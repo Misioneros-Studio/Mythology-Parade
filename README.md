@@ -16,6 +16,15 @@ Misioneros Studio is formed by 8 members:
 ![](https://github.com/Misioneros-Studio/Mythology-Parade/blob/master/docs/Images/WhatsApp%20Image%202020-03-06%20at%2012.34.56.jpeg)
 ***
 
+![](https://github.com/Misioneros-Studio/Mythology-Parade/blob/master/Wiki_pics/Art/Game%20Logo.png)
+
+Mythology Parade is an RTS videogame done by Misioneros Studio that is about trying to impose your religion on the other ones. You will have to manage correctly your resource, units and also the path that your religion is choosing (peaceful or chaotic with it's pros and cons). As a player, you will need to put into test your strategy skills. <br>
+
+![](https://github.com/Misioneros-Studio/Mythology-Parade/blob/master/Wiki_pics/Art/Camera.png)
+
+
+***
+
 # MIT License
 
 Copyright (c) 2020 Misioneros-Studio
