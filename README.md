@@ -1,5 +1,20 @@
-# Project2
+![](https://github.com/Misioneros-Studio/Mythology-Parade/blob/master/Wiki_pics/Art/Team%20Logo.png)
 
+Misioneros Studio is an on-going project working team due to "Project II" subject in CITM University: Videogames Design & Developments degree. Our current aim is to create a RTS videogame called **Mythology Parade** using SDL2 for our subject project.
+
+Misioneros Studio is formed by 8 members:
+
+* **Bernat** Casañas Masip. Github User: @BernatCasanas. Responsibility: **Team Leader**
+* **Jordi** Pardo Gutierrez. Github User: @Jordi-Pardo. Responsibility: **Management**
+* **Eudald** Garrofé Flix. Github User: @Hevne. Responsibility: **Game Designer**
+* **Miquel** Suau Gonzàlez. Github User: @MayKoder. Responsibility: **Code**
+* **Josep** Sànchez Arbona. Github User: @daskza19. Responsibility: **Art**
+* **Arnau** Falgueras García de Atocha. Github User: @Arnau77. Responsibility: **UI**
+* **Marc** Ramos Gomez. Github User: @Ramsubito. Responsibility: **Audio**
+* **Roger** Pérez i Romera. Github User: @Rugiacreed. Responsibility: **QA**
+
+![](https://github.com/Misioneros-Studio/Mythology-Parade/blob/master/docs/Images/WhatsApp%20Image%202020-03-06%20at%2012.34.56.jpeg)
+***
 
 # MIT License
 
