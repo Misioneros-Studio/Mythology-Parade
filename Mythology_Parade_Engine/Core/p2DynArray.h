@@ -40,7 +40,7 @@ public:
 	// Operators
 	VALUE& operator[](unsigned int index)
 	{
-		ASSERT(index < num_elements);
+		assert(index < num_elements);
 		return data[index];
 	}
 
@@ -84,6 +84,10 @@ public:
 
 	void Clear()
 	{
+		//for (int i = 0; i < num_elements; i++)
+		//{
+		//	RELEASE(data[i]);
+		//}
 		num_elements = 0;
 	}
 
