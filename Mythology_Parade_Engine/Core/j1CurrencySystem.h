@@ -26,7 +26,7 @@ public:
 	j1CurrencySystem();
 	~j1CurrencySystem();
 
-	void increaseFaith(int number);
+	void increaseFaith(int number); //you can subtract too
 	void increaseSacrifice(actionSacrifice action);
 	void increasePrayers(actionPrayers action);
 
