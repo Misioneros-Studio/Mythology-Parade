@@ -3,6 +3,7 @@
 #include "j1App.h"
 #include "j1Input.h"
 #include "j1Window.h"
+#include "j1Gui.h"
 #include "SDL/include/SDL.h"
 
 #define MAX_KEYS 300
@@ -131,6 +132,10 @@ bool j1Input::PreUpdate()
 				special_keys = specialkeys::End;
 			}
 
+			break;
+
+		case SDL_TEXTINPUT:
+			App->gui->WorkWithTextInput(event.text.text);
 			break;
 
 		case SDL_MOUSEBUTTONDOWN:

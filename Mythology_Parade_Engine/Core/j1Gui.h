@@ -3,6 +3,7 @@
 
 #include "j1Module.h"
 #include "p2Point.h"
+#include "SDL/include/SDL_rect.h"
 
 #define CURSOR_WIDTH 2
 

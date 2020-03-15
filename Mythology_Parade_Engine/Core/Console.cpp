@@ -79,7 +79,7 @@ p2SString Console::CheckCommand() {
 		command = commands::list;
 	else if (!strcmp(command_text, "god_mode") || !strcmp(command_text, "god mode") || !strcmp(command_text, "godmode"))
 		command = commands::god_mode;
-	else if (!strcmp(command_text, "quit"))
+	else if (!strcmp(command_text, "quit") || !strcmp(command_text, "exit"))
 		command = commands::quit;
 	else if (!strcmp(command_text, "FPS") || !strcmp(command_text, "Fps") || !strcmp(command_text, "fps"))
 		command = commands::FPS;
