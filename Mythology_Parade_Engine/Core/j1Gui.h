@@ -2,8 +2,6 @@
 #define __j1GUI_H__
 
 #include "j1Module.h"
-#include "j1App.h"
-#include "j1Input.h"
 
 #define CURSOR_WIDTH 2
 

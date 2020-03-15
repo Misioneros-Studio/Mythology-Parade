@@ -52,6 +52,9 @@
     <ClCompile Include="QuadTree.cpp">
       <Filter>Core\Tools\Trees</Filter>
     </ClCompile>
+    <ClCompile Include="Console.cpp">
+      <Filter>Core\Modules</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1Window.h">
@@ -122,6 +125,9 @@
     </ClInclude>
     <ClInclude Include="QuadTree.h">
       <Filter>Core\Tools\Trees</Filter>
+    </ClInclude>
+    <ClInclude Include="Console.h">
+      <Filter>Core\Modules</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
