@@ -20,7 +20,7 @@ struct Properties
 		p2List_item<Property*>* item;
 		item = list.start;
 
-		while(item != NULL)
+		while (item != NULL)
 		{
 			RELEASE(item->data);
 			item = item->next;

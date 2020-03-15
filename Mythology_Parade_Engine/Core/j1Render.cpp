@@ -222,6 +222,43 @@ bool j1Render::DrawLine(int x1, int y1, int x2, int y2, Uint8 r, Uint8 g, Uint8 
 	return ret;
 }
 
+bool j1Render::DrawQuadTree(TreeType type, QuadNode* node)
+{
+	//This method needs to be upgraded to a generic display type
+	SDL_Rect quad = { node->x , node->y , node->w,  node->h };
+
+	switch (type)
+	{
+	case NORMAL:
+		App->render->DrawLine(quad.x, quad.y, quad.x, quad.y + quad.h, 255, 255, 255);
+		App->render->DrawLine(quad.x, quad.y, quad.x + quad.w, quad.y, 255, 255, 255);
+
+		App->render->DrawLine(quad.x + quad.w, quad.y + quad.h, quad.x + quad.w, quad.y, 255, 255, 255);
+		App->render->DrawLine(quad.x + quad.w, quad.y + quad.h, quad.x, quad.y + quad.h, 255, 255, 255);
+		break;
+
+
+	case ISOMETRIC:
+
+		App->render->DrawLine(quad.x, quad.y, quad.x - quad.w / 2, quad.y + quad.h / 2, 255, 255, 255);
+		App->render->DrawLine(quad.x, quad.y, quad.x + quad.w / 2, quad.y + quad.h / 2, 255, 255, 255);
+
+		App->render->DrawLine(quad.x - quad.w / 2, quad.y + quad.h / 2, quad.x, quad.y + quad.h, 255, 255, 255);
+		App->render->DrawLine(quad.x + quad.w / 2, quad.y + quad.h / 2, quad.x, quad.y + quad.h, 255, 255, 255);
+		break;
+
+	}
+
+	for (int i = 0; i < QUADNODE_CHILD_NUMBER; i++)
+	{
+		if (node->childs[i])
+		{
+			DrawQuadTree(type, node->childs[i]);
+		}
+	}
+	return true;
+}
+
 bool j1Render::DrawCircle(int x, int y, int radius, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool use_camera) const
 {
 	bool ret = true;

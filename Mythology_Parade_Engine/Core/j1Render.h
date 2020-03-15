@@ -4,6 +4,9 @@
 #include "SDL/include/SDL.h"
 #include "p2Point.h"
 #include "j1Module.h"
+#include"QuadTree.h"
+
+#include<list>
 
 class j1Render : public j1Module
 {
@@ -41,14 +44,18 @@ public:
 	bool DrawQuad(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a = 255, bool filled = true, bool use_camera = true) const;
 	bool DrawLine(int x1, int y1, int x2, int y2, Uint8 r, Uint8 g, Uint8 b, Uint8 a = 255, bool use_camera = true) const;
 	bool DrawCircle(int x1, int y1, int redius, Uint8 r, Uint8 g, Uint8 b, Uint8 a = 255, bool use_camera = true) const;
+	bool DrawQuadTree(TreeType, QuadNode*);
 
 	// Set background color
 	void SetBackgroundColor(SDL_Color color);
 
 public:
 
-	SDL_Renderer* renderer;
+	SDL_Renderer*	renderer;
 	SDL_Rect		camera;
+
+	std::list<QuadNode*> nodesInView;
+
 	SDL_Rect		viewport;
 	SDL_Color		background;
 };
