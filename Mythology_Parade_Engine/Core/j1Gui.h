@@ -2,6 +2,7 @@
 #define __j1GUI_H__
 
 #include "j1Module.h"
+#include "p2Point.h"
 
 #define CURSOR_WIDTH 2
 
@@ -16,6 +17,8 @@ enum class Type
 	INPUT,
 	UNKNOWN
 };
+
+class SDL_Texture;
 
 class UI :public j1Module
 {
