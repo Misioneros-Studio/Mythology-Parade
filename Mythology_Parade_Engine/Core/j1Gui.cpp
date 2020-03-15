@@ -225,9 +225,9 @@ void j1Gui::ClearUI()
 }
 
 void j1Gui::ReturnConsole() {
-	//if (App->console->console_active == true) {
-		//App->console->ActivateConsole();
-	//}
+	if (App->console->console_active == true) {
+		App->console->ActivateConsole();
+	}
 }
 
 void j1Gui::WorkWithTextInput(p2SString text) {
