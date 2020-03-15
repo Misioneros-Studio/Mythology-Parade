@@ -9,6 +9,7 @@
 #include "j1Map.h"
 #include "j1PathFinding.h"
 #include "j1Gui.h"
+#include "j1Fonts.h"
 #include "j1Scene.h"
 
 #include"QuadTree.h"

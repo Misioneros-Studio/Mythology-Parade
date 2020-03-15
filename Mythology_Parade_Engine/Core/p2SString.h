@@ -330,6 +330,55 @@ public:
 		return ret;
 	}
 
+	p2SString Backspace(uint position) {
+
+		uint s = strlen(str);
+
+		uint cont = 0;
+
+		p2SString ret = *this;
+
+		for (uint i = 0; i < s + 1; ++i) {
+			if (i != position - 1) {
+				ret.str[cont] = str[i];
+				cont++;
+			}
+		}
+		return ret;
+	}
+
+	p2SString Supr(uint position) {
+
+		uint s = strlen(str);
+
+		uint cont = 0;
+
+		p2SString ret = *this;
+
+		for (uint i = 0; i < s + 1; ++i) {
+			if (i != position || i == s) {
+				ret.str[cont] = str[i];
+				cont++;
+			}
+		}
+		return ret;
+	}
+
+
+	p2SString StrFromPosition(uint position) {
+
+		uint s = strlen(str);
+
+		uint cont = 0;
+
+		p2SString ret = *this;
+
+		for (uint i = position; i < s; ++i) {
+			ret = ret.Supr(position);
+		}
+		return ret;
+	}
+
 	/**
 	* Paste a substring into buffer
 	*/

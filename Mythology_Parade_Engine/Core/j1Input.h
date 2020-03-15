@@ -17,12 +17,23 @@ enum j1EventWindow
 	WE_COUNT
 };
 
+
 enum j1KeyState
 {
 	KEY_IDLE = 0,
 	KEY_DOWN,
 	KEY_REPEAT,
 	KEY_UP
+};
+
+enum class specialkeys {
+	None,
+	Backspace,
+	Supr,
+	Left,
+	Right,
+	Home,
+	End
 };
 
 class j1Input : public j1Module
@@ -70,6 +81,7 @@ public:
 
 public:
 	bool drawDebug;
+	specialkeys special_keys;
 
 private:
 	bool		windowEvents[WE_COUNT];

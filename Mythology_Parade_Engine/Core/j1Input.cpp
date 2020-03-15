@@ -81,6 +81,8 @@ bool j1Input::PreUpdate()
 			mouse_buttons[i] = KEY_IDLE;
 	}
 
+	special_keys = specialkeys::None;
+
 	while (SDL_PollEvent(&event) != 0)
 	{
 		switch (event.type)
@@ -107,6 +109,28 @@ bool j1Input::PreUpdate()
 				windowEvents[WE_SHOW] = true;
 				break;
 			}
+			break;
+
+		case SDL_KEYDOWN:
+			if (event.key.keysym.sym == SDLK_BACKSPACE) {
+				special_keys = specialkeys::Backspace;
+			}
+			else if (event.key.keysym.sym == SDLK_DELETE) {
+				special_keys = specialkeys::Supr;
+			}
+			else if (event.key.keysym.sym == SDLK_LEFT) {
+				special_keys = specialkeys::Left;
+			}
+			else if (event.key.keysym.sym == SDLK_RIGHT) {
+				special_keys = specialkeys::Right;
+			}
+			else if (event.key.keysym.sym == SDLK_HOME) {
+				special_keys = specialkeys::Home;
+			}
+			else if (event.key.keysym.sym == SDLK_END) {
+				special_keys = specialkeys::End;
+			}
+
 			break;
 
 		case SDL_MOUSEBUTTONDOWN:

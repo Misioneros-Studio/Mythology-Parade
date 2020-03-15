@@ -259,6 +259,12 @@ bool j1Render::DrawQuadTree(TreeType type, QuadNode* node)
 	return true;
 }
 
+void j1Render::BlitInsideQuad(SDL_Texture* texture, SDL_Rect sprite, SDL_Rect quad)
+{
+	SDL_Point p = { 0, 0 };
+	SDL_RenderCopyEx(renderer, texture, &sprite, &quad, 0, &p, SDL_FLIP_NONE);
+}
+
 bool j1Render::DrawCircle(int x, int y, int radius, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool use_camera) const
 {
 	bool ret = true;
