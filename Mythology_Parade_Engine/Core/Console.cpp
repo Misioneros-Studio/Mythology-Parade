@@ -1,10 +1,10 @@
 #include "p2Defs.h"
 #include "p2Log.h"
 #include "j1App.h"
+#include "Console.h"
 #include "j1Gui.h"
 #include "j1Input.h"
-#include "Console.h"
-#include "SDL/include/SDL.h"
+#include "SDL/include/SDL_keyboard.h"
 
 Console::Console() {
 	name.create("console");

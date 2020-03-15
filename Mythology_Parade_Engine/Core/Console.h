@@ -2,6 +2,7 @@
 #define __CONSOLE_H__
 
 #include "j1Module.h"
+#include "SDL/include/SDL_rect.h"
 
 class ImageUI;
 class TextInputUI;
