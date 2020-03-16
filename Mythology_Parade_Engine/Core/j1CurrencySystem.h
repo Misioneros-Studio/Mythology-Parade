@@ -5,7 +5,7 @@
 class j1CurrencySystem
 {
 public:
-	enum class actionSacrifice {
+	enum class ActionSacrifice {
 		RivalKilled,
 		EliteKilled,
 		BeastKilled,
@@ -13,7 +13,7 @@ public:
 		EncampmentDestroyed,
 		MonasteriesSacrifice
 	};
-	enum class actionPrayers {
+	enum class ActionPrayers {
 		UnitConverted,
 		TempleConverted,
 		EncampmentConverted,
@@ -26,9 +26,10 @@ public:
 	j1CurrencySystem();
 	~j1CurrencySystem();
 
-	void increaseFaith(int number); //you can subtract too
-	void increaseSacrifice(actionSacrifice action);
-	void increasePrayers(actionPrayers action);
+	void increaseFaith(int number);
+	void decreaseFaith(int number);
+	void increaseSacrifice(ActionSacrifice action);
+	void increasePrayers(ActionPrayers action);
 
 private:
 	int sacrifices;

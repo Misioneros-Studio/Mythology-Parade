@@ -16,31 +16,36 @@ void j1CurrencySystem::increaseFaith(int number)
 	faith += number;
 }
 
-void j1CurrencySystem::increaseSacrifice(actionSacrifice action)
+void j1CurrencySystem::decreaseFaith(int number)
+{
+	faith -= number;
+}
+
+void j1CurrencySystem::increaseSacrifice(ActionSacrifice action)
 {
 	switch (action)
 	{
-	case actionSacrifice::RivalKilled:
+	case ActionSacrifice::RivalKilled:
 		sacrifices++;
 		prayers--;
 		break;
-	case actionSacrifice::EliteKilled:
+	case ActionSacrifice::EliteKilled:
 		sacrifices += 2;
 		prayers -= 2;
 		break;
-	case actionSacrifice::BeastKilled:
+	case ActionSacrifice::BeastKilled:
 		sacrifices += 2;
 		prayers -= 2;
 		break;
-	case actionSacrifice::TempleDestroyed:
+	case ActionSacrifice::TempleDestroyed:
 		sacrifices++;
 		prayers--;
 		break;
-	case actionSacrifice::EncampmentDestroyed:
+	case ActionSacrifice::EncampmentDestroyed:
 		sacrifices += 2;
 		prayers -= 2;
 		break;
-	case actionSacrifice::MonasteriesSacrifice:
+	case ActionSacrifice::MonasteriesSacrifice:
 		sacrifices++;
 		break;
 	default:
@@ -48,31 +53,31 @@ void j1CurrencySystem::increaseSacrifice(actionSacrifice action)
 	}
 }
 
-void j1CurrencySystem::increasePrayers(actionPrayers action)
+void j1CurrencySystem::increasePrayers(ActionPrayers action)
 {
 	switch (action)
 	{
-	case actionPrayers::UnitConverted:
+	case ActionPrayers::UnitConverted:
 		prayers += 2;
 		sacrifices -= 1;
 		break;
-	case actionPrayers::TempleConverted:
+	case ActionPrayers::TempleConverted:
 		prayers += 1;
 		sacrifices -= 2;
 		break;
-	case actionPrayers::EncampmentConverted:
+	case ActionPrayers::EncampmentConverted:
 		prayers += 2;
 		sacrifices -= 2;
 		break;
-	case actionPrayers::MonasteryConverted:
+	case ActionPrayers::MonasteryConverted:
 		prayers += 1;
 		sacrifices -= 2;
 		break;
-	case actionPrayers::BeastConverted:
+	case ActionPrayers::BeastConverted:
 		prayers += 2;
 		sacrifices -= 2;
 		break;
-	case actionPrayers::MonasteriesPrayers:
+	case ActionPrayers::MonasteriesPrayers:
 		prayers += 1;
 		break;
 	default:
