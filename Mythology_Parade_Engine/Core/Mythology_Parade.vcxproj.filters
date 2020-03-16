@@ -49,6 +49,8 @@
     <ClCompile Include="j1Gui.cpp">
       <Filter>Core\Modules</Filter>
     </ClCompile>
+
+    <ClCompile Include="j1CurrencySystem.cpp">
     <ClCompile Include="QuadTree.cpp">
       <Filter>Core\Tools\Trees</Filter>
     </ClCompile>
@@ -123,10 +125,13 @@
     <ClInclude Include="j1Gui.h">
       <Filter>Core\Modules</Filter>
     </ClInclude>
+    <ClInclude Include="j1CurrencySystem.h">
+
     <ClInclude Include="QuadTree.h">
       <Filter>Core\Tools\Trees</Filter>
     </ClInclude>
     <ClInclude Include="Console.h">
+
       <Filter>Core\Modules</Filter>
     </ClInclude>
   </ItemGroup>
