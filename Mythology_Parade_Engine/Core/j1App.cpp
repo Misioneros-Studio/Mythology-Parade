@@ -15,6 +15,7 @@
 #include "j1Fonts.h"
 #include "j1Gui.h"
 #include "Console.h"
+#include "EntityManager.h"
 #include "j1App.h"
 
 // Constructor
@@ -33,6 +34,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	font = new j1Fonts();
 	gui = new j1Gui();
 	console = new Console();
+	entityManager = new EntityManager();
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
@@ -45,6 +47,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(font);
 	AddModule(gui);
 	AddModule(console);
+	AddModule(entityManager);
 
 
 	// scene last

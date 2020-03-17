@@ -78,6 +78,7 @@
   <ItemGroup>
     <ClCompile Include="j1CurrencySystem.cpp" />
     <ClCompile Include="Console.cpp" />
+    <ClCompile Include="EntityManager.cpp" />
     <ClCompile Include="j1Fonts.cpp" />
     <ClCompile Include="j1Gui.cpp" />
     <ClCompile Include="j1Main.cpp" />
@@ -99,6 +100,8 @@
   <ItemGroup>
     <ClInclude Include="j1CurrencySystem.h" />
     <ClInclude Include="Console.h" />
+    <ClInclude Include="Entity.h" />
+    <ClInclude Include="EntityManager.h" />
     <ClInclude Include="j1Fonts.h" />
     <ClInclude Include="j1Gui.h" />
     <ClInclude Include="j1Map.h" />

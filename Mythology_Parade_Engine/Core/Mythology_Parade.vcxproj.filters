@@ -57,6 +57,9 @@
     <ClCompile Include="Console.cpp">
       <Filter>Core\Modules</Filter>
     </ClCompile>
+    <ClCompile Include="EntityManager.cpp">
+      <Filter>Core\Modules</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1Window.h">
@@ -134,6 +137,12 @@
 
       <Filter>Core\Modules</Filter>
     </ClInclude>
+    <ClInclude Include="EntityManager.h">
+      <Filter>Core\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="Entity.h">
+      <Filter>Core\Entities</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Tools">
@@ -156,6 +165,9 @@
     </Filter>
     <Filter Include="Core\Tools\Trees">
       <UniqueIdentifier>{c47eb193-3016-4949-8f56-a6fb90788276}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Entities">
+      <UniqueIdentifier>{5a0ad7a5-4d2a-445c-a9f1-ff04270ab560}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
