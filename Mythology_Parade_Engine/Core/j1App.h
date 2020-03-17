@@ -19,6 +19,7 @@ class j1PathFinding;
 class j1Fonts;
 class j1Gui;
 class Console;
+class EntityManager;
 
 class j1App
 {
@@ -94,6 +95,7 @@ public:
 	j1Fonts*			font = NULL;
 	j1Gui*				gui = NULL;
 	Console*			console = NULL;
+	EntityManager*		entityManager = NULL;
 
 private:
 
