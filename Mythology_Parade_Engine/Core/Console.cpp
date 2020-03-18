@@ -5,6 +5,7 @@
 #include "j1Gui.h"
 #include "j1Input.h"
 #include "SDL/include/SDL_keyboard.h"
+#include "j1Window.h"
 
 Console::Console() {
 	name.create("console");
@@ -13,15 +14,15 @@ Console::Console() {
 
 
 bool Console::Awake(pugi::xml_node& node) {
-	background_pos = { node.child("background").attribute("position_x").as_int(),node.child("background").attribute("position_y").as_int(),node.child("background").attribute("position_w").as_int(),
-	node.child("background").attribute("position_h").as_int() };
+	uint w, h;
+	App->win->GetWindowSize(w, h);
+	background_pos = { node.child("background").attribute("position_x").as_int(),node.child("background").attribute("position_y").as_int(), (int)w, node.child("background").attribute("position_h").as_int() };
 	background_red = node.child("background").attribute("red").as_int();
 	background_green = node.child("background").attribute("green").as_int();
 	background_blue = node.child("background").attribute("blue").as_int();
 	background_alpha = node.child("background").attribute("alpha").as_int();
 
-	input_pos = { node.child("input").attribute("position_x").as_int(),node.child("input").attribute("position_y").as_int(),node.child("input").attribute("position_w").as_int(),
-	node.child("input").attribute("position_h").as_int() };
+	input_pos = { node.child("input").attribute("position_x").as_int(),node.child("input").attribute("position_y").as_int(), (int)w, node.child("input").attribute("position_h").as_int() };
 	input_red = node.child("input").attribute("red").as_int();
 	input_green = node.child("input").attribute("green").as_int();
 	input_blue = node.child("input").attribute("blue").as_int();
