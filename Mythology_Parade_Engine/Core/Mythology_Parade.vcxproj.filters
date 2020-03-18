@@ -49,8 +49,6 @@
     <ClCompile Include="j1Gui.cpp">
       <Filter>Core\Modules</Filter>
     </ClCompile>
-
-    <ClCompile Include="j1CurrencySystem.cpp">
     <ClCompile Include="QuadTree.cpp">
       <Filter>Core\Tools\Trees</Filter>
     </ClCompile>
@@ -59,6 +57,9 @@
     </ClCompile>
     <ClCompile Include="EntityManager.cpp">
       <Filter>Core\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="j1CurrencySystem.cpp">
+      <Filter>Core\Tools</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -128,13 +129,10 @@
     <ClInclude Include="j1Gui.h">
       <Filter>Core\Modules</Filter>
     </ClInclude>
-    <ClInclude Include="j1CurrencySystem.h">
-
     <ClInclude Include="QuadTree.h">
       <Filter>Core\Tools\Trees</Filter>
     </ClInclude>
     <ClInclude Include="Console.h">
-
       <Filter>Core\Modules</Filter>
     </ClInclude>
     <ClInclude Include="EntityManager.h">
@@ -142,6 +140,9 @@
     </ClInclude>
     <ClInclude Include="Entity.h">
       <Filter>Core\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="j1CurrencySystem.h">
+      <Filter>Core\Tools</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
