@@ -42,10 +42,13 @@ bool j1Scene::Start()
 		if (App->map->CreateWalkabilityMap(w, h, &data))
 			App->pathfinding->SetMap(w, h, data);
 
+		SDL_ShowCursor(0);
+
 		RELEASE_ARRAY(data);
 	}
 
 	debug_tex = App->tex->Load("maps/path2.png");
+	cursor_tex = App->tex->Load("gui/cursors.png");
 
 
 
@@ -127,14 +130,12 @@ bool j1Scene::Update(float dt)
 
 
 	int x, y;
-	App->input->GetMousePosition(x, y);
-	iPoint map_coordinates = App->map->WorldToMap(x - App->render->camera.x, y - App->render->camera.y);
-	p2SString title("Map:%dx%d Tiles:%dx%d Tilesets:%d Tile:%d,%d",
-		App->map->data.width, App->map->data.height,
-		App->map->data.tile_width, App->map->data.tile_height,
-		App->map->data.tilesets.count(),
-		map_coordinates.x, map_coordinates.y);
-
+	//iPoint map_coordinates = App->map->WorldToMap(x - App->render->camera.x, y - App->render->camera.y);
+	//p2SString title("Map:%dx%d Tiles:%dx%d Tilesets:%d Tile:%d,%d",
+	//	App->map->data.width, App->map->data.height,
+	//	App->map->data.tile_width, App->map->data.tile_height,
+	//	App->map->data.tilesets.count(),
+	//	map_coordinates.x, map_coordinates.y);
 	//App->win->SetTitle(title.GetString());
 
 	// Debug pathfinding ------------------------------
@@ -145,6 +146,11 @@ bool j1Scene::Update(float dt)
 	p = App->map->MapToWorld(p.x, p.y);
 
 	App->render->Blit(debug_tex, p.x, p.y);
+
+	//Show cursor ------------------------------
+	SDL_Rect sec = { 0, 0, 54, 45 };
+	p = App->render->ScreenToWorld(x, y);
+	App->render->Blit(cursor_tex, p.x, p.y, &sec);
 
 	const p2DynArray<iPoint>* path = App->pathfinding->GetLastPath();
 	for (uint i = 0; i < path->Count(); ++i)
@@ -171,6 +177,9 @@ bool j1Scene::PostUpdate()
 bool j1Scene::CleanUp()
 {
 	LOG("Freeing scene");
+	App->tex->UnLoad(debug_tex);
+	App->tex->UnLoad(cursor_tex);
+
 	quadTree->Clear();
 
 	return true;
