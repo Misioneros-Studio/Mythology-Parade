@@ -6,7 +6,8 @@
 #include "j1PerfTimer.h"
 #include "j1Timer.h"
 #include "PugiXml\src\pugixml.hpp"
-#include<list>
+#include <list>
+#include <string>
 
 // Modules
 class j1Window;
@@ -56,7 +57,7 @@ public:
 
 	void LoadGame(const char* file);
 	void SaveGame(const char* file) const;
-	void GetSaveGames(p2List<p2SString>& list_to_fill) const;
+	void GetSaveGames(std::list<std::string>& list_to_fill) const;
 
 private:
 
@@ -104,13 +105,13 @@ private:
 	int					argc;
 	char**				args;
 
-	p2SString			title;
-	p2SString			organization;
+	std::string			title;
+	std::string			organization;
 
 	mutable bool		want_to_save = false;
 	bool				want_to_load = false;
-	p2SString			load_game;
-	mutable p2SString	save_game;
+	std::string			load_game;
+	mutable std::string	save_game;
 
 	j1PerfTimer			ptimer;
 	uint64				frame_count = 0;
@@ -123,8 +124,8 @@ private:
 	int					capped_ms = -1;
 
 public:
-	std::list<p2SString>	logs;
-	int					num_logs = 0;
+	std::list<std::string>	logs;
+	int						num_logs = 0;
 };
 
 extern j1App* App; // No student is asking me about that ... odd :-S
