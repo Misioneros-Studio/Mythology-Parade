@@ -63,6 +63,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 j1App::~j1App()
 {
 	// release modules
+	//INFO: How to itinerate all elements of a STD list
 	for (std::list<j1Module*>::iterator it = modules.begin(); it != modules.end(); it++)
 	{
 		RELEASE(it._Ptr->_Myval);
