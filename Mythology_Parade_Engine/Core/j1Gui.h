@@ -19,7 +19,7 @@ enum class Type
 	UNKNOWN
 };
 
-class SDL_Texture;
+struct SDL_Texture;
 
 class UI :public j1Module
 {

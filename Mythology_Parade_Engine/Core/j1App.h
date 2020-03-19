@@ -6,6 +6,7 @@
 #include "j1PerfTimer.h"
 #include "j1Timer.h"
 #include "PugiXml\src\pugixml.hpp"
+#include<list>
 
 // Modules
 class j1Window;
@@ -79,7 +80,7 @@ private:
 
 	// Load / Save
 	bool LoadGameNow();
-	bool SavegameNow() const;
+	bool SavegameNow();
 
 public:
 
@@ -99,7 +100,7 @@ public:
 
 private:
 
-	p2List<j1Module*>	modules;
+	std::list<j1Module*>	modules;
 	int					argc;
 	char**				args;
 
@@ -122,7 +123,7 @@ private:
 	int					capped_ms = -1;
 
 public:
-	p2List<p2SString>	logs;
+	std::list<p2SString>	logs;
 	int					num_logs = 0;
 };
 

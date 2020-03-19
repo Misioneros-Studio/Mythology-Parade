@@ -59,15 +59,21 @@ bool Console::PreUpdate() {
 			console_input->SetPositionToZero();
 		}
 		label = console_input->GetLabel();
-		for (int i = console_log->GetNumberOfStrings(); i < App->num_logs; i++)
-			console_log->SetListOfStrings(App->logs.At(i)->data.GetString(), i);
+
+		int i = 0;
+		for (std::list<p2SString>::iterator it = App->logs.begin(); it != App->logs.end(); it++)
+		{
+			console_log->SetListOfStrings(it._Ptr->_Myval.GetString(), i);
+			i++;
+		}
 	}
 	return true;
 }
 
-void Console::ActivateConsole() {
+void Console::ActivateConsole() 
+{
 	console_background = (ImageUI*)App->gui->CreateUIElement(Type::IMAGE, nullptr, background_pos, "", background_red, background_green, background_blue, background_alpha);
-	console_log = (ListTextsUI*)App->gui->CreateUIElement(Type::LISTTEXTS, console_background, output_pos, { 0,0,0,0 }, App->logs.At(0)->data.GetString(), { 0,0,0,0 }, { 0,0,0,0 }, true,
+	console_log = (ListTextsUI*)App->gui->CreateUIElement(Type::LISTTEXTS, console_background, output_pos, { 0,0,0,0 }, App->logs.begin()->GetString(), { 0,0,0,0 }, { 0,0,0,0 }, true,
 		output_drag_area, nullptr, true);
 	console_input = (TextInputUI*)App->gui->CreateUIElement(Type::INPUT, nullptr, input_pos, "", input_red, input_green, input_blue, input_alpha);
 	console_input->SetLabel(label.GetString());
