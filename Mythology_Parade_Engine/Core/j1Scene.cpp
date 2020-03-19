@@ -191,12 +191,37 @@ bool j1Scene::CleanUp()
 void j1Scene::ActivateOrDeactivatePauseMenu() {
 	if (ui_pause_window == nullptr) {
 		ui_pause_window = (WindowUI*)App->gui->CreateUIElement(Type::WINDOW, nullptr, { 410,300,459,168 }, { 216,18,459,168 });
-		ui_button = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_pause_window, { 450,350,237,38 }, { 787,240,237,38 }, "", { 787,342,237,38 }, { 787,291,237,38});
+		ui_button = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_pause_window, { 520,360,237,38 }, { 787,240,237,38 }, "EXIT", { 787,342,237,38 }, { 787,291,237,38 }, false, { 0,0,0,0 }, this);
+		ui_text = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 610,372,237,38 }, {0,0,100,100},"EXIT");
 	}
 	else {
 		App->gui->DeleteUIElement(ui_pause_window);
 		App->gui->DeleteUIElement(ui_button);
+		App->gui->DeleteUIElement(ui_text);
+		ui_text = nullptr;
 		ui_button = nullptr;
 		ui_pause_window = nullptr;
 	}
+}
+
+void j1Scene::OnClick(UI* element, float argument)
+{
+
+	switch (element->type)
+	{
+
+	case Type::BUTTON:
+
+		if (element->name == (p2SString)"EXIT")
+		{
+			exitGame = true;
+		}
+		break;
+
+
+	default:
+		break;
+	}
+
+
 }

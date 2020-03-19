@@ -7,6 +7,7 @@ struct SDL_Texture;
 class ImageUI;
 class WindowUI;
 class ButtonUI;
+class TextUI;
 class QuadTree;
 
 class j1Scene : public j1Module
@@ -39,12 +40,15 @@ public:
 	// Called when clicking esc
 	void ActivateOrDeactivatePauseMenu();
 
+	void OnClick(UI* element, float argument = 0);
+
 private:
 	SDL_Texture* debug_tex;
 	SDL_Texture* cursor_tex;
 	ImageUI* ui_ingame;
 	WindowUI* ui_pause_window;
 	ButtonUI* ui_button;
+	TextUI* ui_text;
 public:
 	QuadTree* quadTree;
 };

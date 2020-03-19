@@ -22,6 +22,10 @@
     <atlas file="gui/ui.png"/>
   </gui>
 
+  <fonts>
+    <default_font file="fonts/cinzel_family/Cinzel/Cinzel-Regular.ttf"/>
+  </fonts>
+
   <console>
     <input position_x="0" position_y="300" position_w="1024" position_h="21" red="0" blue="100" green="0" alpha="255"/>
     <background position_x="0" position_y="0" position_w="1024" position_h="300" red="0" blue="0" green="0" alpha="255"/>
