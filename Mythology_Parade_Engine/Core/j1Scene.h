@@ -4,8 +4,9 @@
 #include "j1Module.h"
 
 struct SDL_Texture;
-class GuiImage;
-class GuiText;
+class ImageUI;
+class WindowUI;
+class ButtonUI;
 class QuadTree;
 
 class j1Scene : public j1Module
@@ -35,12 +36,15 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
+	// Called when clicking esc
+	void ActivateOrDeactivatePauseMenu();
+
 private:
 	SDL_Texture* debug_tex;
 	SDL_Texture* cursor_tex;
-	GuiImage* banner;
-	GuiText* text;
-
+	ImageUI* ui_ingame;
+	WindowUI* ui_pause_window;
+	ButtonUI* ui_button;
 public:
 	QuadTree* quadTree;
 };

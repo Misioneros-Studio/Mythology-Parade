@@ -47,6 +47,9 @@ bool j1Scene::Start()
 		RELEASE_ARRAY(data);
 	}
 
+	ui_ingame=(ImageUI*)App->gui->CreateUIElement(Type::IMAGE, nullptr, { 0,590,1280,130 }, { 0,590,1280,130 });
+
+
 	debug_tex = App->tex->Load("maps/path2.png");
 	cursor_tex = App->tex->Load("gui/cursors.png");
 
@@ -58,7 +61,6 @@ bool j1Scene::Start()
 	size = iPoint(App->map->data.width * App->map->data.tile_width, App->map->data.height * App->map->data.tile_height);
 	quadTree = new QuadTree(TreeType::ISOMETRIC, position.x + (App->map->data.tile_width / 2), position.y, size.x, size.y);
 	quadTree->baseNode->SubDivide(quadTree->baseNode, 4);
-
 	return true;
 }
 
@@ -103,6 +105,9 @@ bool j1Scene::Update(float dt)
 
 	if (App->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
 		App->SaveGame("save_game.xml");
+
+	if (App->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
+		ActivateOrDeactivatePauseMenu();
 
 	if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
 		App->render->camera.y += floor(700.0f * dt);
@@ -167,9 +172,6 @@ bool j1Scene::PostUpdate()
 {
 	bool ret = true;
 
-	if (App->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
-		ret = false;
-
 	return ret;
 }
 
@@ -183,4 +185,18 @@ bool j1Scene::CleanUp()
 	quadTree->Clear();
 
 	return true;
+}
+
+// Called when clicking esc
+void j1Scene::ActivateOrDeactivatePauseMenu() {
+	if (ui_pause_window == nullptr) {
+		ui_pause_window = (WindowUI*)App->gui->CreateUIElement(Type::WINDOW, nullptr, { 410,300,459,168 }, { 216,18,459,168 });
+		ui_button = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_pause_window, { 450,350,237,38 }, { 787,240,237,38 }, "", { 787,342,237,38 }, { 787,291,237,38});
+	}
+	else {
+		App->gui->DeleteUIElement(ui_pause_window);
+		App->gui->DeleteUIElement(ui_button);
+		ui_button = nullptr;
+		ui_pause_window = nullptr;
+	}
 }
