@@ -38,7 +38,16 @@ public:
 	bool CleanUp();
 
 	// Called when clicking esc
-	void ActivateOrDeactivatePauseMenu();
+	void ActivatePauseMenu();
+
+	// Called when clicking close button in pause menu
+	void DeactivatePauseMenu();
+
+	// Called when clicking options button in pause menu
+	void ActivateOptionsMenu();
+
+	// Called when clicking close button in options menu
+	void DeactivateOptionsMenu();
 
 	void OnClick(UI* element, float argument = 0);
 
@@ -47,8 +56,11 @@ private:
 	SDL_Texture* cursor_tex;
 	ImageUI* ui_ingame;
 	WindowUI* ui_pause_window;
-	ButtonUI* ui_button;
-	TextUI* ui_text;
+	ButtonUI* ui_button[7];
+	TextUI* ui_text[8];
+	WindowUI* ui_options_window;
+	ButtonUI* ui_button_options;
+	TextUI* ui_text_options[2];
 public:
 	QuadTree* quadTree;
 };

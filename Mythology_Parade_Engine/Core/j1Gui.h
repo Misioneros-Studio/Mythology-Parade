@@ -120,7 +120,7 @@ public:
 class TextUI :public UI
 {
 public:
-	TextUI(Type type, UI* p, SDL_Rect r, p2SString str, bool d, bool f, SDL_Rect d_area, bool console);
+	TextUI(Type type, UI* p, SDL_Rect r, p2SString str, bool d, bool f, SDL_Rect d_area, bool console, SDL_Color coulor, bool title);
 
 	// Destructor
 	virtual ~TextUI() {}
@@ -133,6 +133,10 @@ public:
 public:
 
 	p2SString stri;
+	SDL_Color color;
+
+private:
+	bool title_default;
 };
 
 class ListTextsUI :public UI
@@ -186,6 +190,7 @@ public:
 	bool pushed;
 	bool over;
 	bool isLocked;
+	bool front;
 };
 
 class TextInputUI :public UI
