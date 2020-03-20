@@ -12,7 +12,7 @@
 
 j1Gui::j1Gui() : j1Module()
 {
-	name.create("gui");
+	name.append("gui");
 }
 
 // Destructor
@@ -33,7 +33,7 @@ bool j1Gui::Awake(pugi::xml_node& conf)
 // Called before the first frame
 bool j1Gui::Start()
 {
-	atlas = App->tex->Load(atlas_file_name.GetString());
+	atlas = App->tex->Load(atlas_file_name.c_str());
 	click_sfx = App->audio->LoadFx("audio/fx/button_click.wav");
 
 	return true;
@@ -45,18 +45,29 @@ bool j1Gui::PreUpdate()
 	bool mouse = false;
 	lockClick = false;
 	int count = 0;
-	if (App->input->GetMouseButtonDown(1) == KEY_DOWN || App->input->GetMouseButtonDown(1) == KEY_REPEAT) {
-		for (int i = UIs.count() - 1; i >= 0 && mouse == false; i--) {
-			mouse = UIs.At(i)->data->CheckMouse();
+	if (App->input->GetMouseButtonDown(1) == KEY_DOWN || App->input->GetMouseButtonDown(1) == KEY_REPEAT) 
+	{
+		for (int i = UIs.size(); i >= 0 && mouse == false; i--) 
+		{
+			std::list<UI*>::iterator it = UIs.begin();
+			std::advance(it, i);
+
+			if (it._Ptr->_Myval != nullptr) 
+			{
+				mouse = it._Ptr->_Myval->CheckMouse();
+			}
 			if (mouse == true)count = i;
 		}
 	}
-	if (mouse == true) {
-		UIs.At(count)->data->Move();
-	}
-	for (int i = 0; i < UIs.count(); i++)
+	if (mouse == true) 
 	{
-		UIs.At(i)->data->PreUpdate();
+		std::list<UI*>::iterator it = UIs.begin();
+		std::advance(it, count);
+		it._Ptr->_Myval->Move();
+	}
+	for(std::list<UI*>::iterator it = UIs.begin(); it != UIs.end(); it++)
+	{
+		it._Ptr->_Myval->PreUpdate();
 	}
 	return true;
 }
@@ -64,8 +75,9 @@ bool j1Gui::PreUpdate()
 // Called after all Updates
 bool j1Gui::PostUpdate()
 {
-	for (int i = 0; i < UIs.count(); i++) {
-		UIs.At(i)->data->PostUpdate();
+	for (std::list<UI*>::iterator it = UIs.begin(); it != UIs.end(); it++)
+	{
+		it._Ptr->_Myval->PostUpdate();
 	}
 	return true;
 }
@@ -74,12 +86,13 @@ bool j1Gui::PostUpdate()
 bool j1Gui::CleanUp()
 {
 	LOG("Freeing GUI");
-	for (int i = UIs.count() - 1; i >= 0; i--)
+	for (std::list<UI*>::iterator it = UIs.begin(); it != UIs.end(); it++)
 	{
-		UIs.At(i)->data->CleanUp();
-		UIs.del(UIs.At(i));
+		it._Ptr->_Myval->CleanUp();
+		delete it._Ptr->_Myval;
 	}
 	UIs.clear();
+
 	if (atlas)
 	{
 		App->tex->UnLoad(atlas);
@@ -95,7 +108,7 @@ const SDL_Texture* j1Gui::GetAtlas() const
 
 // class Gui ---------------------------------------------------
 
-UI* j1Gui::CreateUIElement(Type type, UI* p, SDL_Rect r, SDL_Rect sprite, p2SString str, SDL_Rect sprite2, SDL_Rect sprite3, bool drageable, SDL_Rect drag_area, j1Module* s_listener,
+UI* j1Gui::CreateUIElement(Type type, UI* p, SDL_Rect r, SDL_Rect sprite, std::string str, SDL_Rect sprite2, SDL_Rect sprite3, bool drageable, SDL_Rect drag_area, j1Module* s_listener,
 	bool console, float drag_position_scroll_bar)
 {
 	UI* ui = nullptr;
@@ -119,7 +132,7 @@ UI* j1Gui::CreateUIElement(Type type, UI* p, SDL_Rect r, SDL_Rect sprite, p2SStr
 	}
 
 	ui->active = true;
-	ui->name = str;
+	ui->name = str.c_str();
 
 	if (s_listener)
 	{
@@ -133,10 +146,11 @@ UI* j1Gui::CreateUIElement(Type type, UI* p, SDL_Rect r, SDL_Rect sprite, p2SStr
 
 	//UIs.add(ui);
 
-	return UIs.add(ui)->data;
+	UIs.push_back(ui);
+	return ui;
 }
 
-UI* j1Gui::CreateUIElement(Type type, UI* p, SDL_Rect r, p2SString str, int re, int g, int b, int a, bool drageable, SDL_Rect drag_area, j1Module* s_listener)
+UI* j1Gui::CreateUIElement(Type type, UI* p, SDL_Rect r, std::string str, int re, int g, int b, int a, bool drageable, SDL_Rect drag_area, j1Module* s_listener)
 {
 	UI* ui = nullptr;
 	switch (type)
@@ -150,7 +164,7 @@ UI* j1Gui::CreateUIElement(Type type, UI* p, SDL_Rect r, p2SString str, int re, 
 	}
 
 	ui->active = true;
-	ui->name = str;
+	ui->name = str.c_str();
 
 	if (s_listener)
 	{
@@ -164,49 +178,62 @@ UI* j1Gui::CreateUIElement(Type type, UI* p, SDL_Rect r, p2SString str, int re, 
 
 	//UIs.add(ui);
 
-	return UIs.add(ui)->data;
+	UIs.push_back(ui);
+	return ui;
 }
 
-bool j1Gui::DeleteUIElement(UI* ui) {
-	int n = UIs.find(ui);
-	if (n == -1)return false;
+bool j1Gui::DeleteUIElement(UI* ui) 
+{
+
+	std::list<UI*>::iterator it = UIs.begin();
+	it = std::find(UIs.begin(), UIs.end(), ui);
+
+	if (it == UIs.end())return false;
 	else
 	{
-		UIs.At(n)->data->CleanUp();
-		UIs.del(UIs.At(n));
+		it._Ptr->_Myval->CleanUp();
+		UIs.remove(ui);
+		delete it._Ptr->_Myval;
 		return true;
 	}
 }
 
-void j1Gui::ChangeDebug() {
-	for (int i = 0; i < UIs.count(); i++) {
-		UIs.At(i)->data->debug = !UIs.At(i)->data->debug;
+void j1Gui::ChangeDebug() 
+{
+	for (std::list<UI*>::iterator it = UIs.begin(); it != UIs.end(); it++)
+	{
+		it._Ptr->_Myval->debug = !it._Ptr->_Myval->debug;
 	}
 }
 
-void j1Gui::ChangeFocus() {
+void j1Gui::ChangeFocus() 
+{
 	bool exit = false;
 	bool focus = false;
 	int count = 0;
-	for (int i = 0; i < UIs.count() && exit == false; i++) {
-		bool focusable = UIs.At(i)->data->CheckFocusable();
+	for (std::list<UI*>::iterator it = UIs.begin(); it != UIs.end() && exit == false; it++)
+	{
+
+		bool focusable = it._Ptr->_Myval->CheckFocusable();
 		if (focusable == true) {
 			count++;
 			if (focus == true) {
-				UIs.At(i)->data->focus = true;
+				it._Ptr->_Myval->focus = true;
 				exit = true;
 			}
 			else {
-				focus = UIs.At(i)->data->focus;
-				UIs.At(i)->data->focus = false;
+				focus = it._Ptr->_Myval->focus;
+				it._Ptr->_Myval->focus = false;
 			}
 		}
 	}
-	if (count > 0 && exit == false) {
-		for (int i = 0; i < UIs.count() && exit == false; i++) {
-			bool focusable = UIs.At(i)->data->CheckFocusable();
+	if (count > 0 && exit == false) 
+	{
+		for (std::list<UI*>::iterator it = UIs.begin(); it != UIs.end() && exit == false; it++)
+		{
+			bool focusable = it._Ptr->_Myval->CheckFocusable();
 			if (focusable == true) {
-				UIs.At(i)->data->focus = true;
+				it._Ptr->_Myval->focus = true;
 				exit = true;
 			}
 		}
@@ -214,8 +241,9 @@ void j1Gui::ChangeFocus() {
 }
 
 void j1Gui::DeleteFocus() {
-	for (int i = 0; i < UIs.count(); i++) {
-		UIs.At(i)->data->focus = false;
+	for (std::list<UI*>::iterator it = UIs.begin(); it != UIs.end(); it++)
+	{
+		it._Ptr->_Myval->focus = false;
 	}
 }
 
@@ -230,11 +258,13 @@ void j1Gui::ReturnConsole() {
 	}
 }
 
-void j1Gui::WorkWithTextInput(p2SString text) {
+void j1Gui::WorkWithTextInput(std::string text) {
 	bool exit = false;
-	for (int i = 0; i < UIs.count() && exit == false; i++) {
-		if (UIs.At(i)->data->type == Type::INPUT && UIs.At(i)->data->focus == true) {
-			TextInputUI* text_ui = (TextInputUI*)UIs.At(i)->data;
+	for (std::list<UI*>::iterator it = UIs.begin(); it != UIs.end() && exit == false; it++)
+	{
+		if (it._Ptr->_Myval->type == Type::INPUT &&it._Ptr->_Myval->focus == true)
+		{
+			TextInputUI* text_ui = (TextInputUI*)it._Ptr->_Myval;
 			text_ui->ChangeLabel(text);
 		}
 	}
@@ -242,7 +272,7 @@ void j1Gui::WorkWithTextInput(p2SString text) {
 
 UI::UI(Type s_type, SDL_Rect r, UI* p, bool d, bool f, SDL_Rect d_area, bool consol)
 {
-	name.create("UI");
+	name.append("UI");
 	type = s_type;
 	drageable = d;
 	focusable = f;
@@ -366,8 +396,10 @@ void UI::UpdateLocalRect() {
 	}
 }
 
-bool UI::CheckMouse() {
-	if (drageable == true) {
+bool UI::CheckMouse() 
+{
+	if (drageable == true) 
+	{
 		int x, y;
 		App->input->GetMousePosition(x, y);
 		if ((x >= screen_rect.x && x <= screen_rect.x + screen_rect.w && y >= screen_rect.y && y <= screen_rect.y + screen_rect.h) || focus == true)
@@ -434,7 +466,7 @@ SDL_Rect UI::Check_Printable_Rect(SDL_Rect sprite, iPoint& dif_sprite, SDL_Rect 
 }
 
 ImageUI::ImageUI(Type type, UI* p, SDL_Rect r, SDL_Rect sprite, bool d, bool f, SDL_Rect d_area, float drag_position_scroll_bar) :UI(type, r, p, d, f, d_area) {
-	name.create("ImageUI");
+	name.append("ImageUI");
 	sprite1 = sprite;
 	quad = r;
 	SDL_Rect drag_area = GetDragArea();
@@ -450,7 +482,7 @@ ImageUI::ImageUI(Type type, UI* p, SDL_Rect r, SDL_Rect sprite, bool d, bool f, 
 }
 
 ImageUI::ImageUI(Type type, UI* p, SDL_Rect r, int re, int g, int b, int a, bool d, bool f, SDL_Rect d_area) :UI(type, r, p, d, f, d_area, true) {
-	name.create("ImageUI");
+	name.append("ImageUI");
 	sprite1 = { 0,0,0,0 };
 	quad = r;
 	SDL_Rect drag_area = GetDragArea();
@@ -512,7 +544,7 @@ fPoint ImageUI::GetDragPositionNormalized() {
 }
 
 WindowUI::WindowUI(Type type, UI* p, SDL_Rect r, SDL_Rect sprite, bool d, bool f, SDL_Rect d_area) :UI(type, r, p, d, f, d_area) {
-	name.create("WindowUI");
+	name.append("WindowUI");
 	sprite1 = sprite;
 	quad = r;
 }
@@ -528,9 +560,9 @@ bool WindowUI::PostUpdate() {
 	return true;
 }
 
-TextUI::TextUI(Type type, UI* p, SDL_Rect r, p2SString str, bool d, bool f, SDL_Rect d_area, bool console) :UI(type, r, p, d, f, d_area, console) {
-	name.create("TextUI");
-	stri = str;
+TextUI::TextUI(Type type, UI* p, SDL_Rect r, std::string str, bool d, bool f, SDL_Rect d_area, bool console) :UI(type, r, p, d, f, d_area, console) {
+	name.append("TextUI");
+	stri = str.c_str();
 	quad = r;
 }
 
@@ -538,7 +570,7 @@ bool TextUI::PostUpdate() {
 	SDL_Rect rect = { 0,0,0,0 };
 	iPoint dif_sprite = { 0,0 };
 
-	SDL_Texture* text = App->font->Print(stri.GetString());
+	SDL_Texture* text = App->font->Print(stri.c_str());
 
 	SDL_QueryTexture(text, NULL, NULL, &rect.w, &rect.h);
 
@@ -553,14 +585,15 @@ bool TextUI::PostUpdate() {
 	return true;
 }
 
-void TextUI::SetString(p2SString new_string) {
+void TextUI::SetString(std::string new_string) 
+{
 	stri = new_string;
 }
 
-ListTextsUI::ListTextsUI(Type type, UI* p, SDL_Rect r, p2SString str, bool d, bool f, SDL_Rect d_area, bool console) :UI(type, r, p, d, f, d_area, console) {
-	name.create("ListTextsUI");
-	stri.add(str);
-	number_of_stri = stri.count();
+ListTextsUI::ListTextsUI(Type type, UI* p, SDL_Rect r, std::string str, bool d, bool f, SDL_Rect d_area, bool console) :UI(type, r, p, d, f, d_area, console) {
+	name.append("ListTextsUI");
+	stri.push_back(str);
+	number_of_stri = stri.size();
 	quad = r;
 }
 
@@ -571,10 +604,14 @@ bool ListTextsUI::PostUpdate() {
 	SDL_Rect rect = { 0,0,0,0 };
 	iPoint dif_sprite = { 0,0 };
 
-	for (int i = 0; i < number_of_stri; i++) {
+	for (int i = 0; i < number_of_stri; i++) 
+	{
 		dif_sprite = { 0,0 };
 
-		SDL_Texture* text = App->font->Print(stri.At(i)->data.GetString());
+		std::list<std::string>::iterator it = stri.begin();
+		std::advance(it, i);
+
+		SDL_Texture* text = App->font->Print(it->c_str());
 
 		SDL_QueryTexture(text, NULL, NULL, &rect.w, &rect.h);
 
@@ -590,9 +627,10 @@ bool ListTextsUI::PostUpdate() {
 	return true;
 }
 
-void ListTextsUI::SetListOfStrings(p2SString string, int position) {
+void ListTextsUI::SetListOfStrings(std::string string, int position) 
+{
 	if (position > number_of_stri) {
-		stri.add(string);
+		stri.push_back(string);
 		number_of_stri++;
 		SDL_Rect screen_rect = GetScreenRect();
 		SDL_Rect parent_screen_rect = GetParentScreenRect();
@@ -604,7 +642,7 @@ void ListTextsUI::SetListOfStrings(p2SString string, int position) {
 }
 
 ButtonUI::ButtonUI(Type type, UI* p, SDL_Rect r, SDL_Rect sprite, SDL_Rect spriten2, SDL_Rect spriten3, bool d, bool f, SDL_Rect d_area) :UI(type, r, p, d, f, d_area) {
-	name.create("ButtonUI");
+	name.append("ButtonUI");
 	sprite1 = sprite;
 	sprite2 = spriten2;
 	sprite3 = spriten3;
@@ -667,8 +705,8 @@ bool ButtonUI::PreUpdate() {
 }
 
 
-TextInputUI::TextInputUI(Type type, UI* p, SDL_Rect r, int re, int g, int b, int a, p2SString str, bool d, bool f, SDL_Rect d_area) :UI(type, r, p, d, f, d_area, true) {
-	name.create("TextInputUI");
+TextInputUI::TextInputUI(Type type, UI* p, SDL_Rect r, int re, int g, int b, int a, std::string str, bool d, bool f, SDL_Rect d_area) :UI(type, r, p, d, f, d_area, true) {
+	name.append("TextInputUI");
 	sprite1 = { 0,0,0,0 };
 	quad = r;
 	label = str;
@@ -698,28 +736,36 @@ bool TextInputUI::PreUpdate() {
 		SDL_StopTextInput();
 		text_input = false;
 	}
-	if (focus == true) {
-		if (App->input->special_keys == specialkeys::Backspace) {
-			label = label.Backspace(position);
+	if (focus == true) 
+	{
+		if (App->input->special_keys == specialkeys::Backspace) 
+		{
 			if (position > 0)
+			{
+				label = label.erase(position - 1, 1);
 				position--;
+			}
 		}
 		else if (App->input->special_keys == specialkeys::Left) {
 			if (position > 0)
 				position--;
 		}
 		else if (App->input->special_keys == specialkeys::Right) {
-			if (position < label.GetCapacity())
+			if (position < label.size())
 				position++;
 		}
 		else if (App->input->special_keys == specialkeys::Supr) {
-			label = label.Supr(position);
+			if (position > 0) 
+			{
+				label = label.erase(position - 1);
+				position--;
+			}
 		}
 		else if (App->input->special_keys == specialkeys::Home) {
 			position = 0;
 		}
 		else if (App->input->special_keys == specialkeys::End) {
-			position = label.GetCapacity();
+			position = label.size();
 		}
 
 	}
@@ -734,18 +780,20 @@ bool TextInputUI::PostUpdate() {
 	}
 
 	SDL_Rect rect = { 0,0,0,0 };
-	if (strcmp(label.GetString(), "")) {
-		SDL_Texture* text = App->font->Print(label.GetString());
+	if (strcmp(label.c_str(), "")) {
+		SDL_Texture* text = App->font->Print(label.c_str());
 		SDL_QueryTexture(text, NULL, NULL, &rect.w, &rect.h);
 		SDL_Rect sprite = UI::Check_Printable_Rect(rect, dif_sprite);
 		if (this->active) App->render->Blit(text, quad.x + dif_sprite.x, quad.y + dif_sprite.y, &sprite, 0.0F);
 		App->tex->UnLoad(text);
 	}
 
-	if (focus == true) {
-		p2SString label_from_position = label.StrFromPosition(position);
+	if (focus == true) 
+	{
+		std::string label_from_position = label;
+		label_from_position.erase(label_from_position.begin() + position, label_from_position.end());
 		int w, h;
-		App->font->CalcSize(label_from_position.GetString(), w, h);
+		App->font->CalcSize(label_from_position.c_str(), w, h);
 		App->render->DrawLine(quad.x + w, quad.y, quad.x + w, quad.y + quad.h, 0, 255, 255, 255, false);
 	}
 	UI::PostUpdate();
@@ -755,30 +803,37 @@ bool TextInputUI::PostUpdate() {
 	return true;
 }
 
-void TextInputUI::ChangeLabel(p2SString text) {
-	p2SString label_part_2, label_part_1;
+//BUG: when moving with left or right keys and typing
+void TextInputUI::ChangeLabel(std::string text) 
+{
+	std::string label_part_2, label_part_1;
 	label_part_1 = label_part_2 = label;
-	for (int i = position; i < label.Length(); i++) {
-		label_part_1 = label_part_1.Supr(position);
+	for (unsigned i = position; i < label.size(); i++) 
+	{
+		label_part_1.erase(position);
 	}
-	if (strcmp(label.GetString(), label_part_1.GetString())) {
-		for (int i = 0; i < position; i++) {
-			label_part_2 = label_part_2.Supr(0);
+	if (strcmp(label.c_str(), label_part_1.c_str())) 
+	{
+		for (int i = 0; i < position; i++) 
+		{
+			label_part_2 = label_part_2.erase(0);
 		}
 	}
 	else {
 		label_part_2 = "";
 	}
-	label_part_1 += text.GetString();
+	label_part_1 += text.c_str();
 	label_part_1 += label_part_2;
 	label = label_part_1;
 	position++;
 }
 
-void TextInputUI::SetLabel(p2SString text) {
-	if (App->input->GetKey(SDL_SCANCODE_GRAVE) != KEY_DOWN) {
-		label = text.GetString();
-		position += label.GetCapacity();
+void TextInputUI::SetLabel(std::string text) 
+{
+	if (App->input->GetKey(SDL_SCANCODE_GRAVE) != KEY_DOWN) 
+	{
+		label = text.c_str();
+		position += label.size() - 1;
 	}
 }
 

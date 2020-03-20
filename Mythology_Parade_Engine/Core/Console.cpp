@@ -8,7 +8,7 @@
 #include "j1Window.h"
 
 Console::Console() {
-	name.create("console");
+	name.append("console");
 	console_active = false;
 }
 
@@ -53,7 +53,7 @@ bool Console::PreUpdate() {
 	if (console_active == true) {
 		console_input->focus = true;
 		if (App->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
-			p2SString argument = CheckCommand();
+			std::string argument = CheckCommand();
 			ExecuteCommand(argument);
 			console_input->SetLabel("");
 			console_input->SetPositionToZero();
@@ -76,12 +76,12 @@ void Console::ActivateConsole()
 	console_log = (ListTextsUI*)App->gui->CreateUIElement(Type::LISTTEXTS, console_background, output_pos, { 0,0,0,0 }, App->logs.begin()->c_str(), { 0,0,0,0 }, { 0,0,0,0 }, true,
 		output_drag_area, nullptr, true);
 	console_input = (TextInputUI*)App->gui->CreateUIElement(Type::INPUT, nullptr, input_pos, "", input_red, input_green, input_blue, input_alpha);
-	console_input->SetLabel(label.GetString());
+	console_input->SetLabel(label.c_str());
 }
 
-p2SString Console::CheckCommand() {
-	p2SString argument = "";
-	const char* command_text = console_input->GetLabel().GetString();
+std::string Console::CheckCommand() {
+	std::string argument = "";
+	const char* command_text = console_input->GetLabel().c_str();
 	if (!strcmp(command_text, "list"))
 		command = commands::list;
 	else if (!strcmp(command_text, "god_mode") || !strcmp(command_text, "god mode") || !strcmp(command_text, "godmode"))
@@ -93,17 +93,17 @@ p2SString Console::CheckCommand() {
 	else if (!strcmp(command_text, "map"))
 		command = commands::map;
 	else {
-		p2SString three_letters_command = argument = console_input->GetLabel();
-		int num_of_letters = three_letters_command.Length();
+		std::string three_letters_command = argument = console_input->GetLabel();
+		int num_of_letters = three_letters_command.size();
 		for (int i = 3; i < num_of_letters; i++) {
-			three_letters_command = three_letters_command.Supr(3);
+			three_letters_command = three_letters_command.erase(3);
 		}
 		for (int i = 0; i < 4; i++) {
-			argument = argument.Supr(0);
+			argument = argument.erase(0);
 		}
-		if (!strcmp(three_letters_command.GetString(), "FPS") || !strcmp(three_letters_command.GetString(), "Fps") || !strcmp(three_letters_command.GetString(), "fps"))
+		if (!strcmp(three_letters_command.c_str(), "FPS") || !strcmp(three_letters_command.c_str(), "Fps") || !strcmp(three_letters_command.c_str(), "fps"))
 			command = commands::FPS;
-		else if (!strcmp(three_letters_command.GetString(), "map"))
+		else if (!strcmp(three_letters_command.c_str(), "map"))
 			command = commands::map;
 		else
 			command = commands::none;
@@ -111,7 +111,7 @@ p2SString Console::CheckCommand() {
 	return argument;
 }
 
-void Console::ExecuteCommand(p2SString argument) {
+void Console::ExecuteCommand(std::string argument) {
 	int fps = 0;
 	switch (command) {
 	case commands::list:

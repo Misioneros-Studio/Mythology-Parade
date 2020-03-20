@@ -2,7 +2,7 @@
 
 EntityManager::EntityManager()
 {
-	name.create("entity_manager");
+	name.append("entity_manager");
 }
 
 //Destructor

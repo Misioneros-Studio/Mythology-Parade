@@ -120,7 +120,7 @@ public:
 class TextUI :public UI
 {
 public:
-	TextUI(Type type, UI* p, SDL_Rect r, p2SString str, bool d, bool f, SDL_Rect d_area, bool console);
+	TextUI(Type type, UI* p, SDL_Rect r, std::string str, bool d, bool f, SDL_Rect d_area, bool console);
 
 	// Destructor
 	virtual ~TextUI() {}
@@ -128,17 +128,17 @@ public:
 	// Called after all Updates
 	bool PostUpdate();
 
-	void SetString(p2SString);
+	void SetString(std::string);
 
 public:
 
-	p2SString stri;
+	std::string stri;
 };
 
 class ListTextsUI :public UI
 {
 public:
-	ListTextsUI(Type type, UI* p, SDL_Rect r, p2SString str, bool d, bool f, SDL_Rect d_area, bool console);
+	ListTextsUI(Type type, UI* p, SDL_Rect r, std::string str, bool d, bool f, SDL_Rect d_area, bool console);
 
 	// Destructor
 	virtual ~ListTextsUI() {}
@@ -146,13 +146,13 @@ public:
 	// Called after all Updates
 	bool PostUpdate();
 
-	void SetListOfStrings(p2SString string, int position);
+	void SetListOfStrings(std::string string, int position);
 
 	int GetNumberOfStrings() { return number_of_stri; }
 
 private:
 
-	p2List<p2SString> stri;
+	std::list<std::string> stri;
 	int number_of_stri;
 };
 
@@ -191,7 +191,7 @@ public:
 class TextInputUI :public UI
 {
 public:
-	TextInputUI(Type type, UI* p, SDL_Rect r, int re, int g, int b, int a, p2SString str, bool d, bool f, SDL_Rect d_area);
+	TextInputUI(Type type, UI* p, SDL_Rect r, int re, int g, int b, int a, std::string str, bool d, bool f, SDL_Rect d_area);
 
 	// Destructor
 	virtual ~TextInputUI() {}
@@ -200,16 +200,16 @@ public:
 	bool PreUpdate();
 	bool PostUpdate();
 
-	void ChangeLabel(p2SString text);
+	void ChangeLabel(std::string text);
 
-	void SetLabel(p2SString text);
+	void SetLabel(std::string text);
 
 	void SetPositionToZero();
 
-	p2SString GetLabel() { return label; }
+	std::string GetLabel() { return label; }
 
 private:
-	p2SString label;
+	std::string label;
 	bool text_input;
 	int position;
 	bool square;
@@ -244,9 +244,9 @@ public:
 	bool CleanUp();
 
 	// Gui creation functions
-	UI* CreateUIElement(Type type, UI* p, SDL_Rect r, SDL_Rect sprite = { 0,0,0,0 }, p2SString str = "", SDL_Rect sprite2 = { 0,0,0,0 }, SDL_Rect sprite3 = { 0,0,0,0 }, bool drageable = false,
+	UI* CreateUIElement(Type type, UI* p, SDL_Rect r, SDL_Rect sprite = { 0,0,0,0 }, std::string str = "", SDL_Rect sprite2 = { 0,0,0,0 }, SDL_Rect sprite3 = { 0,0,0,0 }, bool drageable = false,
 		SDL_Rect drag_area = { 0,0,0,0 }, j1Module* s_listener = nullptr, bool console = false, float drag_position_scroll_bar = -1);
-	UI* CreateUIElement(Type type, UI* p, SDL_Rect r, p2SString str, int re, int g, int b, int a, bool drageable = false, SDL_Rect drag_area = { 0,0,0,0 }, j1Module* s_listener = nullptr);
+	UI* CreateUIElement(Type type, UI* p, SDL_Rect r, std::string str, int re, int g, int b, int a, bool drageable = false, SDL_Rect drag_area = { 0,0,0,0 }, j1Module* s_listener = nullptr);
 	bool DeleteUIElement(UI*);
 
 	void ChangeDebug();
@@ -261,13 +261,13 @@ public:
 
 	void ReturnConsole();
 
-	void WorkWithTextInput(p2SString text);
+	void WorkWithTextInput(std::string text);
 
 private:
 
-	p2List <UI*> UIs;
+	std::list <UI*> UIs;
 	SDL_Texture* atlas;
-	p2SString atlas_file_name;
+	std::string atlas_file_name;
 
 public:
 

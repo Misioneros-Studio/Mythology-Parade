@@ -5,7 +5,7 @@
 
 j1PathFinding::j1PathFinding() : j1Module(), map(NULL), last_path(DEFAULT_PATH_LENGTH),width(0), height(0)
 {
-	name.create("pathfinding");
+	name.append("pathfinding");
 }
 
 // Destructor
@@ -19,7 +19,7 @@ bool j1PathFinding::CleanUp()
 {
 	LOG("Freeing pathfinding library");
 
-	last_path.Clear();
+	last_path.clear();
 	RELEASE_ARRAY(map);
 	return true;
 }
@@ -59,7 +59,7 @@ uchar j1PathFinding::GetTileAt(const iPoint& pos) const
 }
 
 // To request all tiles involved in the last generated path
-const p2DynArray<iPoint>* j1PathFinding::GetLastPath() const
+const std::list<iPoint>* j1PathFinding::GetLastPath()
 {
 	return &last_path;
 }
@@ -67,14 +67,12 @@ const p2DynArray<iPoint>* j1PathFinding::GetLastPath() const
 // PathList ------------------------------------------------------------------------
 // Looks for a node in this list and returns it's list node or NULL
 // ---------------------------------------------------------------------------------
-p2List_item<PathNode>* PathList::Find(const iPoint& point) const
+PathNode* PathList::Find(const iPoint& point)
 {
-	p2List_item<PathNode>* item = list.start;
-	while(item)
+	for (std::list<PathNode>::iterator it = list.begin(); it != list.end(); it++)
 	{
-		if(item->data.pos == point)
-			return item;
-		item = item->next;
+		if(it->pos == point)
+			return &it._Ptr->_Myval;
 	}
 	return NULL;
 }
@@ -82,20 +80,18 @@ p2List_item<PathNode>* PathList::Find(const iPoint& point) const
 // PathList ------------------------------------------------------------------------
 // Returns the Pathnode with lowest score in this list or NULL if empty
 // ---------------------------------------------------------------------------------
-p2List_item<PathNode>* PathList::GetNodeLowestScore() const
+PathNode* PathList::GetNodeLowestScore()
 {
-	p2List_item<PathNode>* ret = NULL;
+	PathNode* ret = NULL;
 	int min = 65535;
 
-	p2List_item<PathNode>* item = list.end;
-	while(item)
+	for (std::list<PathNode>::iterator it = list.begin(); it != list.end(); it++)
 	{
-		if(item->data.Score() < min)
+		if(it->Score() < min)
 		{
-			min = item->data.Score();
-			ret = item;
+			min = it->Score();
+			ret = &it._Ptr->_Myval;
 		}
-		item = item->prev;
 	}
 	return ret;
 }
@@ -118,29 +114,29 @@ PathNode::PathNode(const PathNode& node) : g(node.g), h(node.h), pos(node.pos), 
 uint PathNode::FindWalkableAdjacents(PathList& list_to_fill) const
 {
 	iPoint cell;
-	uint before = list_to_fill.list.count();
+	uint before = list_to_fill.list.size();
 
 	// north
 	cell.create(pos.x, pos.y + 1);
 	if(App->pathfinding->IsWalkable(cell))
-		list_to_fill.list.add(PathNode(-1, -1, cell, this));
+		list_to_fill.list.push_back(PathNode(-1, -1, cell, this));
 
 	// south
 	cell.create(pos.x, pos.y - 1);
 	if(App->pathfinding->IsWalkable(cell))
-		list_to_fill.list.add(PathNode(-1, -1, cell, this));
+		list_to_fill.list.push_back(PathNode(-1, -1, cell, this));
 
 	// east
 	cell.create(pos.x + 1, pos.y);
 	if(App->pathfinding->IsWalkable(cell))
-		list_to_fill.list.add(PathNode(-1, -1, cell, this));
+		list_to_fill.list.push_back(PathNode(-1, -1, cell, this));
 
 	// west
 	cell.create(pos.x - 1, pos.y);
 	if(App->pathfinding->IsWalkable(cell))
-		list_to_fill.list.add(PathNode(-1, -1, cell, this));
+		list_to_fill.list.push_back(PathNode(-1, -1, cell, this));
 
-	return list_to_fill.list.count();
+	return list_to_fill.list.size();
 }
 
 // PathNode -------------------------------------------------------------------------

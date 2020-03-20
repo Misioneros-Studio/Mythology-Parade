@@ -110,7 +110,7 @@ bool j1App::Awake()
 	{
 		for (std::list<j1Module*>::iterator it = modules.begin(); it != modules.end(); it++)
 		{
-			ret = it._Ptr->_Myval->Awake(config.child(it._Ptr->_Myval->name.GetString()));
+			ret = it._Ptr->_Myval->Awake(config.child(it._Ptr->_Myval->name.c_str()));
 		}
 	}
 
@@ -290,7 +290,8 @@ bool j1App::CleanUp()
 	modules.reverse();
 	for (std::list<j1Module*>::iterator it = modules.begin(); it != modules.end() && ret == true; it++)
 	{
-		ret = it._Ptr->_Myval->CleanUp();
+		if(it._Ptr->_Myval != nullptr)
+			ret = it._Ptr->_Myval->CleanUp();
 	}
 
 	PERF_PEEK(ptimer);
@@ -376,7 +377,7 @@ bool j1App::LoadGameNow()
 
 		for (std::list<j1Module*>::iterator it = modules.begin(); it != modules.end() && ret == true; it++)
 		{
-			ret = it._Ptr->_Myval->Load(root.child(it._Ptr->_Myval->name.GetString()));
+			ret = it._Ptr->_Myval->Load(root.child(it._Ptr->_Myval->name.c_str()));
 			item = it._Ptr->_Myval;
 		}
 
@@ -385,7 +386,7 @@ bool j1App::LoadGameNow()
 		if(ret == true)
 			LOG("...finished loading");
 		else
-			LOG("...loading process interrupted with error on module %s", (item != NULL) ? item->name.GetString() : "unknown");
+			LOG("...loading process interrupted with error on module %s", (item != NULL) ? item->name.c_str() : "unknown");
 	}
 	else
 		LOG("Could not parse game state xml file %s. pugi error: %s", load_game.c_str(), result.description());
@@ -410,7 +411,7 @@ bool j1App::SavegameNow()
 
 	for (std::list<j1Module*>::iterator it = modules.begin(); it != modules.end() && ret == true; it++)
 	{
-		ret = it._Ptr->_Myval->Save(root.append_child(it._Ptr->_Myval->name.GetString()));
+		ret = it._Ptr->_Myval->Save(root.append_child(it._Ptr->_Myval->name.c_str()));
 		item = it._Ptr->_Myval;
 	}
 
@@ -424,7 +425,7 @@ bool j1App::SavegameNow()
 		LOG("... finished saving", save_game.c_str());
 	}
 	else
-		LOG("Save process halted from an error in module %s", (item != NULL) ? item->name.GetString() : "unknown");
+		LOG("Save process halted from an error in module %s", (item != NULL) ? item->name.c_str() : "unknown");
 
 	data.reset();
 	want_to_save = false;
