@@ -112,6 +112,8 @@ UI* j1Gui::CreateUIElement(Type type, UI* p, SDL_Rect r, SDL_Rect sprite, std::s
 	bool console, float drag_position_scroll_bar)
 {
 	UI* ui = nullptr;
+	SDL_Color colour;
+	bool title;
 	switch (type)
 	{
 	case Type::BUTTON:
@@ -124,7 +126,12 @@ UI* j1Gui::CreateUIElement(Type type, UI* p, SDL_Rect r, SDL_Rect sprite, std::s
 		ui = new WindowUI(Type::WINDOW, p, r, sprite, drageable, drageable, drag_area);
 		break;
 	case Type::TEXT:
-		ui = new TextUI(Type::TEXT, p, r, str, drageable, drageable, drag_area, console);
+		colour = { (Uint8)sprite2.x,(Uint8)sprite2.y,(Uint8)sprite2.w,(Uint8)sprite2.h };
+		if (sprite3.x == 0)
+			title = false;
+		else
+			title = true;
+		ui = new TextUI(Type::TEXT, p, r, str, drageable, drageable, drag_area, console, colour, title);
 		break;
 	case Type::LISTTEXTS:
 		ui = new ListTextsUI(Type::LISTTEXTS, p, r, str, drageable, drageable, drag_area, console);
@@ -560,17 +567,26 @@ bool WindowUI::PostUpdate() {
 	return true;
 }
 
-TextUI::TextUI(Type type, UI* p, SDL_Rect r, std::string str, bool d, bool f, SDL_Rect d_area, bool console) :UI(type, r, p, d, f, d_area, console) {
+
+TextUI::TextUI(Type type, UI* p, SDL_Rect r, p2SString str, bool d, bool f, SDL_Rect d_area, bool console, SDL_Color coulor, bool title) :UI(type, r, p, d, f, d_area, console) 
+{
 	name.append("TextUI");
 	stri = str.c_str();
 	quad = r;
+	color = coulor;
+	title_default = title;
 }
 
 bool TextUI::PostUpdate() {
 	SDL_Rect rect = { 0,0,0,0 };
 	iPoint dif_sprite = { 0,0 };
 
-	SDL_Texture* text = App->font->Print(stri.c_str());
+  
+	SDL_Texture* text;
+	if(title_default==false)
+		text = App->font->Print(stri.c_str(), color);
+	else
+		text = App->font->Print(stri.c_str(), color, App->font->default_title);
 
 	SDL_QueryTexture(text, NULL, NULL, &rect.w, &rect.h);
 
@@ -650,6 +666,7 @@ ButtonUI::ButtonUI(Type type, UI* p, SDL_Rect r, SDL_Rect sprite, SDL_Rect sprit
 	pushed = false;
 	quad = r;
 	isLocked = false;
+	front = true;
 }
 
 bool ButtonUI::PostUpdate() {
@@ -678,7 +695,7 @@ bool ButtonUI::PreUpdate() {
 	int x, y;
 	App->input->GetMousePosition(x, y);
 
-	if ((x >= GetScreenPos().x && x <= GetScreenPos().x + GetScreenRect().w && y >= GetScreenPos().y && y <= GetScreenPos().y + GetScreenRect().h) || focus == true)
+	if (front == true && ((x >= GetScreenPos().x && x <= GetScreenPos().x + GetScreenRect().w && y >= GetScreenPos().y && y <= GetScreenPos().y + GetScreenRect().h) || focus == true))
 		over = true;
 	else over = false;
 	bool button = false;

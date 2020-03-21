@@ -47,9 +47,19 @@ bool j1Scene::Start()
 		RELEASE_ARRAY(data);
 	}
 
+	ui_ingame=(ImageUI*)App->gui->CreateUIElement(Type::IMAGE, nullptr, { 0,590,1280,130 }, { 0,590,1280,130 });
+	for (int i = 0; i < 3; i++) {
+		ui_text_ingame[i] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 104,610+(i*33),237,38 }, { 0,0,100,100 }, "999", { 255,255,255,255 }, { 1,0,0,0 });
+	}
+	for (int i = 0; i < 8; i++) {
+		if (i != 7) {
+			ui_button[i] = nullptr;
+		}
+		ui_text[i] = nullptr;
+	}
+
 	debug_tex = App->tex->Load("maps/path2.png");
 	cursor_tex = App->tex->Load("gui/cursors.png");
-
 
 
 	iPoint position;
@@ -58,7 +68,6 @@ bool j1Scene::Start()
 	size = iPoint(App->map->data.width * App->map->data.tile_width, App->map->data.height * App->map->data.tile_height);
 	quadTree = new QuadTree(TreeType::ISOMETRIC, position.x + (App->map->data.tile_width / 2), position.y, size.x, size.y);
 	quadTree->baseNode->SubDivide(quadTree->baseNode, 4);
-
 	return true;
 }
 
@@ -103,6 +112,9 @@ bool j1Scene::Update(float dt)
 
 	if (App->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
 		App->SaveGame("save_game.xml");
+
+	if (App->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
+		ActivatePauseMenu();
 
 	if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
 		App->render->camera.y += floor(700.0f * dt);
@@ -172,9 +184,6 @@ bool j1Scene::PostUpdate()
 {
 	bool ret = true;
 
-	if (App->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
-		ret = false;
-
 	return ret;
 }
 
@@ -188,4 +197,130 @@ bool j1Scene::CleanUp()
 	quadTree->Clear();
 
 	return true;
+}
+
+// Called when clicking esc
+void j1Scene::ActivatePauseMenu() {
+	if (ui_pause_window == nullptr) {
+		ui_pause_window = (WindowUI*)App->gui->CreateUIElement(Type::WINDOW, nullptr, { 410,100,459,531 }, { 216,21,459,531 });
+		ui_button[0] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_pause_window, { 520,160,237,38 }, { 787,240,237,38 }, "SAVE", { 787,342,237,38 }, { 787,291,237,38 }, false, { 0,0,0,0 }, this);
+		ui_text[0] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 607,172,237,38 }, { 0,0,100,100 }, "Save Game", {0,0,0,255});
+		ui_button[1] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_pause_window, { 520,220,237,38 }, { 787,240,237,38 }, "LOAD", { 787,342,237,38 }, { 787,291,237,38 }, false, { 0,0,0,0 }, this);
+		ui_text[1] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 604,232,237,38 }, { 0,0,100,100 }, "Load Game", { 0,0,0,255 });
+		ui_button[2] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_pause_window, { 520,280,237,38 }, { 787,240,237,38 }, "OPTIONS", { 787,342,237,38 }, { 787,291,237,38 }, false, { 0,0,0,0 }, this);
+		ui_text[2] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 613,292,237,38 }, { 0,0,100,100 }, "Options", { 0,0,0,255 });
+		ui_button[3] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_pause_window, { 520,340,237,38 }, { 787,240,237,38 }, "RESTART", { 787,342,237,38 }, { 787,291,237,38 }, false, { 0,0,0,0 }, this);
+		ui_text[3] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 614,352,237,38 }, { 0,0,100,100 }, "Restart", { 0,0,0,255 });
+		ui_button[4] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_pause_window, { 520,400,237,38 }, { 787,240,237,38 }, "SURRENDER", { 787,342,237,38 }, { 787,291,237,38 }, false, { 0,0,0,0 }, this);
+		ui_text[4] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 607,412,237,38 }, { 0,0,100,100 }, "Surrender");
+		ui_button[5] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_pause_window, { 520,460,237,38 }, { 787,240,237,38 }, "EXIT", { 787,342,237,38 }, { 787,291,237,38 }, false, { 0,0,0,0 }, this);
+		ui_text[5] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 625,472,237,38 }, { 0,0,100,100 }, "Exit", { 0,0,0,255 });
+		ui_button[6] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_pause_window, { 520,560,237,38 }, { 787,240,237,38 }, "CLOSE", { 787,342,237,38 }, { 787,291,237,38 }, false, { 0,0,0,0 }, this);
+		ui_text[6] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 620,572,237,38 }, { 0,0,100,100 }, "Close", { 0,0,0,255 });
+		ui_text[7] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 604,112,237,38 }, { 0,0,100,100 }, "PAUSE", { 255,255,255,255 }, { 1,0,0,0 });
+	}
+}
+
+// Called when clicking close button in pause menu
+void j1Scene::DeactivatePauseMenu() {
+	if (ui_pause_window != nullptr) {
+		App->gui->DeleteUIElement(ui_pause_window);
+		ui_pause_window = nullptr;
+		for (int i = 7; i >= 0; i--) {
+			if (i != 7) {
+				if (ui_button[i] != nullptr) {
+					App->gui->DeleteUIElement(ui_button[i]);
+					ui_button[i] = nullptr;
+				}
+			}
+			if (ui_text[i] != nullptr) {
+				App->gui->DeleteUIElement(ui_text[i]);
+				ui_text[i] = nullptr;
+			}
+		}
+	}
+}
+
+
+
+
+// Called when clicking options button in pause menu
+void j1Scene::ActivateOptionsMenu() {
+	if (ui_options_window == nullptr) {
+		ui_options_window = (WindowUI*)App->gui->CreateUIElement(Type::WINDOW, nullptr, { 410,200,459,168 }, { 790,408,459,168 });
+		ui_button_options = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_pause_window, { 520,300,237,38 }, { 787,240,237,38 }, "CLOSE OPTIONS", { 787,342,237,38 }, { 787,291,237,38 }, false, { 0,0,0,0 }, this);
+		ui_text_options[0] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 619,312,237,38 }, { 0,0,100,100 }, "Close", { 0,0,0,255 });
+		ui_text_options[1] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 583,212,237,38 }, { 0,0,100,100 }, "OPTIONS", { 255,255,255,255 }, { 1,0,0,0 });
+	}
+	for (int i = 0; i < 7; i++) {
+		if (ui_button[i] != nullptr) {
+			ui_button[i]->front = false;
+		}
+	}
+}
+
+// Called when clicking close button in options menu
+void j1Scene::DeactivateOptionsMenu() {
+	if (ui_options_window != nullptr) {
+		App->gui->DeleteUIElement(ui_options_window);
+		ui_options_window = nullptr;
+		if (ui_button_options != nullptr) {
+			App->gui->DeleteUIElement(ui_button_options);
+			ui_button_options = nullptr;
+		}
+		for (int i = 1; i >= 0; i--) {
+			if (ui_text_options[i] != nullptr) {
+				App->gui->DeleteUIElement(ui_text_options[i]);
+				ui_text_options[i] = nullptr;
+			}
+		}
+	}
+	for (int i = 0; i < 7; i++) {
+		if (ui_button[i] != nullptr) {
+			ui_button[i]->front = true;
+		}
+	}
+}
+
+
+void j1Scene::OnClick(UI* element, float argument)
+{
+
+	switch (element->type)
+	{
+
+	case Type::BUTTON:
+
+		if (element->name == (p2SString)"SAVE")
+		{
+			App->SaveGame("save_game.xml");
+		}
+		else if (element->name == (p2SString)"LOAD")
+		{
+			App->LoadGame("save_game.xml");
+		}
+		else if (element->name == (p2SString)"OPTIONS")
+		{
+			ActivateOptionsMenu();
+		}
+		else if (element->name == (p2SString)"CLOSE OPTIONS")
+		{
+			DeactivateOptionsMenu();
+		}
+		else if (element->name == (p2SString)"EXIT")
+		{
+			exitGame = true;
+		}
+		else if (element->name == (p2SString)"CLOSE")
+		{
+			DeactivatePauseMenu();
+		}
+		break;
+
+
+	default:
+		break;
+	}
+
+
 }
