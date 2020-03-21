@@ -16,7 +16,7 @@
 
 j1Scene::j1Scene() : j1Module()
 {
-	name.create("scene");
+	name.append("scene");
 }
 
 // Destructor
@@ -164,11 +164,16 @@ bool j1Scene::Update(float dt)
 	p = App->render->ScreenToWorld(x, y);
 	App->render->Blit(cursor_tex, p.x, p.y, &sec);
 
-	const p2DynArray<iPoint>* path = App->pathfinding->GetLastPath();
-	for (uint i = 0; i < path->Count(); ++i)
+
+	std::list<iPoint> path = *App->pathfinding->GetLastPath();
+
+	if (!path.begin()->IsZero()) 
 	{
-		iPoint pos = App->map->MapToWorld(path->At(i)->x, path->At(i)->y);
-		App->render->Blit(debug_tex, pos.x, pos.y);
+		for (std::list<iPoint>::iterator it = path.begin(); it != path.end(); it++)
+		{
+			iPoint pos = App->map->MapToWorld(it->x, it->y);
+			App->render->Blit(debug_tex, pos.x, pos.y);
+		}
 	}
 
 	return true;

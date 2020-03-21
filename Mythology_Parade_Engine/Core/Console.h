@@ -37,8 +37,8 @@ public:
 	// Called before quitting
 	bool CleanUp() { return true; };
 
-	p2SString CheckCommand();
-	void ExecuteCommand(p2SString argument);
+	std::string CheckCommand();
+	void ExecuteCommand(std::string argument);
 
 public:
 	ListTextsUI* console_log;
@@ -58,7 +58,7 @@ private:
 	int input_alpha;
 	SDL_Rect output_pos;
 	SDL_Rect output_drag_area;
-	p2SString label;
+	std::string label;
 	commands command;
 };
 
