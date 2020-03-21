@@ -159,15 +159,9 @@ bool j1Scene::Update(float dt)
 
 	App->render->Blit(debug_tex, p.x, p.y);
 
-	//Show cursor ------------------------------
-	SDL_Rect sec = { 0, 0, 54, 45 };
-	p = App->render->ScreenToWorld(x, y);
-	App->render->Blit(cursor_tex, p.x, p.y, &sec);
-
-
 	std::list<iPoint> path = *App->pathfinding->GetLastPath();
 
-	if (!path.begin()->IsZero()) 
+	if (path.size() != 0) 
 	{
 		for (std::list<iPoint>::iterator it = path.begin(); it != path.end(); it++)
 		{
@@ -183,6 +177,14 @@ bool j1Scene::Update(float dt)
 bool j1Scene::PostUpdate()
 {
 	bool ret = true;
+
+	//Show cursor ------------------------------
+	int x, y;
+	App->input->GetMousePosition(x, y);
+	iPoint p = App->render->ScreenToWorld(x, y);
+	SDL_Rect sec = { 0, 0, 54, 45 };
+	p = App->render->ScreenToWorld(x, y);
+	App->render->Blit(cursor_tex, p.x, p.y, &sec);
 
 	return ret;
 }
@@ -291,27 +293,27 @@ void j1Scene::OnClick(UI* element, float argument)
 
 	case Type::BUTTON:
 
-		if (element->name == (p2SString)"SAVE")
+		if (element->name == "SAVE")
 		{
 			App->SaveGame("save_game.xml");
 		}
-		else if (element->name == (p2SString)"LOAD")
+		else if (element->name == "LOAD")
 		{
 			App->LoadGame("save_game.xml");
 		}
-		else if (element->name == (p2SString)"OPTIONS")
+		else if (element->name == "OPTIONS")
 		{
 			ActivateOptionsMenu();
 		}
-		else if (element->name == (p2SString)"CLOSE OPTIONS")
+		else if (element->name == "CLOSE OPTIONS")
 		{
 			DeactivateOptionsMenu();
 		}
-		else if (element->name == (p2SString)"EXIT")
+		else if (element->name == "EXIT")
 		{
 			exitGame = true;
 		}
-		else if (element->name == (p2SString)"CLOSE")
+		else if (element->name == "CLOSE")
 		{
 			DeactivatePauseMenu();
 		}

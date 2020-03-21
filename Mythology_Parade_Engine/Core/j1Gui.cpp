@@ -568,7 +568,7 @@ bool WindowUI::PostUpdate() {
 }
 
 
-TextUI::TextUI(Type type, UI* p, SDL_Rect r, p2SString str, bool d, bool f, SDL_Rect d_area, bool console, SDL_Color coulor, bool title) :UI(type, r, p, d, f, d_area, console) 
+TextUI::TextUI(Type type, UI* p, SDL_Rect r, std::string str, bool d, bool f, SDL_Rect d_area, bool console, SDL_Color coulor, bool title) :UI(type, r, p, d, f, d_area, console) 
 {
 	name.append("TextUI");
 	stri = str.c_str();
