@@ -61,6 +61,9 @@
     <ClCompile Include="j1CurrencySystem.cpp">
       <Filter>Core\Tools</Filter>
     </ClCompile>
+    <ClCompile Include="Animation.cpp">
+      <Filter>Core\Modules</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1Window.h">
@@ -134,6 +137,9 @@
     </ClInclude>
     <ClInclude Include="j1CurrencySystem.h">
       <Filter>Core\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="Animation.h">
+      <Filter>Core\Modules</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

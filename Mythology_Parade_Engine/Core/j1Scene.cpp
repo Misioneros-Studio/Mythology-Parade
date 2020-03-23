@@ -10,6 +10,7 @@
 #include "j1PathFinding.h"
 #include "j1Gui.h"
 #include "j1Fonts.h"
+#include "Animation.h"
 #include "j1Scene.h"
 
 #include"QuadTree.h"
@@ -61,6 +62,10 @@ bool j1Scene::Start()
 	debug_tex = App->tex->Load("maps/path2.png");
 	cursor_tex = App->tex->Load("gui/cursors.png");
 
+
+	//Eudald: This shouldn't be here but we don't have an entity system to load each animation yet
+	App->animation->Load("assets/units/Assassin.tmx");
+		
 
 	iPoint position;
 	iPoint size;
