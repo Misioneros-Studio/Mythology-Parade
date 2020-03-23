@@ -627,7 +627,7 @@ bool ListTextsUI::PostUpdate() {
 		std::list<std::string>::iterator it = stri.begin();
 		std::advance(it, i);
 
-		SDL_Texture* text = App->font->Print(it->c_str());
+		SDL_Texture* text = App->font->Print(it->c_str(), {255,255,255,255});
 
 		SDL_QueryTexture(text, NULL, NULL, &rect.w, &rect.h);
 
