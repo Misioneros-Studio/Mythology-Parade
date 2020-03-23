@@ -1,9 +1,21 @@
 #include "Unit.h"
 #include "p2Log.h"
 #include "j1Textures.h"
+#include "j1Input.h"
 
-Unit::Unit()
+Unit::Unit(UnitType type): unitType(type), state(IDLE), isSelected(false), moveSpeed(1)
 {
+	
+
+	//Init Units
+	switch (type)
+	{
+	case MONK:
+		SetMaxHealth(1); 
+		break;
+	}
+
+	HealthSystem::Init();
 
 }
 
@@ -14,7 +26,7 @@ Unit::~Unit()
 bool Unit::Start()
 {
 	bool ret = true;
-	state = State::IDLE;
+
 	//pugi::xml_document	character_file;
 	//pugi::xml_parse_result result = character_file.load_file("assets/units/Assassin.tmx");
 	//pugi::xml_node	character_node = character_file.child("map");
@@ -30,35 +42,54 @@ bool Unit::Start()
 bool Unit::Update(float dt)
 {
 	bool ret = true;
-	Draw(dt);
+
+	//STATE MACHINE
+	switch (state)
+	{
+	case IDLE:
+		break;
+	case MOVE:
+		break;
+
+	}
+
+
+
+	//Allawys blit the sprite at the end
+	ret = Draw(dt);
+	Action();
+	//Return
 	return ret;
 }
 
-void Unit::Move(p2Point<int>)
+void Unit::SetMoveSpeed(int value)
+{
+	moveSpeed = value;
+}
+
+void Unit::MoveTo(p2Point<int>)
 {
 	//move function logic
 }
+
 
 bool Unit::Draw(float dt)
 {
 	bool ret = true;
 	//App->render->Blit(texture, -90, 430, &position_rect);
-	LOG("%u", healthSystem.GetHealth());
+	//LOG("%u", healthSystem.GetHealth());
 	return ret;
 }
 
-
-
-void HealthSystem::RecieveDamage(int value)
+void Unit::Action()
 {
-	if (!isDeath)
-		health -= value;
-
-	if (health <= 0)
-		isDeath = true;
+	switch (unitType)
+	{
+	case MONK:
+	LOG("I'm a monk unit!");
+		break;
+	}
 }
 
-int HealthSystem::GetHealth()
-{
-	return health;
-}
+
+

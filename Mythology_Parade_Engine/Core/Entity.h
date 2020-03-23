@@ -5,7 +5,6 @@
 #include "SDL/include/SDL_rect.h"
 #include "j1App.h"
 #include "j1Render.h"
-
 struct SDL_Texture;
 
 enum class EntityType

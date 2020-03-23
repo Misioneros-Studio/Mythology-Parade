@@ -64,6 +64,15 @@
     <ClCompile Include="Unit.cpp">
       <Filter>Core\Entities</Filter>
     </ClCompile>
+    <ClCompile Include="HealthSystem.cpp">
+      <Filter>Core\Structs/Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="CombatUnit.cpp">
+      <Filter>Core\Entities\CombatUnits</Filter>
+    </ClCompile>
+    <ClCompile Include="LevelSystem.cpp">
+      <Filter>Core\Structs/Classes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1Window.h">
@@ -141,6 +150,15 @@
     <ClInclude Include="Unit.h">
       <Filter>Core\Entities</Filter>
     </ClInclude>
+    <ClInclude Include="HealthSystem.h">
+      <Filter>Core\Structs/Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="CombatUnit.h">
+      <Filter>Core\Entities\CombatUnits</Filter>
+    </ClInclude>
+    <ClInclude Include="LevelSystem.h">
+      <Filter>Core\Structs/Classes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Tools">
@@ -166,6 +184,12 @@
     </Filter>
     <Filter Include="Core\Entities">
       <UniqueIdentifier>{5a0ad7a5-4d2a-445c-a9f1-ff04270ab560}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Entities\CombatUnits">
+      <UniqueIdentifier>{faf94118-aea3-4518-9ce4-a7e939f7bd44}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Structs/Classes">
+      <UniqueIdentifier>{03835c33-5f3a-41d2-b0d8-6c9642afa02b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

@@ -1,5 +1,6 @@
 #include "EntityManager.h"
 #include "Unit.h"
+#include "CombatUnit.h"
 #include "p2Log.h"
 EntityManager::EntityManager()
 {
@@ -28,7 +29,7 @@ bool EntityManager::Awake(pugi::xml_node& a)
 // Called before the first frame
 bool EntityManager::Start()
 {
-	CreateEntity(EntityType::UNIT);
+	CreateEntity(EntityType::UNIT,PIKEMAN);
 	for (unsigned i = 0; i < entities.size(); i++)
 	{
 		for (std::list<Entity*>::iterator it = entities[(EntityType)i].begin(); it != entities[(EntityType)i].end(); it++)
@@ -114,7 +115,7 @@ bool EntityManager::CleanUp()
 //}
 
 //Called when creating a new Entity
-Entity* EntityManager::CreateEntity(EntityType type)
+Entity* EntityManager::CreateEntity(EntityType type, UnitType unitType)
 {
 	Entity* ret = nullptr;
 	//pugi::xml_document	info_file;
@@ -128,7 +129,18 @@ Entity* EntityManager::CreateEntity(EntityType type)
 		break;
 
 	case EntityType::UNIT:
-		ret = new Unit();
+		switch (unitType)
+		{
+		case ASSASSIN:
+		ret = new CombatUnit(UnitType::ASSASSIN);
+			break;
+		case MONK:
+		ret = new Unit(UnitType::MONK);
+			break;
+		case PIKEMAN:
+		ret = new CombatUnit(UnitType::PIKEMAN);
+			break;
+		}
 		break;
 
 	case EntityType::BUILDING:

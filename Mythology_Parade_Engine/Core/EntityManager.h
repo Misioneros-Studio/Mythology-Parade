@@ -5,6 +5,7 @@
 #include <unordered_map>
 #include "Entity.h"
 
+enum UnitType;
 class Entity;
 class EntityManager : public j1Module
 {
@@ -38,7 +39,7 @@ public:
 
 	bool DeleteEntity(Entity*);
 
-	Entity* CreateEntity(EntityType);
+	Entity* CreateEntity(EntityType, UnitType);
 
 public:
 

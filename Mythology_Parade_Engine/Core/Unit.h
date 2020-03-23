@@ -3,55 +3,57 @@
 
 #include "Entity.h"
 #include "SDL/include/SDL_rect.h"
+#include "HealthSystem.h"
 
 enum State
 {
 	IDLE,
-	MOVE,
-	ATTACK
+	MOVE
 };
 
-struct HealthSystem
+enum UnitType 
 {
-	int health;
-	int maxHealth;
-
-	bool isDeath;
-
-	//Function to substract health from enemy attack
-	void RecieveDamage(int value);
-
-	//Returns current health
-	int GetHealth();
+	ASSASSIN,
+	MONK,
+	PIKEMAN
 };
 
-class Unit : public Entity
+class Unit : public Entity, public HealthSystem
 {
 private:
-	
-	HealthSystem healthSystem;
+
+	int moveSpeed;
 
 
+	//Conditions
 	bool isSelected;
-
-
+	
 	//state
 	State state;
 
+	//Description / Effect
+	std::string description;
+
+public: 
+	//Unit Type
+	UnitType unitType;
+
 public:
-	Unit();
-	~Unit();
+	Unit(UnitType);
+	virtual ~Unit();
 
 	bool Start() override;
-	bool Update(float dt) override;
+	bool Update(float dt);
 
-	void Move(p2Point<int>);
+	void SetMoveSpeed(int);
 
+	virtual bool Draw(float dt);
+	virtual void Action();
 private:
 	//Private Functions
-	bool Draw(float dt);
+	void MoveTo(p2Point<int>);
 
-
+	void CheckState();
 
 };
 

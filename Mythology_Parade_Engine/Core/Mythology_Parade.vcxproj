@@ -76,8 +76,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CombatUnit.cpp" />
     <ClCompile Include="Console.cpp" />
     <ClCompile Include="EntityManager.cpp" />
+    <ClCompile Include="HealthSystem.cpp" />
     <ClCompile Include="j1CurrencySystem.cpp" />
     <ClCompile Include="j1Fonts.cpp" />
     <ClCompile Include="j1Gui.cpp" />
@@ -88,6 +90,7 @@
     <ClCompile Include="j1Map.cpp" />
     <ClCompile Include="j1Pathfinding.cpp" />
     <ClCompile Include="j1PerfTimer.cpp" />
+    <ClCompile Include="LevelSystem.cpp" />
     <ClCompile Include="QuadTree.cpp" />
     <ClCompile Include="j1Scene.cpp" />
     <ClCompile Include="j1Timer.cpp" />
@@ -99,15 +102,18 @@
     <ClCompile Include="Unit.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CombatUnit.h" />
     <ClInclude Include="Console.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="EntityManager.h" />
+    <ClInclude Include="HealthSystem.h" />
     <ClInclude Include="j1CurrencySystem.h" />
     <ClInclude Include="j1Fonts.h" />
     <ClInclude Include="j1Gui.h" />
     <ClInclude Include="j1Map.h" />
     <ClInclude Include="j1Pathfinding.h" />
     <ClInclude Include="j1PerfTimer.h" />
+    <ClInclude Include="LevelSystem.h" />
     <ClInclude Include="QuadTree.h" />
     <ClInclude Include="j1Scene.h" />
     <ClInclude Include="j1Timer.h" />
