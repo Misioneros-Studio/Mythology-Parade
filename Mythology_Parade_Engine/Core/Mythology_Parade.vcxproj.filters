@@ -61,7 +61,9 @@
     <ClCompile Include="j1CurrencySystem.cpp">
       <Filter>Core\Tools</Filter>
     </ClCompile>
-    <ClCompile Include="Unit.cpp" />
+    <ClCompile Include="Unit.cpp">
+      <Filter>Core\Entities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1Window.h">

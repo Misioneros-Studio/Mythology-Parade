@@ -1,5 +1,6 @@
 #include "EntityManager.h"
-
+#include "Unit.h"
+#include "p2Log.h"
 EntityManager::EntityManager()
 {
 	name.append("entity_manager");
@@ -21,7 +22,6 @@ bool EntityManager::Awake(pugi::xml_node& a)
 			//ent->Awake(a.child(ent->name.GetString()));
 		}
 	}
-
 	return true;
 }
 
@@ -35,6 +35,8 @@ bool EntityManager::Start()
 			it._Ptr->_Myval->Start();
 		}
 	}
+
+	CreateEntity(EntityType::UNIT);
 	return true;
 }
 
@@ -126,7 +128,7 @@ Entity* EntityManager::CreateEntity(EntityType type)
 		break;
 
 	case EntityType::UNIT:
-		ret = new Entity();
+		ret = new Unit();
 		break;
 
 	case EntityType::BUILDING:
