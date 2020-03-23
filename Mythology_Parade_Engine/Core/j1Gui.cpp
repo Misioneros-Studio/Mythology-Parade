@@ -694,11 +694,15 @@ bool ButtonUI::PostUpdate() {
 bool ButtonUI::PreUpdate() {
 	int x, y;
 	App->input->GetMousePosition(x, y);
-
+	bool pushing = false;
 	if (front == true && ((x >= GetScreenPos().x && x <= GetScreenPos().x + GetScreenRect().w && y >= GetScreenPos().y && y <= GetScreenPos().y + GetScreenRect().h) || focus == true))
 		over = true;
 	else over = false;
 	bool button = false;
+	if (App->input->GetMouseButtonDown(1) == KEY_DOWN || App->input->GetMouseButtonDown(1) == KEY_REPEAT) {
+		pushing = true;
+		//pushed = false;
+	}
 	if (App->input->GetMouseButtonDown(1) == KEY_UP || App->input->GetKey(SDL_SCANCODE_RETURN))
 		button = true;
 	if (over == true && button == true)
@@ -713,9 +717,9 @@ bool ButtonUI::PreUpdate() {
 			listener->OnClick(this);
 		}
 		App->gui->lockClick = true;
-		LOG("Click");
 	}
-
+	if (pushing == true && over == true)
+		pushed = true;
 	UI::PreUpdate();
 
 	return true;
