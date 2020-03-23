@@ -28,6 +28,7 @@ bool EntityManager::Awake(pugi::xml_node& a)
 // Called before the first frame
 bool EntityManager::Start()
 {
+	CreateEntity(EntityType::UNIT);
 	for (unsigned i = 0; i < entities.size(); i++)
 	{
 		for (std::list<Entity*>::iterator it = entities[(EntityType)i].begin(); it != entities[(EntityType)i].end(); it++)
@@ -36,7 +37,6 @@ bool EntityManager::Start()
 		}
 	}
 
-	CreateEntity(EntityType::UNIT);
 	return true;
 }
 
