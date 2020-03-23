@@ -701,7 +701,6 @@ bool ButtonUI::PreUpdate() {
 	bool button = false;
 	if (App->input->GetMouseButtonDown(1) == KEY_DOWN || App->input->GetMouseButtonDown(1) == KEY_REPEAT) {
 		pushing = true;
-		//pushed = false;
 	}
 	if (App->input->GetMouseButtonDown(1) == KEY_UP || App->input->GetKey(SDL_SCANCODE_RETURN))
 		button = true;
