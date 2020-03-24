@@ -21,9 +21,9 @@ struct Animation_char {
 	int num_sprites = 0;
 	Sprite* sprites = nullptr;
 	bool finished = false;
-
 	int current_sprite = 0;
 };
+
 
 struct CharacterTMXData {
 	SDL_Texture* texture = nullptr;
@@ -37,7 +37,7 @@ struct CharacterTMXData {
 class Animation :public j1Module {
 public:
 
-	void NewAnimation(pugi::xml_node& character_node);
+
 	Animation();
 
 	// Destructor
@@ -57,6 +57,7 @@ public:
 
 private:
 	CharacterTMXData character_tmx_data;
+
 	Animation_char* ATCK_DOWN;
 	Animation_char* ATCK_DOWN_LEFT;
 	Animation_char* ATCK_DOWN_RIGHT;

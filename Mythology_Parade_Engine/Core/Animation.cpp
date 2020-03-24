@@ -3,12 +3,6 @@
 #include "p2Log.h"
 #include "j1Render.h"
 
-void Animation::NewAnimation(pugi::xml_node& character_node)
-{
-
-
-}
-
 Animation::Animation()
 {
 	name.append("animation");
@@ -21,14 +15,13 @@ Animation::~Animation()
 bool Animation::Awake(pugi::xml_node& conf)
 {
 	bool ret = true;
-	//ret = Load("assets/units/Assassin.tmx");
 	return ret;
 }
 
 void Animation::Draw()
 {
 	SDL_Rect rect = {0,0,character_tmx_data.tile_width,character_tmx_data.tile_height};
-	//App->render->Blit(character_tmx_data.texture, 0, 0, &rect);
+	App->render->Blit(character_tmx_data.texture, 0, 0, &rect);
 }
 
 bool Animation::Update(float dt)
@@ -47,6 +40,8 @@ bool Animation::Load(const char* path)
 	bool ret = true;
 	pugi::xml_document	character_file;
 	pugi::xml_parse_result result = character_file.load_file(path);
+	int rect_width = 0;
+	int rect_height = 0;
 
 	if (result == NULL)
 	{
@@ -61,20 +56,24 @@ bool Animation::Load(const char* path)
 
 		LoadCharacterTMX(character_node);
 
-
-
-		//pugi::xml_node pre_group = character_node.child("group");
-		//pugi::xml_node group = pre_group.child("group");
-		pugi::xml_node group = character_node.child("tileset").child("tile").child("animation").child("frame");
-	
-		for (group; group && ret; group = group.next_sibling("frame"))
+		pugi::xml_node group = character_node.child("tileset").child("tile");
+		for (group; group; group.next_sibling("tile"))
 		{
-			LOG("ID: %u", group.attribute("tileid").as_int());
-
-			// Rellenar SDL_Rects de la animacion
-
-			//pugi::xml_node object_group = group.child("objectgroup");
-			//LoadAnimation(object_group);
+			rect_width = 0;
+			pugi::xml_node frame = group.child("animation").child("frame");
+			for (frame; frame && ret; frame = frame.next_sibling("frame"))
+			{
+				if (strcmp(group.child("properties").child("property").attribute("value").as_string(), "ATCK_LEFT_DOWN") == 0)
+				{
+					rect_width += character_tmx_data.tile_width * (frame.attribute("tileid").as_int() + 1);
+					LOG("ID: %u", frame.attribute("tileid").as_int());
+					LOG("Width: %u", rect_width);
+					LOG("Height: %u", rect_height);
+					rect_width = 0;
+				}
+			}
+			rect_height += character_tmx_data.tile_height * (frame.attribute("tileid").as_int() + 1);
+			group = group.next_sibling("tile");
 		}
 	}
 
