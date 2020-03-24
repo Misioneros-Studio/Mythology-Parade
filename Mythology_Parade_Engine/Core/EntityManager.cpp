@@ -1,5 +1,9 @@
 #include "EntityManager.h"
+#include "CombatUnit.h"
+#include "Building.h"
+#include "Player.h"
 
+#include "p2Log.h"
 EntityManager::EntityManager()
 {
 	name.append("entity_manager");
@@ -21,13 +25,13 @@ bool EntityManager::Awake(pugi::xml_node& a)
 			//ent->Awake(a.child(ent->name.GetString()));
 		}
 	}
-
 	return true;
 }
 
 // Called before the first frame
 bool EntityManager::Start()
 {
+
 	for (unsigned i = 0; i < entities.size(); i++)
 	{
 		for (std::list<Entity*>::iterator it = entities[(EntityType)i].begin(); it != entities[(EntityType)i].end(); it++)
@@ -35,6 +39,7 @@ bool EntityManager::Start()
 			it._Ptr->_Myval->Start();
 		}
 	}
+
 	return true;
 }
 
@@ -81,7 +86,7 @@ bool EntityManager::CleanUp()
 	entities.clear();
 	return true;
 }
-//
+
 ////Called when loading the game
 //bool EntityManager::Load(pugi::xml_node& n)
 //{
@@ -112,28 +117,39 @@ bool EntityManager::CleanUp()
 //}
 
 //Called when creating a new Entity
-Entity* EntityManager::CreateEntity(EntityType type)
-{
-	Entity* ret = nullptr;
+//Entity* EntityManager::CreateEntity(EntityType type, UnitType unitType)
+//{
+//	Entity* ret = nullptr;
 	//pugi::xml_document	info_file;
 	//pugi::xml_document info_file2;
 
-	switch (type)
-	{
+	//switch (type)
+	//{
 
-	case EntityType::PLAYER:
-		ret = new Entity();
-		break;
+	//case EntityType::PLAYER:
+	//	ret = new Player();
+	//	break;
 
-	case EntityType::UNIT:
-		ret = new Entity();
-		break;
+	//case EntityType::UNIT:
+	//	switch (unitType)
+	//	{
+	//	case ASSASSIN:
+	//	ret = new CombatUnit(UnitType::ASSASSIN);
+	//		break;
+	//	case MONK:
+	//	ret = new Unit(UnitType::MONK);
+	//		break;
+	//	case PIKEMAN:
+	//	ret = new CombatUnit(UnitType::PIKEMAN);
+	//		break;
+	//	}
+	//	break;
 
-	case EntityType::BUILDING:
-		ret = new Entity();
-		break;
-	}
-	entities[type].push_back(ret);
+	//case EntityType::BUILDING:
+	//	ret = new Building(BuildingType::FORTRESS);
+	//	break;
+	//}
+	//entities[type].push_back(ret);
 
 	//switch (type)
 	//{
@@ -176,8 +192,66 @@ Entity* EntityManager::CreateEntity(EntityType type)
 
 
 	}*/
+//	return ret;
+//}
+
+Entity* EntityManager::CreatePlayerEntity()
+{
+	Entity* ret = nullptr;
+
+	ret = new Player();
+
+	entities[EntityType::PLAYER].push_back(ret);
+
 	return ret;
 }
+
+Entity* EntityManager::CreateUnitEntity(UnitType type)
+{
+	Entity* ret = nullptr;
+	
+	switch (type)
+	{
+	case UnitType::ASSASSIN:
+		ret = new CombatUnit(UnitType::ASSASSIN);
+		break;
+	case UnitType::MONK:
+		ret = new Unit(UnitType::MONK);
+		break;
+	case UnitType::PIKEMAN:
+		ret = new CombatUnit(UnitType::PIKEMAN);
+		break;
+	}
+
+	entities[EntityType::UNIT].push_back(ret);
+
+	return ret;
+}
+
+Entity* EntityManager::CreateBuildingEntity(BuildingType type)
+{
+	Entity* ret = nullptr;
+	switch (type)
+	{
+	case FORTRESS:
+		ret = new Building(BuildingType::FORTRESS);
+		break;
+	case MONASTERY:
+		ret = new Building(BuildingType::MONASTERY);
+		break;
+	case TEMPLE:
+		ret = new Building(BuildingType::TEMPLE);
+		break;
+	case ENCAMPMENT:
+		ret = new Building(BuildingType::ENCAMPMENT);
+		break;
+	}
+
+	entities[EntityType::BUILDING].push_back(ret);
+
+	return ret;
+}
+
 
 //Called when deleting a new Entity
 bool EntityManager::DeleteEntity(Entity* e)
@@ -190,3 +264,4 @@ bool EntityManager::DeleteEntity(Entity* e)
 	}
 	return false;
 }
+

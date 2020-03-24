@@ -117,16 +117,16 @@ bool j1Scene::Update(float dt)
 		ActivatePauseMenu();
 
 	if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
-		App->render->camera.y += floor(700.0f * dt);
+		App->render->camera.y += floor(1000.0f * dt);
 
 	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
-		App->render->camera.y -= floor(700.0f * dt);
+		App->render->camera.y -= floor(1000.0f * dt);
 
 	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
-		App->render->camera.x += floor(700.0f * dt);
+		App->render->camera.x += floor(1000.0f * dt);
 
 	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
-		App->render->camera.x -= floor(700.0f * dt);
+		App->render->camera.x -= floor(1000.0f * dt);
 
 
 	App->map->Draw();
@@ -153,11 +153,14 @@ bool j1Scene::Update(float dt)
 	// Debug pathfinding ------------------------------
 	//int x, y;
 	App->input->GetMousePosition(x, y);
+	y += 16;
 	iPoint p = App->render->ScreenToWorld(x, y);
+
 	p = App->map->WorldToMap(p.x, p.y);
 	p = App->map->MapToWorld(p.x, p.y);
 
 	App->render->Blit(debug_tex, p.x, p.y);
+	App->render->Blit(debug_tex, p.x - 32, p.y, { 128, 64 });
 
 	std::list<iPoint> path = *App->pathfinding->GetLastPath();
 
