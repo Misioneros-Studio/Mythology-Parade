@@ -801,7 +801,7 @@ bool TextInputUI::PostUpdate() {
 
 	SDL_Rect rect = { 0,0,0,0 };
 	if (strcmp(label.c_str(), "")) {
-		SDL_Texture* text = App->font->Print(label.c_str());
+		SDL_Texture* text = App->font->Print(label.c_str(), {255,255,255,255});
 		SDL_QueryTexture(text, NULL, NULL, &rect.w, &rect.h);
 		SDL_Rect sprite = UI::Check_Printable_Rect(rect, dif_sprite);
 		if (this->active) App->render->Blit(text, quad.x + dif_sprite.x, quad.y + dif_sprite.y, &sprite, 0.0F);
