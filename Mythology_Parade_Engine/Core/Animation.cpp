@@ -1,6 +1,13 @@
 #include "Animation.h"
 #include "j1Textures.h"
 #include "p2Log.h"
+#include "j1Render.h"
+
+void Animation::NewAnimation(pugi::xml_node& character_node)
+{
+
+
+}
 
 Animation::Animation()
 {
@@ -20,6 +27,14 @@ bool Animation::Awake(pugi::xml_node& conf)
 
 void Animation::Draw()
 {
+	SDL_Rect rect = {0,0,character_tmx_data.tile_width,character_tmx_data.tile_height};
+	//App->render->Blit(character_tmx_data.texture, 0, 0, &rect);
+}
+
+bool Animation::Update(float dt)
+{
+	Draw();
+	return true;
 }
 
 bool Animation::CleanUp()
@@ -46,13 +61,20 @@ bool Animation::Load(const char* path)
 
 		LoadCharacterTMX(character_node);
 
-		pugi::xml_node pre_group = character_node.child("group");
-		pugi::xml_node group = pre_group.child("group");
 
-		for (group; group && ret; group = group.next_sibling("group"))
+
+		//pugi::xml_node pre_group = character_node.child("group");
+		//pugi::xml_node group = pre_group.child("group");
+		pugi::xml_node group = character_node.child("tileset").child("tile").child("animation").child("frame");
+	
+		for (group; group && ret; group = group.next_sibling("frame"))
 		{
-			pugi::xml_node object_group = group.child("objectgroup");
-			LoadAnimation(object_group);
+			LOG("ID: %u", group.attribute("tileid").as_int());
+
+			// Rellenar SDL_Rects de la animacion
+
+			//pugi::xml_node object_group = group.child("objectgroup");
+			//LoadAnimation(object_group);
 		}
 	}
 

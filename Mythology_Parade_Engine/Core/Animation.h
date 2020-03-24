@@ -5,20 +5,6 @@
 #include "SDL/include/SDL.h"
 #include "j1App.h"
 
-enum MapTypes_v2
-{
-	MAPTYPE_UNKNOWN_v2 = 0,
-	MAPTYPE_ORTHOGONAL_v2,
-	MAPTYPE_ISOMETRIC_v2,
-	MAPTYPE_STAGGERED_v2
-};
-
-//Object layer structs
-struct ObjectLayer_v2
-{
-	std::string				name;
-	std::list<SDL_Rect*>	rects;
-};
 
 struct Sprite {
 
@@ -32,7 +18,6 @@ struct Sprite {
 struct Animation_char {
 	bool loop = true;
 	std::string name;
-
 	int num_sprites = 0;
 	Sprite* sprites = nullptr;
 	bool finished = false;
@@ -46,13 +31,13 @@ struct CharacterTMXData {
 	uint					height = 0u;
 	int						tile_width = 0u;
 	int						tile_height = 0u;
-	MapTypes_v2				type;
-	std::list<ObjectLayer_v2*>	object_Layers;
+
 };
 
 class Animation :public j1Module {
 public:
 
+	void NewAnimation(pugi::xml_node& character_node);
 	Animation();
 
 	// Destructor
@@ -63,7 +48,7 @@ public:
 
 	// Called each loop iteration
 	void Draw();
-
+	bool Update(float dt) override;
 	// Called before quitting
 	bool CleanUp();
 	bool Load(const char* path);
@@ -80,6 +65,8 @@ private:
 	Animation_char* ATCK_UP_LEFT;
 	Animation_char* ATCK_LEFT;
 	Animation_char* ATCK_RIGHT;
+
+
 };
 
 #endif
