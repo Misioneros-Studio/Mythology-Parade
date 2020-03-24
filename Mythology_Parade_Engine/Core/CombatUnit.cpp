@@ -1,16 +1,17 @@
 #include "CombatUnit.h"
 #include "p2Log.h"
+
 CombatUnit::CombatUnit(UnitType type): Unit(type), range(0),damage(0)
 {
 	//TODO 10: Change textures
 	switch (unitType)
 	{
-	case ASSASSIN:
+	case UnitType::ASSASSIN:
 		//Change texture
 		LevelSystem::Init(3500, 6500, 9500);
 		CombatUnit::Init(100, 15, 1, 4);
 		break;
-	case PIKEMAN:
+	case UnitType::PIKEMAN:
 		//Change Texture
 		LevelSystem::Init(3000, 6000, 9500);
 		CombatUnit::Init(110, 25, 1, 2);
@@ -26,10 +27,10 @@ void CombatUnit::Action(Entity* entity)
 {
 	switch (unitType)
 	{
-	case ASSASSIN:
+	case UnitType::ASSASSIN:
 	LOG("I'm a assassin unit!");
 		break;
-	case PIKEMAN:
+	case UnitType::PIKEMAN:
 	LOG("I'm a pikeman unit!");
 		break;
 	

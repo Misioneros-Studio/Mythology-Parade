@@ -15,7 +15,6 @@ public:
 	CombatUnit(UnitType);
 	~CombatUnit();
 
-
 	void Action(Entity*) override;
 
 private:

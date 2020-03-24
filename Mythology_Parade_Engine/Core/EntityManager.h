@@ -5,8 +5,11 @@
 #include <unordered_map>
 #include "Entity.h"
 
-enum UnitType;
+enum class UnitType;
+enum BuildingType;
+
 class Entity;
+
 class EntityManager : public j1Module
 {
 public:
@@ -39,7 +42,9 @@ public:
 
 	bool DeleteEntity(Entity*);
 
-	Entity* CreateEntity(EntityType, UnitType);
+	Entity* CreatePlayerEntity();
+	Entity* CreateUnitEntity(UnitType);
+	Entity* CreateBuildingEntity(BuildingType);
 
 public:
 

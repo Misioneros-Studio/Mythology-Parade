@@ -10,7 +10,7 @@ Unit::Unit(UnitType type): unitType(type), state(IDLE), _isSelected(false), move
 	//Init Units
 	switch (type)
 	{
-	case MONK:
+	case UnitType::MONK:
 		Init(1);
 		break;
 	}
@@ -51,10 +51,9 @@ bool Unit::Update(float dt)
 
 	}
 
-
-
 	//Allawys blit the sprite at the end
 	ret = Draw(dt);
+
 	//Return
 	return ret;
 }
@@ -90,20 +89,19 @@ bool Unit::Draw(float dt)
 {
 	bool ret = true;
 	//App->render->Blit(texture, -90, 430, &position_rect);
-	//LOG("%u", healthSystem.GetHealth());
 	return ret;
 }
 
-void Unit::Action(Entity*)
+void Unit::Action(Entity* entity)
 {
+
 	switch (unitType)
 	{
-	case MONK:
+	case UnitType::MONK:
 	LOG("I'm a monk unit!");
 	
 		break;
 	}
-
 }
 
 

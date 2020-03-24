@@ -74,9 +74,11 @@ public:
 
 	EntityType type;
 
-	SDL_Rect position_rect;
-	SDL_Texture* texture;
+	SDL_Rect position_rect; //Remove it, this should be insde the animation class
+	SDL_Texture* texture; //Change it to Character_TMX
 	p2Point<int> position;
+
+
 
 	//Copy of node
 	pugi::xml_node entity_node;

@@ -11,11 +11,23 @@ enum State
 	MOVE
 };
 
-enum UnitType 
+enum class ReligiousType
 {
-	ASSASSIN,
 	MONK,
-	PIKEMAN
+	CLERIC,
+	MISSIONARY
+};
+
+enum class UnitType 
+{
+	PIKEMAN,
+	ASSASSIN,
+	EXPLORER,
+	PRIEST,
+	FOOTMAN,
+	MONK,
+	CLERIC,
+	MISSIONARY
 };
 
 class Unit : public Entity, public HealthSystem
@@ -57,6 +69,9 @@ public:
 private:
 	//Private Functions
 	void MoveTo(p2Point<int>);
+
+	//Animation
+
 
 	void CheckState();
 

@@ -31,7 +31,7 @@ public:
 	void increaseSacrifice(ActionSacrifice action);
 	void increasePrayers(ActionPrayers action);
 
-private:
+public:
 	int sacrifices;
 	int faith;
 	int prayers;

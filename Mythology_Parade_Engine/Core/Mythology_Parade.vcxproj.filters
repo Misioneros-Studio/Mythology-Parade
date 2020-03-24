@@ -76,6 +76,7 @@
     <ClCompile Include="Building.cpp">
       <Filter>Core\Entities\Building</Filter>
     </ClCompile>
+    <ClCompile Include="Player.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1Window.h">
@@ -164,6 +165,9 @@
     </ClInclude>
     <ClInclude Include="Building.h">
       <Filter>Core\Entities\Building</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Core\Entities\Player</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

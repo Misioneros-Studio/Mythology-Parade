@@ -17,7 +17,8 @@ class Building: public Entity, public HealthSystem
 public:
 	Building(BuildingType);
 	~Building();
-
+	
+	const char* GetDescription();
 private:
 
 	//Stats
@@ -27,6 +28,9 @@ private:
 	int maxCap;
 
 	std::string description;
+
+	bool Update(float dt) override;
+	void Draw();
 
 };
 
