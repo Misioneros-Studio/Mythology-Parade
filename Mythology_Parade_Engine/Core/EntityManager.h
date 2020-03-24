@@ -8,6 +8,10 @@
 enum class UnitType;
 enum BuildingType;
 
+enum class SpriteSheetType {
+
+};
+
 class Entity;
 
 class EntityManager : public j1Module
@@ -49,6 +53,9 @@ public:
 public:
 
 	std::unordered_map<EntityType, std::list<Entity*>> entities;
+
+	//The way to store the spritesheets (needs to be cleaned and spritesheets need to be unloaded)
+	std::unordered_map<SpriteSheetType, std::list<SDL_Texture*>> entitySpriteSheets;
 
 };
 #endif // !_ENTITYMANAGER_H

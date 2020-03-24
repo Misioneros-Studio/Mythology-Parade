@@ -45,10 +45,8 @@ void j1Map::Draw()
 		if (layer->properties.Get("Nodraw") != 0)
 			continue;
 
-		for (unsigned i = 0; i < App->render->nodesInView.size(); i++)
+		for (std::list<QuadNode*>::iterator it = App->render->nodesInView.begin(); it != App->render->nodesInView.end(); it++)
 		{
-			std::list<QuadNode*>::iterator it = App->render->nodesInView.begin();
-			std::advance(it, i);
 			QuadNode* node = it._Ptr->_Myval;
 
 			iPoint id = WorldToMap(node->x, node->y);
