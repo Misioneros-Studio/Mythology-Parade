@@ -29,7 +29,16 @@ bool EntityManager::Awake(pugi::xml_node& a)
 // Called before the first frame
 bool EntityManager::Start()
 {
-	CreateEntity(EntityType::UNIT,PIKEMAN);
+	Entity* pikeman = CreateEntity(EntityType::UNIT,PIKEMAN);
+	Entity* assassin = CreateEntity(EntityType::UNIT,ASSASSIN);
+	Entity* monk = CreateEntity(EntityType::UNIT,MONK);
+
+	Unit* unit = (Unit*)pikeman;
+	Unit* unitAssassin = (Unit*)assassin;
+	unit->Action(assassin);
+
+	LOG("Health: %u", unitAssassin->GetHealth());
+	
 	for (unsigned i = 0; i < entities.size(); i++)
 	{
 		for (std::list<Entity*>::iterator it = entities[(EntityType)i].begin(); it != entities[(EntityType)i].end(); it++)

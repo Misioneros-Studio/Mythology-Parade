@@ -58,20 +58,23 @@
     <ClCompile Include="EntityManager.cpp">
       <Filter>Core\Modules</Filter>
     </ClCompile>
-    <ClCompile Include="j1CurrencySystem.cpp">
-      <Filter>Core\Tools</Filter>
-    </ClCompile>
-    <ClCompile Include="Unit.cpp">
-      <Filter>Core\Entities</Filter>
-    </ClCompile>
     <ClCompile Include="HealthSystem.cpp">
-      <Filter>Core\Structs/Classes</Filter>
+      <Filter>Core\System Classes</Filter>
     </ClCompile>
     <ClCompile Include="CombatUnit.cpp">
-      <Filter>Core\Entities\CombatUnits</Filter>
+      <Filter>Core\Entities\Unit\CombatUnits</Filter>
     </ClCompile>
     <ClCompile Include="LevelSystem.cpp">
-      <Filter>Core\Structs/Classes</Filter>
+      <Filter>Core\System Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="j1CurrencySystem.cpp">
+      <Filter>Core\System Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="Unit.cpp">
+      <Filter>Core\Entities\Unit</Filter>
+    </ClCompile>
+    <ClCompile Include="Building.cpp">
+      <Filter>Core\Entities\Building</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -144,20 +147,23 @@
     <ClInclude Include="Entity.h">
       <Filter>Core\Entities</Filter>
     </ClInclude>
-    <ClInclude Include="j1CurrencySystem.h">
-      <Filter>Core\Tools</Filter>
-    </ClInclude>
-    <ClInclude Include="Unit.h">
-      <Filter>Core\Entities</Filter>
-    </ClInclude>
     <ClInclude Include="HealthSystem.h">
-      <Filter>Core\Structs/Classes</Filter>
+      <Filter>Core\System Classes</Filter>
     </ClInclude>
     <ClInclude Include="CombatUnit.h">
-      <Filter>Core\Entities\CombatUnits</Filter>
+      <Filter>Core\Entities\Unit\CombatUnits</Filter>
     </ClInclude>
     <ClInclude Include="LevelSystem.h">
-      <Filter>Core\Structs/Classes</Filter>
+      <Filter>Core\System Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="j1CurrencySystem.h">
+      <Filter>Core\System Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="Unit.h">
+      <Filter>Core\Entities\Unit</Filter>
+    </ClInclude>
+    <ClInclude Include="Building.h">
+      <Filter>Core\Entities\Building</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -185,11 +191,20 @@
     <Filter Include="Core\Entities">
       <UniqueIdentifier>{5a0ad7a5-4d2a-445c-a9f1-ff04270ab560}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Core\Entities\CombatUnits">
+    <Filter Include="Core\System Classes">
+      <UniqueIdentifier>{03835c33-5f3a-41d2-b0d8-6c9642afa02b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Entities\Unit">
+      <UniqueIdentifier>{8e541af1-9ef2-4870-920e-6d1f893850e5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Entities\Unit\CombatUnits">
       <UniqueIdentifier>{faf94118-aea3-4518-9ce4-a7e939f7bd44}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Core\Structs/Classes">
-      <UniqueIdentifier>{03835c33-5f3a-41d2-b0d8-6c9642afa02b}</UniqueIdentifier>
+    <Filter Include="Core\Entities\Building">
+      <UniqueIdentifier>{5c392556-c622-4762-bfa9-5513b4071e98}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Entities\Player">
+      <UniqueIdentifier>{3dcd2ce1-3295-4ae1-87f2-feb1ee4efadf}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

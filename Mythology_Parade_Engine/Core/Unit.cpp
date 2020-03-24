@@ -3,7 +3,7 @@
 #include "j1Textures.h"
 #include "j1Input.h"
 
-Unit::Unit(UnitType type): unitType(type), state(IDLE), isSelected(false), moveSpeed(1)
+Unit::Unit(UnitType type): unitType(type), state(IDLE), _isSelected(false), moveSpeed(1)
 {
 	
 
@@ -11,11 +11,9 @@ Unit::Unit(UnitType type): unitType(type), state(IDLE), isSelected(false), moveS
 	switch (type)
 	{
 	case MONK:
-		SetMaxHealth(1); 
+		Init(1);
 		break;
 	}
-
-	HealthSystem::Init();
 
 }
 
@@ -57,7 +55,6 @@ bool Unit::Update(float dt)
 
 	//Allawys blit the sprite at the end
 	ret = Draw(dt);
-	Action();
 	//Return
 	return ret;
 }
@@ -67,9 +64,25 @@ void Unit::SetMoveSpeed(int value)
 	moveSpeed = value;
 }
 
+bool Unit::isSelected()
+{
+	return _isSelected;
+}
+
 void Unit::MoveTo(p2Point<int>)
 {
+	if (!isSelected())
+		return;
+
 	//move function logic
+
+
+}
+
+void Unit::Init(int maxHealth)
+{
+	SetMaxHealth(maxHealth);
+	HealthSystem::Init();
 }
 
 
@@ -81,14 +94,16 @@ bool Unit::Draw(float dt)
 	return ret;
 }
 
-void Unit::Action()
+void Unit::Action(Entity*)
 {
 	switch (unitType)
 	{
 	case MONK:
 	LOG("I'm a monk unit!");
+	
 		break;
 	}
+
 }
 
 

@@ -7,7 +7,7 @@
 
 class CombatUnit :	public Unit, public LevelSystem
 {
-public:
+private:
 	int damage;
 	int range;
 
@@ -15,8 +15,13 @@ public:
 	CombatUnit(UnitType);
 	~CombatUnit();
 
-	void Action() override;
 
+	void Action(Entity*) override;
+
+private:
+	void Init(int maxHealth, int damage, int range, int speed);
+	int GetDamageValue();
+	int GetRangeValue();
 };
 
 #endif // !__COMBATUNIT_H__

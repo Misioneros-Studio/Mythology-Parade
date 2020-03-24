@@ -76,6 +76,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Building.cpp" />
     <ClCompile Include="CombatUnit.cpp" />
     <ClCompile Include="Console.cpp" />
     <ClCompile Include="EntityManager.cpp" />
@@ -102,6 +103,7 @@
     <ClCompile Include="Unit.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Building.h" />
     <ClInclude Include="CombatUnit.h" />
     <ClInclude Include="Console.h" />
     <ClInclude Include="Entity.h" />

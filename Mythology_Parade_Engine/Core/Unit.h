@@ -22,11 +22,11 @@ class Unit : public Entity, public HealthSystem
 {
 private:
 
+	//Move Speed
 	int moveSpeed;
 
-
 	//Conditions
-	bool isSelected;
+	bool _isSelected;
 	
 	//state
 	State state;
@@ -42,13 +42,18 @@ public:
 	Unit(UnitType);
 	virtual ~Unit();
 
+	void Init(int maxHealth);
+
 	bool Start() override;
 	bool Update(float dt);
 
 	void SetMoveSpeed(int);
 
+	bool isSelected();
+
 	virtual bool Draw(float dt);
-	virtual void Action();
+	virtual void Action(Entity*);
+
 private:
 	//Private Functions
 	void MoveTo(p2Point<int>);

@@ -8,18 +8,12 @@ CombatUnit::CombatUnit(UnitType type): Unit(type), range(0),damage(0)
 	case ASSASSIN:
 		//Change texture
 		LevelSystem::Init(3500, 6500, 9500);
-		damage = 15;
-		range = 1;
-		SetMaxHealth(100);
-		SetMoveSpeed(4);
+		CombatUnit::Init(100, 15, 1, 4);
 		break;
 	case PIKEMAN:
 		//Change Texture
 		LevelSystem::Init(3000, 6000, 9500);
-		range = 1;
-		damage = 25;
-		SetMaxHealth(110);
-		SetMoveSpeed(2);
+		CombatUnit::Init(110, 25, 1, 2);
 		break;
 	}
 }
@@ -28,7 +22,7 @@ CombatUnit::~CombatUnit()
 {
 }
 
-void CombatUnit::Action()
+void CombatUnit::Action(Entity* entity)
 {
 	switch (unitType)
 	{
@@ -41,4 +35,28 @@ void CombatUnit::Action()
 	
 	}
 	//Attack enemy
+	Unit* target = (Unit*)entity;
+	target->RecieveDamage(GetDamageValue());
+}
+
+
+
+void CombatUnit::Init(int maxHealth, int damage, int range, int speed)
+{
+	Unit::Init(maxHealth);
+	this->damage = damage;
+	this->range = range;
+	SetMoveSpeed(speed);
+
+
+}
+
+int CombatUnit::GetDamageValue()
+{
+	return damage;
+}
+
+int CombatUnit::GetRangeValue()
+{
+	return range;
 }
