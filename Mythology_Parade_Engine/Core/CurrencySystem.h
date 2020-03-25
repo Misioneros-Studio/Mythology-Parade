@@ -1,8 +1,8 @@
-#ifndef _J1CURRENCYSYSTEM_
-#define _J1CURRENCYSYSTEM_
+#ifndef _CURRENCYSYSTEM_
+#define _CURRENCYSYSTEM_
 
 
-class j1CurrencySystem
+class CurrencySystem
 {
 public:
 	enum class ActionSacrifice {
@@ -23,8 +23,8 @@ public:
 	};
 
 public:
-	j1CurrencySystem();
-	~j1CurrencySystem();
+	CurrencySystem();
+	~CurrencySystem();
 
 	void increaseFaith(int number);
 	void decreaseFaith(int number);

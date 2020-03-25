@@ -1,27 +1,27 @@
-#include "j1CurrencySystem.h"
+#include "CurrencySystem.h"
 
-j1CurrencySystem::j1CurrencySystem()
+CurrencySystem::CurrencySystem()
 {
 	faith = 0;
 	sacrifices = 0;
 	prayers = 0;
 }
 
-j1CurrencySystem::~j1CurrencySystem()
+CurrencySystem::~CurrencySystem()
 {
 }
 
-void j1CurrencySystem::increaseFaith(int number)
+void CurrencySystem::increaseFaith(int number)
 {
 	faith += number;
 }
 
-void j1CurrencySystem::decreaseFaith(int number)
+void CurrencySystem::decreaseFaith(int number)
 {
 	faith -= number;
 }
 
-void j1CurrencySystem::increaseSacrifice(ActionSacrifice action)
+void CurrencySystem::increaseSacrifice(ActionSacrifice action)
 {
 	switch (action)
 	{
@@ -53,7 +53,7 @@ void j1CurrencySystem::increaseSacrifice(ActionSacrifice action)
 	}
 }
 
-void j1CurrencySystem::increasePrayers(ActionPrayers action)
+void CurrencySystem::increasePrayers(ActionPrayers action)
 {
 	switch (action)
 	{
