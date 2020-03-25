@@ -79,6 +79,7 @@
     <ClCompile Include="CurrencySystem.cpp">
       <Filter>Core\System Classes</Filter>
     </ClCompile>
+    <ClCompile Include="MiraclesDisasters.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1Window.h">
@@ -169,6 +170,9 @@
       <Filter>Core\Entities\Player</Filter>
     </ClInclude>
     <ClInclude Include="CurrencySystem.h">
+      <Filter>Core\System Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="MiraclesDisasters.h">
       <Filter>Core\System Classes</Filter>
     </ClInclude>
   </ItemGroup>
