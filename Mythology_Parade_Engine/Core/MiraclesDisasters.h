@@ -1,6 +1,7 @@
 #ifndef _MIRACLESDISASTERS_
 #define _MIRACLESDISASTERS_
 
+#include "CurrencySystem.h"
 
 class MiraclesDisasters 
 {
@@ -16,7 +17,7 @@ public:
 		GoldenExpansion,
 		Victory
 	};
-	enum class Disaster {
+	enum class Disasters {
 		MilitaryPressure,
 		TroopsInspiration,
 		HolyMeteor,
@@ -27,6 +28,13 @@ public:
 		AnimalShelter,
 		Victory
 	};
+
+public:
+	MiraclesDisasters();
+	~MiraclesDisasters();
+
+	void Miracle(Miracles action, CurrencySystem* currency);
+	void Disaster(Disasters action, CurrencySystem* currency);
 };
 
 
