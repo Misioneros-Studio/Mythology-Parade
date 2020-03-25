@@ -62,6 +62,8 @@ public:
 	int tile_width = 0;
 	int tile_height = 0;
 
+	int lowest_height;
+
 	//Delete and free all the tree memory
 	void Clear();
 	void FindLoadNodesToList(std::list<QuadNode*>*, QuadNode*, Point, Point);

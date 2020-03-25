@@ -37,6 +37,9 @@ void QuadNode::SetRect(int s_x, int s_y, int s_w, int s_h)
 
 void QuadNode::SubDivide(QuadNode* node, int divisionsLeft) 
 {
+	if (node->root->lowest_height > node->h)
+		node->root->lowest_height = node->h;
+
 	if (divisionsLeft > 0) 
 	{
 		if (!node->isDivided)
@@ -82,6 +85,7 @@ QuadTree::QuadTree(TreeType s_type, int s_x, int s_y, int s_w, int s_h)
 {
 	type = s_type;
 	baseNode = new QuadNode(this, nullptr, s_x, s_y, s_w, s_h);
+	lowest_height = s_w;
 }
 QuadTree::~QuadTree() 
 {
@@ -94,9 +98,10 @@ void QuadTree::FindLoadNodesToList(std::list<QuadNode*>* list, QuadNode* node, P
 
 	Rect rect = {node->x, node->y, node->w, node->h};
 
-	//TODO: 350 WHAT
-	Rect r = {l2.x, l2.y, r2.x + 350, r2.y};
-
+	//TODO: 160 WHAT
+	Rect r = {l2.x, l2.y, r2.x, r2.y};
+	if (this->type == TreeType::ISOMETRIC)
+		r.w += node->root->lowest_height;
 
 	if (node->isDivided) 
 	{
