@@ -137,6 +137,17 @@ bool QuadTree::QuadNodeOverLap(Rect rect, Rect r)
 
 }
 
+Point QuadTree::CoordsToIsometricInt(Point input, Point tileSize) 
+{
+	Point ret;
+
+	float half_width = tileSize.x * 0.5f;
+	float half_height = tileSize.y * 0.5f;
+
+	ret.x = int((input.x / half_width + input.y / half_height) / 2) - 1;
+	ret.y = int((input.y / half_height - (input.x / half_width)) / 2);
+}
+
 void QuadTree::Clear() 
 {
 	//Deletes and calls ~j1QuadTree

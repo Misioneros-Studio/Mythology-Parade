@@ -67,7 +67,7 @@ bool j1Scene::Start()
 	position = App->map->WorldToMap(0, 0);
 	size = iPoint(App->map->data.width * App->map->data.tile_width, App->map->data.height * App->map->data.tile_height);
 	quadTree = new QuadTree(TreeType::ISOMETRIC, position.x + (App->map->data.tile_width / 2), position.y, size.x, size.y);
-	quadTree->baseNode->SubDivide(quadTree->baseNode, 4);
+	quadTree->baseNode->SubDivide(quadTree->baseNode, 5);
 	return true;
 }
 
@@ -157,7 +157,6 @@ bool j1Scene::Update(float dt)
 	iPoint p = App->render->ScreenToWorld(x, y);
 	p = App->map->WorldToMap(p.x, p.y);
 
-	LOG("X = %i // Y = %i", p.x, p.y);
 	if (IN_RANGE(p.x, 0, App->map->data.width-1) == 1 && IN_RANGE(p.y, 0, App->map->data.height-1) == 1)
 	{
 		p = App->map->MapToWorld(p.x, p.y);
