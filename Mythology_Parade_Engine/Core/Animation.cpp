@@ -42,6 +42,7 @@ bool Animation::Load(const char* path)
 	pugi::xml_parse_result result = character_file.load_file(path);
 	int rect_width = 0;
 	int rect_height = 0;
+	int iterator = 1;
 
 	if (result == NULL)
 	{
@@ -59,18 +60,37 @@ bool Animation::Load(const char* path)
 		pugi::xml_node group = character_node.child("tileset").child("tile");
 		for (group; group; group.next_sibling("tile"))
 		{
+			iterator = 1;
 			rect_width = 0;
 			pugi::xml_node frame = group.child("animation").child("frame");
 			for (frame; frame && ret; frame = frame.next_sibling("frame"))
 			{
-				if (strcmp(group.child("properties").child("property").attribute("value").as_string(), "ATCK_LEFT_DOWN") == 0)
+				if (strcmp(group.child("properties").child("property").attribute("value").as_string(), "ATCK_DIAG_DOWN") == 0)
 				{
-					rect_width += character_tmx_data.tile_width * (frame.attribute("tileid").as_int() + 1);
-					LOG("ID: %u", frame.attribute("tileid").as_int());
-					LOG("Width: %u", rect_width);
-					LOG("Height: %u", rect_height);
-					rect_width = 0;
+					LOG("ATCK_DIAG_DOWN");
 				}
+				else if(strcmp(group.child("properties").child("property").attribute("value").as_string(), "ATCK_DIAG_UP") == 0)
+				{
+					LOG("ATCK_DIAG_UP");
+				}
+				else if (strcmp(group.child("properties").child("property").attribute("value").as_string(), "ATCK_LATERAL") == 0)
+				{
+					LOG("ATCK_LATERAL");
+				}
+				else if (strcmp(group.child("properties").child("property").attribute("value").as_string(), "ATCK_UP") == 0)
+				{
+					LOG("ATCK_UP");
+				}
+				else if (strcmp(group.child("properties").child("property").attribute("value").as_string(), "ATCK_DOWN") == 0)
+				{
+					LOG("ATCK_DOWN");
+				}
+				rect_width += character_tmx_data.tile_width * iterator;
+				LOG("ID: %u", frame.attribute("tileid").as_int());
+				LOG("Width: %u", rect_width);
+				LOG("Height: %u", rect_height);
+				rect_width = 0;
+				iterator++;
 			}
 			rect_height += character_tmx_data.tile_height * (frame.attribute("tileid").as_int() + 1);
 			group = group.next_sibling("tile");
