@@ -146,6 +146,8 @@ Point QuadTree::CoordsToIsometricInt(Point input, Point tileSize)
 
 	ret.x = int((input.x / half_width + input.y / half_height) / 2) - 1;
 	ret.y = int((input.y / half_height - (input.x / half_width)) / 2);
+
+	return ret;
 }
 
 void QuadTree::Clear() 
