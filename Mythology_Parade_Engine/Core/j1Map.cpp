@@ -30,6 +30,10 @@ bool j1Map::Awake(pugi::xml_node& config)
 
 void j1Map::Draw()
 {
+	j1Timer timer;
+
+	float time = timer.ReadSec();
+
 	if (map_loaded == false)
 		return;
 
@@ -37,7 +41,13 @@ void j1Map::Draw()
 
 	App->scene->quadTree->FindLoadNodesToList(&App->render->nodesInView, App->scene->quadTree->baseNode, { -App->render->camera.x, -App->render->camera.y }, { App->render->camera.w, App->render->camera.h });
 
-	//int blits = 0;
+
+	SDL_Rect cam = App->render->camera;
+	cam.x *= -1;
+	cam.y *= -1;
+
+	int blits = 0;
+
 	for (std::list<MapLayer*>::iterator it = data.layers.begin(); it != data.layers.end(); it++)
 	{
 		MapLayer* layer = it._Ptr->_Myval;
@@ -45,40 +55,36 @@ void j1Map::Draw()
 		if (layer->properties.Get("Nodraw") != 0)
 			continue;
 
-		for (std::list<QuadNode*>::iterator it = App->render->nodesInView.begin(); it != App->render->nodesInView.end(); it++)
+		//TILES ARE BEING BLIT MULTIPLE TIMES IN THE SAME PLACE
+		for (int y = cam.y; y <= cam.y + cam.h; y += data.tile_height * 0.5f)
 		{
-			QuadNode* node = it._Ptr->_Myval;
-
-			iPoint id = WorldToMap(node->x, node->y);
-			iPoint limitID = WorldToMap(node->x, node->y + node->h);
-
-			//LOG("%i, %i", id.x, id.y);
-			//LOG("%i, %i", limitID.x, limitID.y);
-
-			for (int y = id.y; y <= limitID.y; ++y)
+			for (int x = cam.x; x <= cam.x + cam.w; x += data.tile_width * 0.5f)
 			{
-				for (int x = id.x + 1; x <= limitID.x; ++x)
-				{
+				iPoint ac = WorldToMap(x, y);
 
-					int tile_id = layer->Get(x, y);
+				if (ac.x >= 0 && ac.y >= 0 && ac.x < data.width && ac.y < data.height) 
+				{
+					int tile_id = layer->Get(ac.x, ac.y);
 					if (tile_id > 0)
 					{
+						//LOG("%i, %i // %i, %i", ac.x, ac.y, x, y);
 						TileSet* tileset = GetTilesetFromTileId(tile_id);
 
 						SDL_Rect r = tileset->GetTileRect(tile_id);
-						iPoint pos = MapToWorld(x, y);
+						iPoint pos = MapToWorld(ac.x, ac.y);
 
-						if (pos.y - node->y < 0)
-							break;
 						App->render->Blit(tileset->texture, pos.x, pos.y, &r);
 
-						//blits++;
+						blits++;
 					}
 				}
 			}
 		}
-
 	}
+
+	float endTime = timer.Read();
+
+	LOG("%f", endTime - time);
 	//LOG("%i", App->render->nodesInView.size());
 	//LOG("%i", blits);
 }
