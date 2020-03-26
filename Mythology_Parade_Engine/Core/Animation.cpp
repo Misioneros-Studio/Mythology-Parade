@@ -18,12 +18,6 @@ bool Animation::Awake(pugi::xml_node& conf)
 	return ret;
 }
 
-void Animation::Draw()
-{
-	SDL_Rect rect = {0,0,character_tmx_data.tile_width,character_tmx_data.tile_height};
-	App->render->Blit(character_tmx_data.texture, 0, 0, &rect);
-}
-
 bool Animation::Update(float dt)
 {
 	Draw();
@@ -40,9 +34,11 @@ bool Animation::Load(const char* path)
 	bool ret = true;
 	pugi::xml_document	character_file;
 	pugi::xml_parse_result result = character_file.load_file(path);
-	int rect_width = 0;
-	int rect_height = 0;
-	int iterator = 1;
+
+
+	int row = 0;
+	std::string name;
+	int sprite_num;
 
 	if (result == NULL)
 	{
@@ -57,48 +53,34 @@ bool Animation::Load(const char* path)
 
 		LoadCharacterTMX(character_node);
 
-		pugi::xml_node group = character_node.child("tileset").child("tile");
-		for (group; group; group.next_sibling("tile"))
+	
+	pugi::xml_node group = character_node.child("tileset").child("tile");
+	for (group; group; group.next_sibling("tile"))
+	{
+		// This loop reads basic .tmx properties for iteration between frames
+		pugi::xml_node it = group.child("properties").child("property");
+		for (it; it; it.next_sibling("property"))
 		{
-			iterator = 1;
-			rect_width = 0;
-			pugi::xml_node frame = group.child("animation").child("frame");
-			for (frame; frame && ret; frame = frame.next_sibling("frame"))
+			if (strcmp(it.attribute("name").as_string(), "sprites") == 0)
 			{
-				if (strcmp(group.child("properties").child("property").attribute("value").as_string(), "ATCK_DIAG_DOWN") == 0)
-				{
-					LOG("ATCK_DIAG_DOWN");
-					ATCK_DIAG_DOWN = LoadAnimation(group);
-				}
-				else if(strcmp(group.child("properties").child("property").attribute("value").as_string(), "ATCK_DIAG_UP") == 0)
-				{
-					LOG("ATCK_DIAG_UP");
-				}
-				else if (strcmp(group.child("properties").child("property").attribute("value").as_string(), "ATCK_LATERAL") == 0)
-				{
-					LOG("ATCK_LATERAL");
-				}
-				else if (strcmp(group.child("properties").child("property").attribute("value").as_string(), "ATCK_UP") == 0)
-				{
-					LOG("ATCK_UP");
-				}
-				else if (strcmp(group.child("properties").child("property").attribute("value").as_string(), "ATCK_DOWN") == 0)
-				{
-					LOG("ATCK_DOWN");
-				}
-				rect_width += character_tmx_data.tile_width * iterator;
-				LOG("ID: %u", frame.attribute("tileid").as_int());
-				LOG("Width: %u", rect_width);
-				LOG("Height: %u", rect_height);
-				rect_width = 0;
-				iterator++;
+					sprite_num = it.attribute("value").as_int();
 			}
-			rect_height += character_tmx_data.tile_height * (frame.attribute("tileid").as_int() + 1);
-			group = group.next_sibling("tile");
+			if (strcmp(it.attribute("name").as_string(), "type") == 0)
+			{
+					name = it.attribute("value").as_string();
+			}
+			if (strcmp(it.attribute("name").as_string(), "row") == 0)
+			{
+					row = it.attribute("value").as_int();
+			}
+			it = it.next_sibling("property");
 		}
+		ChooseAnimation(group, row, sprite_num, name);
+		group = group.next_sibling("tile");
 	}
-
-	return ret;
+}
+	current_anim = WALK_DOWN;
+return ret;
 }
 
 bool Animation::LoadCharacterTMX(pugi::xml_node& character_node)
@@ -132,36 +114,82 @@ bool Animation::LoadCharacterTMX(pugi::xml_node& character_node)
 	return ret;
 }
 
-Animation_char* Animation::LoadAnimation(pugi::xml_node& obj_group)
+Animation_char* Animation::LoadAnimation(pugi::xml_node& obj_group, int row, int sprite_num, std::string name)
 {
 	Animation_char* anim = new Animation_char();
-	anim->name = obj_group.attribute("name").as_string();
 
-	if (strcmp(anim->name.c_str(), "DISARMED_IDLE") == 0) { ATCK_UP = anim; ATCK_UP->loop = false; }
-	else if (strcmp(anim->name.c_str(), "DISARMED_JUMP") == 0) { ATCK_RIGHT = anim; ATCK_RIGHT->loop = false; }
-	else if (strcmp(anim->name.c_str(), "DISARMED_DJUMP") == 0) { ATCK_LEFT = anim; ATCK_LEFT->loop = false; }
-	else if (strcmp(anim->name.c_str(), "DISARMED_DJUMP") == 0) { ATCK_UP_LEFT = anim; ATCK_UP_LEFT->loop = false; }
-	else if (strcmp(anim->name.c_str(), "DISARMED_DJUMP") == 0) { ATCK_UP_RIGHT = anim; ATCK_UP_RIGHT->loop = false; }
-	else if (strcmp(anim->name.c_str(), "DISARMED_DJUMP") == 0) { ATCK_DOWN_LEFT = anim; ATCK_DOWN_LEFT->loop = false; }
-	else if (strcmp(anim->name.c_str(), "DISARMED_DJUMP") == 0) { ATCK_DOWN_RIGHT = anim; ATCK_DOWN_RIGHT->loop = false; }
-
-	anim->num_sprites = obj_group.child("properties").child("property").last_attribute().as_int();
-
+	anim->name = name;
+	anim->num_sprites = sprite_num;
 	anim->sprites = new Sprite[anim->num_sprites];
+
+	int rect_width = 0;
+	int rect_height = 0;
+	int rect_x = 0;
+	int rect_y = character_tmx_data.tile_height * row;
+
 	int i = 0;
-	pugi::xml_node AABB_object = obj_group.next_sibling("objectgroup").child("object");
-
-	for (pugi::xml_node object = obj_group.child("object"); object; object = object.next_sibling("object"))
+	pugi::xml_node frame = obj_group.child("animation").child("frame");
+	for (frame; frame; frame = frame.next_sibling("frame"))
 	{
-		anim->sprites[i].rect.x = object.attribute("x").as_int();
-		anim->sprites[i].rect.y = object.attribute("y").as_int();
-		anim->sprites[i].rect.w = object.attribute("width").as_int();
-		anim->sprites[i].rect.h = object.attribute("height").as_int();
-		anim->sprites[i].frames = object.child("properties").child("property").attribute("value").as_int();
 
-		//No AABB
+	/*	anim->sprites[i].rect.x = rect_x;
+		anim->sprites[i].rect.y = rect_y;
+		anim->sprites[i].rect.w = rect_x + character_tmx_data.tile_width;
+		anim->sprites[i].rect.h = character_tmx_data.tile_height;*/
+
+		anim->sprites[i].rect.x = rect_x;
+		anim->sprites[i].rect.y = rect_y;
+		anim->sprites[i].rect.w = character_tmx_data.tile_width;
+		anim->sprites[i].rect.h = character_tmx_data.tile_height;
+		anim->sprites[i].frames = frame.attribute("duration").as_int();
+		anim->loop = true;
+		rect_x += character_tmx_data.tile_width;
 		i++;
 	}
+	
 	return anim;
 }
 
+void Animation::ChooseAnimation(pugi::xml_node& group, int row, int sprite_num, std::string name)
+{
+	//Attacks
+	if (strcmp(name.c_str(), "ATCK_DIAG_DOWN") == 0)	{	ATCK_DIAG_DOWN = LoadAnimation(group, row, sprite_num, name);}
+	else if (strcmp(name.c_str(), "ATCK_DIAG_UP") == 0) {	ATCK_DIAG_UP = LoadAnimation(group, row, sprite_num, name);}
+	else if (strcmp(name.c_str(), "ATCK_LATERAL") == 0) {	ATCK_LATERAL = LoadAnimation(group, row, sprite_num, name);}
+	else if (strcmp(name.c_str(), "ATCK_UP") == 0)		{	ATCK_UP = LoadAnimation(group, row, sprite_num, name);}
+	else if (strcmp(name.c_str(), "ATCK_DOWN") == 0)	{	ATCK_DOWN = LoadAnimation(group, row, sprite_num, name);}
+
+	//Death
+	if (strcmp(name.c_str(), "DIE_DIAG_DOWN") == 0)		{	DIE_DIAG_DOWN = LoadAnimation(group, row, sprite_num, name);}
+	else if (strcmp(name.c_str(), "DIE_DIAG_UP") == 0)	{	DIE_DIAG_UP = LoadAnimation(group, row, sprite_num, name);}
+	else if (strcmp(name.c_str(), "DIE_LATERAL") == 0)	{	DIE_LATERAL = LoadAnimation(group, row, sprite_num, name);}
+	else if (strcmp(name.c_str(), "DIE_UP") == 0)		{	DIE_UP = LoadAnimation(group, row, sprite_num, name);}
+	else if (strcmp(name.c_str(), "DIE_DOWN") == 0)		{	DIE_DOWN = LoadAnimation(group, row, sprite_num, name);}
+
+	//Hit
+	if (strcmp(name.c_str(), "HIT_DIAG_DOWN") == 0)		{	HIT_DIAG_DOWN = LoadAnimation(group, row, sprite_num, name);}
+	else if (strcmp(name.c_str(), "HIT_DIAG_UP") == 0)	{	HIT_DIAG_UP = LoadAnimation(group, row, sprite_num, name);}
+	else if (strcmp(name.c_str(), "HIT_LATERAL") == 0)	{	HIT_LATERAL = LoadAnimation(group, row, sprite_num, name);}
+	else if (strcmp(name.c_str(), "HIT_UP") == 0)		{	HIT_UP = LoadAnimation(group, row, sprite_num, name);}
+	else if (strcmp(name.c_str(), "HIT_DOWN") == 0)		{	HIT_DOWN = LoadAnimation(group, row, sprite_num, name);}
+
+	//Idle
+	if (strcmp(name.c_str(), "IDLE_DIAG_DOWN") == 0)	{	IDLE_DIAG_DOWN = LoadAnimation(group, row, sprite_num, name);}
+	else if (strcmp(name.c_str(), "IDLE_DIAG_UP") == 0)	{	IDLE_DIAG_UP = LoadAnimation(group, row, sprite_num, name);}
+	else if (strcmp(name.c_str(), "IDLE_LATERAL") == 0)	{	IDLE_LATERAL = LoadAnimation(group, row, sprite_num, name);}
+	else if (strcmp(name.c_str(), "IDLE_UP") == 0)		{	IDLE_UP = LoadAnimation(group, row, sprite_num, name);}
+	else if (strcmp(name.c_str(), "IDLE_DOWN") == 0)	{	IDLE_DOWN = LoadAnimation(group, row, sprite_num, name);}
+
+	//Walk
+	if (strcmp(name.c_str(), "WALK_DIAG_DOWN") == 0)	{	WALK_DIAG_DOWN = LoadAnimation(group, row, sprite_num, name);}
+	else if (strcmp(name.c_str(), "WALK_DIAG_UP") == 0)	{	WALK_DIAG_UP = LoadAnimation(group, row, sprite_num, name);}
+	else if (strcmp(name.c_str(), "WALK_LATERAL") == 0)	{	WALK_LATERAL = LoadAnimation(group, row, sprite_num, name);}
+	else if (strcmp(name.c_str(), "WALK_UP") == 0)		{	WALK_UP = LoadAnimation(group, row, sprite_num, name);}
+	else if (strcmp(name.c_str(), "WALK_DOWN") == 0)	{	WALK_DOWN = LoadAnimation(group, row, sprite_num, name);}
+}
+
+void Animation::Draw()
+{
+	num_current_anim = current_anim->GetSprite();
+	App->render->Blit(character_tmx_data.texture, 0, 0, &current_anim->sprites[num_current_anim].rect);
+}
