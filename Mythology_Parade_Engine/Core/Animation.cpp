@@ -38,7 +38,7 @@ bool Animation::Load(const char* path)
 
 	int row = 0;
 	std::string name;
-	int sprite_num;
+	int sprite_num = 0;
 
 	if (result == NULL)
 	{
