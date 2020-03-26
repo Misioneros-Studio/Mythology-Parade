@@ -72,7 +72,7 @@ bool j1Scene::Start()
 	position = App->map->WorldToMap(0, 0);
 	size = iPoint(App->map->data.width * App->map->data.tile_width, App->map->data.height * App->map->data.tile_height);
 	quadTree = new QuadTree(TreeType::ISOMETRIC, position.x + (App->map->data.tile_width / 2), position.y, size.x, size.y);
-	quadTree->baseNode->SubDivide(quadTree->baseNode, 4);
+	quadTree->baseNode->SubDivide(quadTree->baseNode, 5);
 	return true;
 }
 
@@ -122,16 +122,16 @@ bool j1Scene::Update(float dt)
 		ActivatePauseMenu();
 
 	if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
-		App->render->camera.y += floor(700.0f * dt);
+		App->render->camera.y += floor(1000.0f * dt);
 
 	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
-		App->render->camera.y -= floor(700.0f * dt);
+		App->render->camera.y -= floor(1000.0f * dt);
 
 	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
-		App->render->camera.x += floor(700.0f * dt);
+		App->render->camera.x += floor(1000.0f * dt);
 
 	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
-		App->render->camera.x -= floor(700.0f * dt);
+		App->render->camera.x -= floor(1000.0f * dt);
 
 
 	App->map->Draw();
@@ -158,11 +158,16 @@ bool j1Scene::Update(float dt)
 	// Debug pathfinding ------------------------------
 	//int x, y;
 	App->input->GetMousePosition(x, y);
+	y += 16;
 	iPoint p = App->render->ScreenToWorld(x, y);
 	p = App->map->WorldToMap(p.x, p.y);
-	p = App->map->MapToWorld(p.x, p.y);
 
-	App->render->Blit(debug_tex, p.x, p.y);
+	if (IN_RANGE(p.x, 0, App->map->data.width-1) == 1 && IN_RANGE(p.y, 0, App->map->data.height-1) == 1)
+	{
+		p = App->map->MapToWorld(p.x, p.y);
+		App->render->Blit(debug_tex, p.x, p.y);
+		App->render->Blit(debug_tex, p.x - 32, p.y, { 128, 64 });
+	}
 
 	std::list<iPoint> path = *App->pathfinding->GetLastPath();
 

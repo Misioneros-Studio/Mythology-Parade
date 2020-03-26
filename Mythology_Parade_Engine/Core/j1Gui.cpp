@@ -52,7 +52,7 @@ bool j1Gui::PreUpdate()
 			std::list<UI*>::iterator it = UIs.begin();
 			std::advance(it, i);
 
-			if (it._Ptr->_Myval != nullptr) 
+			if (it._Ptr->_Myval != UIs.end()._Ptr->_Myval) 
 			{
 				mouse = it._Ptr->_Myval->CheckMouse();
 			}
@@ -63,7 +63,9 @@ bool j1Gui::PreUpdate()
 	{
 		std::list<UI*>::iterator it = UIs.begin();
 		std::advance(it, count);
-		it._Ptr->_Myval->Move();
+
+		if (it._Ptr->_Myval != UIs.end()._Ptr->_Myval)
+			it._Ptr->_Myval->Move();
 	}
 	for(std::list<UI*>::iterator it = UIs.begin(); it != UIs.end(); it++)
 	{
@@ -615,7 +617,8 @@ ListTextsUI::ListTextsUI(Type type, UI* p, SDL_Rect r, std::string str, bool d, 
 
 
 
-bool ListTextsUI::PostUpdate() {
+bool ListTextsUI::PostUpdate() 
+{
 
 	SDL_Rect rect = { 0,0,0,0 };
 	iPoint dif_sprite = { 0,0 };
@@ -627,16 +630,19 @@ bool ListTextsUI::PostUpdate() {
 		std::list<std::string>::iterator it = stri.begin();
 		std::advance(it, i);
 
-		SDL_Texture* text = App->font->Print(it->c_str());
+		if (it._Ptr->_Myval != stri.end()._Ptr->_Myval) 
+		{
+			SDL_Texture* text = App->font->Print(it->c_str(), { 255,255,255,255 });
 
-		SDL_QueryTexture(text, NULL, NULL, &rect.w, &rect.h);
+			SDL_QueryTexture(text, NULL, NULL, &rect.w, &rect.h);
 
 
-		SDL_Rect sprite = UI::Check_Printable_Rect(rect, dif_sprite, { quad.x,quad.y + (quad.h * i),quad.w,quad.h });
-		if (this->active && this->GetConsole() == false)App->render->Blit(text, GetScreenToWorldPos().x + dif_sprite.x, GetScreenToWorldPos().y + dif_sprite.y, &sprite, 0.0F);
-		else if (this->active) App->render->Blit(text, quad.x + dif_sprite.x, quad.y + dif_sprite.y + (i * quad.h), &sprite, 0.0F);
+			SDL_Rect sprite = UI::Check_Printable_Rect(rect, dif_sprite, { quad.x,quad.y + (quad.h * i),quad.w,quad.h });
+			if (this->active && this->GetConsole() == false)App->render->Blit(text, GetScreenToWorldPos().x + dif_sprite.x, GetScreenToWorldPos().y + dif_sprite.y, &sprite, 0.0F);
+			else if (this->active) App->render->Blit(text, quad.x + dif_sprite.x, quad.y + dif_sprite.y + (i * quad.h), &sprite, 0.0F);
 
-		App->tex->UnLoad(text);
+			App->tex->UnLoad(text);
+		}
 	}
 	UI::PostUpdate();
 
@@ -694,11 +700,14 @@ bool ButtonUI::PostUpdate() {
 bool ButtonUI::PreUpdate() {
 	int x, y;
 	App->input->GetMousePosition(x, y);
-
+	bool pushing = false;
 	if (front == true && ((x >= GetScreenPos().x && x <= GetScreenPos().x + GetScreenRect().w && y >= GetScreenPos().y && y <= GetScreenPos().y + GetScreenRect().h) || focus == true))
 		over = true;
 	else over = false;
 	bool button = false;
+	if (App->input->GetMouseButtonDown(1) == KEY_DOWN || App->input->GetMouseButtonDown(1) == KEY_REPEAT) {
+		pushing = true;
+	}
 	if (App->input->GetMouseButtonDown(1) == KEY_UP || App->input->GetKey(SDL_SCANCODE_RETURN))
 		button = true;
 	if (over == true && button == true)
@@ -713,9 +722,9 @@ bool ButtonUI::PreUpdate() {
 			listener->OnClick(this);
 		}
 		App->gui->lockClick = true;
-		LOG("Click");
 	}
-
+	if (pushing == true && over == true)
+		pushed = true;
 	UI::PreUpdate();
 
 	return true;
@@ -798,7 +807,7 @@ bool TextInputUI::PostUpdate() {
 
 	SDL_Rect rect = { 0,0,0,0 };
 	if (strcmp(label.c_str(), "")) {
-		SDL_Texture* text = App->font->Print(label.c_str());
+		SDL_Texture* text = App->font->Print(label.c_str(), {255,255,255,255});
 		SDL_QueryTexture(text, NULL, NULL, &rect.w, &rect.h);
 		SDL_Rect sprite = UI::Check_Printable_Rect(rect, dif_sprite);
 		if (this->active) App->render->Blit(text, quad.x + dif_sprite.x, quad.y + dif_sprite.y, &sprite, 0.0F);

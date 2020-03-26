@@ -9,6 +9,7 @@
 #include"p2Point.h"
 
 #define QUADNODE_CHILD_NUMBER 4
+#define IN_RANGE_QUADTREE( value, min, max ) ( ((value) >= (min) && (value) <= (max)) ? 1 : 0 )
 
 enum TreeType
 {
@@ -61,10 +62,13 @@ public:
 	int tile_width = 0;
 	int tile_height = 0;
 
+	int lowest_height;
+
 	//Delete and free all the tree memory
 	void Clear();
 	void FindLoadNodesToList(std::list<QuadNode*>*, QuadNode*, Point, Point);
 	static bool QuadNodeOverLap(Rect, Rect);
+	static Point CoordsToIsometricInt(Point, Point);
 
 };
 

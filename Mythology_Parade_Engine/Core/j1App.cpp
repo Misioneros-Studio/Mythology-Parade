@@ -51,12 +51,14 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(font);
 	AddModule(gui);
 	AddModule(console);
-	AddModule(entityManager);
 
 
 	// scene last
 	AddModule(scene);
 	AddModule(animation);
+
+	// entities
+	AddModule(entityManager);
 
 	// render last to swap buffer
 	AddModule(render);
