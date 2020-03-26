@@ -81,16 +81,16 @@ void Console::ActivateConsole()
 
 std::string Console::CheckCommand() {
 	std::string argument = "";
-	const char* command_text = console_input->GetLabel().c_str();
-	if (!strcmp(command_text, "list"))
+	std::string command_text = console_input->GetLabel();
+	if (!strcmp(command_text.c_str(), "list"))
 		command = commands::list;
-	else if (!strcmp(command_text, "god_mode") || !strcmp(command_text, "god mode") || !strcmp(command_text, "godmode"))
+	else if (!strcmp(command_text.c_str(), "god_mode") || !strcmp(command_text.c_str(), "god mode") || !strcmp(command_text.c_str(), "godmode"))
 		command = commands::god_mode;
-	else if (!strcmp(command_text, "quit") || !strcmp(command_text, "exit"))
+	else if (!strcmp(command_text.c_str(), "quit") || !strcmp(command_text.c_str(), "exit"))
 		command = commands::quit;
-	else if (!strcmp(command_text, "FPS") || !strcmp(command_text, "Fps") || !strcmp(command_text, "fps"))
+	else if (!strcmp(command_text.c_str(), "FPS") || !strcmp(command_text.c_str(), "Fps") || !strcmp(command_text.c_str(), "fps"))
 		command = commands::FPS;
-	else if (!strcmp(command_text, "map"))
+	else if (!strcmp(command_text.c_str(), "map"))
 		command = commands::map;
 	else {
 		std::string three_letters_command = argument = console_input->GetLabel();

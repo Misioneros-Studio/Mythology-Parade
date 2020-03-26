@@ -35,7 +35,7 @@ void j1Map::Draw()
 
 	App->render->nodesInView.clear();
 
-	App->scene->quadTree->FindLoadNodesToList(&App->render->nodesInView, App->scene->quadTree->baseNode, { -App->render->camera.x, -App->render->camera.y }, { App->render->camera.w, App->render->camera.h });
+	App->scene->quadTree->FindLoadNodesToList(&App->render->nodesInView, App->scene->quadTree->baseNode, { -App->render->camera.x, -App->render->camera.y }, { App->render->camera.w, App->render->camera.h - 100 });
 
 	//int blits = 0;
 	for (std::list<MapLayer*>::iterator it = data.layers.begin(); it != data.layers.end(); it++)
@@ -79,6 +79,7 @@ void j1Map::Draw()
 		}
 
 	}
+
 	//LOG("%i", App->render->nodesInView.size());
 	//LOG("%i", blits);
 }
