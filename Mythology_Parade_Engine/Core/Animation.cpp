@@ -68,6 +68,7 @@ bool Animation::Load(const char* path)
 				if (strcmp(group.child("properties").child("property").attribute("value").as_string(), "ATCK_DIAG_DOWN") == 0)
 				{
 					LOG("ATCK_DIAG_DOWN");
+					ATCK_DIAG_DOWN = LoadAnimation(group);
 				}
 				else if(strcmp(group.child("properties").child("property").attribute("value").as_string(), "ATCK_DIAG_UP") == 0)
 				{
@@ -137,7 +138,6 @@ Animation_char* Animation::LoadAnimation(pugi::xml_node& obj_group)
 	anim->name = obj_group.attribute("name").as_string();
 
 	if (strcmp(anim->name.c_str(), "DISARMED_IDLE") == 0) { ATCK_UP = anim; ATCK_UP->loop = false; }
-	else if (strcmp(anim->name.c_str(), "DISARMED_RUN") == 0) { ATCK_DOWN = anim; ATCK_DOWN->loop = false; }
 	else if (strcmp(anim->name.c_str(), "DISARMED_JUMP") == 0) { ATCK_RIGHT = anim; ATCK_RIGHT->loop = false; }
 	else if (strcmp(anim->name.c_str(), "DISARMED_DJUMP") == 0) { ATCK_LEFT = anim; ATCK_LEFT->loop = false; }
 	else if (strcmp(anim->name.c_str(), "DISARMED_DJUMP") == 0) { ATCK_UP_LEFT = anim; ATCK_UP_LEFT->loop = false; }

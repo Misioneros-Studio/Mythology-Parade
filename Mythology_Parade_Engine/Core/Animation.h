@@ -58,7 +58,7 @@ public:
 private:
 	CharacterTMXData character_tmx_data;
 
-	Animation_char* ATCK_DOWN;
+	Animation_char* ATCK_DIAG_DOWN;
 	Animation_char* ATCK_DOWN_LEFT;
 	Animation_char* ATCK_DOWN_RIGHT;
 	Animation_char* ATCK_UP;
