@@ -13,12 +13,18 @@ CurrencySystem::~CurrencySystem()
 
 void CurrencySystem::increaseFaith(int number)
 {
-	faith += number;
+	if(number>0)
+	{
+		faith += number;
+	}
 }
 
 void CurrencySystem::decreaseFaith(int number)
 {
-	faith -= number;
+	if (number > 0)
+	{
+		faith -= number;
+	}
 }
 
 void CurrencySystem::increaseSacrifice(ActionSacrifice action)
