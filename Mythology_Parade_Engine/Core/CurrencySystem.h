@@ -57,8 +57,8 @@ public:
 	void increasePrayers(ActionPrayers action);
 
 	//MIRACLES AND DISASTER
-	void Miracle(Miracles action, CurrencySystem* currency);
-	void Disaster(Disasters action, CurrencySystem* currency);
+	void Miracle(Miracles action);
+	void Disaster(Disasters action);
 
 public:
 	//ECONOMY
