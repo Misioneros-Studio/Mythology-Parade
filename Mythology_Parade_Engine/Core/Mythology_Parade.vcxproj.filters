@@ -67,9 +67,6 @@
     <ClCompile Include="LevelSystem.cpp">
       <Filter>Core\System Classes</Filter>
     </ClCompile>
-    <ClCompile Include="j1CurrencySystem.cpp">
-      <Filter>Core\System Classes</Filter>
-    </ClCompile>
     <ClCompile Include="Unit.cpp">
       <Filter>Core\Entities\Unit</Filter>
     </ClCompile>
@@ -78,6 +75,12 @@
     </ClCompile>
     <ClCompile Include="Player.cpp">
       <Filter>Core\Entities\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="CurrencySystem.cpp">
+      <Filter>Core\System Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="Animation.cpp">
+      <Filter>Core\Modules</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -159,9 +162,6 @@
     <ClInclude Include="LevelSystem.h">
       <Filter>Core\System Classes</Filter>
     </ClInclude>
-    <ClInclude Include="j1CurrencySystem.h">
-      <Filter>Core\System Classes</Filter>
-    </ClInclude>
     <ClInclude Include="Unit.h">
       <Filter>Core\Entities\Unit</Filter>
     </ClInclude>
@@ -170,6 +170,12 @@
     </ClInclude>
     <ClInclude Include="Player.h">
       <Filter>Core\Entities\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="CurrencySystem.h">
+      <Filter>Core\System Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="Animation.h">
+      <Filter>Core\Modules</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

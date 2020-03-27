@@ -10,6 +10,7 @@
 #include "j1PathFinding.h"
 #include "j1Gui.h"
 #include "j1Fonts.h"
+#include "Animation.h"
 #include "j1Scene.h"
 
 #include"QuadTree.h"
@@ -64,13 +65,16 @@ bool j1Scene::Start()
 	debug_tex = App->tex->Load("maps/path2.png");
 	cursor_tex = App->tex->Load("gui/cursors.png");
 
-
 	//iPoint position;
 	//iPoint size;
 	//position = App->map->WorldToMap(0, 0);
 	//size = iPoint(App->map->data.width * App->map->data.tile_width, App->map->data.height * App->map->data.tile_height);
 	//quadTree = new QuadTree(TreeType::ISOMETRIC, position.x + (App->map->data.tile_width / 2), position.y, size.x, size.y);
 	//quadTree->baseNode->SubDivide(quadTree->baseNode, 5);
+  
+	//Eudald: This shouldn't be here but we don't have an entity system to load each animation yet
+	App->animation->Load("assets/units/Assassin.tmx");	
+
 	return true;
 }
 

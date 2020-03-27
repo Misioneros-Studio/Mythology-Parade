@@ -1,18 +1,18 @@
 #ifndef __PLAYER_H__
 #define __PLAYER_H__
 #include "Entity.h"
-#include "j1CurrencySystem.h"
+#include "CurrencySystem.h"
 #include "Unit.h"
 #include "Building.h"
 
-class Player : public Entity, public j1CurrencySystem
+class Player : public Entity, public CurrencySystem
 {
 public:
 	Player();
 	~Player();
 
 private:
-	j1CurrencySystem currencySystem;
+	CurrencySystem currencySystem;
 
 	std::list<Unit*> unitsList;
 	std::list<Building*> buildingsList;
