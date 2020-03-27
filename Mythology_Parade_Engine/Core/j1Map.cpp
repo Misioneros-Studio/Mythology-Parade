@@ -57,85 +57,103 @@ void j1Map::Draw()
 			continue;
 
 		//Approach 2.0
+		for (int currentIndex = lenght; currentIndex > 0; currentIndex--)
+		{
+			downCL.y++; downCL.x++;
+			rightCL.y--; rightCL.x++;
 
-		//for (size_t i = 0; i < length; i++)
-		//{
+			if (downCL.x <= C.x)
+			{
+				for (int x = 1; x <= lenght; x++) 
+				{
+					int tile_id = layer->Get(x, downCL.y);
+					if (tile_id > 0)
+					{
+						TileSet* tileset = GetTilesetFromTileId(tile_id);
 
-		//}
+						SDL_Rect r = tileset->GetTileRect(tile_id);
+						iPoint pos = MapToWorld(x, downCL.y);
 
-		//for (int currentIndex = lenght; currentIndex > 0; currentIndex--)
-		//{
+						App->render->Blit(tileset->texture, pos.x, pos.y, &r);
 
-		//}
-			//int tile_id = layer->Get(D.x, D.y);
-			//if (tile_id > 0)
-			//{
-			//	TileSet* tileset = GetTilesetFromTileId(tile_id);
+						blits++;
+					}
+				}
+			}
 
-			//	SDL_Rect r = tileset->GetTileRect(tile_id);
-			//	iPoint pos = MapToWorld(D.x, D.y);
+			if (rightCL.x <= D.x)
+			{
+				int tile_id = layer->Get(rightCL.x, rightCL.y);
+				if (tile_id > 0)
+				{
+					TileSet* tileset = GetTilesetFromTileId(tile_id);
 
-			//	App->render->Blit(tileset->texture, pos.x, pos.y, &r);
+					SDL_Rect r = tileset->GetTileRect(tile_id);
+					iPoint pos = MapToWorld(rightCL.x, rightCL.y);
 
-			//	blits++;
-			//}
-		
+					App->render->Blit(tileset->texture, pos.x, pos.y, &r);
+
+					blits++;
+				}
+			}
+		}
+
 
 
 		//Approach 1.0
-		A = WorldToMap(-App->render->camera.x, -App->render->camera.y);
-		int counter = 1;
-		for (A.x = A.x - 1; A.x <= D.x; A.x++, A.y--)
-		{
-			for (int x = A.x, y = A.y; x <= B.x - counter; x++)
-			{
-				if (x >= 0 && y >= 0 && x < data.width && y < data.height)
-				{
+	//	A = WorldToMap(-App->render->camera.x, -App->render->camera.y);
+	//	int counter = 1;
+	//	for (A.x = A.x - 1; A.x <= D.x; A.x++, A.y--)
+	//	{
+	//		for (int x = A.x, y = A.y; x <= B.x - counter; x++)
+	//		{
+	//			if (x >= 0 && y >= 0 && x < data.width && y < data.height)
+	//			{
 
-					int tile_id = layer->Get(x, y);
-					if (tile_id > 0)
-					{
-						TileSet* tileset = GetTilesetFromTileId(tile_id);
+	//				int tile_id = layer->Get(x, y);
+	//				if (tile_id > 0)
+	//				{
+	//					TileSet* tileset = GetTilesetFromTileId(tile_id);
 
-						SDL_Rect r = tileset->GetTileRect(tile_id);
-						iPoint pos = MapToWorld(x, y);
+	//					SDL_Rect r = tileset->GetTileRect(tile_id);
+	//					iPoint pos = MapToWorld(x, y);
 
-						App->render->Blit(tileset->texture, pos.x, pos.y, &r);
+	//					App->render->Blit(tileset->texture, pos.x, pos.y, &r);
 
-						blits++;
-					}
+	//					blits++;
+	//				}
 
-				}
-			}
-			counter++;
-		}
+	//			}
+	//		}
+	//		counter++;
+	//	}
 
-		counter = 0;
-		A = WorldToMap(-App->render->camera.x, -App->render->camera.y);
-		for (A.x = A.x - 1, A.y = A.y + 1; A.y <= C.y; A.x++, A.y++)
-		{
-			for (int x = A.x, y = A.y; x <= B.x - counter; x++)
-			{
-				if (x >= 0 && y >= 0 && x < data.width && y < data.height)
-				{
+	//	counter = 0;
+	//	A = WorldToMap(-App->render->camera.x, -App->render->camera.y);
+	//	for (A.x = A.x - 1, A.y = A.y + 1; A.y <= C.y; A.x++, A.y++)
+	//	{
+	//		for (int x = A.x, y = A.y; x <= B.x - counter; x++)
+	//		{
+	//			if (x >= 0 && y >= 0 && x < data.width && y < data.height)
+	//			{
 
-					int tile_id = layer->Get(x, y);
-					if (tile_id > 0)
-					{
-						TileSet* tileset = GetTilesetFromTileId(tile_id);
+	//				int tile_id = layer->Get(x, y);
+	//				if (tile_id > 0)
+	//				{
+	//					TileSet* tileset = GetTilesetFromTileId(tile_id);
 
-						SDL_Rect r = tileset->GetTileRect(tile_id);
-						iPoint pos = MapToWorld(x, y);
+	//					SDL_Rect r = tileset->GetTileRect(tile_id);
+	//					iPoint pos = MapToWorld(x, y);
 
-						App->render->Blit(tileset->texture, pos.x, pos.y, &r);
+	//					App->render->Blit(tileset->texture, pos.x, pos.y, &r);
 
-						blits++;
-					}
+	//					blits++;
+	//				}
 
-				}
-			}
-			counter++;
-		}
+	//			}
+	//		}
+	//		counter++;
+	//	}
 	}
 	LOG("%i", blits);
 	float endTime = timer.Read();
