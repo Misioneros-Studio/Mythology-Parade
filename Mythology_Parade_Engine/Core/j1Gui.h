@@ -19,6 +19,19 @@ enum class Type
 	UNKNOWN
 };
 
+enum class UI_Audio
+{
+	NONE=-1,
+	SAVE,
+	LOAD,
+	OPTIONS,
+	RESTART,
+	SURRENDER,
+	EXIT,
+	CLOSE,
+	UNKNOWN
+};
+
 struct SDL_Texture;
 
 class UI :public j1Module
@@ -164,7 +177,7 @@ class ButtonUI :public UI
 {
 public:
 
-	ButtonUI(Type type, UI* p, SDL_Rect r, SDL_Rect sprite, SDL_Rect spriten2, SDL_Rect spriten3, bool d, bool f, SDL_Rect d_area);
+	ButtonUI(Type type, UI* p, SDL_Rect r, SDL_Rect sprite, SDL_Rect spriten2, SDL_Rect spriten3, bool d, bool f, SDL_Rect d_area, int audio);
 
 	// Destructor
 	virtual ~ButtonUI() {}
@@ -191,6 +204,7 @@ public:
 	bool over;
 	bool isLocked;
 	bool front;
+	int click_sfx;
 };
 
 class TextInputUI :public UI
@@ -250,7 +264,7 @@ public:
 
 	// Gui creation functions
 	UI* CreateUIElement(Type type, UI* p, SDL_Rect r, SDL_Rect sprite = { 0,0,0,0 }, std::string str = "", SDL_Rect sprite2 = { 0,0,0,0 }, SDL_Rect sprite3 = { 0,0,0,0 }, bool drageable = false,
-		SDL_Rect drag_area = { 0,0,0,0 }, j1Module* s_listener = nullptr, bool console = false, float drag_position_scroll_bar = -1);
+		SDL_Rect drag_area = { 0,0,0,0 }, j1Module* s_listener = nullptr, int audio=0, bool console = false, float drag_position_scroll_bar = -1);
 	UI* CreateUIElement(Type type, UI* p, SDL_Rect r, std::string str, int re, int g, int b, int a, bool drageable = false, SDL_Rect drag_area = { 0,0,0,0 }, j1Module* s_listener = nullptr);
 	bool DeleteUIElement(UI*);
 
@@ -277,7 +291,7 @@ private:
 public:
 
 	//Audio
-	int click_sfx;
+	int sfx_UI[7];
 	bool lockClick;
 
 };
