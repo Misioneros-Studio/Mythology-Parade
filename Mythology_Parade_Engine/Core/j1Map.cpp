@@ -30,12 +30,15 @@ bool j1Map::Awake(pugi::xml_node& config)
 
 void j1Map::Draw()
 {
+	//j1PerfTimer timer;
+
+	//double startTime = timer.ReadMs();
+
 	if (map_loaded == false)
 		return;
 
-	App->render->nodesInView.clear();
-
-	App->scene->quadTree->FindLoadNodesToList(&App->render->nodesInView, App->scene->quadTree->baseNode, { -App->render->camera.x, -App->render->camera.y }, { App->render->camera.w, App->render->camera.h - 100 });
+	iPoint A = WorldToMap(-App->render->camera.x, -App->render->camera.y);
+	iPoint B = WorldToMap(-App->render->camera.x + App->render->camera.w, -App->render->camera.y + App->render->camera.h);
 
 	//int blits = 0;
 	for (std::list<MapLayer*>::iterator it = data.layers.begin(); it != data.layers.end(); it++)
@@ -45,21 +48,19 @@ void j1Map::Draw()
 		if (layer->properties.Get("Nodraw") != 0)
 			continue;
 
-		for (std::list<QuadNode*>::iterator it = App->render->nodesInView.begin(); it != App->render->nodesInView.end(); it++)
+		//Approach 2.0
+		for (int a = A.x+A.y - 2; a <= B.x + B.y - 5 /* or 2*/; a++) 
 		{
-			QuadNode* node = it._Ptr->_Myval;
-
-			iPoint id = WorldToMap(node->x, node->y);
-			iPoint limitID = WorldToMap(node->x, node->y + node->h);
-
-			//LOG("%i, %i", id.x, id.y);
-			//LOG("%i, %i", limitID.x, limitID.y);
-
-			for (int y = id.y; y <= limitID.y; ++y)
+			for (int b = A.x - A.y - 2; b <= B.x - B.y +2; b++) 
 			{
-				for (int x = id.x + 1; x <= limitID.x; ++x)
-				{
+				if ((b & 1) != (a & 1)) 
+					continue;
 
+				int x = (a + b) / 2;
+				int y = (a - b) / 2;
+
+				if (x >= 0 && y >= 0 && x < data.width && y < data.height) 
+				{
 					int tile_id = layer->Get(x, y);
 					if (tile_id > 0)
 					{
@@ -68,20 +69,18 @@ void j1Map::Draw()
 						SDL_Rect r = tileset->GetTileRect(tile_id);
 						iPoint pos = MapToWorld(x, y);
 
-						if (pos.y - node->y < 0)
-							break;
 						App->render->Blit(tileset->texture, pos.x, pos.y, &r);
 
 						//blits++;
 					}
 				}
+
 			}
 		}
-
 	}
-
-	//LOG("%i", App->render->nodesInView.size());
 	//LOG("%i", blits);
+	//double endTime = timer.ReadMs();
+	//LOG("%f", endTime- startTime);
 }
 
 int Properties::Get(const char* value, int default_value)
