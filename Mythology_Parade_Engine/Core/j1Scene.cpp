@@ -47,27 +47,30 @@ bool j1Scene::Start()
 		RELEASE_ARRAY(data);
 	}
 
-	//ui_ingame=(ImageUI*)App->gui->CreateUIElement(Type::IMAGE, nullptr, { 0,590,1280,130 }, { 0,590,1280,130 });
-	//for (int i = 0; i < 3; i++) {
-	//	ui_text_ingame[i] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 104,610+(i*33),237,38 }, { 0,0,100,100 }, "999", { 255,255,255,255 }, { 1,0,0,0 });
-	//}
-	//for (int i = 0; i < 8; i++) {
-	//	if (i != 7) {
-	//		ui_button[i] = nullptr;
-	//	}
-	//	ui_text[i] = nullptr;
-	//}
+	ui_ingame=(ImageUI*)App->gui->CreateUIElement(Type::IMAGE, nullptr, { 0,590,1280,130 }, { 0,590,1280,130 });
+	for (int i = 0; i < 3; i++) 
+	{
+		ui_text_ingame[i] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 104,610+(i*33),237,38 }, { 0,0,100,100 }, "999", { 255,255,255,255 }, { 1,0,0,0 });
+	}
+	for (int i = 0; i < 8; i++) 
+	{
+		if (i != 7) 
+		{
+			ui_button[i] = nullptr;
+		}
+		ui_text[i] = nullptr;
+	}
 
 	debug_tex = App->tex->Load("maps/path2.png");
 	cursor_tex = App->tex->Load("gui/cursors.png");
 
 
-	iPoint position;
-	iPoint size;
-	position = App->map->WorldToMap(0, 0);
-	size = iPoint(App->map->data.width * App->map->data.tile_width, App->map->data.height * App->map->data.tile_height);
-	quadTree = new QuadTree(TreeType::ISOMETRIC, position.x + (App->map->data.tile_width / 2), position.y, size.x, size.y);
-	quadTree->baseNode->SubDivide(quadTree->baseNode, 5);
+	//iPoint position;
+	//iPoint size;
+	//position = App->map->WorldToMap(0, 0);
+	//size = iPoint(App->map->data.width * App->map->data.tile_width, App->map->data.height * App->map->data.tile_height);
+	//quadTree = new QuadTree(TreeType::ISOMETRIC, position.x + (App->map->data.tile_width / 2), position.y, size.x, size.y);
+	//quadTree->baseNode->SubDivide(quadTree->baseNode, 5);
 	return true;
 }
 
@@ -136,20 +139,11 @@ bool j1Scene::Update(float dt)
 	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
 		App->input->drawDebug = !App->input->drawDebug;
 
-	if (App->input->drawDebug)
-		App->render->DrawQuadTree(quadTree->type, quadTree->baseNode);
-
+	//if (App->input->drawDebug)
+	//	App->render->DrawQuadTree(quadTree->type, quadTree->baseNode);
 
 
 	int x, y;
-	//iPoint map_coordinates = App->map->WorldToMap(x - App->render->camera.x, y - App->render->camera.y);
-	//p2SString title("Map:%dx%d Tiles:%dx%d Tilesets:%d Tile:%d,%d",
-	//	App->map->data.width, App->map->data.height,
-	//	App->map->data.tile_width, App->map->data.tile_height,
-	//	App->map->data.tilesets.count(),
-	//	map_coordinates.x, map_coordinates.y);
-	//App->win->SetTitle(title.GetString());
-
 	// Debug pathfinding ------------------------------
 	//int x, y;
 	App->input->GetMousePosition(x, y);

@@ -30,25 +30,17 @@ bool j1Map::Awake(pugi::xml_node& config)
 
 void j1Map::Draw()
 {
-	j1Timer timer;
+	//j1PerfTimer timer;
 
-	float startTime = timer.Read();
+	//double startTime = timer.ReadMs();
 
 	if (map_loaded == false)
 		return;
 
 	iPoint A = WorldToMap(-App->render->camera.x, -App->render->camera.y);
 	iPoint B = WorldToMap(-App->render->camera.x + App->render->camera.w, -App->render->camera.y + App->render->camera.h);
-	iPoint C = WorldToMap(-App->render->camera.x, -App->render->camera.y + App->render->camera.h);
-	iPoint D = WorldToMap(-App->render->camera.x + App->render->camera.w, -App->render->camera.y);
 
-	//OPT: Need this recalculated every frame? NO
-	int lenght = B.x - A.x;
-
-	iPoint rightCL = A;
-	iPoint downCL = A;
-
-	int blits = 0;
+	//int blits = 0;
 	for (std::list<MapLayer*>::iterator it = data.layers.begin(); it != data.layers.end(); it++)
 	{
 		MapLayer* layer = it._Ptr->_Myval;
@@ -57,107 +49,38 @@ void j1Map::Draw()
 			continue;
 
 		//Approach 2.0
-		for (int currentIndex = lenght; currentIndex > 0; currentIndex--)
+		for (int a = A.x+A.y - 2; a <= B.x + B.y - 5 /* or 2*/; a++) 
 		{
-			downCL.y++; downCL.x++;
-			rightCL.y--; rightCL.x++;
-
-			if (downCL.x <= C.x)
+			for (int b = A.x - A.y - 2; b <= B.x - B.y +2; b++) 
 			{
-				for (int x = 1; x <= lenght; x++) 
+				if ((b & 1) != (a & 1)) 
+					continue;
+
+				int x = (a + b) / 2;
+				int y = (a - b) / 2;
+
+				if (x >= 0 && y >= 0 && x < data.width && y < data.height) 
 				{
-					int tile_id = layer->Get(x, downCL.y);
+					int tile_id = layer->Get(x, y);
 					if (tile_id > 0)
 					{
 						TileSet* tileset = GetTilesetFromTileId(tile_id);
 
 						SDL_Rect r = tileset->GetTileRect(tile_id);
-						iPoint pos = MapToWorld(x, downCL.y);
+						iPoint pos = MapToWorld(x, y);
 
 						App->render->Blit(tileset->texture, pos.x, pos.y, &r);
 
-						blits++;
+						//blits++;
 					}
 				}
-			}
 
-			if (rightCL.x <= D.x)
-			{
-				int tile_id = layer->Get(rightCL.x, rightCL.y);
-				if (tile_id > 0)
-				{
-					TileSet* tileset = GetTilesetFromTileId(tile_id);
-
-					SDL_Rect r = tileset->GetTileRect(tile_id);
-					iPoint pos = MapToWorld(rightCL.x, rightCL.y);
-
-					App->render->Blit(tileset->texture, pos.x, pos.y, &r);
-
-					blits++;
-				}
 			}
 		}
-
-
-
-		//Approach 1.0
-	//	A = WorldToMap(-App->render->camera.x, -App->render->camera.y);
-	//	int counter = 1;
-	//	for (A.x = A.x - 1; A.x <= D.x; A.x++, A.y--)
-	//	{
-	//		for (int x = A.x, y = A.y; x <= B.x - counter; x++)
-	//		{
-	//			if (x >= 0 && y >= 0 && x < data.width && y < data.height)
-	//			{
-
-	//				int tile_id = layer->Get(x, y);
-	//				if (tile_id > 0)
-	//				{
-	//					TileSet* tileset = GetTilesetFromTileId(tile_id);
-
-	//					SDL_Rect r = tileset->GetTileRect(tile_id);
-	//					iPoint pos = MapToWorld(x, y);
-
-	//					App->render->Blit(tileset->texture, pos.x, pos.y, &r);
-
-	//					blits++;
-	//				}
-
-	//			}
-	//		}
-	//		counter++;
-	//	}
-
-	//	counter = 0;
-	//	A = WorldToMap(-App->render->camera.x, -App->render->camera.y);
-	//	for (A.x = A.x - 1, A.y = A.y + 1; A.y <= C.y; A.x++, A.y++)
-	//	{
-	//		for (int x = A.x, y = A.y; x <= B.x - counter; x++)
-	//		{
-	//			if (x >= 0 && y >= 0 && x < data.width && y < data.height)
-	//			{
-
-	//				int tile_id = layer->Get(x, y);
-	//				if (tile_id > 0)
-	//				{
-	//					TileSet* tileset = GetTilesetFromTileId(tile_id);
-
-	//					SDL_Rect r = tileset->GetTileRect(tile_id);
-	//					iPoint pos = MapToWorld(x, y);
-
-	//					App->render->Blit(tileset->texture, pos.x, pos.y, &r);
-
-	//					blits++;
-	//				}
-
-	//			}
-	//		}
-	//		counter++;
-	//	}
 	}
-	LOG("%i", blits);
-	float endTime = timer.Read();
-	LOG("%f", endTime- startTime);
+	//LOG("%i", blits);
+	//double endTime = timer.ReadMs();
+	//LOG("%f", endTime- startTime);
 }
 
 int Properties::Get(const char* value, int default_value)
