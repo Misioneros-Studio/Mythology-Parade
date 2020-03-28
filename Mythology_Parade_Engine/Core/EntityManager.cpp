@@ -69,6 +69,24 @@ bool EntityManager::Update(float dt)
 	return true;
 }
 
+bool EntityManager::PostUpdate() 
+{
+
+	if (App->input->GetKey(SDL_SCANCODE_U) == KEY_REPEAT) 
+	{
+		iPoint mouse = App->map->GetMousePositionOnMap();
+		bool isOn = App->pathfinding->IsWalkable(mouse);
+
+		if (isOn) 
+		{
+
+		}
+	}
+
+
+	return true;
+}
+
 // Called before quitting
 bool EntityManager::CleanUp()
 {

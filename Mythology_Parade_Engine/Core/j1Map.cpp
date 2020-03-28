@@ -512,3 +512,14 @@ bool j1Map::CreateWalkabilityMap(int& width, int& height, uchar** buffer)
 
 	return ret;
 }
+
+iPoint j1Map::GetMousePositionOnMap()
+{
+	int x, y;
+	App->input->GetMousePosition(x, y);
+	y += data.tile_height / 2;
+	iPoint p = App->render->ScreenToWorld(x, y);
+	p = WorldToMap(p.x, p.y);
+
+	return p;
+}

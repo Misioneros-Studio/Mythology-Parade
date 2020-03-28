@@ -86,10 +86,7 @@ bool j1Scene::PreUpdate()
 	static iPoint origin;
 	static bool origin_selected = false;
 
-	int x, y;
-	App->input->GetMousePosition(x, y);
-	iPoint p = App->render->ScreenToWorld(x, y);
-	p = App->map->WorldToMap(p.x, p.y);
+	iPoint p = App->map->GetMousePositionOnMap();
 
 	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN)
 	{
@@ -146,20 +143,13 @@ bool j1Scene::Update(float dt)
 	//if (App->input->drawDebug)
 	//	App->render->DrawQuadTree(quadTree->type, quadTree->baseNode);
 
-
-	int x, y;
-	// Debug pathfinding ------------------------------
-	//int x, y;
-	App->input->GetMousePosition(x, y);
-	y += 16;
-	iPoint p = App->render->ScreenToWorld(x, y);
-	p = App->map->WorldToMap(p.x, p.y);
+	iPoint p = App->map->GetMousePositionOnMap();
 
 	if (IN_RANGE(p.x, 0, App->map->data.width-1) == 1 && IN_RANGE(p.y, 0, App->map->data.height-1) == 1)
 	{
 		p = App->map->MapToWorld(p.x, p.y);
 		App->render->Blit(debug_tex, p.x, p.y);
-		App->render->Blit(debug_tex, p.x - 32, p.y, { 128, 64 });
+		//App->render->Blit(debug_tex, p.x - 32, p.y, { 128, 64 });
 	}
 
 	std::list<iPoint> path = *App->pathfinding->GetLastPath();

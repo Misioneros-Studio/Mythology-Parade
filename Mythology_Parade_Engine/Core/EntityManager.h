@@ -4,6 +4,9 @@
 #include "j1Module.h"
 #include <unordered_map>
 #include "Entity.h"
+#include"j1Input.h"
+#include"j1Map.h"
+#include"j1Pathfinding.h"
 
 enum class UnitType;
 enum BuildingType;
@@ -34,6 +37,8 @@ public:
 
 	// Called each loop iteration
 	bool Update(float dt);
+
+	bool PostUpdate();
 
 	// Called before quitting
 	bool CleanUp();
