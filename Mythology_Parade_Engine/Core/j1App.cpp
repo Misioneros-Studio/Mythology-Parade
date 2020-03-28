@@ -9,6 +9,7 @@
 #include "j1Render.h"
 #include "j1Textures.h"
 #include "j1Audio.h"
+#include "j1TitleScene.h"
 #include "j1Scene.h"
 #include "j1Map.h"
 #include "j1Pathfinding.h"
@@ -30,6 +31,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	render = new j1Render();
 	tex = new j1Textures();
 	audio = new j1Audio();
+	title_scene = new j1TitleScene();
 	scene = new j1Scene();
 	map = new j1Map();
 	pathfinding = new j1PathFinding();
@@ -54,6 +56,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 
 
 	// scene last
+	AddModule(title_scene);
 	AddModule(scene);
 	AddModule(animation);
 
@@ -135,7 +138,8 @@ bool j1App::Start()
 
 	for (std::list<j1Module*>::iterator it = modules.begin(); it != modules.end(); it++)
 	{
-		ret = it._Ptr->_Myval->Start();
+		if(it._Ptr->_Myval->active==true)
+			ret = it._Ptr->_Myval->Start();
 	}
 
 	startup_time.Start();
@@ -231,6 +235,10 @@ void j1App::FinishUpdate()
 bool j1App::PreUpdate()
 {
 	bool ret = true;
+	if (start_game == true) {
+		start_game = false;
+		StartNewGame();
+	}
 	j1Module* pModule = NULL;
 
 	for (std::list<j1Module*>::iterator it = modules.begin(); it != modules.end() && ret == true; it++)
@@ -436,5 +444,20 @@ bool j1App::SavegameNow()
 
 	data.reset();
 	want_to_save = false;
+	return ret;
+}
+
+bool j1App::StartNewGame() {
+	bool ret = true;
+	for (std::list<j1Module*>::iterator it = modules.begin(); it != modules.end(); it++)
+	{
+		if (it._Ptr->_Myval->active == false) {
+			it._Ptr->_Myval->active = true;
+			ret = it._Ptr->_Myval->Start();
+		}
+		else if (it._Ptr->_Myval->destroy == true) {
+			it._Ptr->_Myval->CleanUp();
+		}
+	}
 	return ret;
 }

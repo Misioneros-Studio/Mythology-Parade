@@ -25,6 +25,9 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
+	// Called before render is available
+	bool j1PathFinding::Awake(pugi::xml_node& conf);
+
 	// Sets up the walkability map
 	void SetMap(uint width, uint height, uchar* data);
 

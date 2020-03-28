@@ -34,6 +34,8 @@ bool Console::Awake(pugi::xml_node& node) {
 	node.child("output").attribute("d_area_h").as_int() };
 
 	label = "";
+	active = true;
+
 	return true;
 }
 
