@@ -8,10 +8,18 @@
 #include"j1Map.h"
 #include"j1Pathfinding.h"
 
+//Can delete
+#include "j1Scene.h"
+
 enum class UnitType;
 enum BuildingType;
 
-enum class SpriteSheetType {
+struct CreationPreview 
+{
+	bool active = false;
+	int width = 4;
+	int height = 4;
+	bool canBuild = false;
 
 };
 
@@ -58,9 +66,11 @@ public:
 public:
 
 	std::unordered_map<EntityType, std::list<Entity*>> entities;
+	CreationPreview crPreview;
+	SDL_Texture* debugTex;
 
 	//The way to store the spritesheets (needs to be cleaned and spritesheets need to be unloaded)
-	std::unordered_map<SpriteSheetType, std::list<SDL_Texture*>> entitySpriteSheets;
+	//std::unordered_map<SpriteSheetType, std::list<SDL_Texture*>> entitySpriteSheets;
 
 };
 #endif // !_ENTITYMANAGER_H

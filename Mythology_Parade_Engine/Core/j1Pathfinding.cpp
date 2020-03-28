@@ -50,6 +50,17 @@ bool j1PathFinding::IsWalkable(const iPoint& pos) const
 	return t != INVALID_WALK_CODE && t > 0;
 }
 
+// ----------------------------------------------------------------------------------
+// Actual A* algorithm: return number of steps in the creation of the path or -1 ----
+// ----------------------------------------------------------------------------------
+void j1PathFinding::ChangeMapValue(const iPoint pos, int value) const
+{
+	if (IN_RANGE(value, 0, 1) == 1) 
+	{
+		map[(pos.y*width) + pos.x] = value;
+	}
+}
+
 // Utility: return the walkability value of a tile
 uchar j1PathFinding::GetTileAt(const iPoint& pos) const
 {

@@ -16,7 +16,6 @@
 #include "j1Gui.h"
 #include "Console.h"
 #include "EntityManager.h"
-#include "Animation.h"
 #include "j1App.h"
 
 
@@ -37,7 +36,6 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	gui = new j1Gui();
 	console = new Console();
 	entityManager = new EntityManager();
-	animation = new Animation();
 
 
 	// Ordered for awake / Start / Update
@@ -55,7 +53,6 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 
 	// scene last
 	AddModule(scene);
-	AddModule(animation);
 
 	// entities
 	AddModule(entityManager);

@@ -33,6 +33,13 @@ const char* Building::GetDescription()
 	return description.c_str();
 }
 
+bool Building::Awake(pugi::xml_node& a)
+{
+
+
+	return true;
+}
+
 bool Building::Update(float dt)
 {
 	bool ret = true;
@@ -44,4 +51,5 @@ bool Building::Update(float dt)
 
 void Building::Draw()
 {
+
 }

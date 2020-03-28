@@ -4,18 +4,19 @@
 #include "SDL/include/SDL_rect.h"
 #include "SDL/include/SDL.h"
 #include "j1App.h"
+#include "j1Textures.h"
 
 
-struct Sprite {
-
+struct Sprite 
+{
 	SDL_Rect rect;
 	SDL_Rect AABB_rect;
 	int frames = 0;
 	int current_frame = 0;
-
 };
 
-struct Animation_char {
+struct Animation_char 
+{
 	bool loop = true;
 	std::string name;
 	int num_sprites = 0;
@@ -56,25 +57,35 @@ public:
 		return current_sprite;
 	}
 
+	void Clean() 
+	{
+		if (sprites)
+			delete sprites;
+	}
+
 };
 
 
 
-struct CharacterTMXData {
+struct CharacterTMXData 
+{
 	SDL_Texture* texture = nullptr;
 	uint					width = 0u;
 	uint					height = 0u;
 	int						tile_width = 0u;
 	int						tile_height = 0u;
 
+	void Clean() 
+	{
+		App->tex->UnLoad(texture);
+	}
+
 };
 
-class Animation :public j1Module {
-public:
-
+class Animation :public j1Module 
+{
 
 	Animation();
-
 	// Destructor
 	virtual ~Animation();
 

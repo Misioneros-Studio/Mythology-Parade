@@ -16,13 +16,17 @@ EntityManager::~EntityManager()
 //Called before render is available
 bool EntityManager::Awake(pugi::xml_node& a)
 {
+	pugi::xml_document buildings;
+	buildings.load_file(a.child("buildings").attribute("file").as_string());
+
+
 	//INFO: This is a good way to itinerate all the map, to itinerate only items in one key, use only the second for loop
 	for (unsigned i = 0; i < entities.size(); i++)
 	{
 		for (std::list<Entity*>::iterator it = entities[(EntityType)i].begin(); it != entities[(EntityType)i].end(); it++)
 		{
 			Entity* ent = it._Ptr->_Myval;
-			//ent->Awake(a.child(ent->name.GetString()));
+			ent->Awake(a.child(ent->name.c_str()));
 		}
 	}
 	return true;
@@ -66,24 +70,71 @@ bool EntityManager::Update(float dt)
 			it._Ptr->_Myval->Update(dt);
 		}
 	}
+
+	if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
+	{
+		crPreview.active = !crPreview.active;
+	}
+
+	if (crPreview.active)
+	{
+		iPoint mouse = App->map->GetMousePositionOnMap();
+
+		crPreview.canBuild = true;
+		debugTex = App->scene->debugBlue_tex;
+
+		for (int i = 0; i <= 1; i++)
+		{
+			for (int y = mouse.y; y < mouse.y + crPreview.height; y++)
+			{
+				for (int x = mouse.x; x > mouse.x - crPreview.width; x--)
+				{
+					if (i == 0)
+					{
+						if (crPreview.canBuild && App->pathfinding->IsWalkable({ x, y }) == false) 
+						{
+							debugTex = App->scene->debugRed_tex;
+							crPreview.canBuild = false;
+						}
+					}
+					else
+					{
+						if (IN_RANGE(x, 0, App->map->data.width - 1) == 1 && IN_RANGE(y, 0, App->map->data.height - 1) == 1)
+						{
+							iPoint p = App->map->MapToWorld(x, y);
+							App->render->Blit(debugTex, p.x, p.y);
+						}
+					}
+				}
+			}
+		}
+	}
+
+	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN && crPreview.active && crPreview.canBuild)
+	{
+		CreateBuildingEntity(BuildingType::FORTRESS);
+
+		
+		iPoint mouse = App->map->GetMousePositionOnMap();
+		for (int y = mouse.y; y < mouse.y + crPreview.height; y++)
+		{
+			for (int x = mouse.x; x > mouse.x - crPreview.width; x--)
+			{
+
+				if (IN_RANGE(x, 0, App->map->data.width - 1) == 1 && IN_RANGE(y, 0, App->map->data.height - 1) == 1)
+				{
+					App->pathfinding->ChangeMapValue({x, y}, 0);
+				}
+			}
+		}
+
+	}
+
 	return true;
 }
 
 bool EntityManager::PostUpdate() 
 {
-
-	if (App->input->GetKey(SDL_SCANCODE_U) == KEY_REPEAT) 
-	{
-		iPoint mouse = App->map->GetMousePositionOnMap();
-		bool isOn = App->pathfinding->IsWalkable(mouse);
-
-		if (isOn) 
-		{
-
-		}
-	}
-
-
 	return true;
 }
 

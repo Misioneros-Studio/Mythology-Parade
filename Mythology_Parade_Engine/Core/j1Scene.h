@@ -52,7 +52,6 @@ public:
 	void OnClick(UI* element, float argument = 0);
 
 private:
-	SDL_Texture* debug_tex;
 	SDL_Texture* cursor_tex;
 	ImageUI* ui_ingame;
 	WindowUI* ui_pause_window;
@@ -63,7 +62,9 @@ private:
 	TextUI* ui_text_options[2];
 	TextUI* ui_text_ingame[3];
 public:
-	QuadTree* quadTree;
+	SDL_Texture* debugBlue_tex;
+	SDL_Texture* debugRed_tex;
+
 };
 
 #endif // __j1SCENE_H__

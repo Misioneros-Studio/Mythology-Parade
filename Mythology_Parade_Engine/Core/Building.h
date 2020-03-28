@@ -29,6 +29,7 @@ private:
 
 	std::string description;
 
+	bool Awake(pugi::xml_node&);
 	bool Update(float dt) override;
 	void Draw();
 
