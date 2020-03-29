@@ -457,6 +457,7 @@ bool j1App::StartNewGame() {
 		}
 		else if (it._Ptr->_Myval->destroy == true) {
 			it._Ptr->_Myval->CleanUp();
+			it._Ptr->_Myval->active = false;
 		}
 	}
 	return ret;

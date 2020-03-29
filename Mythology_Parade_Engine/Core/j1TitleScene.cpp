@@ -35,25 +35,21 @@ bool j1TitleScene::Start()
 
 	for (int i = 0; i < 6; i++)
 	{
-		if (i != 5)
-		{
-			ui_button[i] = nullptr;
-		}
+		ui_button[i] = nullptr;
 		ui_text[i] = nullptr;
 	}
 
-	//ui_menu_window = (WindowUI*)App->gui->CreateUIElement(Type::WINDOW, nullptr, { 410,100,459,531 }, { 216,21,459,531 });
-	ui_button[0] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_menu_window, { 35,145,237,38 }, { 787,240,237,38 }, "NEW", { 787,342,237,38 }, { 787,291,237,38 }, false, { 0,0,0,0 }, this);
+	ui_button[0] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, nullptr, { 35,145,237,38 }, { 787,240,237,38 }, "NEW", { 787,342,237,38 }, { 787,291,237,38 }, false, { 0,0,0,0 }, this);
 	ui_text[0] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 122,158,237,38 }, { 0,0,100,100 }, "New Game", { 0,0,0,255 });
-	ui_button[1] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_menu_window, { 35,220,237,38 }, { 787,240,237,38 }, "LOAD", { 787,342,237,38 }, { 787,291,237,38 }, false, { 0,0,0,0 }, this);
+	ui_button[1] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, nullptr, { 35,220,237,38 }, { 787,240,237,38 }, "LOAD", { 787,342,237,38 }, { 787,291,237,38 }, false, { 0,0,0,0 }, this);
 	ui_text[1] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 119,232,237,38 }, { 0,0,100,100 }, "Load Game", { 0,0,0,255 });
-	ui_button[2] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_menu_window, { 35,295,237,38 }, { 787,240,237,38 }, "TUTORIAL", { 787,342,237,38 }, { 787,291,237,38 }, false, { 0,0,0,0 }, this);
+	ui_button[2] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, nullptr, { 35,295,237,38 }, { 787,240,237,38 }, "TUTORIAL", { 787,342,237,38 }, { 787,291,237,38 }, false, { 0,0,0,0 }, this);
 	ui_text[2] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 128,307,237,38 }, { 0,0,100,100 }, "Tutorial", { 0,0,0,255 });
-	ui_button[3] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_menu_window, { 35,370,237,38 }, { 787,240,237,38 }, "OPTIONS", { 787,342,237,38 }, { 787,291,237,38 }, false, { 0,0,0,0 }, this);
+	ui_button[3] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, nullptr, { 35,370,237,38 }, { 787,240,237,38 }, "OPTIONS", { 787,342,237,38 }, { 787,291,237,38 }, false, { 0,0,0,0 }, this);
 	ui_text[3] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 129,382,237,38 }, { 0,0,100,100 }, "Options", { 0,0,0,255 });
-	ui_button[4] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_menu_window, {35,445,237,38 }, { 787,240,237,38 }, "CREDITS", { 787,342,237,38 }, { 787,291,237,38 }, false, { 0,0,0,0 }, this);
+	ui_button[4] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, nullptr, {35,445,237,38 }, { 787,240,237,38 }, "CREDITS", { 787,342,237,38 }, { 787,291,237,38 }, false, { 0,0,0,0 }, this);
 	ui_text[4] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 127,457,237,38 }, { 0,0,100,100 }, "Credits");
-	ui_button[5] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_menu_window, { 35,520,237,38 }, { 787,240,237,38 }, "EXIT", { 787,342,237,38 }, { 787,291,237,38 }, false, { 0,0,0,0 }, this);
+	ui_button[5] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, nullptr, { 35,520,237,38 }, { 787,240,237,38 }, "EXIT", { 787,342,237,38 }, { 787,291,237,38 }, false, { 0,0,0,0 }, this);
 	ui_text[5] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 140,532,237,38 }, { 0,0,100,100 }, "Exit", { 0,0,0,255 });
 
 	cursor_tex = App->tex->Load("gui/cursors.png");
@@ -99,20 +95,14 @@ bool j1TitleScene::PostUpdate()
 bool j1TitleScene::CleanUp()
 {
 	LOG("Freeing title scene");
-	if (ui_menu_window != nullptr) {
-		App->gui->DeleteUIElement(ui_menu_window);
-		ui_menu_window = nullptr;
-		for (int i = 5; i >= 0; i--) {
-			if (i != 5) {
-				if (ui_button[i] != nullptr) {
-					App->gui->DeleteUIElement(ui_button[i]);
-					ui_button[i] = nullptr;
-				}
-			}
-			if (ui_text[i] != nullptr) {
-				App->gui->DeleteUIElement(ui_text[i]);
-				ui_text[i] = nullptr;
-			}
+	for (int i = 5; i >= 0; i--) {
+		if (ui_button[i] != nullptr) {
+			App->gui->DeleteUIElement(ui_button[i]);
+			ui_button[i] = nullptr;
+		}
+		if (ui_text[i] != nullptr) {
+			App->gui->DeleteUIElement(ui_text[i]);
+			ui_text[i] = nullptr;
 		}
 	}
 
@@ -128,7 +118,7 @@ bool j1TitleScene::CleanUp()
 void j1TitleScene::ActivateOptionsMenu() {
 	if (ui_options_window == nullptr) {
 		ui_options_window = (WindowUI*)App->gui->CreateUIElement(Type::WINDOW, nullptr, { 410,200,459,168 }, { 790,408,459,168 });
-		ui_button_options = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_menu_window, { 520,300,237,38 }, { 787,240,237,38 }, "CLOSE OPTIONS", { 787,342,237,38 }, { 787,291,237,38 }, false, { 0,0,0,0 }, this);
+		ui_button_options = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_options_window, { 520,300,237,38 }, { 787,240,237,38 }, "CLOSE OPTIONS", { 787,342,237,38 }, { 787,291,237,38 }, false, { 0,0,0,0 }, this);
 		ui_text_options[0] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 619,312,237,38 }, { 0,0,100,100 }, "Close", { 0,0,0,255 });
 		ui_text_options[1] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 583,212,237,38 }, { 0,0,100,100 }, "OPTIONS", { 255,255,255,255 }, { 1,0,0,0 });
 	}
@@ -168,7 +158,7 @@ void j1TitleScene::DeactivateOptionsMenu() {
 void j1TitleScene::ActivateTutorial() {
 	if (ui_tutorial_window == nullptr) {
 		ui_tutorial_window = (WindowUI*)App->gui->CreateUIElement(Type::WINDOW, nullptr, { 410,200,459,168 }, { 790,408,459,168 });
-		ui_tutorial_options = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_menu_window, { 520,300,237,38 }, { 787,240,237,38 }, "CLOSE TUTORIAL", { 787,342,237,38 }, { 787,291,237,38 }, false, { 0,0,0,0 }, this);
+		ui_tutorial_options = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_tutorial_window, { 520,300,237,38 }, { 787,240,237,38 }, "CLOSE TUTORIAL", { 787,342,237,38 }, { 787,291,237,38 }, false, { 0,0,0,0 }, this);
 		ui_text_tutorial[0] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 619,312,237,38 }, { 0,0,100,100 }, "Close", { 0,0,0,255 });
 		ui_text_tutorial[1] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 583,212,237,38 }, { 0,0,100,100 }, "TUTORIAL", { 255,255,255,255 }, { 1,0,0,0 });
 	}
@@ -208,7 +198,7 @@ void j1TitleScene::DeactivateTutorial() {
 void j1TitleScene::ActivateCredits() {
 	if (ui_credits_window == nullptr) {
 		ui_credits_window = (WindowUI*)App->gui->CreateUIElement(Type::WINDOW, nullptr, { 410,200,459,168 }, { 790,408,459,168 });
-		ui_button_credits = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_menu_window, { 520,300,237,38 }, { 787,240,237,38 }, "CLOSE CREDITS", { 787,342,237,38 }, { 787,291,237,38 }, false, { 0,0,0,0 }, this);
+		ui_button_credits = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_credits_window, { 520,300,237,38 }, { 787,240,237,38 }, "CLOSE CREDITS", { 787,342,237,38 }, { 787,291,237,38 }, false, { 0,0,0,0 }, this);
 		ui_text_credits[0] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 619,312,237,38 }, { 0,0,100,100 }, "Close", { 0,0,0,255 });
 		ui_text_credits[1] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 583,212,237,38 }, { 0,0,100,100 }, "CREDITS", { 255,255,255,255 }, { 1,0,0,0 });
 	}
