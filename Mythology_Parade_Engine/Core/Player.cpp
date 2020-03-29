@@ -26,7 +26,7 @@ bool Player::Start()
 
 bool Player::PreUpdate()
 {
-	//Logic
+	//Logic Faith Increase
 	tick1 = SDL_GetTicks();
 	if (tick1 - tick2 >= 2000) 
 	{
