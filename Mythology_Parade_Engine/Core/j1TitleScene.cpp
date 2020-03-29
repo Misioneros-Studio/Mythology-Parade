@@ -65,12 +65,15 @@ bool j1TitleScene::Start()
 // Called each loop iteration
 bool j1TitleScene::PreUpdate()
 {
+
 	return true;
 }
 
 // Called each loop iteration
 bool j1TitleScene::Update(float dt)
 {
+	SDL_Rect sec2 = { 0, 0, 1280, 720 };
+	App->render->Blit(title_assets_tex, 0, 0, &sec2);
 	return true;
 }
 
@@ -84,10 +87,9 @@ bool j1TitleScene::PostUpdate()
 	App->input->GetMousePosition(x, y);
 	iPoint p = App->render->ScreenToWorld(x, y);
 	SDL_Rect sec = { 0, 0, 54, 45 };
-	SDL_Rect sec2 = { 0, 0, 1280, 720 };
+
 	p = App->render->ScreenToWorld(x, y);
 
-	App->render->Blit(title_assets_tex, 0, 0, &sec2);
 	App->render->Blit(cursor_tex, p.x, p.y, &sec);
 
 	return ret;
