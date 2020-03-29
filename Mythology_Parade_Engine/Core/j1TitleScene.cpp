@@ -42,21 +42,23 @@ bool j1TitleScene::Start()
 		ui_text[i] = nullptr;
 	}
 
-	ui_menu_window = (WindowUI*)App->gui->CreateUIElement(Type::WINDOW, nullptr, { 410,100,459,531 }, { 216,21,459,531 });
-	ui_button[0] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_menu_window, { 520,145,237,38 }, { 787,240,237,38 }, "NEW", { 787,342,237,38 }, { 787,291,237,38 }, false, { 0,0,0,0 }, this);
-	ui_text[0] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 607,158,237,38 }, { 0,0,100,100 }, "New Game", { 0,0,0,255 });
-	ui_button[1] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_menu_window, { 520,220,237,38 }, { 787,240,237,38 }, "LOAD", { 787,342,237,38 }, { 787,291,237,38 }, false, { 0,0,0,0 }, this);
-	ui_text[1] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 604,232,237,38 }, { 0,0,100,100 }, "Load Game", { 0,0,0,255 });
-	ui_button[2] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_menu_window, { 520,295,237,38 }, { 787,240,237,38 }, "TUTORIAL", { 787,342,237,38 }, { 787,291,237,38 }, false, { 0,0,0,0 }, this);
-	ui_text[2] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 613,307,237,38 }, { 0,0,100,100 }, "Tutorial", { 0,0,0,255 });
-	ui_button[3] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_menu_window, { 520,370,237,38 }, { 787,240,237,38 }, "OPTIONS", { 787,342,237,38 }, { 787,291,237,38 }, false, { 0,0,0,0 }, this);
-	ui_text[3] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 614,382,237,38 }, { 0,0,100,100 }, "Options", { 0,0,0,255 });
-	ui_button[4] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_menu_window, { 520,445,237,38 }, { 787,240,237,38 }, "CREDITS", { 787,342,237,38 }, { 787,291,237,38 }, false, { 0,0,0,0 }, this);
-	ui_text[4] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 612,457,237,38 }, { 0,0,100,100 }, "Credits");
-	ui_button[5] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_menu_window, { 520,520,237,38 }, { 787,240,237,38 }, "EXIT", { 787,342,237,38 }, { 787,291,237,38 }, false, { 0,0,0,0 }, this);
-	ui_text[5] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 625,532,237,38 }, { 0,0,100,100 }, "Exit", { 0,0,0,255 });
+	//ui_menu_window = (WindowUI*)App->gui->CreateUIElement(Type::WINDOW, nullptr, { 410,100,459,531 }, { 216,21,459,531 });
+	ui_button[0] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_menu_window, { 35,145,237,38 }, { 787,240,237,38 }, "NEW", { 787,342,237,38 }, { 787,291,237,38 }, false, { 0,0,0,0 }, this);
+	ui_text[0] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 122,158,237,38 }, { 0,0,100,100 }, "New Game", { 0,0,0,255 });
+	ui_button[1] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_menu_window, { 35,220,237,38 }, { 787,240,237,38 }, "LOAD", { 787,342,237,38 }, { 787,291,237,38 }, false, { 0,0,0,0 }, this);
+	ui_text[1] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 119,232,237,38 }, { 0,0,100,100 }, "Load Game", { 0,0,0,255 });
+	ui_button[2] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_menu_window, { 35,295,237,38 }, { 787,240,237,38 }, "TUTORIAL", { 787,342,237,38 }, { 787,291,237,38 }, false, { 0,0,0,0 }, this);
+	ui_text[2] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 128,307,237,38 }, { 0,0,100,100 }, "Tutorial", { 0,0,0,255 });
+	ui_button[3] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_menu_window, { 35,370,237,38 }, { 787,240,237,38 }, "OPTIONS", { 787,342,237,38 }, { 787,291,237,38 }, false, { 0,0,0,0 }, this);
+	ui_text[3] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 129,382,237,38 }, { 0,0,100,100 }, "Options", { 0,0,0,255 });
+	ui_button[4] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_menu_window, {35,445,237,38 }, { 787,240,237,38 }, "CREDITS", { 787,342,237,38 }, { 787,291,237,38 }, false, { 0,0,0,0 }, this);
+	ui_text[4] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 127,457,237,38 }, { 0,0,100,100 }, "Credits");
+	ui_button[5] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_menu_window, { 35,520,237,38 }, { 787,240,237,38 }, "EXIT", { 787,342,237,38 }, { 787,291,237,38 }, false, { 0,0,0,0 }, this);
+	ui_text[5] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 140,532,237,38 }, { 0,0,100,100 }, "Exit", { 0,0,0,255 });
 
 	cursor_tex = App->tex->Load("gui/cursors.png");
+	title_assets_tex = App->tex->Load("gui/TitleAssets.png");
+
 	return true;
 }
 
@@ -82,7 +84,10 @@ bool j1TitleScene::PostUpdate()
 	App->input->GetMousePosition(x, y);
 	iPoint p = App->render->ScreenToWorld(x, y);
 	SDL_Rect sec = { 0, 0, 54, 45 };
+	SDL_Rect sec2 = { 0, 0, 1280, 720 };
 	p = App->render->ScreenToWorld(x, y);
+
+	App->render->Blit(title_assets_tex, 0, 0, &sec2);
 	App->render->Blit(cursor_tex, p.x, p.y, &sec);
 
 	return ret;
