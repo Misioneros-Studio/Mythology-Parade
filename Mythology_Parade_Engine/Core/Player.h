@@ -19,17 +19,11 @@ public:
 	bool CleanUp();
 
 private:
-	enum class Currency{
-		Faith,
-
-	};
-
-private:
 	CurrencySystem currencySystem;
 
 	std::list<Unit*> unitsList;
 	std::list<Building*> buildingsList;
-	char* faith, sacrifice, prayer;
+	std::string faith, sacrifice, prayer;
 };
 
 

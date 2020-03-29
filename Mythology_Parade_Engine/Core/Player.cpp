@@ -27,8 +27,9 @@ bool Player::PreUpdate()
 {
 	currencySystem.faith++;
 
-	int buff = 256;
-	sprintf_s(faith,buff,"%s",currencySystem.faith);
+
+	faith = std::to_string(currencySystem.faith);
+
 	return true;
 }
 

@@ -31,8 +31,6 @@ bool j1Scene::Awake()
 	LOG("Loading Scene");
 	bool ret = true;
 
-	//Creating players
-	App->entityManager->CreatePlayerEntity();
 
 	return ret;
 }
@@ -78,6 +76,9 @@ bool j1Scene::Start()
   
 	//Eudald: This shouldn't be here but we don't have an entity system to load each animation yet
 	App->animation->Load("assets/units/Assassin.tmx");	
+
+	//Creating players
+	App->entityManager->CreatePlayerEntity();
 
 	return true;
 }
