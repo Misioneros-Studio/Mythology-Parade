@@ -1,11 +1,12 @@
 #include "Building.h"
 
-Building::Building(BuildingType buildingType)
+Building::Building(BuildingType buildingType, iPoint pos)
 {
 	damage = 25;
 	SetMaxHealth(500);
 	defenses = 500;
 	maxCap = 1;
+	position = pos;
 
 	switch (buildingType)
 	{
@@ -51,5 +52,7 @@ bool Building::Update(float dt)
 
 void Building::Draw()
 {
-
+	//lengh = 4, lenght is the number of tiles this building uses
+	//App->render->DrawQuad({position.x, position.y + (tileHeight /2) * (height + 1), texturewidth, -textureHeight}, 255, 250, 20);
+	App->render->DrawQuad({position.x, position.y + 16 * 5, 64*4, -32*8}, 255, 250, 20);
 }

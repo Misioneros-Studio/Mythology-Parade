@@ -76,7 +76,7 @@ public:
 
 	SDL_Rect position_rect; //Remove it, this should be insde the animation class
 	SDL_Texture* texture; //Change it to Character_TMX
-	p2Point<int> position;
+	iPoint position;
 
 
 

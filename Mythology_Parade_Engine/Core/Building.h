@@ -15,7 +15,7 @@ enum BuildingType
 class Building: public Entity, public HealthSystem
 {
 public:
-	Building(BuildingType);
+	Building(BuildingType, iPoint);
 	~Building();
 	
 	const char* GetDescription();

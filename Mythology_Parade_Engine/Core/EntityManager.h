@@ -61,7 +61,7 @@ public:
 
 	Entity* CreatePlayerEntity();
 	Entity* CreateUnitEntity(UnitType);
-	Entity* CreateBuildingEntity(BuildingType);
+	Entity* CreateBuildingEntity(iPoint pos, BuildingType);
 
 public:
 

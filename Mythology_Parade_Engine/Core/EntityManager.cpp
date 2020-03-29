@@ -85,9 +85,9 @@ bool EntityManager::Update(float dt)
 
 		for (int i = 0; i <= 1; i++)
 		{
-			for (int y = mouse.y; y < mouse.y + crPreview.height; y++)
+			for (int y = mouse.y; y > mouse.y - crPreview.height; y--)
 			{
-				for (int x = mouse.x; x > mouse.x - crPreview.width; x--)
+				for (int x = mouse.x; x < mouse.x + crPreview.width; x++)
 				{
 					if (i == 0)
 					{
@@ -112,13 +112,14 @@ bool EntityManager::Update(float dt)
 
 	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN && crPreview.active && crPreview.canBuild)
 	{
-		CreateBuildingEntity(BuildingType::FORTRESS);
+		iPoint mouse = App->map->GetMousePositionOnMap();
+
+		CreateBuildingEntity(App->map->MapToWorld(mouse.x, mouse.y) , BuildingType::FORTRESS);
 
 		
-		iPoint mouse = App->map->GetMousePositionOnMap();
-		for (int y = mouse.y; y < mouse.y + crPreview.height; y++)
+		for (int y = mouse.y; y > mouse.y - crPreview.height; y--)
 		{
-			for (int x = mouse.x; x > mouse.x - crPreview.width; x--)
+			for (int x = mouse.x; x < mouse.x + crPreview.width; x++)
 			{
 
 				if (IN_RANGE(x, 0, App->map->data.width - 1) == 1 && IN_RANGE(y, 0, App->map->data.height - 1) == 1)
@@ -297,22 +298,22 @@ Entity* EntityManager::CreateUnitEntity(UnitType type)
 	return ret;
 }
 
-Entity* EntityManager::CreateBuildingEntity(BuildingType type)
+Entity* EntityManager::CreateBuildingEntity(iPoint pos, BuildingType type)
 {
 	Entity* ret = nullptr;
 	switch (type)
 	{
 	case FORTRESS:
-		ret = new Building(BuildingType::FORTRESS);
+		ret = new Building(BuildingType::FORTRESS, pos);
 		break;
 	case MONASTERY:
-		ret = new Building(BuildingType::MONASTERY);
+		ret = new Building(BuildingType::MONASTERY, pos);
 		break;
 	case TEMPLE:
-		ret = new Building(BuildingType::TEMPLE);
+		ret = new Building(BuildingType::TEMPLE, pos);
 		break;
 	case ENCAMPMENT:
-		ret = new Building(BuildingType::ENCAMPMENT);
+		ret = new Building(BuildingType::ENCAMPMENT, pos);
 		break;
 	}
 
