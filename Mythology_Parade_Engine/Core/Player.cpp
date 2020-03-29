@@ -20,15 +20,25 @@ bool Player::Awake()
 
 bool Player::Start()
 {
+	tick2 = SDL_GetTicks();
 	return true;
 }
 
 bool Player::PreUpdate()
 {
-	currencySystem.faith++;
+	//Logic
+	tick1 = SDL_GetTicks();
+	if (tick1 - tick2 >= 2000) 
+	{
+		currencySystem.faith += 2;
+		tick2 = SDL_GetTicks();
+	}
 
 
+	//Sending all numbers to strings to print
 	faith = std::to_string(currencySystem.faith);
+	sacrifice = std::to_string(currencySystem.sacrifices);
+	prayer = std::to_string(currencySystem.prayers);
 
 	return true;
 }
@@ -36,6 +46,9 @@ bool Player::PreUpdate()
 bool Player::Update(float dt)
 {
 	App->scene->ui_text_ingame[0]->SetString(faith);
+	App->scene->ui_text_ingame[1]->SetString(sacrifice);
+	App->scene->ui_text_ingame[2]->SetString(prayer);
+
 	return true;
 }
 

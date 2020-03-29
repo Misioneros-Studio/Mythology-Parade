@@ -24,6 +24,8 @@ private:
 	std::list<Unit*> unitsList;
 	std::list<Building*> buildingsList;
 	std::string faith, sacrifice, prayer;
+
+	int tick1 = 0, tick2 = 0;
 };
 
 
