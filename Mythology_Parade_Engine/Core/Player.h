@@ -11,6 +11,19 @@ public:
 	Player();
 	~Player();
 
+	bool Awake();
+	bool Start();
+	bool PreUpdate();
+	bool Update(float dt);
+	bool PostUpdate();
+	bool CleanUp();
+
+private:
+	enum class Currency{
+		Faith,
+
+	};
+
 private:
 	CurrencySystem currencySystem;
 
