@@ -29,6 +29,7 @@ private:
 
 	std::list<Unit*> unitsList;
 	std::list<Building*> buildingsList;
+	char* faith, sacrifice, prayer;
 };
 
 

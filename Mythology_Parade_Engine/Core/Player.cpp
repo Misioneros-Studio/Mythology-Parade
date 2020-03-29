@@ -1,4 +1,8 @@
 #include "Player.h"
+#include <iostream>
+#include "CurrencySystem.h"
+#include "j1Scene.h"
+#include "j1Gui.h"
 
 Player::Player()
 {
@@ -8,31 +12,38 @@ Player::~Player()
 {
 }
 
-void Player::Awake()
+bool Player::Awake()
 {
+
+	return true;
 }
 
 bool Player::Start()
 {
-	return false;
+	return true;
 }
 
 bool Player::PreUpdate()
 {
-	return false;
+	currencySystem.faith++;
+
+	int buff = 256;
+	sprintf_s(faith,buff,"%s",currencySystem.faith);
+	return true;
 }
 
 bool Player::Update(float dt)
 {
-	return false;
+	App->scene->ui_text_ingame[0]->SetString(faith);
+	return true;
 }
 
 bool Player::PostUpdate()
 {
-	return false;
+	return true;
 }
 
 bool Player::CleanUp()
 {
-	return false;
+	return true;
 }

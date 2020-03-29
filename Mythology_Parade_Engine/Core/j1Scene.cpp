@@ -11,6 +11,7 @@
 #include "j1Gui.h"
 #include "j1Fonts.h"
 #include "Animation.h"
+#include "EntityManager.h"
 #include "j1Scene.h"
 
 #include"QuadTree.h"
@@ -29,6 +30,9 @@ bool j1Scene::Awake()
 {
 	LOG("Loading Scene");
 	bool ret = true;
+
+	//Creating players
+	App->entityManager->CreatePlayerEntity();
 
 	return ret;
 }
