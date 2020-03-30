@@ -61,8 +61,8 @@ private:
 	WindowUI* ui_options_window;
 	ButtonUI* ui_button_options;
 	TextUI* ui_text_options[2];
-	TextUI* ui_text_ingame[3];
 public:
+	TextUI* ui_text_ingame[3];
 	QuadTree* quadTree;
 };
 

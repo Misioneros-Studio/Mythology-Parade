@@ -11,11 +11,21 @@ public:
 	Player();
 	~Player();
 
+	bool Awake();
+	bool Start();
+	bool PreUpdate();
+	bool Update(float dt);
+	bool PostUpdate();
+	bool CleanUp();
+
 private:
 	CurrencySystem currencySystem;
 
 	std::list<Unit*> unitsList;
 	std::list<Building*> buildingsList;
+	std::string faith, sacrifice, prayer;
+
+	int tick1 = 0, tick2 = 0;
 };
 
 
