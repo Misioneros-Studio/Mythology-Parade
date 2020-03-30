@@ -82,6 +82,9 @@
     <ClCompile Include="Animation.cpp">
       <Filter>Core\Modules</Filter>
     </ClCompile>
+    <ClCompile Include="j1TitleScene.cpp">
+      <Filter>Core\Scenes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1Window.h">
@@ -176,6 +179,9 @@
     </ClInclude>
     <ClInclude Include="Animation.h">
       <Filter>Core\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="j1TitleScene.h">
+      <Filter>Core\Scenes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

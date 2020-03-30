@@ -26,12 +26,13 @@ j1Scene::~j1Scene()
 {}
 
 // Called before render is available
-bool j1Scene::Awake()
+bool j1Scene::Awake(pugi::xml_node& config)
 {
 	LOG("Loading Scene");
 	bool ret = true;
 
-
+	App->scene->active = false;
+  
 	return ret;
 }
 
@@ -75,8 +76,10 @@ bool j1Scene::Start()
 	//quadTree->baseNode->SubDivide(quadTree->baseNode, 5);
   
 	//Eudald: This shouldn't be here but we don't have an entity system to load each animation yet
-	App->animation->Load("assets/units/Assassin.tmx");	
-
+	//App->animation->Load("assets/units/Assassin.tmx");
+  
+	App->audio->PlayMusic("audio/music/Ambient1.ogg");
+  
 	//Creating players
 	App->entityManager->CreatePlayerEntity();
 
@@ -248,7 +251,7 @@ void j1Scene::DeactivatePauseMenu() {
 void j1Scene::ActivateOptionsMenu() {
 	if (ui_options_window == nullptr) {
 		ui_options_window = (WindowUI*)App->gui->CreateUIElement(Type::WINDOW, nullptr, { 410,200,459,168 }, { 790,408,459,168 });
-		ui_button_options = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_pause_window, { 520,300,237,38 }, { 787,240,237,38 }, "CLOSE OPTIONS", { 787,342,237,38 }, { 787,291,237,38 }, false, { 0,0,0,0 }, this);
+		ui_button_options = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_options_window, { 520,300,237,38 }, { 787,240,237,38 }, "CLOSE OPTIONS", { 787,342,237,38 }, { 787,291,237,38 }, false, { 0,0,0,0 }, this);
 		ui_text_options[0] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 619,312,237,38 }, { 0,0,100,100 }, "Close", { 0,0,0,255 });
 		ui_text_options[1] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 583,212,237,38 }, { 0,0,100,100 }, "OPTIONS", { 255,255,255,255 }, { 1,0,0,0 });
 	}

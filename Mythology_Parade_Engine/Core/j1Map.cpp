@@ -24,6 +24,7 @@ bool j1Map::Awake(pugi::xml_node& config)
 	bool ret = true;
 
 	folder.append(config.child("folder").child_value());
+	active = false;
 
 	return ret;
 }

@@ -14,6 +14,7 @@ class j1Input;
 class j1Render;
 class j1Textures;
 class j1Audio;
+class j1TitleScene;
 class j1Scene;
 class j1Map;
 class j1PathFinding;
@@ -83,6 +84,9 @@ private:
 	bool LoadGameNow();
 	bool SavegameNow();
 
+	//Called when starting a new game
+	bool StartNewGame();
+
 public:
 
 	// Modules
@@ -91,6 +95,7 @@ public:
 	j1Render*			render = NULL;
 	j1Textures*			tex = NULL;
 	j1Audio*			audio = NULL;
+	j1TitleScene*		title_scene = NULL;
 	j1Scene*			scene = NULL;
 	j1Map*				map = NULL;
 	j1PathFinding*		pathfinding = NULL;
@@ -99,6 +104,7 @@ public:
 	Console*			console = NULL;
 	EntityManager*		entityManager = NULL;
 	Animation*			animation = NULL;
+	bool				start_game = false;
 
 private:
 

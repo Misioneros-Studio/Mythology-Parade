@@ -25,6 +25,8 @@ bool EntityManager::Awake(pugi::xml_node& a)
 			//ent->Awake(a.child(ent->name.GetString()));
 		}
 	}
+	active = false;
+
 	return true;
 }
 

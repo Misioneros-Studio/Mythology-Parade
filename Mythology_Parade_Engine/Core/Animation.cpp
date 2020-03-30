@@ -15,6 +15,7 @@ Animation::~Animation()
 bool Animation::Awake(pugi::xml_node& conf)
 {
 	bool ret = true;
+	active = false;
 	return ret;
 }
 

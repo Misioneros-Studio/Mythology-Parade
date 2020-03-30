@@ -15,6 +15,16 @@ j1PathFinding::~j1PathFinding()
 	RELEASE_ARRAY(map);
 }
 
+
+// Called before render is available
+bool j1PathFinding::Awake(pugi::xml_node& config) {
+	bool ret = true;
+	active = false;
+
+	return ret;
+}
+
+
 // Called before quitting
 bool j1PathFinding::CleanUp()
 {
