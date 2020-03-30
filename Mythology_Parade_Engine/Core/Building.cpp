@@ -1,6 +1,6 @@
 #include "Building.h"
 
-Building::Building(BuildingType buildingType, iPoint pos)
+Building::Building(BuildingType buildingType, iPoint pos, BuildingInfo info)
 {
 	damage = 25;
 	SetMaxHealth(500);
@@ -23,6 +23,13 @@ Building::Building(BuildingType buildingType, iPoint pos)
 	}
 	description = "I'm a fortress";
 	SetMaxHealth(300);
+
+
+	civilization = info.civilization;
+	spriteRect = info.spriteRect;
+	blitRect = info.blitSize;
+	//buildingType = info.buildingType;
+	tileLenght = info.tileLenght;
 }
 
 Building::~Building()
@@ -54,5 +61,5 @@ void Building::Draw()
 {
 	//lengh = 4, lenght is the number of tiles this building uses
 	//App->render->DrawQuad({position.x, position.y + (tileHeight /2) * (height + 1), texturewidth, -textureHeight}, 255, 250, 20);
-	App->render->DrawQuad({position.x, position.y + 16 * 5, 64*4, -32*8}, 255, 250, 20);
+	App->render->Blit(App->entityManager->tempBuildingTexture, position.x, position.y + (32 / 2) * (tileLenght + 1) - blitRect.y, {blitRect.x, blitRect.y}, &spriteRect);
 }

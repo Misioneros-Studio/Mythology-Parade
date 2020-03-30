@@ -1,26 +1,45 @@
 #ifndef _ENTITYMANAGER_H
 #define _ENTITYMANAGER_H
 
+#define MAX_BUILDING_TYPES 8
+
 #include "j1Module.h"
 #include <unordered_map>
 #include "Entity.h"
 #include"j1Input.h"
 #include"j1Map.h"
 #include"j1Pathfinding.h"
+#include<vector>
 
 //Can delete
 #include "j1Scene.h"
+#include"j1Textures.h"
 
 enum class UnitType;
 enum BuildingType;
+enum CivilizationType {
+	VIKING,
+	GREEK,
+	NONE
+};
 
 struct CreationPreview 
 {
 	bool active = false;
-	int width = 4;
-	int height = 4;
+	int width;
+	int height;
 	bool canBuild = false;
 
+};
+
+struct BuildingInfo 
+{
+	CivilizationType civilization;
+	SDL_Rect spriteRect;
+	iPoint blitSize;
+
+	BuildingType buildingType;
+	int tileLenght;
 };
 
 class Entity;
@@ -61,7 +80,7 @@ public:
 
 	Entity* CreatePlayerEntity();
 	Entity* CreateUnitEntity(UnitType);
-	Entity* CreateBuildingEntity(iPoint pos, BuildingType);
+	Entity* CreateBuildingEntity(iPoint, BuildingType, BuildingInfo);
 
 public:
 
@@ -71,6 +90,10 @@ public:
 
 	//The way to store the spritesheets (needs to be cleaned and spritesheets need to be unloaded)
 	//std::unordered_map<SpriteSheetType, std::list<SDL_Texture*>> entitySpriteSheets;
+	std::vector<BuildingInfo> buildingsData;
+
+public:
+	SDL_Texture* tempBuildingTexture;
 
 };
 #endif // !_ENTITYMANAGER_H

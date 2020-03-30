@@ -7,6 +7,7 @@
 EntityManager::EntityManager()
 {
 	name.append("entity_manager");
+	buildingsData.reserve(MAX_BUILDING_TYPES);
 }
 
 //Destructor
@@ -16,8 +17,59 @@ EntityManager::~EntityManager()
 //Called before render is available
 bool EntityManager::Awake(pugi::xml_node& a)
 {
+
+	//Load buildings info
 	pugi::xml_document buildings;
 	buildings.load_file(a.child("buildings").attribute("file").as_string());
+
+	std::string path = "assets/buildings/";
+	path.append(buildings.child("map").child("imagelayer").child("image").attribute("source").as_string());
+
+	//Not working because renderer is not created yet ;-;
+	//tempBuildingTexture = App->tex->Load(path.c_str());
+
+	pugi::xml_node data = buildings.child("map").child("objectgroup");
+
+
+	if (data != NULL)
+	{
+		pugi::xml_node obj;
+
+		for (obj = data.child("object"); obj; obj = obj.next_sibling("object"))
+		{
+
+			BuildingInfo info;	
+			info.spriteRect = { obj.attribute("x").as_int(), obj.attribute("y").as_int(), obj.attribute("width").as_int(), obj.attribute("height").as_int() };
+
+			pugi::xml_node data = obj.child("properties");
+			if (data != NULL)
+			{
+				pugi::xml_node prop;
+				for (prop = data.child("property"); prop; prop = prop.next_sibling("property"))
+				{
+					//OPT: Not the best way but meh
+
+					std::string name = prop.attribute("name").as_string();
+					if (name == "civilization")
+					{
+						info.civilization = (CivilizationType)prop.attribute("value").as_int();
+					}
+					else if (name == "tileSquareLenght")
+					{
+						info.tileLenght = prop.attribute("value").as_int();
+					}
+					else if (name == "type")
+					{
+						info.buildingType = (BuildingType)prop.attribute("value").as_int();
+					}
+				}
+			}	
+			//TODO: Find a wat to mesure this with the tileLenght
+			info.blitSize = { info.spriteRect.w, info.spriteRect.h };
+			//If civilitzation == NONE means is a generic destructed/being built data type
+			buildingsData.push_back(info);
+		}
+	}
 
 
 	//INFO: This is a good way to itinerate all the map, to itinerate only items in one key, use only the second for loop
@@ -35,6 +87,15 @@ bool EntityManager::Awake(pugi::xml_node& a)
 // Called before the first frame
 bool EntityManager::Start()
 {
+	tempBuildingTexture = App->tex->Load("assets/buildings/Buildings.png");
+	for (int i = 0; i < buildingsData.size(); i++)
+	{
+		BuildingInfo* info = &buildingsData[i];
+		int blitWidth = info->tileLenght * App->map->data.tile_width;
+		info->blitSize.x = blitWidth;
+		info->blitSize.y = (blitWidth * info->spriteRect.h) / info->spriteRect.w;
+	}
+
 
 	for (unsigned i = 0; i < entities.size(); i++)
 	{
@@ -74,6 +135,9 @@ bool EntityManager::Update(float dt)
 	if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
 		crPreview.active = !crPreview.active;
+		BuildingInfo data = buildingsData[1];
+		crPreview.height = data.tileLenght;
+		crPreview.width = data.tileLenght;
 	}
 
 	if (crPreview.active)
@@ -114,7 +178,7 @@ bool EntityManager::Update(float dt)
 	{
 		iPoint mouse = App->map->GetMousePositionOnMap();
 
-		CreateBuildingEntity(App->map->MapToWorld(mouse.x, mouse.y) , BuildingType::FORTRESS);
+		CreateBuildingEntity(App->map->MapToWorld(mouse.x, mouse.y) , BuildingType::FORTRESS, buildingsData[1]);
 
 		
 		for (int y = mouse.y; y > mouse.y - crPreview.height; y--)
@@ -152,7 +216,7 @@ bool EntityManager::CleanUp()
 		}
 		entities[(EntityType)i].clear();
 	}
-
+	App->tex->UnLoad(tempBuildingTexture);
 	entities.clear();
 	return true;
 }
@@ -298,22 +362,22 @@ Entity* EntityManager::CreateUnitEntity(UnitType type)
 	return ret;
 }
 
-Entity* EntityManager::CreateBuildingEntity(iPoint pos, BuildingType type)
+Entity* EntityManager::CreateBuildingEntity(iPoint pos, BuildingType type, BuildingInfo info)
 {
 	Entity* ret = nullptr;
 	switch (type)
 	{
 	case FORTRESS:
-		ret = new Building(BuildingType::FORTRESS, pos);
+		ret = new Building(BuildingType::FORTRESS, pos, info);
 		break;
 	case MONASTERY:
-		ret = new Building(BuildingType::MONASTERY, pos);
+		ret = new Building(BuildingType::MONASTERY, pos, info);
 		break;
 	case TEMPLE:
-		ret = new Building(BuildingType::TEMPLE, pos);
+		ret = new Building(BuildingType::TEMPLE, pos, info);
 		break;
 	case ENCAMPMENT:
-		ret = new Building(BuildingType::ENCAMPMENT, pos);
+		ret = new Building(BuildingType::ENCAMPMENT, pos, info);
 		break;
 	}
 
