@@ -11,6 +11,7 @@
 #include "j1Gui.h"
 #include "j1Fonts.h"
 #include "Animation.h"
+#include "EntityManager.h"
 #include "j1Scene.h"
 
 #include"QuadTree.h"
@@ -29,6 +30,7 @@ bool j1Scene::Awake()
 {
 	LOG("Loading Scene");
 	bool ret = true;
+
 
 	return ret;
 }
@@ -51,7 +53,7 @@ bool j1Scene::Start()
 	ui_ingame=(ImageUI*)App->gui->CreateUIElement(Type::IMAGE, nullptr, { 0,590,1280,130 }, { 0,590,1280,130 });
 	for (int i = 0; i < 3; i++) 
 	{
-		ui_text_ingame[i] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 104,610+(i*33),237,38 }, { 0,0,100,100 }, "999", { 255,255,255,255 }, { 1,0,0,0 });
+		ui_text_ingame[i] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 104,610+(i*33),237,38 }, { 0,0,100,100 }, "0", { 255,255,255,255 }, { 1,0,0,0 });
 	}
 	for (int i = 0; i < 8; i++) 
 	{
@@ -74,6 +76,9 @@ bool j1Scene::Start()
   
 	//Eudald: This shouldn't be here but we don't have an entity system to load each animation yet
 	App->animation->Load("assets/units/Assassin.tmx");	
+
+	//Creating players
+	App->entityManager->CreatePlayerEntity();
 
 	return true;
 }
