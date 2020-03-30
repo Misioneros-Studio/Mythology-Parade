@@ -32,6 +32,7 @@ bool j1Scene::Awake(pugi::xml_node& config)
 	bool ret = true;
 
 	App->scene->active = false;
+	SDL_ShowCursor(0);
   
 	return ret;
 }

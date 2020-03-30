@@ -22,7 +22,6 @@ class j1Fonts;
 class j1Gui;
 class Console;
 class EntityManager;
-class Animation;
 
 class j1App
 {
@@ -103,7 +102,6 @@ public:
 	j1Gui*				gui = NULL;
 	Console*			console = NULL;
 	EntityManager*		entityManager = NULL;
-	Animation*			animation = NULL;
 	bool				start_game = false;
 
 private:
