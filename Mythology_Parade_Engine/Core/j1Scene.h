@@ -10,6 +10,7 @@ class ButtonUI;
 class TextUI;
 class QuadTree;
 
+
 class j1Scene : public j1Module
 {
 public:
@@ -55,6 +56,9 @@ private:
 	SDL_Texture* debug_tex;
 	SDL_Texture* cursor_tex;
 	ImageUI* ui_ingame;
+	ImageUI* faith_symbol;
+	ImageUI* sacrifice_symbol;
+	ImageUI* prayer_symbol;
 	WindowUI* ui_pause_window;
 	ButtonUI* ui_button[7];
 	TextUI* ui_text[8];
