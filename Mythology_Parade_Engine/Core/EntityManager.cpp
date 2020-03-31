@@ -8,6 +8,7 @@ EntityManager::EntityManager()
 {
 	name.append("entity_manager");
 	buildingsData.reserve(MAX_BUILDING_TYPES);
+	buildingTestIndex = 0;
 }
 
 //Destructor
@@ -135,9 +136,20 @@ bool EntityManager::Update(float dt)
 	if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
 		crPreview.active = !crPreview.active;
-		BuildingInfo data = buildingsData[1];
-		crPreview.height = data.tileLenght;
-		crPreview.width = data.tileLenght;
+		UpdateBuildPreview(buildingTestIndex);
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN) 
+	{
+		if (buildingTestIndex < 9) 
+		{
+			buildingTestIndex++;
+		}
+		else
+		{
+			buildingTestIndex = 0;
+		}
+		UpdateBuildPreview(buildingTestIndex);
 	}
 
 	if (crPreview.active)
@@ -178,7 +190,7 @@ bool EntityManager::Update(float dt)
 	{
 		iPoint mouse = App->map->GetMousePositionOnMap();
 
-		CreateBuildingEntity(App->map->MapToWorld(mouse.x, mouse.y) , BuildingType::FORTRESS, buildingsData[1]);
+		CreateBuildingEntity(App->map->MapToWorld(mouse.x, mouse.y) , BuildingType::FORTRESS, buildingsData[buildingTestIndex]);
 
 		
 		for (int y = mouse.y; y > mouse.y - crPreview.height; y--)
@@ -192,7 +204,6 @@ bool EntityManager::Update(float dt)
 				}
 			}
 		}
-
 	}
 
 	return true;
@@ -397,5 +408,12 @@ bool EntityManager::DeleteEntity(Entity* e)
 		return true;
 	}
 	return false;
+}
+
+void EntityManager::UpdateBuildPreview(int index) 
+{
+	BuildingInfo data = buildingsData[index];
+	crPreview.height = data.tileLenght;
+	crPreview.width = data.tileLenght;
 }
 

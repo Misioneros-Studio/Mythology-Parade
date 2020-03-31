@@ -81,6 +81,7 @@ public:
 	Entity* CreatePlayerEntity();
 	Entity* CreateUnitEntity(UnitType);
 	Entity* CreateBuildingEntity(iPoint, BuildingType, BuildingInfo);
+	void UpdateBuildPreview(int);
 
 public:
 
@@ -89,11 +90,13 @@ public:
 	SDL_Texture* debugTex;
 
 	//The way to store the spritesheets (needs to be cleaned and spritesheets need to be unloaded)
-	//std::unordered_map<SpriteSheetType, std::list<SDL_Texture*>> entitySpriteSheets;
+	//std::unordered_map<SpriteSheetType, SDL_Texture*> entitySpriteSheets;
 	std::vector<BuildingInfo> buildingsData;
 
-public:
 	SDL_Texture* tempBuildingTexture;
+
+private:
+	int buildingTestIndex = 0;
 
 };
 #endif // !_ENTITYMANAGER_H

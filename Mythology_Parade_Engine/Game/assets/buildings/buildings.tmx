@@ -7,7 +7,7 @@
   <object id="1" x="0" y="0" width="378" height="441">
    <properties>
     <property name="civilization" type="int" value="0"/>
-    <property name="tileSquareLenght" type="int" value="4"/>
+    <property name="tileSquareLenght" type="int" value="3"/>
     <property name="type" type="int" value="0"/>
    </properties>
   </object>
@@ -21,54 +21,54 @@
   <object id="5" x="651" y="5" width="382" height="395">
    <properties>
     <property name="civilization" type="int" value="0"/>
-    <property name="tileSquareLenght" type="int" value="5"/>
+    <property name="tileSquareLenght" type="int" value="3"/>
     <property name="type" type="int" value="2"/>
    </properties>
   </object>
   <object id="6" x="1034" y="1" width="326" height="278">
    <properties>
     <property name="civilization" type="int" value="0"/>
-    <property name="tileSquareLenght" type="int" value="5"/>
+    <property name="tileSquareLenght" type="int" value="2"/>
     <property name="type" type="int" value="3"/>
    </properties>
   </object>
   <object id="7" x="1382" y="0" width="309" height="156">
    <properties>
     <property name="civilization" type="int" value="2"/>
-    <property name="tileSquareLenght" type="int" value="5"/>
+    <property name="tileSquareLenght" type="int" value="4"/>
    </properties>
   </object>
   <object id="8" x="1361" y="195" width="351" height="188">
    <properties>
     <property name="civilization" type="int" value="2"/>
-    <property name="tileSquareLenght" type="int" value="5"/>
+    <property name="tileSquareLenght" type="int" value="4"/>
    </properties>
   </object>
   <object id="9" x="1" y="442" width="395" height="369">
    <properties>
     <property name="civilization" type="int" value="1"/>
-    <property name="tileSquareLenght" type="int" value="5"/>
+    <property name="tileSquareLenght" type="int" value="3"/>
     <property name="type" type="int" value="0"/>
    </properties>
   </object>
   <object id="10" x="396" y="442" width="267" height="335">
    <properties>
     <property name="civilization" type="int" value="1"/>
-    <property name="tileSquareLenght" type="int" value="5"/>
+    <property name="tileSquareLenght" type="int" value="2"/>
     <property name="type" type="int" value="1"/>
    </properties>
   </object>
   <object id="11" x="681" y="442" width="253" height="331">
    <properties>
     <property name="civilization" type="int" value="1"/>
-    <property name="tileSquareLenght" type="int" value="5"/>
+    <property name="tileSquareLenght" type="int" value="3"/>
     <property name="type" type="int" value="2"/>
    </properties>
   </object>
   <object id="12" x="935" y="442" width="318" height="277">
    <properties>
     <property name="civilization" type="int" value="1"/>
-    <property name="tileSquareLenght" type="int" value="5"/>
+    <property name="tileSquareLenght" type="int" value="2"/>
     <property name="type" type="int" value="3"/>
    </properties>
   </object>
