@@ -1,7 +1,7 @@
 #include "Animation.h"
-#include "j1Textures.h"
 #include "p2Log.h"
 #include "j1Render.h"
+#include "j1Input.h"
 
 Animation::Animation()
 {
@@ -21,17 +21,39 @@ bool Animation::Awake(pugi::xml_node& conf)
 
 bool Animation::Update(float dt)
 {
+	if (App->input->GetKey(SDL_SCANCODE_P) == KEY_DOWN && index + 1 < animations.size())
+	{
+		index++;
+		animation = 0;
+		current_anim = animations[(AnimationType)index][(Direction)animation];
+	}
+	if (App->input->GetKey(SDL_SCANCODE_O) == KEY_DOWN && animation + 1 < animations[(AnimationType)index].size())
+	{
+		animation++;
+		current_anim = animations[(AnimationType)index][(Direction)animation];
+	}
+
 	Draw();
 	return true;
 }
 
 bool Animation::CleanUp()
 {
+	for (int i = 0; i < animations.size(); i++)
+	{
+		for (int j = 0; j < animations[(AnimationType)i].size(); j++)
+		{
+			animations[(AnimationType)i][(Direction)j].Clean();
+		}
+		animations[(AnimationType)i].clear();
+	}
+	animations.clear();
 	return true;
 }
 
 bool Animation::Load(const char* path)
 {
+	active = true;
 	bool ret = true;
 	pugi::xml_document	character_file;
 	pugi::xml_parse_result result = character_file.load_file(path);
@@ -40,6 +62,8 @@ bool Animation::Load(const char* path)
 	int row = 0;
 	std::string name;
 	int sprite_num = 0;
+	AnimationType type;
+	Direction dir;
 
 	if (result == NULL)
 	{
@@ -54,34 +78,42 @@ bool Animation::Load(const char* path)
 
 		LoadCharacterTMX(character_node);
 
-	
-	pugi::xml_node group = character_node.child("tileset").child("tile");
-	for (group; group; group.next_sibling("tile"))
-	{
-		// This loop reads basic .tmx properties for iteration between frames
-		pugi::xml_node it = group.child("properties").child("property");
-		for (it; it; it.next_sibling("property"))
+
+		pugi::xml_node group = character_node.child("tileset").child("tile");
+		for (group; group; group.next_sibling("tile"))
 		{
-			if (strcmp(it.attribute("name").as_string(), "sprites") == 0)
+			// This loop reads basic .tmx properties for iteration between frames
+			pugi::xml_node it = group.child("properties").child("property");
+			for (it; it; it.next_sibling("property"))
 			{
+				if (strcmp(it.attribute("name").as_string(), "sprites") == 0)
+				{
 					sprite_num = it.attribute("value").as_int();
-			}
-			if (strcmp(it.attribute("name").as_string(), "type") == 0)
-			{
+				}
+				if (strcmp(it.attribute("name").as_string(), "type") == 0)
+				{
 					name = it.attribute("value").as_string();
-			}
-			if (strcmp(it.attribute("name").as_string(), "row") == 0)
-			{
+				}
+				if (strcmp(it.attribute("name").as_string(), "row") == 0)
+				{
 					row = it.attribute("value").as_int();
+				}
+				if (strcmp(it.attribute("name").as_string(), "dicType") == 0)
+				{
+					type = (AnimationType)it.attribute("value").as_int();
+				}
+				if (strcmp(it.attribute("name").as_string(), "dir") == 0)
+				{
+					dir = (Direction)it.attribute("value").as_int();
+				}
+				it = it.next_sibling("property");
 			}
-			it = it.next_sibling("property");
+			ChooseAnimation(group, row, sprite_num, name, type, dir);
+			group = group.next_sibling("tile");
 		}
-		ChooseAnimation(group, row, sprite_num, name);
-		group = group.next_sibling("tile");
 	}
-}
-	current_anim = WALK_DOWN;
-return ret;
+	current_anim = animations[(AnimationType)0][(Direction)0];
+	return ret;
 }
 
 bool Animation::LoadCharacterTMX(pugi::xml_node& character_node)
@@ -115,13 +147,13 @@ bool Animation::LoadCharacterTMX(pugi::xml_node& character_node)
 	return ret;
 }
 
-Animation_char* Animation::LoadAnimation(pugi::xml_node& obj_group, int row, int sprite_num, std::string name)
+Animation_char Animation::LoadAnimation(pugi::xml_node& obj_group, int row, int sprite_num, std::string name)
 {
-	Animation_char* anim = new Animation_char();
+	Animation_char anim;
 
-	anim->name = name;
-	anim->num_sprites = sprite_num;
-	anim->sprites = new Sprite[anim->num_sprites];
+	anim.name = name;
+	anim.num_sprites = sprite_num;
+	anim.sprites.reserve(sprite_num);
 
 	int rect_width = 0;
 	int rect_height = 0;
@@ -133,64 +165,31 @@ Animation_char* Animation::LoadAnimation(pugi::xml_node& obj_group, int row, int
 	for (frame; frame; frame = frame.next_sibling("frame"))
 	{
 
-	/*	anim->sprites[i].rect.x = rect_x;
-		anim->sprites[i].rect.y = rect_y;
-		anim->sprites[i].rect.w = rect_x + character_tmx_data.tile_width;
-		anim->sprites[i].rect.h = character_tmx_data.tile_height;*/
+		Sprite ret;
 
-		anim->sprites[i].rect.x = rect_x;
-		anim->sprites[i].rect.y = rect_y;
-		anim->sprites[i].rect.w = character_tmx_data.tile_width;
-		anim->sprites[i].rect.h = character_tmx_data.tile_height;
-		anim->sprites[i].frames = frame.attribute("duration").as_int();
-		anim->loop = true;
+		ret.rect.x = rect_x;
+		ret.rect.y = rect_y;
+		ret.rect.w = character_tmx_data.tile_width;
+		ret.rect.h = character_tmx_data.tile_height;
+		ret.frames = frame.attribute("duration").as_int();
+		anim.sprites.push_back(ret);
+
 		rect_x += character_tmx_data.tile_width;
 		i++;
 	}
-	
+	anim.loop = true;
+
 	return anim;
 }
 
-void Animation::ChooseAnimation(pugi::xml_node& group, int row, int sprite_num, std::string name)
+void Animation::ChooseAnimation(pugi::xml_node& group, int row, int sprite_num, std::string name, AnimationType type, Direction dir)
 {
-	//Attacks
-	if (strcmp(name.c_str(), "ATCK_DIAG_DOWN") == 0)	{	ATCK_DIAG_DOWN = LoadAnimation(group, row, sprite_num, name);}
-	else if (strcmp(name.c_str(), "ATCK_DIAG_UP") == 0) {	ATCK_DIAG_UP = LoadAnimation(group, row, sprite_num, name);}
-	else if (strcmp(name.c_str(), "ATCK_LATERAL") == 0) {	ATCK_LATERAL = LoadAnimation(group, row, sprite_num, name);}
-	else if (strcmp(name.c_str(), "ATCK_UP") == 0)		{	ATCK_UP = LoadAnimation(group, row, sprite_num, name);}
-	else if (strcmp(name.c_str(), "ATCK_DOWN") == 0)	{	ATCK_DOWN = LoadAnimation(group, row, sprite_num, name);}
-
-	//Death
-	if (strcmp(name.c_str(), "DIE_DIAG_DOWN") == 0)		{	DIE_DIAG_DOWN = LoadAnimation(group, row, sprite_num, name);}
-	else if (strcmp(name.c_str(), "DIE_DIAG_UP") == 0)	{	DIE_DIAG_UP = LoadAnimation(group, row, sprite_num, name);}
-	else if (strcmp(name.c_str(), "DIE_LATERAL") == 0)	{	DIE_LATERAL = LoadAnimation(group, row, sprite_num, name);}
-	else if (strcmp(name.c_str(), "DIE_UP") == 0)		{	DIE_UP = LoadAnimation(group, row, sprite_num, name);}
-	else if (strcmp(name.c_str(), "DIE_DOWN") == 0)		{	DIE_DOWN = LoadAnimation(group, row, sprite_num, name);}
-
-	//Hit
-	if (strcmp(name.c_str(), "HIT_DIAG_DOWN") == 0)		{	HIT_DIAG_DOWN = LoadAnimation(group, row, sprite_num, name);}
-	else if (strcmp(name.c_str(), "HIT_DIAG_UP") == 0)	{	HIT_DIAG_UP = LoadAnimation(group, row, sprite_num, name);}
-	else if (strcmp(name.c_str(), "HIT_LATERAL") == 0)	{	HIT_LATERAL = LoadAnimation(group, row, sprite_num, name);}
-	else if (strcmp(name.c_str(), "HIT_UP") == 0)		{	HIT_UP = LoadAnimation(group, row, sprite_num, name);}
-	else if (strcmp(name.c_str(), "HIT_DOWN") == 0)		{	HIT_DOWN = LoadAnimation(group, row, sprite_num, name);}
-
-	//Idle
-	if (strcmp(name.c_str(), "IDLE_DIAG_DOWN") == 0)	{	IDLE_DIAG_DOWN = LoadAnimation(group, row, sprite_num, name);}
-	else if (strcmp(name.c_str(), "IDLE_DIAG_UP") == 0)	{	IDLE_DIAG_UP = LoadAnimation(group, row, sprite_num, name);}
-	else if (strcmp(name.c_str(), "IDLE_LATERAL") == 0)	{	IDLE_LATERAL = LoadAnimation(group, row, sprite_num, name);}
-	else if (strcmp(name.c_str(), "IDLE_UP") == 0)		{	IDLE_UP = LoadAnimation(group, row, sprite_num, name);}
-	else if (strcmp(name.c_str(), "IDLE_DOWN") == 0)	{	IDLE_DOWN = LoadAnimation(group, row, sprite_num, name);}
-
-	//Walk
-	if (strcmp(name.c_str(), "WALK_DIAG_DOWN") == 0)	{	WALK_DIAG_DOWN = LoadAnimation(group, row, sprite_num, name);}
-	else if (strcmp(name.c_str(), "WALK_DIAG_UP") == 0)	{	WALK_DIAG_UP = LoadAnimation(group, row, sprite_num, name);}
-	else if (strcmp(name.c_str(), "WALK_LATERAL") == 0)	{	WALK_LATERAL = LoadAnimation(group, row, sprite_num, name);}
-	else if (strcmp(name.c_str(), "WALK_UP") == 0)		{	WALK_UP = LoadAnimation(group, row, sprite_num, name);}
-	else if (strcmp(name.c_str(), "WALK_DOWN") == 0)	{	WALK_DOWN = LoadAnimation(group, row, sprite_num, name);}
+	animations[type][dir] = LoadAnimation(group, row, sprite_num, name);
 }
 
 void Animation::Draw()
 {
-	num_current_anim = current_anim->GetSprite();
-	App->render->Blit(character_tmx_data.texture, 0, 0, &current_anim->sprites[num_current_anim].rect);
+	num_current_anim = current_anim.GetSprite();
+	//App->render->DrawQuad({ 0 - current_anim->sprites[num_current_anim].rect.w / 2, 0, current_anim->sprites[num_current_anim].rect.w, current_anim->sprites[num_current_anim].rect .h}, 255, 0,0);
+	App->render->Blit(character_tmx_data.texture, 0 - current_anim.sprites[num_current_anim].rect.w / 2, 0, &current_anim.sprites[num_current_anim].rect);
 }

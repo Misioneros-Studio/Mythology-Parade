@@ -86,8 +86,10 @@ bool j1Scene::Start()
 	//quadTree = new QuadTree(TreeType::ISOMETRIC, position.x + (App->map->data.tile_width / 2), position.y, size.x, size.y);
 	//quadTree->baseNode->SubDivide(quadTree->baseNode, 5);
   
+
 	//Eudald: This shouldn't be here but we don't have an entity system to load each animation yet
-	//App->animation->Load("assets/units/Assassin.tmx");
+	App->animation->Load("assets/units/Assassin.tmx");
+	
   
 	App->audio->PlayMusic("audio/music/Ambient1.ogg");
   

@@ -4,22 +4,40 @@
 #include "SDL/include/SDL_rect.h"
 #include "SDL/include/SDL.h"
 #include "j1App.h"
+#include "j1Textures.h"
+#include <unordered_map>
 
+enum class AnimationType
+{
+	ATTACK,
+	DIE,
+	HIT,
+	IDLE,
+	WALK,
+};
+enum class Direction
+{
+	UP,
+	LATERAL,
+	DOWN,
+	DIAGONAL_DOWN,
+	DIAGONAL_UP
+};
 
-struct Sprite {
-
+struct Sprite
+{
 	SDL_Rect rect;
 	SDL_Rect AABB_rect;
 	int frames = 0;
 	int current_frame = 0;
-
 };
 
-struct Animation_char {
+struct Animation_char
+{
 	bool loop = true;
 	std::string name;
 	int num_sprites = 0;
-	Sprite* sprites = nullptr;
+	std::vector<Sprite> sprites;
 	bool finished = false;
 	int current_sprite = 0;
 
@@ -38,7 +56,7 @@ public:
 	{
 		if (sprites[current_sprite].current_frame != sprites[current_sprite].frames)
 		{
-				sprites[current_sprite].current_frame = sprites[current_sprite].current_frame + 1;	
+			sprites[current_sprite].current_frame = sprites[current_sprite].current_frame + 1;
 		}
 		else {
 			sprites[current_sprite].current_frame = 0;
@@ -56,25 +74,34 @@ public:
 		return current_sprite;
 	}
 
+	void Clean()
+	{
+		sprites.clear();
+	}
+
 };
 
 
 
-struct CharacterTMXData {
+struct CharacterTMXData
+{
 	SDL_Texture* texture = nullptr;
 	uint					width = 0u;
 	uint					height = 0u;
 	int						tile_width = 0u;
 	int						tile_height = 0u;
 
+	void Clean()
+	{
+		App->tex->UnLoad(texture);
+	}
+
 };
 
-class Animation :public j1Module {
+class Animation :public j1Module
+{
 public:
-
-
 	Animation();
-
 	// Destructor
 	virtual ~Animation();
 
@@ -87,45 +114,21 @@ public:
 	bool CleanUp();
 	bool Load(const char* path);
 	bool LoadCharacterTMX(pugi::xml_node& character_node);
-	void ChooseAnimation(pugi::xml_node& obj_group, int row, int sprite_num, std::string name);
-	virtual Animation_char* LoadAnimation(pugi::xml_node& obj_group, int row, int sprite_num, std::string name);
+	void ChooseAnimation(pugi::xml_node& obj_group, int row, int sprite_num, std::string name, AnimationType type, Direction dir);
+	virtual Animation_char LoadAnimation(pugi::xml_node& obj_group, int row, int sprite_num, std::string name);
 	void Draw();
 
 private:
 	CharacterTMXData character_tmx_data;
 
-	Animation_char* ATCK_DIAG_DOWN;
-	Animation_char* ATCK_DIAG_UP;
-	Animation_char* ATCK_LATERAL;
-	Animation_char* ATCK_UP;
-	Animation_char* ATCK_DOWN;
-
-	Animation_char* DIE_DIAG_DOWN;
-	Animation_char* DIE_DIAG_UP;
-	Animation_char* DIE_LATERAL;
-	Animation_char* DIE_UP;
-	Animation_char* DIE_DOWN;
-
-	Animation_char* HIT_DIAG_DOWN;
-	Animation_char* HIT_DIAG_UP;
-	Animation_char* HIT_LATERAL;
-	Animation_char* HIT_UP;
-	Animation_char* HIT_DOWN;
-
-	Animation_char* IDLE_DIAG_DOWN;
-	Animation_char* IDLE_DIAG_UP;
-	Animation_char* IDLE_LATERAL;
-	Animation_char* IDLE_UP;
-	Animation_char* IDLE_DOWN;
-
-	Animation_char* WALK_DIAG_DOWN;
-	Animation_char* WALK_DIAG_UP;
-	Animation_char* WALK_LATERAL;
-	Animation_char* WALK_UP;
-	Animation_char* WALK_DOWN;
-
-	Animation_char* current_anim = nullptr;
+	Animation_char current_anim;
 	int num_current_anim;
+
+	int index = 0;
+	int animation = 0;
+
+
+	std::unordered_map<AnimationType, std::unordered_map<Direction, Animation_char>> animations;
 };
 
 #endif
