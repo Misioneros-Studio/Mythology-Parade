@@ -107,7 +107,7 @@ public:
 	CreationPreview crPreview;
 	SDL_Texture* debugTex;
 
-	//The way to store the spritesheets (needs to be cleaned and spritesheets need to be unloaded)
+	//The way to store the spritesheets
 	std::unordered_map<SpriteSheetType, SDL_Texture*> entitySpriteSheets;
 	std::vector<BuildingInfo> buildingsData;
 

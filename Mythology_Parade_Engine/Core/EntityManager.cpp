@@ -401,8 +401,8 @@ Entity* EntityManager::CreateBuildingEntity(iPoint pos, BuildingType type, Build
 
 	ret->texture = entitySpriteSheets[SpriteSheetType::BUILDINGS];
 
+	//TODO load spritesheet when needed only? first call of constructor of entity?
 	entities[EntityType::BUILDING].push_back(ret);
-
 	//TODO: sort elements only inside the screen (QuadTree)
 	entities[EntityType::BUILDING].sort(entity_Sort());
 	//std::sort(entities[EntityType::BUILDING].begin(), entities[EntityType::BUILDING].end(), entity_Sort());
