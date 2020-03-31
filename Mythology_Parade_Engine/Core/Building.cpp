@@ -61,5 +61,6 @@ void Building::Draw()
 {
 	//lengh = 4, lenght is the number of tiles this building uses
 	//App->render->DrawQuad({position.x, position.y + (tileHeight /2) * (height + 1), texturewidth, -textureHeight}, 255, 250, 20);
-	App->render->Blit(App->entityManager->tempBuildingTexture, position.x, position.y + (32 / 2) * (tileLenght + 1) - blitRect.y, {blitRect.x, blitRect.y}, &spriteRect);
+	App->render->Blit(texture, position.x, position.y + ((32 / 2) * tileLenght) - blitRect.y, {blitRect.x, blitRect.y}, &spriteRect);
+	App->render->DrawQuad({position.x, position.y, 4, -4}, 255, 0, 0);
 }

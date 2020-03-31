@@ -88,7 +88,9 @@ bool EntityManager::Awake(pugi::xml_node& a)
 // Called before the first frame
 bool EntityManager::Start()
 {
-	tempBuildingTexture = App->tex->Load("assets/buildings/Buildings.png");
+	//TODO: NO HARDCODE BOY
+	entitySpriteSheets[SpriteSheetType::BUILDINGS] = App->tex->Load("assets/buildings/Buildings.png");
+
 	for (int i = 0; i < buildingsData.size(); i++)
 	{
 		BuildingInfo* info = &buildingsData[i];
@@ -189,8 +191,9 @@ bool EntityManager::Update(float dt)
 	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN && crPreview.active && crPreview.canBuild)
 	{
 		iPoint mouse = App->map->GetMousePositionOnMap();
-
-		CreateBuildingEntity(App->map->MapToWorld(mouse.x, mouse.y) , BuildingType::FORTRESS, buildingsData[buildingTestIndex]);
+		iPoint spawnPos = App->map->MapToWorld(mouse.x, mouse.y);
+		spawnPos.y += App->map->data.tile_height / 2;
+		CreateBuildingEntity(spawnPos , BuildingType::FORTRESS, buildingsData[buildingTestIndex]);
 
 		
 		for (int y = mouse.y; y > mouse.y - crPreview.height; y--)
@@ -227,7 +230,11 @@ bool EntityManager::CleanUp()
 		}
 		entities[(EntityType)i].clear();
 	}
-	App->tex->UnLoad(tempBuildingTexture);
+	for (int i = 0; i < entitySpriteSheets.size(); i++)
+	{
+		if(entitySpriteSheets[(SpriteSheetType)i])
+			App->tex->UnLoad(entitySpriteSheets[(SpriteSheetType)i]);
+	}
 	entities.clear();
 	return true;
 }
@@ -392,7 +399,13 @@ Entity* EntityManager::CreateBuildingEntity(iPoint pos, BuildingType type, Build
 		break;
 	}
 
+	ret->texture = entitySpriteSheets[SpriteSheetType::BUILDINGS];
+
 	entities[EntityType::BUILDING].push_back(ret);
+
+	//TODO: sort elements only inside the screen (QuadTree)
+	entities[EntityType::BUILDING].sort(entity_Sort());
+	//std::sort(entities[EntityType::BUILDING].begin(), entities[EntityType::BUILDING].end(), entity_Sort());
 
 	return ret;
 }

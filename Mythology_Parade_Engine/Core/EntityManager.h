@@ -1,7 +1,7 @@
 #ifndef _ENTITYMANAGER_H
 #define _ENTITYMANAGER_H
 
-#define MAX_BUILDING_TYPES 8
+#define MAX_BUILDING_TYPES 10
 
 #include "j1Module.h"
 #include <unordered_map>
@@ -10,6 +10,7 @@
 #include"j1Map.h"
 #include"j1Pathfinding.h"
 #include<vector>
+#include <algorithm>
 
 //Can delete
 #include "j1Scene.h"
@@ -42,7 +43,24 @@ struct BuildingInfo
 	int tileLenght;
 };
 
+enum class SpriteSheetType 
+{
+	BUILDINGS,
+	ASSASSIN,
+	PRIEST,
+	SPEAR_SOLDIER
+};
+
 class Entity;
+
+//Temporal sorting function
+struct entity_Sort
+{
+	inline bool operator() (Entity* struct1, Entity* struct2)
+	{
+		return (struct1->position.y < struct2->position.y);
+	}
+};
 
 class EntityManager : public j1Module
 {
@@ -90,10 +108,8 @@ public:
 	SDL_Texture* debugTex;
 
 	//The way to store the spritesheets (needs to be cleaned and spritesheets need to be unloaded)
-	//std::unordered_map<SpriteSheetType, SDL_Texture*> entitySpriteSheets;
+	std::unordered_map<SpriteSheetType, SDL_Texture*> entitySpriteSheets;
 	std::vector<BuildingInfo> buildingsData;
-
-	SDL_Texture* tempBuildingTexture;
 
 private:
 	int buildingTestIndex = 0;

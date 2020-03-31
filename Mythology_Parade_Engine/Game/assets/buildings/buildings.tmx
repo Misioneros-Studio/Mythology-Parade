@@ -21,7 +21,7 @@
   <object id="5" x="651" y="5" width="382" height="395">
    <properties>
     <property name="civilization" type="int" value="0"/>
-    <property name="tileSquareLenght" type="int" value="3"/>
+    <property name="tileSquareLenght" type="int" value="2"/>
     <property name="type" type="int" value="2"/>
    </properties>
   </object>
@@ -61,7 +61,7 @@
   <object id="11" x="681" y="442" width="253" height="331">
    <properties>
     <property name="civilization" type="int" value="1"/>
-    <property name="tileSquareLenght" type="int" value="3"/>
+    <property name="tileSquareLenght" type="int" value="2"/>
     <property name="type" type="int" value="2"/>
    </properties>
   </object>
