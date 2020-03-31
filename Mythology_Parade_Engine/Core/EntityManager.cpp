@@ -22,55 +22,12 @@ bool EntityManager::Awake(pugi::xml_node& a)
 	//Load buildings info
 	pugi::xml_document buildings;
 	buildings.load_file(a.child("buildings").attribute("file").as_string());
-
-	std::string path = "assets/buildings/";
-	path.append(buildings.child("map").child("imagelayer").child("image").attribute("source").as_string());
+	LoadBuildingsData(buildings.child("map").child("objectgroup"));
 
 	//Not working because renderer is not created yet ;-;
+	//std::string path = "assets/buildings/";
+	//path.append(buildings.child("map").child("imagelayer").child("image").attribute("source").as_string());
 	//tempBuildingTexture = App->tex->Load(path.c_str());
-
-	pugi::xml_node data = buildings.child("map").child("objectgroup");
-
-
-	if (data != NULL)
-	{
-		pugi::xml_node obj;
-
-		for (obj = data.child("object"); obj; obj = obj.next_sibling("object"))
-		{
-
-			BuildingInfo info;	
-			info.spriteRect = { obj.attribute("x").as_int(), obj.attribute("y").as_int(), obj.attribute("width").as_int(), obj.attribute("height").as_int() };
-
-			pugi::xml_node data = obj.child("properties");
-			if (data != NULL)
-			{
-				pugi::xml_node prop;
-				for (prop = data.child("property"); prop; prop = prop.next_sibling("property"))
-				{
-					//OPT: Not the best way but meh
-
-					std::string name = prop.attribute("name").as_string();
-					if (name == "civilization")
-					{
-						info.civilization = (CivilizationType)prop.attribute("value").as_int();
-					}
-					else if (name == "tileSquareLenght")
-					{
-						info.tileLenght = prop.attribute("value").as_int();
-					}
-					else if (name == "type")
-					{
-						info.buildingType = (BuildingType)prop.attribute("value").as_int();
-					}
-				}
-			}	
-			//TODO: Find a wat to mesure this with the tileLenght
-			info.blitSize = { info.spriteRect.w, info.spriteRect.h };
-			//If civilitzation == NONE means is a generic destructed/being built data type
-			buildingsData.push_back(info);
-		}
-	}
 
 
 	//INFO: This is a good way to itinerate all the map, to itinerate only items in one key, use only the second for loop
@@ -430,3 +387,45 @@ void EntityManager::UpdateBuildPreview(int index)
 	crPreview.width = data.tileLenght;
 }
 
+void EntityManager::LoadBuildingsData(pugi::xml_node& node) 
+{
+	if (node != NULL)
+	{
+		pugi::xml_node obj;
+
+		for (obj = node.child("object"); obj; obj = obj.next_sibling("object"))
+		{
+
+			BuildingInfo info;
+			info.spriteRect = { obj.attribute("x").as_int(), obj.attribute("y").as_int(), obj.attribute("width").as_int(), obj.attribute("height").as_int() };
+
+			pugi::xml_node data = obj.child("properties");
+			if (data != NULL)
+			{
+				pugi::xml_node prop;
+				for (prop = data.child("property"); prop; prop = prop.next_sibling("property"))
+				{
+					//OPT: Not the best way but meh
+
+					std::string name = prop.attribute("name").as_string();
+					if (name == "civilization")
+					{
+						info.civilization = (CivilizationType)prop.attribute("value").as_int();
+					}
+					else if (name == "tileSquareLenght")
+					{
+						info.tileLenght = prop.attribute("value").as_int();
+					}
+					else if (name == "type")
+					{
+						info.buildingType = (BuildingType)prop.attribute("value").as_int();
+					}
+				}
+			}
+			//TODO: Find a wat to mesure this with the tileLenght
+			info.blitSize = { info.spriteRect.w, info.spriteRect.h };
+			//If civilitzation == NONE means is a generic destructed/being built data type
+			buildingsData.push_back(info);
+		}
+	}
+}

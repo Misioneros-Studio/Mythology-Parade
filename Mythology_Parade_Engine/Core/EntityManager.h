@@ -101,6 +101,9 @@ public:
 	Entity* CreateBuildingEntity(iPoint, BuildingType, BuildingInfo);
 	void UpdateBuildPreview(int);
 
+	//Load data packets
+	void LoadBuildingsData(pugi::xml_node&);
+
 public:
 
 	std::unordered_map<EntityType, std::list<Entity*>> entities;
