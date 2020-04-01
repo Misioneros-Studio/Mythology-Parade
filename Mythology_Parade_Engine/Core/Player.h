@@ -26,6 +26,9 @@ private:
 	std::string faith, sacrifice, prayer;
 
 	int tick1 = 0, tick2 = 0;
+
+	int x, y;
+	SDL_Rect vertical1, vertical2, horizontal1, horizontal2;
 };
 
 
