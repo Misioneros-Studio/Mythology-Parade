@@ -1,7 +1,7 @@
 #ifndef _ENTITYMANAGER_H
 #define _ENTITYMANAGER_H
 
-#define MAX_BUILDING_TYPES 10
+#define MAX_BUILDING_TYPES 8
 
 #include "j1Module.h"
 #include <unordered_map>
@@ -103,6 +103,7 @@ public:
 
 	//Load data packets
 	void LoadBuildingsData(pugi::xml_node&);
+	iPoint CalculateBuildingSize(int, int, int);
 
 public:
 
@@ -116,6 +117,10 @@ public:
 
 private:
 	int buildingTestIndex = 0;
+
+public:
+	SDL_Rect constructorSpriteRect;
+	SDL_Rect destructedSpriteRect;
 
 };
 #endif // !_ENTITYMANAGER_H

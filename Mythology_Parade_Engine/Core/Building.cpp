@@ -52,6 +52,21 @@ bool Building::Update(float dt)
 {
 	bool ret = true;
 
+	if (App->input->GetKey(SDL_SCANCODE_3) == KEY_DOWN) 
+	{
+		spriteRect = App->entityManager->destructedSpriteRect;
+
+		int blitWidth = tileLenght * App->map->data.tile_width;
+		blitRect = App->entityManager->CalculateBuildingSize(blitWidth, spriteRect.w, spriteRect.h);
+	}
+	if (App->input->GetKey(SDL_SCANCODE_4) == KEY_DOWN)
+	{
+		spriteRect = App->entityManager->constructorSpriteRect;
+
+		int blitWidth = tileLenght * App->map->data.tile_width;
+		blitRect = App->entityManager->CalculateBuildingSize(blitWidth, spriteRect.w, spriteRect.h);
+	}
+
 	Draw();
 
 	return ret;

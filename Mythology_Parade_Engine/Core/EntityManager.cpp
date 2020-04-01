@@ -52,8 +52,8 @@ bool EntityManager::Start()
 	{
 		BuildingInfo* info = &buildingsData[i];
 		int blitWidth = info->tileLenght * App->map->data.tile_width;
-		info->blitSize.x = blitWidth;
-		info->blitSize.y = (blitWidth * info->spriteRect.h) / info->spriteRect.w;
+		info->blitSize = CalculateBuildingSize(blitWidth, info->spriteRect.w, info->spriteRect.h);
+
 	}
 
 
@@ -100,7 +100,7 @@ bool EntityManager::Update(float dt)
 
 	if (App->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN) 
 	{
-		if (buildingTestIndex < 9) 
+		if (buildingTestIndex < MAX_BUILDING_TYPES - 1) 
 		{
 			buildingTestIndex++;
 		}
@@ -397,6 +397,7 @@ void EntityManager::LoadBuildingsData(pugi::xml_node& node)
 		{
 
 			BuildingInfo info;
+			bool push = true;
 			info.spriteRect = { obj.attribute("x").as_int(), obj.attribute("y").as_int(), obj.attribute("width").as_int(), obj.attribute("height").as_int() };
 
 			pugi::xml_node data = obj.child("properties");
@@ -410,7 +411,24 @@ void EntityManager::LoadBuildingsData(pugi::xml_node& node)
 					std::string name = prop.attribute("name").as_string();
 					if (name == "civilization")
 					{
-						info.civilization = (CivilizationType)prop.attribute("value").as_int();
+						CivilizationType type = (CivilizationType)prop.attribute("value").as_int();
+						info.civilization = type;
+						if (IN_RANGE(type, VIKING, GREEK) == 0)
+						{
+							push = false;
+						}
+					}
+					else if(push == false && name == "consType")
+					{
+						if (prop.attribute("value").as_int() == 0)
+						{
+							destructedSpriteRect = info.spriteRect;
+						}
+						else
+						{
+							constructorSpriteRect = info.spriteRect;
+						}
+						break;
 					}
 					else if (name == "tileSquareLenght")
 					{
@@ -424,8 +442,14 @@ void EntityManager::LoadBuildingsData(pugi::xml_node& node)
 			}
 			//TODO: Find a wat to mesure this with the tileLenght
 			info.blitSize = { info.spriteRect.w, info.spriteRect.h };
-			//If civilitzation == NONE means is a generic destructed/being built data type
-			buildingsData.push_back(info);
+
+			if(push)
+				buildingsData.push_back(info);
 		}
 	}
+}
+
+iPoint EntityManager::CalculateBuildingSize(int bw, int w, int h) 
+{
+	return {bw , (bw * h) / w};
 }

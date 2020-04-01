@@ -35,12 +35,14 @@
   <object id="7" x="1382" y="0" width="309" height="156">
    <properties>
     <property name="civilization" type="int" value="2"/>
+    <property name="consType" type="int" value="0"/>
     <property name="tileSquareLenght" type="int" value="4"/>
    </properties>
   </object>
   <object id="8" x="1361" y="195" width="351" height="188">
    <properties>
     <property name="civilization" type="int" value="2"/>
+    <property name="consType" type="int" value="1"/>
     <property name="tileSquareLenght" type="int" value="4"/>
    </properties>
   </object>
