@@ -18,7 +18,7 @@ public:
 	bool PostUpdate();
 	bool CleanUp();
 
-	void SelectionDraw();
+	void SelectionDraw_Logic();
 
 private:
 	CurrencySystem currencySystem;

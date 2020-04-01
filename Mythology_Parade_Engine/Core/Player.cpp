@@ -50,8 +50,8 @@ bool Player::Update(float dt)
 	App->scene->ui_text_ingame[1]->SetString(sacrifice);
 	App->scene->ui_text_ingame[2]->SetString(prayer);
 	
-	//The 4 lines calculations and drawing
-	SelectionDraw(); 
+	//Selection logics and drawing
+	SelectionDraw_Logic(); 
 
 	return true;
 }
@@ -66,7 +66,7 @@ bool Player::CleanUp()
 	return true;
 }
 
-void Player::SelectionDraw()
+void Player::SelectionDraw_Logic()
 {
 	if (!App->input->GetMouseButtonDown(1))
 	{
