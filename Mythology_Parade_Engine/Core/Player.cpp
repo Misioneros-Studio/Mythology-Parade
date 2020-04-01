@@ -49,14 +49,31 @@ bool Player::Update(float dt)
 	App->scene->ui_text_ingame[0]->SetString(faith);
 	App->scene->ui_text_ingame[1]->SetString(sacrifice);
 	App->scene->ui_text_ingame[2]->SetString(prayer);
+	
+	//The 4 lines calculations and drawing
+	SelectionDraw(); 
 
-	//LOGIC 
+	return true;
+}
+
+bool Player::PostUpdate()
+{
+	return true;
+}
+
+bool Player::CleanUp()
+{
+	return true;
+}
+
+void Player::SelectionDraw()
+{
 	if (!App->input->GetMouseButtonDown(1))
 	{
 		App->input->GetMousePosition(x, y);
 	}
 
-	if(App->input->GetMouseButtonDown(1) == KEY_REPEAT)
+	if (App->input->GetMouseButtonDown(1) == KEY_REPEAT)
 	{
 		int x2, y2;
 		App->input->GetMousePosition(x2, y2);
@@ -73,16 +90,4 @@ bool Player::Update(float dt)
 		App->render->DrawQuad(horizontal2, 255, 255, 255, 255);
 	}
 
-
-	return true;
-}
-
-bool Player::PostUpdate()
-{
-	return true;
-}
-
-bool Player::CleanUp()
-{
-	return true;
 }

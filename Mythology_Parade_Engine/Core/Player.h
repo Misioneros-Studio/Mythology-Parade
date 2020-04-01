@@ -18,6 +18,8 @@ public:
 	bool PostUpdate();
 	bool CleanUp();
 
+	void SelectionDraw();
+
 private:
 	CurrencySystem currencySystem;
 
