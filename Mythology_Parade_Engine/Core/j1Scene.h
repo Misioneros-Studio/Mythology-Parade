@@ -3,6 +3,14 @@
 
 #include "j1Module.h"
 
+enum class CloseSceneMenus {
+	None,
+	Pause,
+	Options,
+	Confirmation,
+	Unknown
+};
+
 struct SDL_Texture;
 class ImageUI;
 class WindowUI;
@@ -68,6 +76,7 @@ private:
 public:
 	TextUI* ui_text_ingame[3];
 	QuadTree* quadTree;
+	CloseSceneMenus close_menus;
 };
 
 #endif // __j1SCENE_H__

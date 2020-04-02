@@ -3,6 +3,13 @@
 
 #include "j1Module.h"
 
+enum class CloseTitleSceneMenus{
+	None,
+	Credits,
+	Tutorial,
+	Options,
+	Unknown
+};
 struct SDL_Texture;
 class ImageUI;
 class WindowUI;
@@ -73,6 +80,7 @@ private:
 	ButtonUI* ui_button_credits;
 	TextUI* ui_text_credits[2];
 public:
+	CloseTitleSceneMenus close_menus;
 };
 
 #endif // __j1TITLESCENE_H__
