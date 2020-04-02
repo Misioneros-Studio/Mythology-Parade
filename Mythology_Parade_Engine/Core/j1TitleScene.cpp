@@ -53,6 +53,8 @@ bool j1TitleScene::Start()
 	ui_button[5] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, nullptr, { 35,520,237,38 }, { 787,240,237,38 }, "EXIT", { 787,342,237,38 }, { 787,291,237,38 }, false, { 0,0,0,0 }, this);
 	ui_text[5] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 140,532,237,38 }, { 0,0,100,100 }, "Exit", { 0,0,0,255 });
 
+	close_menus = CloseTitleSceneMenus::None;
+
 	cursor_tex = App->tex->Load("gui/cursors.png");
 	title_assets_tex = App->tex->Load("gui/TitleAssets.png");
 	App->audio->PlayMusic("audio/music/MainTitle_Use.ogg");
@@ -69,6 +71,21 @@ bool j1TitleScene::PreUpdate()
 // Called each loop iteration
 bool j1TitleScene::Update(float dt)
 {
+	switch (close_menus)
+	{
+	case::CloseTitleSceneMenus::Credits:
+		DeactivateCredits();
+		close_menus = CloseTitleSceneMenus::None;
+		break;
+	case::CloseTitleSceneMenus::Tutorial:
+		DeactivateTutorial();
+		close_menus = CloseTitleSceneMenus::None;
+		break;
+	case::CloseTitleSceneMenus::Options:
+		DeactivateOptionsMenu();
+		close_menus = CloseTitleSceneMenus::None;
+		break;
+	}
 	SDL_Rect sec2 = { 0, 0, 1280, 720 };
 	App->render->Blit(title_assets_tex, 0, 0, &sec2);
 	return true;
@@ -257,7 +274,7 @@ void j1TitleScene::OnClick(UI* element, float argument)
 		}
 		else if (element->name == "CLOSE TUTORIAL")
 		{
-			DeactivateTutorial();
+			close_menus = CloseTitleSceneMenus::Tutorial;
 		}
 		else if (element->name == "OPTIONS")
 		{
@@ -265,7 +282,7 @@ void j1TitleScene::OnClick(UI* element, float argument)
 		}
 		else if (element->name == "CLOSE OPTIONS")
 		{
-			DeactivateOptionsMenu();
+			close_menus = CloseTitleSceneMenus::Options;
 		}
 		else if (element->name == "CREDITS")
 		{
@@ -273,7 +290,7 @@ void j1TitleScene::OnClick(UI* element, float argument)
 		}
 		else if (element->name == "CLOSE CREDITS")
 		{
-			DeactivateCredits();
+			close_menus = CloseTitleSceneMenus::Credits;
 		}
 		else if (element->name == "EXIT")
 		{

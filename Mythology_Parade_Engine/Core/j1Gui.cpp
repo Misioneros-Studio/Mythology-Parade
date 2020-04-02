@@ -70,6 +70,7 @@ bool j1Gui::PreUpdate()
 		if (it._Ptr->_Myval != UIs.end()._Ptr->_Myval)
 			it._Ptr->_Myval->Move();
 	}
+	int i = 0;
 	for(std::list<UI*>::iterator it = UIs.begin(); it != UIs.end(); it++)
 	{
 		it._Ptr->_Myval->PreUpdate();

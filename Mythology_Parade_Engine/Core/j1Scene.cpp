@@ -75,6 +75,7 @@ bool j1Scene::Start()
 	App->gui->sfx_UI[(int)UI_Audio::EXIT] = App->audio->LoadFx("audio/ui/Exit.wav");
 	App->gui->sfx_UI[(int)UI_Audio::CLOSE] = App->audio->LoadFx("audio/ui/Close_Menu.wav");
 
+	close_menus = CloseSceneMenus::None;
 
 	debug_tex = App->tex->Load("maps/path2.png");
 	cursor_tex = App->tex->Load("gui/cursors.png");
@@ -128,7 +129,17 @@ bool j1Scene::PreUpdate()
 bool j1Scene::Update(float dt)
 {
 	// Gui ---
-
+	switch (close_menus)
+	{
+	case::CloseSceneMenus::Pause:
+		DeactivatePauseMenu();
+		close_menus = CloseSceneMenus::None;
+		break;
+	case::CloseSceneMenus::Options:
+		DeactivateOptionsMenu();
+		close_menus = CloseSceneMenus::None;
+		break;
+	}
 	// -------
 	if (App->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN)
 		App->LoadGame("save_game.xml");
@@ -328,7 +339,7 @@ void j1Scene::OnClick(UI* element, float argument)
 		}
 		else if (element->name == "CLOSE OPTIONS")
 		{
-			DeactivateOptionsMenu();
+			close_menus = CloseSceneMenus::Options;
 		}
 		else if (element->name == "EXIT")
 		{
@@ -336,7 +347,7 @@ void j1Scene::OnClick(UI* element, float argument)
 		}
 		else if (element->name == "CLOSE")
 		{
-			DeactivatePauseMenu();
+			close_menus = CloseSceneMenus::Pause;
 		}
 		break;
 
