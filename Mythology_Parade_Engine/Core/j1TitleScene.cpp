@@ -261,7 +261,7 @@ void j1TitleScene::OnClick(UI* element, float argument)
 
 		if (element->name == "NEW")
 		{
-			App->start_game = true;
+			App->change_scene = true;
 			destroy = true;
 		}
 		else if (element->name == "LOAD")

@@ -14,13 +14,14 @@ Player::~Player()
 
 bool Player::Awake()
 {
-
+	player_type = PlayerType::VIKING;
 	return true;
 }
 
 bool Player::Start()
 {
 	tick2 = SDL_GetTicks();
+	player_win = player_lose = false;
 	return true;
 }
 
