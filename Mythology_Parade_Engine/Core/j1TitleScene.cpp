@@ -132,6 +132,7 @@ bool j1TitleScene::CleanUp()
 		}
 	}
 
+	App->tex->UnLoad(title_assets_tex);
 	App->tex->UnLoad(cursor_tex);
 
 	return true;
