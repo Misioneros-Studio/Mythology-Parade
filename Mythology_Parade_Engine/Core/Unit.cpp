@@ -68,20 +68,21 @@ bool Unit::isSelected()
 	return _isSelected;
 }
 
-void Unit::MoveTo(p2Point<int>)
-{
-	if (!isSelected())
-		return;
-
-	//move function logic
-
-
-}
+//void Unit::MoveTo(p2Point<int>)
+//{
+//	if (!isSelected())
+//		return;
+//
+//	//move function logic
+//
+//
+//}
 
 void Unit::Init(int maxHealth)
 {
 	SetMaxHealth(maxHealth);
 	HealthSystem::Init();
+	
 }
 
 
@@ -102,6 +103,53 @@ void Unit::Action(Entity* entity)
 	
 		break;
 	}
+}
+
+Direction Unit::getMovementDirection(iPoint target) 
+{
+	Direction dir = Direction::UP;
+
+	iPoint temp = App->map->WorldToMap(position.x, position.y);
+
+	target = App->map->MapToWorld(target.x, target.y);
+	iPoint pos = App->map->MapToWorld(temp.x, temp.y);
+
+	if (target.x > position.x)
+	{
+		flipState = SDL_FLIP_HORIZONTAL;
+	}
+	else
+	{
+		flipState = SDL_FLIP_NONE;
+	}
+
+	if (target.x == pos.x && target.y < pos.y)
+	{
+		dir = Direction::UP;
+	}
+	else if(target.x == pos.x && target.y > pos.y)
+	{
+		dir = Direction::DOWN;
+	}
+	else if (target.x != pos.x && target.y == pos.y)
+	{
+		dir = Direction::LATERAL;
+	}
+	else if (target.x != pos.x && target.y > pos.y)
+	{
+		dir = Direction::DIAGONAL_DOWN;
+	}
+	else if (target.x != pos.x && target.y < pos.y)
+	{
+		dir = Direction::DIAGONAL_UP;
+	}
+	else 
+	{
+		//Is the same place
+		LOG("EHE");
+	}
+
+	return dir;
 }
 
 

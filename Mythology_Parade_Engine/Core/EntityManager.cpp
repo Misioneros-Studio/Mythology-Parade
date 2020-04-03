@@ -50,6 +50,8 @@ bool EntityManager::Start()
 	//TODO: NO HARDCODE BOY
 	entitySpriteSheets[SpriteSheetType::BUILDINGS] = App->tex->Load("assets/buildings/Buildings.png");
 
+	animations[UnitType::ASSASSIN] = animationManager.Load("assets/units/Assassin.tmx");
+
 	for (int i = 0; i < buildingsData.size(); i++)
 	{
 		BuildingInfo* info = &buildingsData[i];
@@ -195,6 +197,22 @@ bool EntityManager::CleanUp()
 		if(entitySpriteSheets[(SpriteSheetType)i])
 			App->tex->UnLoad(entitySpriteSheets[(SpriteSheetType)i]);
 	}
+
+
+	for (int i = 0; i < animations.size(); i++)
+	{
+		for (int k = 0; k < animations[(UnitType)i].size(); k++)
+		{
+			for (int j = 0; j < animations[(UnitType)i][(AnimationType)k].size(); j++)
+			{
+				animations[(UnitType)i][(AnimationType)k][(Direction)j].Clean();
+			}
+			animations[(UnitType)i][(AnimationType)k].clear();
+		}
+		animations[(UnitType)i].clear();
+	}
+	animations.clear();
+
 	entities.clear();
 	return true;
 }
@@ -327,6 +345,7 @@ Entity* EntityManager::CreateUnitEntity(UnitType type, iPoint pos)
 	{
 	case UnitType::ASSASSIN:
 		ret = new CombatUnit(UnitType::ASSASSIN, pos);
+		ret->texture = animationManager.character_tmx_data.texture;
 		break;
 	case UnitType::MONK:
 		ret = new Unit(UnitType::MONK);
@@ -338,6 +357,9 @@ Entity* EntityManager::CreateUnitEntity(UnitType type, iPoint pos)
 	ret->type = EntityType::UNIT;
 	entities[EntityType::UNIT].push_back(ret);
 
+	//DELETE: THIS
+	entities[EntityType::UNIT].sort(entity_Sort());
+	
 	return ret;
 }
 

@@ -4,6 +4,8 @@
 #include "Entity.h"
 #include "SDL/include/SDL_rect.h"
 #include "HealthSystem.h"
+#include"EntityManager.h"
+#include "Animation.h"
 
 enum State
 {
@@ -66,14 +68,18 @@ public:
 	virtual bool Draw(float dt);
 	virtual void Action(Entity*);
 
-private:
-	//Private Functions
-	void MoveTo(p2Point<int>);
-
+protected:
 	//Animation
+	Direction currentDirection;
+	Animation_char currentAnim;
+
+	iPoint targetPosition;
+	Direction getMovementDirection(iPoint);
+	//void SetTarget();
 
 
-	void CheckState();
+	//void CheckState();
+	//void MoveTo(p2Point<int>);
 
 };
 

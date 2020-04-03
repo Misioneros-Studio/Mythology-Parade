@@ -7,6 +7,7 @@
 #include "j1Input.h"
 #include "EntityManager.h"
 
+class Unit;
 class Player : public Entity, public CurrencySystem
 {
 public:
@@ -33,6 +34,8 @@ public:
 	bool player_win = false;
 	bool player_lose = false;
 	CivilizationType player_type;
+
+
 };
 
 

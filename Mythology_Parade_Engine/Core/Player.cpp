@@ -52,9 +52,12 @@ bool Player::Update(float dt)
 
 	if (App->input->GetKey(SDL_SCANCODE_5) == KEY_DOWN) 
 	{
-		int x, y;
-		App->input->GetMousePosition(x, y);
-		App->entityManager->CreateUnitEntity(UnitType::ASSASSIN, {x, y});
+		iPoint mouse = App->map->GetMousePositionOnMap();
+		iPoint spawnPos = App->map->MapToWorld(mouse.x, mouse.y);
+
+		spawnPos.y += (App->map->data.tile_height / 2);
+		spawnPos.x += 15;
+		App->entityManager->CreateUnitEntity(UnitType::ASSASSIN, spawnPos);
 	}
 
 

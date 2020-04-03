@@ -4,6 +4,8 @@
 CombatUnit::CombatUnit(UnitType type, iPoint pos): Unit(type), range(0),damage(0)
 {
 	//TODO 10: Change textures
+	unitType = type;
+	position = pos;
 	switch (unitType)
 	{
 	case UnitType::ASSASSIN:
@@ -17,7 +19,6 @@ CombatUnit::CombatUnit(UnitType type, iPoint pos): Unit(type), range(0),damage(0
 		CombatUnit::Init(110, 25, 1, 2);
 		break;
 	}
-	position = pos;
 }
 
 CombatUnit::~CombatUnit()
@@ -50,12 +51,19 @@ void CombatUnit::Init(int maxHealth, int damage, int range, int speed)
 	this->range = range;
 	SetMoveSpeed(speed);
 
+	//TODO: Convert to a get funtions
+	targetPosition = { 9, 16 };
+	currentDirection = getMovementDirection(targetPosition);
+	currentAnim = App->entityManager->animations[unitType][(AnimationType)3][currentDirection];
 
 }
 
 bool CombatUnit::Update(float dt) 
 {
-	App->render->DrawQuad({position.x, position.y, 10, -40}, 255, 0, 0);
+	int num_current_anim = currentAnim.GetSprite();
+
+	App->render->Blit(texture, position.x - currentAnim.sprites[num_current_anim].rect.w / 3, position.y - currentAnim.sprites[num_current_anim].rect.h + 16, &currentAnim.sprites[num_current_anim].rect);
+	App->render->DrawQuad({position.x, position.y, 2, 2}, 255, 0, 0);
 	return true;
 }
 
