@@ -52,6 +52,12 @@ void CombatUnit::Init(int maxHealth, int damage, int range, int speed)
 
 }
 
+bool CombatUnit::Update(float dt) 
+{
+	App->render->DrawQuad({position.x, position.y, 10, -40}, 255, 0, 0);
+	return true;
+}
+
 int CombatUnit::GetDamageValue()
 {
 	return damage;

@@ -50,6 +50,12 @@ bool Player::Update(float dt)
 	App->scene->ui_text_ingame[1]->SetString(sacrifice);
 	App->scene->ui_text_ingame[0]->SetString(prayer);
 
+	if (App->input->GetKey(SDL_SCANCODE_5) == KEY_DOWN) 
+	{
+		App->entityManager->CreateUnitEntity(UnitType::ASSASSIN);
+	}
+
+
 	return true;
 }
 

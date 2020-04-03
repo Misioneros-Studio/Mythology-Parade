@@ -4,6 +4,8 @@
 #include "CurrencySystem.h"
 #include "Unit.h"
 #include "Building.h"
+#include "j1Input.h"
+#include "EntityManager.h"
 
 class Player : public Entity, public CurrencySystem
 {

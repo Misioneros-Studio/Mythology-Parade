@@ -15,6 +15,7 @@ public:
 	CombatUnit(UnitType);
 	~CombatUnit();
 
+	bool Update(float);
 	void Action(Entity*) override;
 
 private:

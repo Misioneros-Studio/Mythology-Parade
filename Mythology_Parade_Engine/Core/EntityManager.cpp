@@ -93,7 +93,7 @@ bool EntityManager::Update(float dt)
 			it._Ptr->_Myval->Update(dt);
 		}
 	}
-
+  
 	//TODO: Move this logic to the player
 	if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
