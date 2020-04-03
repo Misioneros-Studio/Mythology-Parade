@@ -242,6 +242,10 @@ bool j1App::PreUpdate()
 		change_scene = false;
 		ChangeScene();
 	}
+	if (first_change_scene == true) {
+		first_change_scene = false;
+		ChangeScene(true);
+	}
 	j1Module* pModule = NULL;
 
 	for (std::list<j1Module*>::iterator it = modules.begin(); it != modules.end() && ret == true; it++)
@@ -450,13 +454,20 @@ bool j1App::SavegameNow()
 	return ret;
 }
 
-bool j1App::ChangeScene() {
+bool j1App::ChangeScene(bool first_change) {
 	bool ret = true;
 	for (std::list<j1Module*>::iterator it = modules.begin(); it != modules.end(); it++)
 	{
+
 		if (it._Ptr->_Myval->active == false) {
-			it._Ptr->_Myval->active = true;
-			ret = it._Ptr->_Myval->Start();
+			if (first_change == false && (it._Ptr->_Myval->name.compare("logo_scene") != 0)) {
+				it._Ptr->_Myval->active = true;
+				ret = it._Ptr->_Myval->Start();
+			}
+			else if (it._Ptr->_Myval->name.compare("gui") == 0 || it._Ptr->_Myval->name.compare("title_scene") == 0) {
+				it._Ptr->_Myval->active = true;
+				ret = it._Ptr->_Myval->Start();
+			}
 		}
 		else if (it._Ptr->_Myval->destroy == true) {
 			it._Ptr->_Myval->CleanUp();

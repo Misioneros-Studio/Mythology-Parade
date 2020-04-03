@@ -11,7 +11,7 @@
 
 j1LogoScene::j1LogoScene() : j1Module()
 {
-	name.append("intro_scene");
+	name.append("logo_scene");
 	active = true;
 }
 
@@ -23,15 +23,15 @@ j1LogoScene::~j1LogoScene()
 bool j1LogoScene::Start()
 {
 	timer_logo.Start();
-	debug_tex = App->tex->Load("gui/TitleAssets.png");
+	debug_tex = App->tex->Load("gui/Logo.png");
 	App->audio->PlayMusic("audio/music/MainTitle_Use.ogg");
 	return true;
 }
 
 // Called each loop iteration
-bool j1LogoScene::Update(float dt)
+bool j1LogoScene::PostUpdate()
 {
-	SDL_Rect sec2 = { 0, 0, 1280, 720 };
+	SDL_Rect sec2 = { 0, 0, 543, 285 };
 	App->render->Blit(debug_tex, 0, 0, &sec2);
 
 	if (timer_logo.ReadSec() >= 5) {
@@ -50,6 +50,7 @@ bool j1LogoScene::CleanUp()
 
 void j1LogoScene::ChangeToTitleScene()
 {
-
+	destroy = true;
+	App->first_change_scene = true;
 
 }

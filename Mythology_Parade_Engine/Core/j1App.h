@@ -86,7 +86,7 @@ private:
 	bool SavegameNow();
 
 	//Called when changing a scene (start new game or exit the actual game)
-	bool ChangeScene();
+	bool ChangeScene(bool first_scene=false);
 
 public:
 
@@ -109,7 +109,7 @@ public:
  
 	bool				start_game = false;
 	bool				change_scene = false;
-
+	bool				first_change_scene = false;
 
 private:
 
