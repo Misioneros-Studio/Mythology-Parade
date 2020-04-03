@@ -178,3 +178,21 @@ bool j1Audio::PlayFx(unsigned int id, int repeat)
 
 	return ret;
 }
+
+// Clean all fxs to change scene
+
+bool j1Audio::CleanFxs() {
+	bool ret = false;
+
+	if (!active)
+		return false;
+	Mix_HaltChannel(-1);
+	for (std::list<Mix_Chunk*>::iterator it = fx.begin(); it != fx.end(); it++)
+	{
+		Mix_FreeChunk(it._Ptr->_Myval);
+	}
+
+	fx.clear();
+
+	return ret;
+}

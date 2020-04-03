@@ -22,6 +22,8 @@ enum class Type
 enum class UI_Audio
 {
 	NONE=-1,
+	MAIN_MENU,
+	CONFIRMATION,
 	SAVE,
 	LOAD,
 	OPTIONS,
@@ -291,7 +293,7 @@ private:
 public:
 
 	//Audio
-	int sfx_UI[7];
+	int sfx_UI[9];
 	bool lockClick;
 
 };
