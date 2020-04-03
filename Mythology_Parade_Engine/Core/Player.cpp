@@ -14,13 +14,14 @@ Player::~Player()
 
 bool Player::Awake()
 {
-
+	player_type = CivilizationType::VIKING;
 	return true;
 }
 
 bool Player::Start()
 {
 	tick2 = SDL_GetTicks();
+	player_win = player_lose = false;
 	return true;
 }
 
@@ -45,9 +46,9 @@ bool Player::PreUpdate()
 
 bool Player::Update(float dt)
 {
-	App->scene->ui_text_ingame[0]->SetString(faith);
+	App->scene->ui_text_ingame[2]->SetString(faith);
 	App->scene->ui_text_ingame[1]->SetString(sacrifice);
-	App->scene->ui_text_ingame[2]->SetString(prayer);
+	App->scene->ui_text_ingame[0]->SetString(prayer);
 
 	if (App->input->GetKey(SDL_SCANCODE_5) == KEY_DOWN) 
 	{

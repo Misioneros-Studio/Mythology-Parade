@@ -235,9 +235,9 @@ void j1App::FinishUpdate()
 bool j1App::PreUpdate()
 {
 	bool ret = true;
-	if (start_game == true) {
-		start_game = false;
-		StartNewGame();
+	if (change_scene == true) {
+		change_scene = false;
+		ChangeScene();
 	}
 	j1Module* pModule = NULL;
 
@@ -447,7 +447,7 @@ bool j1App::SavegameNow()
 	return ret;
 }
 
-bool j1App::StartNewGame() {
+bool j1App::ChangeScene() {
 	bool ret = true;
 	for (std::list<j1Module*>::iterator it = modules.begin(); it != modules.end(); it++)
 	{

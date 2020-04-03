@@ -6,6 +6,7 @@
 #include "j1App.h"
 #include "j1Render.h"
 struct SDL_Texture;
+enum CivilizationType;
 
 enum class EntityType
 {
@@ -74,9 +75,17 @@ public:
 
 	EntityType type;
 
-	SDL_Rect position_rect; //Remove it, this should be insde the animation class
 	SDL_Texture* texture; //Change it to Character_TMX
-	p2Point<int> position;
+	iPoint position;
+
+	//Rect in the spritesheet
+	SDL_Rect spriteRect;
+
+	//W and H for the blit
+	iPoint blitRect;
+
+	//Side
+	CivilizationType civilization;
 
 
 

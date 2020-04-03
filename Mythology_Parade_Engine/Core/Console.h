@@ -33,6 +33,7 @@ public:
 	bool PostUpdate() { return true; };
 
 	void ActivateConsole();
+	void CloseConsole();
 
 	// Called before quitting
 	bool CleanUp() { return true; };

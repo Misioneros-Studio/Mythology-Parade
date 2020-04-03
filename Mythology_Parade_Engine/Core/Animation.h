@@ -24,7 +24,7 @@ enum class Direction
 	DIAGONAL_UP
 };
 
-struct Sprite
+struct Sprite 
 {
 	SDL_Rect rect;
 	SDL_Rect AABB_rect;
@@ -83,6 +83,7 @@ public:
 
 
 
+
 struct CharacterTMXData
 {
 	SDL_Texture* texture = nullptr;
@@ -90,7 +91,7 @@ struct CharacterTMXData
 	uint					height = 0u;
 	int						tile_width = 0u;
 	int						tile_height = 0u;
-
+  
 	void Clean()
 	{
 		App->tex->UnLoad(texture);
@@ -98,9 +99,8 @@ struct CharacterTMXData
 
 };
 
-class Animation :public j1Module
+class Animation :public j1Module 
 {
-public:
 	Animation();
 	// Destructor
 	virtual ~Animation();

@@ -24,10 +24,15 @@ private:
 	CurrencySystem currencySystem;
 
 	std::list<Unit*> unitsList;
-	std::list<Building*> buildingsList;
+	//std::list<Building*> buildingsList;
 	std::string faith, sacrifice, prayer;
 
 	int tick1 = 0, tick2 = 0;
+
+public:
+	bool player_win = false;
+	bool player_lose = false;
+	CivilizationType player_type;
 };
 
 

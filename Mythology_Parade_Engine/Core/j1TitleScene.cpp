@@ -53,6 +53,8 @@ bool j1TitleScene::Start()
 	ui_button[5] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, nullptr, { 35,520,237,38 }, { 787,240,237,38 }, "EXIT", { 787,342,237,38 }, { 787,291,237,38 }, false, { 0,0,0,0 }, this);
 	ui_text[5] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 140,532,237,38 }, { 0,0,100,100 }, "Exit", { 0,0,0,255 });
 
+	close_menus = CloseTitleSceneMenus::None;
+
 	cursor_tex = App->tex->Load("gui/cursors.png");
 	title_assets_tex = App->tex->Load("gui/TitleAssets.png");
 	App->audio->PlayMusic("audio/music/MainTitle_Use.ogg");
@@ -69,8 +71,27 @@ bool j1TitleScene::PreUpdate()
 // Called each loop iteration
 bool j1TitleScene::Update(float dt)
 {
-	SDL_Rect sec2 = { 0, 0, 1280, 720 };
-	App->render->Blit(title_assets_tex, 0, 0, &sec2);
+	switch (close_menus)
+	{
+	case::CloseTitleSceneMenus::Credits:
+		DeactivateCredits();
+		close_menus = CloseTitleSceneMenus::None;
+		break;
+	case::CloseTitleSceneMenus::Tutorial:
+		DeactivateTutorial();
+		close_menus = CloseTitleSceneMenus::None;
+		break;
+	case::CloseTitleSceneMenus::Options:
+		DeactivateOptionsMenu();
+		close_menus = CloseTitleSceneMenus::None;
+		break;
+	case::CloseTitleSceneMenus::Confirmation:
+		DeactivateConfirmationMenu();
+		close_menus = CloseTitleSceneMenus::None;
+		break;
+	}
+	SDL_Rect sec2 = { 0, 0, App->render->camera.w, App->render->camera.h };
+	App->render->Blit(title_assets_tex, 0, 0, &sec2, 0.f);
 	return true;
 }
 
@@ -96,6 +117,10 @@ bool j1TitleScene::PostUpdate()
 bool j1TitleScene::CleanUp()
 {
 	LOG("Freeing title scene");
+	DeactivateCredits();
+	DeactivateOptionsMenu();
+	DeactivateTutorial();
+	DeactivateConfirmationMenu();
 	for (int i = 5; i >= 0; i--) {
 		if (ui_button[i] != nullptr) {
 			App->gui->DeleteUIElement(ui_button[i]);
@@ -107,6 +132,7 @@ bool j1TitleScene::CleanUp()
 		}
 	}
 
+	App->tex->UnLoad(title_assets_tex);
 	App->tex->UnLoad(cursor_tex);
 
 	return true;
@@ -234,6 +260,55 @@ void j1TitleScene::DeactivateCredits() {
 
 }
 
+// Called when clicking a button in the menu with confirmation message
+void j1TitleScene::ActivateConfirmationMenu(std::string str) {
+	if (ui_confirmation_window == nullptr) {
+		ui_confirmation_window = (WindowUI*)App->gui->CreateUIElement(Type::WINDOW, nullptr, { 410,200,459,168 }, { 790,408,459,168 });
+		ui_button_confirmation[0] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_confirmation_window, { 470,300,117,38 }, { 834,125,117,24 }, "YES", { 834,149,117,24 },
+			{ 834,101,117,24 }, false, { 0,0,0,0 }, this);
+		ui_text_confirmation[0] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 509,306,237,38 }, { 0,0,100,100 }, "Yes", { 0,0,0,255 }, { 1,0,0,0 });
+		ui_button_confirmation[1] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_confirmation_window, { 690,300,117,38 }, { 834,125,117,24 }, "NO", { 834,149,117,24 },
+			{ 834,101,117,24 }, false, { 0,0,0,0 }, this);
+		ui_text_confirmation[1] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 731,306,237,38 }, { 0,0,100,100 }, "No", { 0,0,0,255 }, { 1,0,0,0 });
+		std::string text = str + " ?";
+		ui_text_confirmation[2] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 463,212,237,38 }, { 0,0,100,100 }, "ARE YOU SURE YOU WANT TO", { 255,255,255,255 }, { 1,0,0,0 });
+		int size = text.length();
+		ui_text_confirmation[3] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 640 - (6 * size),247,237,38 }, { 0,0,100,100 }, text, { 255,255,255,255 }, { 1,0,0,0 });
+
+	}
+	for (int i = 0; i < 5; i++) {
+		if (ui_button[i] != nullptr) {
+			ui_button[i]->front = false;
+		}
+	}
+}
+
+// Called when clicking no in the confirmation message
+void j1TitleScene::DeactivateConfirmationMenu() {
+	confirmation_option.clear();
+	if (ui_confirmation_window != nullptr) {
+		App->gui->DeleteUIElement(ui_confirmation_window);
+		ui_confirmation_window = nullptr;
+		for (int i = 3; i >= 0; i--) {
+			if (i < 2)
+			{
+				if (ui_button_confirmation[i] != nullptr) {
+					App->gui->DeleteUIElement(ui_button_confirmation[i]);
+					ui_button_confirmation[i] = nullptr;
+				}
+			}
+			if (ui_text_confirmation[i] != nullptr) {
+				App->gui->DeleteUIElement(ui_text_confirmation[i]);
+				ui_text_confirmation[i] = nullptr;
+			}
+		}
+	}
+	for (int i = 0; i < 5; i++) {
+		if (ui_button[i] != nullptr) {
+			ui_button[i]->front = true;
+		}
+	}
+}
 
 void j1TitleScene::OnClick(UI* element, float argument)
 {
@@ -244,12 +319,13 @@ void j1TitleScene::OnClick(UI* element, float argument)
 
 		if (element->name == "NEW")
 		{
-			App->start_game = true;
+			App->change_scene = true;
 			destroy = true;
 		}
 		else if (element->name == "LOAD")
 		{
-			App->LoadGame("save_game.xml");
+			confirmation_option = "LOAD";
+			ActivateConfirmationMenu("LOAD THE GAME");
 		}
 		else if (element->name == "TUTORIAL")
 		{
@@ -257,7 +333,7 @@ void j1TitleScene::OnClick(UI* element, float argument)
 		}
 		else if (element->name == "CLOSE TUTORIAL")
 		{
-			DeactivateTutorial();
+			close_menus = CloseTitleSceneMenus::Tutorial;
 		}
 		else if (element->name == "OPTIONS")
 		{
@@ -265,7 +341,7 @@ void j1TitleScene::OnClick(UI* element, float argument)
 		}
 		else if (element->name == "CLOSE OPTIONS")
 		{
-			DeactivateOptionsMenu();
+			close_menus = CloseTitleSceneMenus::Options;
 		}
 		else if (element->name == "CREDITS")
 		{
@@ -273,11 +349,28 @@ void j1TitleScene::OnClick(UI* element, float argument)
 		}
 		else if (element->name == "CLOSE CREDITS")
 		{
-			DeactivateCredits();
+			close_menus = CloseTitleSceneMenus::Credits;
 		}
 		else if (element->name == "EXIT")
 		{
-			exitGame = true;
+			confirmation_option = "EXIT";
+			ActivateConfirmationMenu("EXIT");
+		}
+		else if (element->name == "NO")
+		{
+			close_menus = CloseTitleSceneMenus::Confirmation;
+		}
+		else if (element->name == "YES")
+		{
+			if (confirmation_option.compare("LOAD") == 0)
+			{
+				App->LoadGame("save_game.xml");
+			}
+			else if (confirmation_option.compare("EXIT") == 0)
+			{
+				exitGame = true;
+			}
+			close_menus = CloseTitleSceneMenus::Confirmation;
 		}
 		break;
 

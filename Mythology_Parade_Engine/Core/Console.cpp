@@ -47,9 +47,7 @@ bool Console::PreUpdate() {
 			ActivateConsole();
 		}
 		else {
-			App->gui->DeleteUIElement(console_log);
-			App->gui->DeleteUIElement(console_background);
-			App->gui->DeleteUIElement(console_input);
+			CloseConsole();
 		}
 	}
 	if (console_active == true) {
@@ -79,6 +77,13 @@ void Console::ActivateConsole()
 		output_drag_area, nullptr, 0, true);
 	console_input = (TextInputUI*)App->gui->CreateUIElement(Type::INPUT, nullptr, input_pos, "", input_red, input_green, input_blue, input_alpha);
 	console_input->SetLabel(label.c_str());
+}
+
+void Console::CloseConsole() 
+{
+	App->gui->DeleteUIElement(console_log);
+	App->gui->DeleteUIElement(console_background);
+	App->gui->DeleteUIElement(console_input);
 }
 
 std::string Console::CheckCommand() {
