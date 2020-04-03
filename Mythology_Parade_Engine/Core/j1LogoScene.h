@@ -30,7 +30,8 @@ public:
 private:
 	SDL_Texture* debug_tex;
 	j1Timer timer_logo;
-
+	int angle = 0;
+	int sfx_logo;
 };
 
 #endif // __j1LOGOSCENE_H__
