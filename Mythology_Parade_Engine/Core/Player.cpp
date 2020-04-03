@@ -52,7 +52,9 @@ bool Player::Update(float dt)
 
 	if (App->input->GetKey(SDL_SCANCODE_5) == KEY_DOWN) 
 	{
-		App->entityManager->CreateUnitEntity(UnitType::ASSASSIN);
+		int x, y;
+		App->input->GetMousePosition(x, y);
+		App->entityManager->CreateUnitEntity(UnitType::ASSASSIN, {x, y});
 	}
 
 

@@ -12,7 +12,7 @@ private:
 	int range;
 
 public:
-	CombatUnit(UnitType);
+	CombatUnit(UnitType, iPoint);
 	~CombatUnit();
 
 	bool Update(float);

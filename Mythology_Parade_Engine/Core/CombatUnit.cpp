@@ -1,7 +1,7 @@
 #include "CombatUnit.h"
 #include "p2Log.h"
 
-CombatUnit::CombatUnit(UnitType type): Unit(type), range(0),damage(0)
+CombatUnit::CombatUnit(UnitType type, iPoint pos): Unit(type), range(0),damage(0)
 {
 	//TODO 10: Change textures
 	switch (unitType)
@@ -17,6 +17,7 @@ CombatUnit::CombatUnit(UnitType type): Unit(type), range(0),damage(0)
 		CombatUnit::Init(110, 25, 1, 2);
 		break;
 	}
+	position = pos;
 }
 
 CombatUnit::~CombatUnit()

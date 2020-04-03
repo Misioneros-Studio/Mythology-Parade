@@ -102,7 +102,7 @@ public:
 	bool DeleteEntity(Entity*);
 
 	Entity* CreatePlayerEntity();
-	Entity* CreateUnitEntity(UnitType);
+	Entity* CreateUnitEntity(UnitType, iPoint);
 	Entity* CreateBuildingEntity(iPoint, BuildingType, BuildingInfo);
 	void UpdateBuildPreview(int);
 

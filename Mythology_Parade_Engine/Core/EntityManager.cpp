@@ -319,20 +319,20 @@ Entity* EntityManager::CreatePlayerEntity()
 	return ret;
 }
 
-Entity* EntityManager::CreateUnitEntity(UnitType type)
+Entity* EntityManager::CreateUnitEntity(UnitType type, iPoint pos)
 {
 	Entity* ret = nullptr;
 	
 	switch (type)
 	{
 	case UnitType::ASSASSIN:
-		ret = new CombatUnit(UnitType::ASSASSIN);
+		ret = new CombatUnit(UnitType::ASSASSIN, pos);
 		break;
 	case UnitType::MONK:
 		ret = new Unit(UnitType::MONK);
 		break;
 	case UnitType::PIKEMAN:
-		ret = new CombatUnit(UnitType::PIKEMAN);
+		ret = new CombatUnit(UnitType::PIKEMAN, pos);
 		break;
 	}
 	ret->type = EntityType::UNIT;
