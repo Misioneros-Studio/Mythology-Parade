@@ -90,8 +90,8 @@ bool j1TitleScene::Update(float dt)
 		close_menus = CloseTitleSceneMenus::None;
 		break;
 	}
-	SDL_Rect sec2 = { 0, 0, 1280, 720 };
-	App->render->Blit(title_assets_tex, 0, 0, &sec2);
+	SDL_Rect sec2 = { 0, 0, App->render->camera.w, App->render->camera.h };
+	App->render->Blit(title_assets_tex, 0, 0, &sec2, 0.f);
 	return true;
 }
 
