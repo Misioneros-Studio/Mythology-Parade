@@ -7,6 +7,8 @@
 #include"j1Input.h"
 #include"j1Map.h"
 #include"j1Pathfinding.h"
+#include "Player.h"
+
 
 enum class UnitType;
 enum BuildingType;
@@ -54,6 +56,8 @@ public:
 	Entity* CreatePlayerEntity();
 	Entity* CreateUnitEntity(UnitType);
 	Entity* CreateBuildingEntity(BuildingType);
+
+	Player* getPlayer();
 
 public:
 

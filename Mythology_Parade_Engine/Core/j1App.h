@@ -83,8 +83,8 @@ private:
 	bool LoadGameNow();
 	bool SavegameNow();
 
-	//Called when starting a new game
-	bool StartNewGame();
+	//Called when changing a scene (start new game or exit the actual game)
+	bool ChangeScene();
 
 public:
 
@@ -102,7 +102,7 @@ public:
 	j1Gui*				gui = NULL;
 	Console*			console = NULL;
 	EntityManager*		entityManager = NULL;
-	bool				start_game = false;
+	bool				change_scene = false;
 
 private:
 

@@ -285,3 +285,6 @@ bool EntityManager::DeleteEntity(Entity* e)
 	return false;
 }
 
+Player* EntityManager::getPlayer() {
+	return (Player*)App->entityManager->entities[EntityType::PLAYER].begin()._Ptr->_Myval;
+}
