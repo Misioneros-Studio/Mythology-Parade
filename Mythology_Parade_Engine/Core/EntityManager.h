@@ -56,6 +56,7 @@ enum class SpriteSheetType
 };
 
 class Entity;
+class Player;
 
 //Temporal sorting function
 struct entity_Sort

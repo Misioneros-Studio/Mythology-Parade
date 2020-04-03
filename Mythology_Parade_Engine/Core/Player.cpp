@@ -14,7 +14,7 @@ Player::~Player()
 
 bool Player::Awake()
 {
-	player_type = PlayerType::VIKING;
+	player_type = CivilizationType::VIKING;
 	return true;
 }
 

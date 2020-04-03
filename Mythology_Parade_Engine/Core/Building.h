@@ -12,6 +12,7 @@ enum BuildingType
 	TEMPLE,
 	ENCAMPMENT
 };
+struct BuildingInfo;
 
 class Building: public Entity, public HealthSystem
 {

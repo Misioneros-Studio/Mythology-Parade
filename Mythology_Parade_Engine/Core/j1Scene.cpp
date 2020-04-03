@@ -57,7 +57,9 @@ bool j1Scene::Start()
 	ui_ingame=(ImageUI*)App->gui->CreateUIElement(Type::IMAGE, nullptr, { 0,590,1280,130 }, { 0,590,1280,130 });
 
 	faith_symbol = (ImageUI*)App->gui->CreateUIElement(Type::IMAGE, nullptr, { 0,590,1280,130 });
-	for (int i = 0; i < 3; i++) {
+
+	for (int i = 0; i < 3; i++) 
+	{
 		ui_text_ingame[i] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 104,610+(i*33),237,38 }, { 0,0,100,100 }, "9999", { 255,255,255,255 }, { 1,0,0,0 });
 	}
 	for (int i = 0; i < 8; i++) 
@@ -221,7 +223,7 @@ bool j1Scene::Update(float dt)
 	}
 
 	if (App->entityManager->getPlayer()->player_win == true) {
-		if (App->entityManager->getPlayer()->player_type == PlayerType::VIKING) {
+		if (App->entityManager->getPlayer()->player_type == CivilizationType::VIKING) {
 			DoWinOrLoseWindow(1, true);
 		}
 		else {
@@ -230,7 +232,7 @@ bool j1Scene::Update(float dt)
 	}
 
 	else if (App->entityManager->getPlayer()->player_lose == true) {
-		if (App->entityManager->getPlayer()->player_type == PlayerType::VIKING) {
+		if (App->entityManager->getPlayer()->player_type == CivilizationType::VIKING) {
 			DoWinOrLoseWindow(1, false);
 		}
 		else {
