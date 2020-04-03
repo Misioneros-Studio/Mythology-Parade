@@ -92,6 +92,7 @@ bool EntityManager::Update(float dt)
 		}
 	}
 
+	//TODO: Move this logic to the player
 	if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
 		crPreview.active = !crPreview.active;
@@ -310,6 +311,7 @@ Entity* EntityManager::CreatePlayerEntity()
 
 	ret = new Player();
 
+	ret->type = EntityType::PLAYER;
 	entities[EntityType::PLAYER].push_back(ret);
 
 	return ret;
@@ -331,7 +333,7 @@ Entity* EntityManager::CreateUnitEntity(UnitType type)
 		ret = new CombatUnit(UnitType::PIKEMAN);
 		break;
 	}
-
+	ret->type = EntityType::UNIT;
 	entities[EntityType::UNIT].push_back(ret);
 
 	return ret;
@@ -356,6 +358,7 @@ Entity* EntityManager::CreateBuildingEntity(iPoint pos, BuildingType type, Build
 		break;
 	}
 
+	ret->type = EntityType::BUILDING;
 	ret->texture = entitySpriteSheets[SpriteSheetType::BUILDINGS];
 
 	//TODO load spritesheet when needed only? first call of constructor of entity?
