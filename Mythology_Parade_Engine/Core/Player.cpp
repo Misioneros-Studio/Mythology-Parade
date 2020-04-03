@@ -45,9 +45,9 @@ bool Player::PreUpdate()
 
 bool Player::Update(float dt)
 {
-	App->scene->ui_text_ingame[0]->SetString(faith);
+	App->scene->ui_text_ingame[2]->SetString(faith);
 	App->scene->ui_text_ingame[1]->SetString(sacrifice);
-	App->scene->ui_text_ingame[2]->SetString(prayer);
+	App->scene->ui_text_ingame[0]->SetString(prayer);
 
 	return true;
 }
