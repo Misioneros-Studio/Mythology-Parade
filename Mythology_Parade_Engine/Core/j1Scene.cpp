@@ -157,6 +157,12 @@ bool j1Scene::Update(float dt)
 	case::CloseSceneMenus::Confirmation:
 		DeactivateConfirmationMenu();
 		close_menus = CloseSceneMenus::None;
+		break;
+	case::CloseSceneMenus::Confirmation_and_Pause:
+		DeactivateConfirmationMenu();
+		DeactivatePauseMenu();
+		close_menus = CloseSceneMenus::None;
+		break;
 	}
 	// -------
 	if (App->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN)
@@ -468,6 +474,7 @@ void j1Scene::OnClick(UI* element, float argument)
 		}
 		else if (element->name == "YES")
 		{
+			close_menus = CloseSceneMenus::Confirmation;
 			if (confirmation_option.compare("SAVE") == 0)
 			{
 				App->SaveGame("save_game.xml");
@@ -479,12 +486,12 @@ void j1Scene::OnClick(UI* element, float argument)
 			else if (confirmation_option.compare("SURRENDER") == 0)
 			{
 				App->entityManager->getPlayer()->player_lose = true;
+				close_menus = CloseSceneMenus::Confirmation_and_Pause;
 			}
 			else if (confirmation_option.compare("EXIT") == 0)
 			{
 				BackToTitleMenu();
 			}
-			close_menus = CloseSceneMenus::Confirmation;
 		}
 		else if (element->name == "CLOSE")
 		{

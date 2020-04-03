@@ -9,6 +9,7 @@ enum class CloseSceneMenus {
 	Pause,
 	Options,
 	Confirmation,
+	Confirmation_and_Pause,
 	Unknown
 };
 
