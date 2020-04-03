@@ -9,6 +9,7 @@
 #include "j1Render.h"
 #include "j1Textures.h"
 #include "j1Audio.h"
+#include "j1LogoScene.h"
 #include "j1TitleScene.h"
 #include "j1Scene.h"
 #include "j1Map.h"
@@ -31,6 +32,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	render = new j1Render();
 	tex = new j1Textures();
 	audio = new j1Audio();
+	logo_scene = new j1LogoScene();
 	title_scene = new j1TitleScene();
 	scene = new j1Scene();
 	map = new j1Map();
@@ -54,6 +56,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(console);
 
 	// scene last
+	AddModule(logo_scene);
 	AddModule(title_scene);
 	AddModule(scene);
 

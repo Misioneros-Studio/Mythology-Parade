@@ -14,6 +14,7 @@ class j1Input;
 class j1Render;
 class j1Textures;
 class j1Audio;
+class j1LogoScene;
 class j1TitleScene;
 class j1Scene;
 class j1Map;
@@ -95,6 +96,7 @@ public:
 	j1Render*			render = NULL;
 	j1Textures*			tex = NULL;
 	j1Audio*			audio = NULL;
+	j1LogoScene*		logo_scene = NULL;
 	j1TitleScene*		title_scene = NULL;
 	j1Scene*			scene = NULL;
 	j1Map*				map = NULL;
