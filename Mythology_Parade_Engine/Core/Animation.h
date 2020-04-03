@@ -101,6 +101,7 @@ struct CharacterTMXData
 
 class Animation :public j1Module 
 {
+public:
 	Animation();
 	// Destructor
 	virtual ~Animation();
