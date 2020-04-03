@@ -3,6 +3,7 @@
 
 #include "Entity.h"
 #include "HealthSystem.h"
+#include"EntityManager.h"
 
 enum BuildingType 
 {
@@ -15,11 +16,15 @@ enum BuildingType
 class Building: public Entity, public HealthSystem
 {
 public:
-	Building(BuildingType);
+	Building(BuildingType, iPoint, BuildingInfo);
 	~Building();
 	
 	const char* GetDescription();
 private:
+
+	bool Awake(pugi::xml_node&);
+	bool Update(float dt) override;
+	void Draw();
 
 	//Stats
 	int defenses;
@@ -29,8 +34,11 @@ private:
 
 	std::string description;
 
-	bool Update(float dt) override;
-	void Draw();
+	//Settigns
+	BuildingType buildingType;
+	int tileLenght;
+
+
 
 };
 

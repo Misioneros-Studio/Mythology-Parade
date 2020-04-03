@@ -76,9 +76,8 @@ private:
 
 	void DoWinOrLoseWindow(int type, bool win);
 
-private:
-	SDL_Texture* debug_tex;
 	SDL_Texture* cursor_tex;
+  
 	SDL_Texture* winlose_tex;
 	ImageUI* ui_ingame;
 	ImageUI* faith_symbol;
@@ -99,7 +98,11 @@ private:
 	ButtonUI* ui_button_confirmation[2];
 	TextUI* ui_text_confirmation[4];
 	std::string confirmation_option;
+  
 public:
+	SDL_Texture* debugBlue_tex;
+	SDL_Texture* debugRed_tex;
+
 	TextUI* ui_text_ingame[3];
 	QuadTree* quadTree;
 	CloseSceneMenus close_menus;

@@ -69,6 +69,10 @@ bool j1Scene::Start()
 		ui_text[i] = nullptr;
 	}
 
+  //Load building debug textures
+	debugBlue_tex = App->tex->Load("maps/path2.png");
+	debugRed_tex = App->tex->Load("maps/cantBuild.png");
+
 	App->gui->sfx_UI[(int)UI_Audio::SAVE] = App->audio->LoadFx("audio/ui/Save.wav");
 	App->gui->sfx_UI[(int)UI_Audio::LOAD] = App->audio->LoadFx("audio/ui/load.wav");
 	App->gui->sfx_UI[(int)UI_Audio::OPTIONS] = App->audio->LoadFx("audio/ui/Settings_Click.wav");
@@ -89,9 +93,7 @@ bool j1Scene::Start()
 
 	close_menus = CloseSceneMenus::None;
 
-	debug_tex = App->tex->Load("maps/path2.png");
 	cursor_tex = App->tex->Load("gui/cursors.png");
-
 
 	winlose_tex = App->tex->Load("gui/WinLoseBackground.png");
 
@@ -103,7 +105,8 @@ bool j1Scene::Start()
 	//quadTree->baseNode->SubDivide(quadTree->baseNode, 5);
   
 	//Eudald: This shouldn't be here but we don't have an entity system to load each animation yet
-	//App->animation->Load("assets/units/Assassin.tmx");
+	//App->animation->Load("assets/units/Assassin.tmx");	
+
   
 	App->audio->PlayMusic("audio/music/Ambient1.ogg");
   
@@ -118,24 +121,24 @@ bool j1Scene::PreUpdate()
 {
 
 	// debug pathfing ------------------
-	static iPoint origin;
-	static bool origin_selected = false;
+	//static iPoint origin;
+	//static bool origin_selected = false;
 
-	iPoint p = App->map->GetMousePositionOnMap();
+	//iPoint p = App->map->GetMousePositionOnMap();
 
-	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN)
-	{
-		if (origin_selected == true)
-		{
-			App->pathfinding->CreatePath(origin, p);
-			origin_selected = false;
-		}
-		else
-		{
-			origin = p;
-			origin_selected = true;
-		}
-	}
+	//if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN)
+	//{
+	//	if (origin_selected == true)
+	//	{
+	//		App->pathfinding->CreatePath(origin, p);
+	//		origin_selected = false;
+	//	}
+	//	else
+	//	{
+	//		origin = p;
+	//		origin_selected = true;
+	//	}
+	//}
 
 	return true;
 }
@@ -201,8 +204,8 @@ bool j1Scene::Update(float dt)
 
 	if (IN_RANGE(p.x, 0, App->map->data.width-1) == 1 && IN_RANGE(p.y, 0, App->map->data.height-1) == 1)
 	{
-		p = App->map->MapToWorld(p.x, p.y);
-		App->render->Blit(debug_tex, p.x, p.y);
+		//p = App->map->MapToWorld(p.x, p.y);
+		//App->render->Blit(debug_tex, p.x, p.y);
 		//App->render->Blit(debug_tex, p.x - 32, p.y, { 128, 64 });
 	}
 
@@ -213,7 +216,7 @@ bool j1Scene::Update(float dt)
 		for (std::list<iPoint>::iterator it = path.begin(); it != path.end(); it++)
 		{
 			iPoint pos = App->map->MapToWorld(it->x, it->y);
-			App->render->Blit(debug_tex, pos.x, pos.y);
+			App->render->Blit(debugBlue_tex, pos.x, pos.y);
 		}
 	}
 
@@ -258,6 +261,10 @@ bool j1Scene::PostUpdate()
 bool j1Scene::CleanUp()
 {
 	LOG("Freeing scene");
+
+	App->tex->UnLoad(debugBlue_tex);
+	App->tex->UnLoad(debugRed_tex);
+
 	DeactivateConfirmationMenu();
 	DeactivateOptionsMenu();
 	DeactivatePauseMenu();
@@ -268,10 +275,10 @@ bool j1Scene::CleanUp()
 		App->gui->DeleteUIElement(ui_text_ingame[i]);
 		ui_text_ingame[i] = nullptr;
 	}
-	App->tex->UnLoad(debug_tex);
+
 	App->tex->UnLoad(cursor_tex);
 
-	quadTree->Clear();
+	//quadTree->Clear();
 
 	return true;
 }

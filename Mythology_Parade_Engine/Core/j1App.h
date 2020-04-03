@@ -102,6 +102,7 @@ public:
 	j1Gui*				gui = NULL;
 	Console*			console = NULL;
 	EntityManager*		entityManager = NULL;
+
 	bool				change_scene = false;
 
 private:

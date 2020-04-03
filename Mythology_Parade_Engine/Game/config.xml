@@ -37,5 +37,12 @@
   <map>
     <folder>maps/</folder>
   </map>
+  
+  <entity_manager>
+    
+    <buildings file="assets/buildings/buildings.tmx"/>
+      
+    
+  </entity_manager>
 
 </config>
