@@ -449,7 +449,6 @@ bool j1App::SavegameNow()
 
 bool j1App::ChangeScene() {
 	bool ret = true;
-	audio->CleanFxs();
 
 	for (std::list<j1Module*>::iterator it = modules.begin(); it != modules.end(); it++)
 	{

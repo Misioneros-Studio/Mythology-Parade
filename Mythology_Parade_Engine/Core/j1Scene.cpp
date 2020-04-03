@@ -75,6 +75,8 @@ bool j1Scene::Start()
 	debugBlue_tex = App->tex->Load("maps/path2.png");
 	debugRed_tex = App->tex->Load("maps/cantBuild.png");
 
+	App->audio->CleanFxs();
+
 	App->gui->sfx_UI[(int)UI_Audio::SAVE] = App->audio->LoadFx("audio/ui/Save.wav");
 	App->gui->sfx_UI[(int)UI_Audio::LOAD] = App->audio->LoadFx("audio/ui/load.wav");
 	App->gui->sfx_UI[(int)UI_Audio::CONFIRMATION] = App->audio->LoadFx("audio/ui/Click_Standard2.wav");
