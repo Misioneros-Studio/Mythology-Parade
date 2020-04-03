@@ -4,6 +4,7 @@
 #include "j1Scene.h"
 #include "j1Input.h"
 #include "j1Gui.h"
+#include "j1Window.h"
 
 Player::Player()
 {
@@ -70,19 +71,19 @@ void Player::SelectionDraw_Logic()
 {
 	if (!App->input->GetMouseButtonDown(1))
 	{
-		App->input->GetMousePosition(x, y);
+		App->input->GetMousePosition(preClicked.x, preClicked.y);
+		preClicked = App->render->ScreenToWorld(preClicked.x, preClicked.y);
 	}
 
 	if (App->input->GetMouseButtonDown(1) == KEY_REPEAT)
 	{
-		int x2, y2;
-		App->input->GetMousePosition(x2, y2);
+		App->input->GetMousePosition(postClicked.x, postClicked.y);
+		postClicked = App->render->ScreenToWorld(postClicked.x, postClicked.y);
 
-
-		vertical1 = { x, y, 2, y2 - y };
-		vertical2 = { x2, y, 2, y2 - y };
-		horizontal1 = { x, y, x2 - x, 2 };
-		horizontal2 = { x, y2, x2 - x, 2 };
+		vertical1 = { preClicked.x, preClicked.y, 2, postClicked.y - preClicked.y };
+		vertical2 = { postClicked.x, preClicked.y, 2, postClicked.y - preClicked.y };
+		horizontal1 = { preClicked.x, preClicked.y, postClicked.x - preClicked.x, 2 };
+		horizontal2 = { preClicked.x, postClicked.y, postClicked.x - preClicked.x, 2 };
 
 		App->render->DrawQuad(vertical1, 255, 255, 255, 255);
 		App->render->DrawQuad(vertical2, 255, 255, 255, 255);

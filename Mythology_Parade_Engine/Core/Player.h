@@ -29,7 +29,8 @@ private:
 
 	int tick1 = 0, tick2 = 0;
 
-	int x, y;
+	iPoint preClicked;
+	iPoint postClicked;
 	SDL_Rect vertical1, vertical2, horizontal1, horizontal2;
 };
 
