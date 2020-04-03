@@ -35,6 +35,7 @@ bool j1Fonts::Awake(pugi::xml_node& conf)
 		default = Load(path, size);
 		default_title = Load(path, 24);
 	}
+	active = true;
 
 	return ret;
 }

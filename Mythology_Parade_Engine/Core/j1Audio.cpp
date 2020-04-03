@@ -49,6 +49,7 @@ bool j1Audio::Awake(pugi::xml_node& config)
 		active = false;
 		ret = true;
 	}
+	active = true;
 
 	return ret;
 }

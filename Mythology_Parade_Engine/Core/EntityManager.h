@@ -9,12 +9,16 @@
 #include"j1Input.h"
 #include"j1Map.h"
 #include"j1Pathfinding.h"
+
 #include<vector>
 #include <algorithm>
 
 //Can delete
 #include "j1Scene.h"
 #include"j1Textures.h"
+#include "Player.h"
+
+
 
 enum class UnitType;
 enum BuildingType;
@@ -104,6 +108,8 @@ public:
 	//Load data packets
 	void LoadBuildingsData(pugi::xml_node&);
 	iPoint CalculateBuildingSize(int, int, int);
+
+	Player* getPlayer();
 
 public:
 

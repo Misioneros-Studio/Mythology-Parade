@@ -30,6 +30,7 @@ bool j1Textures::Awake(pugi::xml_node& config)
 		LOG("Could not initialize Image lib. IMG_Init: %s", IMG_GetError());
 		ret = false;
 	}
+	active = true;
 
 	return ret;
 }

@@ -39,6 +39,8 @@ bool EntityManager::Awake(pugi::xml_node& a)
 			ent->Awake(a.child(ent->name.c_str()));
 		}
 	}
+	active = false;
+
 	return true;
 }
 
@@ -455,4 +457,9 @@ void EntityManager::LoadBuildingsData(pugi::xml_node& node)
 iPoint EntityManager::CalculateBuildingSize(int bw, int w, int h) 
 {
 	return {bw , (bw * h) / w};
+}
+
+Player* EntityManager::getPlayer() 
+{
+	return (Player*)App->entityManager->entities[EntityType::PLAYER].begin()._Ptr->_Myval;
 }
