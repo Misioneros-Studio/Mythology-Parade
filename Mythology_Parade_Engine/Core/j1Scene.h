@@ -69,6 +69,9 @@ public:
 	// Called when returning to main menu (either winning/losing or by menu options like exit)
 	void BackToTitleMenu();
 
+	// Called when restarting the game
+	void RestartGame();
+
 
 	void OnClick(UI* element, float argument = 0);
 
@@ -76,7 +79,6 @@ private:
 
 	void DoWinOrLoseWindow(int type, bool win);
 
-	SDL_Texture* cursor_tex;
   
 	SDL_Texture* winlose_tex;
 	ImageUI* ui_ingame;

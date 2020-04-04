@@ -16,6 +16,7 @@ class j1Textures;
 class j1Audio;
 class j1TitleScene;
 class j1Scene;
+class j1Minimap;
 class j1Map;
 class j1PathFinding;
 class j1Fonts;
@@ -87,6 +88,9 @@ private:
 	//Called when changing a scene (start new game or exit the actual game)
 	bool ChangeScene();
 
+	//Called when restarting a scene (restart button)
+	bool RestartScene();
+
 public:
 
 	// Modules
@@ -97,6 +101,7 @@ public:
 	j1Audio*			audio = NULL;
 	j1TitleScene*		title_scene = NULL;
 	j1Scene*			scene = NULL;
+	j1Minimap*			minimap = NULL;
 	j1Map*				map = NULL;
 	j1PathFinding*		pathfinding = NULL;
 	j1Fonts*			font = NULL;
@@ -107,6 +112,7 @@ public:
  
 	bool				start_game = false;
 	bool				change_scene = false;
+	bool				restart_scene = false;
 
 
 private:
