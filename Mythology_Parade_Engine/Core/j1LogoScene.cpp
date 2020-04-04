@@ -52,6 +52,7 @@ bool j1LogoScene::PostUpdate()
 // Called before quitting
 bool j1LogoScene::CleanUp()
 {
+	App->tex->UnLoad(debug_tex);
 	return true;
 }
 
