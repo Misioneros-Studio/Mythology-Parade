@@ -251,7 +251,7 @@ bool j1App::PreUpdate()
 	if (restart_scene == true) {
 		restart_scene = false;
 		RestartScene();
-
+	}
 	if (first_change_scene == true) {
 		first_change_scene = false;
 		ChangeScene(true);
