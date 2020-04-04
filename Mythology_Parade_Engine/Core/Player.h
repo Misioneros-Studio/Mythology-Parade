@@ -20,7 +20,7 @@ public:
 	bool CleanUp();
 
 	void SelectionDraw_Logic();
-	std::vector<Entity> entitiesInside();
+	std::list<Entity*> entitiesInside();
 
 private:
 	CurrencySystem currencySystem;
@@ -35,7 +35,7 @@ private:
 	iPoint postClicked;
 	SDL_Rect vertical1, vertical2, horizontal1, horizontal2;
 
-	std::vector<Entity> listEntities;
+	std::list<Entity*> listEntities; //Entities instide selection
 };
 
 

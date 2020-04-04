@@ -93,10 +93,19 @@ void Player::SelectionDraw_Logic()
 
 }
 
-std::vector<Entity> Player::entitiesInside()
+std::list<Entity*> Player::entitiesInside()
 {
 	//ALERT MAYK
 	std::list<Entity*>::iterator it = App->entityManager->entities[EntityType::UNIT].begin();
-	//it._Ptr->_Myval->position;
-	return std::vector<Entity>();
+	for (it; it != App->entityManager->entities[EntityType::UNIT].end(); ++it) 
+	{
+		if (it._Ptr->_Myval->position.x >= preClicked.x && it._Ptr->_Myval->position.x <= postClicked.x)
+		{
+			if (it._Ptr->_Myval->position.y >= preClicked.y && it._Ptr->_Myval->position.y <= postClicked.y)
+			{
+				listEntities.push_back(it._Ptr->_Myval);
+			}
+		}
+	}
+	return listEntities;
 }
