@@ -4,7 +4,7 @@
 #include "j1Scene.h"
 #include "j1Input.h"
 #include "j1Gui.h"
-#include "j1Window.h"
+#include "EntityManager.h"
 
 Player::Player()
 {
@@ -91,4 +91,12 @@ void Player::SelectionDraw_Logic()
 		App->render->DrawQuad(horizontal2, 255, 255, 255, 255);
 	}
 
+}
+
+std::vector<Entity> Player::entitiesInside()
+{
+	//ALERT MAYK
+	std::list<Entity*>::iterator it = App->entityManager->entities[EntityType::UNIT].begin();
+	//it._Ptr->_Myval->position;
+	return std::vector<Entity>();
 }

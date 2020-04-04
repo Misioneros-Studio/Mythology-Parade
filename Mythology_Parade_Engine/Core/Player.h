@@ -4,6 +4,7 @@
 #include "CurrencySystem.h"
 #include "Unit.h"
 #include "Building.h"
+#include "EntityManager.h"
 
 class Player : public Entity, public CurrencySystem
 {
@@ -19,6 +20,7 @@ public:
 	bool CleanUp();
 
 	void SelectionDraw_Logic();
+	std::vector<Entity> entitiesInside();
 
 private:
 	CurrencySystem currencySystem;
@@ -32,6 +34,8 @@ private:
 	iPoint preClicked;
 	iPoint postClicked;
 	SDL_Rect vertical1, vertical2, horizontal1, horizontal2;
+
+	std::vector<Entity> listEntities;
 };
 
 
