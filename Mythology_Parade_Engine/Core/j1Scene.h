@@ -106,6 +106,8 @@ public:
 	TextUI* ui_text_ingame[3];
 	QuadTree* quadTree;
 	CloseSceneMenus close_menus;
+	int SeaSounding = 0;
+	uint SeaSound;
 };
 
 #endif // __j1SCENE_H__

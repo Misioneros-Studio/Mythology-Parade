@@ -164,7 +164,7 @@ unsigned int j1Audio::LoadFx(const char* path)
 }
 
 // Play WAV
-bool j1Audio::PlayFx(unsigned int id, int repeat)
+bool j1Audio::PlayFx(int channel , unsigned int id, int repeat)
 {
 	bool ret = false;
 

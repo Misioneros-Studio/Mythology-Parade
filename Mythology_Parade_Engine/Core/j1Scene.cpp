@@ -86,6 +86,8 @@ bool j1Scene::Start()
 	App->gui->sfx_UI[(int)UI_Audio::EXIT] = App->audio->LoadFx("audio/ui/Exit.wav");
 	App->gui->sfx_UI[(int)UI_Audio::CLOSE] = App->audio->LoadFx("audio/ui/Close_Menu.wav");
 
+	SeaSound = App->audio->LoadFx("audio/fx/Close_to_seaFX.wav");
+
 	for (int i = 0; i < 4; i++)
 	{
 		if (i < 3)
@@ -241,6 +243,34 @@ bool j1Scene::Update(float dt)
 		else {
 			DoWinOrLoseWindow(2, false);
 		}
+	}
+	//Audio
+	/*if (App->render->camera.x < -30 + App->render->camera.w && App->render->camera.x > -30 && App->render->camera.y <200 && App->render->camera.h)
+	{
+		SeaSounding = 1;
+		//App->audio->PlayFx(App->audio->)
+	
+	}*/
+	if (App->input->GetKey(SDL_SCANCODE_N) == KEY_DOWN) {
+		//SeaSounding = 1;
+		Mix_HaltChannel(-1);
+		Mix_SetPosition(1, 270, 1);
+		App->audio->PlayFx(1, SeaSound, 0);
+	}
+	if (App->input->GetKey(SDL_SCANCODE_M) == KEY_DOWN) {
+		Mix_HaltChannel(-1);
+		Mix_SetPosition(2, 270, 200);
+		App->audio->PlayFx(2, SeaSound, 0);
+	}
+	if (App->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN) {
+		Mix_HaltChannel(-1);
+		Mix_SetPosition(3, 90, 1);
+		App->audio->PlayFx(3, SeaSound, 0);
+	}
+	if (App->input->GetKey(SDL_SCANCODE_O) == KEY_DOWN) {
+		Mix_HaltChannel(-1);
+		Mix_SetPosition(4, 90, 200);
+		App->audio->PlayFx(4, SeaSound, 0);
 	}
 
 	return true;
@@ -438,7 +468,6 @@ void j1Scene::BackToTitleMenu() {
 	App->map->destroy = true;
 	App->pathfinding->destroy = true;
 	App->entityManager->destroy = true;
-	App->audio->PlayFx(App->audio->ExitGame_transition);
 }
 
 void j1Scene::OnClick(UI* element, float argument)
@@ -539,12 +568,12 @@ void j1Scene::DoWinOrLoseWindow(int type, bool win) {
 		if (win == true) {
 			App->render->Blit(winlose_tex, 230, 100, &sec_win);
 			App->render->Blit(winlose_tex, 230, 100, &sec_viking);
-			App->audio->PlayFx(App->audio->WinVikings_sound);
+			App->audio->PlayFx(0,App->audio->WinVikings_sound);
 		}
 		else {
 			App->render->Blit(winlose_tex, 230, 100, &sec_greek);
 			App->render->Blit(winlose_tex, 230, 100, &sec_lose);
-			App->audio->PlayFx(App->audio->Lose_Sound);
+			App->audio->PlayFx(0,App->audio->Lose_Sound);
 		}
 	}
 
@@ -552,12 +581,12 @@ void j1Scene::DoWinOrLoseWindow(int type, bool win) {
 		if (win == true) {
 			App->render->Blit(winlose_tex, 230, 100, &sec_greek);
 			App->render->Blit(winlose_tex, 230, 100, &sec_lose);
-			App->audio->PlayFx(App->audio->WinGreeks_sound);
+			App->audio->PlayFx(0,App->audio->WinGreeks_sound);
 		}
 		else {
 			App->render->Blit(winlose_tex, 230, 100, &sec_viking);
 			App->render->Blit(winlose_tex, 230, 100, &sec_win);
-			App->audio->PlayFx(App->audio->Lose_Sound);
+			App->audio->PlayFx(0,App->audio->Lose_Sound);
 		}
 	}
 	if (timer_win_lose.ReadSec() >= 5) {

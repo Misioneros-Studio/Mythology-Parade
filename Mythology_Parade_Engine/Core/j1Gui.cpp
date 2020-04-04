@@ -719,7 +719,7 @@ bool ButtonUI::PreUpdate() {
 	else pushed = false;
 	if (pushed && !App->gui->lockClick && !isLocked)
 	{
-		App->audio->PlayFx(click_sfx);
+		App->audio->PlayFx(0,click_sfx);
 		//Button clicked
 		if (listener)
 		{
