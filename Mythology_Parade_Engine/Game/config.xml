@@ -39,7 +39,7 @@
   </map>
 
   <minimap>
-    <measurements width="250" corner="bottom_right" margin="0"/>
+    <measurements width="230" corner="bottom_right" margin="5"/>
   </minimap> 
   
   <entity_manager>
