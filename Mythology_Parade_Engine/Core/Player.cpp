@@ -64,6 +64,7 @@ bool Player::PostUpdate()
 
 bool Player::CleanUp()
 {
+	listEntities.clear();
 	return true;
 }
 
@@ -81,15 +82,8 @@ void Player::SelectionDraw_Logic()
 		App->input->GetMousePosition(postClicked.x, postClicked.y);
 		postClicked = App->render->ScreenToWorld(postClicked.x, postClicked.y);
 
-		vertical1 = { preClicked.x, preClicked.y, 2, postClicked.y - preClicked.y };
-		vertical2 = { postClicked.x, preClicked.y, 2, postClicked.y - preClicked.y };
-		horizontal1 = { preClicked.x, preClicked.y, postClicked.x - preClicked.x, 2 };
-		horizontal2 = { preClicked.x, postClicked.y, postClicked.x - preClicked.x, 2 };
-
-		App->render->DrawQuad(vertical1, 255, 255, 255, 255);
-		App->render->DrawQuad(vertical2, 255, 255, 255, 255);
-		App->render->DrawQuad(horizontal1, 255, 255, 255, 255);
-		App->render->DrawQuad(horizontal2, 255, 255, 255, 255);
+		App->render->DrawQuad({preClicked.x, preClicked.y, postClicked.x - preClicked.x, postClicked.y - preClicked.y}, 255, 255, 255, 255, false);
+		//App->render->DrawQuad({preClicked.x + 1, preClicked.y + 1, postClicked.x - preClicked.x - 2, postClicked.y - preClicked.y  - 2}, 255, 255, 255, 255, false);
 
 		SeeEntitiesInside(); //We iterate the list of entities to see if someone is in there
 	}

@@ -34,7 +34,6 @@ private:
 
 	iPoint preClicked;
 	iPoint postClicked;
-	SDL_Rect vertical1, vertical2, horizontal1, horizontal2;
 
 	std::list<Entity*> listEntities; //Entities instide selection
 };
