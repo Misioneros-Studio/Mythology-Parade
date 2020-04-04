@@ -9,6 +9,7 @@
 #include "j1Render.h"
 #include "j1Textures.h"
 #include "j1Audio.h"
+#include "j1LogoScene.h"
 #include "j1TitleScene.h"
 #include "j1Scene.h"
 #include "j1Minimap.h"
@@ -32,6 +33,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	render = new j1Render();
 	tex = new j1Textures();
 	audio = new j1Audio();
+	logo_scene = new j1LogoScene();
 	title_scene = new j1TitleScene();
 	scene = new j1Scene();
 	minimap = new j1Minimap();
@@ -55,6 +57,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 
 
 	// scene last
+	AddModule(logo_scene);
 	AddModule(title_scene);
 	AddModule(scene);
 
@@ -244,9 +247,15 @@ bool j1App::PreUpdate()
 		change_scene = false;
 		ChangeScene();
 	}
+
 	if (restart_scene == true) {
 		restart_scene = false;
 		RestartScene();
+
+	if (first_change_scene == true) {
+		first_change_scene = false;
+		ChangeScene(true);
+
 	}
 	j1Module* pModule = NULL;
 
@@ -456,14 +465,21 @@ bool j1App::SavegameNow()
 	return ret;
 }
 
-bool j1App::ChangeScene() {
+bool j1App::ChangeScene(bool first_change) {
 	bool ret = true;
 
 	for (std::list<j1Module*>::iterator it = modules.begin(); it != modules.end(); it++)
 	{
+
 		if (it._Ptr->_Myval->active == false) {
-			it._Ptr->_Myval->active = true;
-			ret = it._Ptr->_Myval->Start();
+			if (first_change == false && (it._Ptr->_Myval->name.compare("logo_scene") != 0)) {
+				it._Ptr->_Myval->active = true;
+				ret = it._Ptr->_Myval->Start();
+			}
+			else if (it._Ptr->_Myval->name.compare("gui") == 0 || it._Ptr->_Myval->name.compare("title_scene") == 0) {
+				it._Ptr->_Myval->active = true;
+				ret = it._Ptr->_Myval->Start();
+			}
 		}
 		else if (it._Ptr->_Myval->destroy == true) {
 			it._Ptr->_Myval->CleanUp();

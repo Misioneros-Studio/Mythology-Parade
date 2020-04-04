@@ -21,10 +21,12 @@ j1TitleScene::~j1TitleScene()
 {}
 
 // Called before render is available
-bool j1TitleScene::Awake()
+bool j1TitleScene::Awake(pugi::xml_node& config)
 {
 	LOG("Loading Title Scene");
 	bool ret = true;
+
+	active = false;
 
 	return ret;
 }

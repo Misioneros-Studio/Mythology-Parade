@@ -32,6 +32,8 @@
     <output position_x="0" position_y="0" position_w="1024" position_h="18" d_area_x="0" d_area_y="-100000" d_area_w="0" d_area_h="200000"/>
   </console>
 
+  <title_scene/>
+
   <scene/>
   
   <map>
