@@ -6,6 +6,7 @@ CombatUnit::CombatUnit(UnitType type, iPoint pos): Unit(type), range(0),damage(0
 	//TODO 10: Change textures
 	unitType = type;
 	position = pos;
+	state = AnimationType::IDLE;
 	switch (unitType)
 	{
 	case UnitType::ASSASSIN:
@@ -52,18 +53,31 @@ void CombatUnit::Init(int maxHealth, int damage, int range, int speed)
 	SetMoveSpeed(speed);
 
 	//TODO: Convert to a get funtions
-	targetPosition = { 9, 16 };
 	currentDirection = getMovementDirection(targetPosition);
-	currentAnim = App->entityManager->animations[unitType][(AnimationType)3][currentDirection];
+	currentAnim = App->entityManager->animations[unitType][state][currentDirection];
 
 }
 
 bool CombatUnit::Update(float dt) 
 {
-	int num_current_anim = currentAnim.GetSprite();
+	if (App->input->GetMouseButtonDown(SDL_BUTTON_RIGHT) == KEY_DOWN)
+	{
+		targetPosition = App->map->GetMousePositionOnMap();
+		currentDirection = getMovementDirection(targetPosition);
+		currentAnim = App->entityManager->animations[unitType][AnimationType::WALK][currentDirection];
+	}
 
-	App->render->Blit(texture, position.x - currentAnim.sprites[num_current_anim].rect.w / 3, position.y - currentAnim.sprites[num_current_anim].rect.h + 16, &currentAnim.sprites[num_current_anim].rect);
-	App->render->DrawQuad({position.x, position.y, 2, 2}, 255, 0, 0);
+	if (targetPosition != iPoint(0, 0))
+		MoveToTarget();
+
+
+	int num_current_anim = currentAnim.GetSprite();
+	blitRect = { currentAnim.sprites[num_current_anim].rect.w, currentAnim.sprites[num_current_anim].rect.h };
+
+	App->render->Blit(texture, position.x - currentAnim.sprites[num_current_anim].rect.w / 3, position.y - currentAnim.sprites[num_current_anim].rect.h + 16, blitRect, &currentAnim.sprites[num_current_anim].rect, 1.f, flipState);
+	
+	iPoint draw = App->map->MapToWorld(targetPosition.x, targetPosition.y);
+	App->render->DrawQuad({draw.x, draw.y, 64, 32}, 255, 0, 0);
 	return true;
 }
 

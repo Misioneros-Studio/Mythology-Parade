@@ -7,12 +7,6 @@
 #include"EntityManager.h"
 #include "Animation.h"
 
-enum State
-{
-	IDLE,
-	MOVE
-};
-
 enum class ReligiousType
 {
 	MONK,
@@ -42,9 +36,6 @@ private:
 	//Conditions
 	bool _isSelected;
 	
-	//state
-	State state;
-
 	//Description / Effect
 	std::string description;
 
@@ -75,11 +66,12 @@ protected:
 
 	iPoint targetPosition;
 	Direction getMovementDirection(iPoint);
+	AnimationType state;
 	//void SetTarget();
 
 
 	//void CheckState();
-	//void MoveTo(p2Point<int>);
+	void MoveToTarget();
 
 };
 

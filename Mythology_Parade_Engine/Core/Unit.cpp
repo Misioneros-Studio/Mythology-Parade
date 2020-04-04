@@ -3,10 +3,10 @@
 #include "j1Textures.h"
 #include "j1Input.h"
 
-Unit::Unit(UnitType type): unitType(type), state(IDLE), _isSelected(false), moveSpeed(1)
+Unit::Unit(UnitType type): unitType(type), _isSelected(false), moveSpeed(1)
 {
 	
-
+	state = AnimationType::IDLE;
 	//Init Units
 	switch (type)
 	{
@@ -41,16 +41,6 @@ bool Unit::Update(float dt)
 {
 	bool ret = true;
 
-	//STATE MACHINE
-	switch (state)
-	{
-	case IDLE:
-		break;
-	case MOVE:
-		break;
-
-	}
-
 	//Allawys blit the sprite at the end
 	ret = Draw(dt);
 
@@ -68,15 +58,41 @@ bool Unit::isSelected()
 	return _isSelected;
 }
 
-//void Unit::MoveTo(p2Point<int>)
-//{
-//	if (!isSelected())
-//		return;
-//
-//	//move function logic
-//
-//
-//}
+void Unit::MoveToTarget()
+{
+	//if (!isSelected())
+	//	return;
+
+	//move function logic
+	iPoint increment = { 0, 0 };
+
+	switch (currentDirection)
+	{
+	case Direction::UP:
+		increment = { 0, -1 };
+		break;
+	case Direction::LATERAL:
+		increment = { 1, 0};
+		break;
+	case Direction::DOWN:
+		increment = { 0, 1 };
+		break;
+	case Direction::DIAGONAL_DOWN:
+		increment = { 1, 1 };
+		break;
+	case Direction::DIAGONAL_UP:
+		increment = { 1, -1 };
+		break;
+	}
+
+	if (flipState == SDL_FLIP_NONE) 
+	{
+		increment.x *= -1;
+	}
+
+	state = AnimationType::WALK;
+	position += increment;
+}
 
 void Unit::Init(int maxHealth)
 {
@@ -109,7 +125,7 @@ Direction Unit::getMovementDirection(iPoint target)
 {
 	Direction dir = Direction::UP;
 
-	iPoint temp = App->map->WorldToMap(position.x, position.y);
+	iPoint temp = App->map->WorldToMap(position.x + App->map->data.tile_width/2, position.y + App->map->data.tile_height / 2);
 
 	target = App->map->MapToWorld(target.x, target.y);
 	iPoint pos = App->map->MapToWorld(temp.x, temp.y);
