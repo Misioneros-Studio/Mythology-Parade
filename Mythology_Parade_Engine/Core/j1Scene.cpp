@@ -438,6 +438,7 @@ void j1Scene::BackToTitleMenu() {
 	App->map->destroy = true;
 	App->pathfinding->destroy = true;
 	App->entityManager->destroy = true;
+	App->audio->PlayFx(App->audio->ExitGame_transition);
 }
 
 void j1Scene::OnClick(UI* element, float argument)

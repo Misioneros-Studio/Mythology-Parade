@@ -49,9 +49,12 @@ bool j1Audio::Awake(pugi::xml_node& config)
 		ret = true;
 	}
 	active = true;
+	
 	WinVikings_sound = LoadFx("audio/fx/WinVikings.wav");
 	WinGreeks_sound = LoadFx("audo/fx/win_greeks.wav");
 	Lose_Sound = LoadFx("audio/fx/WinVikings.wav");
+	NewGame_transition = LoadFx("audio/fx/NewGame_transition.wav");
+	ExitGame_transition = LoadFx("audio/fx/ExitGame_transition.wav");
 	return ret;
 }
 

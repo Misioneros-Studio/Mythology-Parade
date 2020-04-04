@@ -38,7 +38,8 @@ public:
 	uint WinVikings_sound;
 	uint WinGreeks_sound;
 	uint Lose_Sound;
-
+	uint NewGame_transition;
+	uint ExitGame_transition;
 private:
 
 	_Mix_Music*			music = NULL;

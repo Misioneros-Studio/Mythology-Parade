@@ -339,6 +339,7 @@ void j1TitleScene::OnClick(UI* element, float argument)
 		{
 			App->change_scene = true;
 			destroy = true;
+			App->audio->PlayFx(App->audio->NewGame_transition);
 		}
 		else if (element->name == "LOAD")
 		{
