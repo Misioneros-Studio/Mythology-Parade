@@ -31,7 +31,6 @@ bool j1Audio::Awake(pugi::xml_node& config)
 		ret = true;
 	}
 
-	// load support for the JPG and PNG image formats
 	int flags = MIX_INIT_OGG;
 	int init = Mix_Init(flags);
 
@@ -50,7 +49,9 @@ bool j1Audio::Awake(pugi::xml_node& config)
 		ret = true;
 	}
 	active = true;
-
+	WinVikings_sound = LoadFx("audio/fx/WinVikings.wav");
+	WinGreeks_sound = LoadFx("audo/fx/win_greeks.wav");
+	Lose_Sound = LoadFx("audio/fx/WinVikings.wav");
 	return ret;
 }
 
@@ -154,6 +155,7 @@ unsigned int j1Audio::LoadFx(const char* path)
 		fx.push_back(chunk);
 		ret = fx.size();
 	}
+
 
 	return ret;
 }

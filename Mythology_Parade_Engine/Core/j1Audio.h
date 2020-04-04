@@ -35,6 +35,10 @@ public:
 	// Clean all fxs to change scene
 	bool CleanFxs();
 
+	uint WinVikings_sound;
+	uint WinGreeks_sound;
+	uint Lose_Sound;
+
 private:
 
 	_Mix_Music*			music = NULL;
