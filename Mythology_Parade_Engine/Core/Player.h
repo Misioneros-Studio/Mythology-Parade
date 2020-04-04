@@ -20,7 +20,8 @@ public:
 	bool CleanUp();
 
 	void SelectionDraw_Logic();
-	std::list<Entity*> entitiesInside();
+	void SeeEntitiesInside();
+	std::list<Entity*> GetEntitiesSelected();
 
 private:
 	CurrencySystem currencySystem;

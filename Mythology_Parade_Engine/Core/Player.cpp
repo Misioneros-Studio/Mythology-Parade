@@ -73,6 +73,7 @@ void Player::SelectionDraw_Logic()
 	{
 		App->input->GetMousePosition(preClicked.x, preClicked.y);
 		preClicked = App->render->ScreenToWorld(preClicked.x, preClicked.y);
+		listEntities.clear(); //we clear the list of entities selected to select again or just deselect
 	}
 
 	if (App->input->GetMouseButtonDown(1) == KEY_REPEAT)
@@ -89,15 +90,22 @@ void Player::SelectionDraw_Logic()
 		App->render->DrawQuad(vertical2, 255, 255, 255, 255);
 		App->render->DrawQuad(horizontal1, 255, 255, 255, 255);
 		App->render->DrawQuad(horizontal2, 255, 255, 255, 255);
+
+		SeeEntitiesInside(); //We iterate the list of entities to see if someone is in there
 	}
 
 }
 
-std::list<Entity*> Player::entitiesInside()
+std::list<Entity*> Player::GetEntitiesSelected()
+{
+	return listEntities;
+}
+
+void Player::SeeEntitiesInside()
 {
 	//ALERT MAYK
 	std::list<Entity*>::iterator it = App->entityManager->entities[EntityType::UNIT].begin();
-	for (it; it != App->entityManager->entities[EntityType::UNIT].end(); ++it) 
+	for (it; it != App->entityManager->entities[EntityType::UNIT].end(); ++it)
 	{
 		if (it._Ptr->_Myval->position.x >= preClicked.x && it._Ptr->_Myval->position.x <= postClicked.x)
 		{
@@ -107,5 +115,4 @@ std::list<Entity*> Player::entitiesInside()
 			}
 		}
 	}
-	return listEntities;
 }
