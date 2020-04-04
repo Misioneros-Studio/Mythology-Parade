@@ -74,7 +74,6 @@ public:
 
 private:
 	SDL_Texture* debug_tex;
-	SDL_Texture* cursor_tex;
 	SDL_Texture* title_assets_tex;
 	ButtonUI* ui_button[6];
 	TextUI* ui_text[6];

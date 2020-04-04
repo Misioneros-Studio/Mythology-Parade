@@ -289,6 +289,7 @@ private:
 	std::list <UI*> UIs;
 	SDL_Texture* atlas;
 	std::string atlas_file_name;
+	SDL_Texture* cursor_tex;
 
 public:
 

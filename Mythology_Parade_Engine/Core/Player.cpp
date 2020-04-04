@@ -22,6 +22,9 @@ bool Player::Start()
 {
 	tick2 = SDL_GetTicks();
 	player_win = player_lose = false;
+	currencySystem.faith = 0;
+	currencySystem.prayers = 0;
+	currencySystem.sacrifices = 0;
 	return true;
 }
 

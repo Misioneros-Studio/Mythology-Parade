@@ -39,6 +39,10 @@
   <map>
     <folder>maps/</folder>
   </map>
+
+  <minimap>
+    <measurements width="230" corner="bottom_right" margin="5"/>
+  </minimap> 
   
   <entity_manager>
     

@@ -38,7 +38,7 @@ bool j1Gui::Start()
 	for (int i = 0; i < 9; i++) {
 		sfx_UI[i] = 0;
 	}
-
+	cursor_tex = App->tex->Load("gui/cursors.png");
 	return true;
 }
 
@@ -84,6 +84,15 @@ bool j1Gui::PostUpdate()
 	{
 		it._Ptr->_Myval->PostUpdate();
 	}
+	//Show cursor ------------------------------
+	int x, y;
+	App->input->GetMousePosition(x, y);
+	iPoint p = App->render->ScreenToWorld(x, y);
+	SDL_Rect sec = { 0, 0, 54, 45 };
+
+	p = App->render->ScreenToWorld(x, y);
+
+	App->render->Blit(cursor_tex, p.x, p.y, &sec);
 	return true;
 }
 
@@ -102,6 +111,7 @@ bool j1Gui::CleanUp()
 	{
 		App->tex->UnLoad(atlas);
 	}
+	App->tex->UnLoad(cursor_tex);
 	return true;
 }
 

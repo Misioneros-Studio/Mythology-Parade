@@ -12,6 +12,7 @@
 #include "j1Fonts.h"
 #include "Animation.h"
 #include "EntityManager.h"
+#include "j1Minimap.h"
 #include "j1Scene.h"
 
 #include"QuadTree.h"
@@ -98,7 +99,7 @@ bool j1Scene::Start()
 
 	close_menus = CloseSceneMenus::None;
 
-	cursor_tex = App->tex->Load("gui/cursors.png");
+
 
 	winlose_tex = App->tex->Load("gui/WinLoseBackground.png");
 
@@ -118,13 +119,14 @@ bool j1Scene::Start()
 	//Creating players
 	App->entityManager->CreatePlayerEntity();
 
+	App->render->camera = { 0,0,App->render->camera.w,App->render->camera.h };
+
 	return true;
 }
 
 // Called each loop iteration
 bool j1Scene::PreUpdate()
 {
-
 	// debug pathfing ------------------
 	//static iPoint origin;
 	//static bool origin_selected = false;
@@ -144,6 +146,26 @@ bool j1Scene::PreUpdate()
 	//		origin_selected = true;
 	//	}
 	//}
+
+
+
+	// Move Camera if click on the minimap
+	int mouse_x, mouse_y;
+	if ((App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN) || (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_REPEAT))
+	{
+		App->input->GetMousePosition(mouse_x, mouse_y);
+		SDL_Rect minimap = { App->minimap->position.x, App->minimap->position.y, App->minimap->width, App->minimap->height };
+
+		if ((mouse_x > minimap.x) && (mouse_x < minimap.x + minimap.w) && (mouse_y > minimap.y) && (mouse_y < minimap.y + minimap.h))
+		{
+			iPoint minimap_mouse_position = App->minimap->ScreenToMinimapToWorld(mouse_x, mouse_y);
+			App->render->camera.x = -(minimap_mouse_position.x - App->render->camera.w * 0.5f);
+			App->render->camera.y = -(minimap_mouse_position.y - App->render->camera.h * 0.5f);
+		}
+	}
+
+
+
 
 	return true;
 }
@@ -251,14 +273,6 @@ bool j1Scene::PostUpdate()
 {
 	bool ret = true;
 
-	//Show cursor ------------------------------
-	int x, y;
-	App->input->GetMousePosition(x, y);
-	iPoint p = App->render->ScreenToWorld(x, y);
-	SDL_Rect sec = { 0, 0, 54, 45 };
-	p = App->render->ScreenToWorld(x, y);
-	App->render->Blit(cursor_tex, p.x, p.y, &sec);
-
 	return ret;
 }
 
@@ -282,7 +296,6 @@ bool j1Scene::CleanUp()
 		ui_text_ingame[i] = nullptr;
 	}
 
-	App->tex->UnLoad(cursor_tex);
 
 
 	//quadTree->Clear();
@@ -438,6 +451,16 @@ void j1Scene::BackToTitleMenu() {
 	App->map->destroy = true;
 	App->pathfinding->destroy = true;
 	App->entityManager->destroy = true;
+	App->minimap->destroy = true;
+}
+
+void j1Scene::RestartGame() {
+	App->restart_scene = true;
+	destroy = true;
+	App->map->destroy = true;
+	App->pathfinding->destroy = true;
+	App->entityManager->destroy = true;
+	App->minimap->destroy = true;
 }
 
 void j1Scene::OnClick(UI* element, float argument)
@@ -497,6 +520,11 @@ void j1Scene::OnClick(UI* element, float argument)
 			{
 				App->LoadGame("save_game.xml");
 			}
+			else if (confirmation_option.compare("RESTART") == 0)
+			{
+				//close_menus = CloseSceneMenus::Confirmation_and_Pause;
+				RestartGame();
+			}
 			else if (confirmation_option.compare("SURRENDER") == 0)
 			{
 				App->entityManager->getPlayer()->player_lose = true;
@@ -536,23 +564,23 @@ void j1Scene::DoWinOrLoseWindow(int type, bool win) {
 
 	if (type == 1) {
 		if (win == true) {
-			App->render->Blit(winlose_tex, 230, 100, &sec_win);
-			App->render->Blit(winlose_tex, 230, 100, &sec_viking);
+			App->render->Blit(winlose_tex, 230, 100, &sec_win, NULL, 0.0F);
+			App->render->Blit(winlose_tex, 230, 100, &sec_viking, NULL, 0.0F);
 		}
 		else {
-			App->render->Blit(winlose_tex, 230, 100, &sec_greek);
-			App->render->Blit(winlose_tex, 230, 100, &sec_lose);
+			App->render->Blit(winlose_tex, 230, 100, &sec_greek, NULL, 0.0F);
+			App->render->Blit(winlose_tex, 230, 100, &sec_lose, NULL, 0.0F);
 		}
 	}
 
 	if (type == 2) {
 		if (win == true) {
-			App->render->Blit(winlose_tex, 230, 100, &sec_greek);
-			App->render->Blit(winlose_tex, 230, 100, &sec_lose);
+			App->render->Blit(winlose_tex, 230, 100, &sec_greek, NULL, 0.0F);
+			App->render->Blit(winlose_tex, 230, 100, &sec_lose, NULL, 0.0F);
 		}
 		else {
-			App->render->Blit(winlose_tex, 230, 100, &sec_viking);
-			App->render->Blit(winlose_tex, 230, 100, &sec_win);
+			App->render->Blit(winlose_tex, 230, 100, &sec_viking, NULL, 0.0F);
+			App->render->Blit(winlose_tex, 230, 100, &sec_win, NULL, 0.0F);
 		}
 	}
 	if (timer_win_lose.ReadSec() >= 5) {
