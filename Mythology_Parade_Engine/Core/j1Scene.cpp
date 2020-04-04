@@ -57,7 +57,6 @@ bool j1Scene::Start()
 
 	ui_ingame=(ImageUI*)App->gui->CreateUIElement(Type::IMAGE, nullptr, { 0,590,1280,130 }, { 0,590,1280,130 });
 
-	faith_symbol = (ImageUI*)App->gui->CreateUIElement(Type::IMAGE, nullptr, { 0,590,1280,130 });
 
 	for (int i = 0; i < 3; i++) 
 	{
@@ -284,6 +283,7 @@ bool j1Scene::CleanUp()
 
 	App->tex->UnLoad(debugBlue_tex);
 	App->tex->UnLoad(debugRed_tex);
+	App->tex->UnLoad(winlose_tex);
 
 	DeactivateConfirmationMenu();
 	DeactivateOptionsMenu();

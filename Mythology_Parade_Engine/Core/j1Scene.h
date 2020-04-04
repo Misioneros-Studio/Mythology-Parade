@@ -82,9 +82,6 @@ private:
   
 	SDL_Texture* winlose_tex;
 	ImageUI* ui_ingame;
-	ImageUI* faith_symbol;
-	ImageUI* sacrifice_symbol;
-	ImageUI* prayer_symbol;
 	WindowUI* ui_pause_window;
 	ButtonUI* ui_button[7];
 	TextUI* ui_text[8];
@@ -106,7 +103,6 @@ public:
 	SDL_Texture* debugRed_tex;
 
 	TextUI* ui_text_ingame[3];
-	QuadTree* quadTree;
 	CloseSceneMenus close_menus;
 };
 
