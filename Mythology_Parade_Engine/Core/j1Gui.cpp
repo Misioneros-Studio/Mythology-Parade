@@ -26,7 +26,7 @@ bool j1Gui::Awake(pugi::xml_node& conf)
 	bool ret = true;
 
 	atlas_file_name = conf.child("atlas").attribute("file").as_string("");
-	active = true;
+	active = false;
 
 	return ret;
 }
