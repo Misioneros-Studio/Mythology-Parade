@@ -56,7 +56,6 @@ bool j1Minimap::Start() {
 	height = (map_height)*scale;
 
 	texture = SDL_CreateTexture(App->render->renderer, SDL_GetWindowPixelFormat(App->win->window), SDL_TEXTUREACCESS_TARGET, 1.05f * width, 1.05f * height);
-
 	SDL_SetRenderTarget(App->render->renderer, texture);
 	CreateMinimap();
 	SDL_SetRenderTarget(App->render->renderer, NULL);
@@ -125,6 +124,12 @@ bool j1Minimap::CreateMinimap() {
 		}
 	}
 	
+	return true;
+}
+
+bool j1Minimap::CleanUp() 
+{
+	SDL_DestroyTexture(texture);
 	return true;
 }
 
