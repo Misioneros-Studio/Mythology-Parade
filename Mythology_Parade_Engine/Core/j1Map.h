@@ -1,10 +1,10 @@
 #ifndef __j1MAP_H__
 #define __j1MAP_H__
 
-#include "PugiXml/src/pugixml.hpp"
 #include "p2Point.h"
 #include "j1Module.h"
-#include"j1Input.h"
+#include "PugiXml/src/pugixml.hpp"
+
 
 // ----------------------------------------------------
 struct Properties
@@ -36,6 +36,7 @@ struct Properties
 // ----------------------------------------------------
 struct MapLayer
 {
+	
 	std::string	name;
 	int			width;
 	int			height;
@@ -124,6 +125,8 @@ public:
 
 	bool CreateWalkabilityMap(int& width, int& height, uchar** buffer);
 
+	TileSet* GetTilesetFromTileId(int id);
+
 private:
 
 	bool LoadMap();
@@ -132,7 +135,6 @@ private:
 	bool LoadLayer(pugi::xml_node& node, MapLayer* layer);
 	bool LoadProperties(pugi::xml_node& node, Properties& properties);
 
-	TileSet* GetTilesetFromTileId(int id);
 
 public:
 

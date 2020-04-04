@@ -16,13 +16,17 @@ Player::~Player()
 
 bool Player::Awake()
 {
-
+	player_type = CivilizationType::VIKING;
 	return true;
 }
 
 bool Player::Start()
 {
 	tick2 = SDL_GetTicks();
+	player_win = player_lose = false;
+	currencySystem.faith = 0;
+	currencySystem.prayers = 0;
+	currencySystem.sacrifices = 0;
 	return true;
 }
 
@@ -51,6 +55,11 @@ bool Player::Update(float dt)
 	App->scene->ui_text_ingame[1]->SetString(sacrifice);
 	App->scene->ui_text_ingame[2]->SetString(prayer);
 	
+  if (App->input->GetKey(SDL_SCANCODE_5) == KEY_DOWN) 
+	{
+		App->entityManager->CreateUnitEntity(UnitType::ASSASSIN);
+	}
+  
 	//Selection logics and drawing
 	SelectionDraw_Logic(); 
 

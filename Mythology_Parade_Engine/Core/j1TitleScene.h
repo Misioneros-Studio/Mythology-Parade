@@ -3,6 +3,14 @@
 
 #include "j1Module.h"
 
+enum class CloseTitleSceneMenus{
+	None,
+	Credits,
+	Tutorial,
+	Options,
+	Confirmation,
+	Unknown
+};
 struct SDL_Texture;
 class ImageUI;
 class WindowUI;
@@ -20,7 +28,7 @@ public:
 	virtual ~j1TitleScene();
 
 	// Called before render is available
-	bool Awake();
+	bool Awake(pugi::xml_node& conf);
 
 	// Called before the first frame
 	bool Start();
@@ -55,11 +63,17 @@ public:
 	// Called when clicking close button in credits
 	void DeactivateCredits();
 
+	// Called when clicking a button in the menu with confirmation message
+	void ActivateConfirmationMenu(std::string str);
+
+	// Called when clicking no in the confirmation message
+	void DeactivateConfirmationMenu();
+
+
 	void OnClick(UI* element, float argument = 0);
 
 private:
 	SDL_Texture* debug_tex;
-	SDL_Texture* cursor_tex;
 	SDL_Texture* title_assets_tex;
 	ButtonUI* ui_button[6];
 	TextUI* ui_text[6];
@@ -72,7 +86,12 @@ private:
 	WindowUI* ui_credits_window;
 	ButtonUI* ui_button_credits;
 	TextUI* ui_text_credits[2];
+	WindowUI* ui_confirmation_window;
+	ButtonUI* ui_button_confirmation[2];
+	TextUI* ui_text_confirmation[4];
+	std::string confirmation_option;
 public:
+	CloseTitleSceneMenus close_menus;
 };
 
 #endif // __j1TITLESCENE_H__

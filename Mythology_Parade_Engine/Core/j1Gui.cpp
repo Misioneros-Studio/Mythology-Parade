@@ -26,7 +26,7 @@ bool j1Gui::Awake(pugi::xml_node& conf)
 	bool ret = true;
 
 	atlas_file_name = conf.child("atlas").attribute("file").as_string("");
-	active = true;
+	active = false;
 
 	return ret;
 }
@@ -35,8 +35,10 @@ bool j1Gui::Awake(pugi::xml_node& conf)
 bool j1Gui::Start()
 {
 	atlas = App->tex->Load(atlas_file_name.c_str());
-	click_sfx = App->audio->LoadFx("audio/fx/button_click.wav");
-
+	for (int i = 0; i < 9; i++) {
+		sfx_UI[i] = 0;
+	}
+	cursor_tex = App->tex->Load("gui/cursors.png");
 	return true;
 }
 
@@ -82,6 +84,15 @@ bool j1Gui::PostUpdate()
 	{
 		it._Ptr->_Myval->PostUpdate();
 	}
+	//Show cursor ------------------------------
+	int x, y;
+	App->input->GetMousePosition(x, y);
+	iPoint p = App->render->ScreenToWorld(x, y);
+	SDL_Rect sec = { 0, 0, 54, 45 };
+
+	p = App->render->ScreenToWorld(x, y);
+
+	App->render->Blit(cursor_tex, p.x, p.y, &sec);
 	return true;
 }
 
@@ -100,6 +111,7 @@ bool j1Gui::CleanUp()
 	{
 		App->tex->UnLoad(atlas);
 	}
+	App->tex->UnLoad(cursor_tex);
 	return true;
 }
 
@@ -111,7 +123,7 @@ const SDL_Texture* j1Gui::GetAtlas() const
 
 // class Gui ---------------------------------------------------
 
-UI* j1Gui::CreateUIElement(Type type, UI* p, SDL_Rect r, SDL_Rect sprite, std::string str, SDL_Rect sprite2, SDL_Rect sprite3, bool drageable, SDL_Rect drag_area, j1Module* s_listener,
+UI* j1Gui::CreateUIElement(Type type, UI* p, SDL_Rect r, SDL_Rect sprite, std::string str, SDL_Rect sprite2, SDL_Rect sprite3, bool drageable, SDL_Rect drag_area, j1Module* s_listener, int audio,
 	bool console, float drag_position_scroll_bar)
 {
 	UI* ui = nullptr;
@@ -120,7 +132,7 @@ UI* j1Gui::CreateUIElement(Type type, UI* p, SDL_Rect r, SDL_Rect sprite, std::s
 	switch (type)
 	{
 	case Type::BUTTON:
-		ui = new ButtonUI(Type::BUTTON, p, r, sprite, sprite2, sprite3, true, true, drag_area);
+		ui = new ButtonUI(Type::BUTTON, p, r, sprite, sprite2, sprite3, true, true, drag_area, audio);
 		break;
 	case Type::IMAGE:
 		ui = new ImageUI(Type::IMAGE, p, r, sprite, drageable, drageable, drag_area, drag_position_scroll_bar);
@@ -664,7 +676,7 @@ void ListTextsUI::SetListOfStrings(std::string string, int position)
 	}
 }
 
-ButtonUI::ButtonUI(Type type, UI* p, SDL_Rect r, SDL_Rect sprite, SDL_Rect spriten2, SDL_Rect spriten3, bool d, bool f, SDL_Rect d_area) :UI(type, r, p, d, f, d_area) {
+ButtonUI::ButtonUI(Type type, UI* p, SDL_Rect r, SDL_Rect sprite, SDL_Rect spriten2, SDL_Rect spriten3, bool d, bool f, SDL_Rect d_area, int audio) :UI(type, r, p, d, f, d_area) {
 	name.append("ButtonUI");
 	sprite1 = sprite;
 	sprite2 = spriten2;
@@ -674,6 +686,7 @@ ButtonUI::ButtonUI(Type type, UI* p, SDL_Rect r, SDL_Rect sprite, SDL_Rect sprit
 	quad = r;
 	isLocked = false;
 	front = true;
+	click_sfx = App->gui->sfx_UI[audio];
 }
 
 bool ButtonUI::PostUpdate() {
@@ -716,7 +729,7 @@ bool ButtonUI::PreUpdate() {
 	else pushed = false;
 	if (pushed && !App->gui->lockClick && !isLocked)
 	{
-		App->audio->PlayFx(App->gui->click_sfx);
+		App->audio->PlayFx(click_sfx);
 		//Button clicked
 		if (listener)
 		{

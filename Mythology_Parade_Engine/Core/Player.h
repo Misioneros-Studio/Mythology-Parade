@@ -4,6 +4,8 @@
 #include "CurrencySystem.h"
 #include "Unit.h"
 #include "Building.h"
+
+#include "j1Input.h"
 #include "EntityManager.h"
 
 class Player : public Entity, public CurrencySystem
@@ -27,15 +29,19 @@ private:
 	CurrencySystem currencySystem;
 
 	std::list<Unit*> unitsList;
-	std::list<Building*> buildingsList;
+	//std::list<Building*> buildingsList;
 	std::string faith, sacrifice, prayer;
 
 	int tick1 = 0, tick2 = 0;
-
 	iPoint preClicked;
 	iPoint postClicked;
-
 	std::list<Entity*> listEntities; //Entities instide selection
+
+public:
+	bool player_win = false;
+	bool player_lose = false;
+	CivilizationType player_type;
+  
 };
 
 

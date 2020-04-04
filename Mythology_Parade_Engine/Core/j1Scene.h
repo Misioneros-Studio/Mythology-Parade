@@ -2,6 +2,16 @@
 #define __j1SCENE_H__
 
 #include "j1Module.h"
+#include "j1Timer.h"
+
+enum class CloseSceneMenus {
+	None,
+	Pause,
+	Options,
+	Confirmation,
+	Confirmation_and_Pause,
+	Unknown
+};
 
 struct SDL_Texture;
 class ImageUI;
@@ -9,6 +19,7 @@ class WindowUI;
 class ButtonUI;
 class TextUI;
 class QuadTree;
+
 
 class j1Scene : public j1Module
 {
@@ -49,11 +60,27 @@ public:
 	// Called when clicking close button in options menu
 	void DeactivateOptionsMenu();
 
+	// Called when clicking a button in the menu with confirmation message
+	void ActivateConfirmationMenu(std::string str);
+
+	// Called when clicking no in the confirmation message
+	void DeactivateConfirmationMenu();
+
+	// Called when returning to main menu (either winning/losing or by menu options like exit)
+	void BackToTitleMenu();
+
+	// Called when restarting the game
+	void RestartGame();
+
+
 	void OnClick(UI* element, float argument = 0);
 
 private:
-	SDL_Texture* debug_tex;
-	SDL_Texture* cursor_tex;
+
+	void DoWinOrLoseWindow(int type, bool win);
+
+  
+	SDL_Texture* winlose_tex;
 	ImageUI* ui_ingame;
 	WindowUI* ui_pause_window;
 	ButtonUI* ui_button[7];
@@ -61,9 +88,22 @@ private:
 	WindowUI* ui_options_window;
 	ButtonUI* ui_button_options;
 	TextUI* ui_text_options[2];
+	WindowUI* ui_winlose_window;
+	ButtonUI* ui_button_winlose[2];
+	TextUI* ui_text_winlose[4];
+	j1Timer timer_win_lose;
+	bool start_timer;
+	WindowUI* ui_confirmation_window;
+	ButtonUI* ui_button_confirmation[2];
+	TextUI* ui_text_confirmation[4];
+	std::string confirmation_option;
+  
 public:
+	SDL_Texture* debugBlue_tex;
+	SDL_Texture* debugRed_tex;
+
 	TextUI* ui_text_ingame[3];
-	QuadTree* quadTree;
+	CloseSceneMenus close_menus;
 };
 
 #endif // __j1SCENE_H__

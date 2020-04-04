@@ -85,6 +85,12 @@
     <ClCompile Include="j1TitleScene.cpp">
       <Filter>Core\Scenes</Filter>
     </ClCompile>
+    <ClCompile Include="j1Minimap.cpp">
+      <Filter>Core\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="j1LogoScene.cpp">
+      <Filter>Core\Scenes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1Window.h">
@@ -181,6 +187,13 @@
       <Filter>Core\Modules</Filter>
     </ClInclude>
     <ClInclude Include="j1TitleScene.h">
+      <Filter>Core\Scenes</Filter>
+    </ClInclude>
+
+    <ClInclude Include="j1Minimap.h">
+      <Filter>Core\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="j1LogoScene.h">
       <Filter>Core\Scenes</Filter>
     </ClInclude>
   </ItemGroup>
