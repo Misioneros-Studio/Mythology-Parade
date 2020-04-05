@@ -69,19 +69,19 @@ void Unit::MoveToTarget()
 	switch (currentDirection)
 	{
 	case Direction::UP:
-		increment = { 0, -1 };
+		increment = { 0, -2 };
 		break;
 	case Direction::LATERAL:
-		increment = { 1, 0};
+		increment = { 2, 0};
 		break;
 	case Direction::DOWN:
-		increment = { 0, 1 };
+		increment = { 0, 2 };
 		break;
 	case Direction::DIAGONAL_DOWN:
-		increment = { 1, 1 };
+		increment = { 2, 1 };
 		break;
 	case Direction::DIAGONAL_UP:
-		increment = { 1, -1 };
+		increment = { 2, -1 };
 		break;
 	}
 
