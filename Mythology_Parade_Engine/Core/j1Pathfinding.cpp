@@ -3,10 +3,12 @@
 #include "j1App.h"
 #include "j1PathFinding.h"
 
-j1PathFinding::j1PathFinding() : j1Module(), map(NULL), last_path(DEFAULT_PATH_LENGTH),width(0), height(0)
+
+j1PathFinding::j1PathFinding() : j1Module(), map(NULL),width(0), height(0),requestPath(false)
 {
 	name.append("pathfinding");
-	last_path.clear();
+
+
 }
 
 // Destructor
@@ -15,22 +17,16 @@ j1PathFinding::~j1PathFinding()
 	RELEASE_ARRAY(map);
 }
 
-
-// Called before render is available
-bool j1PathFinding::Awake(pugi::xml_node& config) {
-	bool ret = true;
-	active = false;
-
-	return ret;
-}
-
-
 // Called before quitting
 bool j1PathFinding::CleanUp()
 {
 	LOG("Freeing pathfinding library");
 
-	last_path.clear();
+	for (int i = 0; i < pathfinderList.size(); i++)
+	{
+	pathfinderList[i]->last_path.clear();
+	}
+	pathfinderList.clear();
 	RELEASE_ARRAY(map);
 	return true;
 }
@@ -60,17 +56,6 @@ bool j1PathFinding::IsWalkable(const iPoint& pos) const
 	return t != INVALID_WALK_CODE && t > 0;
 }
 
-// ----------------------------------------------------------------------------------
-// Actual A* algorithm: return number of steps in the creation of the path or -1 ----
-// ----------------------------------------------------------------------------------
-void j1PathFinding::ChangeMapValue(const iPoint pos, int value) const
-{
-	if (IN_RANGE(value, 0, 1) == 1) 
-	{
-		map[(pos.y*width) + pos.x] = value;
-	}
-}
-
 // Utility: return the walkability value of a tile
 uchar j1PathFinding::GetTileAt(const iPoint& pos) const
 {
@@ -80,115 +65,61 @@ uchar j1PathFinding::GetTileAt(const iPoint& pos) const
 	return INVALID_WALK_CODE;
 }
 
-// To request all tiles involved in the last generated path
-const std::list<iPoint>* j1PathFinding::GetLastPath()
-{
-	return &last_path;
-}
 
-// PathList ------------------------------------------------------------------------
-// Looks for a node in this list and returns it's list node or NULL
-// ---------------------------------------------------------------------------------
-PathNode* PathList::Find(const iPoint& point)
+// TODO 3: Remember, now we want to iterate from all PathFinders and check if it's available.
+
+void j1PathFinding::RequestPath(const iPoint& origin, const iPoint& destination)
 {
-	for (std::list<PathNode>::iterator it = list.begin(); it != list.end(); it++)
+	LOG("Requesting a path...");
+	if (!IsWalkable(origin) || !IsWalkable(destination))
 	{
-		if(it->pos == point)
-			return &it._Ptr->_Myval;
+		LOG("Origin or destination are not walkable");
+		return;
 	}
-	return NULL;
-}
+	requestPath = true;
 
-// PathList ------------------------------------------------------------------------
-// Returns the Pathnode with lowest score in this list or NULL if empty
-// ---------------------------------------------------------------------------------
-PathNode* PathList::GetNodeLowestScore()
-{
-	PathNode* ret = NULL;
-	int min = 65535;
-
-	for (std::list<PathNode>::iterator it = list.begin(); it != list.end(); it++)
+	for (int i = 0; i < pathfinderList.size(); i++)
 	{
-		if(it->Score() < min)
-		{
-			min = it->Score();
-			ret = &it._Ptr->_Myval;
+		if (pathfinderList[i]->available) {
+			pathfinderList[i]->PreparePath(origin, destination);		
+			LOG("Requested succeed");
+			return;
 		}
 	}
-	return ret;
+
+
 }
 
-// PathNode -------------------------------------------------------------------------
-// Convenient constructors
-// ----------------------------------------------------------------------------------
-PathNode::PathNode() : g(-1), h(-1), pos(-1, -1), parent(NULL)
-{}
-
-PathNode::PathNode(int g, int h, const iPoint& pos, const PathNode* parent) : g(g), h(h), pos(pos), parent(parent)
-{}
-
-PathNode::PathNode(const PathNode& node) : g(node.g), h(node.h), pos(node.pos), parent(node.parent)
-{}
-
-// PathNode -------------------------------------------------------------------------
-// Fills a list (PathList) of all valid adjacent pathnodes
-// ----------------------------------------------------------------------------------
-uint PathNode::FindWalkableAdjacents(PathList& list_to_fill) const
+bool j1PathFinding::Start()
 {
-	iPoint cell;
-	uint before = list_to_fill.list.size();
+	//TODO 3: Add PathFinder to the vector.
 
-	// north
-	cell.create(pos.x, pos.y + 1);
-	if(App->pathfinding->IsWalkable(cell))
-		list_to_fill.list.push_back(PathNode(-1, -1, cell, this));
-
-	// south
-	cell.create(pos.x, pos.y - 1);
-	if(App->pathfinding->IsWalkable(cell))
-		list_to_fill.list.push_back(PathNode(-1, -1, cell, this));
-
-	// east
-	cell.create(pos.x + 1, pos.y);
-	if(App->pathfinding->IsWalkable(cell))
-		list_to_fill.list.push_back(PathNode(-1, -1, cell, this));
-
-	// west
-	cell.create(pos.x - 1, pos.y);
-	if(App->pathfinding->IsWalkable(cell))
-		list_to_fill.list.push_back(PathNode(-1, -1, cell, this));
-
-	return list_to_fill.list.size();
+	PathFinder* pathfinder01 = new PathFinder;
+	PathFinder* pathfinder02 = new PathFinder;
+	pathfinderList.push_back(pathfinder01);
+	pathfinderList.push_back(pathfinder02);
+	return true;
 }
 
-// PathNode -------------------------------------------------------------------------
-// Calculates this tile score
-// ----------------------------------------------------------------------------------
-int PathNode::Score() const
+
+
+bool j1PathFinding::Update(float dt)
 {
-	return g + h;
+	if (!requestPath)
+		return true;
+
+	for (int i = 0; i < pathfinderList.size(); i++)
+	{
+		if (!pathfinderList[i]->available)
+			requestPath = pathfinderList[i]->Update();
+	}
+		
+
+	return true;
 }
 
-// PathNode -------------------------------------------------------------------------
-// Calculate the F for a specific destination tile
-// ----------------------------------------------------------------------------------
-int PathNode::CalculateF(const iPoint& destination)
-{
-	g = parent->g + 1;
-	h = pos.DistanceTo(destination);
-
-	return g + h;
-}
 
 // ----------------------------------------------------------------------------------
 // Actual A* algorithm: return number of steps in the creation of the path or -1 ----
 // ----------------------------------------------------------------------------------
-int j1PathFinding::CreatePath(const iPoint& origin, const iPoint& destination)
-{
-	int ret = -1;
-
-	// Nice try :)
-
-	return ret;
-}
 

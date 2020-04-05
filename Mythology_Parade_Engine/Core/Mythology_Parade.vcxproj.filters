@@ -91,6 +91,9 @@
     <ClCompile Include="j1LogoScene.cpp">
       <Filter>Core\Scenes</Filter>
     </ClCompile>
+    <ClCompile Include="PathFinder.cpp">
+      <Filter>Core\Classes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1Window.h">
@@ -189,12 +192,14 @@
     <ClInclude Include="j1TitleScene.h">
       <Filter>Core\Scenes</Filter>
     </ClInclude>
-
     <ClInclude Include="j1Minimap.h">
       <Filter>Core\Modules</Filter>
     </ClInclude>
     <ClInclude Include="j1LogoScene.h">
       <Filter>Core\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="PathFinder.h">
+      <Filter>Core\Classes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -236,6 +241,9 @@
     </Filter>
     <Filter Include="Core\Entities\Player">
       <UniqueIdentifier>{3dcd2ce1-3295-4ae1-87f2-feb1ee4efadf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Classes">
+      <UniqueIdentifier>{374c90ee-db3c-449e-a9e4-a9ed25f77057}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
