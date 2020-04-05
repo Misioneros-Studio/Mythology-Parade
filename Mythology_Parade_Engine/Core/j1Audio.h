@@ -45,7 +45,7 @@ public:
 
 private:
 
-	_Mix_Music*			music; //= NULL;
+	_Mix_Music*			music = NULL;
 	std::list<Mix_Chunk*>	fx;
 };
 

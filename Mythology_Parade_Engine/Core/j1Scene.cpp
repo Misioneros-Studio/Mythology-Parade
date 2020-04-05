@@ -244,34 +244,33 @@ bool j1Scene::Update(float dt)
 			DoWinOrLoseWindow(2, false);
 		}
 	}
-	//Audio
-	/*if (App->render->camera.x < -30 + App->render->camera.w && App->render->camera.x > -30 && App->render->camera.y <200 && App->render->camera.h)
+	//Spatial Audio
+	if (App->input->GetKey(SDL_SCANCODE_M) == KEY_DOWN)
 	{
-		SeaSounding = 1;
-		//App->audio->PlayFx(App->audio->)
-	
-	}*/
-	if (App->input->GetKey(SDL_SCANCODE_N) == KEY_DOWN) {
-		//SeaSounding = 1;
 		Mix_HaltChannel(-1);
 		Mix_SetPosition(1, 270, 1);
 		App->audio->PlayFx(1, SeaSound, 0);
 	}
-	if (App->input->GetKey(SDL_SCANCODE_M) == KEY_DOWN) {
+	if (App->input->GetKey(SDL_SCANCODE_N) == KEY_DOWN)
+	{
 		Mix_HaltChannel(-1);
 		Mix_SetPosition(2, 270, 200);
 		App->audio->PlayFx(2, SeaSound, 0);
 	}
-	if (App->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN) {
+	if (App->input->GetKey(SDL_SCANCODE_O) == KEY_DOWN)
+	{
 		Mix_HaltChannel(-1);
 		Mix_SetPosition(3, 90, 1);
 		App->audio->PlayFx(3, SeaSound, 0);
 	}
-	if (App->input->GetKey(SDL_SCANCODE_O) == KEY_DOWN) {
+	if (App->input->GetKey(SDL_SCANCODE_P) == KEY_DOWN)
+	{
 		Mix_HaltChannel(-1);
 		Mix_SetPosition(4, 90, 200);
 		App->audio->PlayFx(4, SeaSound, 0);
 	}
+
+	
 
 	return true;
 }

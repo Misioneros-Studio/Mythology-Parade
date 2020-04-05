@@ -191,7 +191,7 @@ bool j1Audio::CleanFxs() {
 
 	if (!active)
 		return false;
-	//Mix_HaltChannel(-1);
+	Mix_HaltChannel(-1);
 	for (std::list<Mix_Chunk*>::iterator it = fx.begin(); it != fx.end(); it++)
 	{
 		Mix_FreeChunk(it._Ptr->_Myval);
