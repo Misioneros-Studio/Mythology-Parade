@@ -49,6 +49,9 @@ public:
 
 	bool Update(float dt) override;
 
+	void j1PathFinding::ChangeMapValue(const iPoint pos, int value) const;
+
+
 	j1Timer timer;
 
 	// TODO 3: Create a vector of PathFinders to distribute the new paths. Make sure to iterate from all vector.

@@ -127,25 +127,27 @@ bool j1Scene::Start()
 bool j1Scene::PreUpdate()
 {
 	// debug pathfing ------------------
-	//static iPoint origin;
-	//static bool origin_selected = false;
+	static iPoint origin;
+	static bool origin_selected = false;
 
-	//iPoint p = App->map->GetMousePositionOnMap();
+	int x, y;
+	App->input->GetMousePosition(x, y);
+	iPoint p = App->render->ScreenToWorld(x, y);
+	p = App->map->WorldToMap(p.x, p.y);
 
-	//if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN)
-	//{
-	//	if (origin_selected == true)
-	//	{
-	//		App->pathfinding->CreatePath(origin, p);
-	//		origin_selected = false;
-	//	}
-	//	else
-	//	{
-	//		origin = p;
-	//		origin_selected = true;
-	//	}
-	//}
-
+	if (App->input->GetMouseButtonDown(SDL_BUTTON_RIGHT) == KEY_DOWN)
+	{
+		if (origin_selected == true)
+		{
+			App->pathfinding->RequestPath(origin, p);
+			origin_selected = false;
+		}
+		else
+		{
+			origin = p;
+			origin_selected = true;
+		}
+	}
 
 
 	// Move Camera if click on the minimap
@@ -226,24 +228,36 @@ bool j1Scene::Update(float dt)
 	//if (App->input->drawDebug)
 	//	App->render->DrawQuadTree(quadTree->type, quadTree->baseNode);
 
-	iPoint p = App->map->GetMousePositionOnMap();
+	//iPoint p = App->map->GetMousePositionOnMap();
 
-	if (IN_RANGE(p.x, 0, App->map->data.width-1) == 1 && IN_RANGE(p.y, 0, App->map->data.height-1) == 1)
-	{
-		//p = App->map->MapToWorld(p.x, p.y);
-		//App->render->Blit(debug_tex, p.x, p.y);
-		//App->render->Blit(debug_tex, p.x - 32, p.y, { 128, 64 });
-	}
+	//if (IN_RANGE(p.x, 0, App->map->data.width-1) == 1 && IN_RANGE(p.y, 0, App->map->data.height-1) == 1)
+	//{
+	//	//p = App->map->MapToWorld(p.x, p.y);
+	//	//App->render->Blit(debug_tex, p.x, p.y);
+	//	//App->render->Blit(debug_tex, p.x - 32, p.y, { 128, 64 });
+	//}
 
-	std::vector<iPoint> path = *App->pathfinding->pathfinderList[0]->GetLastPath();
-	if (path.size() != 0) 
+
+	//Draw blue quad debug for pathfinding
+	int x, y;
+	App->input->GetMousePosition(x, y);
+	iPoint p = App->render->ScreenToWorld(x, y);
+	p = App->map->WorldToMap(p.x, p.y);
+	p = App->map->MapToWorld(p.x, p.y);
+
+	App->render->Blit(debugBlue_tex, p.x, p.y);
+
+	for (int i = 0; i < App->pathfinding->pathfinderList.size(); i++)
 	{
-		for (std::vector<iPoint>::iterator it = path.begin(); it != path.end(); it++)
+		std::vector<iPoint> path = *App->pathfinding->pathfinderList[i]->GetLastPath();
+
+		for (uint i = 0; i < path.size(); ++i)
 		{
-			iPoint pos = App->map->MapToWorld(it->x, it->y);
+			iPoint pos = App->map->MapToWorld(path.at(i).x, path.at(i).y);
 			App->render->Blit(debugBlue_tex, pos.x, pos.y);
 		}
 	}
+
 
 	if (App->entityManager->getPlayer()->player_win == true) {
 		if (App->entityManager->getPlayer()->player_type == CivilizationType::VIKING) {

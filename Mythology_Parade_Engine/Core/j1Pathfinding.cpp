@@ -41,7 +41,13 @@ void j1PathFinding::SetMap(uint width, uint height, uchar* data)
 	map = new uchar[width*height];
 	memcpy(map, data, width*height);
 }
-
+void j1PathFinding::ChangeMapValue(const iPoint pos, int value) const
+{
+	if (IN_RANGE(value, 0, 1) == 1)
+	{
+		map[(pos.y * width) + pos.x] = value;
+	}
+}
 // Utility: return true if pos is inside the map boundaries
 bool j1PathFinding::CheckBoundaries(const iPoint& pos) const
 {
@@ -95,9 +101,7 @@ bool j1PathFinding::Start()
 	//TODO 3: Add PathFinder to the vector.
 
 	PathFinder* pathfinder01 = new PathFinder;
-	PathFinder* pathfinder02 = new PathFinder;
 	pathfinderList.push_back(pathfinder01);
-	pathfinderList.push_back(pathfinder02);
 	return true;
 }
 

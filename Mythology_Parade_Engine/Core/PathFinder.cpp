@@ -6,6 +6,7 @@
 PathFinder::PathFinder() : last_path(DEFAULT_PATH_LENGTH), initSuccessful(false), pathCompleted(false),max_iterations(50),available(true)
 {
 	LOG("PathFinder created");
+	last_path.clear();
 }
 
 PathFinder::~PathFinder()
@@ -138,6 +139,7 @@ PathNode* PathList::GetNodeLowestScore() const
 	int min = 65535;
 
 	std::vector<PathNode>::const_iterator item = list.end();
+	PathNode* node = item._Ptr;
 	while (item._Ptr)
 	{
 		if (item->Score() < min)
