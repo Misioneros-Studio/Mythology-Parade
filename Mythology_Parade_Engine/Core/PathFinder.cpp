@@ -133,22 +133,33 @@ std::vector<PathNode>::const_iterator PathList::Find(const iPoint& point) const
 // PathList ------------------------------------------------------------------------
 // Returns the Pathnode with lowest score in this list or NULL if empty
 // ---------------------------------------------------------------------------------
-PathNode* PathList::GetNodeLowestScore() const
+PathNode* PathList::GetNodeLowestScore()
 {
 	PathNode* ret = NULL;
 	int min = 65535;
 
-	std::vector<PathNode>::const_iterator item = list.end();
-	PathNode* node = item._Ptr;
-	while (item._Ptr)
-	{
-		if (item->Score() < min)
-		{
-			min = item->Score();
-			ret = item._Ptr;
-		}
-		item = item--;
+	if (list.empty()) {
+		return ret;
 	}
+
+
+	for (int i = list.size() - 1 ; i >= 0; i--)
+	{
+		if (list[i].Score() < min) {
+			min = list[i].Score();
+			ret = &list[i];
+		}
+	}
+
+	//while (item)
+	//{
+	//	if (item->Score() < min)
+	//	{
+	//		min = item->Score();
+	//		ret = item;
+	//	}
+	//	item = item--;
+	//}
 	return ret;
 }
 #pragma endregion
