@@ -35,7 +35,7 @@ struct PathList
 {
 
 	// Looks for a node in this list and returns it's list node or NULL
-	std::vector<PathNode>::const_iterator Find(const iPoint& point) const;
+	std::vector<PathNode>::const_iterator* Find(const iPoint& point) const;
 
 	// Returns the Pathnode with lowest score in this list or NULL if empty
 	PathNode* GetNodeLowestScore();

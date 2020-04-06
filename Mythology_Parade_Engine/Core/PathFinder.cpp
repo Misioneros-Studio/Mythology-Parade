@@ -37,7 +37,7 @@ bool PathFinder::IteratePath()
 
 	PathNode* node = new PathNode(*open.GetNodeLowestScore());
 	close.list.push_back(*node);
-	open.list.erase(open.Find(node->pos));
+	open.list.erase(*open.Find(node->pos));
 
 
 	if (node->pos == destination) {
@@ -71,18 +71,18 @@ bool PathFinder::IteratePath()
 	for (uint i = 0; i < numNodes; i++)
 	{
 		// ignore nodes in the closed list
-		if (close.Find(adjacentNodes.list[i].pos)._Ptr == NULL) {
+		if (close.Find(adjacentNodes.list[i].pos) == NULL) {
 			// If it is NOT found, calculate its F and add it to the open list
-			if (open.Find(adjacentNodes.list[i].pos)._Ptr == NULL) {
+			if (open.Find(adjacentNodes.list[i].pos) == NULL) {
 				adjacentNodes.list[i].CalculateF(destination);
 				open.list.push_back(adjacentNodes.list[i]);
 			}
 			// If it is already in the open list, check if it is a better path (compare G)
 			else {
-				if (adjacentNodes.list[i].g < open.Find(adjacentNodes.list[i].pos)->g) {
+				if (adjacentNodes.list[i].g < open.Find(adjacentNodes.list[i].pos)->_Ptr->g) {
 					// If it is a better path, Update the parent
 					adjacentNodes.list[i].CalculateF(destination);
-					open.list.erase(open.Find(adjacentNodes.list[i].pos));
+					open.list.erase(*open.Find(adjacentNodes.list[i].pos));
 					open.list.push_back(adjacentNodes.list[i]);
 				}
 			}
@@ -119,15 +119,14 @@ bool PathFinder::Update()
 // PathList ------------------------------------------------------------------------
 // Looks for a node in this list and returns it's list node or NULL
 // ---------------------------------------------------------------------------------
-std::vector<PathNode>::const_iterator PathList::Find(const iPoint& point) const
+std::vector<PathNode>::const_iterator* PathList::Find(const iPoint& point) const
 {
-	std::vector<PathNode>::const_iterator item = list.begin();
-	while (item._Ptr)
-	{
-		if (item->pos == point)
-			return item;
-		item = item++;
+	for (std::vector<PathNode>::const_iterator it = list.begin(); it != list.end(); ++it) {
+		if (it->pos == point)
+			return &it;	
 	}
+	return NULL;
+	
 }
 
 // PathList ------------------------------------------------------------------------
@@ -192,9 +191,29 @@ uint PathNode::FindWalkableAdjacents(PathList& list_to_fill) const
 	cell.create(pos.x, pos.y + 1);
 	if (App->pathfinding->IsWalkable(cell))
 		list_to_fill.list.push_back(PathNode(-1, -1, cell, this));
+		
+	// north - east
+	cell.create(pos.x + 1, pos.y + 1);
+	if (App->pathfinding->IsWalkable(cell))
+		list_to_fill.list.push_back(PathNode(0, -1, cell, this));
+		
+	// north - west
+	cell.create(pos.x - 1, pos.y + 1);
+	if (App->pathfinding->IsWalkable(cell))
+		list_to_fill.list.push_back(PathNode(0, -1, cell, this));
 
 	// south
 	cell.create(pos.x, pos.y - 1);
+	if (App->pathfinding->IsWalkable(cell))
+		list_to_fill.list.push_back(PathNode(-1, -1, cell, this));
+
+	// south - east
+	cell.create(pos.x + 1, pos.y - 1);
+	if (App->pathfinding->IsWalkable(cell))
+		list_to_fill.list.push_back(PathNode(-1, -1, cell, this));
+
+	// south -west
+	cell.create(pos.x - 1, pos.y - 1);
 	if (App->pathfinding->IsWalkable(cell))
 		list_to_fill.list.push_back(PathNode(-1, -1, cell, this));
 
