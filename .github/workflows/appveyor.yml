@@ -1,0 +1,32 @@
+version: 0.{build}
+image: Visual Studio 2019
+branches:
+  only:
+  - master
+configuration: Release
+build:
+  project: Mythology_Parade_Engine/Mythology_Parade_Solution.sln
+  verbosity: minimal
+after_build:
+- cmd: >-
+    copy D:\Agenda_Automatica\Project2\Mythology_Parade_Engine\Release\solution.exe D:\Agenda_Automatica\Project2\Mythology_Parade_Engine\Game
+    copy D:\Agenda_Automatica\Project2\README.md D:\Agenda_Automatica\Project2\Mythology_Parade_Engine\Game
+artifacts:
+- path: Mythology_Parade_Engine/Game
+  name: Mythology_Parade_Engine
+  type: WebDeployPackage
+deploy:
+- provider: GitHub
+  tag: v$(appveyor_build_version)
+  release: Fallout Test v$(appveyor_build_version)
+  description: Automatic Release
+  auth_token:
+    secure: 8b38182d57851017ed92856534518cd69b1a5b2c
+  draft: false
+  prerelease: false
+notifications:
+- provider: GitHubPullRequest
+  template: Release Successful
+  on_build_success: true
+  on_build_failure: false
+  on_build_status_changed: false
