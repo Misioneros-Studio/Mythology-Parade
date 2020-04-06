@@ -76,6 +76,7 @@ bool CombatUnit::Update(float dt)
 
 	App->render->Blit(texture, position.x - currentAnim.sprites[num_current_anim].rect.w / 3, position.y - currentAnim.sprites[num_current_anim].rect.h + 16, blitRect, &currentAnim.sprites[num_current_anim].rect, 1.f, flipState);
 	
+	App->render->DrawQuad({position.x, position.y, 5, 5}, 0, 255, 0);
 	iPoint draw = App->map->MapToWorld(targetPosition.x, targetPosition.y);
 	App->render->DrawQuad({draw.x, draw.y, 64, 32}, 255, 0, 0);
 	return true;
