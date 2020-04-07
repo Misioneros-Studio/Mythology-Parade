@@ -56,7 +56,7 @@ bool Player::Update(float dt)
 		iPoint spawnPos = App->map->MapToWorld(mouse.x, mouse.y);
 
 		spawnPos.y += (App->map->data.tile_height / 2);
-		spawnPos.x += 15;
+		spawnPos.x += (App->map->data.tile_width / 2);
 		App->entityManager->CreateUnitEntity(UnitType::ASSASSIN, spawnPos);
 	}
 

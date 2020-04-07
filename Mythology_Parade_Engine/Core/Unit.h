@@ -58,6 +58,10 @@ public:
 
 	virtual bool Draw(float dt);
 	virtual void Action(Entity*);
+	void ChangeState(iPoint, AnimationType);
+
+	void MoveToTarget();
+	Direction getMovementDirection(iPoint);
 
 protected:
 	//Animation
@@ -65,13 +69,11 @@ protected:
 	Animation_char currentAnim;
 
 	iPoint targetPosition;
-	Direction getMovementDirection(iPoint);
 	AnimationType state;
+
 	//void SetTarget();
-
-
 	//void CheckState();
-	void MoveToTarget();
+
 
 };
 

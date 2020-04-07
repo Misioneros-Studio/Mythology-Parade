@@ -53,8 +53,8 @@ void CombatUnit::Init(int maxHealth, int damage, int range, int speed)
 	SetMoveSpeed(speed);
 
 	//TODO: Convert to a get funtions
-	currentDirection = getMovementDirection(targetPosition);
-	currentAnim = App->entityManager->animations[unitType][state][currentDirection];
+	targetPosition = {-1, -1};
+	ChangeState(targetPosition, state);
 
 }
 
@@ -62,23 +62,24 @@ bool CombatUnit::Update(float dt)
 {
 	if (App->input->GetMouseButtonDown(SDL_BUTTON_RIGHT) == KEY_DOWN)
 	{
-		targetPosition = App->map->GetMousePositionOnMap();
-		currentDirection = getMovementDirection(targetPosition);
-		currentAnim = App->entityManager->animations[unitType][AnimationType::WALK][currentDirection];
+		iPoint pos = App->map->GetMousePositionOnMap();
+
+		targetPosition = pos;
+		ChangeState(targetPosition, AnimationType::WALK);
 	}
 
-	if (targetPosition != iPoint(0, 0))
+	if (targetPosition != iPoint(-1,-1))
 		MoveToTarget();
 
 
 	int num_current_anim = currentAnim.GetSprite();
-	blitRect = { currentAnim.sprites[num_current_anim].rect.w, currentAnim.sprites[num_current_anim].rect.h };
+	blitRect = { (int)(currentAnim.sprites[num_current_anim].rect.w / 1.5f), (int)(currentAnim.sprites[num_current_anim].rect.h / 1.5f) };
 
-	App->render->Blit(texture, position.x - currentAnim.sprites[num_current_anim].rect.w / 3, position.y - currentAnim.sprites[num_current_anim].rect.h + 16, blitRect, &currentAnim.sprites[num_current_anim].rect, 1.f, flipState);
+	App->render->Blit(texture, position.x - blitRect.x / 2, position.y - blitRect.y, blitRect, &currentAnim.sprites[num_current_anim].rect, 1.f, flipState);
 	
 	App->render->DrawQuad({position.x, position.y, 5, 5}, 0, 255, 0);
-	iPoint draw = App->map->MapToWorld(targetPosition.x, targetPosition.y);
-	App->render->DrawQuad({draw.x, draw.y, 64, 32}, 255, 0, 0);
+	//iPoint draw = App->map->MapToWorld(targetPosition.x, targetPosition.y);
+	//App->render->DrawQuad({draw.x, draw.y, 64, 32}, 255, 0, 0);
 	return true;
 }
 

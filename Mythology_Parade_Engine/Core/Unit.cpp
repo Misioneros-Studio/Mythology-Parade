@@ -63,7 +63,7 @@ void Unit::MoveToTarget()
 	//if (!isSelected())
 	//	return;
 
-	//move function logic
+	////move function logic
 	iPoint increment = { 0, 0 };
 
 	switch (currentDirection)
@@ -91,7 +91,31 @@ void Unit::MoveToTarget()
 	}
 
 	state = AnimationType::WALK;
-	position += increment;
+
+	iPoint currentIso = position + increment;
+	iPoint targetIso = App->map->MapToWorld(targetPosition.x, targetPosition.y);
+	targetIso += {32, 16};
+
+	if (currentIso.y > targetIso.y) 
+	{
+		currentIso.x += 32;
+		currentIso.y += 16;
+	}
+	
+	currentIso = App->map->WorldToMap(currentIso.x, currentIso.y);
+
+	if (currentIso == targetPosition) 
+	{
+		position = App->map->MapToWorld(targetPosition.x, targetPosition.y);
+		position += {32, 16};
+
+		targetPosition = { -1, -1 };
+		ChangeState(targetPosition, AnimationType::IDLE);
+	}
+	else
+	{
+		position += increment;
+	}
 }
 
 void Unit::Init(int maxHealth)
@@ -101,6 +125,19 @@ void Unit::Init(int maxHealth)
 	
 }
 
+void Unit::ChangeState(iPoint isoLookPosition, AnimationType newState) 
+{
+	currentDirection = getMovementDirection(isoLookPosition);
+
+	if (targetPosition == iPoint(-1, -1)) 
+	{
+		currentAnim = App->entityManager->animations[unitType][AnimationType::IDLE][currentDirection];
+	}
+	else
+	{
+		currentAnim = App->entityManager->animations[unitType][newState][currentDirection];
+	}
+}
 
 bool Unit::Draw(float dt)
 {
@@ -125,12 +162,12 @@ Direction Unit::getMovementDirection(iPoint target)
 {
 	Direction dir = Direction::UP;
 
-	iPoint temp = App->map->WorldToMap(position.x + App->map->data.tile_width/2, position.y + App->map->data.tile_height / 2);
+	iPoint temp = App->map->WorldToMap(position.x, position.y);
 
 	target = App->map->MapToWorld(target.x, target.y);
 	iPoint pos = App->map->MapToWorld(temp.x, temp.y);
 
-	if (target.x > position.x)
+	if (target.x >= position.x)
 	{
 		flipState = SDL_FLIP_HORIZONTAL;
 	}
@@ -162,6 +199,7 @@ Direction Unit::getMovementDirection(iPoint target)
 	else 
 	{
 		//Is the same place
+		targetPosition = { -1, -1 };
 		LOG("EHE");
 	}
 
