@@ -8,6 +8,7 @@
 #include "PathFinder.h"
 
 #include <vector>
+#include <queue>
 
 #define DEFAULT_PATH_LENGTH 50
 #define INVALID_WALK_CODE 255
@@ -55,7 +56,10 @@ public:
 	j1Timer timer;
 
 	// TODO 3: Create a vector of PathFinders to distribute the new paths. Make sure to iterate from all vector.
-	std::vector<PathFinder*> pathfinderList;
+	std::vector<PathFinder> pathfinderList;
+
+	std::queue<PathRequest> pathRequestList;
+
 private:
 
 	// size of the map

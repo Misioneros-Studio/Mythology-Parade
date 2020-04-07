@@ -24,7 +24,7 @@ bool j1PathFinding::CleanUp()
 
 	for (int i = 0; i < pathfinderList.size(); i++)
 	{
-	pathfinderList[i]->last_path.clear();
+	pathfinderList[i].last_path.clear();
 	}
 	pathfinderList.clear();
 	RELEASE_ARRAY(map);
@@ -84,14 +84,7 @@ void j1PathFinding::RequestPath(const iPoint& origin, const iPoint& destination)
 	}
 	requestPath = true;
 
-	for (int i = 0; i < pathfinderList.size(); i++)
-	{
-		if (pathfinderList[i]->available) {
-			pathfinderList[i]->PreparePath(origin, destination);		
-			LOG("Requested succeed");
-			return;
-		}
-	}
+	pathRequestList.push(PathRequest(origin, destination));
 
 
 }
@@ -100,8 +93,8 @@ bool j1PathFinding::Start()
 {
 	//TODO 3: Add PathFinder to the vector.
 
-	PathFinder* pathfinder01 = new PathFinder;
-	pathfinderList.push_back(pathfinder01);
+	pathfinderList.push_back(PathFinder());
+	pathfinderList.push_back(PathFinder());
 	return true;
 }
 
@@ -109,16 +102,40 @@ bool j1PathFinding::Start()
 
 bool j1PathFinding::Update(float dt)
 {
+
 	if (!requestPath)
 		return true;
 
+	for (int j = 0; j < pathRequestList.size(); j++)
+	{
+		for (int i = 0; i < pathfinderList.size(); i++)
+		{
+			if (pathfinderList[i].available) {
+				PathRequest request = pathRequestList.front();
+				pathfinderList[i].PreparePath(request.origin, request.destination);
+				pathRequestList.pop();
+				LOG("Requested succeed");
+				return true;
+			}
+		}
+	}
+
+
 	for (int i = 0; i < pathfinderList.size(); i++)
 	{
-		if (!pathfinderList[i]->available)
-			requestPath = pathfinderList[i]->Update();
+		if (!pathfinderList[i].available)
+			requestPath = pathfinderList[i].Update();
 	}
-		
+	
 
+	
+	for (int i = 0; i < pathfinderList.size(); i++)
+	{
+		if (pathfinderList[i].available)
+			requestPath = false;
+		else
+			requestPath = true;
+	}
 	return true;
 }
 

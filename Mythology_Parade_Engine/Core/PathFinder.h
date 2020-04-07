@@ -5,6 +5,12 @@
 
 #pragma region Structs
 
+struct PathRequest {
+	iPoint origin;
+	iPoint destination;
+
+	PathRequest(iPoint, iPoint);
+};
 
 struct PathList;
 struct PathNode

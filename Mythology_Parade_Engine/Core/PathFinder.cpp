@@ -250,3 +250,8 @@ int PathNode::CalculateF(const iPoint& destination)
 }
 #pragma endregion
 
+PathRequest::PathRequest(iPoint o, iPoint d)
+{
+	origin = o;
+	destination = d;
+}
