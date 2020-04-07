@@ -9,8 +9,8 @@ build:
   verbosity: minimal
 after_build:
 - cmd: >-
-    copy D:\Agenda_Automatica\Project2\Mythology_Parade_Engine\Release\solution.exe D:\Agenda_Automatica\Project2\Mythology_Parade_Engine\Game
-    copy D:\Agenda_Automatica\Project2\README.md D:\Agenda_Automatica\Project2\Mythology_Parade_Engine\Game
+    copy C:\projects\Mythology_Parade_Engine\Release\solution.exe C:\projects\Mythology_Parade_Engine\Game
+    copy C:\projects\Mythology_Parade_Engine\README.md C:\projects\Mythology_Parade_Engine\Mythology_Parade_Engine\Game
 artifacts:
 - path: Mythology_Parade_Engine/Game
   name: Mythology_Parade_Engine
