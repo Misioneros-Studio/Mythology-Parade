@@ -42,6 +42,7 @@ public:
 	uint Lose_Sound;
 	uint NewGame_transition;
 	uint ExitGame_transition;
+	uint SeaSound;
 
 private:
 

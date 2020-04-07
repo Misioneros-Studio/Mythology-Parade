@@ -86,8 +86,6 @@ bool j1Scene::Start()
 	App->gui->sfx_UI[(int)UI_Audio::EXIT] = App->audio->LoadFx("audio/ui/Exit.wav");
 	App->gui->sfx_UI[(int)UI_Audio::CLOSE] = App->audio->LoadFx("audio/ui/Close_Menu.wav");
 
-	SeaSound = App->audio->LoadFx("audio/fx/Close_to_seaFX.wav");
-
 	for (int i = 0; i < 4; i++)
 	{
 		if (i < 3)
@@ -244,34 +242,6 @@ bool j1Scene::Update(float dt)
 			DoWinOrLoseWindow(2, false);
 		}
 	}
-	//Spatial Audio
-	if (App->input->GetKey(SDL_SCANCODE_M) == KEY_DOWN)
-	{
-		Mix_HaltChannel(-1);
-		Mix_SetPosition(1, 270, 1);
-		App->audio->PlayFx(1, SeaSound, 0);
-	}
-	if (App->input->GetKey(SDL_SCANCODE_N) == KEY_DOWN)
-	{
-		Mix_HaltChannel(-1);
-		Mix_SetPosition(2, 270, 200);
-		App->audio->PlayFx(2, SeaSound, 0);
-	}
-	if (App->input->GetKey(SDL_SCANCODE_O) == KEY_DOWN)
-	{
-		Mix_HaltChannel(-1);
-		Mix_SetPosition(3, 90, 1);
-		App->audio->PlayFx(3, SeaSound, 0);
-	}
-	if (App->input->GetKey(SDL_SCANCODE_P) == KEY_DOWN)
-	{
-		Mix_HaltChannel(-1);
-		Mix_SetPosition(4, 90, 200);
-		App->audio->PlayFx(4, SeaSound, 0);
-	}
-
-	
-
 	return true;
 }
 
