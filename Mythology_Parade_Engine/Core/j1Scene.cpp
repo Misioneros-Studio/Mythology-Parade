@@ -537,12 +537,12 @@ void j1Scene::DoWinOrLoseWindow(int type, bool win) {
 		if (win == true) {
 			App->render->Blit(winlose_tex, 230, 100, &sec_win);
 			App->render->Blit(winlose_tex, 230, 100, &sec_viking);
-			App->audio->PlayFx(0,App->audio->WinVikings_sound);
+			App->audio->PlayFx(1,App->audio->WinVikings_sound);
 		}
 		else {
 			App->render->Blit(winlose_tex, 230, 100, &sec_greek);
 			App->render->Blit(winlose_tex, 230, 100, &sec_lose);
-			App->audio->PlayFx(0,App->audio->Lose_Sound);
+			App->audio->PlayFx(1,App->audio->Lose_Sound);
 		}
 	}
 
@@ -550,12 +550,12 @@ void j1Scene::DoWinOrLoseWindow(int type, bool win) {
 		if (win == true) {
 			App->render->Blit(winlose_tex, 230, 100, &sec_greek);
 			App->render->Blit(winlose_tex, 230, 100, &sec_lose);
-			App->audio->PlayFx(0,App->audio->WinGreeks_sound);
+			App->audio->PlayFx(1,App->audio->WinGreeks_sound);
 		}
 		else {
 			App->render->Blit(winlose_tex, 230, 100, &sec_viking);
 			App->render->Blit(winlose_tex, 230, 100, &sec_win);
-			App->audio->PlayFx(0,App->audio->Lose_Sound);
+			App->audio->PlayFx(1,App->audio->Lose_Sound);
 		}
 	}
 	if (timer_win_lose.ReadSec() >= 5) {
