@@ -2,7 +2,7 @@ version: 0.{build}
 image: Visual Studio 2019
 branches:
   only:
-  - master
+  - Develop
 configuration: Release
 build:
   project: Mythology_Parade_Engine/Mythology_Parade_Solution.sln
