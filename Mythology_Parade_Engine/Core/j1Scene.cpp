@@ -463,6 +463,7 @@ void j1Scene::RestartGame() {
 	App->pathfinding->destroy = true;
 	App->entityManager->destroy = true;
 	App->minimap->destroy = true;
+	App->animation->destroy = true;
 }
 
 void j1Scene::OnClick(UI* element, float argument)
