@@ -9,8 +9,7 @@ build:
   verbosity: minimal
 after_build:
 - cmd: >-
-    copy C:\projects\mythology-parade\Mythology_Parade_Engine\Release\Mythology_Parade.exe
- C:\projects\mythology-parade\Mythology_Parade_Engine
+    copy C:\projects\mythology-parade\Mythology_Parade_Engine\Release\Mythology_Parade.exe C:\projects\mythology-parade\Mythology_Parade_Engine
     copy C:\projects\mythology-parade\Mythology_Parade_Engine\README.md C:\projects\mythology-parade\Mythology_Parade_Engine\Game
 artifacts:
 - path: Mythology_Parade_Engine/Game
