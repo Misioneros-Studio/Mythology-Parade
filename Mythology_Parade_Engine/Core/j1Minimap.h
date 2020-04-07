@@ -30,8 +30,8 @@ public:
 	iPoint position;
 	int width;
 	int height;
-private:
 	float scale;
+private:
 	int map_width;
 	int map_height;
 	int margin;

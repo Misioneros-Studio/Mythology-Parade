@@ -101,6 +101,7 @@ private:
 public:
 	SDL_Texture* debugBlue_tex;
 	SDL_Texture* debugRed_tex;
+	bool paused_game;
 
 	TextUI* ui_text_ingame[3];
 	CloseSceneMenus close_menus;

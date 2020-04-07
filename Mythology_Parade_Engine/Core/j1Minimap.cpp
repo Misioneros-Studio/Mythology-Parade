@@ -88,10 +88,6 @@ bool j1Minimap::PostUpdate() {
 
 	App->render->Blit(texture, position.x, position.y, NULL, 0.0, 0);
 
-	SDL_Rect rect = { 0,0,0,0 };
-	iPoint rect_position = WorldToMinimap(-App->render->camera.x, -App->render->camera.y);
-	App->render->DrawQuad({ rect_position.x, rect_position.y, (int)(App->render->camera.w * scale),(int)(App->render->camera.h * scale) }, 255, 255, 255, 255, false, false);
-	
 	return true;
 }
 

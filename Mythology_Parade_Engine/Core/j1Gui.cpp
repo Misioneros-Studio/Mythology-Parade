@@ -7,6 +7,7 @@
 #include "j1Input.h"
 #include "j1Window.h"
 #include "j1Gui.h"
+#include "j1Minimap.h"
 #include "Console.h"
 #include "j1Audio.h"
 
@@ -84,6 +85,11 @@ bool j1Gui::PostUpdate()
 	{
 		it._Ptr->_Myval->PostUpdate();
 	}
+
+	iPoint rect_position = App->minimap->WorldToMinimap(-App->render->camera.x, -App->render->camera.y);
+	App->render->DrawQuad({ rect_position.x, rect_position.y, (int)(App->render->camera.w * App->minimap->scale),(int)(App->render->camera.h * App->minimap->scale) }, 255, 255, 255, 255, false, false);
+
+
 	//Show cursor ------------------------------
 	int x, y;
 	App->input->GetMousePosition(x, y);

@@ -98,7 +98,7 @@ bool j1Scene::Start()
 
 	close_menus = CloseSceneMenus::None;
 
-
+	paused_game = false;
 
 	winlose_tex = App->tex->Load("gui/WinLoseBackground.png");
 
@@ -150,7 +150,7 @@ bool j1Scene::PreUpdate()
 
 	// Move Camera if click on the minimap
 	int mouse_x, mouse_y;
-	if ((App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN) || (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_REPEAT))
+	if (((App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN) || (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_REPEAT)) && paused_game == false)
 	{
 		App->input->GetMousePosition(mouse_x, mouse_y);
 		SDL_Rect minimap = { App->minimap->position.x, App->minimap->position.y, App->minimap->width, App->minimap->height };
@@ -330,6 +330,7 @@ void j1Scene::ActivatePauseMenu() {
 		ui_text[6] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 620,572,237,38 }, { 0,0,100,100 }, "Close", { 0,0,0,255 });
 		ui_text[7] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 604,112,237,38 }, { 0,0,100,100 }, "PAUSE", { 255,255,255,255 }, { 1,0,0,0 });
 	}
+	paused_game = true;
 }
 
 // Called when clicking close button in pause menu
@@ -350,6 +351,7 @@ void j1Scene::DeactivatePauseMenu() {
 			}
 		}
 	}
+	paused_game = false;
 }
 
 
