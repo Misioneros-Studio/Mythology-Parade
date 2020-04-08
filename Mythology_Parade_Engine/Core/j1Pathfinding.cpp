@@ -85,8 +85,7 @@ void j1PathFinding::RequestPath(const iPoint& origin, const iPoint& destination)
 	requestPath = true;
 
 	pathRequestList.push(PathRequest(origin, destination));
-
-
+	
 }
 
 bool j1PathFinding::Start()

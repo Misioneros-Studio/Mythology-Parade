@@ -71,8 +71,6 @@ private:
 	void MoveTo(p2Point<int>);
 
 	//Animation
-
-
 	void CheckState();
 
 };

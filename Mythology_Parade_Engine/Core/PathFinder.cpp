@@ -28,6 +28,7 @@ void PathFinder::PreparePath(const iPoint& origin, const iPoint& destination)
 	initSuccessful = true;
 	available = false;
 	
+	
 }
 
 bool PathFinder::IteratePath()
