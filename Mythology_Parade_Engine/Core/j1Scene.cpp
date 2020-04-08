@@ -140,10 +140,7 @@ bool j1Scene::PreUpdate()
 		if (origin_selected == true)
 		{
 			App->pathfinding->RequestPath(origin, p);
-			origin.x += 2;
-			App->pathfinding->RequestPath(origin, p);
-			origin.x -= 3;
-			App->pathfinding->RequestPath(origin, p);
+
 			origin_selected = false;
 		}
 		else

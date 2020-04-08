@@ -79,19 +79,17 @@ void j1PathFinding::RequestPath(const iPoint& origin, const iPoint& destination)
 	LOG("Requesting a path...");
 	if (!IsWalkable(origin) || !IsWalkable(destination))
 	{
-		LOG("Origin or destination are not walkable");
+		LOG("Invalid Path");
 		return;
 	}
-	requestPath = true;
-
-	pathRequestList.push(PathRequest(origin, destination));
 	
+	pathRequestList.push(PathRequest(origin, destination));
+	LOG("Path added to Path Request List");
 }
 
 bool j1PathFinding::Start()
 {
 	//TODO 3: Add PathFinder to the vector.
-
 	pathfinderList.push_back(PathFinder());
 	pathfinderList.push_back(PathFinder());
 	return true;
@@ -101,39 +99,30 @@ bool j1PathFinding::Start()
 
 bool j1PathFinding::Update(float dt)
 {
-
-	if (!requestPath)
-		return true;
-
-	for (int j = 0; j < pathRequestList.size(); j++)
+	//This part distribute PathRequests to PathFinders
+	//Check if there are any path request
+	while (!pathRequestList.empty())
 	{
+		//Check if there are any pathFinder available to take that request
 		for (int i = 0; i < pathfinderList.size(); i++)
 		{
-			if (pathfinderList[i].available) {
+			if (pathfinderList[i].available)
+			{
+				//Add pathRequest to pathFinder and delete it from the pathRequest list
 				PathRequest request = pathRequestList.front();
-				pathfinderList[i].PreparePath(request.origin, request.destination);
 				pathRequestList.pop();
-				LOG("Requested succeed");
-				return true;
+
+				pathfinderList[i].PreparePath(request.origin, request.destination);
+				break;
 			}
 		}
 	}
 
-
+	//Update PathFinders
 	for (int i = 0; i < pathfinderList.size(); i++)
 	{
 		if (!pathfinderList[i].available)
-			requestPath = pathfinderList[i].Update();
-	}
-	
-
-	
-	for (int i = 0; i < pathfinderList.size(); i++)
-	{
-		if (pathfinderList[i].available)
-			requestPath = false;
-		else
-			requestPath = true;
+			pathfinderList[i].Update();
 	}
 	return true;
 }

@@ -57,13 +57,15 @@ struct PathList
 
 class PathFinder
 {
+private:
+	bool IteratePath();
+
 public:
 	PathFinder();
 	~PathFinder();
 
 	// Main function to request a path from A to B
 	void PreparePath(const iPoint& origin, const iPoint& destination);
-	bool IteratePath();
 
 
 	// To request all tiles involved in the last generated path
@@ -73,7 +75,6 @@ public:
 
 	bool Update();
 
-	bool initSuccessful;
 	bool pathCompleted;
 	bool available;
 
