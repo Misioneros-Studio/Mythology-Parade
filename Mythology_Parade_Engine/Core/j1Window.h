@@ -38,7 +38,7 @@ public:
 	SDL_Surface* screen_surface;
 
 private:
-	std::string	title;
+	p2SString	title;
 	uint		width;
 	uint		height;
 	uint		scale;

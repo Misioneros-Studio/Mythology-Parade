@@ -5,8 +5,7 @@
 
 j1PathFinding::j1PathFinding() : j1Module(), map(NULL), last_path(DEFAULT_PATH_LENGTH),width(0), height(0)
 {
-	name.append("pathfinding");
-	last_path.clear();
+	name.create("pathfinding");
 }
 
 // Destructor
@@ -15,22 +14,12 @@ j1PathFinding::~j1PathFinding()
 	RELEASE_ARRAY(map);
 }
 
-
-// Called before render is available
-bool j1PathFinding::Awake(pugi::xml_node& config) {
-	bool ret = true;
-	active = false;
-
-	return ret;
-}
-
-
 // Called before quitting
 bool j1PathFinding::CleanUp()
 {
 	LOG("Freeing pathfinding library");
 
-	last_path.clear();
+	last_path.Clear();
 	RELEASE_ARRAY(map);
 	return true;
 }
@@ -60,17 +49,6 @@ bool j1PathFinding::IsWalkable(const iPoint& pos) const
 	return t != INVALID_WALK_CODE && t > 0;
 }
 
-// ----------------------------------------------------------------------------------
-// Actual A* algorithm: return number of steps in the creation of the path or -1 ----
-// ----------------------------------------------------------------------------------
-void j1PathFinding::ChangeMapValue(const iPoint pos, int value) const
-{
-	if (IN_RANGE(value, 0, 1) == 1) 
-	{
-		map[(pos.y*width) + pos.x] = value;
-	}
-}
-
 // Utility: return the walkability value of a tile
 uchar j1PathFinding::GetTileAt(const iPoint& pos) const
 {
@@ -81,7 +59,7 @@ uchar j1PathFinding::GetTileAt(const iPoint& pos) const
 }
 
 // To request all tiles involved in the last generated path
-const std::list<iPoint>* j1PathFinding::GetLastPath()
+const p2DynArray<iPoint>* j1PathFinding::GetLastPath() const
 {
 	return &last_path;
 }
@@ -89,12 +67,14 @@ const std::list<iPoint>* j1PathFinding::GetLastPath()
 // PathList ------------------------------------------------------------------------
 // Looks for a node in this list and returns it's list node or NULL
 // ---------------------------------------------------------------------------------
-PathNode* PathList::Find(const iPoint& point)
+p2List_item<PathNode>* PathList::Find(const iPoint& point) const
 {
-	for (std::list<PathNode>::iterator it = list.begin(); it != list.end(); it++)
+	p2List_item<PathNode>* item = list.start;
+	while(item)
 	{
-		if(it->pos == point)
-			return &it._Ptr->_Myval;
+		if(item->data.pos == point)
+			return item;
+		item = item->next;
 	}
 	return NULL;
 }
@@ -102,18 +82,20 @@ PathNode* PathList::Find(const iPoint& point)
 // PathList ------------------------------------------------------------------------
 // Returns the Pathnode with lowest score in this list or NULL if empty
 // ---------------------------------------------------------------------------------
-PathNode* PathList::GetNodeLowestScore()
+p2List_item<PathNode>* PathList::GetNodeLowestScore() const
 {
-	PathNode* ret = NULL;
+	p2List_item<PathNode>* ret = NULL;
 	int min = 65535;
 
-	for (std::list<PathNode>::iterator it = list.begin(); it != list.end(); it++)
+	p2List_item<PathNode>* item = list.end;
+	while(item)
 	{
-		if(it->Score() < min)
+		if(item->data.Score() < min)
 		{
-			min = it->Score();
-			ret = &it._Ptr->_Myval;
+			min = item->data.Score();
+			ret = item;
 		}
+		item = item->prev;
 	}
 	return ret;
 }
@@ -136,29 +118,29 @@ PathNode::PathNode(const PathNode& node) : g(node.g), h(node.h), pos(node.pos), 
 uint PathNode::FindWalkableAdjacents(PathList& list_to_fill) const
 {
 	iPoint cell;
-	uint before = list_to_fill.list.size();
+	uint before = list_to_fill.list.count();
 
 	// north
 	cell.create(pos.x, pos.y + 1);
 	if(App->pathfinding->IsWalkable(cell))
-		list_to_fill.list.push_back(PathNode(-1, -1, cell, this));
+		list_to_fill.list.add(PathNode(-1, -1, cell, this));
 
 	// south
 	cell.create(pos.x, pos.y - 1);
 	if(App->pathfinding->IsWalkable(cell))
-		list_to_fill.list.push_back(PathNode(-1, -1, cell, this));
+		list_to_fill.list.add(PathNode(-1, -1, cell, this));
 
 	// east
 	cell.create(pos.x + 1, pos.y);
 	if(App->pathfinding->IsWalkable(cell))
-		list_to_fill.list.push_back(PathNode(-1, -1, cell, this));
+		list_to_fill.list.add(PathNode(-1, -1, cell, this));
 
 	// west
 	cell.create(pos.x - 1, pos.y);
 	if(App->pathfinding->IsWalkable(cell))
-		list_to_fill.list.push_back(PathNode(-1, -1, cell, this));
+		list_to_fill.list.add(PathNode(-1, -1, cell, this));
 
-	return list_to_fill.list.size();
+	return list_to_fill.list.count();
 }
 
 // PathNode -------------------------------------------------------------------------

@@ -10,7 +10,7 @@ j1Window::j1Window() : j1Module()
 {
 	window = NULL;
 	screen_surface = NULL;
-	name.append("window");
+	name.create("window");
 }
 
 // Destructor
@@ -23,7 +23,6 @@ bool j1Window::Awake(pugi::xml_node& config)
 {
 	LOG("Init SDL window & surface");
 	bool ret = true;
-	active = true;
 
 	if(SDL_Init(SDL_INIT_VIDEO) < 0)
 	{

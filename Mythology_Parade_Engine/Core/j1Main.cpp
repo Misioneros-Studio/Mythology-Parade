@@ -22,8 +22,6 @@ enum MainState
 };
 
 j1App* App = NULL;
-bool exitGame = false;
-
 
 int main(int argc, char* args[])
 {
@@ -80,7 +78,7 @@ int main(int argc, char* args[])
 
 			// Loop all modules until we are asked to leave ---------------------
 			case LOOP:
-			if(App->Update() == false || exitGame)
+			if(App->Update() == false)
 				state = CLEAN;
 			break;
 

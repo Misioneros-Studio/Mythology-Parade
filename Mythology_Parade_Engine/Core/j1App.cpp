@@ -9,19 +9,12 @@
 #include "j1Render.h"
 #include "j1Textures.h"
 #include "j1Audio.h"
-#include "j1LogoScene.h"
-#include "j1TitleScene.h"
 #include "j1Scene.h"
-#include "j1Minimap.h"
 #include "j1Map.h"
 #include "j1Pathfinding.h"
 #include "j1Fonts.h"
 #include "j1Gui.h"
-#include "Console.h"
-#include "EntityManager.h"
 #include "j1App.h"
-#include "Animation.h"
-
 
 // Constructor
 j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
@@ -33,17 +26,11 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	render = new j1Render();
 	tex = new j1Textures();
 	audio = new j1Audio();
-	logo_scene = new j1LogoScene();
-	title_scene = new j1TitleScene();
 	scene = new j1Scene();
-	minimap = new j1Minimap();
 	map = new j1Map();
 	pathfinding = new j1PathFinding();
 	font = new j1Fonts();
 	gui = new j1Gui();
-	console = new Console();
-	entityManager = new EntityManager();
-	animation = new Animation();
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
@@ -54,22 +41,10 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(map);
 	AddModule(pathfinding);
 	AddModule(font);
-
+	AddModule(gui);
 
 	// scene last
-	AddModule(logo_scene);
-	AddModule(title_scene);
 	AddModule(scene);
-
-	AddModule(minimap);
-	AddModule(gui);
-	AddModule(console);
-
-	//On top of scene
-	AddModule(animation);
-
-	// entities
-	AddModule(entityManager);
 
 	// render last to swap buffer
 	AddModule(render);
@@ -81,18 +56,21 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 j1App::~j1App()
 {
 	// release modules
-	//INFO: How to itinerate all elements of a STD list
-	for (std::list<j1Module*>::iterator it = modules.begin(); it != modules.end(); it++)
+	p2List_item<j1Module*>* item = modules.end;
+
+	while(item != NULL)
 	{
-		RELEASE(it._Ptr->_Myval);
+		RELEASE(item->data);
+		item = item->prev;
 	}
+
 	modules.clear();
 }
 
 void j1App::AddModule(j1Module* module)
 {
 	module->Init();
-	modules.push_back(module);
+	modules.add(module);
 }
 
 // Called before render is available
@@ -113,8 +91,8 @@ bool j1App::Awake()
 		// self-config
 		ret = true;
 		app_config = config.child("app");
-		title.append(app_config.child("title").child_value());
-		organization.append(app_config.child("organization").child_value());
+		title.create(app_config.child("title").child_value());
+		organization.create(app_config.child("organization").child_value());
 
 		int cap = app_config.attribute("framerate_cap").as_int(-1);
 
@@ -126,9 +104,13 @@ bool j1App::Awake()
 
 	if(ret == true)
 	{
-		for (std::list<j1Module*>::iterator it = modules.begin(); it != modules.end(); it++)
+		p2List_item<j1Module*>* item;
+		item = modules.start;
+
+		while(item != NULL && ret == true)
 		{
-			ret = it._Ptr->_Myval->Awake(config.child(it._Ptr->_Myval->name.c_str()));
+			ret = item->data->Awake(config.child(item->data->name.GetString()));
+			item = item->next;
 		}
 	}
 
@@ -142,14 +124,14 @@ bool j1App::Start()
 {
 	PERF_START(ptimer);
 	bool ret = true;
+	p2List_item<j1Module*>* item;
+	item = modules.start;
 
-
-	for (std::list<j1Module*>::iterator it = modules.begin(); it != modules.end(); it++)
+	while(item != NULL && ret == true)
 	{
-		if(it._Ptr->_Myval->active==true)
-			ret = it._Ptr->_Myval->Start();
+		ret = item->data->Start();
+		item = item->next;
 	}
-
 	startup_time.Start();
 
 	PERF_PEEK(ptimer);
@@ -228,11 +210,11 @@ void j1App::FinishUpdate()
 	uint32 frames_on_last_update = prev_last_sec_frame_count;
 
 	static char title[256];
-	sprintf_s(title, 256, "Av.FPS: %.2f Last Frame Ms: %.2u Last sec frames: %i Last dt: %.3f Time since startup: %.3f Frame Count: %lu ",
+	sprintf_s(title, 256, "Av.FPS: %.2f Last Frame Ms: %u Last sec frames: %i Last dt: %.3f Time since startup: %.3f Frame Count: %lu ",
 			  avg_fps, last_frame_ms, frames_on_last_update, dt, seconds_since_startup, frame_count);
 	App->win->SetTitle(title);
 
-	if(capped_ms > 0 && (int)last_frame_ms < capped_ms)
+	if(capped_ms > 0 && last_frame_ms < capped_ms)
 	{
 		j1PerfTimer t;
 		SDL_Delay(capped_ms - last_frame_ms);
@@ -243,32 +225,19 @@ void j1App::FinishUpdate()
 bool j1App::PreUpdate()
 {
 	bool ret = true;
-	if (change_scene == true) {
-		change_scene = false;
-		ChangeScene();
-	}
-
-	if (restart_scene == true) {
-		restart_scene = false;
-		RestartScene();
-	}
-	if (first_change_scene == true) {
-		first_change_scene = false;
-		ChangeScene(true);
-
-	}
+	p2List_item<j1Module*>* item;
+	item = modules.start;
 	j1Module* pModule = NULL;
 
-	for (std::list<j1Module*>::iterator it = modules.begin(); it != modules.end() && ret == true; it++)
+	for(item = modules.start; item != NULL && ret == true; item = item->next)
 	{
+		pModule = item->data;
 
-		pModule = it._Ptr->_Myval;
-		if (pModule->active == false) 
-		{
+		if(pModule->active == false) {
 			continue;
 		}
 
-		ret = it._Ptr->_Myval->PreUpdate();
+		ret = item->data->PreUpdate();
 	}
 
 	return ret;
@@ -278,17 +247,19 @@ bool j1App::PreUpdate()
 bool j1App::DoUpdate()
 {
 	bool ret = true;
+	p2List_item<j1Module*>* item;
+	item = modules.start;
 	j1Module* pModule = NULL;
 
-	for (std::list<j1Module*>::iterator it = modules.begin(); it != modules.end() && ret == true; it++)
+	for(item = modules.start; item != NULL && ret == true; item = item->next)
 	{
-		pModule = it._Ptr->_Myval;
-		if (pModule->active == false)
-		{
+		pModule = item->data;
+
+		if(pModule->active == false) {
 			continue;
 		}
 
-		ret = it._Ptr->_Myval->Update(dt);
+		ret = item->data->Update(dt);
 	}
 
 	return ret;
@@ -298,17 +269,18 @@ bool j1App::DoUpdate()
 bool j1App::PostUpdate()
 {
 	bool ret = true;
+	p2List_item<j1Module*>* item;
 	j1Module* pModule = NULL;
 
-	for (std::list<j1Module*>::iterator it = modules.begin(); it != modules.end() && ret == true; it++)
+	for(item = modules.start; item != NULL && ret == true; item = item->next)
 	{
-		pModule = it._Ptr->_Myval;
-		if (pModule->active == false)
-		{
+		pModule = item->data;
+
+		if(pModule->active == false) {
 			continue;
 		}
 
-		ret = it._Ptr->_Myval->PostUpdate();
+		ret = item->data->PostUpdate();
 	}
 
 	return ret;
@@ -319,12 +291,13 @@ bool j1App::CleanUp()
 {
 	PERF_START(ptimer);
 	bool ret = true;
+	p2List_item<j1Module*>* item;
+	item = modules.end;
 
-	modules.reverse();
-	for (std::list<j1Module*>::iterator it = modules.begin(); it != modules.end() && ret == true; it++)
+	while(item != NULL && ret == true)
 	{
-		if(it._Ptr->_Myval != nullptr)
-			ret = it._Ptr->_Myval->CleanUp();
+		ret = item->data->CleanUp();
+		item = item->prev;
 	}
 
 	PERF_PEEK(ptimer);
@@ -349,7 +322,7 @@ const char* j1App::GetArgv(int index) const
 // ---------------------------------------
 const char* j1App::GetTitle() const
 {
-	return title.c_str();
+	return title.GetString();
 }
 
 // ---------------------------------------
@@ -361,7 +334,7 @@ float j1App::GetDT() const
 // ---------------------------------------
 const char* j1App::GetOrganization() const
 {
-	return organization.c_str();
+	return organization.GetString();
 }
 
 // Load / Save
@@ -380,11 +353,11 @@ void j1App::SaveGame(const char* file) const
 	// from the "GetSaveGames" list ... should we overwrite ?
 
 	want_to_save = true;
-	save_game.append(file);
+	save_game.create(file);
 }
 
 // ---------------------------------------
-void j1App::GetSaveGames(std::list<std::string>& list_to_fill) const
+void j1App::GetSaveGames(p2List<p2SString>& list_to_fill) const
 {
 	// need to add functionality to file_system module for this to work
 }
@@ -396,43 +369,41 @@ bool j1App::LoadGameNow()
 	pugi::xml_document data;
 	pugi::xml_node root;
 
-	pugi::xml_parse_result result = data.load_file(load_game.c_str());
+	pugi::xml_parse_result result = data.load_file(load_game.GetString());
 
 	if(result != NULL)
 	{
-		LOG("Loading new Game State from %s...", load_game.c_str());
+		LOG("Loading new Game State from %s...", load_game.GetString());
 
 		root = data.child("game_state");
 
+		p2List_item<j1Module*>* item = modules.start;
 		ret = true;
-		j1Module* item = NULL;
 
-
-		for (std::list<j1Module*>::iterator it = modules.begin(); it != modules.end() && ret == true; it++)
+		while(item != NULL && ret == true)
 		{
-			ret = it._Ptr->_Myval->Load(root.child(it._Ptr->_Myval->name.c_str()));
-			item = it._Ptr->_Myval;
+			ret = item->data->Load(root.child(item->data->name.GetString()));
+			item = item->next;
 		}
-
 
 		data.reset();
 		if(ret == true)
 			LOG("...finished loading");
 		else
-			LOG("...loading process interrupted with error on module %s", (item != NULL) ? item->name.c_str() : "unknown");
+			LOG("...loading process interrupted with error on module %s", (item != NULL) ? item->data->name.GetString() : "unknown");
 	}
 	else
-		LOG("Could not parse game state xml file %s. pugi error: %s", load_game.c_str(), result.description());
+		LOG("Could not parse game state xml file %s. pugi error: %s", load_game.GetString(), result.description());
 
 	want_to_load = false;
 	return ret;
 }
 
-bool j1App::SavegameNow()
+bool j1App::SavegameNow() const
 {
 	bool ret = true;
 
-	LOG("Saving Game State to %s...", save_game.c_str());
+	LOG("Saving Game State to %s...", save_game.GetString());
 
 	// xml object were we will store all data
 	pugi::xml_document data;
@@ -440,12 +411,12 @@ bool j1App::SavegameNow()
 	
 	root = data.append_child("game_state");
 
-	j1Module* item = NULL;
+	p2List_item<j1Module*>* item = modules.start;
 
-	for (std::list<j1Module*>::iterator it = modules.begin(); it != modules.end() && ret == true; it++)
+	while(item != NULL && ret == true)
 	{
-		ret = it._Ptr->_Myval->Save(root.append_child(it._Ptr->_Myval->name.c_str()));
-		item = it._Ptr->_Myval;
+		ret = item->data->Save(root.append_child(item->data->name.GetString()));
+		item = item->next;
 	}
 
 	if(ret == true)
@@ -455,56 +426,12 @@ bool j1App::SavegameNow()
 
 		// we are done, so write data to disk
 		//fs->Save(save_game.GetString(), stream.str().c_str(), stream.str().length());
-		LOG("... finished saving", save_game.c_str());
+		LOG("... finished saving", save_game.GetString());
 	}
 	else
-		LOG("Save process halted from an error in module %s", (item != NULL) ? item->name.c_str() : "unknown");
+		LOG("Save process halted from an error in module %s", (item != NULL) ? item->data->name.GetString() : "unknown");
 
 	data.reset();
 	want_to_save = false;
-	return ret;
-}
-
-bool j1App::ChangeScene(bool first_change) {
-	bool ret = true;
-
-	for (std::list<j1Module*>::iterator it = modules.begin(); it != modules.end(); it++)
-	{
-
-		if (it._Ptr->_Myval->active == false) {
-			if (first_change == false && (it._Ptr->_Myval->name.compare("logo_scene") != 0)) {
-				it._Ptr->_Myval->active = true;
-				ret = it._Ptr->_Myval->Start();
-			}
-			else if (it._Ptr->_Myval->name.compare("gui") == 0 || it._Ptr->_Myval->name.compare("title_scene") == 0) {
-				it._Ptr->_Myval->active = true;
-				ret = it._Ptr->_Myval->Start();
-			}
-		}
-		else if (it._Ptr->_Myval->destroy == true) {
-			it._Ptr->_Myval->CleanUp();
-			it._Ptr->_Myval->active = false;
-			it._Ptr->_Myval->destroy = false;
-		}
-	}
-	return ret;
-}
-
-bool j1App::RestartScene() {
-	bool ret = true;
-
-	for (int i = 0; i < 2; i++) {
-		for (std::list<j1Module*>::iterator it = modules.begin(); it != modules.end(); it++)
-		{
-			if (it._Ptr->_Myval->destroy == true) {
-				if(i==0)
-					it._Ptr->_Myval->CleanUp();
-				else {
-					it._Ptr->_Myval->Start();
-					it._Ptr->_Myval->destroy = false;
-				}
-			}
-		}
-	}
 	return ret;
 }
