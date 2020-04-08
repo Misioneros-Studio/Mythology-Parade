@@ -32,10 +32,13 @@ public:
 	// Play a previously loaded WAV
 	bool PlayFx(unsigned int fx, int repeat = 0);
 
+	// Clean all fxs to change scene
+	bool CleanFxs();
+
 private:
 
 	_Mix_Music*			music = NULL;
-	p2List<Mix_Chunk*>	fx;
+	std::list<Mix_Chunk*>	fx;
 };
 
 #endif // __j1AUDIO_H__

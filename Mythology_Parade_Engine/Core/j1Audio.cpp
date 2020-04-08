@@ -10,7 +10,7 @@
 j1Audio::j1Audio() : j1Module()
 {
 	music = NULL;
-	name.create("audio");
+	name.append("audio");
 }
 
 // Destructor
@@ -49,6 +49,7 @@ bool j1Audio::Awake(pugi::xml_node& config)
 		active = false;
 		ret = true;
 	}
+	active = true;
 
 	return ret;
 }
@@ -66,9 +67,10 @@ bool j1Audio::CleanUp()
 		Mix_FreeMusic(music);
 	}
 
-	p2List_item<Mix_Chunk*>* item;
-	for(item = fx.start; item != NULL; item = item->next)
-		Mix_FreeChunk(item->data);
+	for (std::list<Mix_Chunk*>::iterator it = fx.begin(); it != fx.end(); it++) 
+	{
+		Mix_FreeChunk(it._Ptr->_Myval);
+	}
 
 	fx.clear();
 
@@ -149,8 +151,8 @@ unsigned int j1Audio::LoadFx(const char* path)
 	}
 	else
 	{
-		fx.add(chunk);
-		ret = fx.count();
+		fx.push_back(chunk);
+		ret = fx.size();
 	}
 
 	return ret;
@@ -164,10 +166,33 @@ bool j1Audio::PlayFx(unsigned int id, int repeat)
 	if(!active)
 		return false;
 
-	if(id > 0 && id <= fx.count())
+	if(id > 0 && id <= fx.size())
 	{
-		Mix_PlayChannel(-1, fx[id - 1], repeat);
+
+		std::list<Mix_Chunk*>::iterator it = fx.begin();
+		std::advance(it, id - 1);
+
+		if(it._Ptr->_Myval != fx.end()._Ptr->_Myval)
+			Mix_PlayChannel(-1, it._Ptr->_Myval, repeat);
 	}
+
+	return ret;
+}
+
+// Clean all fxs to change scene
+
+bool j1Audio::CleanFxs() {
+	bool ret = false;
+
+	if (!active)
+		return false;
+	Mix_HaltChannel(-1);
+	for (std::list<Mix_Chunk*>::iterator it = fx.begin(); it != fx.end(); it++)
+	{
+		Mix_FreeChunk(it._Ptr->_Myval);
+	}
+
+	fx.clear();
 
 	return ret;
 }

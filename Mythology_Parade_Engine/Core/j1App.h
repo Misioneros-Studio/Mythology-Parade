@@ -1,11 +1,12 @@
 #ifndef __j1APP_H__
 #define __j1APP_H__
 
-#include "p2List.h"
 #include "j1Module.h"
 #include "j1PerfTimer.h"
 #include "j1Timer.h"
 #include "PugiXml\src\pugixml.hpp"
+#include <list>
+#include <string>
 
 // Modules
 class j1Window;
@@ -13,11 +14,17 @@ class j1Input;
 class j1Render;
 class j1Textures;
 class j1Audio;
+class j1LogoScene;
+class j1TitleScene;
 class j1Scene;
+class j1Minimap;
 class j1Map;
 class j1PathFinding;
 class j1Fonts;
 class j1Gui;
+class Console;
+class EntityManager;
+class Animation;
 
 class j1App
 {
@@ -53,7 +60,7 @@ public:
 
 	void LoadGame(const char* file);
 	void SaveGame(const char* file) const;
-	void GetSaveGames(p2List<p2SString>& list_to_fill) const;
+	void GetSaveGames(std::list<std::string>& list_to_fill) const;
 
 private:
 
@@ -77,7 +84,13 @@ private:
 
 	// Load / Save
 	bool LoadGameNow();
-	bool SavegameNow() const;
+	bool SavegameNow();
+
+	//Called when changing a scene (start new game or exit the actual game)
+	bool ChangeScene(bool first_scene=false);
+
+	//Called when restarting a scene (restart button)
+	bool RestartScene();
 
 public:
 
@@ -87,25 +100,37 @@ public:
 	j1Render*			render = NULL;
 	j1Textures*			tex = NULL;
 	j1Audio*			audio = NULL;
+	j1LogoScene*		logo_scene = NULL;
+	j1TitleScene*		title_scene = NULL;
 	j1Scene*			scene = NULL;
+	j1Minimap*			minimap = NULL;
 	j1Map*				map = NULL;
 	j1PathFinding*		pathfinding = NULL;
 	j1Fonts*			font = NULL;
 	j1Gui*				gui = NULL;
+	Console*			console = NULL;
+	EntityManager*		entityManager = NULL;
+	Animation*			animation = NULL;
+ 
+	bool				start_game = false;
+	bool				change_scene = false;
+
+	bool				restart_scene = false;
+	bool				first_change_scene = false;
 
 private:
 
-	p2List<j1Module*>	modules;
+	std::list<j1Module*>	modules;
 	int					argc;
 	char**				args;
 
-	p2SString			title;
-	p2SString			organization;
+	std::string			title;
+	std::string			organization;
 
 	mutable bool		want_to_save = false;
 	bool				want_to_load = false;
-	p2SString			load_game;
-	mutable p2SString	save_game;
+	std::string			load_game;
+	mutable std::string	save_game;
 
 	j1PerfTimer			ptimer;
 	uint64				frame_count = 0;
@@ -116,8 +141,13 @@ private:
 	uint32				prev_last_sec_frame_count = 0;
 	float				dt = 0.0f;
 	int					capped_ms = -1;
+
+public:
+	std::list<std::string>	logs;
+	int						num_logs = 0;
 };
 
 extern j1App* App; // No student is asking me about that ... odd :-S
+extern bool exitGame;
 
 #endif

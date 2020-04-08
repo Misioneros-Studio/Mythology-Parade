@@ -10,7 +10,7 @@
 
 j1Fonts::j1Fonts() : j1Module()
 {
-	name.create("fonts");
+	name.append("fonts");
 }
 
 // Destructor
@@ -33,7 +33,9 @@ bool j1Fonts::Awake(pugi::xml_node& conf)
 		const char* path = conf.child("default_font").attribute("file").as_string(DEFAULT_FONT);
 		int size = conf.child("default_font").attribute("size").as_int(DEFAULT_FONT_SIZE);
 		default = Load(path, size);
+		default_title = Load(path, 24);
 	}
+	active = true;
 
 	return ret;
 }
@@ -42,11 +44,9 @@ bool j1Fonts::Awake(pugi::xml_node& conf)
 bool j1Fonts::CleanUp()
 {
 	LOG("Freeing True Type fonts and library");
-	p2List_item<TTF_Font*>* item;
-
-	for(item = fonts.start; item != NULL; item = item->next)
+	for (std::list<_TTF_Font*>::iterator it = fonts.begin(); it != fonts.end(); it++)
 	{
-		TTF_CloseFont(item->data);
+		TTF_CloseFont(it._Ptr->_Myval);
 	}
 
 	fonts.clear();
@@ -66,7 +66,7 @@ TTF_Font* const j1Fonts::Load(const char* path, int size)
 	else
 	{
 		LOG("Successfully loaded font %s size %d", path, size);
-		fonts.add(font);
+		fonts.push_back(font);
 	}
 
 	return font;
