@@ -47,9 +47,8 @@ bool EntityManager::Awake(pugi::xml_node& a)
 // Called before the first frame
 bool EntityManager::Start()
 {
-	//TODO: NO HARDCODE BOY
+	//TODO: NO HARDCODE BOY, we must load this from the xml
 	entitySpriteSheets[SpriteSheetType::BUILDINGS] = App->tex->Load("assets/buildings/Buildings.png");
-
 	animations[UnitType::ASSASSIN] = animationManager.Load("assets/units/Assassin.tmx");
 
 	for (int i = 0; i < buildingsData.size(); i++)
@@ -103,6 +102,7 @@ bool EntityManager::Update(float dt)
 		UpdateBuildPreview(buildingTestIndex);
 	}
 
+	//ALL THIS CODE IS JUST FOR BUILDING DEBUGGIN
 	if (App->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN) 
 	{
 		if (buildingTestIndex < MAX_BUILDING_TYPES - 1) 
@@ -115,7 +115,6 @@ bool EntityManager::Update(float dt)
 		}
 		UpdateBuildPreview(buildingTestIndex);
 	}
-
 	if (crPreview.active)
 	{
 		iPoint mouse = App->map->GetMousePositionOnMap();
@@ -149,7 +148,6 @@ bool EntityManager::Update(float dt)
 			}
 		}
 	}
-
 	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN && crPreview.active && crPreview.canBuild)
 	{
 		iPoint mouse = App->map->GetMousePositionOnMap();
@@ -389,7 +387,6 @@ Entity* EntityManager::CreateBuildingEntity(iPoint pos, BuildingType type, Build
 	entities[EntityType::BUILDING].push_back(ret);
 	//TODO: sort elements only inside the screen (QuadTree)
 	entities[EntityType::BUILDING].sort(entity_Sort());
-	//std::sort(entities[EntityType::BUILDING].begin(), entities[EntityType::BUILDING].end(), entity_Sort());
 
 	return ret;
 }

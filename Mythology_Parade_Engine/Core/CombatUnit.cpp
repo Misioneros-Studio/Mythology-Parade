@@ -53,19 +53,24 @@ void CombatUnit::Init(int maxHealth, int damage, int range, int speed)
 	SetMoveSpeed(speed);
 
 	//TODO: Convert to a get funtions
-	targetPosition = {-1, -1};
+	targetPosition.ResetAsPosition();
 	ChangeState(targetPosition, state);
 
 }
 
 bool CombatUnit::Update(float dt) 
 {
+	//This needs to be changed once pathfinding is implemented
 	if (App->input->GetMouseButtonDown(SDL_BUTTON_RIGHT) == KEY_DOWN)
 	{
 		iPoint pos = App->map->GetMousePositionOnMap();
 
-		targetPosition = pos;
-		ChangeState(targetPosition, AnimationType::WALK);
+
+		if (pos != App->map->WorldToMap(position.x, position.y)) 
+		{
+			targetPosition = pos;
+			ChangeState(targetPosition, AnimationType::WALK);
+		}
 	}
 
 	if (targetPosition != iPoint(-1,-1))
@@ -76,10 +81,8 @@ bool CombatUnit::Update(float dt)
 	blitRect = { (int)(currentAnim.sprites[num_current_anim].rect.w / 1.5f), (int)(currentAnim.sprites[num_current_anim].rect.h / 1.5f) };
 
 	App->render->Blit(texture, position.x - blitRect.x / 2, position.y - blitRect.y, blitRect, &currentAnim.sprites[num_current_anim].rect, 1.f, flipState);
-	
-	App->render->DrawQuad({position.x, position.y, 5, 5}, 0, 255, 0);
-	//iPoint draw = App->map->MapToWorld(targetPosition.x, targetPosition.y);
-	//App->render->DrawQuad({draw.x, draw.y, 64, 32}, 255, 0, 0);
+	//App->render->DrawQuad({position.x, position.y, 5, 5}, 0, 255, 0);
+
 	return true;
 }
 

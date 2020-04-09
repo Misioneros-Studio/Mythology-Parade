@@ -104,6 +104,11 @@ iPoint j1Map::TileCenterPoint(iPoint tile)
 
 }
 
+iPoint j1Map::GetTilesHalfSize() 
+{
+	return {data.tile_width / 2, data.tile_height / 2};
+}
+
 TileSet* j1Map::GetTilesetFromTileId(int id) 
 {
 

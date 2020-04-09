@@ -228,7 +228,4 @@
       <UniqueIdentifier>{7afc422c-dd2d-40d6-866a-162931ae588d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
-  <ItemGroup>
-    <Text Include="TODOS.txt" />
-  </ItemGroup>
 </Project>

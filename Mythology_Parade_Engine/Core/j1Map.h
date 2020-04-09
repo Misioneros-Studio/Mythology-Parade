@@ -122,6 +122,7 @@ public:
 	iPoint WorldToMap(int x, int y) const;
 	iPoint TileCenterPoint(iPoint);
 	iPoint GetMousePositionOnMap();
+	iPoint GetTilesHalfSize();
 
 	bool CreateWalkabilityMap(int& width, int& height, uchar** buffer);
 

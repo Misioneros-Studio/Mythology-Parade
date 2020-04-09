@@ -94,12 +94,12 @@ void Unit::MoveToTarget()
 
 	iPoint currentIso = position + increment;
 	iPoint targetIso = App->map->MapToWorld(targetPosition.x, targetPosition.y);
-	targetIso += {32, 16};
+	targetIso += App->map->GetTilesHalfSize();
 
 	if (currentIso.y > targetIso.y) 
 	{
-		currentIso.x += 32;
-		currentIso.y += 16;
+		currentIso.x += App->map->data.tile_width / 2;
+		currentIso.y += App->map->data.tile_height / 2;
 	}
 	
 	currentIso = App->map->WorldToMap(currentIso.x, currentIso.y);
@@ -107,9 +107,9 @@ void Unit::MoveToTarget()
 	if (currentIso == targetPosition) 
 	{
 		position = App->map->MapToWorld(targetPosition.x, targetPosition.y);
-		position += {32, 16};
+		position += App->map->GetTilesHalfSize();
 
-		targetPosition = { -1, -1 };
+		targetPosition.ResetAsPosition();
 		ChangeState(targetPosition, AnimationType::IDLE);
 	}
 	else
@@ -127,14 +127,13 @@ void Unit::Init(int maxHealth)
 
 void Unit::ChangeState(iPoint isoLookPosition, AnimationType newState) 
 {
-	currentDirection = getMovementDirection(isoLookPosition);
-
 	if (targetPosition == iPoint(-1, -1)) 
 	{
 		currentAnim = App->entityManager->animations[unitType][AnimationType::IDLE][currentDirection];
 	}
 	else
 	{
+		currentDirection = getMovementDirection(isoLookPosition);
 		currentAnim = App->entityManager->animations[unitType][newState][currentDirection];
 	}
 }
@@ -199,8 +198,7 @@ Direction Unit::getMovementDirection(iPoint target)
 	else 
 	{
 		//Is the same place
-		targetPosition = { -1, -1 };
-		LOG("EHE");
+		targetPosition.ResetAsPosition();
 	}
 
 	return dir;

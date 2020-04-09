@@ -49,6 +49,12 @@ public:
 		return(r);
 	}
 
+	void ResetAsPosition() 
+	{
+		x = -1;
+		y = -1;
+	}
+
 	p2Point operator + (const p2Point &v) const
 	{
 		p2Point r;
