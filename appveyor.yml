@@ -18,7 +18,7 @@ artifacts:
   type: WebDeployPackage
 deploy:
 - provider: GitHub
-  tag: V$(appveyor_build_version)
+  tag: Mythology_Parade-V$(appveyor_build_version)
   release: Mythology Parade
   auth_token:
     secure: KghY3L0nvYfR/6rGwcBUlM53HHU9raYtqIrE0BvIRnEH8zLvseMPPcA8inwVk5vT
