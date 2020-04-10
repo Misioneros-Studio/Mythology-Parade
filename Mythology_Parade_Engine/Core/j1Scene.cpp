@@ -50,6 +50,8 @@ bool j1Scene::Start()
 		if (App->map->CreateWalkabilityMap(w, h, &data))
 			App->pathfinding->SetMap(w, h, data);
 
+		mapLimitsRect = App->map->GetMapRect();
+
 		SDL_ShowCursor(0);
 
 		RELEASE_ARRAY(data);
@@ -117,8 +119,6 @@ bool j1Scene::Start()
   
 	//Creating players
 	App->entityManager->CreatePlayerEntity();
-
-	App->render->camera = { 0,0,App->render->camera.w,App->render->camera.h };
 
 	return true;
 }
@@ -203,17 +203,58 @@ bool j1Scene::Update(float dt)
 	if (App->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
 		ActivatePauseMenu();
 
+
+	SDL_Rect correctedCamera = App->render->camera;
+	correctedCamera.x = -correctedCamera.x;
+	correctedCamera.y = -correctedCamera.y;
+
 	if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
-		App->render->camera.y += floor(1000.0f * dt);
+	{
+		if (correctedCamera.y - floor(1000.0f * dt) >= mapLimitsRect.y)
+		{
+			App->render->camera.y += floor(1000.0f * dt);
+		}
+		else
+		{
+			App->render->camera.y = 0;
+		}
+	}
 
-	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
-		App->render->camera.y -= floor(1000.0f * dt);
+	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT) 
+	{
+		if (correctedCamera.y + App->render->camera.h + floor(1000.0f * dt) <= mapLimitsRect.h) 
+		{
+			App->render->camera.y -= floor(1000.0f * dt);
+		}
+		else 
+		{
+			App->render->camera.y = -mapLimitsRect.h + App->render->camera.h;
+		}
+	}
 
-	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
-		App->render->camera.x += floor(1000.0f * dt);
+	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT) 
+	{
+		if (correctedCamera.x - floor(1000.0f * dt) >= mapLimitsRect.x)
+		{
+			App->render->camera.x += floor(1000.0f * dt);
+		}
+		else 
+		{
+			App->render->camera.x = -mapLimitsRect.x;
+		}
+	}
 
-	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
-		App->render->camera.x -= floor(1000.0f * dt);
+	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT) 
+	{
+		if (correctedCamera.x + App->render->camera.w + floor(1000.0f * dt) <= mapLimitsRect.x + mapLimitsRect.w)
+		{
+			App->render->camera.x -= floor(1000.0f * dt);
+		}
+		else
+		{
+			App->render->camera.x = -(mapLimitsRect.x + mapLimitsRect.w) + App->render->camera.w;
+		}
+	}
 
 
 	App->map->Draw();
@@ -263,6 +304,8 @@ bool j1Scene::Update(float dt)
 			DoWinOrLoseWindow(2, false);
 		}
 	}
+
+	App->render->DrawQuad(mapLimitsRect, 255, 255, 255, 40);
 
 	return true;
 }

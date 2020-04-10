@@ -79,6 +79,7 @@ private:
 
 	void DoWinOrLoseWindow(int type, bool win);
 
+	SDL_Rect mapLimitsRect;
   
 	SDL_Texture* winlose_tex;
 	ImageUI* ui_ingame;

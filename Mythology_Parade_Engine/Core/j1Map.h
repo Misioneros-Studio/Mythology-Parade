@@ -122,6 +122,7 @@ public:
 	iPoint MapToWorld(int x, int y) const;
 	iPoint WorldToMap(int x, int y) const;
 	iPoint GetMousePositionOnMap();
+	SDL_Rect GetMapRect();
 
 	bool CreateWalkabilityMap(int& width, int& height, uchar** buffer);
 
