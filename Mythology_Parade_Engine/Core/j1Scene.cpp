@@ -305,7 +305,7 @@ bool j1Scene::Update(float dt)
 		}
 	}
 
-	App->render->DrawQuad(mapLimitsRect, 255, 255, 255, 40);
+	//App->render->DrawQuad(mapLimitsRect, 255, 255, 255, 40);
 
 	return true;
 }
