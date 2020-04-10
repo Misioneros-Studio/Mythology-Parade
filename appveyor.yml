@@ -5,6 +5,7 @@ branches:
 configuration: Release
 platform: x86
 build:
+  project: Mythology_Parade_Engine/Mythology_Parade_Solution.sln
   verbosity: minimal
 after_build:
 - cmd: >-
@@ -20,5 +21,5 @@ deploy:
   release: Mythology Parade
   description: Mythology-Parade_V$(appveyor_build_version)
   auth_token:
-    secure: /CpKDxDjlXVEO4YmjshGO7BvsfX9yz8rgbMgl//JmbU9PojTuFh2PGRxm3cUwyza
+    secure: KghY3L0nvYfR/6rGwcBUlM53HHU9raYtqIrE0BvIRnEH8zLvseMPPcA8inwVk5vT
   repository: projects/Misioneros-Studio/Mythology-Parade
