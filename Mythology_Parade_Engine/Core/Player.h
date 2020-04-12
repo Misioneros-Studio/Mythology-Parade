@@ -23,6 +23,7 @@ public:
 
 	void SelectionDraw_Logic();
 	void SeeEntitiesInside();
+	void playerInputs();
 	std::list<Entity*> GetEntitiesSelected();
 
 private:
@@ -36,6 +37,8 @@ private:
 	iPoint preClicked;
 	iPoint postClicked;
 	std::list<Entity*> listEntities; //Entities instide selection
+	
+	bool godMode;
 
 public:
 	bool player_win = false;

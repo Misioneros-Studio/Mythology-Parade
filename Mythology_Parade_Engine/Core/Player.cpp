@@ -119,3 +119,12 @@ void Player::SeeEntitiesInside()
 		}
 	}
 }
+
+void Player::playerInputs()
+{
+	if (App->input->GetKey(SDL_SCANCODE_F10) == KEY_DOWN)
+	{
+		godMode = !godMode;
+		App->input->drawDebug = !App->input->drawDebug;
+	}
+}
