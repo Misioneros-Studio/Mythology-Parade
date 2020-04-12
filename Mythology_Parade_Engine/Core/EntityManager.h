@@ -17,7 +17,6 @@
 #include "j1Scene.h"
 #include"j1Textures.h"
 #include "Player.h"
-#include"Animation.h"
 
 
 
@@ -103,7 +102,7 @@ public:
 	bool DeleteEntity(Entity*);
 
 	Entity* CreatePlayerEntity();
-	Entity* CreateUnitEntity(UnitType, iPoint);
+	Entity* CreateUnitEntity(UnitType);
 	Entity* CreateBuildingEntity(iPoint, BuildingType, BuildingInfo);
 	void UpdateBuildPreview(int);
 
@@ -125,12 +124,10 @@ public:
 
 private:
 	int buildingTestIndex = 0;
-	Animation animationManager;
 
 public:
 	SDL_Rect constructorSpriteRect;
 	SDL_Rect destructedSpriteRect;
-	std::unordered_map<UnitType, std::unordered_map<AnimationType, std::unordered_map<Direction, Animation_char>>> animations;
 
 };
 #endif // !_ENTITYMANAGER_H

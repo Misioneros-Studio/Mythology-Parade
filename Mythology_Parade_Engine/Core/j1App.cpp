@@ -39,6 +39,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	gui = new j1Gui();
 	console = new Console();
 	entityManager = new EntityManager();
+	animation = new Animation();
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
@@ -56,6 +57,16 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(title_scene);
 	AddModule(scene);
 
+<<<<<<< HEAD
+=======
+	AddModule(minimap);
+	AddModule(gui);
+	AddModule(console);
+
+	//On top of scene
+	AddModule(animation);
+
+>>>>>>> parent of 5bdf825... Merge branch 'Feature/Units_v2' into Feature/Pathfinding
 	// entities
 	AddModule(entityManager);
 

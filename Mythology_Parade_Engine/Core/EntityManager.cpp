@@ -47,9 +47,8 @@ bool EntityManager::Awake(pugi::xml_node& a)
 // Called before the first frame
 bool EntityManager::Start()
 {
-	//TODO: NO HARDCODE BOY, we must load this from the xml
+	//TODO: NO HARDCODE BOY
 	entitySpriteSheets[SpriteSheetType::BUILDINGS] = App->tex->Load("assets/buildings/Buildings.png");
-	animations[UnitType::ASSASSIN] = animationManager.Load("assets/units/Assassin.tmx");
 
 	for (int i = 0; i < buildingsData.size(); i++)
 	{
@@ -102,7 +101,6 @@ bool EntityManager::Update(float dt)
 		UpdateBuildPreview(buildingTestIndex);
 	}
 
-	//ALL THIS CODE IS JUST FOR BUILDING DEBUGGIN
 	if (App->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN) 
 	{
 		if (buildingTestIndex < MAX_BUILDING_TYPES - 1) 
@@ -115,6 +113,7 @@ bool EntityManager::Update(float dt)
 		}
 		UpdateBuildPreview(buildingTestIndex);
 	}
+
 	if (crPreview.active)
 	{
 		iPoint mouse = App->map->GetMousePositionOnMap();
@@ -148,6 +147,7 @@ bool EntityManager::Update(float dt)
 			}
 		}
 	}
+
 	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN && crPreview.active && crPreview.canBuild)
 	{
 		iPoint mouse = App->map->GetMousePositionOnMap();
@@ -195,22 +195,6 @@ bool EntityManager::CleanUp()
 		if(entitySpriteSheets[(SpriteSheetType)i])
 			App->tex->UnLoad(entitySpriteSheets[(SpriteSheetType)i]);
 	}
-
-
-	for (int i = 0; i < animations.size(); i++)
-	{
-		for (int k = 0; k < animations[(UnitType)i].size(); k++)
-		{
-			for (int j = 0; j < animations[(UnitType)i][(AnimationType)k].size(); j++)
-			{
-				animations[(UnitType)i][(AnimationType)k][(Direction)j].Clean();
-			}
-			animations[(UnitType)i][(AnimationType)k].clear();
-		}
-		animations[(UnitType)i].clear();
-	}
-	animations.clear();
-
 	entities.clear();
 	return true;
 }
@@ -335,29 +319,25 @@ Entity* EntityManager::CreatePlayerEntity()
 	return ret;
 }
 
-Entity* EntityManager::CreateUnitEntity(UnitType type, iPoint pos)
+Entity* EntityManager::CreateUnitEntity(UnitType type)
 {
 	Entity* ret = nullptr;
 	
 	switch (type)
 	{
 	case UnitType::ASSASSIN:
-		ret = new CombatUnit(UnitType::ASSASSIN, pos);
-		ret->texture = animationManager.character_tmx_data.texture;
+		ret = new CombatUnit(UnitType::ASSASSIN);
 		break;
 	case UnitType::MONK:
 		ret = new Unit(UnitType::MONK);
 		break;
 	case UnitType::PIKEMAN:
-		ret = new CombatUnit(UnitType::PIKEMAN, pos);
+		ret = new CombatUnit(UnitType::PIKEMAN);
 		break;
 	}
 	ret->type = EntityType::UNIT;
 	entities[EntityType::UNIT].push_back(ret);
 
-	//DELETE: THIS
-	entities[EntityType::UNIT].sort(entity_Sort());
-	
 	return ret;
 }
 
@@ -387,6 +367,7 @@ Entity* EntityManager::CreateBuildingEntity(iPoint pos, BuildingType type, Build
 	entities[EntityType::BUILDING].push_back(ret);
 	//TODO: sort elements only inside the screen (QuadTree)
 	entities[EntityType::BUILDING].sort(entity_Sort());
+	//std::sort(entities[EntityType::BUILDING].begin(), entities[EntityType::BUILDING].end(), entity_Sort());
 
 	return ret;
 }

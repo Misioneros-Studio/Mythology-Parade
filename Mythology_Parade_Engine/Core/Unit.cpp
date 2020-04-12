@@ -3,10 +3,10 @@
 #include "j1Textures.h"
 #include "j1Input.h"
 
-Unit::Unit(UnitType type): unitType(type), _isSelected(false), moveSpeed(1)
+Unit::Unit(UnitType type): unitType(type), state(IDLE), _isSelected(false), moveSpeed(1)
 {
 	
-	state = AnimationType::IDLE;
+
 	//Init Units
 	switch (type)
 	{
@@ -41,6 +41,16 @@ bool Unit::Update(float dt)
 {
 	bool ret = true;
 
+	//STATE MACHINE
+	switch (state)
+	{
+	case IDLE:
+		break;
+	case MOVE:
+		break;
+
+	}
+
 	//Allawys blit the sprite at the end
 	ret = Draw(dt);
 
@@ -58,85 +68,22 @@ bool Unit::isSelected()
 	return _isSelected;
 }
 
-void Unit::MoveToTarget()
+void Unit::MoveTo(p2Point<int>)
 {
-	//if (!isSelected())
-	//	return;
+	if (!isSelected())
+		return;
 
-	////move function logic
-	iPoint increment = { 0, 0 };
+	//move function logic
 
-	switch (currentDirection)
-	{
-	case Direction::UP:
-		increment = { 0, -2 };
-		break;
-	case Direction::LATERAL:
-		increment = { 2, 0};
-		break;
-	case Direction::DOWN:
-		increment = { 0, 2 };
-		break;
-	case Direction::DIAGONAL_DOWN:
-		increment = { 2, 1 };
-		break;
-	case Direction::DIAGONAL_UP:
-		increment = { 2, -1 };
-		break;
-	}
 
-	if (flipState == SDL_FLIP_NONE) 
-	{
-		increment.x *= -1;
-	}
-
-	state = AnimationType::WALK;
-
-	iPoint currentIso = position + increment;
-	iPoint targetIso = App->map->MapToWorld(targetPosition.x, targetPosition.y);
-	targetIso += App->map->GetTilesHalfSize();
-
-	if (currentIso.y > targetIso.y) 
-	{
-		currentIso.x += App->map->data.tile_width / 2;
-		currentIso.y += App->map->data.tile_height / 2;
-	}
-	
-	currentIso = App->map->WorldToMap(currentIso.x, currentIso.y);
-
-	if (currentIso == targetPosition) 
-	{
-		position = App->map->MapToWorld(targetPosition.x, targetPosition.y);
-		position += App->map->GetTilesHalfSize();
-
-		targetPosition.ResetAsPosition();
-		ChangeState(targetPosition, AnimationType::IDLE);
-	}
-	else
-	{
-		position += increment;
-	}
 }
 
 void Unit::Init(int maxHealth)
 {
 	SetMaxHealth(maxHealth);
 	HealthSystem::Init();
-	
 }
 
-void Unit::ChangeState(iPoint isoLookPosition, AnimationType newState) 
-{
-	if (targetPosition == iPoint(-1, -1)) 
-	{
-		currentAnim = App->entityManager->animations[unitType][AnimationType::IDLE][currentDirection];
-	}
-	else
-	{
-		currentDirection = getMovementDirection(isoLookPosition);
-		currentAnim = App->entityManager->animations[unitType][newState][currentDirection];
-	}
-}
 
 bool Unit::Draw(float dt)
 {
@@ -155,53 +102,6 @@ void Unit::Action(Entity* entity)
 	
 		break;
 	}
-}
-
-Direction Unit::getMovementDirection(iPoint target) 
-{
-	Direction dir = Direction::UP;
-
-	iPoint temp = App->map->WorldToMap(position.x, position.y);
-
-	target = App->map->MapToWorld(target.x, target.y);
-	iPoint pos = App->map->MapToWorld(temp.x, temp.y);
-
-	if (target.x >= position.x)
-	{
-		flipState = SDL_FLIP_HORIZONTAL;
-	}
-	else
-	{
-		flipState = SDL_FLIP_NONE;
-	}
-
-	if (target.x == pos.x && target.y < pos.y)
-	{
-		dir = Direction::UP;
-	}
-	else if(target.x == pos.x && target.y > pos.y)
-	{
-		dir = Direction::DOWN;
-	}
-	else if (target.x != pos.x && target.y == pos.y)
-	{
-		dir = Direction::LATERAL;
-	}
-	else if (target.x != pos.x && target.y > pos.y)
-	{
-		dir = Direction::DIAGONAL_DOWN;
-	}
-	else if (target.x != pos.x && target.y < pos.y)
-	{
-		dir = Direction::DIAGONAL_UP;
-	}
-	else 
-	{
-		//Is the same place
-		targetPosition.ResetAsPosition();
-	}
-
-	return dir;
 }
 
 

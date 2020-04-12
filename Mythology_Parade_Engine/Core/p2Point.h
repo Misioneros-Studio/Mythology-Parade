@@ -41,7 +41,7 @@ public:
 	// Math ------------------------------------------------
 	p2Point operator -(const p2Point &v) const
 	{
-		p2Point r;
+		p2Vector2 r;
 
 		r.x = x - v.x;
 		r.y = y - v.y;
@@ -49,15 +49,9 @@ public:
 		return(r);
 	}
 
-	void ResetAsPosition() 
-	{
-		x = -1;
-		y = -1;
-	}
-
 	p2Point operator + (const p2Point &v) const
 	{
-		p2Point r;
+		p2Vector2 r;
 
 		r.x = x + v.x;
 		r.y = y + v.y;

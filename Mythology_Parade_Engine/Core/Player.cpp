@@ -48,6 +48,7 @@ bool Player::Update(float dt)
 {
 	App->scene->ui_text_ingame[2]->SetString(faith);
 	App->scene->ui_text_ingame[1]->SetString(sacrifice);
+<<<<<<< HEAD
 	App->scene->ui_text_ingame[0]->SetString(prayer);
 
 	if (App->input->GetKey(SDL_SCANCODE_5) == KEY_DOWN) 
@@ -59,6 +60,17 @@ bool Player::Update(float dt)
 		//Todo change assassin for the type of unit
 		App->entityManager->CreateUnitEntity(UnitType::ASSASSIN, spawnPos);
 	}
+=======
+	App->scene->ui_text_ingame[2]->SetString(prayer);
+	
+  if (App->input->GetKey(SDL_SCANCODE_5) == KEY_DOWN) 
+	{
+		App->entityManager->CreateUnitEntity(UnitType::ASSASSIN);
+	}
+  
+	//Selection logics and drawing
+	SelectionDraw_Logic(); 
+>>>>>>> parent of 5bdf825... Merge branch 'Feature/Units_v2' into Feature/Pathfinding
 
 	return true;
 }

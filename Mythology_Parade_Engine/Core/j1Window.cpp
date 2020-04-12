@@ -80,15 +80,6 @@ bool j1Window::Awake(pugi::xml_node& config)
 	return ret;
 }
 
-bool j1Window::ToggleFullscreen()
-{
-	Uint32 FullscreenFlag = SDL_WINDOW_FULLSCREEN;
-	bool IsFullscreen = SDL_GetWindowFlags(window) & FullscreenFlag;
-	SDL_SetWindowFullscreen(window, IsFullscreen ? 0 : FullscreenFlag);
-
-	return IsFullscreen;
-}
-
 // Called before quitting
 bool j1Window::CleanUp()
 {

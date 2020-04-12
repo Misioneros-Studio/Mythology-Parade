@@ -5,19 +5,59 @@
 
 Animation::Animation()
 {
+	name.append("animation");
 }
 
 Animation::~Animation()
 {
 }
 
-std::unordered_map<AnimationType, std::unordered_map<Direction, Animation_char>> Animation::Load(const char* path)
+bool Animation::Awake(pugi::xml_node& conf)
 {
+	bool ret = true;
+	active = false;
+	return ret;
+}
+
+bool Animation::Update(float dt)
+{
+	if (App->input->GetKey(SDL_SCANCODE_P) == KEY_DOWN && index + 1 < animations.size())
+	{
+		index++;
+		animation = 0;
+		current_anim = animations[(AnimationType)index][(Direction)animation];
+	}
+	if (App->input->GetKey(SDL_SCANCODE_O) == KEY_DOWN && animation + 1 < animations[(AnimationType)index].size())
+	{
+		animation++;
+		current_anim = animations[(AnimationType)index][(Direction)animation];
+	}
+
+	Draw();
+	return true;
+}
+
+bool Animation::CleanUp()
+{
+	for (int i = 0; i < animations.size(); i++)
+	{
+		for (int j = 0; j < animations[(AnimationType)i].size(); j++)
+		{
+			animations[(AnimationType)i][(Direction)j].Clean();
+		}
+		animations[(AnimationType)i].clear();
+	}
+	animations.clear();
+	return true;
+}
+
+bool Animation::Load(const char* path)
+{
+	active = true;
 	bool ret = true;
 	pugi::xml_document	character_file;
 	pugi::xml_parse_result result = character_file.load_file(path);
 
-	std::unordered_map<AnimationType, std::unordered_map<Direction, Animation_char>> animations;
 
 	int row = 0;
 	std::string name;
@@ -68,13 +108,12 @@ std::unordered_map<AnimationType, std::unordered_map<Direction, Animation_char>>
 				}
 				it = it.next_sibling("property");
 			}
-			animations[type][dir] = LoadAnimation(group, row, sprite_num, name);
-
+			ChooseAnimation(group, row, sprite_num, name, type, dir);
 			group = group.next_sibling("tile");
 		}
 	}
-	//current_anim = animations[(AnimationType)0][(Direction)0];
-	return animations;
+	current_anim = animations[(AnimationType)0][(Direction)0];
+	return ret;
 }
 
 bool Animation::LoadCharacterTMX(pugi::xml_node& character_node)
@@ -141,4 +180,16 @@ Animation_char Animation::LoadAnimation(pugi::xml_node& obj_group, int row, int 
 	anim.loop = true;
 
 	return anim;
+}
+
+void Animation::ChooseAnimation(pugi::xml_node& group, int row, int sprite_num, std::string name, AnimationType type, Direction dir)
+{
+	animations[type][dir] = LoadAnimation(group, row, sprite_num, name);
+}
+
+void Animation::Draw()
+{
+	num_current_anim = current_anim.GetSprite();
+	//App->render->DrawQuad({ 0 - current_anim->sprites[num_current_anim].rect.w / 2, 0, current_anim->sprites[num_current_anim].rect.w, current_anim->sprites[num_current_anim].rect .h}, 255, 0,0);
+	App->render->Blit(character_tmx_data.texture, 0 - current_anim.sprites[num_current_anim].rect.w / 2, 0, &current_anim.sprites[num_current_anim].rect);
 }

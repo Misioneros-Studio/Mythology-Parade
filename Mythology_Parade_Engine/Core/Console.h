@@ -14,8 +14,7 @@ enum class commands {
 	god_mode,
 	quit,
 	FPS,
-	map,
-	fullscreen
+	map
 };
 
 class Console :public j1Module {

@@ -41,8 +41,7 @@
   <entity_manager>
     
     <buildings file="assets/buildings/buildings.tmx"/>
-    <buildingsSPR file="assets/buildings/Buildings.png"/>
-    <Assassin  file="assets/units/Assassin.tmx"/>
+      
     
   </entity_manager>
 
