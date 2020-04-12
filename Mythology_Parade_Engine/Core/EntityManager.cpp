@@ -2,6 +2,7 @@
 #include "CombatUnit.h"
 #include "Building.h"
 #include "Player.h"
+#include "j1Gui.h"
 
 #include "p2Log.h"
 EntityManager::EntityManager()
@@ -23,6 +24,8 @@ bool EntityManager::Awake(pugi::xml_node& a)
 	pugi::xml_document buildings;
 	buildings.load_file(a.child("buildings").attribute("file").as_string());
 	LoadBuildingsData(buildings.child("map").child("objectgroup"));
+	construction_bar_back = { 1300,512,106,18 };
+	construction_bar_front = { 1303,500,100,12 };
 
 	//Not working because renderer is not created yet ;-;
 	//std::string path = "assets/buildings/";
@@ -153,8 +156,24 @@ bool EntityManager::Update(float dt)
 		iPoint mouse = App->map->GetMousePositionOnMap();
 		iPoint spawnPos = App->map->MapToWorld(mouse.x, mouse.y);
 		spawnPos.y += App->map->data.tile_height / 2;
-		CreateBuildingEntity(spawnPos , BuildingType::FORTRESS, buildingsData[buildingTestIndex]);
-
+		switch (buildingTestIndex) {
+		case 0:
+		case 4:
+			CreateBuildingEntity(spawnPos, BuildingType::FORTRESS, buildingsData[buildingTestIndex]);
+			break;
+		case 1:
+		case 5:
+			CreateBuildingEntity(spawnPos, BuildingType::MONASTERY , buildingsData[buildingTestIndex]);
+			break;
+		case 2:
+		case 6:
+			CreateBuildingEntity(spawnPos, BuildingType::TEMPLE, buildingsData[buildingTestIndex]);
+			break;
+		case 3:
+		case 7:
+			CreateBuildingEntity(spawnPos, BuildingType::ENCAMPMENT, buildingsData[buildingTestIndex]);
+			break;
+		}
 		
 		for (int y = mouse.y; y > mouse.y - crPreview.height; y--)
 		{

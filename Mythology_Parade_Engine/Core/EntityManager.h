@@ -128,6 +128,8 @@ private:
 public:
 	SDL_Rect constructorSpriteRect;
 	SDL_Rect destructedSpriteRect;
+	SDL_Rect construction_bar_back;
+	SDL_Rect construction_bar_front;
 
 };
 #endif // !_ENTITYMANAGER_H
