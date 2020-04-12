@@ -12,6 +12,7 @@
 #include "j1Fonts.h"
 #include "Animation.h"
 #include "EntityManager.h"
+#include "j1Minimap.h"
 #include "j1Scene.h"
 
 #include"QuadTree.h"
@@ -56,7 +57,6 @@ bool j1Scene::Start()
 
 	ui_ingame=(ImageUI*)App->gui->CreateUIElement(Type::IMAGE, nullptr, { 0,590,1280,130 }, { 0,590,1280,130 });
 
-	faith_symbol = (ImageUI*)App->gui->CreateUIElement(Type::IMAGE, nullptr, { 0,590,1280,130 });
 
 	for (int i = 0; i < 3; i++) 
 	{
@@ -75,8 +75,11 @@ bool j1Scene::Start()
 	debugBlue_tex = App->tex->Load("maps/path2.png");
 	debugRed_tex = App->tex->Load("maps/cantBuild.png");
 
+	App->audio->CleanFxs();
+
 	App->gui->sfx_UI[(int)UI_Audio::SAVE] = App->audio->LoadFx("audio/ui/Save.wav");
 	App->gui->sfx_UI[(int)UI_Audio::LOAD] = App->audio->LoadFx("audio/ui/load.wav");
+	App->gui->sfx_UI[(int)UI_Audio::CONFIRMATION] = App->audio->LoadFx("audio/ui/Click_Standard2.wav");
 	App->gui->sfx_UI[(int)UI_Audio::OPTIONS] = App->audio->LoadFx("audio/ui/Settings_Click.wav");
 	App->gui->sfx_UI[(int)UI_Audio::RESTART] = App->audio->LoadFx("audio/ui/Restart.wav");
 	App->gui->sfx_UI[(int)UI_Audio::SURRENDER] = App->audio->LoadFx("audio/ui/Surrender.wav");
@@ -95,7 +98,7 @@ bool j1Scene::Start()
 
 	close_menus = CloseSceneMenus::None;
 
-	cursor_tex = App->tex->Load("gui/cursors.png");
+
 
 	winlose_tex = App->tex->Load("gui/WinLoseBackground.png");
 
@@ -115,32 +118,56 @@ bool j1Scene::Start()
 	//Creating players
 	App->entityManager->CreatePlayerEntity();
 
+	App->render->camera = { 0,0,App->render->camera.w,App->render->camera.h };
+
 	return true;
 }
 
 // Called each loop iteration
 bool j1Scene::PreUpdate()
 {
-
 	// debug pathfing ------------------
-	//static iPoint origin;
-	//static bool origin_selected = false;
+	static iPoint origin;
+	static bool origin_selected = false;
 
-	//iPoint p = App->map->GetMousePositionOnMap();
+	int x, y;
+	App->input->GetMousePosition(x, y);
+	iPoint p = App->render->ScreenToWorld(x, y);
+	p = App->map->WorldToMap(p.x, p.y);
 
-	//if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN)
-	//{
-	//	if (origin_selected == true)
-	//	{
-	//		App->pathfinding->CreatePath(origin, p);
-	//		origin_selected = false;
-	//	}
-	//	else
-	//	{
-	//		origin = p;
-	//		origin_selected = true;
-	//	}
-	//}
+	if (App->input->GetMouseButtonDown(SDL_BUTTON_RIGHT) == KEY_DOWN)
+	{
+		if (origin_selected == true)
+		{
+			App->pathfinding->RequestPath(origin, p);
+
+			origin_selected = false;
+		}
+		else
+		{
+			origin = p;
+			origin_selected = true;
+		}
+	}
+
+
+	// Move Camera if click on the minimap
+	int mouse_x, mouse_y;
+	if ((App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN) || (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_REPEAT))
+	{
+		App->input->GetMousePosition(mouse_x, mouse_y);
+		SDL_Rect minimap = { App->minimap->position.x, App->minimap->position.y, App->minimap->width, App->minimap->height };
+
+		if ((mouse_x > minimap.x) && (mouse_x < minimap.x + minimap.w) && (mouse_y > minimap.y) && (mouse_y < minimap.y + minimap.h))
+		{
+			iPoint minimap_mouse_position = App->minimap->ScreenToMinimapToWorld(mouse_x, mouse_y);
+			App->render->camera.x = -(minimap_mouse_position.x - App->render->camera.w * 0.5f);
+			App->render->camera.y = -(minimap_mouse_position.y - App->render->camera.h * 0.5f);
+		}
+	}
+
+
+
 
 	return true;
 }
@@ -201,25 +228,36 @@ bool j1Scene::Update(float dt)
 	//if (App->input->drawDebug)
 	//	App->render->DrawQuadTree(quadTree->type, quadTree->baseNode);
 
-	iPoint p = App->map->GetMousePositionOnMap();
+	//iPoint p = App->map->GetMousePositionOnMap();
 
-	if (IN_RANGE(p.x, 0, App->map->data.width-1) == 1 && IN_RANGE(p.y, 0, App->map->data.height-1) == 1)
+	//if (IN_RANGE(p.x, 0, App->map->data.width-1) == 1 && IN_RANGE(p.y, 0, App->map->data.height-1) == 1)
+	//{
+	//	//p = App->map->MapToWorld(p.x, p.y);
+	//	//App->render->Blit(debug_tex, p.x, p.y);
+	//	//App->render->Blit(debug_tex, p.x - 32, p.y, { 128, 64 });
+	//}
+
+
+	//Draw blue quad debug for pathfinding
+	int x, y;
+	App->input->GetMousePosition(x, y);
+	iPoint p = App->render->ScreenToWorld(x, y);
+	p = App->map->WorldToMap(p.x, p.y);
+	p = App->map->MapToWorld(p.x, p.y);
+
+	App->render->Blit(debugBlue_tex, p.x, p.y);
+
+	for (int i = 0; i < App->pathfinding->pathfinderList.size(); i++)
 	{
-		//p = App->map->MapToWorld(p.x, p.y);
-		//App->render->Blit(debug_tex, p.x, p.y);
-		//App->render->Blit(debug_tex, p.x - 32, p.y, { 128, 64 });
-	}
+		std::vector<iPoint> path = *App->pathfinding->pathfinderList[i].GetLastPath();
 
-	std::list<iPoint> path = *App->pathfinding->GetLastPath();
-
-	if (path.size() != 0) 
-	{
-		for (std::list<iPoint>::iterator it = path.begin(); it != path.end(); it++)
+		for (uint i = 0; i < path.size(); ++i)
 		{
-			iPoint pos = App->map->MapToWorld(it->x, it->y);
+			iPoint pos = App->map->MapToWorld(path.at(i).x, path.at(i).y);
 			App->render->Blit(debugBlue_tex, pos.x, pos.y);
 		}
 	}
+
 
 	if (App->entityManager->getPlayer()->player_win == true) {
 		if (App->entityManager->getPlayer()->player_type == CivilizationType::VIKING) {
@@ -247,14 +285,6 @@ bool j1Scene::PostUpdate()
 {
 	bool ret = true;
 
-	//Show cursor ------------------------------
-	int x, y;
-	App->input->GetMousePosition(x, y);
-	iPoint p = App->render->ScreenToWorld(x, y);
-	SDL_Rect sec = { 0, 0, 54, 45 };
-	p = App->render->ScreenToWorld(x, y);
-	App->render->Blit(cursor_tex, p.x, p.y, &sec);
-
 	return ret;
 }
 
@@ -263,8 +293,10 @@ bool j1Scene::CleanUp()
 {
 	LOG("Freeing scene");
 
+
 	App->tex->UnLoad(debugBlue_tex);
 	App->tex->UnLoad(debugRed_tex);
+	App->tex->UnLoad(winlose_tex);
 
 	DeactivateConfirmationMenu();
 	DeactivateOptionsMenu();
@@ -277,7 +309,7 @@ bool j1Scene::CleanUp()
 		ui_text_ingame[i] = nullptr;
 	}
 
-	App->tex->UnLoad(cursor_tex);
+
 
 	//quadTree->Clear();
 
@@ -381,10 +413,10 @@ void j1Scene::ActivateConfirmationMenu(std::string str) {
 	if (ui_confirmation_window == nullptr) {
 		ui_confirmation_window = (WindowUI*)App->gui->CreateUIElement(Type::WINDOW, nullptr, { 410,200,459,168 }, { 790,408,459,168 });
 		ui_button_confirmation[0] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_confirmation_window, { 470,300,117,38 }, { 834,125,117,24 }, "YES", { 834,149,117,24 },
-			{ 834,101,117,24 }, false, { 0,0,0,0 }, this);
+			{ 834,101,117,24 }, false, { 0,0,0,0 }, this, (int)UI_Audio::CONFIRMATION);
 		ui_text_confirmation[0] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 509,306,237,38 }, { 0,0,100,100 }, "Yes", { 0,0,0,255 }, { 1,0,0,0 });
 		ui_button_confirmation[1] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_confirmation_window, { 690,300,117,38 }, { 834,125,117,24 }, "NO", { 834,149,117,24 },
-			{ 834,101,117,24 }, false, { 0,0,0,0 }, this);
+			{ 834,101,117,24 }, false, { 0,0,0,0 }, this, (int)UI_Audio::CONFIRMATION);
 		ui_text_confirmation[1] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 731,306,237,38 }, { 0,0,100,100 }, "No", { 0,0,0,255 }, { 1,0,0,0 });
 		std::string text = str + " ?";
 		ui_text_confirmation[2] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 463,212,237,38 }, { 0,0,100,100 }, "ARE YOU SURE YOU WANT TO", { 255,255,255,255 }, { 1,0,0,0 });
@@ -432,6 +464,16 @@ void j1Scene::BackToTitleMenu() {
 	App->map->destroy = true;
 	App->pathfinding->destroy = true;
 	App->entityManager->destroy = true;
+	App->minimap->destroy = true;
+}
+
+void j1Scene::RestartGame() {
+	App->restart_scene = true;
+	destroy = true;
+	App->map->destroy = true;
+	App->pathfinding->destroy = true;
+	App->entityManager->destroy = true;
+	App->minimap->destroy = true;
 }
 
 void j1Scene::OnClick(UI* element, float argument)
@@ -491,6 +533,11 @@ void j1Scene::OnClick(UI* element, float argument)
 			{
 				App->LoadGame("save_game.xml");
 			}
+			else if (confirmation_option.compare("RESTART") == 0)
+			{
+				//close_menus = CloseSceneMenus::Confirmation_and_Pause;
+				RestartGame();
+			}
 			else if (confirmation_option.compare("SURRENDER") == 0)
 			{
 				App->entityManager->getPlayer()->player_lose = true;
@@ -530,23 +577,23 @@ void j1Scene::DoWinOrLoseWindow(int type, bool win) {
 
 	if (type == 1) {
 		if (win == true) {
-			App->render->Blit(winlose_tex, 230, 100, &sec_win);
-			App->render->Blit(winlose_tex, 230, 100, &sec_viking);
+			App->render->Blit(winlose_tex, 230, 100, &sec_win, NULL, 0.0F);
+			App->render->Blit(winlose_tex, 230, 100, &sec_viking, NULL, 0.0F);
 		}
 		else {
-			App->render->Blit(winlose_tex, 230, 100, &sec_greek);
-			App->render->Blit(winlose_tex, 230, 100, &sec_lose);
+			App->render->Blit(winlose_tex, 230, 100, &sec_greek, NULL, 0.0F);
+			App->render->Blit(winlose_tex, 230, 100, &sec_lose, NULL, 0.0F);
 		}
 	}
 
 	if (type == 2) {
 		if (win == true) {
-			App->render->Blit(winlose_tex, 230, 100, &sec_greek);
-			App->render->Blit(winlose_tex, 230, 100, &sec_lose);
+			App->render->Blit(winlose_tex, 230, 100, &sec_greek, NULL, 0.0F);
+			App->render->Blit(winlose_tex, 230, 100, &sec_lose, NULL, 0.0F);
 		}
 		else {
-			App->render->Blit(winlose_tex, 230, 100, &sec_viking);
-			App->render->Blit(winlose_tex, 230, 100, &sec_win);
+			App->render->Blit(winlose_tex, 230, 100, &sec_viking, NULL, 0.0F);
+			App->render->Blit(winlose_tex, 230, 100, &sec_win, NULL, 0.0F);
 		}
 	}
 	if (timer_win_lose.ReadSec() >= 5) {

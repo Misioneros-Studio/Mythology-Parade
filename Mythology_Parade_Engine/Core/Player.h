@@ -4,6 +4,7 @@
 #include "CurrencySystem.h"
 #include "Unit.h"
 #include "Building.h"
+
 #include "j1Input.h"
 #include "EntityManager.h"
 
@@ -21,6 +22,10 @@ public:
 	bool PostUpdate();
 	bool CleanUp();
 
+	void SelectionDraw_Logic();
+	void SeeEntitiesInside();
+	std::list<Entity*> GetEntitiesSelected();
+
 private:
 	CurrencySystem currencySystem;
 
@@ -29,12 +34,14 @@ private:
 	std::string faith, sacrifice, prayer;
 
 	int tick1 = 0, tick2 = 0;
+	iPoint preClicked;
+	iPoint postClicked;
+	std::list<Entity*> listEntities; //Entities instide selection
 
 public:
 	bool player_win = false;
 	bool player_lose = false;
 	CivilizationType player_type;
-
 
 };
 
