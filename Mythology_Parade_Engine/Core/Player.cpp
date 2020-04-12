@@ -63,6 +63,8 @@ bool Player::Update(float dt)
 	//Selection logics and drawing
 	SelectionDraw_Logic(); 
 
+	playerInputs();
+
 	return true;
 }
 
@@ -126,5 +128,15 @@ void Player::playerInputs()
 	{
 		godMode = !godMode;
 		App->input->drawDebug = !App->input->drawDebug;
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_REPEAT && godMode) 
+	{
+		currencySystem.increaseAll(10);
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_F2) && godMode)
+	{
+
 	}
 }

@@ -55,6 +55,7 @@ public:
 	void decreaseFaith(int number);
 	void increaseSacrifice(ActionSacrifice action);
 	void increasePrayers(ActionPrayers action);
+	void increaseAll(int number);
 
 	//MIRACLES AND DISASTER
 	void Miracle(Miracles action);

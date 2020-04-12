@@ -90,6 +90,15 @@ void CurrencySystem::increasePrayers(ActionPrayers action)
 		break;
 	}
 }
+void CurrencySystem::increaseAll(int number)
+{
+	if (number > 0)
+	{
+		faith += number;
+		sacrifices += number;
+		prayers += number;
+	}
+}
 void CurrencySystem::Miracle(Miracles action)
 {
 	switch (action)
