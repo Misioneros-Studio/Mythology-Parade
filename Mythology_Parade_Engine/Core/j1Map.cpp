@@ -95,6 +95,20 @@ int Properties::Get(const char* value, int default_value)
 	return default_value;
 }
 
+iPoint j1Map::TileCenterPoint(iPoint tile) 
+{
+	iPoint ret = App->map->MapToWorld(tile.x, tile.y);
+	ret.x += data.tile_width / 2;
+	ret.y += data.tile_height / 2;
+	return ret;
+
+}
+
+iPoint j1Map::GetTilesHalfSize() 
+{
+	return {data.tile_width / 2, data.tile_height / 2};
+}
+
 TileSet* j1Map::GetTilesetFromTileId(int id) 
 {
 

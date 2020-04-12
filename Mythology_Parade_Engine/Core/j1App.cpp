@@ -1,5 +1,5 @@
-#include <iostream>
-#include <sstream>
+#include <iostream> 
+#include <sstream> 
 
 #include "p2Defs.h"
 #include "p2Log.h"
@@ -39,7 +39,6 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	gui = new j1Gui();
 	console = new Console();
 	entityManager = new EntityManager();
-	animation = new Animation();
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
@@ -94,7 +93,7 @@ bool j1App::Awake()
 	pugi::xml_node		app_config;
 
 	bool ret = false;
-
+		
 	config = LoadConfig(config_file);
 
 	if(config.empty() == false)
@@ -242,7 +241,7 @@ bool j1App::PreUpdate()
 	{
 
 		pModule = it._Ptr->_Myval;
-		if (pModule->active == false)
+		if (pModule->active == false) 
 		{
 			continue;
 		}
@@ -416,7 +415,7 @@ bool j1App::SavegameNow()
 	// xml object were we will store all data
 	pugi::xml_document data;
 	pugi::xml_node root;
-
+	
 	root = data.append_child("game_state");
 
 	j1Module* item = NULL;

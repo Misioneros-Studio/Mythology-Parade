@@ -7,6 +7,7 @@
 #include "j1Input.h"
 #include "EntityManager.h"
 
+class Unit;
 class Player : public Entity, public CurrencySystem
 {
 public:
@@ -40,3 +41,4 @@ public:
 
 
 #endif // !__PLAYER_H__
+

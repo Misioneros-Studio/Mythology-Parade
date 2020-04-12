@@ -87,10 +87,12 @@ public:
 	//Side
 	CivilizationType civilization;
 
-
-
 	//Copy of node
 	pugi::xml_node entity_node;
+
+protected:
+	SDL_RendererFlip flipState;
+
 };
 
 #endif // !ENTITY_H
