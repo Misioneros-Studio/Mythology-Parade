@@ -33,15 +33,10 @@ public:
 	bool player_win = false;
 	bool player_lose = false;
 	CivilizationType player_type;
-<<<<<<< HEAD
 
 
-=======
-  
->>>>>>> parent of 5bdf825... Merge branch 'Feature/Units_v2' into Feature/Pathfinding
 };
 
 
 
 #endif // !__PLAYER_H__
-

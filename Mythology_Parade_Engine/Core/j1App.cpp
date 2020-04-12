@@ -1,5 +1,5 @@
-#include <iostream> 
-#include <sstream> 
+#include <iostream>
+#include <sstream>
 
 #include "p2Defs.h"
 #include "p2Log.h"
@@ -57,16 +57,6 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(title_scene);
 	AddModule(scene);
 
-<<<<<<< HEAD
-=======
-	AddModule(minimap);
-	AddModule(gui);
-	AddModule(console);
-
-	//On top of scene
-	AddModule(animation);
-
->>>>>>> parent of 5bdf825... Merge branch 'Feature/Units_v2' into Feature/Pathfinding
 	// entities
 	AddModule(entityManager);
 
@@ -104,7 +94,7 @@ bool j1App::Awake()
 	pugi::xml_node		app_config;
 
 	bool ret = false;
-		
+
 	config = LoadConfig(config_file);
 
 	if(config.empty() == false)
@@ -252,7 +242,7 @@ bool j1App::PreUpdate()
 	{
 
 		pModule = it._Ptr->_Myval;
-		if (pModule->active == false) 
+		if (pModule->active == false)
 		{
 			continue;
 		}
@@ -426,7 +416,7 @@ bool j1App::SavegameNow()
 	// xml object were we will store all data
 	pugi::xml_document data;
 	pugi::xml_node root;
-	
+
 	root = data.append_child("game_state");
 
 	j1Module* item = NULL;
