@@ -111,7 +111,7 @@ bool j1Scene::Start()
   
 
 	//Eudald: This shouldn't be here but we don't have an entity system to load each animation yet
-	App->animation->Load("assets/units/Assassin.tmx");
+	//App->animation->Load("assets/units/Assassin.tmx");
   
 	App->audio->PlayMusic("audio/music/Ambient1.ogg");
   
@@ -217,7 +217,6 @@ bool j1Scene::Update(float dt)
 
 	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
 		App->render->camera.x -= floor(1000.0f * dt);
-
 
 	App->map->Draw();
 

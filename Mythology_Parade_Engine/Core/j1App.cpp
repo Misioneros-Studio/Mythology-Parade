@@ -43,7 +43,6 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	gui = new j1Gui();
 	console = new Console();
 	entityManager = new EntityManager();
-	animation = new Animation();
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
@@ -67,7 +66,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 
 	//On top of scene
 	AddModule(animation);
-
+  
 	// entities
 	AddModule(entityManager);
 
