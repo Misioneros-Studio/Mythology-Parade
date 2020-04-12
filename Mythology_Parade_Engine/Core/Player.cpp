@@ -116,7 +116,10 @@ void Player::SeeEntitiesInside()
 		{
 			if (it._Ptr->_Myval->position.y >= preClicked.y && it._Ptr->_Myval->position.y <= postClicked.y)
 			{
-				listEntities.push_back(it._Ptr->_Myval);
+				if (it._Ptr->_Myval->civilization == CivilizationType::VIKING)
+				{
+					listEntities.push_back(it._Ptr->_Myval);
+				}
 			}
 		}
 	}
@@ -137,6 +140,11 @@ void Player::playerInputs()
 
 	if (App->input->GetKey(SDL_SCANCODE_F2) && godMode)
 	{
+		App->entityManager->CreateUnitEntity(UnitType::ASSASSIN);
+	}
 
+	if (App->input->GetKey(SDL_SCANCODE_F3) && godMode)
+	{
+		App->entityManager->CreateUnitEntity(UnitType::MONK);
 	}
 }
