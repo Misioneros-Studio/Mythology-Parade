@@ -14,10 +14,8 @@ class j1Input;
 class j1Render;
 class j1Textures;
 class j1Audio;
-class j1LogoScene;
 class j1TitleScene;
 class j1Scene;
-class j1Minimap;
 class j1Map;
 class j1PathFinding;
 class j1Fonts;
@@ -86,10 +84,7 @@ private:
 	bool SavegameNow();
 
 	//Called when changing a scene (start new game or exit the actual game)
-	bool ChangeScene(bool first_scene=false);
-
-	//Called when restarting a scene (restart button)
-	bool RestartScene();
+	bool ChangeScene();
 
 public:
 
@@ -99,10 +94,8 @@ public:
 	j1Render*			render = NULL;
 	j1Textures*			tex = NULL;
 	j1Audio*			audio = NULL;
-	j1LogoScene*		logo_scene = NULL;
 	j1TitleScene*		title_scene = NULL;
 	j1Scene*			scene = NULL;
-	j1Minimap*			minimap = NULL;
 	j1Map*				map = NULL;
 	j1PathFinding*		pathfinding = NULL;
 	j1Fonts*			font = NULL;
@@ -113,8 +106,6 @@ public:
 	bool				start_game = false;
 	bool				change_scene = false;
 
-	bool				restart_scene = false;
-	bool				first_change_scene = false;
 
 private:
 
