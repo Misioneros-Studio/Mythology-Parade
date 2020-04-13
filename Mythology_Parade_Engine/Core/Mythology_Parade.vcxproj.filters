@@ -85,6 +85,9 @@
     <ClCompile Include="Animation.cpp">
       <Filter>Core\Tools\Animations</Filter>
     </ClCompile>
+    <ClCompile Include="PathFinder.cpp">
+      <Filter>Core\Modules</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1Window.h">
@@ -182,6 +185,9 @@
     </ClInclude>
     <ClInclude Include="Animation.h">
       <Filter>Core\Tools\Animations</Filter>
+    </ClInclude>
+    <ClInclude Include="PathFinder.h">
+      <Filter>Core\Modules</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
