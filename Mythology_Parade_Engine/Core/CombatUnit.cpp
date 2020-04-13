@@ -60,18 +60,27 @@ void CombatUnit::Init(int maxHealth, int damage, int range, int speed)
 
 bool CombatUnit::Update(float dt) 
 {
-	//This needs to be changed once pathfinding is implemented
-	if (App->input->GetMouseButtonDown(SDL_BUTTON_RIGHT) == KEY_DOWN)
+	////This needs to be changed once pathfinding is implemented
+	//if (App->input->GetMouseButtonDown(SDL_BUTTON_RIGHT) == KEY_DOWN)
+	//{
+	//	iPoint pos = App->map->GetMousePositionOnMap();
+
+
+	//	if (pos != App->map->WorldToMap(position.x, position.y)) 
+	//	{
+	//		targetPosition = pos;
+	//		ChangeState(targetPosition, AnimationType::WALK);
+	//	}
+	//}
+
+	if (entPath.size() > 0 && targetPosition == iPoint(-1, -1)) 
 	{
-		iPoint pos = App->map->GetMousePositionOnMap();
-
-
-		if (pos != App->map->WorldToMap(position.x, position.y)) 
-		{
-			targetPosition = pos;
-			ChangeState(targetPosition, AnimationType::WALK);
-		}
+		targetPosition.x = entPath[0].x;
+		targetPosition.y = entPath[0].y;
+		ChangeState(targetPosition, AnimationType::WALK);
+		entPath.erase(entPath.begin(), entPath.begin() + 1);
 	}
+
 
 	if (targetPosition != iPoint(-1,-1))
 		MoveToTarget();
@@ -81,7 +90,7 @@ bool CombatUnit::Update(float dt)
 	blitRect = { (int)(currentAnim.sprites[num_current_anim].rect.w / 1.5f), (int)(currentAnim.sprites[num_current_anim].rect.h / 1.5f) };
 
 	App->render->Blit(texture, position.x - blitRect.x / 2, position.y - blitRect.y, blitRect, &currentAnim.sprites[num_current_anim].rect, 1.f, flipState);
-	//App->render->DrawQuad({position.x, position.y, 5, 5}, 0, 255, 0);
+	App->render->DrawQuad({position.x, position.y, 5, 5}, 0, 255, 0);
 
 	return true;
 }

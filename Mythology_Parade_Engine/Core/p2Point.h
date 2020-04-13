@@ -65,6 +65,14 @@ public:
 		return(r);
 	}
 
+	const p2Point operator * (const int &v)
+	{
+		x *= v;
+		y *= v;
+
+		return(*this);
+	}
+
 	const p2Point& operator -=(const p2Point &v)
 	{
 		x -= v.x;

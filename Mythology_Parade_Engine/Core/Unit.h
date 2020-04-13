@@ -62,6 +62,8 @@ public:
 
 	void MoveToTarget();
 	Direction getMovementDirection(iPoint);
+	void SetPath(const std::vector<iPoint>);
+
 
 protected:
 	//Animation
@@ -70,7 +72,9 @@ protected:
 
 	iPoint targetPosition;
 	AnimationType state;
+	Unit* enemyTarget;
 
+	std::vector<iPoint> entPath;
 	//void SetTarget();
 	//void CheckState();
 

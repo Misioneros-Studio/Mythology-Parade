@@ -3,6 +3,7 @@
 
 #include "j1Module.h"
 #include "j1Timer.h"
+#include<vector>
 
 enum class CloseSceneMenus {
 	None,

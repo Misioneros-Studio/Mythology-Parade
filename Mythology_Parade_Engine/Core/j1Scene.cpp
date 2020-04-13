@@ -122,29 +122,21 @@ bool j1Scene::Start()
 bool j1Scene::PreUpdate()
 {
 	// debug pathfing ------------------
-	static iPoint origin;
-	static bool origin_selected = false;
-
-	int x, y;
-	App->input->GetMousePosition(x, y);
-	iPoint p = App->render->ScreenToWorld(x, y);
-	p = App->map->WorldToMap(p.x, p.y);
-
 	if (App->input->GetMouseButtonDown(SDL_BUTTON_RIGHT) == KEY_DOWN)
 	{
-		if (origin_selected == true)
-		{
-			App->pathfinding->RequestPath(origin, p);
+		Entity* ent = App->entityManager->entities[EntityType::UNIT].begin()._Ptr->_Myval;
+		iPoint origin = App->map->WorldToMap(ent->position.x, ent->position.y);
+		iPoint ending = App->map->GetMousePositionOnMap();
 
-			origin_selected = false;
-		}
-		else
-		{
-			origin = p;
-			origin_selected = true;
-		}
+		App->pathfinding->RequestPath(origin, ending);
 	}
 
+	if (App->pathfinding->pathfinderList[0].pathCompleted)
+	{
+		Unit* ent = (Unit*)App->entityManager->entities[EntityType::UNIT].begin()._Ptr->_Myval;
+		ent->SetPath(*App->pathfinding->pathfinderList.begin()->GetLastPath());
+		App->pathfinding->pathfinderList[0].pathCompleted = false;
+	}
 
 	return true;
 }
@@ -213,15 +205,6 @@ bool j1Scene::Update(float dt)
 	//	//App->render->Blit(debug_tex, p.x, p.y);
 	//	//App->render->Blit(debug_tex, p.x - 32, p.y, { 128, 64 });
 	//}
-
-	//Draw blue quad debug for pathfinding
-	int x, y;
-	App->input->GetMousePosition(x, y);
-	iPoint p = App->render->ScreenToWorld(x, y);
-	p = App->map->WorldToMap(p.x, p.y);
-	p = App->map->MapToWorld(p.x, p.y);
-
-	App->render->Blit(debugBlue_tex, p.x, p.y);
 
 	for (int i = 0; i < App->pathfinding->pathfinderList.size(); i++)
 	{

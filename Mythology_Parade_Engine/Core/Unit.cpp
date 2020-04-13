@@ -109,8 +109,12 @@ void Unit::MoveToTarget()
 		position = App->map->MapToWorld(targetPosition.x, targetPosition.y);
 		position += App->map->GetTilesHalfSize();
 
+
 		targetPosition.ResetAsPosition();
-		ChangeState(targetPosition, AnimationType::IDLE);
+		if (entPath.size() <= 0) 
+		{
+			ChangeState(targetPosition, AnimationType::IDLE);
+		}
 	}
 	else
 	{
@@ -127,14 +131,15 @@ void Unit::Init(int maxHealth)
 
 void Unit::ChangeState(iPoint isoLookPosition, AnimationType newState) 
 {
-	if (targetPosition == iPoint(-1, -1)) 
+	if (targetPosition == iPoint(-1, -1) && entPath.size() == 0) 
 	{
 		currentAnim = App->entityManager->animations[unitType][AnimationType::IDLE][currentDirection];
 	}
 	else
 	{
 		currentDirection = getMovementDirection(isoLookPosition);
-		currentAnim = App->entityManager->animations[unitType][newState][currentDirection];
+		if(App->entityManager->animations[unitType][newState][currentDirection].name != currentAnim.name)
+			currentAnim = App->entityManager->animations[unitType][newState][currentDirection];
 	}
 }
 
@@ -204,5 +209,10 @@ Direction Unit::getMovementDirection(iPoint target)
 	return dir;
 }
 
+
+void Unit::SetPath(const std::vector<iPoint> s_path) 
+{
+	entPath = s_path;
+}
 
 
