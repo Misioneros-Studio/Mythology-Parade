@@ -75,9 +75,10 @@ public:
 
 	void OnClick(UI* element, float argument = 0);
 
+	void DoWinOrLoseWindow(int type, bool win);
+
 private:
 
-	void DoWinOrLoseWindow(int type, bool win);
 
   
 	SDL_Texture* winlose_tex;

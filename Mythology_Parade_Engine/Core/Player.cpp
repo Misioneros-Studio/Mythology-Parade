@@ -157,4 +157,13 @@ void Player::playerInputs()
 		}
 	}
 
+	if (App->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN && godMode)
+	{
+		App->scene->DoWinOrLoseWindow(2, true);
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN && godMode)
+	{
+		App->scene->DoWinOrLoseWindow(2, false);
+	}
 }
