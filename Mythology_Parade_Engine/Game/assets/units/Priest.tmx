@@ -3,6 +3,13 @@
  <tileset firstgid="1" name="New2_SpriteSheet" tilewidth="185" tileheight="141" tilecount="400" columns="16">
   <image source="PriestSpriteSheet.png" width="3102" height="3525"/>
   <tile id="0">
+   <properties>
+    <property name="dicType" type="int" value="0"/>
+    <property name="dir" type="int" value="3"/>
+    <property name="row" type="int" value="0"/>
+    <property name="sprites" type="int" value="16"/>
+    <property name="type" value="ATCK_DIAG_DOWN"/>
+   </properties>
    <animation>
     <frame tileid="0" duration="100"/>
     <frame tileid="1" duration="100"/>
@@ -23,6 +30,13 @@
    </animation>
   </tile>
   <tile id="16">
+   <properties>
+    <property name="dicType" type="int" value="0"/>
+    <property name="dir" type="int" value="4"/>
+    <property name="row" type="int" value="1"/>
+    <property name="sprites" type="int" value="16"/>
+    <property name="type" value="ATCK_DIAG_UP"/>
+   </properties>
    <animation>
     <frame tileid="16" duration="100"/>
     <frame tileid="17" duration="100"/>
@@ -43,6 +57,13 @@
    </animation>
   </tile>
   <tile id="32">
+   <properties>
+    <property name="dicType" type="int" value="0"/>
+    <property name="dir" type="int" value="2"/>
+    <property name="row" type="int" value="2"/>
+    <property name="sprites" type="int" value="16"/>
+    <property name="type" value="ATCK_DOWN"/>
+   </properties>
    <animation>
     <frame tileid="32" duration="100"/>
     <frame tileid="33" duration="100"/>
@@ -63,6 +84,13 @@
    </animation>
   </tile>
   <tile id="48">
+   <properties>
+    <property name="dicType" type="int" value="0"/>
+    <property name="dir" type="int" value="1"/>
+    <property name="row" type="int" value="3"/>
+    <property name="sprites" type="int" value="16"/>
+    <property name="type" value="ATCK_LATERAL"/>
+   </properties>
    <animation>
     <frame tileid="48" duration="100"/>
     <frame tileid="49" duration="100"/>
@@ -83,6 +111,13 @@
    </animation>
   </tile>
   <tile id="64">
+   <properties>
+    <property name="dicType" type="int" value="0"/>
+    <property name="dir" type="int" value="0"/>
+    <property name="row" type="int" value="4"/>
+    <property name="sprites" type="int" value="16"/>
+    <property name="type" value="ATCK_UP"/>
+   </properties>
    <animation>
     <frame tileid="64" duration="100"/>
     <frame tileid="65" duration="100"/>
@@ -103,6 +138,13 @@
    </animation>
   </tile>
   <tile id="80">
+   <properties>
+    <property name="dicType" value="1"/>
+    <property name="dir" type="int" value="3"/>
+    <property name="row" value="5"/>
+    <property name="sprites" value="16"/>
+    <property name="type" value="DIE_DIAG_DOWN"/>
+   </properties>
    <animation>
     <frame tileid="80" duration="100"/>
     <frame tileid="81" duration="100"/>
@@ -123,6 +165,13 @@
    </animation>
   </tile>
   <tile id="96">
+   <properties>
+    <property name="dicType" value="1"/>
+    <property name="dir" type="int" value="4"/>
+    <property name="row" value="6"/>
+    <property name="sprites" value="16"/>
+    <property name="type" value="DIE_DIAG_UP"/>
+   </properties>
    <animation>
     <frame tileid="96" duration="100"/>
     <frame tileid="97" duration="100"/>
@@ -143,6 +192,13 @@
    </animation>
   </tile>
   <tile id="112">
+   <properties>
+    <property name="dicType" value="1"/>
+    <property name="dir" type="int" value="1"/>
+    <property name="row" value="7"/>
+    <property name="sprites" value="16"/>
+    <property name="type" value="DIE_LATERAL"/>
+   </properties>
    <animation>
     <frame tileid="112" duration="100"/>
     <frame tileid="113" duration="100"/>
@@ -163,6 +219,13 @@
    </animation>
   </tile>
   <tile id="128">
+   <properties>
+    <property name="dicType" value="1"/>
+    <property name="dir" type="int" value="2"/>
+    <property name="row" value="8"/>
+    <property name="sprites" value="16"/>
+    <property name="type" value="DIE_DOWN"/>
+   </properties>
    <animation>
     <frame tileid="128" duration="100"/>
     <frame tileid="129" duration="100"/>
@@ -183,6 +246,13 @@
    </animation>
   </tile>
   <tile id="144">
+   <properties>
+    <property name="dicType" value="1"/>
+    <property name="dir" type="int" value="0"/>
+    <property name="row" value="9"/>
+    <property name="sprites" value="16"/>
+    <property name="type" value="DIE_UP"/>
+   </properties>
    <animation>
     <frame tileid="144" duration="100"/>
     <frame tileid="145" duration="100"/>
@@ -203,6 +273,13 @@
    </animation>
   </tile>
   <tile id="160">
+   <properties>
+    <property name="dicType" value="2"/>
+    <property name="dir" type="int" value="3"/>
+    <property name="row" value="10"/>
+    <property name="sprites" value="12"/>
+    <property name="type" value="HIT_DIAG_DOWN"/>
+   </properties>
    <animation>
     <frame tileid="160" duration="100"/>
     <frame tileid="161" duration="100"/>
@@ -219,6 +296,13 @@
    </animation>
   </tile>
   <tile id="176">
+   <properties>
+    <property name="dicType" value="2"/>
+    <property name="dir" type="int" value="4"/>
+    <property name="row" value="11"/>
+    <property name="sprites" value="12"/>
+    <property name="type" value="HIT_DIAG_UP"/>
+   </properties>
    <animation>
     <frame tileid="176" duration="100"/>
     <frame tileid="177" duration="100"/>
@@ -235,6 +319,13 @@
    </animation>
   </tile>
   <tile id="192">
+   <properties>
+    <property name="dicType" value="2"/>
+    <property name="dir" type="int" value="2"/>
+    <property name="row" value="12"/>
+    <property name="sprites" value="12"/>
+    <property name="type" value="HIT_DOWN"/>
+   </properties>
    <animation>
     <frame tileid="192" duration="100"/>
     <frame tileid="193" duration="100"/>
@@ -251,6 +342,13 @@
    </animation>
   </tile>
   <tile id="208">
+   <properties>
+    <property name="dicType" value="2"/>
+    <property name="dir" type="int" value="1"/>
+    <property name="row" value="13"/>
+    <property name="sprites" value="12"/>
+    <property name="type" value="HIT_LATERAL"/>
+   </properties>
    <animation>
     <frame tileid="208" duration="100"/>
     <frame tileid="209" duration="100"/>
@@ -267,6 +365,13 @@
    </animation>
   </tile>
   <tile id="224">
+   <properties>
+    <property name="dicType" value="2"/>
+    <property name="dir" type="int" value="0"/>
+    <property name="row" value="14"/>
+    <property name="sprites" value="12"/>
+    <property name="type" value="HIT_UP"/>
+   </properties>
    <animation>
     <frame tileid="224" duration="100"/>
     <frame tileid="225" duration="100"/>
@@ -283,6 +388,13 @@
    </animation>
   </tile>
   <tile id="240">
+   <properties>
+    <property name="dicType" value="3"/>
+    <property name="dir" type="int" value="3"/>
+    <property name="row" value="15"/>
+    <property name="sprites" value="12"/>
+    <property name="type" value="IDLE_DIAG_DOWN"/>
+   </properties>
    <animation>
     <frame tileid="240" duration="100"/>
     <frame tileid="241" duration="100"/>
@@ -299,6 +411,13 @@
    </animation>
   </tile>
   <tile id="256">
+   <properties>
+    <property name="dicType" value="3"/>
+    <property name="dir" type="int" value="4"/>
+    <property name="row" value="16"/>
+    <property name="sprites" value="12"/>
+    <property name="type" value="IDLE_DIAG_UP"/>
+   </properties>
    <animation>
     <frame tileid="256" duration="100"/>
     <frame tileid="257" duration="100"/>
@@ -315,6 +434,13 @@
    </animation>
   </tile>
   <tile id="272">
+   <properties>
+    <property name="dicType" value="3"/>
+    <property name="dir" type="int" value="2"/>
+    <property name="row" value="17"/>
+    <property name="sprites" value="12"/>
+    <property name="type" value="IDLE_DOWN"/>
+   </properties>
    <animation>
     <frame tileid="272" duration="100"/>
     <frame tileid="273" duration="100"/>
@@ -331,6 +457,13 @@
    </animation>
   </tile>
   <tile id="288">
+   <properties>
+    <property name="dicType" value="3"/>
+    <property name="dir" type="int" value="1"/>
+    <property name="row" value="18"/>
+    <property name="sprites" value="12"/>
+    <property name="type" value="IDLE_LATERAL"/>
+   </properties>
    <animation>
     <frame tileid="288" duration="100"/>
     <frame tileid="289" duration="100"/>
@@ -347,6 +480,13 @@
    </animation>
   </tile>
   <tile id="304">
+   <properties>
+    <property name="dicType" value="3"/>
+    <property name="dir" type="int" value="0"/>
+    <property name="row" value="19"/>
+    <property name="sprites" value="12"/>
+    <property name="type" value="IDLE_UP"/>
+   </properties>
    <animation>
     <frame tileid="304" duration="100"/>
     <frame tileid="305" duration="100"/>
@@ -363,6 +503,13 @@
    </animation>
   </tile>
   <tile id="320">
+   <properties>
+    <property name="dicType" value="4"/>
+    <property name="dir" type="int" value="3"/>
+    <property name="row" value="20"/>
+    <property name="sprites" value="16"/>
+    <property name="type" value="WALK_DIAG_DOWN"/>
+   </properties>
    <animation>
     <frame tileid="320" duration="100"/>
     <frame tileid="321" duration="100"/>
@@ -383,6 +530,13 @@
    </animation>
   </tile>
   <tile id="336">
+   <properties>
+    <property name="dicType" value="4"/>
+    <property name="dir" type="int" value="4"/>
+    <property name="row" value="21"/>
+    <property name="sprites" value="16"/>
+    <property name="type" value="WALK_DIAG_UP"/>
+   </properties>
    <animation>
     <frame tileid="336" duration="100"/>
     <frame tileid="337" duration="100"/>
@@ -403,6 +557,13 @@
    </animation>
   </tile>
   <tile id="352">
+   <properties>
+    <property name="dicType" value="4"/>
+    <property name="dir" type="int" value="2"/>
+    <property name="row" value="22"/>
+    <property name="sprites" value="16"/>
+    <property name="type" value="WALK_DOWN"/>
+   </properties>
    <animation>
     <frame tileid="352" duration="100"/>
     <frame tileid="353" duration="100"/>
@@ -423,6 +584,13 @@
    </animation>
   </tile>
   <tile id="368">
+   <properties>
+    <property name="dicType" value="4"/>
+    <property name="dir" type="int" value="1"/>
+    <property name="row" value="23"/>
+    <property name="sprites" value="16"/>
+    <property name="type" value="WALK_LATERAL"/>
+   </properties>
    <animation>
     <frame tileid="368" duration="100"/>
     <frame tileid="369" duration="100"/>
@@ -443,6 +611,13 @@
    </animation>
   </tile>
   <tile id="384">
+   <properties>
+    <property name="dicType" value="4"/>
+    <property name="dir" type="int" value="0"/>
+    <property name="row" value="24"/>
+    <property name="sprites" value="16"/>
+    <property name="type" value="WALK_UP"/>
+   </properties>
    <animation>
     <frame tileid="384" duration="100"/>
     <frame tileid="385" duration="100"/>
@@ -464,8 +639,32 @@
   </tile>
  </tileset>
  <layer id="1" name="Capa de patrones 1" width="5" height="5">
-  <data encoding="base64">
-   AQAAABEAAAAhAAAAMQAAAEEAAABRAAAAYQAAAHEAAACBAAAAkQAAAKEAAACxAAAAwQAAANEAAADhAAAA8QAAAAEBAAARAQAAIQEAADEBAABBAQAAUQEAAGEBAABxAQAAgQEAAA==
+  <data>
+   <tile gid="1"/>
+   <tile gid="17"/>
+   <tile gid="33"/>
+   <tile gid="49"/>
+   <tile gid="65"/>
+   <tile gid="81"/>
+   <tile gid="97"/>
+   <tile gid="113"/>
+   <tile gid="129"/>
+   <tile gid="145"/>
+   <tile gid="161"/>
+   <tile gid="177"/>
+   <tile gid="193"/>
+   <tile gid="209"/>
+   <tile gid="225"/>
+   <tile gid="241"/>
+   <tile gid="257"/>
+   <tile gid="273"/>
+   <tile gid="289"/>
+   <tile gid="305"/>
+   <tile gid="321"/>
+   <tile gid="337"/>
+   <tile gid="353"/>
+   <tile gid="369"/>
+   <tile gid="385"/>
   </data>
  </layer>
 </map>

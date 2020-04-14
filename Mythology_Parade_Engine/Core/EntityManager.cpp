@@ -52,8 +52,10 @@ bool EntityManager::Start()
 {
 	//TODO: NO HARDCODE BOY
 	entitySpriteSheets[SpriteSheetType::BUILDINGS] = App->tex->Load("assets/buildings/Buildings.png");
+
 	animations[UnitType::ASSASSIN] = animationManager.Load("assets/units/Assassin.tmx", UnitType::ASSASSIN);
 	animations[UnitType::MONK] = animationManager.Load("assets/units/Monk.tmx", UnitType::MONK);
+	animations[UnitType::PRIEST] = animationManager.Load("assets/units/Priest.tmx", UnitType::PRIEST);
 
 	for (int i = 0; i < buildingsData.size(); i++)
 	{
