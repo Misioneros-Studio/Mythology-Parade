@@ -276,13 +276,13 @@ bool j1Scene::Update(float dt)
 		//App->render->Blit(debug_tex, p.x - 32, p.y, { 128, 64 });
 	}
 
-	std::list<iPoint> path = *App->pathfinding->GetLastPath();
-
-	if (path.size() != 0) 
+	for (int i = 0; i < App->pathfinding->pathfinderList.size(); i++)
 	{
-		for (std::list<iPoint>::iterator it = path.begin(); it != path.end(); it++)
+		std::vector<iPoint> path = *App->pathfinding->pathfinderList[i].GetLastPath();
+
+		for (uint i = 0; i < path.size(); ++i)
 		{
-			iPoint pos = App->map->MapToWorld(it->x, it->y);
+			iPoint pos = App->map->MapToWorld(path.at(i).x, path.at(i).y);
 			App->render->Blit(debugBlue_tex, pos.x, pos.y);
 		}
 	}
