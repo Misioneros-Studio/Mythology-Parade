@@ -31,7 +31,6 @@ bool j1Audio::Awake(pugi::xml_node& config)
 		ret = true;
 	}
 
-	// load support for the JPG and PNG image formats
 	int flags = MIX_INIT_OGG;
 	int init = Mix_Init(flags);
 
@@ -50,6 +49,13 @@ bool j1Audio::Awake(pugi::xml_node& config)
 		ret = true;
 	}
 	active = true;
+	
+	WinVikings_sound = LoadFx("audio/fx/WinVikings.wav");
+	WinGreeks_sound = LoadFx("audo/fx/win_greeks.wav");
+	Lose_Sound = LoadFx("audio/fx/WinVikings.wav");
+	NewGame_transition = LoadFx("audio/fx/NewGame_transition.wav");
+	ExitGame_transition = LoadFx("audio/fx/ExitGame_transition.wav");
+	SeaSound = App->audio->LoadFx("audio/fx/Close_to_seaFX.wav");
 
 	return ret;
 }
@@ -82,7 +88,7 @@ bool j1Audio::CleanUp()
 }
 
 // Play a music file
-bool j1Audio::PlayMusic(const char* path, float fade_time)
+bool j1Audio::PlayMusic(const char* path, float fade_time, int volume)
 {
 	bool ret = true;
 
@@ -155,11 +161,12 @@ unsigned int j1Audio::LoadFx(const char* path)
 		ret = fx.size();
 	}
 
+
 	return ret;
 }
 
 // Play WAV
-bool j1Audio::PlayFx(unsigned int id, int repeat)
+bool j1Audio::PlayFx(int channel , unsigned int id, int repeat)
 {
 	bool ret = false;
 
@@ -173,7 +180,7 @@ bool j1Audio::PlayFx(unsigned int id, int repeat)
 		std::advance(it, id - 1);
 
 		if(it._Ptr->_Myval != fx.end()._Ptr->_Myval)
-			Mix_PlayChannel(-1, it._Ptr->_Myval, repeat);
+			Mix_PlayChannel(channel, it._Ptr->_Myval, repeat);
 	}
 
 	return ret;
