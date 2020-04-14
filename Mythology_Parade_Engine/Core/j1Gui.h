@@ -22,8 +22,6 @@ enum class Type
 enum class UI_Audio
 {
 	NONE=-1,
-	MAIN_MENU,
-	CONFIRMATION,
 	SAVE,
 	LOAD,
 	OPTIONS,
@@ -294,12 +292,11 @@ private:
 	std::list <UI*> UIs;
 	SDL_Texture* atlas;
 	std::string atlas_file_name;
-	SDL_Texture* cursor_tex;
 
 public:
 
 	//Audio
-	int sfx_UI[9];
+	int sfx_UI[7];
 	bool lockClick;
 
 };

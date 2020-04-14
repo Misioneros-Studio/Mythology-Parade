@@ -60,6 +60,7 @@ bool Building::Awake(pugi::xml_node& a)
 bool Building::Update(float dt)
 {
 	bool ret = true;
+
 	if (first_time_constructing == true && buildingStatus == CONSTRUCTING)
 	{
 		int actual_construction_time = timer_construction.ReadSec();
@@ -111,6 +112,22 @@ bool Building::Update(float dt)
 		blitRect = App->entityManager->CalculateBuildingSize(blitWidth, spriteRect.w, spriteRect.h);
 	}
 
+	//Dont delete, we need this to change the state to "building" or "destructed"
+	//if (App->input->GetKey(SDL_SCANCODE_3) == KEY_DOWN) 
+	//{
+	//	spriteRect = App->entityManager->destructedSpriteRect;
+
+	//	int blitWidth = tileLenght * App->map->data.tile_width;
+	//	blitRect = App->entityManager->CalculateBuildingSize(blitWidth, spriteRect.w, spriteRect.h);
+	//}
+	//if (App->input->GetKey(SDL_SCANCODE_4) == KEY_DOWN)
+	//{
+	//	spriteRect = App->entityManager->constructorSpriteRect;
+
+	//	int blitWidth = tileLenght * App->map->data.tile_width;
+	//	blitRect = App->entityManager->CalculateBuildingSize(blitWidth, spriteRect.w, spriteRect.h);
+	//}
+
 	Draw();
 	if (buildingStatus == CONSTRUCTING) {
 		Draw_Construction_Bar(blitWidth);
@@ -121,10 +138,8 @@ bool Building::Update(float dt)
 
 void Building::Draw()
 {
-	//lengh = 4, lenght is the number of tiles this building uses
-	//App->render->DrawQuad({position.x, position.y + (tileHeight /2) * (height + 1), texturewidth, -textureHeight}, 255, 250, 20);
-	App->render->Blit(texture, position.x, position.y + ((32 / 2) * tileLenght) - blitRect.y, {blitRect.x, blitRect.y}, &spriteRect);
-	App->render->DrawQuad({position.x, position.y, 4, -4}, 255, 0, 0);
+	App->render->Blit(texture, position.x, position.y + ((App->map->data.tile_height / 2) * tileLenght) - blitRect.y, {blitRect.x, blitRect.y}, &spriteRect);
+	//App->render->DrawQuad({position.x, position.y, 4, -4}, 255, 0, 0);
 }
 
 void Building::Draw_Construction_Bar(int blitWidth)

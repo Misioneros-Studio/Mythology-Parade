@@ -192,6 +192,7 @@
     <ClInclude Include="j1TitleScene.h">
       <Filter>Core\Scenes</Filter>
     </ClInclude>
+
     <ClInclude Include="j1Minimap.h">
       <Filter>Core\Modules</Filter>
     </ClInclude>

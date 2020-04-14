@@ -4,12 +4,8 @@
 #include "Entity.h"
 #include "SDL/include/SDL_rect.h"
 #include "HealthSystem.h"
-
-enum State
-{
-	IDLE,
-	MOVE
-};
+#include"EntityManager.h"
+#include "Animation.h"
 
 enum class ReligiousType
 {
@@ -40,9 +36,6 @@ private:
 	//Conditions
 	bool _isSelected;
 	
-	//state
-	State state;
-
 	//Description / Effect
 	std::string description;
 
@@ -65,15 +58,26 @@ public:
 
 	virtual bool Draw(float dt);
 	virtual void Action(Entity*);
+	void ChangeState(iPoint, AnimationType);
 
-private:
-	//Private Functions
-	void MoveTo(p2Point<int>);
+	void MoveToTarget();
+	Direction getMovementDirection(iPoint);
+	void SetPath(const std::vector<iPoint>);
 
+
+protected:
 	//Animation
+	Direction currentDirection;
+	Animation_char currentAnim;
 
+	iPoint targetPosition;
+	AnimationType state;
+	Unit* enemyTarget;
 
-	void CheckState();
+	std::vector<iPoint> entPath;
+	//void SetTarget();
+	//void CheckState();
+
 
 };
 

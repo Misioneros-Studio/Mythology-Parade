@@ -1,10 +1,10 @@
 #ifndef __j1MAP_H__
 #define __j1MAP_H__
 
+#include "PugiXml/src/pugixml.hpp"
 #include "p2Point.h"
 #include "j1Module.h"
-#include "PugiXml/src/pugixml.hpp"
-
+#include"j1Input.h"
 
 // ----------------------------------------------------
 struct Properties
@@ -36,7 +36,6 @@ struct Properties
 // ----------------------------------------------------
 struct MapLayer
 {
-	
 	std::string	name;
 	int			width;
 	int			height;
@@ -121,12 +120,13 @@ public:
 
 	iPoint MapToWorld(int x, int y) const;
 	iPoint WorldToMap(int x, int y) const;
+	iPoint TileCenterPoint(iPoint);
 	iPoint GetMousePositionOnMap();
+	
 	SDL_Rect GetMapRect();
+	iPoint GetTilesHalfSize();
 
 	bool CreateWalkabilityMap(int& width, int& height, uchar** buffer);
-
-	TileSet* GetTilesetFromTileId(int id);
 
 private:
 
@@ -135,10 +135,11 @@ private:
 	bool LoadTilesetImage(pugi::xml_node& tileset_node, TileSet* set);
 	bool LoadLayer(pugi::xml_node& node, MapLayer* layer);
 	bool LoadProperties(pugi::xml_node& node, Properties& properties);
-
+	TileSet* GetTilesetFromTileId(int id);
 
 public:
 
+	int GetMapMaxLenght();
 	MapData data;
 
 private:

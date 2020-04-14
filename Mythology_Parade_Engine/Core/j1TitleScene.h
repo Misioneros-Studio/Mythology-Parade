@@ -28,7 +28,7 @@ public:
 	virtual ~j1TitleScene();
 
 	// Called before render is available
-	bool Awake(pugi::xml_node& conf);
+	bool Awake();
 
 	// Called before the first frame
 	bool Start();
@@ -74,6 +74,7 @@ public:
 
 private:
 	SDL_Texture* debug_tex;
+	SDL_Texture* cursor_tex;
 	SDL_Texture* title_assets_tex;
 	ButtonUI* ui_button[6];
 	TextUI* ui_text[6];

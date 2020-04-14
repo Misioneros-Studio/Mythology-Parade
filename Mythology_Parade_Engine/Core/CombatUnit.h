@@ -3,6 +3,7 @@
 
 #include "Unit.h"
 #include "LevelSystem.h"
+#include"Animation.h"
 
 
 class CombatUnit :	public Unit, public LevelSystem
@@ -12,7 +13,7 @@ private:
 	int range;
 
 public:
-	CombatUnit(UnitType);
+	CombatUnit(UnitType, iPoint);
 	~CombatUnit();
 
 	bool Update(float);

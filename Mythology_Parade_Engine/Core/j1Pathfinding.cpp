@@ -82,7 +82,7 @@ void j1PathFinding::RequestPath(const iPoint& origin, const iPoint& destination)
 		LOG("Invalid Path");
 		return;
 	}
-
+	
 	pathRequestList.push(PathRequest(origin, destination));
 	LOG("Path added to Path Request List");
 }

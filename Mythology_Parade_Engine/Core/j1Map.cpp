@@ -4,9 +4,9 @@
 #include "j1Render.h"
 #include "j1Textures.h"
 #include "j1Map.h"
-#include "j1Input.h"
 #include <math.h>
 #include"j1Scene.h"
+#include"QuadTree.h"
 
 j1Map::j1Map() : j1Module(), map_loaded(false)
 {
@@ -93,6 +93,36 @@ int Properties::Get(const char* value, int default_value)
 	}
 
 	return default_value;
+}
+
+iPoint j1Map::TileCenterPoint(iPoint tile) 
+{
+	iPoint ret = App->map->MapToWorld(tile.x, tile.y);
+	ret.x += data.tile_width / 2;
+	ret.y += data.tile_height / 2;
+	return ret;
+
+}
+
+iPoint j1Map::GetTilesHalfSize() 
+{
+	return {data.tile_width / 2, data.tile_height / 2};
+}
+
+int j1Map::GetMapMaxLenght() 
+{
+	iPoint leftLimit = { 0, data.height };
+	iPoint rightLimit = { data.width, 0 };
+
+	//Convert coords to cart space
+	leftLimit = MapToWorld(leftLimit.x, leftLimit.y);
+	rightLimit = MapToWorld(rightLimit.x, rightLimit.y);
+
+	//Center tile position
+	leftLimit = leftLimit + GetTilesHalfSize();
+	rightLimit = rightLimit + GetTilesHalfSize();
+
+	return  leftLimit.DistanceManhattan(rightLimit);
 }
 
 TileSet* j1Map::GetTilesetFromTileId(int id) 
