@@ -55,9 +55,14 @@ bool Player::Update(float dt)
 	App->scene->ui_text_ingame[1]->SetString(sacrifice);
 	App->scene->ui_text_ingame[2]->SetString(prayer);
 	
-  if (App->input->GetKey(SDL_SCANCODE_5) == KEY_DOWN) 
+	if (App->input->GetKey(SDL_SCANCODE_5) == KEY_DOWN) 
 	{
-		App->entityManager->CreateUnitEntity(UnitType::ASSASSIN);
+		//Unit spawn
+		iPoint mouse = App->map->GetMousePositionOnMap();
+		iPoint spawnPos = App->map->TileCenterPoint(mouse);
+
+		//Todo change assassin for the type of unit
+		App->entityManager->CreateUnitEntity(UnitType::ASSASSIN, spawnPos);
 	}
   
 	//Selection logics and drawing

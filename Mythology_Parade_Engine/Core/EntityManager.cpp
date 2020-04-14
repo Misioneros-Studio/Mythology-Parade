@@ -52,6 +52,7 @@ bool EntityManager::Start()
 {
 	//TODO: NO HARDCODE BOY
 	entitySpriteSheets[SpriteSheetType::BUILDINGS] = App->tex->Load("assets/buildings/Buildings.png");
+	animations[UnitType::ASSASSIN] = animationManager.Load("assets/units/Assassin.tmx");
 
 	for (int i = 0; i < buildingsData.size(); i++)
 	{
@@ -215,6 +216,21 @@ bool EntityManager::CleanUp()
 			App->tex->UnLoad(entitySpriteSheets[(SpriteSheetType)i]);
 	}
 	entities.clear();
+
+	for (int i = 0; i < animations.size(); i++)
+	{
+		for (int k = 0; k < animations[(UnitType)i].size(); k++)
+		{
+			for (int j = 0; j < animations[(UnitType)i][(AnimationType)k].size(); j++)
+			{
+				animations[(UnitType)i][(AnimationType)k][(Direction)j].Clean();
+			}
+			animations[(UnitType)i][(AnimationType)k].clear();
+		}
+		animations[(UnitType)i].clear();
+	}
+	animations.clear();
+
 	return true;
 }
 
@@ -338,24 +354,28 @@ Entity* EntityManager::CreatePlayerEntity()
 	return ret;
 }
 
-Entity* EntityManager::CreateUnitEntity(UnitType type)
+Entity* EntityManager::CreateUnitEntity(UnitType type, iPoint pos)
 {
 	Entity* ret = nullptr;
-	
+
 	switch (type)
 	{
 	case UnitType::ASSASSIN:
-		ret = new CombatUnit(UnitType::ASSASSIN);
+		ret = new CombatUnit(UnitType::ASSASSIN, pos);
+		ret->texture = animationManager.character_tmx_data.texture;
 		break;
 	case UnitType::MONK:
 		ret = new Unit(UnitType::MONK);
 		break;
 	case UnitType::PIKEMAN:
-		ret = new CombatUnit(UnitType::PIKEMAN);
+		ret = new CombatUnit(UnitType::PIKEMAN, pos);
 		break;
 	}
 	ret->type = EntityType::UNIT;
 	entities[EntityType::UNIT].push_back(ret);
+
+	//DELETE: THIS
+	entities[EntityType::UNIT].sort(entity_Sort());
 
 	return ret;
 }
@@ -411,7 +431,7 @@ void EntityManager::UpdateBuildPreview(int index)
 	crPreview.width = data.tileLenght;
 }
 
-void EntityManager::LoadBuildingsData(pugi::xml_node& node) 
+void EntityManager::LoadBuildingsData(pugi::xml_node& node)
 {
 	if (node != NULL)
 	{
@@ -442,7 +462,7 @@ void EntityManager::LoadBuildingsData(pugi::xml_node& node)
 							push = false;
 						}
 					}
-					else if(push == false && name == "consType")
+					else if (push == false && name == "consType")
 					{
 						if (prop.attribute("value").as_int() == 0)
 						{
@@ -467,7 +487,7 @@ void EntityManager::LoadBuildingsData(pugi::xml_node& node)
 			//TODO: Find a wat to mesure this with the tileLenght
 			info.blitSize = { info.spriteRect.w, info.spriteRect.h };
 
-			if(push)
+			if (push)
 				buildingsData.push_back(info);
 		}
 	}

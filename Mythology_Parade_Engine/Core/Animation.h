@@ -21,10 +21,10 @@ enum class Direction
 	LATERAL,
 	DOWN,
 	DIAGONAL_DOWN,
-	DIAGONAL_UP
+	DIAGONAL_UP,
 };
 
-struct Sprite 
+struct Sprite
 {
 	SDL_Rect rect;
 	SDL_Rect AABB_rect;
@@ -91,7 +91,7 @@ struct CharacterTMXData
 	uint					height = 0u;
 	int						tile_width = 0u;
 	int						tile_height = 0u;
-  
+
 	void Clean()
 	{
 		App->tex->UnLoad(texture);
@@ -99,37 +99,20 @@ struct CharacterTMXData
 
 };
 
-class Animation :public j1Module 
+class Animation
 {
 public:
 	Animation();
 	// Destructor
 	virtual ~Animation();
 
-	// Called before render is available
-	bool Awake(pugi::xml_node& conf);
-
-	// Called each loop iteration
-	bool Update(float dt) override;
 	// Called before quitting
-	bool CleanUp();
-	bool Load(const char* path);
+	std::unordered_map<AnimationType, std::unordered_map<Direction, Animation_char>> Load(const char* path);
 	bool LoadCharacterTMX(pugi::xml_node& character_node);
-	void ChooseAnimation(pugi::xml_node& obj_group, int row, int sprite_num, std::string name, AnimationType type, Direction dir);
 	virtual Animation_char LoadAnimation(pugi::xml_node& obj_group, int row, int sprite_num, std::string name);
-	void Draw();
 
-private:
+public:
 	CharacterTMXData character_tmx_data;
-
-	Animation_char current_anim;
-	int num_current_anim;
-
-	int index = 0;
-	int animation = 0;
-
-
-	std::unordered_map<AnimationType, std::unordered_map<Direction, Animation_char>> animations;
 };
 
 #endif

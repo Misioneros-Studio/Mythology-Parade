@@ -4,7 +4,7 @@
 #include "p2Point.h"
 #include "j1Module.h"
 #include "PugiXml/src/pugixml.hpp"
-
+#include"j1Input.h"
 
 // ----------------------------------------------------
 struct Properties
@@ -121,7 +121,11 @@ public:
 
 	iPoint MapToWorld(int x, int y) const;
 	iPoint WorldToMap(int x, int y) const;
+
 	iPoint GetMousePositionOnMap();
+	iPoint TileCenterPoint(iPoint);
+	iPoint GetTilesHalfSize();
+
 	SDL_Rect GetMapRect();
 
 	bool CreateWalkabilityMap(int& width, int& height, uchar** buffer);
@@ -139,6 +143,7 @@ private:
 
 public:
 
+	int GetMapMaxLenght();
 	MapData data;
 
 private:

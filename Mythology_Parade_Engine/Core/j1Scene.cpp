@@ -51,6 +51,7 @@ bool j1Scene::Start()
 			App->pathfinding->SetMap(w, h, data);
 
 		mapLimitsRect = App->map->GetMapRect();
+		App->pathfinding->maxPathLenght = App->map->GetMapMaxLenght();
 
 		SDL_ShowCursor(0);
 
@@ -111,10 +112,6 @@ bool j1Scene::Start()
 	//quadTree = new QuadTree(TreeType::ISOMETRIC, position.x + (App->map->data.tile_width / 2), position.y, size.x, size.y);
 	//quadTree->baseNode->SubDivide(quadTree->baseNode, 5);
   
-
-	//Eudald: This shouldn't be here but we don't have an entity system to load each animation yet
-	App->animation->Load("assets/units/Assassin.tmx");
-  
 	App->audio->PlayMusic("audio/music/Ambient1.ogg");
   
 	//Creating players
@@ -127,25 +124,22 @@ bool j1Scene::Start()
 bool j1Scene::PreUpdate()
 {
 	// debug pathfing ------------------
-	//static iPoint origin;
-	//static bool origin_selected = false;
+	if (App->input->GetMouseButtonDown(SDL_BUTTON_RIGHT) == KEY_DOWN)
+	{
+		//TMP: Temporal pathfinding debug
+		Entity* ent = App->entityManager->entities[EntityType::UNIT].begin()._Ptr->_Myval;
+		iPoint origin = App->map->WorldToMap(ent->position.x, ent->position.y);
+		iPoint ending = App->map->GetMousePositionOnMap();
 
-	//iPoint p = App->map->GetMousePositionOnMap();
-
-	//if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN)
-	//{
-	//	if (origin_selected == true)
-	//	{
-	//		App->pathfinding->CreatePath(origin, p);
-	//		origin_selected = false;
-	//	}
-	//	else
-	//	{
-	//		origin = p;
-	//		origin_selected = true;
-	//	}
-	//}
-
+		if (origin != ending)
+			App->pathfinding->RequestPath(origin, ending);
+	}
+	if (App->pathfinding->pathfinderList[0].pathCompleted)
+	{
+		Unit* ent = (Unit*)App->entityManager->entities[EntityType::UNIT].begin()._Ptr->_Myval;
+		ent->SetPath(*App->pathfinding->pathfinderList.begin()->GetLastPath());
+		App->pathfinding->pathfinderList[0].pathCompleted = false;
+	}
 
 
 	// Move Camera if click on the minimap
@@ -162,9 +156,6 @@ bool j1Scene::PreUpdate()
 			App->render->camera.y = -(minimap_mouse_position.y - App->render->camera.h * 0.5f);
 		}
 	}
-
-
-
 
 	return true;
 }
@@ -267,22 +258,21 @@ bool j1Scene::Update(float dt)
 	//if (App->input->drawDebug)
 	//	App->render->DrawQuadTree(quadTree->type, quadTree->baseNode);
 
-	iPoint p = App->map->GetMousePositionOnMap();
+	//iPoint p = App->map->GetMousePositionOnMap();
+	//if (IN_RANGE(p.x, 0, App->map->data.width-1) == 1 && IN_RANGE(p.y, 0, App->map->data.height-1) == 1)
+	//{
+	//	//p = App->map->MapToWorld(p.x, p.y);
+	//	//App->render->Blit(debug_tex, p.x, p.y);
+	//	//App->render->Blit(debug_tex, p.x - 32, p.y, { 128, 64 });
+	//}
 
-	if (IN_RANGE(p.x, 0, App->map->data.width-1) == 1 && IN_RANGE(p.y, 0, App->map->data.height-1) == 1)
+	for (int i = 0; i < App->pathfinding->pathfinderList.size(); i++)
 	{
-		//p = App->map->MapToWorld(p.x, p.y);
-		//App->render->Blit(debug_tex, p.x, p.y);
-		//App->render->Blit(debug_tex, p.x - 32, p.y, { 128, 64 });
-	}
+		std::vector<iPoint> path = *App->pathfinding->pathfinderList[i].GetLastPath();
 
-	std::list<iPoint> path = *App->pathfinding->GetLastPath();
-
-	if (path.size() != 0) 
-	{
-		for (std::list<iPoint>::iterator it = path.begin(); it != path.end(); it++)
+		for (uint i = 0; i < path.size(); ++i)
 		{
-			iPoint pos = App->map->MapToWorld(it->x, it->y);
+			iPoint pos = App->map->MapToWorld(path.at(i).x, path.at(i).y);
 			App->render->Blit(debugBlue_tex, pos.x, pos.y);
 		}
 	}
@@ -338,9 +328,6 @@ bool j1Scene::CleanUp()
 		App->gui->DeleteUIElement(ui_text_ingame[i]);
 		ui_text_ingame[i] = nullptr;
 	}
-
-
-
 	//quadTree->Clear();
 
 	return true;
@@ -506,7 +493,6 @@ void j1Scene::RestartGame() {
 	App->pathfinding->destroy = true;
 	App->entityManager->destroy = true;
 	App->minimap->destroy = true;
-	App->animation->destroy = true;
 }
 
 void j1Scene::OnClick(UI* element, float argument)
