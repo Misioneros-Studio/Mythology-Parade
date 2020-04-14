@@ -258,13 +258,12 @@ bool j1Scene::Update(float dt)
 	//if (App->input->drawDebug)
 	//	App->render->DrawQuadTree(quadTree->type, quadTree->baseNode);
 
-	//iPoint p = App->map->GetMousePositionOnMap();
-	//if (IN_RANGE(p.x, 0, App->map->data.width-1) == 1 && IN_RANGE(p.y, 0, App->map->data.height-1) == 1)
-	//{
-	//	//p = App->map->MapToWorld(p.x, p.y);
-	//	//App->render->Blit(debug_tex, p.x, p.y);
-	//	//App->render->Blit(debug_tex, p.x - 32, p.y, { 128, 64 });
-	//}
+	iPoint p = App->map->GetMousePositionOnMap();
+	if (!App->entityManager->crPreview.active && IN_RANGE(p.x, 0, App->map->data.width-1) == 1 && IN_RANGE(p.y, 0, App->map->data.height-1) == 1)
+	{
+		p = App->map->MapToWorld(p.x, p.y);
+		App->render->Blit(debugBlue_tex, p.x, p.y);
+	}
 
 	for (int i = 0; i < App->pathfinding->pathfinderList.size(); i++)
 	{
