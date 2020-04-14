@@ -81,9 +81,23 @@ bool j1Gui::PreUpdate()
 // Called after all Updates
 bool j1Gui::PostUpdate()
 {
-	for (std::list<UI*>::iterator it = UIs.begin(); it != UIs.end(); it++)
-	{
-		it._Ptr->_Myval->PostUpdate();
+	if (App->console->console_active == true) {
+		for (std::list<UI*>::iterator it = UIs.begin(); it != UIs.end(); it++)
+		{
+			if (it._Ptr->_Myval->GetPriority() != 2)
+				it._Ptr->_Myval->PostUpdate();
+		}
+		for (std::list<UI*>::iterator it = UIs.begin(); it != UIs.end(); it++)
+		{
+			if (it._Ptr->_Myval->GetPriority() == 2)
+				it._Ptr->_Myval->PostUpdate();
+		}
+	}
+	else {
+		for (std::list<UI*>::iterator it = UIs.begin(); it != UIs.end(); it++)
+		{
+			it._Ptr->_Myval->PostUpdate();
+		}
 	}
 
 	iPoint rect_position = App->minimap->WorldToMinimap(-App->render->camera.x, -App->render->camera.y);
@@ -317,6 +331,7 @@ UI::UI(Type s_type, SDL_Rect r, UI* p, bool d, bool f, SDL_Rect d_area, bool con
 	focus = false;
 	drag_area = d_area;
 	console = consol;
+	priority = 1;
 }
 
 bool UI::PreUpdate() {
@@ -450,6 +465,10 @@ bool UI::Move() {
 		quad.y += y;
 	}
 	return true;
+}
+
+void UI::SetPriority(int prior) {
+	priority = prior;
 }
 
 SDL_Rect UI::Check_Printable_Rect(SDL_Rect sprite, iPoint& dif_sprite) {

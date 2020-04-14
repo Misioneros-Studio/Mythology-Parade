@@ -80,6 +80,7 @@ public:
 private:
 
 
+	SDL_Rect mapLimitsRect;
   
 	SDL_Texture* winlose_tex;
 	ImageUI* ui_ingame;

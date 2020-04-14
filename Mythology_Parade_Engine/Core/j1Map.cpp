@@ -7,6 +7,7 @@
 #include "j1Input.h"
 #include <math.h>
 #include"j1Scene.h"
+#include"QuadTree.h"
 
 j1Map::j1Map() : j1Module(), map_loaded(false)
 {
@@ -95,6 +96,36 @@ int Properties::Get(const char* value, int default_value)
 	return default_value;
 }
 
+iPoint j1Map::TileCenterPoint(iPoint tile)
+{
+	iPoint ret = App->map->MapToWorld(tile.x, tile.y);
+	ret.x += data.tile_width / 2;
+	ret.y += data.tile_height / 2;
+	return ret;
+
+}
+
+iPoint j1Map::GetTilesHalfSize()
+{
+	return { data.tile_width / 2, data.tile_height / 2 };
+}
+
+int j1Map::GetMapMaxLenght()
+{
+	iPoint leftLimit = { 0, data.height };
+	iPoint rightLimit = { data.width, 0 };
+
+	//Convert coords to cart space
+	leftLimit = MapToWorld(leftLimit.x, leftLimit.y);
+	rightLimit = MapToWorld(rightLimit.x, rightLimit.y);
+
+	//Center tile position
+	leftLimit = leftLimit + GetTilesHalfSize();
+	rightLimit = rightLimit + GetTilesHalfSize();
+
+	return  leftLimit.DistanceManhattan(rightLimit);
+}
+
 TileSet* j1Map::GetTilesetFromTileId(int id) 
 {
 
@@ -111,6 +142,11 @@ TileSet* j1Map::GetTilesetFromTileId(int id)
 	}
 
 	return set;
+}
+
+SDL_Rect j1Map::GetMapRect() 
+{
+	return {-((data.width/2) * data.tile_width) + (data.tile_width/2), 0, data.width * data.tile_width, data.height*data.tile_height  };
 }
 
 iPoint j1Map::MapToWorld(int x, int y) const
