@@ -129,6 +129,7 @@ bool j1Scene::PreUpdate()
 	// debug pathfing ------------------
 	if (App->input->GetMouseButtonDown(SDL_BUTTON_RIGHT) == KEY_DOWN)
 	{
+		//TMP: Temporal pathfinding debug
 		Entity* ent = App->entityManager->entities[EntityType::UNIT].begin()._Ptr->_Myval;
 		iPoint origin = App->map->WorldToMap(ent->position.x, ent->position.y);
 		iPoint ending = App->map->GetMousePositionOnMap();
@@ -136,7 +137,6 @@ bool j1Scene::PreUpdate()
 		if(origin != ending)
 			App->pathfinding->RequestPath(origin, ending);
 	}
-
 	if (App->pathfinding->pathfinderList[0].pathCompleted)
 	{
 		Unit* ent = (Unit*)App->entityManager->entities[EntityType::UNIT].begin()._Ptr->_Myval;
