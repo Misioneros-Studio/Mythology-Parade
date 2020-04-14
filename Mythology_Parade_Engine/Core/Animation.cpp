@@ -11,7 +11,7 @@ Animation::~Animation()
 {
 }
 
-std::unordered_map<AnimationType, std::unordered_map<Direction, Animation_char>> Animation::Load(const char* path)
+std::unordered_map<AnimationType, std::unordered_map<Direction, Animation_char>> Animation::Load(const char* path, UnitType s_type)
 {
 	bool ret = true;
 	pugi::xml_document	character_file;
@@ -36,7 +36,7 @@ std::unordered_map<AnimationType, std::unordered_map<Direction, Animation_char>>
 
 		pugi::xml_node	character_node = character_file.child("map");
 
-		LoadCharacterTMX(character_node);
+		LoadCharacterTMX(character_node, &charData[s_type]);
 
 
 		pugi::xml_node group = character_node.child("tileset").child("tile");
@@ -68,7 +68,7 @@ std::unordered_map<AnimationType, std::unordered_map<Direction, Animation_char>>
 				}
 				it = it.next_sibling("property");
 			}
-			animations[type][dir] = LoadAnimation(group, row, sprite_num, name);
+			animations[type][dir] = LoadAnimation(group, row, sprite_num, name, &charData[s_type]);
 
 			group = group.next_sibling("tile");
 		}
@@ -77,7 +77,7 @@ std::unordered_map<AnimationType, std::unordered_map<Direction, Animation_char>>
 	return animations;
 }
 
-bool Animation::LoadCharacterTMX(pugi::xml_node& character_node)
+bool Animation::LoadCharacterTMX(pugi::xml_node& character_node, CharacterTMXData* cData)
 {
 	bool ret = true;
 	if (character_node == NULL)
@@ -87,16 +87,16 @@ bool Animation::LoadCharacterTMX(pugi::xml_node& character_node)
 	}
 	else
 	{
-		character_tmx_data.width = character_node.attribute("width").as_int();
-		character_tmx_data.height = character_node.attribute("height").as_int();
-		character_tmx_data.tile_width = character_node.attribute("tilewidth").as_int();
-		character_tmx_data.tile_height = character_node.attribute("tileheight").as_int();
+		cData->width = character_node.attribute("width").as_int();
+		cData->height = character_node.attribute("height").as_int();
+		cData->tile_width = character_node.attribute("tilewidth").as_int();
+		cData->tile_height = character_node.attribute("tileheight").as_int();
 
 		std::string image_source("assets/units/");
 		image_source += character_node.child("tileset").child("image").attribute("source").as_string();
-		character_tmx_data.texture = App->tex->Load(image_source.c_str());
+		cData->texture = App->tex->Load(image_source.c_str());
 
-		if (character_tmx_data.texture) {
+		if (cData->texture) {
 
 			LOG("Player Texture succesfull loaded");
 		}
@@ -108,7 +108,7 @@ bool Animation::LoadCharacterTMX(pugi::xml_node& character_node)
 	return ret;
 }
 
-Animation_char Animation::LoadAnimation(pugi::xml_node& obj_group, int row, int sprite_num, std::string name)
+Animation_char Animation::LoadAnimation(pugi::xml_node& obj_group, int row, int sprite_num, std::string name, CharacterTMXData* cData)
 {
 	Animation_char anim;
 
@@ -119,7 +119,7 @@ Animation_char Animation::LoadAnimation(pugi::xml_node& obj_group, int row, int 
 	int rect_width = 0;
 	int rect_height = 0;
 	int rect_x = 0;
-	int rect_y = character_tmx_data.tile_height * row;
+	int rect_y = cData->tile_height * row;
 
 	int i = 0;
 	pugi::xml_node frame = obj_group.child("animation").child("frame");
@@ -130,12 +130,12 @@ Animation_char Animation::LoadAnimation(pugi::xml_node& obj_group, int row, int 
 
 		ret.rect.x = rect_x;
 		ret.rect.y = rect_y;
-		ret.rect.w = character_tmx_data.tile_width;
-		ret.rect.h = character_tmx_data.tile_height;
+		ret.rect.w = cData->tile_width;
+		ret.rect.h = cData->tile_height;
 		ret.frames = frame.attribute("duration").as_int();
 		anim.sprites.push_back(ret);
 
-		rect_x += character_tmx_data.tile_width;
+		rect_x += cData->tile_width;
 		i++;
 	}
 	anim.loop = true;

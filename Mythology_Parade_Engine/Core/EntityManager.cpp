@@ -52,7 +52,8 @@ bool EntityManager::Start()
 {
 	//TODO: NO HARDCODE BOY
 	entitySpriteSheets[SpriteSheetType::BUILDINGS] = App->tex->Load("assets/buildings/Buildings.png");
-	animations[UnitType::ASSASSIN] = animationManager.Load("assets/units/Assassin.tmx");
+	animations[UnitType::ASSASSIN] = animationManager.Load("assets/units/Assassin.tmx", UnitType::ASSASSIN);
+	animations[UnitType::MONK] = animationManager.Load("assets/units/Monk.tmx", UnitType::MONK);
 
 	for (int i = 0; i < buildingsData.size(); i++)
 	{
@@ -362,16 +363,18 @@ Entity* EntityManager::CreateUnitEntity(UnitType type, iPoint pos)
 	{
 	case UnitType::ASSASSIN:
 		ret = new CombatUnit(UnitType::ASSASSIN, pos);
-		ret->texture = animationManager.character_tmx_data.texture;
 		break;
 	case UnitType::MONK:
-		ret = new Unit(UnitType::MONK);
+		ret = new Unit(UnitType::MONK, pos);
+		//ret->texture = animationManager.character_tmx_data.texture;
 		break;
 	case UnitType::PIKEMAN:
 		ret = new CombatUnit(UnitType::PIKEMAN, pos);
 		break;
 	}
 	ret->type = EntityType::UNIT;
+	ret->texture = animationManager.charData[type].texture;
+
 	entities[EntityType::UNIT].push_back(ret);
 
 	//DELETE: THIS

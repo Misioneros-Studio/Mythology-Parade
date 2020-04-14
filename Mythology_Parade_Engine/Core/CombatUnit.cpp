@@ -1,7 +1,7 @@
 #include "CombatUnit.h"
 #include "p2Log.h"
 
-CombatUnit::CombatUnit(UnitType type, iPoint pos) : Unit(type), range(0), damage(0)
+CombatUnit::CombatUnit(UnitType type, iPoint pos) : Unit(type, pos), range(0), damage(0)
 {
 	//TODO 10: Change textures
 	unitType = type;
@@ -59,24 +59,7 @@ void CombatUnit::Init(int maxHealth, int damage, int range, int speed)
 
 bool CombatUnit::Update(float dt) 
 {
-	if (entPath.size() > 0 && targetPosition == iPoint(-1, -1))
-	{
-		targetPosition.x = entPath[0].x;
-		targetPosition.y = entPath[0].y;
-		ChangeState(targetPosition, AnimationType::WALK);
-		entPath.erase(entPath.begin(), entPath.begin() + 1);
-	}
-
-
-	if (targetPosition != iPoint(-1, -1))
-		MoveToTarget();
-
-
-	int num_current_anim = currentAnim.GetSprite();
-	blitRect = { (int)(currentAnim.sprites[num_current_anim].rect.w / 1.5f), (int)(currentAnim.sprites[num_current_anim].rect.h / 1.5f) };
-
-	App->render->Blit(texture, position.x - blitRect.x / 2, position.y - blitRect.y, blitRect, &currentAnim.sprites[num_current_anim].rect, 1.f, flipState);
-	App->render->DrawQuad({ position.x, position.y, 5, 5 }, 0, 255, 0);
+	Unit::Update(dt);
 	return true;
 }
 
