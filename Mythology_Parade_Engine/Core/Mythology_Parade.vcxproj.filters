@@ -79,14 +79,17 @@
     <ClCompile Include="CurrencySystem.cpp">
       <Filter>Core\System Classes</Filter>
     </ClCompile>
+    <ClCompile Include="Animation.cpp">
+      <Filter>Core\Modules</Filter>
+    </ClCompile>
     <ClCompile Include="j1TitleScene.cpp">
       <Filter>Core\Scenes</Filter>
     </ClCompile>
-    <ClCompile Include="Animation.cpp">
-      <Filter>Core\Tools\Animations</Filter>
-    </ClCompile>
-    <ClCompile Include="PathFinder.cpp">
+    <ClCompile Include="j1Minimap.cpp">
       <Filter>Core\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="j1LogoScene.cpp">
+      <Filter>Core\Scenes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -180,14 +183,18 @@
     <ClInclude Include="CurrencySystem.h">
       <Filter>Core\System Classes</Filter>
     </ClInclude>
+    <ClInclude Include="Animation.h">
+      <Filter>Core\Modules</Filter>
+    </ClInclude>
     <ClInclude Include="j1TitleScene.h">
       <Filter>Core\Scenes</Filter>
     </ClInclude>
-    <ClInclude Include="Animation.h">
-      <Filter>Core\Tools\Animations</Filter>
-    </ClInclude>
-    <ClInclude Include="PathFinder.h">
+
+    <ClInclude Include="j1Minimap.h">
       <Filter>Core\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="j1LogoScene.h">
+      <Filter>Core\Scenes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -229,9 +236,6 @@
     </Filter>
     <Filter Include="Core\Entities\Player">
       <UniqueIdentifier>{3dcd2ce1-3295-4ae1-87f2-feb1ee4efadf}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Core\Tools\Animations">
-      <UniqueIdentifier>{7afc422c-dd2d-40d6-866a-162931ae588d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
