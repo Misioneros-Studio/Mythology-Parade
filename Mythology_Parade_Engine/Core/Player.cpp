@@ -88,7 +88,7 @@ bool Player::CleanUp()
 
 void Player::SelectionDraw_Logic()
 {
-	if (!App->input->GetMouseButtonDown(1))
+	if (!App->input->GetMouseButtonDown(1) == KEY_DOWN)
 	{
 		App->input->GetMousePosition(preClicked.x, preClicked.y);
 		preClicked = App->render->ScreenToWorld(preClicked.x, preClicked.y);
@@ -102,7 +102,10 @@ void Player::SelectionDraw_Logic()
 
 		App->render->DrawQuad({preClicked.x, preClicked.y, postClicked.x - preClicked.x, postClicked.y - preClicked.y}, 255, 255, 255, 255, false);
 		//App->render->DrawQuad({preClicked.x + 1, preClicked.y + 1, postClicked.x - preClicked.x - 2, postClicked.y - preClicked.y  - 2}, 255, 255, 255, 255, false);
+	}
 
+	if (App->input->GetMouseButtonDown(1) == KEY_UP)
+	{
 		SeeEntitiesInside(); //We iterate the list of entities to see if someone is in there
 	}
 
@@ -142,17 +145,21 @@ void Player::playerInputs()
 
 	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_REPEAT && App->scene->godMode)
 	{
-		currencySystem.increaseAll(10);
+		currencySystem.IncreaseAll(10);
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN && App->scene->godMode)
 	{
-		App->entityManager->CreateUnitEntity(UnitType::ASSASSIN);
+		iPoint mouse = App->map->GetMousePositionOnMap();
+		iPoint spawnPos = App->map->TileCenterPoint(mouse);
+		App->entityManager->CreateUnitEntity(UnitType::ASSASSIN, spawnPos);
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN && App->scene->godMode)
 	{
-		App->entityManager->CreateUnitEntity(UnitType::MONK);
+		iPoint mouse = App->map->GetMousePositionOnMap();
+		iPoint spawnPos = App->map->TileCenterPoint(mouse);
+		App->entityManager->CreateUnitEntity(UnitType::MONK, spawnPos);
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_F4) == KEY_DOWN && App->scene->godMode)
