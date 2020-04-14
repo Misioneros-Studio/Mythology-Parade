@@ -7,6 +7,7 @@
 #include "j1Timer.h"
 #include "PathFinder.h"
 
+
 #include <vector>
 #include <queue>
 
@@ -59,6 +60,8 @@ public:
 	std::vector<PathFinder> pathfinderList;
 
 	std::queue<PathRequest> pathRequestList;
+
+	int maxPathLenght;
 
 private:
 

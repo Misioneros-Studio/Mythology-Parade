@@ -109,6 +109,22 @@ iPoint j1Map::GetTilesHalfSize()
 	return {data.tile_width / 2, data.tile_height / 2};
 }
 
+int j1Map::GetMapMaxLenght() 
+{
+	iPoint leftLimit = { 0, data.height };
+	iPoint rightLimit = { data.width, 0 };
+
+	//Convert coords to cart space
+	leftLimit = MapToWorld(leftLimit.x, leftLimit.y);
+	rightLimit = MapToWorld(rightLimit.x, rightLimit.y);
+
+	//Center tile position
+	leftLimit = leftLimit + GetTilesHalfSize();
+	rightLimit = rightLimit + GetTilesHalfSize();
+
+	return  leftLimit.DistanceManhattan(rightLimit);
+}
+
 TileSet* j1Map::GetTilesetFromTileId(int id) 
 {
 

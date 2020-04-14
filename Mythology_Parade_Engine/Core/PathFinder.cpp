@@ -26,9 +26,9 @@ void PathFinder::PreparePath(const iPoint& o, const iPoint& d)
 	origin = o;
 	destination = d;
 
+	int currentDistance = destination.DistanceManhattan(origin);
 
-
-
+	max_iterations = App->pathfinding->maxPathLenght / currentDistance;
 
 	available = false;
 	
@@ -107,16 +107,18 @@ bool PathFinder::Update()
 	//TODO 2: Make a loop to take control on how many times the function "IteratePath" should be called in one frame
 	bool ret = true;
 
-	j1PerfTimer timer;
+	j1Timer timer;
 
-	double oldTime = timer.ReadMs();
+	uint32 startTime = timer.Read();
 	for (int i = 0; i < max_iterations && ret; i++)
 	{
 		 ret = IteratePath();
-		 
+			
+		 //If the path is calculated or it's taking more than 2ms to calculate, stop
+		 //This 2ms limit if for all the paths, if 2 paths take 2ms, the other paths will have to wait for the next frame
+		 if (ret == false || timer.Read() - startTime >= 2)
+			 break;
 	}
-	LOG("%f", timer.ReadMs() - oldTime);
-
 	return ret;
 }
 

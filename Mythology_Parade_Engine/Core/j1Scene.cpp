@@ -49,6 +49,11 @@ bool j1Scene::Start()
 		if (App->map->CreateWalkabilityMap(w, h, &data))
 			App->pathfinding->SetMap(w, h, data);
 
+
+		App->pathfinding->maxPathLenght = App->map->GetMapMaxLenght();
+
+
+
 		SDL_ShowCursor(0);
 
 		RELEASE_ARRAY(data);
@@ -128,7 +133,8 @@ bool j1Scene::PreUpdate()
 		iPoint origin = App->map->WorldToMap(ent->position.x, ent->position.y);
 		iPoint ending = App->map->GetMousePositionOnMap();
 
-		App->pathfinding->RequestPath(origin, ending);
+		if(origin != ending)
+			App->pathfinding->RequestPath(origin, ending);
 	}
 
 	if (App->pathfinding->pathfinderList[0].pathCompleted)
