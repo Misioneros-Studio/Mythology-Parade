@@ -37,6 +37,8 @@ bool Player::PreUpdate()
 	if (tick1 - tick2 >= 2000) 
 	{
 		currencySystem.faith += 2;
+		currencySystem.sacrifices += 3;
+		currencySystem.prayers += 5;
 		tick2 = SDL_GetTicks();
 	}
 
@@ -68,6 +70,8 @@ bool Player::Update(float dt)
 	//Selection logics and drawing
 	SelectionDraw_Logic(); 
 
+	playerInputs();
+
 	return true;
 }
 
@@ -88,7 +92,7 @@ void Player::SelectionDraw_Logic()
 	{
 		App->input->GetMousePosition(preClicked.x, preClicked.y);
 		preClicked = App->render->ScreenToWorld(preClicked.x, preClicked.y);
-		listEntities.clear(); //we clear the list of entities selected to select again or just deselect
+		//listEntities.clear(); //we clear the list of entities selected to select again or just deselect
 	}
 
 	if (App->input->GetMouseButtonDown(1) == KEY_REPEAT)
@@ -119,8 +123,54 @@ void Player::SeeEntitiesInside()
 		{
 			if (it._Ptr->_Myval->position.y >= preClicked.y && it._Ptr->_Myval->position.y <= postClicked.y)
 			{
-				listEntities.push_back(it._Ptr->_Myval);
+				//if (it._Ptr->_Myval->civilization == CivilizationType::VIKING)
+				//{
+					listEntities.push_back(it._Ptr->_Myval);
+				//}
 			}
 		}
+	}
+}
+
+void Player::playerInputs()
+{
+	if (App->input->GetKey(SDL_SCANCODE_F10) == KEY_DOWN)
+	{
+		App->scene->godMode = !App->scene->godMode;
+		App->input->drawDebug = !App->input->drawDebug;
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_REPEAT && App->scene->godMode)
+	{
+		currencySystem.increaseAll(10);
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN && App->scene->godMode)
+	{
+		App->entityManager->CreateUnitEntity(UnitType::ASSASSIN);
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN && App->scene->godMode)
+	{
+		App->entityManager->CreateUnitEntity(UnitType::MONK);
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_F4) == KEY_DOWN && App->scene->godMode)
+	{
+		std::list<Entity*>::iterator it = listEntities.begin();
+		for (it; it != listEntities.end(); ++it)
+		{
+			App->entityManager->DeleteEntity(it._Ptr->_Myval);
+		}
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN && App->scene->godMode)
+	{
+		player_win = true;
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN && App->scene->godMode)
+	{
+		player_lose = true;
 	}
 }

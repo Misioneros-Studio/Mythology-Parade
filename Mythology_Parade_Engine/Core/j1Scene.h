@@ -75,9 +75,10 @@ public:
 
 	void OnClick(UI* element, float argument = 0);
 
+	void DoWinOrLoseWindow(int type, bool win);
+
 private:
 
-	void DoWinOrLoseWindow(int type, bool win);
 
 	SDL_Rect mapLimitsRect;
   
@@ -103,6 +104,7 @@ public:
 	SDL_Texture* debugBlue_tex;
 	SDL_Texture* debugRed_tex;
 	bool paused_game;
+	bool godMode;
 
 	TextUI* ui_text_ingame[3];
 	CloseSceneMenus close_menus;

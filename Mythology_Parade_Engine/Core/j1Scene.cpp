@@ -252,8 +252,6 @@ bool j1Scene::Update(float dt)
 
 
 	//Quad draw
-	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
-		App->input->drawDebug = !App->input->drawDebug;
 
 	//if (App->input->drawDebug)
 	//	App->render->DrawQuadTree(quadTree->type, quadTree->baseNode);

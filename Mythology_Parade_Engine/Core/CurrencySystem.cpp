@@ -1,4 +1,6 @@
 #include "CurrencySystem.h"
+#include "j1App.h"
+#include "j1Scene.h"
 
 CurrencySystem::CurrencySystem()
 {
@@ -13,81 +15,102 @@ CurrencySystem::~CurrencySystem()
 
 void CurrencySystem::increaseFaith(int number)
 {
-	if(number>0)
+	if(App->scene->paused_game)
 	{
-		faith += number;
+		if(number>0)
+		{
+			faith += number;
+		}
 	}
 }
 
 void CurrencySystem::decreaseFaith(int number)
 {
-	if (number > 0)
+	if (App->scene->paused_game)
 	{
-		faith -= number;
+		if (number > 0)
+		{
+			faith -= number;
+		}
 	}
 }
 
 void CurrencySystem::increaseSacrifice(ActionSacrifice action)
 {
-	switch (action)
+	if (App->scene->paused_game)
 	{
-	case ActionSacrifice::RivalKilled:
-		sacrifices++;
-		prayers--;
-		break;
-	case ActionSacrifice::EliteKilled:
-		sacrifices += 2;
-		prayers -= 2;
-		break;
-	case ActionSacrifice::BeastKilled:
-		sacrifices += 2;
-		prayers -= 2;
-		break;
-	case ActionSacrifice::TempleDestroyed:
-		sacrifices++;
-		prayers--;
-		break;
-	case ActionSacrifice::EncampmentDestroyed:
-		sacrifices += 2;
-		prayers -= 2;
-		break;
-	case ActionSacrifice::MonasteriesSacrifice:
-		sacrifices++;
-		break;
-	default:
-		break;
+		switch (action)
+		{
+		case ActionSacrifice::RivalKilled:
+			sacrifices++;
+			prayers--;
+			break;
+		case ActionSacrifice::EliteKilled:
+			sacrifices += 2;
+			prayers -= 2;
+			break;
+		case ActionSacrifice::BeastKilled:
+			sacrifices += 2;
+			prayers -= 2;
+			break;
+		case ActionSacrifice::TempleDestroyed:
+			sacrifices++;
+			prayers--;
+			break;
+		case ActionSacrifice::EncampmentDestroyed:
+			sacrifices += 2;
+			prayers -= 2;
+			break;
+		case ActionSacrifice::MonasteriesSacrifice:
+			sacrifices++;
+			break;
+		default:
+			break;
+		}
 	}
 }
 
 void CurrencySystem::increasePrayers(ActionPrayers action)
 {
-	switch (action)
+	if (App->scene->paused_game)
 	{
-	case ActionPrayers::UnitConverted:
-		prayers += 2;
-		sacrifices -= 1;
-		break;
-	case ActionPrayers::TempleConverted:
-		prayers += 1;
-		sacrifices -= 2;
-		break;
-	case ActionPrayers::EncampmentConverted:
-		prayers += 2;
-		sacrifices -= 2;
-		break;
-	case ActionPrayers::MonasteryConverted:
-		prayers += 1;
-		sacrifices -= 2;
-		break;
-	case ActionPrayers::BeastConverted:
-		prayers += 2;
-		sacrifices -= 2;
-		break;
-	case ActionPrayers::MonasteriesPrayers:
-		prayers += 1;
-		break;
-	default:
-		break;
+		switch (action)
+		{
+		case ActionPrayers::UnitConverted:
+			prayers += 2;
+			sacrifices -= 1;
+			break;
+		case ActionPrayers::TempleConverted:
+			prayers += 1;
+			sacrifices -= 2;
+			break;
+		case ActionPrayers::EncampmentConverted:
+			prayers += 2;
+			sacrifices -= 2;
+			break;
+		case ActionPrayers::MonasteryConverted:
+			prayers += 1;
+			sacrifices -= 2;
+			break;
+		case ActionPrayers::BeastConverted:
+			prayers += 2;
+			sacrifices -= 2;
+			break;
+		case ActionPrayers::MonasteriesPrayers:
+			prayers += 1;
+			break;
+		default:
+			break;
+		}
+	}
+}
+void CurrencySystem::increaseAll(int number)
+{
+	if (number > 0)
+	{
+		faith += number;
+		sacrifices += number;
+		prayers += number;
 	}
 }
 void CurrencySystem::Miracle(Miracles action)
