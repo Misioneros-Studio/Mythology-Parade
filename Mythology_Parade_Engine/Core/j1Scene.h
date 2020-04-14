@@ -105,6 +105,7 @@ public:
 
 	TextUI* ui_text_ingame[3];
 	CloseSceneMenus close_menus;
+	int SeaSounding = 0;//1,2,3,4 values for different channels
 };
 
 #endif // __j1SCENE_H__
