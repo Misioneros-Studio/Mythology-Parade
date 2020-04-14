@@ -113,6 +113,11 @@ TileSet* j1Map::GetTilesetFromTileId(int id)
 	return set;
 }
 
+SDL_Rect j1Map::GetMapRect() 
+{
+	return {-((data.width/2) * data.tile_width) + (data.tile_width/2), 0, data.width * data.tile_width, data.height*data.tile_height  };
+}
+
 iPoint j1Map::MapToWorld(int x, int y) const
 {
 	iPoint ret;
