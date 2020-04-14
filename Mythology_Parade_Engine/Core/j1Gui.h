@@ -61,6 +61,10 @@ public:
 
 	bool Move();
 
+	void SetPriority(int prior);
+
+	int GetPriority() { return priority; };
+
 	SDL_Rect GetScreenRect();
 	SDL_Rect GetParentScreenRect();
 	SDL_Rect GetLocalRect();
@@ -94,6 +98,7 @@ private:
 	bool focusable;
 	SDL_Rect drag_area;
 	bool console;
+	int priority;
 };
 class ImageUI :public UI
 {
@@ -289,6 +294,7 @@ private:
 	std::list <UI*> UIs;
 	SDL_Texture* atlas;
 	std::string atlas_file_name;
+	SDL_Texture* cursor_tex;
 
 public:
 

@@ -69,6 +69,9 @@ public:
 	// Called when returning to main menu (either winning/losing or by menu options like exit)
 	void BackToTitleMenu();
 
+	// Called when restarting the game
+	void RestartGame();
+
 
 	void OnClick(UI* element, float argument = 0);
 
@@ -76,13 +79,9 @@ private:
 
 	void DoWinOrLoseWindow(int type, bool win);
 
-	SDL_Texture* cursor_tex;
   
 	SDL_Texture* winlose_tex;
 	ImageUI* ui_ingame;
-	ImageUI* faith_symbol;
-	ImageUI* sacrifice_symbol;
-	ImageUI* prayer_symbol;
 	WindowUI* ui_pause_window;
 	ButtonUI* ui_button[7];
 	TextUI* ui_text[8];
@@ -102,9 +101,9 @@ private:
 public:
 	SDL_Texture* debugBlue_tex;
 	SDL_Texture* debugRed_tex;
+	bool paused_game;
 
 	TextUI* ui_text_ingame[3];
-	QuadTree* quadTree;
 	CloseSceneMenus close_menus;
 	int SeaSounding = 0;//1,2,3,4 values for different channels
 };

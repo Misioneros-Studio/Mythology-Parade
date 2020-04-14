@@ -21,10 +21,12 @@ j1TitleScene::~j1TitleScene()
 {}
 
 // Called before render is available
-bool j1TitleScene::Awake()
+bool j1TitleScene::Awake(pugi::xml_node& config)
 {
 	LOG("Loading Title Scene");
 	bool ret = true;
+
+	active = false;
 
 	return ret;
 }
@@ -70,7 +72,6 @@ bool j1TitleScene::Start()
 
 
 
-	cursor_tex = App->tex->Load("gui/cursors.png");
 	title_assets_tex = App->tex->Load("gui/TitleAssets.png");
 	App->audio->PlayMusic("audio/music/MainTitle_Use.ogg");
 	return true;
@@ -115,15 +116,7 @@ bool j1TitleScene::PostUpdate()
 {
 	bool ret = true;
 
-	//Show cursor ------------------------------
-	int x, y;
-	App->input->GetMousePosition(x, y);
-	iPoint p = App->render->ScreenToWorld(x, y);
-	SDL_Rect sec = { 0, 0, 54, 45 };
-
-	p = App->render->ScreenToWorld(x, y);
-
-	App->render->Blit(cursor_tex, p.x, p.y, &sec);
+	
 
 	return ret;
 }
@@ -148,7 +141,6 @@ bool j1TitleScene::CleanUp()
 	}
 
 	App->tex->UnLoad(title_assets_tex);
-	App->tex->UnLoad(cursor_tex);
 
 	return true;
 }

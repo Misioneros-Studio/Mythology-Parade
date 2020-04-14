@@ -7,6 +7,7 @@
 #include "j1Input.h"
 #include "j1Window.h"
 #include "j1Gui.h"
+#include "j1Minimap.h"
 #include "Console.h"
 #include "j1Audio.h"
 
@@ -26,7 +27,7 @@ bool j1Gui::Awake(pugi::xml_node& conf)
 	bool ret = true;
 
 	atlas_file_name = conf.child("atlas").attribute("file").as_string("");
-	active = true;
+	active = false;
 
 	return ret;
 }
@@ -38,7 +39,7 @@ bool j1Gui::Start()
 	for (int i = 0; i < 9; i++) {
 		sfx_UI[i] = 0;
 	}
-
+	cursor_tex = App->tex->Load("gui/cursors.png");
 	return true;
 }
 
@@ -80,10 +81,38 @@ bool j1Gui::PreUpdate()
 // Called after all Updates
 bool j1Gui::PostUpdate()
 {
-	for (std::list<UI*>::iterator it = UIs.begin(); it != UIs.end(); it++)
-	{
-		it._Ptr->_Myval->PostUpdate();
+	if (App->console->console_active == true) {
+		for (std::list<UI*>::iterator it = UIs.begin(); it != UIs.end(); it++)
+		{
+			if (it._Ptr->_Myval->GetPriority() != 2)
+				it._Ptr->_Myval->PostUpdate();
+		}
+		for (std::list<UI*>::iterator it = UIs.begin(); it != UIs.end(); it++)
+		{
+			if (it._Ptr->_Myval->GetPriority() == 2)
+				it._Ptr->_Myval->PostUpdate();
+		}
 	}
+	else {
+		for (std::list<UI*>::iterator it = UIs.begin(); it != UIs.end(); it++)
+		{
+			it._Ptr->_Myval->PostUpdate();
+		}
+	}
+
+	iPoint rect_position = App->minimap->WorldToMinimap(-App->render->camera.x, -App->render->camera.y);
+	App->render->DrawQuad({ rect_position.x, rect_position.y, (int)(App->render->camera.w * App->minimap->scale),(int)(App->render->camera.h * App->minimap->scale) }, 255, 255, 255, 255, false, false);
+
+
+	//Show cursor ------------------------------
+	int x, y;
+	App->input->GetMousePosition(x, y);
+	iPoint p = App->render->ScreenToWorld(x, y);
+	SDL_Rect sec = { 0, 0, 54, 45 };
+
+	p = App->render->ScreenToWorld(x, y);
+
+	App->render->Blit(cursor_tex, p.x, p.y, &sec);
 	return true;
 }
 
@@ -102,6 +131,7 @@ bool j1Gui::CleanUp()
 	{
 		App->tex->UnLoad(atlas);
 	}
+	App->tex->UnLoad(cursor_tex);
 	return true;
 }
 
@@ -301,6 +331,7 @@ UI::UI(Type s_type, SDL_Rect r, UI* p, bool d, bool f, SDL_Rect d_area, bool con
 	focus = false;
 	drag_area = d_area;
 	console = consol;
+	priority = 1;
 }
 
 bool UI::PreUpdate() {
@@ -434,6 +465,10 @@ bool UI::Move() {
 		quad.y += y;
 	}
 	return true;
+}
+
+void UI::SetPriority(int prior) {
+	priority = prior;
 }
 
 SDL_Rect UI::Check_Printable_Rect(SDL_Rect sprite, iPoint& dif_sprite) {

@@ -9,8 +9,10 @@
 #include "j1Render.h"
 #include "j1Textures.h"
 #include "j1Audio.h"
+#include "j1LogoScene.h"
 #include "j1TitleScene.h"
 #include "j1Scene.h"
+#include "j1Minimap.h"
 #include "j1Map.h"
 #include "j1Pathfinding.h"
 #include "j1Fonts.h"
@@ -31,8 +33,10 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	render = new j1Render();
 	tex = new j1Textures();
 	audio = new j1Audio();
+	logo_scene = new j1LogoScene();
 	title_scene = new j1TitleScene();
 	scene = new j1Scene();
+	minimap = new j1Minimap();
 	map = new j1Map();
 	pathfinding = new j1PathFinding();
 	font = new j1Fonts();
@@ -50,12 +54,16 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(map);
 	AddModule(pathfinding);
 	AddModule(font);
-	AddModule(gui);
-	AddModule(console);
+
 
 	// scene last
+	AddModule(logo_scene);
 	AddModule(title_scene);
 	AddModule(scene);
+
+	AddModule(minimap);
+	AddModule(gui);
+	AddModule(console);
 
 	//On top of scene
 	AddModule(animation);
@@ -238,6 +246,16 @@ bool j1App::PreUpdate()
 	if (change_scene == true) {
 		change_scene = false;
 		ChangeScene();
+	}
+
+	if (restart_scene == true) {
+		restart_scene = false;
+		RestartScene();
+	}
+	if (first_change_scene == true) {
+		first_change_scene = false;
+		ChangeScene(true);
+
 	}
 	j1Module* pModule = NULL;
 
@@ -447,18 +465,45 @@ bool j1App::SavegameNow()
 	return ret;
 }
 
-bool j1App::ChangeScene() {
+bool j1App::ChangeScene(bool first_change) {
 	bool ret = true;
 
 	for (std::list<j1Module*>::iterator it = modules.begin(); it != modules.end(); it++)
 	{
+
 		if (it._Ptr->_Myval->active == false) {
-			it._Ptr->_Myval->active = true;
-			ret = it._Ptr->_Myval->Start();
+			if (first_change == false && (it._Ptr->_Myval->name.compare("logo_scene") != 0)) {
+				it._Ptr->_Myval->active = true;
+				ret = it._Ptr->_Myval->Start();
+			}
+			else if (it._Ptr->_Myval->name.compare("gui") == 0 || it._Ptr->_Myval->name.compare("title_scene") == 0) {
+				it._Ptr->_Myval->active = true;
+				ret = it._Ptr->_Myval->Start();
+			}
 		}
 		else if (it._Ptr->_Myval->destroy == true) {
 			it._Ptr->_Myval->CleanUp();
 			it._Ptr->_Myval->active = false;
+			it._Ptr->_Myval->destroy = false;
+		}
+	}
+	return ret;
+}
+
+bool j1App::RestartScene() {
+	bool ret = true;
+
+	for (int i = 0; i < 2; i++) {
+		for (std::list<j1Module*>::iterator it = modules.begin(); it != modules.end(); it++)
+		{
+			if (it._Ptr->_Myval->destroy == true) {
+				if(i==0)
+					it._Ptr->_Myval->CleanUp();
+				else {
+					it._Ptr->_Myval->Start();
+					it._Ptr->_Myval->destroy = false;
+				}
+			}
 		}
 	}
 	return ret;
