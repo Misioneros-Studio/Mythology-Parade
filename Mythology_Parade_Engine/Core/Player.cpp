@@ -131,26 +131,26 @@ void Player::playerInputs()
 {
 	if (App->input->GetKey(SDL_SCANCODE_F10) == KEY_DOWN)
 	{
-		godMode = !godMode;
+		App->scene->godMode = !App->scene->godMode;
 		App->input->drawDebug = !App->input->drawDebug;
 	}
 
-	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_REPEAT && godMode) 
+	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_REPEAT && App->scene->godMode)
 	{
 		currencySystem.increaseAll(10);
 	}
 
-	if (App->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN && godMode)
+	if (App->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN && App->scene->godMode)
 	{
 		App->entityManager->CreateUnitEntity(UnitType::ASSASSIN);
 	}
 
-	if (App->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN && godMode)
+	if (App->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN && App->scene->godMode)
 	{
 		App->entityManager->CreateUnitEntity(UnitType::MONK);
 	}
 
-	if (App->input->GetKey(SDL_SCANCODE_F4) == KEY_DOWN && godMode)
+	if (App->input->GetKey(SDL_SCANCODE_F4) == KEY_DOWN && App->scene->godMode)
 	{
 		std::list<Entity*>::iterator it = listEntities.begin();
 		for (it; it != listEntities.end(); ++it)
@@ -159,12 +159,12 @@ void Player::playerInputs()
 		}
 	}
 
-	if (App->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN && godMode)
+	if (App->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN && App->scene->godMode)
 	{
 		player_win = true;
 	}
 
-	if (App->input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN && godMode)
+	if (App->input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN && App->scene->godMode)
 	{
 		player_lose = true;
 	}

@@ -1,5 +1,6 @@
 #include "HealthSystem.h"
-
+#include "j1App.h"
+#include "j1Scene.h"
 
 void HealthSystem::Init()
 {
@@ -9,11 +10,14 @@ void HealthSystem::Init()
 
 void HealthSystem::RecieveDamage(int value)
 {
-	if (!isDeath)
-		health -= value;
+	if (!App->scene->godMode)
+	{
+		if (!isDeath)
+			health -= value;
 
-	if (health <= 0)
-		isDeath = true;
+		if (health <= 0)
+			isDeath = true;
+	}
 }
 int HealthSystem::GetHealth()
 {

@@ -38,7 +38,6 @@ private:
 	iPoint postClicked;
 	std::list<Entity*> listEntities; //Entities instide selection
 	
-	bool godMode;
 
 public:
 	bool player_win = false;
