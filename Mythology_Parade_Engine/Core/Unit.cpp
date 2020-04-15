@@ -3,9 +3,11 @@
 #include "j1Textures.h"
 #include "j1Input.h"
 
-Unit::Unit(UnitType type): unitType(type), state(AnimationType::IDLE), _isSelected(false), moveSpeed(1)
+Unit::Unit(UnitType type, iPoint pos): unitType(type), state(AnimationType::IDLE), _isSelected(false), moveSpeed(1)
 {
 	
+	unitType = type;
+	position = pos;
 	state = AnimationType::IDLE;
 	//Init Units
 	switch (type)
@@ -126,6 +128,9 @@ void Unit::Init(int maxHealth)
 {
 	SetMaxHealth(maxHealth);
 	HealthSystem::Init();
+
+	targetPosition.ResetAsPosition();
+	ChangeState(targetPosition, state);
 }
 
 void Unit::ChangeState(iPoint isoLookPosition, AnimationType newState)
@@ -144,9 +149,26 @@ void Unit::ChangeState(iPoint isoLookPosition, AnimationType newState)
 
 bool Unit::Draw(float dt)
 {
-	bool ret = true;
-	//App->render->Blit(texture, -90, 430, &position_rect);
-	return ret;
+	if (entPath.size() > 0 && targetPosition == iPoint(-1, -1))
+	{
+		targetPosition.x = entPath[0].x;
+		targetPosition.y = entPath[0].y;
+		ChangeState(targetPosition, AnimationType::WALK);
+		entPath.erase(entPath.begin(), entPath.begin() + 1);
+	}
+
+
+	if (targetPosition != iPoint(-1, -1))
+		MoveToTarget();
+
+
+	int num_current_anim = currentAnim.GetSprite();
+	blitRect = { (int)(currentAnim.sprites[num_current_anim].rect.w / 1.5f), (int)(currentAnim.sprites[num_current_anim].rect.h / 1.5f) };
+
+	App->render->Blit(texture, position.x - blitRect.x / 2, position.y - blitRect.y, blitRect, &currentAnim.sprites[num_current_anim].rect, 1.f, flipState);
+	App->render->DrawQuad({ position.x, position.y, 5, 5 }, 0, 255, 0);
+
+	return true;
 }
 
 void Unit::Action(Entity* entity)

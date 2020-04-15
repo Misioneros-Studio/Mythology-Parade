@@ -44,7 +44,7 @@ public:
 	UnitType unitType;
 
 public:
-	Unit(UnitType);
+	Unit(UnitType, iPoint);
 	virtual ~Unit();
 
 	void Init(int maxHealth);

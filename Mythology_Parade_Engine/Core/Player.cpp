@@ -64,7 +64,7 @@ bool Player::Update(float dt)
 		iPoint spawnPos = App->map->TileCenterPoint(mouse);
 
 		//Todo change assassin for the type of unit
-		App->entityManager->CreateUnitEntity(UnitType::ASSASSIN, spawnPos);
+		App->entityManager->CreateUnitEntity(UnitType::MONK, spawnPos);
 	}
   
 	//Selection logics and drawing
