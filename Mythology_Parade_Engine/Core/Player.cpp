@@ -57,20 +57,20 @@ bool Player::Update(float dt)
 	App->scene->ui_text_ingame[1]->SetString(sacrifice);
 	App->scene->ui_text_ingame[2]->SetString(prayer);
 	
-	if (App->input->GetKey(SDL_SCANCODE_5) == KEY_DOWN && !App->entityManager->crPreview.active) 
-	{
-		//Unit spawn
-		iPoint mouse = App->map->GetMousePositionOnMap();
-		iPoint spawnPos = App->map->TileCenterPoint(mouse);
+	//if (App->input->GetKey(SDL_SCANCODE_5) == KEY_DOWN && !App->entityManager->crPreview.active) 
+	//{
+	//	//Unit spawn
+	//	iPoint mouse = App->map->GetMousePositionOnMap();
+	//	iPoint spawnPos = App->map->TileCenterPoint(mouse);
 
-		//Todo change assassin for the type of unit
-		App->entityManager->CreateUnitEntity(UnitType::MONK, spawnPos);
-	}
+	//	//Todo change assassin for the type of unit
+	//	App->entityManager->CreateUnitEntity(UnitType::MONK, spawnPos);
+	//}
   
 	//Selection logics and drawing
 	SelectionDraw_Logic(); 
 
-	playerInputs();
+	PlayerInputs();
 
 	return true;
 }
@@ -135,7 +135,7 @@ void Player::SeeEntitiesInside()
 	}
 }
 
-void Player::playerInputs()
+void Player::PlayerInputs()
 {
 	if (App->input->GetKey(SDL_SCANCODE_F10) == KEY_DOWN)
 	{
