@@ -10,6 +10,7 @@ class CombatUnit :	public Unit, public LevelSystem
 private:
 	int damage;
 	int range;
+	int speed;
 
 public:
 	CombatUnit(UnitType, iPoint);
@@ -20,8 +21,12 @@ public:
 
 private:
 	void Init(int maxHealth, int damage, int range, int speed);
+
+public:
 	int GetDamageValue();
 	int GetRangeValue();
+	int GetSpeedValue();
+
 };
 
 #endif // !__COMBATUNIT_H__

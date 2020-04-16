@@ -72,6 +72,7 @@ public:
 	iPoint GetScreenToWorldPos();
 	iPoint GetLocalPos();
 	void SetLocalPos(iPoint pos);
+	void SetRect(SDL_Rect rect);
 	void SetScreenRect(SDL_Rect rect);
 	void UpdateLocalRect();
 	bool CheckMouse();

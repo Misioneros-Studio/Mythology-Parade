@@ -49,3 +49,8 @@ int LevelSystem::GetLevel()
 {
 	return level;
 }
+
+int LevelSystem::GetExperience()
+{
+	return experience;
+}

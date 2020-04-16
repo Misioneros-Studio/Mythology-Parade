@@ -439,6 +439,17 @@ void UI::SetLocalPos(iPoint pos) {
 	screen_rect.y += r.y;
 }
 
+void UI::SetRect(SDL_Rect rect) {
+	screen_rect = rect;
+	if (parent != nullptr) {
+		local_rect = { screen_rect.x - parent->screen_rect.x, screen_rect.y - parent->screen_rect.y, screen_rect.w, screen_rect.h };
+	}
+	else {
+		local_rect = screen_rect;
+	}
+	mask_rect = screen_rect;
+}
+
 void UI::SetScreenRect(SDL_Rect rect) {
 	screen_rect = rect;
 }

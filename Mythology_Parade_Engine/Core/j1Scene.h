@@ -22,6 +22,7 @@ class TextUI;
 class QuadTree;
 class Entity;
 enum class UnitType;
+enum BuildingType;
 
 class j1Scene : public j1Module
 {
@@ -80,8 +81,14 @@ public:
 	// Called when deleting the list of troops in the HUD
 	void HUDDeleteListTroops();
 
+	// Called when deleting the selected troop in the HUD
+	void HUDDeleteSelectedTroop();
+
 	// Called to get the rect of the sprite of the portrait
 	SDL_Rect GetSpritePortrait(int type_of_portrait, UnitType unit_type);
+
+	// Called to get the rect of the sprite of the portrait of the building
+	SDL_Rect GetSpritePortraitBuilding(int type_of_portrait, BuildingType building_type);
 
 	void OnClick(UI* element, float argument = 0);
 
@@ -113,6 +120,8 @@ private:
 	TextUI* hud_number_troops[13];
 	int number_of_troops[13];
 	UnitType type_of_troops[13];
+	ImageUI* hud_selected_troop;
+	TextUI* hud_stats_selected_troop[13];
 
 
 public:

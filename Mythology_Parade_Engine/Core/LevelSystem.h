@@ -26,6 +26,7 @@ public:
 
 	void GainExperience(Action value);
 	int GetLevel();
+	int GetExperience();
 };
 
 #endif // !__LEVELSYSTEM__H_
