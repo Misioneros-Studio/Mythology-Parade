@@ -26,7 +26,8 @@ bool j1Gui::Awake(pugi::xml_node& conf)
 	LOG("Loading GUI atlas");
 	bool ret = true;
 
-	atlas_file_name = conf.child("atlas").attribute("file").as_string("");
+	atlas_file_name_num_0 = conf.child("atlas_0").attribute("file").as_string("");
+	atlas_file_name_num_1 = conf.child("atlas_1").attribute("file").as_string("");
 	active = false;
 
 	return ret;
@@ -35,7 +36,8 @@ bool j1Gui::Awake(pugi::xml_node& conf)
 // Called before the first frame
 bool j1Gui::Start()
 {
-	atlas = App->tex->Load(atlas_file_name.c_str());
+	atlas_num_0 = App->tex->Load(atlas_file_name_num_0.c_str());
+	atlas_num_1 = App->tex->Load(atlas_file_name_num_1.c_str());
 	for (int i = 0; i < 9; i++) {
 		sfx_UI[i] = 0;
 	}
@@ -127,24 +129,31 @@ bool j1Gui::CleanUp()
 	}
 	UIs.clear();
 
-	if (atlas)
+	if (atlas_num_0)
 	{
-		App->tex->UnLoad(atlas);
+		App->tex->UnLoad(atlas_num_0);
+	}
+	if (atlas_num_1)
+	{
+		App->tex->UnLoad(atlas_num_1);
 	}
 	App->tex->UnLoad(cursor_tex);
 	return true;
 }
 
 // const getter for atlas
-const SDL_Texture* j1Gui::GetAtlas() const
+const SDL_Texture* j1Gui::GetAtlas(int number_atlas) const
 {
-	return atlas;
+	if (number_atlas == 0)
+		return atlas_num_0;
+	else if (number_atlas == 1)
+		return atlas_num_1;
 }
 
 // class Gui ---------------------------------------------------
 
 UI* j1Gui::CreateUIElement(Type type, UI* p, SDL_Rect r, SDL_Rect sprite, std::string str, SDL_Rect sprite2, SDL_Rect sprite3, bool drageable, SDL_Rect drag_area, j1Module* s_listener, int audio,
-	bool console, float drag_position_scroll_bar)
+	bool console, float drag_position_scroll_bar, int number_atlas)
 {
 	UI* ui = nullptr;
 	SDL_Color colour;
@@ -175,6 +184,7 @@ UI* j1Gui::CreateUIElement(Type type, UI* p, SDL_Rect r, SDL_Rect sprite, std::s
 
 	ui->active = true;
 	ui->name = str.c_str();
+	ui->num_atlas = number_atlas;
 
 	if (s_listener)
 	{
@@ -223,6 +233,8 @@ UI* j1Gui::CreateUIElement(Type type, UI* p, SDL_Rect r, std::string str, int re
 	UIs.push_back(ui);
 	return ui;
 }
+
+
 
 bool j1Gui::DeleteUIElement(UI* ui) 
 {
@@ -332,6 +344,7 @@ UI::UI(Type s_type, SDL_Rect r, UI* p, bool d, bool f, SDL_Rect d_area, bool con
 	drag_area = d_area;
 	console = consol;
 	priority = 1;
+	num_atlas = 0;
 }
 
 bool UI::PreUpdate() {
@@ -572,7 +585,7 @@ bool ImageUI::PostUpdate() {
 		SDL_Rect sprite = UI::Check_Printable_Rect(sprite1, dif_sprite);
 		quad.x = GetScreenPos().x + dif_sprite.x;
 		quad.y = GetScreenPos().y + dif_sprite.y;
-		if (this->active) App->render->BlitInsideQuad((SDL_Texture*)App->gui->GetAtlas(), sprite, quad);
+		if (this->active) App->render->BlitInsideQuad((SDL_Texture*)App->gui->GetAtlas(num_atlas), sprite, quad);
 	}
 	else if (this->active) {
 		App->render->DrawQuad(quad, red, green, blue, alpha, true, false);
@@ -601,7 +614,7 @@ bool WindowUI::PostUpdate() {
 	SDL_Rect sprite = UI::Check_Printable_Rect(sprite1, dif_sprite);
 	quad.x = GetScreenPos().x + dif_sprite.x;
 	quad.y = GetScreenPos().y + dif_sprite.y;
-	if (this->active)App->render->BlitInsideQuad((SDL_Texture*)App->gui->GetAtlas(), sprite, quad);
+	if (this->active)App->render->BlitInsideQuad((SDL_Texture*)App->gui->GetAtlas(num_atlas), sprite, quad);
 
 	UI::PostUpdate();
 	return true;
@@ -730,7 +743,7 @@ bool ButtonUI::PostUpdate() {
 
 	quad.x = GetScreenPos().x + dif_sprite.x;
 	quad.y = GetScreenPos().y + dif_sprite.y;
-	if (this->active)App->render->BlitInsideQuad((SDL_Texture*)App->gui->GetAtlas(), sprite, quad);
+	if (this->active)App->render->BlitInsideQuad((SDL_Texture*)App->gui->GetAtlas(num_atlas), sprite, quad);
 
 	UI::PostUpdate();
 	return true;

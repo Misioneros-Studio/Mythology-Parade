@@ -73,6 +73,11 @@ bool j1Scene::Start()
 		}
 		ui_text[i] = nullptr;
 	}
+	for (int i = 0; i < 13; i++)
+	{
+		hud_list_troops[i] = nullptr;
+		hud_number_troops[i] = nullptr;
+	}
 
   //Load building debug textures
 	debugBlue_tex = App->tex->Load("maps/path2.png");
@@ -318,6 +323,7 @@ bool j1Scene::CleanUp()
 	DeactivateConfirmationMenu();
 	DeactivateOptionsMenu();
 	DeactivatePauseMenu();
+	HUDDeleteListTroops();
 	App->gui->DeleteUIElement(ui_ingame);
 	ui_ingame = nullptr;
 	for (int i = 0; i < 3; i++)
@@ -474,6 +480,7 @@ void j1Scene::DeactivateConfirmationMenu() {
 	}
 }
 
+// Called when returning to main menu (either winning/losing or by menu options like exit)
 void j1Scene::BackToTitleMenu() {
 	App->change_scene = true;
 	destroy = true;
@@ -483,6 +490,7 @@ void j1Scene::BackToTitleMenu() {
 	App->minimap->destroy = true;
 }
 
+// Called when restarting the game
 void j1Scene::RestartGame() {
 	App->restart_scene = true;
 	destroy = true;
@@ -490,6 +498,89 @@ void j1Scene::RestartGame() {
 	App->pathfinding->destroy = true;
 	App->entityManager->destroy = true;
 	App->minimap->destroy = true;
+}
+
+// Called when selecting troops or buildings
+void j1Scene::HUDUpdateSelection(std::list<Entity*> listEntities) {
+	int i = 0;
+	HUDDeleteListTroops();
+	for (std::list<Entity*>::iterator it = listEntities.begin(); it != listEntities.end(); it++) {
+		if (it._Ptr->_Myval->type == EntityType::UNIT) {
+			Unit* unit = (Unit*)it._Ptr->_Myval;
+			if (i == 0) {
+				number_of_troops[i]++;
+				type_of_troops[i] = unit->unitType;
+				i++;
+			}
+			else {
+				bool new_troop = true;
+				for (int j = 0; j < i; j++) {
+					if (type_of_troops[j] == unit->unitType) {
+						number_of_troops[j]++;
+						new_troop = false;
+					}
+				}
+				if (new_troop == true) {
+					number_of_troops[i]++;
+					type_of_troops[i] = unit->unitType;
+					i++;
+				}
+			}
+		}
+	}
+	SDL_Rect r = { 825,618,30,41 };
+	SDL_Rect r2 = { 828,645,17,9 };
+	
+	for (int j = 0; j < i; j++) {
+		
+		if (j == 6) {
+			r.y += 50;
+			r2.y += 50;
+		}
+			hud_list_troops[j]=(ImageUI*)App->gui->CreateUIElement(Type::IMAGE, (UI*)ui_ingame, r, GetSpritePortrait(0, type_of_troops[j]), "Troop", { 0,0,0,0 }, { 0,0,0,0 }, false, { 0,0,0,0 },
+				nullptr, 0, false, -1.0F, 1);
+			if (number_of_troops[j] > 1) 
+				hud_number_troops[j] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, (UI*)ui_ingame, r2, { 0,0,100,100 }, std::to_string(number_of_troops[j]), { 255,255,255,255 });
+			r.x += 34;
+			r2.x += 34;
+	}
+}
+
+void j1Scene::HUDDeleteListTroops() {
+	for (int i = 12; i >= 0; i--) {
+		number_of_troops[i] = 0;
+		if (hud_list_troops[i] != nullptr) {
+			App->gui->DeleteUIElement(hud_list_troops[i]);
+			hud_list_troops[i] = nullptr;
+		}
+		if (hud_number_troops[i] != nullptr) {
+			App->gui->DeleteUIElement(hud_number_troops[i]);
+			hud_number_troops[i] = nullptr;
+		}
+	}
+}
+
+// Called to get the rect of the sprite of the portrait
+SDL_Rect j1Scene::GetSpritePortrait(int type_of_portrait, UnitType unit_type) {
+	SDL_Rect sprite = { 0,0,0,0 };
+	if (type_of_portrait == 0) {
+		switch (unit_type) {
+		case UnitType::ASSASSIN:
+			sprite = { 299,194,30,41 };
+			break;
+		case UnitType::PIKEMAN:
+			sprite = { 331,194,30,41 };
+			break;
+		case UnitType::MONK:
+			sprite = { 362,194,30,41 };
+			break;
+		case UnitType::PRIEST:
+			sprite = { 393,194,30,41 };
+			break;
+		}
+	}
+	return sprite;
+
 }
 
 void j1Scene::OnClick(UI* element, float argument)

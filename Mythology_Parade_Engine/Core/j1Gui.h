@@ -88,6 +88,7 @@ public:
 	bool focus;
 	j1Module* listener;
 	Type type;
+	int num_atlas;
 
 private:
 	SDL_Rect screen_rect;
@@ -271,7 +272,7 @@ public:
 
 	// Gui creation functions
 	UI* CreateUIElement(Type type, UI* p, SDL_Rect r, SDL_Rect sprite = { 0,0,0,0 }, std::string str = "", SDL_Rect sprite2 = { 0,0,0,0 }, SDL_Rect sprite3 = { 0,0,0,0 }, bool drageable = false,
-		SDL_Rect drag_area = { 0,0,0,0 }, j1Module* s_listener = nullptr, int audio=0, bool console = false, float drag_position_scroll_bar = -1);
+		SDL_Rect drag_area = { 0,0,0,0 }, j1Module* s_listener = nullptr, int audio=0, bool console = false, float drag_position_scroll_bar = -1, int number_atlas = 0);
 	UI* CreateUIElement(Type type, UI* p, SDL_Rect r, std::string str, int re, int g, int b, int a, bool drageable = false, SDL_Rect drag_area = { 0,0,0,0 }, j1Module* s_listener = nullptr);
 	bool DeleteUIElement(UI*);
 
@@ -281,7 +282,7 @@ public:
 
 	void DeleteFocus();
 
-	const SDL_Texture* GetAtlas() const;
+	const SDL_Texture* GetAtlas(int num_atlas) const;
 
 	void ClearUI();
 
@@ -292,8 +293,10 @@ public:
 private:
 
 	std::list <UI*> UIs;
-	SDL_Texture* atlas;
-	std::string atlas_file_name;
+	SDL_Texture* atlas_num_0;
+	SDL_Texture* atlas_num_1;
+	std::string atlas_file_name_num_0;
+	std::string atlas_file_name_num_1;
 	SDL_Texture* cursor_tex;
 
 public:
