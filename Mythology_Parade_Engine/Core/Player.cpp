@@ -137,6 +137,8 @@ void Player::SeeEntitiesInside()
 
 void Player::PlayerInputs()
 {
+
+	//CHANGE ALL ITINERATIONS TO entityInsideCamera LIST
 	if (App->input->GetKey(SDL_SCANCODE_F10) == KEY_DOWN)
 	{
 		App->scene->godMode = !App->scene->godMode;

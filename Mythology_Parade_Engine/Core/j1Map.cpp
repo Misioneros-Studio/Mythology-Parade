@@ -280,12 +280,24 @@ bool j1Map::Load(const char* file_name)
 	pugi::xml_node layer;
 	for (layer = map_file.child("map").child("layer"); layer && ret; layer = layer.next_sibling("layer"))
 	{
-		MapLayer* lay = new MapLayer();
+			MapLayer* lay = new MapLayer();
 
-		ret = LoadLayer(layer, lay);
+			ret = LoadLayer(layer, lay);
 
-		if (ret == true)
-			data.layers.push_back(lay);
+			if (ret == true) 
+			{
+				//if (lay->properties.Get("afterLayer", 1) == 0) 
+				//{
+
+				//}
+				//else
+				//{
+				//	data.layers.push_back(lay);
+				//}
+
+				data.layers.push_back(lay);
+			}
+
 	}
 
 	if (ret == true)
