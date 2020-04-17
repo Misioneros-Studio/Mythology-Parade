@@ -21,5 +21,5 @@ deploy:
   release: Mythology Parade
   description: Mythology-Parade_V$(appveyor_build_version)
   auth_token:
-    secure: /CpKDxDjlXVEO4YmjshGO7BvsfX9yz8rgbMgl//JmbU9PojTuFh2PGRxm3cUwyza
+    secure: 4f4299dc384ef4d285e0028ecf15f0294674f649
   repository: projects/Misioneros-Studio/Mythology-Parade
