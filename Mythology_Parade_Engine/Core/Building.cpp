@@ -111,7 +111,6 @@ bool Building::Update(float dt)
 		blitRect = App->entityManager->CalculateBuildingSize(blitWidth, spriteRect.w, spriteRect.h);
 	}
 
-	Draw();
 	if (buildingStatus == CONSTRUCTING) {
 		Draw_Construction_Bar(blitWidth);
 	}
@@ -119,12 +118,14 @@ bool Building::Update(float dt)
 	return ret;
 }
 
-void Building::Draw()
+bool Building::Draw(float dt)
 {
 	//lengh = 4, lenght is the number of tiles this building uses
 	//App->render->DrawQuad({position.x, position.y + (tileHeight /2) * (height + 1), texturewidth, -textureHeight}, 255, 250, 20);
 	App->render->Blit(texture, position.x, position.y + ((32 / 2) * tileLenght) - blitRect.y, {blitRect.x, blitRect.y}, &spriteRect);
 	App->render->DrawQuad({position.x, position.y, 4, -4}, 255, 0, 0);
+
+	return true;
 }
 
 void Building::Draw_Construction_Bar(int blitWidth)

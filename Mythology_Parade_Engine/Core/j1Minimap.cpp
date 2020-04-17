@@ -94,7 +94,7 @@ bool j1Minimap::PostUpdate() {
 bool j1Minimap::CreateMinimap() {
 
 	bool ret = true;
-	for (std::list<MapLayer*>::iterator it = App->map->data.layers.begin(); ret == true && it != App->map->data.layers.end(); it++)
+	for (std::list<MapLayer*>::iterator it = App->map->data.downLayers.begin(); ret == true && it != App->map->data.downLayers.end(); it++)
 	{
 		MapLayer* layer = it._Ptr->_Myval;
 

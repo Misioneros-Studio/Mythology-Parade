@@ -44,7 +44,7 @@ bool Unit::Update(float dt)
 	bool ret = true;
 
 	//Allawys blit the sprite at the end
-	ret = Draw(dt);
+	//ret = Draw(dt);
 
 	//Return
 	return ret;

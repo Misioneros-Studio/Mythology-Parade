@@ -182,4 +182,9 @@ void Player::PlayerInputs()
 	{
 		player_lose = true;
 	}
+
+	if (App->input->GetKey(SDL_SCANCODE_F7) == KEY_DOWN && App->scene->godMode)
+	{
+		player_lose = true;
+	}
 }

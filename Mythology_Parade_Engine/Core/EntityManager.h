@@ -110,6 +110,7 @@ public:
 	//Load data packets
 	void LoadBuildingsData(pugi::xml_node&);
 	iPoint CalculateBuildingSize(int, int, int);
+	void DrawEverything();
 
 	Player* getPlayer();
 

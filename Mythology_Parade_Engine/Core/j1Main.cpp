@@ -32,8 +32,13 @@ int main(int argc, char* args[])
 	MainState state = MainState::CREATE;
 	int result = EXIT_FAILURE;
 
+	j1PerfTimer timer;
+
 	while(state != EXIT)
 	{
+
+		double oldTimer = timer.ReadMs();
+
 		switch(state)
 		{
 
@@ -105,6 +110,8 @@ int main(int argc, char* args[])
 			state = EXIT;
 			break;
 		}
+
+		LOG("%f", timer.ReadMs() - oldTimer);
 	}
 
 	LOG("... Bye! :)\n");
