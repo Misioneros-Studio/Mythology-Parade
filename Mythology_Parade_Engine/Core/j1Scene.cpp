@@ -80,7 +80,14 @@ bool j1Scene::Start()
 		hud_number_troops[i] = nullptr;
 		hud_stats_selected_troop[i] = nullptr;
 	}
+
+	for (int i = 0; i < 5; i++) {
+		hud_button_actions[i] = nullptr;
+		hud_button_actions_unclickable[i] = nullptr;
+	}
+
 	hud_selected_troop = nullptr;
+	thing_selected = nullptr;
 
   //Load building debug textures
 	debugBlue_tex = App->tex->Load("maps/path2.png");
@@ -308,6 +315,10 @@ bool j1Scene::Update(float dt)
 // Called each loop iteration
 bool j1Scene::PostUpdate()
 {
+	if (thing_selected != nullptr) {
+		UpdateSelectedThing();
+		ManageActionButtons();
+	}
 	bool ret = true;
 
 	return ret;
@@ -327,6 +338,8 @@ bool j1Scene::CleanUp()
 	DeactivateOptionsMenu();
 	DeactivatePauseMenu();
 	HUDDeleteListTroops();
+	HUDDeleteSelectedTroop();
+	HUDDeleteActionButtons();
 	App->gui->DeleteUIElement(ui_ingame);
 	ui_ingame = nullptr;
 	for (int i = 0; i < 3; i++)
@@ -508,6 +521,7 @@ void j1Scene::HUDUpdateSelection(std::list<Entity*> listEntities) {
 	int i = 0;
 	HUDDeleteListTroops();
 	HUDDeleteSelectedTroop();
+	HUDDeleteActionButtons();
 	for (std::list<Entity*>::iterator it = listEntities.begin(); it != listEntities.end(); it++) {
 		if (it._Ptr->_Myval->type == EntityType::UNIT) {
 			Unit* unit = (Unit*)it._Ptr->_Myval;
@@ -553,6 +567,7 @@ void j1Scene::HUDUpdateSelection(std::list<Entity*> listEntities) {
 
 	SDL_Rect position_name = { 725,603,30,30 };
 	if (listEntities.begin()._Ptr->_Myval->type == EntityType::UNIT) {
+		thing_selected = listEntities.begin()._Ptr->_Myval;
 		Unit* unit = (Unit*)listEntities.begin()._Ptr->_Myval; 	
 		hud_selected_troop = (ImageUI*)App->gui->CreateUIElement(Type::IMAGE, (UI*)ui_ingame, { 640,613,76,105 }, GetSpritePortrait(1, unit->unitType), "Troop", { 0,0,0,0 }, { 0,0,0,0 }, false,
 			{ 0,0,0,0 }, nullptr, 0, false, -1.0F, 1);
@@ -561,20 +576,24 @@ void j1Scene::HUDUpdateSelection(std::list<Entity*> listEntities) {
 		switch (unit->unitType) {
 		case UnitType::MONK:
 			hud_stats_selected_troop[0]->SetString("Monk");
+			type_thing_selected = Type_Selected::Monk;
 			position_name.x += 18;
 			hud_stats_selected_troop[0]->SetRect(position_name);
 			break;
 		case UnitType::CLERIC:
 			hud_stats_selected_troop[0]->SetString("Cleric");
+			type_thing_selected = Type_Selected::Cleric;
 			break;
 		case UnitType::ASSASSIN:
 			hud_stats_selected_troop[0]->SetString("Assassin");
+			type_thing_selected = Type_Selected::Assassin;
 			position_name.x += 6;
 			hud_stats_selected_troop[0]->SetRect(position_name);
 			combat_unit = true;
 			break;
 		case UnitType::PIKEMAN:
 			hud_stats_selected_troop[0]->SetString("Pikeman");
+			type_thing_selected = Type_Selected::Pikeman;
 			combat_unit = true;
 			break;
 		}
@@ -608,17 +627,21 @@ void j1Scene::HUDUpdateSelection(std::list<Entity*> listEntities) {
 			hud_stats_selected_troop[0]->SetString("Fortress");
 			//position_name.x += 18;
 			hud_stats_selected_troop[0]->SetRect(position_name);
+			type_thing_selected = Type_Selected::Fortress;
 			break;
 		case BuildingType::MONASTERY:
 			hud_stats_selected_troop[0]->SetString("Monastery");
+			type_thing_selected = Type_Selected::Monastery;
 			break;
 		case BuildingType::TEMPLE:
 			hud_stats_selected_troop[0]->SetString("Temple");
+			type_thing_selected = Type_Selected::Temple;
 			//position_name.x += 6;
 			hud_stats_selected_troop[0]->SetRect(position_name);
 			break;
 		case BuildingType::ENCAMPMENT:
 			hud_stats_selected_troop[0]->SetString("Encampment");
+			type_thing_selected = Type_Selected::Encampment;
 			break;
 		}
 		hud_stats_selected_troop[1] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, (UI*)ui_ingame, { 720,622,30,30 }, { 0,0,100,100 }, "Influence:", { 0,0,0,255 });
@@ -630,6 +653,7 @@ void j1Scene::HUDUpdateSelection(std::list<Entity*> listEntities) {
 		hud_stats_selected_troop[7] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, (UI*)ui_ingame, { 720,703,30,10 }, { 0,0,100,100 }, "Health:", { 0,0,0,255 });
 		hud_stats_selected_troop[8] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, (UI*)ui_ingame, { 773,703,30,10 }, { 0,0,100,100 }, std::to_string(building->GetHealth()), { 0,0,0,255 });
 	}
+	ManageActionButtons(true);
 }
 
 // Called when deleting the list of troops in the HUD
@@ -649,6 +673,8 @@ void j1Scene::HUDDeleteListTroops() {
 
 // Called when deleting the selected troop in the HUD
 void j1Scene::HUDDeleteSelectedTroop() {
+	thing_selected = nullptr;
+	type_thing_selected = Type_Selected::None;
 	for (int i = 12; i >= 0; i--) {
 		if (hud_stats_selected_troop[i] != nullptr) {
 			App->gui->DeleteUIElement(hud_stats_selected_troop[i]);
@@ -660,6 +686,99 @@ void j1Scene::HUDDeleteSelectedTroop() {
 		hud_selected_troop = nullptr;
 	}
 }
+
+// Called when deleting the selected troop's action buttons in the HUD
+void j1Scene::HUDDeleteActionButtons() {
+	for (int i = 4; i >= 0; i--) {
+		if (hud_button_actions[i] != nullptr) {
+			App->gui->DeleteUIElement(hud_button_actions[i]);
+			hud_button_actions[i] = nullptr;
+		}
+		if (hud_button_actions_unclickable[i] != nullptr) {
+			App->gui->DeleteUIElement(hud_button_actions_unclickable[i]);
+			hud_button_actions_unclickable[i] = nullptr;
+		}
+	}
+}
+
+// Called to update every frame the information of the selected thing
+void j1Scene::UpdateSelectedThing() {
+	if (thing_selected->type == EntityType::UNIT) {
+		if (hud_stats_selected_troop[5] != nullptr) {
+			CombatUnit* cunit = (CombatUnit*)thing_selected;
+			hud_stats_selected_troop[2]->SetString(std::to_string(cunit->GetDamageValue()));
+			hud_stats_selected_troop[4]->SetString(std::to_string(cunit->GetRangeValue()));
+			hud_stats_selected_troop[6]->SetString(std::to_string(cunit->GetSpeedValue()));
+			hud_stats_selected_troop[8]->SetString(std::to_string(cunit->GetLevel()));
+			hud_stats_selected_troop[10]->SetString(std::to_string(cunit->GetExperience()));
+			hud_stats_selected_troop[12]->SetString(std::to_string(cunit->GetHealth()));
+		}
+		else {
+			Unit* unit = (Unit*)thing_selected;
+			hud_stats_selected_troop[2]->SetString(std::to_string(unit->GetHealth()));
+		}
+	}
+	else if (thing_selected->type == EntityType::BUILDING) {
+		Building* building = (Building*)thing_selected;
+		hud_stats_selected_troop[2]->SetString(std::to_string(building->GetInfluence()));
+		hud_stats_selected_troop[4]->SetString(std::to_string(building->GetDamage()));
+		hud_stats_selected_troop[6]->SetString(std::to_string(building->GetMaxCap()));
+		hud_stats_selected_troop[8]->SetString(std::to_string(building->GetHealth()));
+	}
+}
+
+//Called when creating or updating the action buttons
+void j1Scene::ManageActionButtons(bool create_buttons) {
+	if (create_buttons == true) {
+		switch (type_thing_selected) {
+		case Type_Selected::Assassin:
+		{
+			CombatUnit* cunit = (CombatUnit*)thing_selected;
+			int exp_needed = cunit->GetExperienceToLevel(cunit->GetLevel());
+			hud_button_actions[0] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 200,613,36,36 }, { 16,185,36,36 }, "Move", { 98,185,36,36 }, { 57,185,36,36 }, false, { 0,0,0,0 },
+				this, (int)UI_Audio::MAIN_MENU);
+			hud_button_actions[1] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 241,613,36,36 }, { 16,143,36,36 }, "Attack", { 98,143,36,36 }, { 57,143,36,36 }, false, { 0,0,0,0 },
+				this, (int)UI_Audio::MAIN_MENU);
+			if (exp_needed > cunit->GetExperience()) {
+				hud_button_actions[2] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 282,613,36,36 }, { 16,102,36,36 }, "Upgrade", { 98,102,36,36 }, { 57,102,36,36 }, false, { 0,0,0,0 },
+					this, (int)UI_Audio::MAIN_MENU);
+			}
+			else {
+				hud_button_actions_unclickable[2] = (ImageUI*)App->gui->CreateUIElement(Type::IMAGE, ui_ingame, { 282,613,36,36 }, { 98,442,36,36 });
+			}
+			break;
+		}
+		case Type_Selected::Monk:
+			hud_button_actions[0] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 200,613,36,36 }, { 16,185,36,36 }, "Move", { 98,185,36,36 }, { 57,185,36,36 }, false, { 0,0,0,0 },
+				this, (int)UI_Audio::MAIN_MENU);
+			break;
+		}
+	}
+	else {
+		switch (type_thing_selected) {
+		case Type_Selected::Assassin:
+			CombatUnit* cunit = (CombatUnit*)thing_selected;
+			int exp_needed = cunit->GetExperienceToLevel(cunit->GetLevel());
+			if (hud_button_actions[2] == nullptr && exp_needed <= cunit->GetExperience()) {
+				if (hud_button_actions_unclickable[2] != nullptr) {
+					App->gui->DeleteUIElement(hud_button_actions_unclickable[2]);
+					hud_button_actions_unclickable[2] = nullptr;
+				}
+				hud_button_actions[2] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 282,613,36,36 }, { 16,102,36,36 }, "Upgrade", { 98,102,36,36 }, { 57,102,36,36 }, false, { 0,0,0,0 },
+					this, (int)UI_Audio::MAIN_MENU);
+			}
+			else if (hud_button_actions_unclickable[2] == nullptr && exp_needed > cunit->GetExperience()) {
+				if (hud_button_actions[2] != nullptr) {
+					App->gui->DeleteUIElement(hud_button_actions[2]);
+					hud_button_actions[2] = nullptr;
+				}
+				hud_button_actions_unclickable[2] = (ImageUI*)App->gui->CreateUIElement(Type::IMAGE, ui_ingame, { 282,613,36,36 }, { 98,442,36,36 });
+			}
+			break;
+		}
+	}
+}
+
 
 // Called to get the rect of the sprite of the portrait
 SDL_Rect j1Scene::GetSpritePortrait(int type_of_portrait, UnitType unit_type) {

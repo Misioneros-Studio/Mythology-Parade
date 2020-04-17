@@ -54,3 +54,15 @@ int LevelSystem::GetExperience()
 {
 	return experience;
 }
+
+int LevelSystem::GetExperienceToLevel(int level) {
+	if (level == 0) {
+		return exp_to_lvl_1;
+	}
+	else if (level == 1) {
+		return exp_to_lvl_2;
+	}
+	else if (level == 2) {
+		return exp_to_lvl_3;
+	}
+}
