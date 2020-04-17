@@ -23,7 +23,7 @@ deploy:
   release: Mythologhy Parade v$(appveyor_build_version)
   description: Automatic Release
   auth_token:
-    secure: 4f4299dc384ef4d285e0028ecf15f0294674f649
+    secure: 40a0e17514111084e5af9a7896421edaeb8e719b
 notifications:
 - provider: GitHubPullRequest
   template: Release Successful
