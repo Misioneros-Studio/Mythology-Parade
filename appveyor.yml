@@ -1,10 +1,11 @@
 version: 0.{build}
+image: Visual Studio 2019
 branches:
   only:
-  - Develop
+  - master
 skip_branch_with_pr: true
 configuration: Release
-platform: x86
+shallow_clone: true
 build:
   verbosity: minimal
 after_build:
@@ -18,8 +19,14 @@ artifacts:
   type: WebDeployPackage
 deploy:
 - provider: GitHub
-  release: Mythology Parade
-  description: Mythology-Parade_V$(appveyor_build_version)
+  tag: Mythology-Parade_V$$(appveyor_build_version)
+  release: Mythologhy Parade v$(appveyor_build_version)
+  description: Automatic Release
   auth_token:
     secure: 4f4299dc384ef4d285e0028ecf15f0294674f649
-  repository: projects/Misioneros-Studio/Mythology-Parade
+notifications:
+- provider: GitHubPullRequest
+  template: Release Successful
+  on_build_success: true
+  on_build_failure: false
+  on_build_status_changed: false
