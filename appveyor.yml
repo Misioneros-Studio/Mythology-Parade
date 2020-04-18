@@ -23,4 +23,4 @@ deploy:
   tag: v$(appveyor_build_version)
   release: Mythology_Parade
   auth_token:
-    secure: PSvYRm2n+XTf3FxysUnVKLaZJaOQbHqYCb0gbG8WPVJkazEzVmyErRbb3tZrrbAf
+    secure: iNYsTD+Tmk/cCUsRbHU6nbhnghVJ2575/Sl4+sn1ymq691x3XghuWLLXIByBjMMd
