@@ -10,10 +10,10 @@ build:
   verbosity: minimal
 after_build:
 - cmd: >-
-    copy C:\projects\Misioneros-Studio/Mythology-Parade\Release\*.exe C:\projects\Misioneros-Studio/Mythology-Parade\Game\
+    copy C:\projects\Misioneros-Studio\Mythology-Parade\Release\*.exe C:\projects\Misioneros-Studio\Mythology-Parade\Game\
 
 
-    copy C:\projects\Misioneros-Studio/Mythology-Parade\README.md C:\projects\Misioneros-Studio/Mythology-Parade\Game\
+    copy C:\projects\Misioneros-Studio\Mythology-Parade\README.md C:\projects\Misioneros-Studio\Mythology-Parade\Game\
 artifacts:
 - path: Mythology_Parade_Engine\Game
   name: Mythology-Parade
