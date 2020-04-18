@@ -92,7 +92,7 @@ void Player::SelectionDraw_Logic()
 	{
 		App->input->GetMousePosition(preClicked.x, preClicked.y);
 		preClicked = App->render->ScreenToWorld(preClicked.x, preClicked.y);
-		//listEntities.clear(); //we clear the list of entities selected to select again or just deselect
+		listEntities.clear(); //we clear the list of entities selected to select again or just deselect
 	}
 
 	if (App->input->GetMouseButtonDown(1) == KEY_REPEAT)
@@ -122,14 +122,11 @@ void Player::SeeEntitiesInside()
 	std::list<Entity*>::iterator it = App->entityManager->entities[EntityType::UNIT].begin();
 	for (it; it != App->entityManager->entities[EntityType::UNIT].end(); ++it)
 	{
-		if (it._Ptr->_Myval->position.x >= preClicked.x && it._Ptr->_Myval->position.x <= postClicked.x)
+		if ((it._Ptr->_Myval->position.x >= preClicked.x && it._Ptr->_Myval->position.x <= postClicked.x) || (it._Ptr->_Myval->position.x <= preClicked.x && it._Ptr->_Myval->position.x >= postClicked.x))
 		{
-			if (it._Ptr->_Myval->position.y >= preClicked.y && it._Ptr->_Myval->position.y <= postClicked.y)
+			if ((it._Ptr->_Myval->position.y >= preClicked.y && it._Ptr->_Myval->position.y <= postClicked.y) || it._Ptr->_Myval->position.y <= preClicked.y && it._Ptr->_Myval->position.y >= postClicked.y)
 			{
-				//if (it._Ptr->_Myval->civilization == CivilizationType::VIKING)
-				//{
-					listEntities.push_back(it._Ptr->_Myval);
-				//}
+				listEntities.push_back(it._Ptr->_Myval);
 			}
 		}
 	}
