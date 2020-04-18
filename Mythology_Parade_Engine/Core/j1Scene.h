@@ -3,6 +3,7 @@
 
 #include "j1Module.h"
 #include "j1Timer.h"
+#include "SDL/include/SDL.h"
 
 	struct SDL_Rect;
 

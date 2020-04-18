@@ -92,7 +92,7 @@ void Player::SelectionDraw_Logic()
 	{
 		App->input->GetMousePosition(preClicked.x, preClicked.y);
 		preClicked = App->render->ScreenToWorld(preClicked.x, preClicked.y);
-		//listEntities.clear(); //we clear the list of entities selected to select again or just deselect
+		listEntities.clear(); //we clear the list of entities selected to select again or just deselect
 	}
 
 	if (App->input->GetMouseButtonDown(1) == KEY_REPEAT)
@@ -144,12 +144,12 @@ void Player::playerInputs()
 
 	if (App->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN && App->scene->godMode)
 	{
-		App->entityManager->CreateUnitEntity(UnitType::ASSASSIN, { 120,100 });
+		App->entityManager->CreateUnitEntity(UnitType::ASSASSIN, { 0,0 });
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN && App->scene->godMode)
 	{
-		App->entityManager->CreateUnitEntity(UnitType::MONK, { 100,100 });
+		App->entityManager->CreateUnitEntity(UnitType::MONK, { 0,0 });
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_F4) == KEY_DOWN && App->scene->godMode)
