@@ -28,6 +28,10 @@ public:
 	~Building();
 	
 	const char* GetDescription();
+	BuildingType GetBuildingType() { return buildingType; }
+	int GetInfluence() { return influence; }
+	int GetDamage() { return damage; }
+	int GetMaxCap() { return maxCap; }
 private:
 
 	bool Awake(pugi::xml_node&);

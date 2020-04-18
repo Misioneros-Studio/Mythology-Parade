@@ -50,6 +50,7 @@ void CombatUnit::Init(int maxHealth, int damage, int range, int speed)
 	Unit::Init(maxHealth);
 	this->damage = damage;
 	this->range = range;
+	this->speed = speed;
 	SetMoveSpeed(speed);
 
 	//TODO: Convert to a get funtions
@@ -71,4 +72,10 @@ int CombatUnit::GetDamageValue()
 int CombatUnit::GetRangeValue()
 {
 	return range;
+}
+
+
+int CombatUnit::GetSpeedValue()
+{
+	return speed;
 }

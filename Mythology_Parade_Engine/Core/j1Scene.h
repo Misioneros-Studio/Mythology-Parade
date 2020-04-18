@@ -22,6 +22,9 @@ class WindowUI;
 class ButtonUI;
 class TextUI;
 class QuadTree;
+class Entity;
+enum class UnitType;
+enum BuildingType;
 
 class j1Scene : public j1Module
 {
@@ -74,13 +77,48 @@ public:
 	// Called when restarting the game
 	void RestartGame();
 
+	// Called when selecting troops or buildings
+	void HUDUpdateSelection(std::list<Entity*>);
+
+	// Called when deleting the list of troops in the HUD
+	void HUDDeleteListTroops();
+
+	// Called when deleting the selected troop in the HUD
+	void HUDDeleteSelectedTroop();
+
+	// Called when deleting the selected troop's action buttons in the HUD
+	void HUDDeleteActionButtons();
+
+	// Called to update every frame the information of the selected thing
+	void UpdateSelectedThing();
+
+	//Called when creating or updating the action buttons
+	void ManageActionButtons(bool create_buttons = false);
+
+	// Called to get the rect of the sprite of the portrait
+	SDL_Rect GetSpritePortrait(int type_of_portrait, UnitType unit_type);
+
+	// Called to get the rect of the sprite of the portrait of the building
+	SDL_Rect GetSpritePortraitBuilding(int type_of_portrait, BuildingType building_type);
+
 
 	void OnClick(UI* element, float argument = 0);
 
 	void DoWinOrLoseWindow(int type, bool win);
 
 private:
-
+	enum class Type_Selected {
+		None,
+		Assassin,
+		Pikeman,
+		Monk,
+		Cleric,
+		Fortress,
+		Temple,
+		Encampment,
+		Monastery,
+		Unknown
+	};
 
 	SDL_Rect mapLimitsRect;
   
@@ -90,8 +128,8 @@ private:
 	ButtonUI* ui_button[7];
 	TextUI* ui_text[8];
 	WindowUI* ui_options_window;
-	ButtonUI* ui_button_options;
-	TextUI* ui_text_options[2];
+	ButtonUI* ui_button_options[2];
+	TextUI* ui_text_options[3];
 	WindowUI* ui_winlose_window;
 	ButtonUI* ui_button_winlose[2];
 	TextUI* ui_text_winlose[4];
@@ -101,7 +139,18 @@ private:
 	ButtonUI* ui_button_confirmation[2];
 	TextUI* ui_text_confirmation[4];
 	std::string confirmation_option;
-  
+	ImageUI* hud_list_troops[13];
+	TextUI* hud_number_troops[13];
+	int number_of_troops[13];
+	UnitType type_of_troops[13];
+	ImageUI* hud_selected_troop;
+	TextUI* hud_stats_selected_troop[13];
+	Entity* thing_selected;
+	Type_Selected type_thing_selected;
+	ButtonUI* hud_button_actions[5];
+	ImageUI* hud_button_actions_unclickable[5];
+
+
 public:
 	SDL_Texture* debugBlue_tex;
 	SDL_Texture* debugRed_tex;

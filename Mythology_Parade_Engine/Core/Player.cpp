@@ -106,7 +106,9 @@ void Player::SelectionDraw_Logic()
 
 	if (App->input->GetMouseButtonDown(1) == KEY_UP)
 	{
+		listEntities.clear();
 		SeeEntitiesInside(); //We iterate the list of entities to see if someone is in there
+		App->scene->HUDUpdateSelection(listEntities);
 	}
 
 }

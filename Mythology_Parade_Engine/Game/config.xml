@@ -19,7 +19,8 @@
   </window>
 
   <gui>
-    <atlas file="gui/ui.png"/>
+    <atlas_0 file="gui/ui.png"/>
+    <atlas_1 file="gui/Portaits.png"/>
   </gui>
 
   <fonts>
