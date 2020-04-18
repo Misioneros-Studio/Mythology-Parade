@@ -13,7 +13,7 @@ after_build:
     copy C:\projects\mythology-parade\Mythology_Parade_Engine\Release\Mythology_Parade.exe  C:\projects\mythology-parade\Mythology_Parade_Engine\Game\
 
 
-    copy  C:\projects\mythology-parade\Mythology_Parade_Engine\README.md  C:\projects\mythology-parade\Mythology_Parade_Engine\Game\
+    copy  C:\projects\mythology-parade\README.md  C:\projects\mythology-parade\Mythology_Parade_Engine\Game\
 artifacts:
 - path: Mythology_Parade_Engine\Game
   name: Mythology-Parade
