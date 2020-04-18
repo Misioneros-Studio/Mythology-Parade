@@ -152,10 +152,13 @@ bool j1TitleScene::CleanUp()
 void j1TitleScene::ActivateOptionsMenu() {
 	if (ui_options_window == nullptr) {
 		ui_options_window = (WindowUI*)App->gui->CreateUIElement(Type::WINDOW, nullptr, { 410,200,459,168 }, { 790,408,459,168 });
-		ui_button_options = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_options_window, { 520,300,237,38 }, { 787,240,237,38 }, "CLOSE OPTIONS", { 787,342,237,38 }, { 787,291,237,38 },
+		ui_button_options[0] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_options_window, { 520,300,237,38 }, { 787,240,237,38 }, "CLOSE OPTIONS", { 787,342,237,38 }, { 787,291,237,38 },
 			false, { 0,0,0,0 }, this, (int)UI_Audio::CLOSE);
+		ui_button_options[1] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_options_window, { 570,250,36,36 }, { 16,21,36,36 }, "FULLSCREEN", { 98,21,36,36 },
+			{ 57,21,36,36 }, false, { 0,0,0,0 }, this, (int)UI_Audio::MAIN_MENU);
 		ui_text_options[0] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 619,312,237,38 }, { 0,0,100,100 }, "Close", { 0,0,0,255 });
 		ui_text_options[1] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 583,212,237,38 }, { 0,0,100,100 }, "OPTIONS", { 255,255,255,255 }, { 1,0,0,0 });
+		ui_text_options[2] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 620,260,237,38 }, { 0,0,100,100 }, "FULLSCREEN", { 255,255,255,255 });
 	}
 	for (int i = 0; i < 5; i++) {
 		if (ui_button[i] != nullptr) {
@@ -169,11 +172,13 @@ void j1TitleScene::DeactivateOptionsMenu() {
 	if (ui_options_window != nullptr) {
 		App->gui->DeleteUIElement(ui_options_window);
 		ui_options_window = nullptr;
-		if (ui_button_options != nullptr) {
-			App->gui->DeleteUIElement(ui_button_options);
-			ui_button_options = nullptr;
-		}
 		for (int i = 1; i >= 0; i--) {
+			if (ui_button_options[i] != nullptr) {
+				App->gui->DeleteUIElement(ui_button_options[i]);
+				ui_button_options[i] = nullptr;
+			}
+		}
+		for (int i = 2; i >= 0; i--) {
 			if (ui_text_options[i] != nullptr) {
 				App->gui->DeleteUIElement(ui_text_options[i]);
 				ui_text_options[i] = nullptr;
@@ -381,6 +386,14 @@ void j1TitleScene::OnClick(UI* element, float argument)
 				exitGame = true;
 			}
 			close_menus = CloseTitleSceneMenus::Confirmation;
+		}
+		else if (element->name == "FULLSCREEN") {
+			if (ui_button_options[1]->sprite1.y == 21) {
+				ui_button_options[1]->sprite1.y = ui_button_options[1]->sprite2.y = ui_button_options[1]->sprite3.y = 61;
+			}
+			else if (ui_button_options[1]->sprite1.y == 61) {
+				ui_button_options[1]->sprite1.y = ui_button_options[1]->sprite2.y = ui_button_options[1]->sprite3.y = 21;
+			}
 		}
 		break;
 

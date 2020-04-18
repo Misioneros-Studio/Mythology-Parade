@@ -411,10 +411,13 @@ void j1Scene::ActivateOptionsMenu() {
 	if (ui_options_window == nullptr) {
 		ui_options_window = (WindowUI*)App->gui->CreateUIElement(Type::WINDOW, nullptr, { 410,200,459,168 }, { 790,408,459,168 });
 
-		ui_button_options = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_pause_window, { 520,300,237,38 }, { 787,240,237,38 }, "CLOSE OPTIONS", { 787,342,237,38 }, 
+		ui_button_options[0] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_options_window, { 520,300,237,38 }, { 787,240,237,38 }, "CLOSE OPTIONS", { 787,342,237,38 },
 			{ 787,291,237,38 }, false, { 0,0,0,0 }, this, (int)UI_Audio::CLOSE);
+		ui_button_options[1]= (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_options_window, { 570,250,36,36 }, { 16,21,36,36 }, "FULLSCREEN", { 98,21,36,36 },
+			{ 57,21,36,36 }, false, { 0,0,0,0 }, this, (int)UI_Audio::MAIN_MENU);
 		ui_text_options[0] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 619,312,237,38 }, { 0,0,100,100 }, "Close", { 0,0,0,255 });
 		ui_text_options[1] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 583,212,237,38 }, { 0,0,100,100 }, "OPTIONS", { 255,255,255,255 }, { 1,0,0,0 });
+		ui_text_options[2] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 620,260,237,38 }, { 0,0,100,100 }, "FULLSCREEN", { 255,255,255,255 });
 	}
 	for (int i = 0; i < 7; i++) {
 		if (ui_button[i] != nullptr) {
@@ -428,11 +431,13 @@ void j1Scene::DeactivateOptionsMenu() {
 	if (ui_options_window != nullptr) {
 		App->gui->DeleteUIElement(ui_options_window);
 		ui_options_window = nullptr;
-		if (ui_button_options != nullptr) {
-			App->gui->DeleteUIElement(ui_button_options);
-			ui_button_options = nullptr;
-		}
 		for (int i = 1; i >= 0; i--) {
+			if (ui_button_options[i] != nullptr) {
+				App->gui->DeleteUIElement(ui_button_options[i]);
+				ui_button_options[i] = nullptr;
+			}
+		}
+		for (int i = 2; i >= 0; i--) {
 			if (ui_text_options[i] != nullptr) {
 				App->gui->DeleteUIElement(ui_text_options[i]);
 				ui_text_options[i] = nullptr;
@@ -548,110 +553,112 @@ void j1Scene::HUDUpdateSelection(std::list<Entity*> listEntities) {
 	}
 	SDL_Rect r = { 825,618,30,41 };
 	SDL_Rect r2 = { 828,645,17,9 };
-	
+
 	for (int j = 0; j < i; j++) {
-		
+
 		if (j == 6) {
 			r.y += 50;
 			r2.y += 50;
 			r.x = 825;
 			r2.x = 828;
 		}
-			hud_list_troops[j]=(ImageUI*)App->gui->CreateUIElement(Type::IMAGE, (UI*)ui_ingame, r, GetSpritePortrait(0, type_of_troops[j]), "Troop", { 0,0,0,0 }, { 0,0,0,0 }, false, { 0,0,0,0 },
-				nullptr, 0, false, -1.0F, 1);
-			if (number_of_troops[j] > 1) 
-				hud_number_troops[j] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, (UI*)ui_ingame, r2, { 0,0,100,100 }, std::to_string(number_of_troops[j]), { 255,255,255,255 });
-			r.x += 34;
-			r2.x += 34;
+		hud_list_troops[j] = (ImageUI*)App->gui->CreateUIElement(Type::IMAGE, (UI*)ui_ingame, r, GetSpritePortrait(0, type_of_troops[j]), "Troop", { 0,0,0,0 }, { 0,0,0,0 }, false, { 0,0,0,0 },
+			nullptr, 0, false, -1.0F, 1);
+		if (number_of_troops[j] > 1)
+			hud_number_troops[j] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, (UI*)ui_ingame, r2, { 0,0,100,100 }, std::to_string(number_of_troops[j]), { 255,255,255,255 });
+		r.x += 34;
+		r2.x += 34;
 	}
 
 	SDL_Rect position_name = { 725,603,30,30 };
-	if (listEntities.begin()._Ptr->_Myval->type == EntityType::UNIT) {
-		thing_selected = listEntities.begin()._Ptr->_Myval;
-		Unit* unit = (Unit*)listEntities.begin()._Ptr->_Myval; 	
-		hud_selected_troop = (ImageUI*)App->gui->CreateUIElement(Type::IMAGE, (UI*)ui_ingame, { 640,613,76,105 }, GetSpritePortrait(1, unit->unitType), "Troop", { 0,0,0,0 }, { 0,0,0,0 }, false,
-			{ 0,0,0,0 }, nullptr, 0, false, -1.0F, 1);
-		hud_stats_selected_troop[0] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, (UI*)ui_ingame, position_name, { 0,0,100,100 }, "Unit", { 0,0,0,255 });
-		bool combat_unit = false;
-		switch (unit->unitType) {
-		case UnitType::MONK:
-			hud_stats_selected_troop[0]->SetString("Monk");
-			type_thing_selected = Type_Selected::Monk;
-			position_name.x += 18;
-			hud_stats_selected_troop[0]->SetRect(position_name);
-			break;
-		case UnitType::CLERIC:
-			hud_stats_selected_troop[0]->SetString("Cleric");
-			type_thing_selected = Type_Selected::Cleric;
-			break;
-		case UnitType::ASSASSIN:
-			hud_stats_selected_troop[0]->SetString("Assassin");
-			type_thing_selected = Type_Selected::Assassin;
-			position_name.x += 6;
-			hud_stats_selected_troop[0]->SetRect(position_name);
-			combat_unit = true;
-			break;
-		case UnitType::PIKEMAN:
-			hud_stats_selected_troop[0]->SetString("Pikeman");
-			type_thing_selected = Type_Selected::Pikeman;
-			combat_unit = true;
-			break;
+	if (listEntities.begin()._Ptr->_Myval != nullptr) {
+		if (listEntities.begin()._Ptr->_Myval->type == EntityType::UNIT) {
+			thing_selected = listEntities.begin()._Ptr->_Myval;
+			Unit* unit = (Unit*)listEntities.begin()._Ptr->_Myval;
+			hud_selected_troop = (ImageUI*)App->gui->CreateUIElement(Type::IMAGE, (UI*)ui_ingame, { 640,613,76,105 }, GetSpritePortrait(1, unit->unitType), "Troop", { 0,0,0,0 }, { 0,0,0,0 }, false,
+				{ 0,0,0,0 }, nullptr, 0, false, -1.0F, 1);
+			hud_stats_selected_troop[0] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, (UI*)ui_ingame, position_name, { 0,0,100,100 }, "Unit", { 0,0,0,255 });
+			bool combat_unit = false;
+			switch (unit->unitType) {
+			case UnitType::MONK:
+				hud_stats_selected_troop[0]->SetString("Monk");
+				type_thing_selected = Type_Selected::Monk;
+				position_name.x += 18;
+				hud_stats_selected_troop[0]->SetRect(position_name);
+				break;
+			case UnitType::CLERIC:
+				hud_stats_selected_troop[0]->SetString("Cleric");
+				type_thing_selected = Type_Selected::Cleric;
+				break;
+			case UnitType::ASSASSIN:
+				hud_stats_selected_troop[0]->SetString("Assassin");
+				type_thing_selected = Type_Selected::Assassin;
+				position_name.x += 6;
+				hud_stats_selected_troop[0]->SetRect(position_name);
+				combat_unit = true;
+				break;
+			case UnitType::PIKEMAN:
+				hud_stats_selected_troop[0]->SetString("Pikeman");
+				type_thing_selected = Type_Selected::Pikeman;
+				combat_unit = true;
+				break;
+			}
+			if (combat_unit == true) {
+				CombatUnit* cunit = (CombatUnit*)unit;
+				hud_stats_selected_troop[1] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, (UI*)ui_ingame, { 720,622,30,30 }, { 0,0,100,100 }, "Damage:", { 0,0,0,255 });
+				hud_stats_selected_troop[2] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, (UI*)ui_ingame, { 780,622,30,30 }, { 0,0,100,100 }, std::to_string(cunit->GetDamageValue()), { 0,0,0,255 });
+				hud_stats_selected_troop[3] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, (UI*)ui_ingame, { 720,636,30,30 }, { 0,0,100,100 }, "Range:", { 0,0,0,255 });
+				hud_stats_selected_troop[4] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, (UI*)ui_ingame, { 768,636,30,30 }, { 0,0,100,100 }, std::to_string(cunit->GetRangeValue()), { 0,0,0,255 });
+				hud_stats_selected_troop[5] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, (UI*)ui_ingame, { 720,650,30,30 }, { 0,0,100,100 }, "Speed:", { 0,0,0,255 });
+				hud_stats_selected_troop[6] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, (UI*)ui_ingame, { 760,650,30,30 }, { 0,0,100,100 }, std::to_string(cunit->GetSpeedValue()), { 0,0,0,255 });
+				hud_stats_selected_troop[7] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, (UI*)ui_ingame, { 720,664,30,30 }, { 0,0,100,100 }, "Level:", { 0,0,0,255 });
+				hud_stats_selected_troop[8] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, (UI*)ui_ingame, { 760,664,30,30 }, { 0,0,100,100 }, std::to_string(cunit->GetLevel()), { 0,0,0,255 });
+				hud_stats_selected_troop[9] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, (UI*)ui_ingame, { 720,678,30,30 }, { 0,0,100,100 }, "Exp:", { 0,0,0,255 });
+				hud_stats_selected_troop[10] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, (UI*)ui_ingame, { 747,678,30,30 }, { 0,0,100,100 }, std::to_string(cunit->GetExperience()), { 0,0,0,255 });
+				hud_stats_selected_troop[11] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, (UI*)ui_ingame, { 720,703,30,10 }, { 0,0,100,100 }, "Health:", { 0,0,0,255 });
+				hud_stats_selected_troop[12] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, (UI*)ui_ingame, { 773,703,30,10 }, { 0,0,100,100 }, std::to_string(unit->GetHealth()), { 0,0,0,255 });
+			}
+			else {
+				hud_stats_selected_troop[1] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, (UI*)ui_ingame, { 720,703,30,10 }, { 0,0,100,100 }, "Health:", { 0,0,0,255 });
+				hud_stats_selected_troop[2] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, (UI*)ui_ingame, { 773,703,30,10 }, { 0,0,100,100 }, std::to_string(unit->GetHealth()), { 0,0,0,255 });
+			}
 		}
-		if (combat_unit == true) {
-			CombatUnit* cunit = (CombatUnit*)unit;
-			hud_stats_selected_troop[1] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, (UI*)ui_ingame, { 720,622,30,30 }, { 0,0,100,100 }, "Damage:", { 0,0,0,255 });
-			hud_stats_selected_troop[2] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, (UI*)ui_ingame, { 780,622,30,30 }, { 0,0,100,100 }, std::to_string(cunit->GetDamageValue()), { 0,0,0,255 });
-			hud_stats_selected_troop[3] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, (UI*)ui_ingame, { 720,636,30,30 }, { 0,0,100,100 }, "Range:", { 0,0,0,255 });
-			hud_stats_selected_troop[4] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, (UI*)ui_ingame, { 768,636,30,30 }, { 0,0,100,100 }, std::to_string(cunit->GetRangeValue()), { 0,0,0,255 });
-			hud_stats_selected_troop[5] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, (UI*)ui_ingame, { 720,650,30,30 }, { 0,0,100,100 }, "Speed:", { 0,0,0,255 });
-			hud_stats_selected_troop[6] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, (UI*)ui_ingame, { 760,650,30,30 }, { 0,0,100,100 }, std::to_string(cunit->GetSpeedValue()), { 0,0,0,255 });
-			hud_stats_selected_troop[7] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, (UI*)ui_ingame, { 720,664,30,30 }, { 0,0,100,100 }, "Level:", { 0,0,0,255 });
-			hud_stats_selected_troop[8] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, (UI*)ui_ingame, { 760,664,30,30 }, { 0,0,100,100 }, std::to_string(cunit->GetLevel()), { 0,0,0,255 });
-			hud_stats_selected_troop[9] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, (UI*)ui_ingame, { 720,678,30,30 }, { 0,0,100,100 }, "Exp:", { 0,0,0,255 });
-			hud_stats_selected_troop[10] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, (UI*)ui_ingame, { 747,678,30,30 }, { 0,0,100,100 }, std::to_string(cunit->GetExperience()), { 0,0,0,255 });
-			hud_stats_selected_troop[11] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, (UI*)ui_ingame, { 720,703,30,10 }, { 0,0,100,100 }, "Health:", { 0,0,0,255 });
-			hud_stats_selected_troop[12] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, (UI*)ui_ingame, { 773,703,30,10 }, { 0,0,100,100 }, std::to_string(unit->GetHealth()), { 0,0,0,255 });
+		else if (listEntities.begin()._Ptr->_Myval->type == EntityType::BUILDING) {
+			Building* building = (Building*)listEntities.begin()._Ptr->_Myval;
+			hud_selected_troop = (ImageUI*)App->gui->CreateUIElement(Type::IMAGE, (UI*)ui_ingame, { 640,613,76,105 }, GetSpritePortraitBuilding(0, building->GetBuildingType()), "Building",
+				{ 0,0,0,0 }, { 0,0,0,0 }, false, { 0,0,0,0 }, nullptr, 0, false, -1.0F, 1);
+			hud_stats_selected_troop[0] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, (UI*)ui_ingame, position_name, { 0,0,100,100 }, "Building", { 0,0,0,255 });
+			switch (building->GetBuildingType()) {
+			case BuildingType::FORTRESS:
+				hud_stats_selected_troop[0]->SetString("Fortress");
+				//position_name.x += 18;
+				hud_stats_selected_troop[0]->SetRect(position_name);
+				type_thing_selected = Type_Selected::Fortress;
+				break;
+			case BuildingType::MONASTERY:
+				hud_stats_selected_troop[0]->SetString("Monastery");
+				type_thing_selected = Type_Selected::Monastery;
+				break;
+			case BuildingType::TEMPLE:
+				hud_stats_selected_troop[0]->SetString("Temple");
+				type_thing_selected = Type_Selected::Temple;
+				//position_name.x += 6;
+				hud_stats_selected_troop[0]->SetRect(position_name);
+				break;
+			case BuildingType::ENCAMPMENT:
+				hud_stats_selected_troop[0]->SetString("Encampment");
+				type_thing_selected = Type_Selected::Encampment;
+				break;
+			}
+			hud_stats_selected_troop[1] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, (UI*)ui_ingame, { 720,622,30,30 }, { 0,0,100,100 }, "Influence:", { 0,0,0,255 });
+			hud_stats_selected_troop[2] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, (UI*)ui_ingame, { 780,622,30,30 }, { 0,0,100,100 }, std::to_string(building->GetInfluence()), { 0,0,0,255 });
+			hud_stats_selected_troop[3] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, (UI*)ui_ingame, { 720,636,30,30 }, { 0,0,100,100 }, "Damage:", { 0,0,0,255 });
+			hud_stats_selected_troop[4] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, (UI*)ui_ingame, { 768,636,30,30 }, { 0,0,100,100 }, std::to_string(building->GetDamage()), { 0,0,0,255 });
+			hud_stats_selected_troop[5] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, (UI*)ui_ingame, { 720,650,30,30 }, { 0,0,100,100 }, "Max Capacity:", { 0,0,0,255 });
+			hud_stats_selected_troop[6] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, (UI*)ui_ingame, { 760,650,30,30 }, { 0,0,100,100 }, std::to_string(building->GetMaxCap()), { 0,0,0,255 });
+			hud_stats_selected_troop[7] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, (UI*)ui_ingame, { 720,703,30,10 }, { 0,0,100,100 }, "Health:", { 0,0,0,255 });
+			hud_stats_selected_troop[8] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, (UI*)ui_ingame, { 773,703,30,10 }, { 0,0,100,100 }, std::to_string(building->GetHealth()), { 0,0,0,255 });
 		}
-		else {
-			hud_stats_selected_troop[1] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, (UI*)ui_ingame, { 720,703,30,10 }, { 0,0,100,100 }, "Health:", { 0,0,0,255 });
-			hud_stats_selected_troop[2] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, (UI*)ui_ingame, { 773,703,30,10 }, { 0,0,100,100 }, std::to_string(unit->GetHealth()), { 0,0,0,255 });
-		}
-	}
-	else if (listEntities.begin()._Ptr->_Myval->type == EntityType::BUILDING) {
-		Building* building = (Building*)listEntities.begin()._Ptr->_Myval;
-		hud_selected_troop = (ImageUI*)App->gui->CreateUIElement(Type::IMAGE, (UI*)ui_ingame, { 640,613,76,105 }, GetSpritePortraitBuilding(0, building->GetBuildingType()), "Building",
-			{ 0,0,0,0 }, { 0,0,0,0 }, false, { 0,0,0,0 }, nullptr, 0, false, -1.0F, 1);
-		hud_stats_selected_troop[0] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, (UI*)ui_ingame, position_name, { 0,0,100,100 }, "Building", { 0,0,0,255 });
-		switch (building->GetBuildingType()) {
-		case BuildingType::FORTRESS:
-			hud_stats_selected_troop[0]->SetString("Fortress");
-			//position_name.x += 18;
-			hud_stats_selected_troop[0]->SetRect(position_name);
-			type_thing_selected = Type_Selected::Fortress;
-			break;
-		case BuildingType::MONASTERY:
-			hud_stats_selected_troop[0]->SetString("Monastery");
-			type_thing_selected = Type_Selected::Monastery;
-			break;
-		case BuildingType::TEMPLE:
-			hud_stats_selected_troop[0]->SetString("Temple");
-			type_thing_selected = Type_Selected::Temple;
-			//position_name.x += 6;
-			hud_stats_selected_troop[0]->SetRect(position_name);
-			break;
-		case BuildingType::ENCAMPMENT:
-			hud_stats_selected_troop[0]->SetString("Encampment");
-			type_thing_selected = Type_Selected::Encampment;
-			break;
-		}
-		hud_stats_selected_troop[1] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, (UI*)ui_ingame, { 720,622,30,30 }, { 0,0,100,100 }, "Influence:", { 0,0,0,255 });
-		hud_stats_selected_troop[2] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, (UI*)ui_ingame, { 780,622,30,30 }, { 0,0,100,100 }, std::to_string(building->GetInfluence()), { 0,0,0,255 });
-		hud_stats_selected_troop[3] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, (UI*)ui_ingame, { 720,636,30,30 }, { 0,0,100,100 }, "Damage:", { 0,0,0,255 });
-		hud_stats_selected_troop[4] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, (UI*)ui_ingame, { 768,636,30,30 }, { 0,0,100,100 }, std::to_string(building->GetDamage()), { 0,0,0,255 });
-		hud_stats_selected_troop[5] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, (UI*)ui_ingame, { 720,650,30,30 }, { 0,0,100,100 }, "Max Capacity:", { 0,0,0,255 });
-		hud_stats_selected_troop[6] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, (UI*)ui_ingame, { 760,650,30,30 }, { 0,0,100,100 }, std::to_string(building->GetMaxCap()), { 0,0,0,255 });
-		hud_stats_selected_troop[7] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, (UI*)ui_ingame, { 720,703,30,10 }, { 0,0,100,100 }, "Health:", { 0,0,0,255 });
-		hud_stats_selected_troop[8] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, (UI*)ui_ingame, { 773,703,30,10 }, { 0,0,100,100 }, std::to_string(building->GetHealth()), { 0,0,0,255 });
 	}
 	ManageActionButtons(true);
 }
@@ -911,6 +918,14 @@ void j1Scene::OnClick(UI* element, float argument)
 			else if (confirmation_option.compare("EXIT") == 0)
 			{
 				BackToTitleMenu();
+			}
+		}
+		else if (element->name == "FULLSCREEN") {
+			if (ui_button_options[1]->sprite1.y == 21) {
+				ui_button_options[1]->sprite1.y = ui_button_options[1]->sprite2.y = ui_button_options[1]->sprite3.y = 61;
+			}
+			else if(ui_button_options[1]->sprite1.y == 61) {
+				ui_button_options[1]->sprite1.y = ui_button_options[1]->sprite2.y = ui_button_options[1]->sprite3.y = 21;
 			}
 		}
 		else if (element->name == "CLOSE")

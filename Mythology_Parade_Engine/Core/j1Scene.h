@@ -126,8 +126,8 @@ private:
 	ButtonUI* ui_button[7];
 	TextUI* ui_text[8];
 	WindowUI* ui_options_window;
-	ButtonUI* ui_button_options;
-	TextUI* ui_text_options[2];
+	ButtonUI* ui_button_options[2];
+	TextUI* ui_text_options[3];
 	WindowUI* ui_winlose_window;
 	ButtonUI* ui_button_winlose[2];
 	TextUI* ui_text_winlose[4];
