@@ -168,6 +168,9 @@ bool Unit::Draw(float dt)
 	App->render->Blit(texture, position.x - blitRect.x / 2, position.y - blitRect.y, blitRect, &currentAnim.sprites[num_current_anim].rect, 1.f, flipState);
 	App->render->DrawQuad({ position.x, position.y, 5, 5 }, 0, 255, 0);
 
+	collisionRect.x = position.x;
+	collisionRect.y = position.y;
+
 	return true;
 }
 
