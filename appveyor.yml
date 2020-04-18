@@ -1,25 +1,26 @@
-
 version: 0.{build}
 branches:
   only:
   - master
+skip_branch_with_pr: true
 configuration: Release
 platform: x86
+shallow_clone: true
 build:
-  project: Mythology_Parade_Engine/Mythology_Parade_Solution.sln
   verbosity: minimal
 after_build:
 - cmd: >-
-    copy C:\projects\Mythology-Parade\Mythology_Parade_Engine\Release\*.exe C:\projects\Mythology Parade\Mythology_Parade_Engine\Game
-    
-    copy C:\projects\Mythology-Parade\README.md C:\projects\Mythology-Parade\Mythology_Parade_Engine\Game
+    copy C:\projects\Misioneros-Studio/Mythology-Parade\Release\*.exe C:\projects\Misioneros-Studio/Mythology-Parade\Game\
+
+
+    copy C:\projects\Misioneros-Studio/Mythology-Parade\README.md C:\projects\Misioneros-Studio/Mythology-Parade\Game\
 artifacts:
 - path: Mythology_Parade_Engine\Game
-  name: Mythology_Parade
+  name: Mythology-Parade
   type: WebDeployPackage
 deploy:
 - provider: GitHub
-  tag: V$(appveyor_build_version)
-  release: Mythology Parade
+  tag: v$(appveyor_build_version)
+  release: Mythology_Parade
   auth_token:
-    secure: KghY3L0nvYfR/6rGwcBUlM53HHU9raYtqIrE0BvIRnEH8zLvseMPPcA8inwVk5vT
+    secure: PSvYRm2n+XTf3FxysUnVKLaZJaOQbHqYCb0gbG8WPVJkazEzVmyErRbb3tZrrbAf
