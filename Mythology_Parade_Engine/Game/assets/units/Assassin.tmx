@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.2" tiledversion="1.2.4" orientation="orthogonal" renderorder="right-down" width="5" height="5" tilewidth="125" tileheight="112" infinite="0" nextlayerid="2" nextobjectid="1">
  <tileset firstgid="1" name="New_SpriteSheet" tilewidth="125" tileheight="112" tilecount="425" columns="17">
-  <image source="SpriteSheet.png" width="2128" height="2800"/>
+  <image source="AssassinSpriteSheet.png" width="2128" height="2800"/>
   <tile id="0">
    <properties>
     <property name="dicType" type="int" value="0"/>
@@ -639,8 +639,32 @@
   </tile>
  </tileset>
  <layer id="1" name="Capa de patrones 1" width="5" height="5">
-  <data encoding="base64">
-   AQAAABIAAAAjAAAANAAAAEUAAABWAAAAZwAAAHgAAACJAAAAmgAAAKsAAAC8AAAAzQAAAN4AAADvAAAAAAEAABEBAAAiAQAAMwEAAEQBAABVAQAAZgEAAHcBAACIAQAAmQEAAA==
+  <data>
+   <tile gid="1"/>
+   <tile gid="18"/>
+   <tile gid="35"/>
+   <tile gid="52"/>
+   <tile gid="69"/>
+   <tile gid="86"/>
+   <tile gid="103"/>
+   <tile gid="120"/>
+   <tile gid="137"/>
+   <tile gid="154"/>
+   <tile gid="171"/>
+   <tile gid="188"/>
+   <tile gid="205"/>
+   <tile gid="222"/>
+   <tile gid="239"/>
+   <tile gid="256"/>
+   <tile gid="273"/>
+   <tile gid="290"/>
+   <tile gid="307"/>
+   <tile gid="324"/>
+   <tile gid="341"/>
+   <tile gid="358"/>
+   <tile gid="375"/>
+   <tile gid="392"/>
+   <tile gid="409"/>
   </data>
  </layer>
 </map>

@@ -24,7 +24,7 @@ public:
 
 	void SelectionDraw_Logic();
 	void SeeEntitiesInside();
-	void playerInputs();
+	void PlayerInputs();
 	std::list<Entity*> GetEntitiesSelected();
 
 private:

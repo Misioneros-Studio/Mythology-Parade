@@ -13,7 +13,7 @@ CurrencySystem::~CurrencySystem()
 {
 }
 
-void CurrencySystem::increaseFaith(int number)
+void CurrencySystem::IncreaseFaith(int number)
 {
 	if(App->scene->paused_game)
 	{
@@ -24,7 +24,7 @@ void CurrencySystem::increaseFaith(int number)
 	}
 }
 
-void CurrencySystem::decreaseFaith(int number)
+void CurrencySystem::DecreaseFaith(int number)
 {
 	if (App->scene->paused_game)
 	{
@@ -35,7 +35,7 @@ void CurrencySystem::decreaseFaith(int number)
 	}
 }
 
-void CurrencySystem::increaseSacrifice(ActionSacrifice action)
+void CurrencySystem::IncreaseSacrifice(ActionSacrifice action)
 {
 	if (App->scene->paused_game)
 	{
@@ -70,7 +70,7 @@ void CurrencySystem::increaseSacrifice(ActionSacrifice action)
 	}
 }
 
-void CurrencySystem::increasePrayers(ActionPrayers action)
+void CurrencySystem::IncreasePrayers(ActionPrayers action)
 {
 	if (App->scene->paused_game)
 	{
@@ -104,7 +104,7 @@ void CurrencySystem::increasePrayers(ActionPrayers action)
 		}
 	}
 }
-void CurrencySystem::increaseAll(int number)
+void CurrencySystem::IncreaseAll(int number)
 {
 	if (number > 0)
 	{

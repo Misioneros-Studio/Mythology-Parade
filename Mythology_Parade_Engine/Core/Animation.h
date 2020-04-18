@@ -6,7 +6,9 @@
 #include "j1App.h"
 #include "j1Textures.h"
 #include <unordered_map>
+//#include "Unit.h"
 
+enum class UnitType;
 enum class AnimationType
 {
 	ATTACK,
@@ -107,12 +109,12 @@ public:
 	virtual ~Animation();
 
 	// Called before quitting
-	std::unordered_map<AnimationType, std::unordered_map<Direction, Animation_char>> Load(const char* path);
-	bool LoadCharacterTMX(pugi::xml_node& character_node);
-	virtual Animation_char LoadAnimation(pugi::xml_node& obj_group, int row, int sprite_num, std::string name);
+	std::unordered_map<AnimationType, std::unordered_map<Direction, Animation_char>> Load(const char* path, UnitType s_type);
+	bool LoadCharacterTMX(pugi::xml_node& character_node, CharacterTMXData* cData);
+	virtual Animation_char LoadAnimation(pugi::xml_node& obj_group, int row, int sprite_num, std::string name, CharacterTMXData* cData);
 
 public:
-	CharacterTMXData character_tmx_data;
+	std::unordered_map<UnitType, CharacterTMXData> charData;
 };
 
 #endif

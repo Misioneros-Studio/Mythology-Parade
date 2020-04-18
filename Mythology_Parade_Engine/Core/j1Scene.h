@@ -5,7 +5,7 @@
 #include "j1Timer.h"
 #include "SDL/include/SDL.h"
 
-	struct SDL_Rect;
+struct SDL_Rect;
 
 enum class CloseSceneMenus {
 	None,
@@ -22,7 +22,6 @@ class WindowUI;
 class ButtonUI;
 class TextUI;
 class QuadTree;
-
 
 class j1Scene : public j1Module
 {

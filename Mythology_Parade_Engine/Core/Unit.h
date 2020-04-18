@@ -44,7 +44,7 @@ public:
 	UnitType unitType;
 
 public:
-	Unit(UnitType);
+	Unit(UnitType, iPoint);
 	virtual ~Unit();
 
 	void Init(int maxHealth);
@@ -72,6 +72,8 @@ protected:
 	iPoint targetPosition;
 	AnimationType state;
 	Unit* enemyTarget;
+
+	SDL_Rect collisionRect = {0, 0, 30, -55 };
 
 	std::vector<iPoint> entPath;
 	//void SetTarget();

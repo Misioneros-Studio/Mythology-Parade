@@ -185,11 +185,11 @@ bool j1Scene::Update(float dt)
 		break;
 	}
 	// -------
-	if (App->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN)
-		App->LoadGame("save_game.xml");
+	//if (App->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN)
+	//	App->LoadGame("save_game.xml");
 
-	if (App->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
-		App->SaveGame("save_game.xml");
+	//if (App->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
+	//	App->SaveGame("save_game.xml");
 
 	if (App->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
 		ActivatePauseMenu();
