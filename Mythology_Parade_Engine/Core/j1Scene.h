@@ -4,6 +4,8 @@
 #include "j1Module.h"
 #include "j1Timer.h"
 
+	struct SDL_Rect;
+
 enum class CloseSceneMenus {
 	None,
 	Pause,

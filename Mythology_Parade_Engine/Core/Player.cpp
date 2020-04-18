@@ -119,14 +119,11 @@ void Player::SeeEntitiesInside()
 	std::list<Entity*>::iterator it = App->entityManager->entities[EntityType::UNIT].begin();
 	for (it; it != App->entityManager->entities[EntityType::UNIT].end(); ++it)
 	{
-		if (it._Ptr->_Myval->position.x >= preClicked.x && it._Ptr->_Myval->position.x <= postClicked.x)
+		if ((it._Ptr->_Myval->position.x >= preClicked.x && it._Ptr->_Myval->position.x <= postClicked.x) || (it._Ptr->_Myval->position.x <= preClicked.x && it._Ptr->_Myval->position.x >= postClicked.x))
 		{
-			if (it._Ptr->_Myval->position.y >= preClicked.y && it._Ptr->_Myval->position.y <= postClicked.y)
+			if ((it._Ptr->_Myval->position.y >= preClicked.y && it._Ptr->_Myval->position.y <= postClicked.y) || it._Ptr->_Myval->position.y <= preClicked.y && it._Ptr->_Myval->position.y >= postClicked.y)
 			{
-				//if (it._Ptr->_Myval->civilization == CivilizationType::VIKING)
-				//{
-					listEntities.push_back(it._Ptr->_Myval);
-				//}
+				listEntities.push_back(it._Ptr->_Myval);
 			}
 		}
 	}
@@ -147,12 +144,12 @@ void Player::playerInputs()
 
 	if (App->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN && App->scene->godMode)
 	{
-		App->entityManager->CreateUnitEntity(UnitType::ASSASSIN);
+		App->entityManager->CreateUnitEntity(UnitType::ASSASSIN, { 120,100 });
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN && App->scene->godMode)
 	{
-		App->entityManager->CreateUnitEntity(UnitType::MONK);
+		App->entityManager->CreateUnitEntity(UnitType::MONK, { 100,100 });
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_F4) == KEY_DOWN && App->scene->godMode)
