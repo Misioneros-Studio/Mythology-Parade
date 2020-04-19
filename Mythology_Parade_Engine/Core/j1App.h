@@ -24,6 +24,7 @@ class j1Fonts;
 class j1Gui;
 class Console;
 class EntityManager;
+class j1FadeToBlack;
 
 class j1App
 {
@@ -109,16 +110,17 @@ public:
 	j1Gui*				gui = NULL;
 	Console*			console = NULL;
 	EntityManager*		entityManager = NULL;
+	j1FadeToBlack*		fade_to_black = NULL;
  
 	bool				start_game = false;
 	bool				change_scene = false;
 
 	bool				restart_scene = false;
 	bool				first_change_scene = false;
-
+	std::list<j1Module*>	modules;
 private:
 
-	std::list<j1Module*>	modules;
+
 	int					argc;
 	char**				args;
 

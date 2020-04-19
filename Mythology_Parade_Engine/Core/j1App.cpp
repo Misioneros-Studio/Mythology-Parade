@@ -19,6 +19,7 @@
 #include "j1Gui.h"
 #include "Console.h"
 #include "EntityManager.h"
+#include "j1FadeToBlack.h"
 #include "j1App.h"
 
 
@@ -42,6 +43,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	gui = new j1Gui();
 	console = new Console();
 	entityManager = new EntityManager();
+	fade_to_black = new j1FadeToBlack();
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
@@ -67,7 +69,9 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(entityManager);
 
 	// render last to swap buffer
+	AddModule(fade_to_black);
 	AddModule(render);
+
 
 	PERF_PEEK(ptimer);
 }

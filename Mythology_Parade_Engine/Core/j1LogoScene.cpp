@@ -7,6 +7,7 @@
 #include "j1Render.h"
 #include "j1LogoScene.h"
 #include"j1Audio.h"
+#include"j1FadeToBlack.h"
 
 
 j1LogoScene::j1LogoScene() : j1Module()
@@ -59,5 +60,5 @@ bool j1LogoScene::CleanUp()
 void j1LogoScene::ChangeToTitleScene()
 {
 	destroy = true;
-	App->first_change_scene = true;
+	App->fade_to_black->FadeToBlack((j1Module*)App->logo_scene, (j1Module*)App->title_scene, 2);
 }
