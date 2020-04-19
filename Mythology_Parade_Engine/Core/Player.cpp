@@ -104,6 +104,7 @@ void Player::SelectionDraw_Logic()
 
 	if (App->input->GetMouseButtonDown(1) == KEY_UP)
 	{
+		listEntities.clear();
 		ClickLogic();
 		SeeEntitiesInside();
 		App->scene->HUDUpdateSelection(listEntities);
@@ -196,12 +197,12 @@ void Player::ClickLogic()
 		}
 	}
 	if (listEntities.empty()) {
-		std::list<Entity*>::iterator it = App->entityManager->entities[EntityType::UNIT].begin();
+		it = App->entityManager->entities[EntityType::UNIT].begin();
 		for (it; it != App->entityManager->entities[EntityType::UNIT].end(); ++it)
 		{
-			if (preClicked.x >= it._Ptr->_Myval->position.x && preClicked.x <= it._Ptr->_Myval->position.x + it._Ptr->_Myval->spriteRect.w)
+			if (preClicked.x >= it._Ptr->_Myval->position.x && preClicked.x <= it._Ptr->_Myval->position.x + it._Ptr->_Myval->blitRect.x)
 			{
-				if (preClicked.y >= it._Ptr->_Myval->position.y && preClicked.y <= it._Ptr->_Myval->position.y + it._Ptr->_Myval->spriteRect.h)
+				if (preClicked.y >= it._Ptr->_Myval->position.y && preClicked.y <= it._Ptr->_Myval->position.y + it._Ptr->_Myval->blitRect.y)
 				{
 					listEntities.push_back(it._Ptr->_Myval);
 				}
