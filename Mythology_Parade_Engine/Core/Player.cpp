@@ -68,9 +68,12 @@ bool Player::Update(float dt)
 	//}
   
 	//Selection logics and drawing
-	SelectionDraw_Logic(); 
+	if (!App->scene->paused_game)
+	{
+		SelectionDraw_Logic(); 
+		PlayerInputs();
+	}
 
-	PlayerInputs();
 
 	return true;
 }
@@ -97,6 +100,10 @@ void Player::SelectionDraw_Logic()
 	if (App->input->GetMouseButtonDown(1) == KEY_REPEAT)
 	{
 		App->input->GetMousePosition(postClicked.x, postClicked.y);
+		if (postClicked.y >= 590)
+		{
+			postClicked.y = 588;
+		}
 		postClicked = App->render->ScreenToWorld(postClicked.x, postClicked.y);
 
 		App->render->DrawQuad({preClicked.x, preClicked.y, postClicked.x - preClicked.x, postClicked.y - preClicked.y}, 255, 255, 255, 255, false);
