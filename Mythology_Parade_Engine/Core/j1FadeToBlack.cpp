@@ -5,6 +5,10 @@
 #include "SDL/include/SDL_render.h"
 #include "SDL/include/SDL_timer.h"
 #include "j1Gui.h"
+#include "j1Map.h"
+#include "j1Minimap.h"
+#include "j1Pathfinding.h"
+#include "EntityManager.h"
 
 j1FadeToBlack::j1FadeToBlack()
 {
@@ -78,7 +82,6 @@ bool j1FadeToBlack::FadeToBlack(j1Module* module_off, j1Module* module_on, bool 
 		if (is_changing_to_scene == true) {
 			App->change_scene = true;
 		}
-
 
 		ret = true;
 	}

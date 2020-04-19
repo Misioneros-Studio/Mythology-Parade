@@ -505,12 +505,13 @@ void j1Scene::DeactivateConfirmationMenu() {
 // Called when returning to main menu (either winning/losing or by menu options like exit)
 void j1Scene::BackToTitleMenu() {
 	App->fade_to_black->FadeToBlack((j1Module*)App->scene, (j1Module*)App->title_scene, false, 2);
-	App->change_scene = true;
+
 	destroy = true;
 	App->map->destroy = true;
 	App->pathfinding->destroy = true;
 	App->entityManager->destroy = true;
 	App->minimap->destroy = true;
+	App->change_scene = true;
 }
 
 // Called when restarting the game
