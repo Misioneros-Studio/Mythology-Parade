@@ -92,7 +92,6 @@ void Player::SelectionDraw_Logic()
 	{
 		App->input->GetMousePosition(preClicked.x, preClicked.y);
 		preClicked = App->render->ScreenToWorld(preClicked.x, preClicked.y);
-		listEntities.clear(); //we clear the list of entities selected to select again or just deselect
 	}
 
 	if (App->input->GetMouseButtonDown(1) == KEY_REPEAT)
@@ -101,13 +100,11 @@ void Player::SelectionDraw_Logic()
 		postClicked = App->render->ScreenToWorld(postClicked.x, postClicked.y);
 
 		App->render->DrawQuad({preClicked.x, preClicked.y, postClicked.x - preClicked.x, postClicked.y - preClicked.y}, 255, 255, 255, 255, false);
-		//App->render->DrawQuad({preClicked.x + 1, preClicked.y + 1, postClicked.x - preClicked.x - 2, postClicked.y - preClicked.y  - 2}, 255, 255, 255, 255, false);
 	}
 
 	if (App->input->GetMouseButtonDown(1) == KEY_UP)
 	{
-		listEntities.clear();
-		SeeEntitiesInside(); //We iterate the list of entities to see if someone is in there
+		SeeEntitiesInside();
 		App->scene->HUDUpdateSelection(listEntities);
 	}
 
@@ -170,6 +167,8 @@ void Player::PlayerInputs()
 		{
 			App->entityManager->DeleteEntity(it._Ptr->_Myval);
 		}
+		listEntities.clear();
+		App->scene->HUDUpdateSelection(listEntities);
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN && App->scene->godMode)

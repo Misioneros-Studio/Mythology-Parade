@@ -30,14 +30,13 @@ public:
 private:
 	CurrencySystem currencySystem;
 
-	std::list<Unit*> unitsList;
-	//std::list<Building*> buildingsList;
 	std::string faith, sacrifice, prayer;
 
 	int tick1 = 0, tick2 = 0;
 	iPoint preClicked;
 	iPoint postClicked;
-	std::list<Entity*> listEntities; //Entities instide selection
+	Building* buildingSelected;
+	std::list<Entity*> listEntities;
 	
 
 public:
