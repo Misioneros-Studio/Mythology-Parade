@@ -25,6 +25,7 @@ public:
 	void SelectionDraw_Logic();
 	void SeeEntitiesInside();
 	void PlayerInputs();
+	void ClickLogic();
 	std::list<Entity*> GetEntitiesSelected();
 
 private:
@@ -35,9 +36,8 @@ private:
 	int tick1 = 0, tick2 = 0;
 	iPoint preClicked;
 	iPoint postClicked;
-	Building* buildingSelected;
 	std::list<Entity*> listEntities;
-	
+	Entity* buildingSelect;
 
 public:
 	bool player_win = false;

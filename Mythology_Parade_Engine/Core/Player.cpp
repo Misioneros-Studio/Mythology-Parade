@@ -104,10 +104,10 @@ void Player::SelectionDraw_Logic()
 
 	if (App->input->GetMouseButtonDown(1) == KEY_UP)
 	{
+		ClickLogic();
 		SeeEntitiesInside();
 		App->scene->HUDUpdateSelection(listEntities);
 	}
-
 }
 
 std::list<Entity*> Player::GetEntitiesSelected()
@@ -179,5 +179,33 @@ void Player::PlayerInputs()
 	if (App->input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN && App->scene->godMode)
 	{
 		player_lose = true;
+	}
+}
+
+void Player::ClickLogic()
+{
+	std::list<Entity*>::iterator it = App->entityManager->entities[EntityType::BUILDING].begin();
+	for (it; it != App->entityManager->entities[EntityType::BUILDING].end(); ++it)
+	{
+		if (preClicked.x >= it._Ptr->_Myval->position.x && preClicked.x <= it._Ptr->_Myval->position.x + it._Ptr->_Myval->spriteRect.w)
+		{
+			if (preClicked.y >= it._Ptr->_Myval->position.y && preClicked.y <= it._Ptr->_Myval->position.y + it._Ptr->_Myval->spriteRect.h)
+			{
+				buildingSelect = it._Ptr->_Myval;
+			}
+		}
+	}
+	if (listEntities.empty()) {
+		std::list<Entity*>::iterator it = App->entityManager->entities[EntityType::UNIT].begin();
+		for (it; it != App->entityManager->entities[EntityType::UNIT].end(); ++it)
+		{
+			if (preClicked.x >= it._Ptr->_Myval->position.x && preClicked.x <= it._Ptr->_Myval->position.x + it._Ptr->_Myval->spriteRect.w)
+			{
+				if (preClicked.y >= it._Ptr->_Myval->position.y && preClicked.y <= it._Ptr->_Myval->position.y + it._Ptr->_Myval->spriteRect.h)
+				{
+					listEntities.push_back(it._Ptr->_Myval);
+				}
+			}
+		}
 	}
 }
