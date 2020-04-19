@@ -336,8 +336,7 @@ void j1TitleScene::OnClick(UI* element, float argument)
 
 		if (element->name == "NEW")
 		{
-			//App->change_scene = true;
-			App->fade_to_black->FadeToBlack((j1Module*)App->title_scene, (j1Module*)App->scene, 2);
+			App->fade_to_black->FadeToBlack((j1Module*)App->title_scene, (j1Module*)App->scene, true, 2);
 			destroy = true;
 		}
 		else if (element->name == "LOAD")

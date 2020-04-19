@@ -37,8 +37,8 @@ bool j1FadeToBlack::PostUpdate()
 		if (now >= total_time)
 		{
 			// Enable / disable the modules received when FadeToBlacks() gets called
-			module_off->Disable();
-			module_on->Enable();
+				module_off->Disable();
+				module_on->Enable();
 			// ---
 			total_time += total_time;
 			start_time = SDL_GetTicks();
@@ -63,7 +63,7 @@ bool j1FadeToBlack::PostUpdate()
 }
 
 // Fade to black. At mid point deactivate one module, then activate the other
-bool j1FadeToBlack::FadeToBlack(j1Module* module_off, j1Module* module_on, float time)
+bool j1FadeToBlack::FadeToBlack(j1Module* module_off, j1Module* module_on, bool is_changing_to_scene, float time)
 {
 	bool ret = false;
 
@@ -74,6 +74,11 @@ bool j1FadeToBlack::FadeToBlack(j1Module* module_off, j1Module* module_on, float
 		current_step = fade_step::fade_to_black;
 		start_time = SDL_GetTicks();
 		total_time = (Uint32)(time * 0.5f * 1000.0f);
+
+		if (is_changing_to_scene == true) {
+			App->change_scene = true;
+		}
+
 
 		ret = true;
 	}

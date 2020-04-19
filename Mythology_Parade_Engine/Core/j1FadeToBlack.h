@@ -13,12 +13,13 @@ public:
 	bool Start();
 	bool PostUpdate();
 
-	bool FadeToBlack(j1Module* module_off, j1Module* module_on, float time = 2.0f);
+	bool FadeToBlack(j1Module* module_off, j1Module* module_on, bool is_changing_to_scene=false, float time = 2.0f);
 
 private:
 
 	j1Module* module_on = nullptr;
 	j1Module* module_off = nullptr;
+	bool changing_to_scene = false;
 
 	enum fade_step
 	{

@@ -15,6 +15,7 @@
 #include "j1Minimap.h"
 #include "CombatUnit.h"
 #include "j1Scene.h"
+#include "j1FadeToBlack.h"
 
 #include"QuadTree.h"
 
@@ -503,6 +504,7 @@ void j1Scene::DeactivateConfirmationMenu() {
 
 // Called when returning to main menu (either winning/losing or by menu options like exit)
 void j1Scene::BackToTitleMenu() {
+	App->fade_to_black->FadeToBlack((j1Module*)App->scene, (j1Module*)App->title_scene, false, 2);
 	App->change_scene = true;
 	destroy = true;
 	App->map->destroy = true;
@@ -977,6 +979,7 @@ void j1Scene::DoWinOrLoseWindow(int type, bool win) {
 		}
 	}
 	if (timer_win_lose.ReadSec() >= 5) {
+
 		BackToTitleMenu();
 	}
 }
