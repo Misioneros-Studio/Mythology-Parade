@@ -100,6 +100,10 @@ void Player::SelectionDraw_Logic()
 			dontSelect = true;
 			return;
 		}
+		else
+		{
+			dontSelect = false;
+		}
 		preClicked = App->render->ScreenToWorld(preClicked.x, preClicked.y);
 	}
 	if (!dontSelect)
