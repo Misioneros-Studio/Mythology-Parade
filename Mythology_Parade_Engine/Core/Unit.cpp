@@ -43,11 +43,6 @@ bool Unit::Update(float dt)
 {
 	bool ret = true;
 
-	//TEST
-	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
-		Action(this);
-	}
-
 	//Allawys blit the sprite at the end
 	ret = Draw(dt);
 
@@ -184,10 +179,7 @@ void Unit::Action(Entity* entity)
 
 	switch (unitType)
 	{
-	case UnitType::MONK:
-		App->entityManager->getPlayer()->IncreaseFaithRatio(1);
-		LOG("INCREASED FAITH RATIO");
-		break;
+		//Monks action are controled by Monastery so, its functionality is there ( on Monastery Building )
 	}
 }
 
