@@ -27,6 +27,9 @@ public:
 	void PlayerInputs();
 	void ClickLogic();
 	std::list<Entity*> GetEntitiesSelected();
+	int GetFaith();
+	int GetPrayers();
+	int GetSacrifices();
 
 private:
 	CurrencySystem currencySystem;
@@ -44,6 +47,9 @@ private:
 public:
 	bool player_win = false;
 	bool player_lose = false;
+	int num_monastery;
+	int num_temple;
+	int num_encampment;
 	CivilizationType player_type;
   
 };

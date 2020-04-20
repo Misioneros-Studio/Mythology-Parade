@@ -28,6 +28,7 @@ bool Player::Start()
 	currencySystem.prayers = 0;
 	currencySystem.sacrifices = 0;
 	dontSelect = false;
+	num_encampment = num_monastery = num_temple = 0;
 	return true;
 }
 
@@ -229,4 +230,15 @@ void Player::ClickLogic()
 			}
 		}
 	}
+}
+int Player::GetFaith() {
+	return currencySystem.faith;
+}
+
+int Player::GetPrayers() {
+	return currencySystem.prayers;
+}
+
+int Player::GetSacrifices() {
+	return currencySystem.sacrifices;
 }

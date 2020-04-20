@@ -526,6 +526,7 @@ void j1Scene::RestartGame() {
 // Called when selecting troops or buildings
 void j1Scene::HUDUpdateSelection(std::list<Entity*> listEntities, Building* building_selected) {
 	int i = 0;
+	bool viking = true;
 	HUDDeleteListTroops();
 	HUDDeleteSelectedTroop();
 	HUDDeleteActionButtons();
@@ -588,9 +589,9 @@ void j1Scene::HUDUpdateSelection(std::list<Entity*> listEntities, Building* buil
 				position_name.x += 18;
 				hud_stats_selected_troop[0]->SetRect(position_name);
 				break;
-			case UnitType::CLERIC:
-				hud_stats_selected_troop[0]->SetString("Cleric");
-				type_thing_selected = Type_Selected::Cleric;
+			case UnitType::PRIEST:
+				hud_stats_selected_troop[0]->SetString("Priest");
+				type_thing_selected = Type_Selected::Priest;
 				break;
 			case UnitType::ASSASSIN:
 				hud_stats_selected_troop[0]->SetString("Assassin");
@@ -627,6 +628,7 @@ void j1Scene::HUDUpdateSelection(std::list<Entity*> listEntities, Building* buil
 		}
 	}
 	else if(building_selected!=nullptr){
+		thing_selected = building_selected;
 		hud_selected_troop = (ImageUI*)App->gui->CreateUIElement(Type::IMAGE, (UI*)ui_ingame, { 640,613,76,105 }, GetSpritePortraitBuilding(0, building_selected->GetBuildingType(), 
 			building_selected->civilization), "Building", { 0,0,0,0 }, { 0,0,0,0 }, false, { 0,0,0,0 }, nullptr, 0, false, -1.0F, 1);
 		hud_stats_selected_troop[0] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, (UI*)ui_ingame, position_name, { 0,0,100,100 }, "Building", { 0,0,0,255 });
@@ -660,8 +662,10 @@ void j1Scene::HUDUpdateSelection(std::list<Entity*> listEntities, Building* buil
 		hud_stats_selected_troop[6] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, (UI*)ui_ingame, { 780,650,30,30 }, { 0,0,100,100 }, std::to_string(building_selected->GetMaxCap()), { 0,0,0,255 });
 		hud_stats_selected_troop[7] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, (UI*)ui_ingame, { 720,703,30,10 }, { 0,0,100,100 }, "Health:", { 0,0,0,255 });
 		hud_stats_selected_troop[8] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, (UI*)ui_ingame, { 773,703,30,10 }, { 0,0,100,100 }, std::to_string(building_selected->GetHealth()), { 0,0,0,255 });
+		if (building_selected->civilization == CivilizationType::GREEK)
+			viking = false;
 	}
-	ManageActionButtons(true);
+	ManageActionButtons(true, viking);
 }
 
 // Called when deleting the list of troops in the HUD
@@ -736,7 +740,7 @@ void j1Scene::UpdateSelectedThing() {
 }
 
 //Called when creating or updating the action buttons
-void j1Scene::ManageActionButtons(bool create_buttons) {
+void j1Scene::ManageActionButtons(bool create_buttons, bool viking) {
 	if (create_buttons == true) {
 		switch (type_thing_selected) {
 		case Type_Selected::Assassin:
@@ -760,11 +764,118 @@ void j1Scene::ManageActionButtons(bool create_buttons) {
 			hud_button_actions[0] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 200,613,36,36 }, { 16,185,36,36 }, "Move", { 98,185,36,36 }, { 57,185,36,36 }, false, { 0,0,0,0 },
 				this, (int)UI_Audio::MAIN_MENU);
 			break;
+		case Type_Selected::Fortress:
+			if (viking == true) {
+				if (App->entityManager->getPlayer()->GetFaith() >= 200 && App->entityManager->getPlayer()->num_temple < 8) {
+					hud_button_actions[0] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 200,604,99,60 }, { 2,2,99,60 }, "Produce_Temple", { 2,124,99,60 }, { 2,63,99,60 }, 
+						false, { 0,0,0,0 }, this, (int)UI_Audio::MAIN_MENU, false, -1.0F, 1);
+				}
+				else {
+					hud_button_actions_unclickable[0] = (ImageUI*)App->gui->CreateUIElement(Type::IMAGE, ui_ingame, { 200,604,99,60 }, { 329,313,99,60 }, "", { 0,0,0,0 }, { 0,0,0,0 }, false,
+						{ 0,0,0,0 }, nullptr, 0, false, -1.0F, 1);
+				}
+				if (App->entityManager->getPlayer()->GetFaith() >= 200 && App->entityManager->getPlayer()->num_encampment < 7) {
+					hud_button_actions[1] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 304,613,99,51 }, { 104,11,99,51 }, "Produce_Encampment", { 104,133,99,51 },
+						{ 104,72,99,51 }, false, { 0,0,0,0 }, this, (int)UI_Audio::MAIN_MENU, false, -1.0F, 1);
+				}
+				else {
+					hud_button_actions_unclickable[1] = (ImageUI*)App->gui->CreateUIElement(Type::IMAGE, ui_ingame, { 304,613,99,51 }, { 430,322,99,51 }, "", { 0,0,0,0 }, { 0,0,0,0 }, false,
+						{ 0,0,0,0 }, nullptr, 0, false, -1.0F, 1);
+				}
+				if (App->entityManager->getPlayer()->GetFaith() >= 200 && App->entityManager->getPlayer()->num_monastery < 5) {
+					hud_button_actions[2] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 408,612,99,52 }, { 206,10,99,52 }, "Produce_Monastery", { 206,132,99,52 },
+						{ 206,71,99,52 }, false, { 0,0,0,0 }, this, (int)UI_Audio::MAIN_MENU, false, -1.0F, 1);
+				}
+				else {
+					hud_button_actions_unclickable[2] = (ImageUI*)App->gui->CreateUIElement(Type::IMAGE, ui_ingame, { 408,612,99,52 }, { 532,321,99,52 }, "", { 0,0,0,0 }, { 0,0,0,0 }, false,
+						{ 0,0,0,0 }, nullptr, 0, false, -1.0F, 1);
+				}
+			}
+			else {
+				if (App->entityManager->getPlayer()->GetFaith() >= 200 && App->entityManager->getPlayer()->num_temple < 8) {
+					hud_button_actions[0] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 200,602,99,62 }, { 308,0,99,62 }, "Produce_Temple", { 308,122,99,62 }, 
+						{ 308,61,99,62 }, false, { 0,0,0,0 }, this, (int)UI_Audio::MAIN_MENU, false, -1.0F, 1);
+				}
+				else {
+					hud_button_actions_unclickable[0] = (ImageUI*)App->gui->CreateUIElement(Type::IMAGE, ui_ingame, { 200,602,99,62 }, { 329,246,99,62 }, "", { 0,0,0,0 }, { 0,0,0,0 }, false,
+						{ 0,0,0,0 }, nullptr, 0, false, -1.0F, 1);
+				}
+				if (App->entityManager->getPlayer()->GetFaith() >= 200 && App->entityManager->getPlayer()->num_encampment < 7) {
+					hud_button_actions[1] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 304,613,99,51 }, { 410,11,99,51 }, "Produce_Encampment", { 410,133,99,51 },
+						{ 410,72,99,51 }, false, { 0,0,0,0 }, this, (int)UI_Audio::MAIN_MENU, false, -1.0F, 1);
+				}
+				else {
+					hud_button_actions_unclickable[1] = (ImageUI*)App->gui->CreateUIElement(Type::IMAGE, ui_ingame, { 304,613,99,51 }, { 430,257,99,51 }, "", { 0,0,0,0 }, { 0,0,0,0 }, false,
+						{ 0,0,0,0 }, nullptr, 0, false, -1.0F, 1);
+				}
+				if (App->entityManager->getPlayer()->GetFaith() >= 200 && App->entityManager->getPlayer()->num_monastery < 5) {
+					hud_button_actions[2] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 408,612,99,52 }, { 512,10,99,52 }, "Produce_Monastery", { 512,132,99,52 },
+						{ 512,71,99,52 }, false, { 0,0,0,0 }, this, (int)UI_Audio::MAIN_MENU, false, -1.0F, 1);
+				}
+				else {
+					hud_button_actions_unclickable[2] = (ImageUI*)App->gui->CreateUIElement(Type::IMAGE, ui_ingame, { 408,612,99,52 }, { 532,256,99,52 }, "", { 0,0,0,0 }, { 0,0,0,0 }, false,
+						{ 0,0,0,0 }, nullptr, 0, false, -1.0F, 1);
+				}
+			}
+			if (App->entityManager->getPlayer()->GetFaith() >= 600) {
+				hud_button_actions[3] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 512,621,67,41 }, { 75,540,67,41 }, "Produce_Victory", { 75,632,67,41 },
+					{ 75,586,67,41 }, false, { 0,0,0,0 }, this, (int)UI_Audio::MAIN_MENU, false, -1.0F, 1);
+			}
+			else {
+				hud_button_actions_unclickable[3] = (ImageUI*)App->gui->CreateUIElement(Type::IMAGE, ui_ingame, { 512,621,67,41 }, { 75,678,67,41 }, "", { 0,0,0,0 }, { 0,0,0,0 }, false,
+					{ 0,0,0,0 }, nullptr, 0, false, -1.0F, 1);
+			}
+			hud_button_actions[4] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 584,626,36,36 }, { 16,227,36,36 }, "Research", { 98,227,36,36 },
+				{ 57,227,36,36 }, false, { 0,0,0,0 }, this, (int)UI_Audio::MAIN_MENU);
+			break;
+		case Type_Selected::Temple:
+			hud_button_actions_unclickable[0] = (ImageUI*)App->gui->CreateUIElement(Type::IMAGE, ui_ingame, { 200,613,67,41 }, { 337,382,67,41 }, "", { 0,0,0,0 }, { 0,0,0,0 }, false,
+				{ 0,0,0,0 }, nullptr, 0, false, -1.0F, 1);
+			break;
+		case Type_Selected::Encampment:
+			if (App->entityManager->getPlayer()->GetFaith() >= 100 && App->entityManager->getPlayer()->GetSacrifices() >= 10) {
+				hud_button_actions[0] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 200,613,67,41 }, { 215,185,67,41 }, "Produce_Assassin", { 215,275,67,41 }, 
+					{ 215,230,67,41 }, false, { 0,0,0,0 }, this, (int)UI_Audio::MAIN_MENU, false, -1.0F, 1);
+			}
+			else {
+				hud_button_actions_unclickable[0] = (ImageUI*)App->gui->CreateUIElement(Type::IMAGE, ui_ingame, { 200,613,67,41 }, { 549,382,67,41 }, "", { 0,0,0,0 }, { 0,0,0,0 }, false,
+					{ 0,0,0,0 }, nullptr, 0, false, -1.0F, 1);
+			}
+			hud_button_actions_unclickable[1] = (ImageUI*)App->gui->CreateUIElement(Type::IMAGE, ui_ingame, { 272,613,67,41 }, { 478,382,67,41 }, "", { 0,0,0,0 }, { 0,0,0,0 }, false,
+				{ 0,0,0,0 }, nullptr, 0, false, -1.0F, 1);
+			break;
+		case Type_Selected::Monastery:
+			if (App->entityManager->getPlayer()->GetFaith() >= 50) {
+				hud_button_actions[0] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 200,613,67,41 }, { 73,185,67,41 }, "Produce_Monk", { 73,275,67,41 },
+					{ 73,230,67,41 }, false, { 0,0,0,0 }, this, (int)UI_Audio::MAIN_MENU, false, -1.0F, 1);
+			}
+			else {
+				hud_button_actions_unclickable[0] = (ImageUI*)App->gui->CreateUIElement(Type::IMAGE, ui_ingame, { 200,613,67,41 }, { 407,382,67,41 }, "", { 0,0,0,0 }, { 0,0,0,0 }, false,
+					{ 0,0,0,0 }, nullptr, 0, false, -1.0F, 1);
+			}
+			if (App->entityManager->getPlayer()->GetFaith() >= 40) {
+				hud_button_actions[1] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 272,613,67,41 }, { 3,540,67,41 }, "Produce_Sacrifices", { 3,632,67,41 },
+					{ 3,586,67,41 }, false, { 0,0,0,0 }, this, (int)UI_Audio::MAIN_MENU, false, -1.0F, 1);
+			}
+			else {
+				hud_button_actions_unclickable[1] = (ImageUI*)App->gui->CreateUIElement(Type::IMAGE, ui_ingame, { 272,613,67,41 }, { 3,678,67,41 }, "", { 0,0,0,0 }, { 0,0,0,0 }, false,
+					{ 0,0,0,0 }, nullptr, 0, false, -1.0F, 1);
+			}
+			if (App->entityManager->getPlayer()->GetFaith() >= 40) {
+				hud_button_actions[2] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 344,613,67,41 }, { 146,540,67,41 }, "Produce_Prayers", { 146,632,67,41 },
+					{ 146,586,67,41 }, false, { 0,0,0,0 }, this, (int)UI_Audio::MAIN_MENU, false, -1.0F, 1);
+			}
+			else {
+				hud_button_actions_unclickable[2] = (ImageUI*)App->gui->CreateUIElement(Type::IMAGE, ui_ingame, { 344,613,67,41 }, { 146,678,67,41 }, "", { 0,0,0,0 }, { 0,0,0,0 }, false,
+					{ 0,0,0,0 }, nullptr, 0, false, -1.0F, 1);
+			}
+			break;
 		}
 	}
 	else {
 		switch (type_thing_selected) {
 		case Type_Selected::Assassin:
+		{
 			CombatUnit* cunit = (CombatUnit*)thing_selected;
 			int exp_needed = cunit->GetExperienceToLevel(cunit->GetLevel());
 			if (hud_button_actions[2] == nullptr && exp_needed <= cunit->GetExperience()) {
@@ -781,6 +892,193 @@ void j1Scene::ManageActionButtons(bool create_buttons) {
 					hud_button_actions[2] = nullptr;
 				}
 				hud_button_actions_unclickable[2] = (ImageUI*)App->gui->CreateUIElement(Type::IMAGE, ui_ingame, { 282,613,36,36 }, { 98,442,36,36 });
+			}
+			break;
+		}
+		case Type_Selected::Fortress:
+			if (viking == true) {
+				if (hud_button_actions[0] == nullptr && App->entityManager->getPlayer()->GetFaith() >= 200 && App->entityManager->getPlayer()->num_temple < 8) {
+					if (hud_button_actions_unclickable[0] != nullptr) {
+						App->gui->DeleteUIElement(hud_button_actions_unclickable[0]);
+						hud_button_actions_unclickable[0] = nullptr;
+					}
+					hud_button_actions[0] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 200,604,99,60 }, { 2,2,99,60 }, "Produce_Temple", { 2,124,99,60 }, { 2,63,99,60 },
+						false, { 0,0,0,0 }, this, (int)UI_Audio::MAIN_MENU, false, -1.0F, 1);
+				}
+				else if (hud_button_actions_unclickable[0] == nullptr && (App->entityManager->getPlayer()->GetFaith() < 200 || App->entityManager->getPlayer()->num_temple >= 8)) {
+					if (hud_button_actions[0] != nullptr) {
+						App->gui->DeleteUIElement(hud_button_actions[0]);
+						hud_button_actions[0] = nullptr;
+					}
+					hud_button_actions_unclickable[0] = (ImageUI*)App->gui->CreateUIElement(Type::IMAGE, ui_ingame, { 200,604,99,60 }, { 329,313,99,60 }, "", { 0,0,0,0 }, { 0,0,0,0 }, false,
+						{ 0,0,0,0 }, nullptr, 0, false, -1.0F, 1);
+				}
+				if (hud_button_actions[1] == nullptr && App->entityManager->getPlayer()->GetFaith() >= 200 && App->entityManager->getPlayer()->num_encampment < 7) {
+					if (hud_button_actions_unclickable[1] != nullptr) {
+						App->gui->DeleteUIElement(hud_button_actions_unclickable[1]);
+						hud_button_actions_unclickable[1] = nullptr;
+					}
+					hud_button_actions[1] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 304,613,99,51 }, { 104,11,99,51 }, "Produce_Encampment", { 104,133,99,51 },
+						{ 104,72,99,51 }, false, { 0,0,0,0 }, this, (int)UI_Audio::MAIN_MENU, false, -1.0F, 1);
+				}
+				else if (hud_button_actions_unclickable[1] == nullptr && (App->entityManager->getPlayer()->GetFaith() < 200 || App->entityManager->getPlayer()->num_encampment >= 7)) {
+					if (hud_button_actions[1] != nullptr) {
+						App->gui->DeleteUIElement(hud_button_actions[1]);
+						hud_button_actions[1] = nullptr;
+					}
+					hud_button_actions_unclickable[1] = (ImageUI*)App->gui->CreateUIElement(Type::IMAGE, ui_ingame, { 304,613,99,51 }, { 430,322,99,51 }, "", { 0,0,0,0 }, { 0,0,0,0 }, false,
+						{ 0,0,0,0 }, nullptr, 0, false, -1.0F, 1);
+				}
+				if (hud_button_actions[2] == nullptr && App->entityManager->getPlayer()->GetFaith() >= 200 && App->entityManager->getPlayer()->num_monastery < 5) {
+					if (hud_button_actions_unclickable[2] != nullptr) {
+						App->gui->DeleteUIElement(hud_button_actions_unclickable[2]);
+						hud_button_actions_unclickable[2] = nullptr;
+					}
+					hud_button_actions[2] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 408,612,99,52 }, { 206,10,99,52 }, "Produce_Monastery", { 206,132,99,52 },
+						{ 206,71,99,52 }, false, { 0,0,0,0 }, this, (int)UI_Audio::MAIN_MENU, false, -1.0F, 1);
+				}
+				else if (hud_button_actions_unclickable[2] == nullptr && (App->entityManager->getPlayer()->GetFaith() < 200 || App->entityManager->getPlayer()->num_monastery >= 5)) {
+					if (hud_button_actions[2] != nullptr) {
+						App->gui->DeleteUIElement(hud_button_actions[2]);
+						hud_button_actions[2] = nullptr;
+					}
+					hud_button_actions_unclickable[2] = (ImageUI*)App->gui->CreateUIElement(Type::IMAGE, ui_ingame, { 408,612,99,52 }, { 532,321,99,52 }, "", { 0,0,0,0 }, { 0,0,0,0 }, false,
+						{ 0,0,0,0 }, nullptr, 0, false, -1.0F, 1);
+				}
+			}
+			else {
+				if (hud_button_actions[0] == nullptr && App->entityManager->getPlayer()->GetFaith() >= 200 && App->entityManager->getPlayer()->num_temple < 8) {
+					if (hud_button_actions_unclickable[0] != nullptr) {
+						App->gui->DeleteUIElement(hud_button_actions_unclickable[0]);
+						hud_button_actions_unclickable[0] = nullptr;
+					}
+					hud_button_actions[0] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 200,602,99,62 }, { 308,0,99,62 }, "Produce_Temple", { 308,122,99,62 }, { 308,61,99,62 },
+						false, { 0,0,0,0 }, this, (int)UI_Audio::MAIN_MENU, false, -1.0F, 1);
+				}
+				else if (hud_button_actions_unclickable[0] == nullptr && (App->entityManager->getPlayer()->GetFaith() < 200 || App->entityManager->getPlayer()->num_temple >= 8)) {
+					if (hud_button_actions[0] != nullptr) {
+						App->gui->DeleteUIElement(hud_button_actions[0]);
+						hud_button_actions[0] = nullptr;
+					}
+					hud_button_actions_unclickable[0] = (ImageUI*)App->gui->CreateUIElement(Type::IMAGE, ui_ingame, { 200,602,99,62 }, { 329,246,99,62 }, "", { 0,0,0,0 }, { 0,0,0,0 }, false,
+						{ 0,0,0,0 }, nullptr, 0, false, -1.0F, 1);
+				}
+				if (hud_button_actions[1] == nullptr && App->entityManager->getPlayer()->GetFaith() >= 200 && App->entityManager->getPlayer()->num_encampment < 7) {
+					if (hud_button_actions_unclickable[1] != nullptr) {
+						App->gui->DeleteUIElement(hud_button_actions_unclickable[1]);
+						hud_button_actions_unclickable[1] = nullptr;
+					}
+					hud_button_actions[1] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 304,613,99,51 }, { 410,11,99,51 }, "Produce_Encampment", { 410,133,99,51 },
+						{ 410,72,99,51 }, false, { 0,0,0,0 }, this, (int)UI_Audio::MAIN_MENU, false, -1.0F, 1);
+				}
+				else if (hud_button_actions_unclickable[1] == nullptr && (App->entityManager->getPlayer()->GetFaith() < 200 || App->entityManager->getPlayer()->num_encampment >= 7)) {
+					if (hud_button_actions[1] != nullptr) {
+						App->gui->DeleteUIElement(hud_button_actions[1]);
+						hud_button_actions[1] = nullptr;
+					}
+					hud_button_actions_unclickable[1] = (ImageUI*)App->gui->CreateUIElement(Type::IMAGE, ui_ingame, { 304,613,99,51 }, { 430,257,99,51 }, "", { 0,0,0,0 }, { 0,0,0,0 }, false,
+						{ 0,0,0,0 }, nullptr, 0, false, -1.0F, 1);
+				}
+				if (hud_button_actions[2] == nullptr && App->entityManager->getPlayer()->GetFaith() >= 200 && App->entityManager->getPlayer()->num_monastery < 5) {
+					if (hud_button_actions_unclickable[2] != nullptr) {
+						App->gui->DeleteUIElement(hud_button_actions_unclickable[2]);
+						hud_button_actions_unclickable[2] = nullptr;
+					}
+					hud_button_actions[2] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 408,612,99,52 }, { 512,10,99,52 }, "Produce_Monastery", { 512,132,99,52 },
+						{ 512,71,99,52 }, false, { 0,0,0,0 }, this, (int)UI_Audio::MAIN_MENU, false, -1.0F, 1);
+				}
+				else if (hud_button_actions_unclickable[2] == nullptr && (App->entityManager->getPlayer()->GetFaith() < 200 || App->entityManager->getPlayer()->num_monastery >= 5)) {
+					if (hud_button_actions[2] != nullptr) {
+						App->gui->DeleteUIElement(hud_button_actions[2]);
+						hud_button_actions[2] = nullptr;
+					}
+					hud_button_actions_unclickable[2] = (ImageUI*)App->gui->CreateUIElement(Type::IMAGE, ui_ingame, { 408,612,99,52 }, { 532,256,99,52 }, "", { 0,0,0,0 }, { 0,0,0,0 }, false,
+						{ 0,0,0,0 }, nullptr, 0, false, -1.0F, 1);
+				}
+			}
+			if (hud_button_actions[3] == nullptr && App->entityManager->getPlayer()->GetFaith() >= 600) {
+				if (hud_button_actions_unclickable[3] != nullptr) {
+					App->gui->DeleteUIElement(hud_button_actions_unclickable[3]);
+					hud_button_actions_unclickable[3] = nullptr;
+				}
+				hud_button_actions[3] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 512,621,67,41 }, { 75,540,67,41 }, "Produce_Victory", { 75,632,67,41 },
+					{ 75,586,67,41 }, false, { 0,0,0,0 }, this, (int)UI_Audio::MAIN_MENU, false, -1.0F, 1);
+			}
+			else if (hud_button_actions[3] == nullptr && App->entityManager->getPlayer()->GetFaith() < 600) {
+				if (hud_button_actions[3] != nullptr) {
+					App->gui->DeleteUIElement(hud_button_actions[3]);
+					hud_button_actions[3] = nullptr;
+				}
+				hud_button_actions_unclickable[3] = (ImageUI*)App->gui->CreateUIElement(Type::IMAGE, ui_ingame, { 512,621,67,41 }, { 75,678,67,41 }, "", { 0,0,0,0 }, { 0,0,0,0 }, false,
+					{ 0,0,0,0 }, nullptr, 0, false, -1.0F, 1);
+			}
+			break;
+		case Type_Selected::Encampment:
+			if (hud_button_actions[0] == nullptr && App->entityManager->getPlayer()->GetFaith() >= 100 && App->entityManager->getPlayer()->GetSacrifices() >= 10) {
+				if (hud_button_actions_unclickable[0] != nullptr) {
+					App->gui->DeleteUIElement(hud_button_actions_unclickable[0]);
+					hud_button_actions_unclickable[0] = nullptr;
+				}
+				hud_button_actions[0] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 200,613,67,41 }, { 215,185,67,41 }, "Produce_Assassin", { 215,275,67,41 },
+					{ 215,230,67,41 }, false, { 0,0,0,0 }, this, (int)UI_Audio::MAIN_MENU, false, -1.0F, 1);
+			}
+			else if(hud_button_actions_unclickable[0] == nullptr && (App->entityManager->getPlayer()->GetFaith() < 100 || App->entityManager->getPlayer()->GetSacrifices() < 10)) {
+				if (hud_button_actions[0] != nullptr) {
+					App->gui->DeleteUIElement(hud_button_actions[0]);
+					hud_button_actions[0] = nullptr;
+				}
+				hud_button_actions_unclickable[0] = (ImageUI*)App->gui->CreateUIElement(Type::IMAGE, ui_ingame, { 200,613,67,41 }, { 549,382,67,41 }, "", { 0,0,0,0 }, { 0,0,0,0 }, false,
+					{ 0,0,0,0 }, nullptr, 0, false, -1.0F, 1);
+			}
+			break;
+		case Type_Selected::Monastery:
+			if (hud_button_actions[0] == nullptr && App->entityManager->getPlayer()->GetFaith() >= 50) {
+				if (hud_button_actions_unclickable[0] != nullptr) {
+					App->gui->DeleteUIElement(hud_button_actions_unclickable[0]);
+					hud_button_actions_unclickable[0] = nullptr;
+				}
+				hud_button_actions[0] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 200,613,67,41 }, { 73,185,67,41 }, "Produce_Monk", { 73,275,67,41 },
+					{ 73,230,67,41 }, false, { 0,0,0,0 }, this, (int)UI_Audio::MAIN_MENU, false, -1.0F, 1);
+			}
+			else if (hud_button_actions_unclickable[0] == nullptr && App->entityManager->getPlayer()->GetFaith() < 20) {
+				if (hud_button_actions[0] != nullptr) {
+					App->gui->DeleteUIElement(hud_button_actions[0]);
+					hud_button_actions[0] = nullptr;
+				}
+				hud_button_actions_unclickable[0] = (ImageUI*)App->gui->CreateUIElement(Type::IMAGE, ui_ingame, { 200,613,67,41 }, { 407,382,67,41 }, "", { 0,0,0,0 }, { 0,0,0,0 }, false,
+					{ 0,0,0,0 }, nullptr, 0, false, -1.0F, 1);
+			}
+			if (hud_button_actions[1] == nullptr && App->entityManager->getPlayer()->GetFaith() >= 40) {
+				if (hud_button_actions_unclickable[1] != nullptr) {
+					App->gui->DeleteUIElement(hud_button_actions_unclickable[1]);
+					hud_button_actions_unclickable[1] = nullptr;
+				}
+				hud_button_actions[1] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 272,613,67,41 }, { 3,540,67,41 }, "Produce_Sacrifices", { 3,632,67,41 },
+					{ 3,586,67,41 }, false, { 0,0,0,0 }, this, (int)UI_Audio::MAIN_MENU, false, -1.0F, 1);
+			}
+			else if (hud_button_actions_unclickable[1] == nullptr && App->entityManager->getPlayer()->GetFaith() < 20) {
+				if (hud_button_actions[1] != nullptr) {
+					App->gui->DeleteUIElement(hud_button_actions[1]);
+					hud_button_actions[1] = nullptr;
+				}
+				hud_button_actions_unclickable[1] = (ImageUI*)App->gui->CreateUIElement(Type::IMAGE, ui_ingame, { 272,613,67,41 }, { 3,678,67,41 }, "", { 0,0,0,0 }, { 0,0,0,0 }, false,
+					{ 0,0,0,0 }, nullptr, 0, false, -1.0F, 1);
+			}
+			if (hud_button_actions[2] == nullptr && App->entityManager->getPlayer()->GetFaith() >= 40) {
+				if (hud_button_actions_unclickable[2] != nullptr) {
+					App->gui->DeleteUIElement(hud_button_actions_unclickable[2]);
+					hud_button_actions_unclickable[2] = nullptr;
+				}
+				hud_button_actions[2] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 344,613,67,41 }, { 146,540,67,41 }, "Produce_Prayers", { 146,632,67,41 },
+					{ 146,586,67,41 }, false, { 0,0,0,0 }, this, (int)UI_Audio::MAIN_MENU, false, -1.0F, 1);
+			}
+			else if (hud_button_actions_unclickable[2] == nullptr && App->entityManager->getPlayer()->GetFaith() < 20) {
+				if (hud_button_actions[2] != nullptr) {
+					App->gui->DeleteUIElement(hud_button_actions[2]);
+					hud_button_actions[2] = nullptr;
+				}
+				hud_button_actions_unclickable[2] = (ImageUI*)App->gui->CreateUIElement(Type::IMAGE, ui_ingame, { 344,613,67,41 }, { 146,678,67,41 }, "", { 0,0,0,0 }, { 0,0,0,0 }, false,
+					{ 0,0,0,0 }, nullptr, 0, false, -1.0F, 1);
 			}
 			break;
 		}

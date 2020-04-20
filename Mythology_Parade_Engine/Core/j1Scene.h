@@ -95,7 +95,7 @@ public:
 	void UpdateSelectedThing();
 
 	//Called when creating or updating the action buttons
-	void ManageActionButtons(bool create_buttons = false);
+	void ManageActionButtons(bool create_buttons = false, bool viking = true);
 
 	// Called to get the rect of the sprite of the portrait
 	SDL_Rect GetSpritePortrait(int type_of_portrait, UnitType unit_type);
@@ -114,7 +114,7 @@ private:
 		Assassin,
 		Pikeman,
 		Monk,
-		Cleric,
+		Priest,
 		Fortress,
 		Temple,
 		Encampment,

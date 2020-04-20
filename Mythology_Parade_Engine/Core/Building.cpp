@@ -29,6 +29,7 @@ Building::Building(BuildingType buildingType, iPoint pos, BuildingInfo info)
 		influence = 10;
 		maxCap = 5;
 		description = "I'm a monastery";
+		App->entityManager->getPlayer()->num_monastery++;
 		break;
 	case TEMPLE:
 		this->buildingType = BuildingType::TEMPLE;
@@ -39,6 +40,7 @@ Building::Building(BuildingType buildingType, iPoint pos, BuildingInfo info)
 		influence = 10;
 		maxCap = 8;
 		description = "I'm a temple";
+		App->entityManager->getPlayer()->num_temple++;
 		break;
 	case ENCAMPMENT:
 		this->buildingType = BuildingType::ENCAMPMENT;
@@ -49,6 +51,7 @@ Building::Building(BuildingType buildingType, iPoint pos, BuildingInfo info)
 		influence = 10;
 		maxCap = 7;
 		description = "I'm an encampment";
+		App->entityManager->getPlayer()->num_encampment++;
 		break;
 	default:
 		break;
