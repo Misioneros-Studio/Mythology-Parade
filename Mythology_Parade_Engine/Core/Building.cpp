@@ -145,8 +145,7 @@ bool Building::Update(float dt)
 		if (nearbyMonks != count) 
 		{
 			nearbyMonks = count;
-			App->entityManager->getPlayer()->IncreaseFaithRatio(nearbyMonks);
-			LOG("Num units: %i", nearbyMonks);
+			App->entityManager->getPlayer()->IncreaseFaithRatio(nearbyMonks);			
 		}
 	}
 
