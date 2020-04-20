@@ -146,7 +146,10 @@ void Player::SeeEntitiesInside()
 		{
 			if ((it._Ptr->_Myval->position.y >= preClicked.y && it._Ptr->_Myval->position.y <= postClicked.y) || it._Ptr->_Myval->position.y <= preClicked.y && it._Ptr->_Myval->position.y >= postClicked.y)
 			{
-				listEntities.push_back(it._Ptr->_Myval);
+				if (it._Ptr->_Myval->civilization = player_type)
+				{
+					listEntities.push_back(it._Ptr->_Myval);
+				}
 			}
 		}
 	}
