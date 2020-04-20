@@ -39,6 +39,8 @@ private:
 	std::list<Entity*> listEntities;
 	Entity* buildingSelect;
 
+	bool dontSelect;
+
 public:
 	bool player_win = false;
 	bool player_lose = false;

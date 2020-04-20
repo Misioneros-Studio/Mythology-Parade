@@ -27,6 +27,7 @@ bool Player::Start()
 	currencySystem.faith = 0;
 	currencySystem.prayers = 0;
 	currencySystem.sacrifices = 0;
+	dontSelect = false;
 	return true;
 }
 
@@ -94,27 +95,34 @@ void Player::SelectionDraw_Logic()
 	if (!App->input->GetMouseButtonDown(1) == KEY_DOWN)
 	{
 		App->input->GetMousePosition(preClicked.x, preClicked.y);
+		if(preClicked.y>=590) 
+		{
+			dontSelect = true;
+			return;
+		}
 		preClicked = App->render->ScreenToWorld(preClicked.x, preClicked.y);
 	}
-
-	if (App->input->GetMouseButtonDown(1) == KEY_REPEAT)
+	if (!dontSelect)
 	{
-		App->input->GetMousePosition(postClicked.x, postClicked.y);
-		if (postClicked.y >= 590)
+		if (App->input->GetMouseButtonDown(1) == KEY_REPEAT)
 		{
-			postClicked.y = 588;
+			App->input->GetMousePosition(postClicked.x, postClicked.y);
+			if (postClicked.y >= 590)
+			{
+				postClicked.y = 588;
+			}
+			postClicked = App->render->ScreenToWorld(postClicked.x, postClicked.y);
+
+			App->render->DrawQuad({ preClicked.x, preClicked.y, postClicked.x - preClicked.x, postClicked.y - preClicked.y }, 255, 255, 255, 255, false);
 		}
-		postClicked = App->render->ScreenToWorld(postClicked.x, postClicked.y);
 
-		App->render->DrawQuad({preClicked.x, preClicked.y, postClicked.x - preClicked.x, postClicked.y - preClicked.y}, 255, 255, 255, 255, false);
-	}
-
-	if (App->input->GetMouseButtonDown(1) == KEY_UP)
-	{
-		listEntities.clear();
-		ClickLogic();
-		SeeEntitiesInside();
-		App->scene->HUDUpdateSelection(listEntities);
+		if (App->input->GetMouseButtonDown(1) == KEY_UP)
+		{
+			listEntities.clear();
+			ClickLogic();
+			SeeEntitiesInside();
+			App->scene->HUDUpdateSelection(listEntities);
+		}
 	}
 }
 
