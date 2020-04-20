@@ -104,7 +104,7 @@ public:
 
 	Entity* CreatePlayerEntity();
 	Entity* CreateUnitEntity(UnitType, iPoint);
-	Entity* CreateBuildingEntity(iPoint, BuildingType, BuildingInfo);
+	Entity* CreateBuildingEntity(iPoint, BuildingType, BuildingInfo, bool);
 	void UpdateBuildPreview(int);
 
 	//Load data packets

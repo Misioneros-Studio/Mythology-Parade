@@ -45,6 +45,9 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
+	// Called when creating the menu
+	void MoveMenu();
+
 	// Called when clicking options button in menu
 	void ActivateOptionsMenu();
 

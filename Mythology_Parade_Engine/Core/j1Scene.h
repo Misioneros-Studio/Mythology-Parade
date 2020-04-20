@@ -23,8 +23,10 @@ class ButtonUI;
 class TextUI;
 class QuadTree;
 class Entity;
+class Building;
 enum class UnitType;
 enum BuildingType;
+enum CivilizationType;
 
 class j1Scene : public j1Module
 {
@@ -78,7 +80,7 @@ public:
 	void RestartGame();
 
 	// Called when selecting troops or buildings
-	void HUDUpdateSelection(std::list<Entity*>);
+	void HUDUpdateSelection(std::list<Entity*>, Building*);
 
 	// Called when deleting the list of troops in the HUD
 	void HUDDeleteListTroops();
@@ -99,7 +101,7 @@ public:
 	SDL_Rect GetSpritePortrait(int type_of_portrait, UnitType unit_type);
 
 	// Called to get the rect of the sprite of the portrait of the building
-	SDL_Rect GetSpritePortraitBuilding(int type_of_portrait, BuildingType building_type);
+	SDL_Rect GetSpritePortraitBuilding(int type_of_portrait, BuildingType building_type, CivilizationType civilization);
 
 
 	void OnClick(UI* element, float argument = 0);

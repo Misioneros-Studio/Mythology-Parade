@@ -160,22 +160,27 @@ bool EntityManager::Update(float dt)
 		iPoint mouse = App->map->GetMousePositionOnMap();
 		iPoint spawnPos = App->map->MapToWorld(mouse.x, mouse.y);
 		spawnPos.y += App->map->data.tile_height / 2;
+		bool viking = false;
 		switch (buildingTestIndex) {
 		case 0:
+			viking = true;
 		case 4:
-			CreateBuildingEntity(spawnPos, BuildingType::FORTRESS, buildingsData[buildingTestIndex]);
+			CreateBuildingEntity(spawnPos, BuildingType::FORTRESS, buildingsData[buildingTestIndex], viking);
 			break;
 		case 1:
+			viking = true;
 		case 5:
-			CreateBuildingEntity(spawnPos, BuildingType::MONASTERY , buildingsData[buildingTestIndex]);
+			CreateBuildingEntity(spawnPos, BuildingType::MONASTERY , buildingsData[buildingTestIndex], viking);
 			break;
 		case 2:
+			viking = true;
 		case 6:
-			CreateBuildingEntity(spawnPos, BuildingType::TEMPLE, buildingsData[buildingTestIndex]);
+			CreateBuildingEntity(spawnPos, BuildingType::TEMPLE, buildingsData[buildingTestIndex], viking);
 			break;
 		case 3:
+			viking = true;
 		case 7:
-			CreateBuildingEntity(spawnPos, BuildingType::ENCAMPMENT, buildingsData[buildingTestIndex]);
+			CreateBuildingEntity(spawnPos, BuildingType::ENCAMPMENT, buildingsData[buildingTestIndex], viking);
 			break;
 		}
 		
@@ -385,7 +390,7 @@ Entity* EntityManager::CreateUnitEntity(UnitType type, iPoint pos)
 	return ret;
 }
 
-Entity* EntityManager::CreateBuildingEntity(iPoint pos, BuildingType type, BuildingInfo info)
+Entity* EntityManager::CreateBuildingEntity(iPoint pos, BuildingType type, BuildingInfo info, bool viking)
 {
 	Entity* ret = nullptr;
 	switch (type)
@@ -403,7 +408,10 @@ Entity* EntityManager::CreateBuildingEntity(iPoint pos, BuildingType type, Build
 		ret = new Building(BuildingType::ENCAMPMENT, pos, info);
 		break;
 	}
-
+	if (viking == true)
+		ret->civilization = CivilizationType::VIKING;
+	else
+		ret->civilization = CivilizationType::GREEK;
 	ret->type = EntityType::BUILDING;
 	ret->texture = entitySpriteSheets[SpriteSheetType::BUILDINGS];
 

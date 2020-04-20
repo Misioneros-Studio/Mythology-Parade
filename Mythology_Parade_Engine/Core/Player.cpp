@@ -123,9 +123,10 @@ void Player::SelectionDraw_Logic()
 		if (App->input->GetMouseButtonDown(1) == KEY_UP)
 		{
 			listEntities.clear();
+			buildingSelect = nullptr;
 			ClickLogic();
 			SeeEntitiesInside();
-			App->scene->HUDUpdateSelection(listEntities);
+			App->scene->HUDUpdateSelection(listEntities, (Building*)buildingSelect);
 		}
 	}
 }
@@ -188,7 +189,7 @@ void Player::PlayerInputs()
 			App->entityManager->DeleteEntity(it._Ptr->_Myval);
 		}
 		listEntities.clear();
-		App->scene->HUDUpdateSelection(listEntities);
+		App->scene->HUDUpdateSelection(listEntities, nullptr);
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN && App->scene->godMode)

@@ -2,10 +2,7 @@
 
 Building::Building(BuildingType buildingType, iPoint pos, BuildingInfo info)
 {
-	damage = 25;
-	SetMaxHealth(500);
-	defenses = 500;
-	maxCap = 1;
+
 	position = pos;
 	buildingStatus = CONSTRUCTING;
 	percentage_constructing = 0;
@@ -14,25 +11,51 @@ Building::Building(BuildingType buildingType, iPoint pos, BuildingInfo info)
 	switch (buildingType)
 	{
 	case FORTRESS:
+		this->buildingType = BuildingType::FORTRESS;
 		time_construction = 0;
+		damage = 25;
+		SetMaxHealth(500);
+		defenses = 500;
+		influence = 20;
+		maxCap = 1;
+		description = "I'm a fortress";
 		break;
 	case MONASTERY:
+		this->buildingType = BuildingType::MONASTERY;
 		time_construction = 60;
+		damage = 15;
+		SetMaxHealth(250);
+		defenses = 250;
+		influence = 10;
+		maxCap = 5;
+		description = "I'm a monastery";
 		break;
 	case TEMPLE:
+		this->buildingType = BuildingType::TEMPLE;
 		time_construction = 90;
+		damage = 15;
+		SetMaxHealth(200);
+		defenses = 200;
+		influence = 10;
+		maxCap = 8;
+		description = "I'm a temple";
 		break;
 	case ENCAMPMENT:
+		this->buildingType = BuildingType::ENCAMPMENT;
 		time_construction = 90;
+		damage = 20;
+		SetMaxHealth(350);
+		defenses = 350;
+		influence = 10;
+		maxCap = 7;
+		description = "I'm an encampment";
 		break;
 	default:
 		break;
 	}
-	description = "I'm a fortress";
-	SetMaxHealth(300);
+	HealthSystem::Init();
 
 
-	civilization = info.civilization;
 	original_spriteRect = spriteRect = info.spriteRect;
 	blitRect = info.blitSize;
 	//buildingType = info.buildingType;
