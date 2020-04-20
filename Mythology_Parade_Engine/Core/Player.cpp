@@ -27,6 +27,7 @@ bool Player::Start()
 	currencySystem.faith = 0;
 	currencySystem.prayers = 0;
 	currencySystem.sacrifices = 0;
+	dontSelect = false;
 	return true;
 }
 
@@ -68,9 +69,12 @@ bool Player::Update(float dt)
 	//}
   
 	//Selection logics and drawing
-	SelectionDraw_Logic(); 
+	if (!App->scene->paused_game)
+	{
+		SelectionDraw_Logic(); 
+		PlayerInputs();
+	}
 
-	PlayerInputs();
 
 	return true;
 }
@@ -91,26 +95,39 @@ void Player::SelectionDraw_Logic()
 	if (!App->input->GetMouseButtonDown(1) == KEY_DOWN)
 	{
 		App->input->GetMousePosition(preClicked.x, preClicked.y);
+		if(preClicked.y>=590) 
+		{
+			dontSelect = true;
+			return;
+		}
+		else
+		{
+			dontSelect = false;
+		}
 		preClicked = App->render->ScreenToWorld(preClicked.x, preClicked.y);
-		listEntities.clear(); //we clear the list of entities selected to select again or just deselect
 	}
-
-	if (App->input->GetMouseButtonDown(1) == KEY_REPEAT)
+	if (!dontSelect)
 	{
-		App->input->GetMousePosition(postClicked.x, postClicked.y);
-		postClicked = App->render->ScreenToWorld(postClicked.x, postClicked.y);
+		if (App->input->GetMouseButtonDown(1) == KEY_REPEAT)
+		{
+			App->input->GetMousePosition(postClicked.x, postClicked.y);
+			if (postClicked.y >= 590)
+			{
+				postClicked.y = 588;
+			}
+			postClicked = App->render->ScreenToWorld(postClicked.x, postClicked.y);
 
-		App->render->DrawQuad({preClicked.x, preClicked.y, postClicked.x - preClicked.x, postClicked.y - preClicked.y}, 255, 255, 255, 255, false);
-		//App->render->DrawQuad({preClicked.x + 1, preClicked.y + 1, postClicked.x - preClicked.x - 2, postClicked.y - preClicked.y  - 2}, 255, 255, 255, 255, false);
+			App->render->DrawQuad({ preClicked.x, preClicked.y, postClicked.x - preClicked.x, postClicked.y - preClicked.y }, 255, 255, 255, 255, false);
+		}
+
+		if (App->input->GetMouseButtonDown(1) == KEY_UP)
+		{
+			listEntities.clear();
+			ClickLogic();
+			SeeEntitiesInside();
+			App->scene->HUDUpdateSelection(listEntities);
+		}
 	}
-
-	if (App->input->GetMouseButtonDown(1) == KEY_UP)
-	{
-		listEntities.clear();
-		SeeEntitiesInside(); //We iterate the list of entities to see if someone is in there
-		App->scene->HUDUpdateSelection(listEntities);
-	}
-
 }
 
 std::list<Entity*> Player::GetEntitiesSelected()
@@ -170,6 +187,8 @@ void Player::PlayerInputs()
 		{
 			App->entityManager->DeleteEntity(it._Ptr->_Myval);
 		}
+		listEntities.clear();
+		App->scene->HUDUpdateSelection(listEntities);
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN && App->scene->godMode)
@@ -180,5 +199,33 @@ void Player::PlayerInputs()
 	if (App->input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN && App->scene->godMode)
 	{
 		player_lose = true;
+	}
+}
+
+void Player::ClickLogic()
+{
+	std::list<Entity*>::iterator it = App->entityManager->entities[EntityType::BUILDING].begin();
+	for (it; it != App->entityManager->entities[EntityType::BUILDING].end(); ++it)
+	{
+		if (preClicked.x >= it._Ptr->_Myval->position.x && preClicked.x <= it._Ptr->_Myval->position.x + it._Ptr->_Myval->spriteRect.w)
+		{
+			if (preClicked.y >= it._Ptr->_Myval->position.y && preClicked.y <= it._Ptr->_Myval->position.y + it._Ptr->_Myval->spriteRect.h)
+			{
+				buildingSelect = it._Ptr->_Myval;
+			}
+		}
+	}
+	if (listEntities.empty()) {
+		it = App->entityManager->entities[EntityType::UNIT].begin();
+		for (it; it != App->entityManager->entities[EntityType::UNIT].end(); ++it)
+		{
+			if (preClicked.x >= it._Ptr->_Myval->position.x && preClicked.x <= it._Ptr->_Myval->position.x + it._Ptr->_Myval->blitRect.x)
+			{
+				if (preClicked.y >= it._Ptr->_Myval->position.y && preClicked.y <= it._Ptr->_Myval->position.y + it._Ptr->_Myval->blitRect.y)
+				{
+					listEntities.push_back(it._Ptr->_Myval);
+				}
+			}
+		}
 	}
 }

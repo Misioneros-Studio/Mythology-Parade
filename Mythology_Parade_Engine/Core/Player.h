@@ -25,20 +25,21 @@ public:
 	void SelectionDraw_Logic();
 	void SeeEntitiesInside();
 	void PlayerInputs();
+	void ClickLogic();
 	std::list<Entity*> GetEntitiesSelected();
 
 private:
 	CurrencySystem currencySystem;
 
-	std::list<Unit*> unitsList;
-	//std::list<Building*> buildingsList;
 	std::string faith, sacrifice, prayer;
 
 	int tick1 = 0, tick2 = 0;
 	iPoint preClicked;
 	iPoint postClicked;
-	std::list<Entity*> listEntities; //Entities instide selection
-	
+	std::list<Entity*> listEntities;
+	Entity* buildingSelect;
+
+	bool dontSelect;
 
 public:
 	bool player_win = false;

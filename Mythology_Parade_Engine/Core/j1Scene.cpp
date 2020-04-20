@@ -571,7 +571,7 @@ void j1Scene::HUDUpdateSelection(std::list<Entity*> listEntities) {
 	}
 
 	SDL_Rect position_name = { 725,603,30,30 };
-	if (listEntities.begin()._Ptr->_Myval != nullptr) {
+	if (!listEntities.empty()) {
 		if (listEntities.begin()._Ptr->_Myval->type == EntityType::UNIT) {
 			thing_selected = listEntities.begin()._Ptr->_Myval;
 			Unit* unit = (Unit*)listEntities.begin()._Ptr->_Myval;
