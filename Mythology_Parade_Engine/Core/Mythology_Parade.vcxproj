@@ -83,6 +83,7 @@
     <ClCompile Include="EntityManager.cpp" />
     <ClCompile Include="HealthSystem.cpp" />
     <ClCompile Include="CurrencySystem.cpp" />
+    <ClCompile Include="j1FadeToBlack.cpp" />
     <ClCompile Include="j1Fonts.cpp" />
     <ClCompile Include="j1Gui.cpp" />
     <ClCompile Include="j1LogoScene.cpp" />
@@ -117,6 +118,7 @@
     <ClInclude Include="EntityManager.h" />
     <ClInclude Include="HealthSystem.h" />
     <ClInclude Include="CurrencySystem.h" />
+    <ClInclude Include="j1FadeToBlack.h" />
     <ClInclude Include="j1Fonts.h" />
     <ClInclude Include="j1Gui.h" />
     <ClInclude Include="j1LogoScene.h" />

@@ -94,6 +94,9 @@
     <ClCompile Include="PathFinder.cpp">
       <Filter>Core\Modules</Filter>
     </ClCompile>
+    <ClCompile Include="j1FadeToBlack.cpp">
+      <Filter>Core\Modules</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1Window.h">
@@ -199,6 +202,9 @@
       <Filter>Core\Scenes</Filter>
     </ClInclude>
     <ClInclude Include="PathFinder.h">
+      <Filter>Core\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="j1FadeToBlack.h">
       <Filter>Core\Modules</Filter>
     </ClInclude>
   </ItemGroup>

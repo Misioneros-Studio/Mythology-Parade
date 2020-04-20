@@ -7,7 +7,7 @@
 #include "j1Render.h"
 #include "j1TitleScene.h"
 #include"j1Audio.h"
-
+#include"j1FadeToBlack.h"
 
 j1TitleScene::j1TitleScene() : j1Module()
 {
@@ -35,6 +35,8 @@ bool j1TitleScene::Awake(pugi::xml_node& config)
 // Called before the first frame
 bool j1TitleScene::Start()
 {
+	App->gui->active = true;
+	App->gui->Start();
 
 	for (int i = 0; i < 6; i++)
 	{
@@ -334,7 +336,7 @@ void j1TitleScene::OnClick(UI* element, float argument)
 
 		if (element->name == "NEW")
 		{
-			App->change_scene = true;
+			App->fade_to_black->FadeToBlack(which_fade::title_to_scene, 2);
 			destroy = true;
 		}
 		else if (element->name == "LOAD")
