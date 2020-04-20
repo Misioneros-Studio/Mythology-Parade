@@ -50,6 +50,23 @@ const char* Building::GetDescription()
 	return description.c_str();
 }
 
+void Building::CreateUnit(BuildingType type)
+{
+	switch (type)
+	{
+	case FORTRESS:
+		break;
+	case MONASTERY:
+		App->entityManager->CreateUnitEntity(UnitType::MONK, { position.x + 5,position.y });
+		break;
+	case TEMPLE:
+		break;
+	case ENCAMPMENT:
+		App->entityManager->CreateUnitEntity(UnitType::ASSASSIN, { position.x + 5,position.y });
+		break;
+	}
+}
+
 bool Building::Awake(pugi::xml_node& a)
 {
 

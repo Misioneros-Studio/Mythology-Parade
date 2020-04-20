@@ -32,6 +32,7 @@ public:
 	int GetInfluence() { return influence; }
 	int GetDamage() { return damage; }
 	int GetMaxCap() { return maxCap; }
+	void CreateUnit(BuildingType);
 private:
 
 	bool Awake(pugi::xml_node&);

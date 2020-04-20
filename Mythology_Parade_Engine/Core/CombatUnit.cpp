@@ -19,6 +19,12 @@ CombatUnit::CombatUnit(UnitType type, iPoint pos) : Unit(type, pos), range(0), d
 		LevelSystem::Init(3000, 6000, 9500);
 		CombatUnit::Init(110, 25, 1, 2);
 		break;
+	case UnitType::EXPLORER:
+		break;
+	case UnitType::PRIEST:
+		break;
+	case UnitType::FOOTMAN:
+		break;
 	}
 }
 
@@ -41,6 +47,36 @@ void CombatUnit::Action(Entity* entity)
 	//Attack enemy
 	Unit* target = (Unit*)entity;
 	target->RecieveDamage(GetDamageValue());
+}
+
+void CombatUnit::LevelUp()
+{
+	LevelSystem::LevelUp();
+	switch (unitType)
+	{
+	case UnitType::PIKEMAN:
+		break;
+	case UnitType::ASSASSIN:
+		switch (GetLevel())
+		{
+		case 1:
+			IncreaseDamage(5);
+			break;
+		case 2:
+			IncreaseHealth(10);
+			break;
+		case 3:
+			IncreaseSpeed(1);
+		}
+		break;
+	case UnitType::EXPLORER:
+		break;
+	case UnitType::PRIEST:
+		break;
+	case UnitType::FOOTMAN:
+		break;
+
+	}
 }
 
 
@@ -79,3 +115,19 @@ int CombatUnit::GetSpeedValue()
 {
 	return speed;
 }
+
+void CombatUnit::IncreaseHealth(int value)
+{
+	HealthSystem::IncreaseHealth(value);
+}
+
+void CombatUnit::IncreaseSpeed(int value)
+{
+	speed += value;
+}
+
+void CombatUnit::IncreaseDamage(int value)
+{
+	damage += value;
+}
+
