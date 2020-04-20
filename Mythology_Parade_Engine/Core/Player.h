@@ -29,8 +29,6 @@ public:
 	std::list<Entity*> GetEntitiesSelected();
 
 private:
-	CurrencySystem currencySystem;
-
 	std::string faith, sacrifice, prayer;
 
 	int tick1 = 0, tick2 = 0;

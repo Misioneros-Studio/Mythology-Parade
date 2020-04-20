@@ -43,6 +43,11 @@ bool Unit::Update(float dt)
 {
 	bool ret = true;
 
+	//TEST
+	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
+		Action(this);
+	}
+
 	//Allawys blit the sprite at the end
 	ret = Draw(dt);
 
@@ -180,8 +185,8 @@ void Unit::Action(Entity* entity)
 	switch (unitType)
 	{
 	case UnitType::MONK:
-	LOG("I'm a monk unit!");
-	
+		App->entityManager->getPlayer()->IncreaseFaithRatio(1);
+		LOG("INCREASED FAITH RATIO");
 		break;
 	}
 }

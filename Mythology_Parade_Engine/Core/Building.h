@@ -46,7 +46,7 @@ private:
 	int damage;
 	int maxCap;
 	int time_construction;
-
+	int nearbyMonks;
 	std::string description;
 
 	//Used when constructing

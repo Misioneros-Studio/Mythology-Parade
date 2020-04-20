@@ -1,6 +1,6 @@
 #include "Building.h"
-
-Building::Building(BuildingType buildingType, iPoint pos, BuildingInfo info)
+#include "p2Log.h"
+Building::Building(BuildingType type, iPoint pos, BuildingInfo info)
 {
 	damage = 25;
 	SetMaxHealth(500);
@@ -10,6 +10,7 @@ Building::Building(BuildingType buildingType, iPoint pos, BuildingInfo info)
 	buildingStatus = CONSTRUCTING;
 	percentage_constructing = 0;
 	first_time_constructing = true;
+	buildingType = type;
 
 	switch (buildingType)
 	{
@@ -128,10 +129,37 @@ bool Building::Update(float dt)
 		blitRect = App->entityManager->CalculateBuildingSize(blitWidth, spriteRect.w, spriteRect.h);
 	}
 
+
+
+	//IF MONASTERY DETECTS NEARBY MONKS,INCREASE FAITH
+	if (buildingType == BuildingType::MONASTERY) {
+		std::list<Entity*> list =  App->entityManager->entities[EntityType::UNIT];
+		int count = 0;
+		for each (Unit* var in list)
+		{
+			if (var->unitType == UnitType::MONK) {
+				if(position.DistanceManhattan(var->position) < 300)
+				count++;
+			}
+		}
+		if (nearbyMonks != count) 
+		{
+			nearbyMonks = count;
+			App->entityManager->getPlayer()->IncreaseFaithRatio(nearbyMonks);
+			LOG("Num units: %i", nearbyMonks);
+		}
+	}
+
+
+
 	Draw();
 	if (buildingStatus == CONSTRUCTING) {
 		Draw_Construction_Bar(blitWidth);
 	}
+
+
+
+
 
 	return ret;
 }
