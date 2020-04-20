@@ -62,6 +62,7 @@ public:
 	void SaveGame(const char* file) const;
 	void GetSaveGames(std::list<std::string>& list_to_fill) const;
 
+
 private:
 
 	// Load config file
@@ -86,8 +87,6 @@ private:
 	bool LoadGameNow();
 	bool SavegameNow();
 
-	//Called when changing a scene (start new game or exit the actual game)
-	bool ChangeScene(bool first_scene=false);
 
 	//Called when restarting a scene (restart button)
 	bool RestartScene();
@@ -112,14 +111,10 @@ public:
 	EntityManager*		entityManager = NULL;
 	j1FadeToBlack*		fade_to_black = NULL;
  
-	bool				start_game = false;
-	bool				change_scene = false;
-
 	bool				restart_scene = false;
-	bool				first_change_scene = false;
-	std::list<j1Module*>	modules;
-private:
 
+private:
+	std::list<j1Module*>	modules;
 
 	int					argc;
 	char**				args;

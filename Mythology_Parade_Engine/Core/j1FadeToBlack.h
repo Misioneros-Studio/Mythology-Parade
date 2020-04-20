@@ -4,6 +4,13 @@
 #include "j1Module.h"
 #include "SDL\include\SDL_rect.h"
 
+enum which_fade {
+	unknown,
+	logo_to_title,
+	title_to_scene,
+	scene_to_title
+};
+
 class j1FadeToBlack : public j1Module
 {
 public:
@@ -13,8 +20,6 @@ public:
 	bool Start();
 	bool PostUpdate();
 
-	bool FadeToBlack(j1Module* module_off, j1Module* module_on, bool is_changing_to_scene=false, float time = 2.0f);
-
 
 public:
 	enum fade_step
@@ -23,6 +28,13 @@ public:
 		fade_to_black,
 		fade_from_black
 	} current_step = fade_step::none;
+
+ 
+	
+	which_fade actual_change = unknown;
+
+	bool FadeToBlack(which_fade fade, float time = 2.0f);
+
 private:
 
 	j1Module* module_on = nullptr;

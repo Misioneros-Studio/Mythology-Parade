@@ -9,6 +9,17 @@
 #include "j1Minimap.h"
 #include "j1Pathfinding.h"
 #include "EntityManager.h"
+#include "j1Textures.h"
+#include "j1Audio.h"
+#include "j1LogoScene.h"
+#include "j1TitleScene.h"
+#include "j1Scene.h"
+#include "j1Minimap.h"
+#include "j1Map.h"
+#include "j1Fonts.h"
+#include "j1Gui.h"
+#include "Console.h"
+#include "EntityManager.h"
 
 j1FadeToBlack::j1FadeToBlack()
 {
@@ -40,10 +51,30 @@ bool j1FadeToBlack::PostUpdate()
 	{
 		if (now >= total_time)
 		{
-			// Enable / disable the modules received when FadeToBlacks() gets called
-				module_off->Disable();
-				module_on->Enable();
-			// ---
+			switch (actual_change) {
+			case(which_fade::logo_to_title):
+				App->logo_scene->Disable();
+				App->title_scene->Enable();
+				break;
+				
+			case(which_fade::title_to_scene):
+				App->title_scene->Disable();
+				App->entityManager->Enable();
+				App->pathfinding->Enable();
+				App->scene->Enable();
+				App->minimap->Enable();
+
+				break;
+
+			case(which_fade::scene_to_title):
+				App->entityManager->Disable();
+				App->pathfinding->Disable();
+				App->scene->Disable();
+				App->minimap->Disable();
+				App->title_scene->Enable();
+				break;
+			}
+
 			total_time += total_time;
 			start_time = SDL_GetTicks();
 			current_step = fade_step::fade_from_black;
@@ -67,21 +98,16 @@ bool j1FadeToBlack::PostUpdate()
 }
 
 // Fade to black. At mid point deactivate one module, then activate the other
-bool j1FadeToBlack::FadeToBlack(j1Module* module_off, j1Module* module_on, bool is_changing_to_scene, float time)
+bool j1FadeToBlack::FadeToBlack(which_fade fade2, float time)
 {
 	bool ret = false;
 
 	if (current_step == fade_step::none)
 	{
-		this->module_off = module_off;
-		this->module_on = module_on;
+		actual_change = fade2;
 		current_step = fade_step::fade_to_black;
 		start_time = SDL_GetTicks();
 		total_time = (Uint32)(time * 0.5f * 1000.0f);
-
-		if (is_changing_to_scene == true) {
-			App->change_scene = true;
-		}
 
 		ret = true;
 	}

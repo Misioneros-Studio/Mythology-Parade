@@ -290,24 +290,25 @@ bool j1Scene::Update(float dt)
 		}
 	}
 
-	if (App->entityManager->getPlayer()->player_win == true) {
-		if (App->entityManager->getPlayer()->player_type == CivilizationType::VIKING) {
-			DoWinOrLoseWindow(1, true);
+	if (App->entityManager->getPlayer() != nullptr) {
+		if (App->entityManager->getPlayer()->player_win == true) {
+			if (App->entityManager->getPlayer()->player_type == CivilizationType::VIKING) {
+				DoWinOrLoseWindow(1, true);
+			}
+			else {
+				DoWinOrLoseWindow(2, true);
+			}
 		}
-		else {
-			DoWinOrLoseWindow(2, true);
+
+		else if (App->entityManager->getPlayer()->player_lose == true) {
+			if (App->entityManager->getPlayer()->player_type == CivilizationType::VIKING) {
+				DoWinOrLoseWindow(1, false);
+			}
+			else {
+				DoWinOrLoseWindow(2, false);
+			}
 		}
 	}
-
-	else if (App->entityManager->getPlayer()->player_lose == true) {
-		if (App->entityManager->getPlayer()->player_type == CivilizationType::VIKING) {
-			DoWinOrLoseWindow(1, false);
-		}
-		else {
-			DoWinOrLoseWindow(2, false);
-		}
-	}
-
 	//App->render->DrawQuad(mapLimitsRect, 255, 255, 255, 40);
 
 	return true;
@@ -403,8 +404,6 @@ void j1Scene::DeactivatePauseMenu() {
 	}
 	paused_game = false;
 }
-
-
 
 
 // Called when clicking options button in pause menu
@@ -504,14 +503,14 @@ void j1Scene::DeactivateConfirmationMenu() {
 
 // Called when returning to main menu (either winning/losing or by menu options like exit)
 void j1Scene::BackToTitleMenu() {
-	App->fade_to_black->FadeToBlack((j1Module*)App->scene, (j1Module*)App->title_scene, false, 2);
-
 	destroy = true;
 	App->map->destroy = true;
 	App->pathfinding->destroy = true;
 	App->entityManager->destroy = true;
 	App->minimap->destroy = true;
-	App->change_scene = true;
+	App->fade_to_black->FadeToBlack(which_fade::scene_to_title, 2);
+
+	//App->change_scene = true;
 }
 
 // Called when restarting the game

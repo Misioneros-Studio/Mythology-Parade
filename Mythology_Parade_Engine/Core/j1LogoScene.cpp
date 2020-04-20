@@ -60,5 +60,5 @@ bool j1LogoScene::CleanUp()
 void j1LogoScene::ChangeToTitleScene()
 {
 	destroy = true;
-	App->fade_to_black->FadeToBlack((j1Module*)App->logo_scene, (j1Module*)App->title_scene, false, 2);
+	App->fade_to_black->FadeToBlack(which_fade::logo_to_title, 2);
 }
