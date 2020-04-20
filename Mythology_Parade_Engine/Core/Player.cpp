@@ -24,9 +24,9 @@ bool Player::Start()
 {
 	tick2 = SDL_GetTicks();
 	player_win = player_lose = false;
-	currencySystem.faith = 0;
-	currencySystem.prayers = 0;
-	currencySystem.sacrifices = 0;
+	CurrencySystem::faith = 0;
+	CurrencySystem::prayers = 0;
+	CurrencySystem::sacrifices = 0;
 	dontSelect = false;
 	return true;
 }
@@ -37,17 +37,18 @@ bool Player::PreUpdate()
 	tick1 = SDL_GetTicks();
 	if (tick1 - tick2 >= 2000) 
 	{
-		currencySystem.faith += 2;
-		currencySystem.sacrifices += 3;
-		currencySystem.prayers += 5;
+		
+		IncreaseFaith();
+		CurrencySystem::sacrifices += 3;
+		CurrencySystem::prayers += 5;
 		tick2 = SDL_GetTicks();
 	}
 
 
 	//Sending all numbers to strings to print
-	faith = std::to_string(currencySystem.faith);
-	sacrifice = std::to_string(currencySystem.sacrifices);
-	prayer = std::to_string(currencySystem.prayers);
+	faith = std::to_string(CurrencySystem::faith);
+	sacrifice = std::to_string(CurrencySystem::sacrifices);
+	prayer = std::to_string(CurrencySystem::prayers);
 
 	return true;
 }
@@ -163,7 +164,7 @@ void Player::PlayerInputs()
 
 	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_REPEAT && App->scene->godMode)
 	{
-		currencySystem.IncreaseAll(10);
+		CurrencySystem::IncreaseAll(10);
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN && App->scene->godMode)

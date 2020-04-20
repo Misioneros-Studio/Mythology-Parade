@@ -113,6 +113,7 @@ bool EntityManager::Update(float dt)
 		if (buildingTestIndex < MAX_BUILDING_TYPES - 1) 
 		{
 			buildingTestIndex++;
+			LOG("Building Index: %i", buildingTestIndex);
 		}
 		else
 		{

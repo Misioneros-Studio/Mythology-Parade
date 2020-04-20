@@ -51,11 +51,12 @@ public:
 	~CurrencySystem();
 
 	//BASIC ECONOMY FUNCTONS
-	void IncreaseFaith(int number);
+	void IncreaseFaith();
 	void DecreaseFaith(int number);
 	void IncreaseSacrifice(ActionSacrifice action);
 	void IncreasePrayers(ActionPrayers action);
 	void IncreaseAll(int number);
+	void IncreaseFaithRatio(int number);
 
 	//MIRACLES AND DISASTER
 	void Miracle(Miracles action);
@@ -66,6 +67,10 @@ public:
 	int sacrifices;
 	int faith;
 	int prayers;
+
+private:
+	int faithRatio;
+	int basefaithRatio;
 };
 
 #endif // !_J1CURRENCYSYSTEM_

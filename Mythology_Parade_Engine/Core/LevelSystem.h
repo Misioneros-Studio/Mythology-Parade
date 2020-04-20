@@ -24,6 +24,8 @@ private:
 public:
 	void Init(int, int, int);
 
+	bool canLevelUp;
+	void LevelUp();
 	void GainExperience(Action value);
 	int GetLevel();
 	int GetExperience();

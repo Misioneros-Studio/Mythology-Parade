@@ -29,3 +29,9 @@ void HealthSystem::SetMaxHealth(int value)
 	maxHealth = value;
 }
 
+void HealthSystem::IncreaseHealth(int value)
+{
+	health += value;
+	maxHealth += value;
+}
+
