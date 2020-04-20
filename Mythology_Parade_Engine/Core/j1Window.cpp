@@ -113,3 +113,12 @@ uint j1Window::GetScale() const
 {
 	return scale;
 }
+
+bool j1Window::ToggleFullscreen() 
+{
+	Uint32 fullscreenFlag = SDL_WINDOW_FULLSCREEN;
+	bool isFullscreen = SDL_GetWindowFlags(window) & fullscreenFlag;
+	SDL_SetWindowFullscreen(window, isFullscreen ? 0 : fullscreenFlag);
+
+	return isFullscreen;
+}

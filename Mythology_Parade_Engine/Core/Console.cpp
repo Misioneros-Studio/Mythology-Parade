@@ -102,6 +102,8 @@ std::string Console::CheckCommand() {
 		command = commands::FPS;
 	else if (!strcmp(command_text.c_str(), "map"))
 		command = commands::map;
+	else if (!strcmp(command_text.c_str(), "fullscreen") || !strcmp(command_text.c_str(), "FULLSCREEN"))
+		command = commands::fullscreen;
 	else {
 		std::string three_letters_command = argument = console_input->GetLabel();
 		int num_of_letters = three_letters_command.size();
@@ -135,6 +137,17 @@ void Console::ExecuteCommand(std::string argument) {
 	case commands::quit:
 		LOG("Exiting game");
 		exitGame = true;
+		break;
+
+	case commands::fullscreen:
+		if (App->win->ToggleFullscreen())
+		{
+			LOG("Fullscreen mode is : OFF");
+		}
+		else
+		{
+			LOG("Fullscreen mode is : ON");
+		}
 		break;
 
 	case commands::FPS:
