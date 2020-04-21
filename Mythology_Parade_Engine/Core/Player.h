@@ -27,6 +27,7 @@ public:
 	void PlayerInputs();
 	void ClickLogic();
 	std::list<Entity*> GetEntitiesSelected();
+	Building* GetSelectedBuild();
 	int GetFaith();
 	int GetPrayers();
 	int GetSacrifices();
@@ -44,7 +45,6 @@ private:
 	Entity* buildingSelect;
 
 	bool dontSelect;
-	iPoint click;
 
 public:
 	bool player_win = false;
