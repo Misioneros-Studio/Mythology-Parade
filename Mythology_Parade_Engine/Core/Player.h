@@ -27,7 +27,6 @@ public:
 	void PlayerInputs();
 	void ClickLogic();
 	std::list<Entity*> GetEntitiesSelected();
-	Building* GetSelectedBuild();
 	int GetFaith();
 	int GetPrayers();
 	int GetSacrifices();

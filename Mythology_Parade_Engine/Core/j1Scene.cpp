@@ -1393,49 +1393,40 @@ void j1Scene::OnClick(UI* element, float argument)
 		}
 		else if (element->name == "RESEARCH MONASTERY") {
 			Building* building = (Building*)thing_selected;
-			building->StartResearching(10, "Monastery");//60
+			building->StartResearching(60, "Monastery");
 			close_menus = CloseSceneMenus::Research;
 		}
 		else if (element->name == "RESEARCH TEMPLE") {
 			Building* building = (Building*)thing_selected;
-			building->StartResearching(90, "Temple");//90
+			building->StartResearching(90, "Temple");
 			close_menus = CloseSceneMenus::Research;
 		}
 		else if (element->name == "RESEARCH ENCAMPMENT") {
 			Building* building = (Building*)thing_selected;
-			building->StartResearching(10, "Encampment");//90
+			building->StartResearching(90, "Encampment");
 			close_menus = CloseSceneMenus::Research;
 		}
 		else if (element->name == "Produce_Temple")
 		{
 			//CONSTRUCT TEMPLE
-			
 		}
 		else if (element->name == "Produce_Encampment")
 		{
 			//CONSTRUCT ENCAMPMENT
-			App->entityManager->EnterBuildMode();
-			App->entityManager->SetBuildIndex(3);
-			LOG("Construct encampment");
 		}
 		else if (element->name == "Produce_Monastery")
 		{
 			//CONSTRUCT MONASTERY
-			LOG("Construct monastery");
-			App->entityManager->EnterBuildMode();
-			App->entityManager->SetBuildIndex(1);
 		}
 		else if (element->name == "Produce_Assassin")
 		{
 			Building* building = (Building*)thing_selected;
-			App->entityManager->getPlayer()->DecreaseFaith(100);
-			building->StartProducing(10, "Assassin");
+			building->StartProducing(90, "Assassin");
 		}
 		else if (element->name == "Produce_Monk")
 		{
 			Building* building = (Building*)thing_selected;
-			App->entityManager->getPlayer()->DecreaseFaith(50);
-			building->StartProducing(10, "Monk");
+			building->StartProducing(90, "Monk");
 		}
 		else if (element->name == "Produce_Victory")
 		{
@@ -1506,7 +1497,9 @@ void j1Scene::DoWinOrLoseWindow(int type, bool win) {
 	}
 }
 
-
+void j1Scene::FinishProduction(std::string thing_produced) {
+	int i;
+}
 
 void j1Scene::FinishResearching(std::string thing_researched) {
 	if (thing_researched == "Monastery") {

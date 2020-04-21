@@ -10,7 +10,7 @@ CurrencySystem::CurrencySystem()
 
 	time_prayers = time_sacrifices = 120;
 
-	basefaithRatio = 200;
+	basefaithRatio = 2;
 	faithRatio = basefaithRatio;
 
 }
@@ -32,7 +32,7 @@ void CurrencySystem::IncreaseFaith()
 
 void CurrencySystem::DecreaseFaith(int number)
 {
-	if (!App->scene->paused_game)
+	if (App->scene->paused_game)
 	{
 		if (number > 0)
 		{

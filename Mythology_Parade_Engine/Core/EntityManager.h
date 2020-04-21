@@ -89,8 +89,6 @@ public:
 	// Called each loop iteration
 	bool Update(float dt);
 
-
-
 	bool PostUpdate();
 
 	// Called before quitting
@@ -108,8 +106,6 @@ public:
 	Entity* CreateUnitEntity(UnitType, iPoint);
 	Entity* CreateBuildingEntity(iPoint, BuildingType, BuildingInfo);
 	void UpdateBuildPreview(int);
-	void EnterBuildMode();
-	void SetBuildIndex(int);
 
 	//Load data packets
 	void LoadBuildingsData(pugi::xml_node&);
