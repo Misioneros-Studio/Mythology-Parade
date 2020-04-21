@@ -44,7 +44,6 @@ private:
 	Entity* buildingSelect;
 
 	bool dontSelect;
-	bool oneTime;
 	iPoint click;
 
 public:

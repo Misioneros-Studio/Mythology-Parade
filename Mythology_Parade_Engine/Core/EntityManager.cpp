@@ -365,6 +365,7 @@ Entity* EntityManager::CreatePlayerEntity()
 	ret->type = EntityType::PLAYER;
 
 	entities[EntityType::PLAYER].push_back(ret);
+	entities[EntityType::PLAYER].begin()._Ptr->_Myval->Start();
 
 	return ret;
 }

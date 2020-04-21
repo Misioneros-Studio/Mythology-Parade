@@ -8,7 +8,18 @@
 
 Player::Player()
 {
-	Start();
+	player_win = player_lose = false;
+
+	CurrencySystem::faith = 0;
+	CurrencySystem::prayers = 0;
+	CurrencySystem::sacrifices = 0;
+
+	dontSelect = false;
+	num_encampment = num_monastery = num_temple = 0;
+	time_production_victory = 300;
+
+	player_type = CivilizationType::VIKING;
+	displayDebug = false;
 }
 
 Player::~Player()
@@ -24,19 +35,9 @@ bool Player::Start()
 {
 
 	tick2 = SDL_GetTicks();
-	player_win = player_lose = false;
 
-	CurrencySystem::faith = 0;
-	CurrencySystem::prayers = 0;
-	CurrencySystem::sacrifices = 0;
-
-	dontSelect = false;
-	num_encampment = num_monastery = num_temple = 0;
-	time_production_victory = 300;
-
-	player_type = CivilizationType::VIKING;
-	displayDebug = false;
-	oneTime = true;
+	InitVikings();
+	InitGreek();
 
 	return true;
 }
@@ -59,14 +60,6 @@ bool Player::PreUpdate()
 	faith = std::to_string(CurrencySystem::faith);
 	sacrifice = std::to_string(CurrencySystem::sacrifices);
 	prayer = std::to_string(CurrencySystem::prayers);
-
-	if (oneTime)
-	{
-		InitVikings();
-		InitGreek();
-		oneTime = !oneTime;
-	}
-
 
 	return true;
 }
