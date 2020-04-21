@@ -78,8 +78,8 @@ private:
 	ButtonUI* ui_button[6];
 	TextUI* ui_text[6];
 	WindowUI* ui_options_window;
-	ButtonUI* ui_button_options;
-	TextUI* ui_text_options[2];
+	ButtonUI* ui_button_options[2];
+	TextUI* ui_text_options[3];
 	WindowUI* ui_tutorial_window;
 	ButtonUI* ui_tutorial_options;
 	TextUI* ui_text_tutorial[2];

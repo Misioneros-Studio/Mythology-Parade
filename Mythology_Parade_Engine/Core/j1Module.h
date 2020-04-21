@@ -76,6 +76,21 @@ public:
 	{
 
 	}
+
+	void Disable(){
+		if (active == true) {
+			active = false;
+			CleanUp();
+		}
+	}
+
+	void Enable() {
+		if (active == false) {
+			active = true;
+			Start();
+		}
+	}
+
 public:
 
 	std::string	name;

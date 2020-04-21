@@ -28,6 +28,11 @@ public:
 	~Building();
 	
 	const char* GetDescription();
+	BuildingType GetBuildingType() { return buildingType; }
+	int GetInfluence() { return influence; }
+	int GetDamage() { return damage; }
+	int GetMaxCap() { return maxCap; }
+	void CreateUnit(BuildingType);
 private:
 
 	bool Awake(pugi::xml_node&);
@@ -41,7 +46,7 @@ private:
 	int damage;
 	int maxCap;
 	int time_construction;
-
+	int nearbyMonks;
 	std::string description;
 
 	//Used when constructing

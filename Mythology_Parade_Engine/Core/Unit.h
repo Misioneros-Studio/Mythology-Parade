@@ -76,7 +76,7 @@ protected:
 	std::vector<iPoint> entPath;
 	//void SetTarget();
 	//void CheckState();
-
+	
 };
 
 #endif // !__UNIT_H__

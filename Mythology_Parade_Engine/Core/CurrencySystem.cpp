@@ -7,19 +7,21 @@ CurrencySystem::CurrencySystem()
 	faith = 0;
 	sacrifices = 0;
 	prayers = 0;
+	basefaithRatio = 2;
+	faithRatio = basefaithRatio;
 }
 
 CurrencySystem::~CurrencySystem()
 {
 }
 
-void CurrencySystem::IncreaseFaith(int number)
+void CurrencySystem::IncreaseFaith()
 {
-	if(App->scene->paused_game)
+	if(!App->scene->paused_game)
 	{
-		if(number>0)
+		if(faithRatio>0)
 		{
-			faith += number;
+			faith += faithRatio;
 		}
 	}
 }
@@ -112,6 +114,10 @@ void CurrencySystem::IncreaseAll(int number)
 		sacrifices += number;
 		prayers += number;
 	}
+}
+void CurrencySystem::IncreaseFaithRatio(int number)
+{
+	faithRatio = basefaithRatio + number;
 }
 void CurrencySystem::Miracle(Miracles action)
 {

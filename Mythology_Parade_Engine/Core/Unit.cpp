@@ -185,10 +185,7 @@ void Unit::Action(Entity* entity)
 
 	switch (unitType)
 	{
-	case UnitType::MONK:
-	LOG("I'm a monk unit!");
-	
-		break;
+		//Monks action are controled by Monastery so, its functionality is there ( on Monastery Building )
 	}
 }
 

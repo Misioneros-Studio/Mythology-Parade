@@ -2,6 +2,8 @@
 #define __j1WINDOW_H__
 
 #include "j1Module.h"
+#include "j1Minimap.h"
+#include"j1Render.h"
 
 struct SDL_Window;
 struct SDL_Surface;
@@ -29,6 +31,8 @@ public:
 
 	// Retrieve window scale
 	uint GetScale() const;
+
+	bool ToggleFullscreen();
 
 public:
 	//The window we'll be rendering to

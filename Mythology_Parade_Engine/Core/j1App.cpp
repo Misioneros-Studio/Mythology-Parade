@@ -19,6 +19,7 @@
 #include "j1Gui.h"
 #include "Console.h"
 #include "EntityManager.h"
+#include "j1FadeToBlack.h"
 #include "j1App.h"
 
 
@@ -42,6 +43,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	gui = new j1Gui();
 	console = new Console();
 	entityManager = new EntityManager();
+	fade_to_black = new j1FadeToBlack();
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
@@ -67,7 +69,9 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(entityManager);
 
 	// render last to swap buffer
+	AddModule(fade_to_black);
 	AddModule(render);
+
 
 	PERF_PEEK(ptimer);
 }
@@ -238,20 +242,12 @@ void j1App::FinishUpdate()
 bool j1App::PreUpdate()
 {
 	bool ret = true;
-	if (change_scene == true) {
-		change_scene = false;
-		ChangeScene();
-	}
 
 	if (restart_scene == true) {
 		restart_scene = false;
 		RestartScene();
 	}
-	if (first_change_scene == true) {
-		first_change_scene = false;
-		ChangeScene(true);
 
-	}
 	j1Module* pModule = NULL;
 
 	for (std::list<j1Module*>::iterator it = modules.begin(); it != modules.end() && ret == true; it++)
@@ -457,31 +453,6 @@ bool j1App::SavegameNow()
 
 	data.reset();
 	want_to_save = false;
-	return ret;
-}
-
-bool j1App::ChangeScene(bool first_change) {
-	bool ret = true;
-
-	for (std::list<j1Module*>::iterator it = modules.begin(); it != modules.end(); it++)
-	{
-
-		if (it._Ptr->_Myval->active == false) {
-			if (first_change == false && (it._Ptr->_Myval->name.compare("logo_scene") != 0)) {
-				it._Ptr->_Myval->active = true;
-				ret = it._Ptr->_Myval->Start();
-			}
-			else if (it._Ptr->_Myval->name.compare("gui") == 0 || it._Ptr->_Myval->name.compare("title_scene") == 0) {
-				it._Ptr->_Myval->active = true;
-				ret = it._Ptr->_Myval->Start();
-			}
-		}
-		else if (it._Ptr->_Myval->destroy == true) {
-			it._Ptr->_Myval->CleanUp();
-			it._Ptr->_Myval->active = false;
-			it._Ptr->_Myval->destroy = false;
-		}
-	}
 	return ret;
 }
 

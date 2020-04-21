@@ -24,8 +24,12 @@ private:
 public:
 	void Init(int, int, int);
 
+	bool canLevelUp;
+	void LevelUp();
 	void GainExperience(Action value);
 	int GetLevel();
+	int GetExperience();
+	int GetExperienceToLevel(int level);
 };
 
 #endif // !__LEVELSYSTEM__H_

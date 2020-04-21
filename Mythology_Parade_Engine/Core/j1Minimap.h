@@ -31,12 +31,12 @@ public:
 	int width;
 	int height;
 	float scale;
+	SDL_Texture* texture;
 private:
 	int map_width;
 	int map_height;
 	int margin;
 	Corner corner;
-	SDL_Texture* texture;
 	SDL_Rect minimap_test_rect;
 };
 
