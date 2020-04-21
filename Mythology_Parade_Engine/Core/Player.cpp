@@ -8,7 +8,18 @@
 
 Player::Player()
 {
-	Start();
+	player_win = player_lose = false;
+
+	CurrencySystem::faith = 0;
+	CurrencySystem::prayers = 0;
+	CurrencySystem::sacrifices = 0;
+
+	dontSelect = false;
+	num_encampment = num_monastery = num_temple = 0;
+	time_production_victory = 300;
+
+	player_type = CivilizationType::VIKING;
+	displayDebug = false;
 }
 
 Player::~Player()
@@ -24,20 +35,9 @@ bool Player::Start()
 {
 
 	tick2 = SDL_GetTicks();
-	player_win = player_lose = false;
-
-	CurrencySystem::faith = 0;
-	CurrencySystem::prayers = 0;
-	CurrencySystem::sacrifices = 0;
-
-	dontSelect = false;
-	num_encampment = num_monastery = num_temple = 0;
-	time_production_victory = 300;
 
 	InitVikings();
 	InitGreek();
-	player_type = CivilizationType::VIKING;
-	displayDebug = false;
 
 	return true;
 }
@@ -60,9 +60,6 @@ bool Player::PreUpdate()
 	faith = std::to_string(CurrencySystem::faith);
 	sacrifice = std::to_string(CurrencySystem::sacrifices);
 	prayer = std::to_string(CurrencySystem::prayers);
-
-
-
 
 	return true;
 }
@@ -150,11 +147,6 @@ void Player::SelectionDraw_Logic()
 std::list<Entity*> Player::GetEntitiesSelected()
 {
 	return listEntities;
-}
-
-Building* Player::GetSelectedBuild()
-{
-	return (Building*) buildingSelect;
 }
 
 void Player::SeeEntitiesInside()
@@ -247,16 +239,18 @@ void Player::PlayerInputs()
 
 void Player::ClickLogic()
 {
+	App->input->GetMousePosition(click.x,click.y);
+	click = App->render->ScreenToWorld(click.x, click.y);
 	std::list<Entity*>::iterator it = App->entityManager->entities[EntityType::BUILDING].begin();
 	for (it; it != App->entityManager->entities[EntityType::BUILDING].end(); ++it)
 	{
-		if (preClicked.x >= it._Ptr->_Myval->position.x && preClicked.x <= it._Ptr->_Myval->position.x + it._Ptr->_Myval->spriteRect.w)
+		if (click.x >= it._Ptr->_Myval->getCollisionRect().x && click.x <= it._Ptr->_Myval->getCollisionRect().x + it._Ptr->_Myval->getCollisionRect().w)
 		{
-			if (preClicked.y >= it._Ptr->_Myval->position.y && preClicked.y <= it._Ptr->_Myval->position.y + it._Ptr->_Myval->spriteRect.h)
+			if (click.y <= it._Ptr->_Myval->getCollisionRect().y && click.y >= it._Ptr->_Myval->getCollisionRect().y + it._Ptr->_Myval->getCollisionRect().h)
 			{
-				if (it._Ptr->_Myval->civilization == player_type)
+				//if (it._Ptr->_Myval->civilization = player_type)
 				{
-					buildingSelect = it._Ptr->_Myval;
+						buildingSelect = it._Ptr->_Myval;
 				}
 			}
 		}
@@ -265,9 +259,9 @@ void Player::ClickLogic()
 		it = App->entityManager->entities[EntityType::UNIT].begin();
 		for (it; it != App->entityManager->entities[EntityType::UNIT].end(); ++it)
 		{
-			if (preClicked.x >= it._Ptr->_Myval->position.x && preClicked.x <= it._Ptr->_Myval->position.x + it._Ptr->_Myval->blitRect.x)
+			if (click.x >= it._Ptr->_Myval->getCollisionRect().x && click.x <= it._Ptr->_Myval->getCollisionRect().x + it._Ptr->_Myval->getCollisionRect().w)
 			{
-				if (preClicked.y >= it._Ptr->_Myval->position.y && preClicked.y <= it._Ptr->_Myval->position.y + it._Ptr->_Myval->blitRect.y)
+				if (click.y <= it._Ptr->_Myval->getCollisionRect().y && click.y >= it._Ptr->_Myval->getCollisionRect().y + it._Ptr->_Myval->getCollisionRect().h)
 				{
 					//if (it._Ptr->_Myval->civilization = player_type)
 					{

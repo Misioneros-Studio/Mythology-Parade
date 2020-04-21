@@ -97,9 +97,13 @@ public:
 
 	bool displayDebug;
 
+	SDL_Rect getCollisionRect()
+	{
+		return collisionRect;
+	}
+
 protected:
 	SDL_RendererFlip flipState;
 	SDL_Rect collisionRect;
 };
-
 #endif // !ENTITY_H
