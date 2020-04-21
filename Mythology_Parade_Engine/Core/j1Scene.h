@@ -106,6 +106,8 @@ public:
 
 	void OnClick(UI* element, float argument = 0);
 
+	void FinishProduction(std::string thing_produced);
+
 	void DoWinOrLoseWindow(int type, bool win);
 
 private:

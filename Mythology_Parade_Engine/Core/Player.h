@@ -50,6 +50,7 @@ public:
 	int num_monastery;
 	int num_temple;
 	int num_encampment;
+	int time_production_victory;
 	CivilizationType player_type;
   
 };

@@ -29,6 +29,7 @@ bool Player::Start()
 	currencySystem.sacrifices = 0;
 	dontSelect = false;
 	num_encampment = num_monastery = num_temple = 0;
+	time_production_victory = 300;
 	return true;
 }
 

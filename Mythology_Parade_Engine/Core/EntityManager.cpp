@@ -24,8 +24,10 @@ bool EntityManager::Awake(pugi::xml_node& a)
 	pugi::xml_document buildings;
 	buildings.load_file(a.child("buildings").attribute("file").as_string());
 	LoadBuildingsData(buildings.child("map").child("objectgroup"));
-	construction_bar_back = { 1300,512,106,18 };
-	construction_bar_front = { 1303,500,100,12 };
+	life_bar_front = { 1299,519,125,17 };
+	research_bar_front = { 1299,539,125,17 };
+	construction_bar_back = { 1299,559,125,17 };
+	construction_bar_front = { 1299,499,125,17 };
 
 	//Not working because renderer is not created yet ;-;
 	//std::string path = "assets/buildings/";

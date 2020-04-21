@@ -7,6 +7,7 @@ CurrencySystem::CurrencySystem()
 	faith = 0;
 	sacrifices = 0;
 	prayers = 0;
+	time_prayers = time_sacrifices = 120;
 }
 
 CurrencySystem::~CurrencySystem()

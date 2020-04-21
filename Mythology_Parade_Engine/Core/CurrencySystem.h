@@ -66,6 +66,8 @@ public:
 	int sacrifices;
 	int faith;
 	int prayers;
+	int time_sacrifices;
+	int time_prayers;
 };
 
 #endif // !_J1CURRENCYSYSTEM_
