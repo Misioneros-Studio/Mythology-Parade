@@ -59,6 +59,7 @@ bool j1FadeToBlack::PostUpdate()
 				
 			case(which_fade::title_to_scene):
 				App->title_scene->Disable();
+				App->title_scene->destroy = false;
 				App->entityManager->Enable();
 				App->pathfinding->Enable();
 				App->scene->Enable();
