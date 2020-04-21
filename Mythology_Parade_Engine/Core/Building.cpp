@@ -36,7 +36,7 @@ Building::Building(BuildingType type, iPoint pos, BuildingInfo info)
 	case MONASTERY:
 		this->buildingType = BuildingType::MONASTERY;
 		time_research = 60;
-		time_construction = 180;
+		time_construction = 20; //180
 		damage = 15;
 		SetMaxHealth(250);
 		defenses = 250;
@@ -62,7 +62,7 @@ Building::Building(BuildingType type, iPoint pos, BuildingInfo info)
 	case ENCAMPMENT:
 		this->buildingType = BuildingType::ENCAMPMENT;
 		time_research = 90;
-		time_construction = 180;
+		time_construction = 10; //180
 		damage = 20;
 		SetMaxHealth(350);
 		defenses = 350;
@@ -99,19 +99,19 @@ const char* Building::GetDescription()
 	return description.c_str();
 }
 
-void Building::CreateUnit(BuildingType type)
+void Building::CreateUnit()
 {
-	switch (type)
+	switch (buildingType)
 	{
 	case FORTRESS:
 		break;
 	case MONASTERY:
-		App->entityManager->CreateUnitEntity(UnitType::MONK, { position.x + 5,position.y });
+		App->entityManager->CreateUnitEntity(UnitType::MONK, { position.x - 30,position.y });
 		break;
 	case TEMPLE:
 		break;
 	case ENCAMPMENT:
-		App->entityManager->CreateUnitEntity(UnitType::ASSASSIN, { position.x + 5,position.y });
+		App->entityManager->CreateUnitEntity(UnitType::ASSASSIN, { position.x - 20,position.y });
 		break;
 	}
 }
@@ -146,7 +146,7 @@ bool Building::Update(float dt)
 		{
 
 			if (buildingAction == PRODUCING) {
-				App->scene->FinishProduction(element_producing);
+				FinishProduction(element_producing);
 			}
 			else if(buildingAction==RESEARCHING){
 				App->scene->FinishResearching(element_producing);
@@ -265,6 +265,11 @@ void Building::StartProducing(int time, std::string thing_producing) {
 	time_producing = time;
 	element_producing = thing_producing;
 	timer_construction.Start();
+}
+
+void Building::FinishProduction(std::string thing_produced) 
+{
+	CreateUnit();
 }
 
 void Building::StartResearching(int time, std::string thing_producing) {
