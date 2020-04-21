@@ -10,7 +10,7 @@ j1Window::j1Window() : j1Module()
 {
 	window = NULL;
 	screen_surface = NULL;
-	name.create("window");
+	name.append("window");
 }
 
 // Destructor
@@ -23,6 +23,7 @@ bool j1Window::Awake(pugi::xml_node& config)
 {
 	LOG("Init SDL window & surface");
 	bool ret = true;
+	active = true;
 
 	if(SDL_Init(SDL_INIT_VIDEO) < 0)
 	{
@@ -111,4 +112,22 @@ void j1Window::GetWindowSize(uint& width, uint& height) const
 uint j1Window::GetScale() const
 {
 	return scale;
+}
+
+bool j1Window::ToggleFullscreen() 
+{
+	Uint32 fullscreenFlag = SDL_WINDOW_FULLSCREEN;
+	bool isFullscreen = SDL_GetWindowFlags(window) & fullscreenFlag;
+	SDL_SetWindowFullscreen(window, isFullscreen ? 0 : fullscreenFlag);
+	SDL_ShowCursor(0);
+
+
+	j1Timer timer;
+	uint32 old = timer.Read();
+	SDL_SetRenderTarget(App->render->renderer, App->minimap->texture);
+	App->minimap->CreateMinimap();
+	SDL_SetRenderTarget(App->render->renderer, NULL);
+	LOG("%i", timer.Read() - old);
+
+	return isFullscreen;
 }

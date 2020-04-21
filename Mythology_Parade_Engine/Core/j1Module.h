@@ -6,10 +6,10 @@
 #ifndef __j1MODULE_H__
 #define __j1MODULE_H__
 
-#include "p2SString.h"
 #include "PugiXml\src\pugixml.hpp"
 
 class j1App;
+class UI;
 
 class j1Module
 {
@@ -72,10 +72,30 @@ public:
 		return true;
 	}
 
+	virtual void OnClick(UI* element, float argument = -1)
+	{
+
+	}
+
+	void Disable(){
+		if (active == true) {
+			active = false;
+			CleanUp();
+		}
+	}
+
+	void Enable() {
+		if (active == false) {
+			active = true;
+			Start();
+		}
+	}
+
 public:
 
-	p2SString	name;
+	std::string	name;
 	bool		active;
+	bool		destroy = false;
 
 };
 

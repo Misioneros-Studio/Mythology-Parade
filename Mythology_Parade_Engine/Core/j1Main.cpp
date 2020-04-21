@@ -22,6 +22,8 @@ enum MainState
 };
 
 j1App* App = NULL;
+bool exitGame = false;
+
 
 int main(int argc, char* args[])
 {
@@ -30,8 +32,13 @@ int main(int argc, char* args[])
 	MainState state = MainState::CREATE;
 	int result = EXIT_FAILURE;
 
+	j1PerfTimer timer;
+
 	while(state != EXIT)
 	{
+
+		double oldTimer = timer.ReadMs();
+
 		switch(state)
 		{
 
@@ -78,7 +85,7 @@ int main(int argc, char* args[])
 
 			// Loop all modules until we are asked to leave ---------------------
 			case LOOP:
-			if(App->Update() == false)
+			if(App->Update() == false || exitGame)
 				state = CLEAN;
 			break;
 
@@ -103,6 +110,8 @@ int main(int argc, char* args[])
 			state = EXIT;
 			break;
 		}
+
+		//LOG("%f", timer.ReadMs() - oldTimer);
 	}
 
 	LOG("... Bye! :)\n");

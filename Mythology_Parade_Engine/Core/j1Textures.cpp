@@ -9,7 +9,7 @@
 
 j1Textures::j1Textures() : j1Module()
 {
-	name.create("textures");
+	name.append("textures");
 }
 
 // Destructor
@@ -30,6 +30,7 @@ bool j1Textures::Awake(pugi::xml_node& config)
 		LOG("Could not initialize Image lib. IMG_Init: %s", IMG_GetError());
 		ret = false;
 	}
+	active = true;
 
 	return ret;
 }
@@ -46,11 +47,10 @@ bool j1Textures::Start()
 bool j1Textures::CleanUp()
 {
 	LOG("Freeing textures and Image library");
-	p2List_item<SDL_Texture*>* item;
 
-	for(item = textures.start; item != NULL; item = item->next)
+	for (std::list<SDL_Texture*>::iterator it = textures.begin(); it != textures.end(); it++)
 	{
-		SDL_DestroyTexture(item->data);
+		SDL_DestroyTexture(it._Ptr->_Myval);
 	}
 
 	textures.clear();
@@ -72,6 +72,7 @@ SDL_Texture* const j1Textures::Load(const char* path)
 	{
 		texture = LoadSurface(surface);
 		SDL_FreeSurface(surface);
+		LOG("Load success");
 	}
 
 	return texture;
@@ -80,14 +81,12 @@ SDL_Texture* const j1Textures::Load(const char* path)
 // Unload texture
 bool j1Textures::UnLoad(SDL_Texture* texture)
 {
-	p2List_item<SDL_Texture*>* item;
-
-	for(item = textures.start; item != NULL; item = item->next)
+	for (std::list<SDL_Texture*>::iterator it = textures.begin(); it != textures.end(); it++)
 	{
-		if(texture == item->data)
+		if(texture == it._Ptr->_Myval)
 		{
-			SDL_DestroyTexture(item->data);
-			textures.del(item);
+			SDL_DestroyTexture(it._Ptr->_Myval);
+			textures.remove(it._Ptr->_Myval);
 			return true;
 		}
 	}
@@ -106,7 +105,7 @@ SDL_Texture* const j1Textures::LoadSurface(SDL_Surface* surface)
 	}
 	else
 	{
-		textures.add(texture);
+		textures.push_back(texture);
 	}
 
 	return texture;

@@ -1,4 +1,0 @@
-Add p2ListExtended or use dynaarray
-Make sprite ordering
-Clear #pragme comments
-Load map

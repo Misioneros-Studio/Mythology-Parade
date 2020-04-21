@@ -28,7 +28,7 @@
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -76,15 +76,29 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Animation.cpp" />
+    <ClCompile Include="Building.cpp" />
+    <ClCompile Include="CombatUnit.cpp" />
+    <ClCompile Include="Console.cpp" />
+    <ClCompile Include="EntityManager.cpp" />
+    <ClCompile Include="HealthSystem.cpp" />
+    <ClCompile Include="CurrencySystem.cpp" />
+    <ClCompile Include="j1FadeToBlack.cpp" />
     <ClCompile Include="j1Fonts.cpp" />
     <ClCompile Include="j1Gui.cpp" />
+    <ClCompile Include="j1LogoScene.cpp" />
     <ClCompile Include="j1Main.cpp" />
     <ClCompile Include="j1App.cpp" />
     <ClCompile Include="j1Audio.cpp" />
     <ClCompile Include="j1Input.cpp" />
     <ClCompile Include="j1Map.cpp" />
+    <ClCompile Include="j1Minimap.cpp" />
     <ClCompile Include="j1Pathfinding.cpp" />
     <ClCompile Include="j1PerfTimer.cpp" />
+    <ClCompile Include="LevelSystem.cpp" />
+    <ClCompile Include="PathFinder.cpp" />
+    <ClCompile Include="Player.cpp" />
+    <ClCompile Include="QuadTree.cpp" />
     <ClCompile Include="j1Scene.cpp" />
     <ClCompile Include="j1Timer.cpp" />
     <ClCompile Include="p2Log.cpp" />
@@ -92,30 +106,46 @@
     <ClCompile Include="j1Textures.cpp" />
     <ClCompile Include="j1Window.cpp" />
     <ClCompile Include="PugiXml\src\pugixml.cpp" />
+    <ClCompile Include="j1TitleScene.cpp" />
+    <ClCompile Include="Unit.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Animation.h" />
+    <ClInclude Include="Building.h" />
+    <ClInclude Include="CombatUnit.h" />
+    <ClInclude Include="Console.h" />
+    <ClInclude Include="Entity.h" />
+    <ClInclude Include="EntityManager.h" />
+    <ClInclude Include="HealthSystem.h" />
+    <ClInclude Include="CurrencySystem.h" />
+    <ClInclude Include="j1FadeToBlack.h" />
     <ClInclude Include="j1Fonts.h" />
     <ClInclude Include="j1Gui.h" />
+    <ClInclude Include="j1LogoScene.h" />
     <ClInclude Include="j1Map.h" />
+    <ClInclude Include="j1Minimap.h" />
     <ClInclude Include="j1Pathfinding.h" />
     <ClInclude Include="j1PerfTimer.h" />
+    <ClInclude Include="LevelSystem.h" />
+    <ClInclude Include="PathFinder.h" />
+    <ClInclude Include="Player.h" />
+    <ClInclude Include="QuadTree.h" />
     <ClInclude Include="j1Scene.h" />
     <ClInclude Include="j1Timer.h" />
-    <ClInclude Include="p2DynArray.h" />
     <ClInclude Include="j1Audio.h" />
     <ClInclude Include="j1Input.h" />
     <ClInclude Include="p2Log.h" />
     <ClInclude Include="j1App.h" />
     <ClInclude Include="p2Defs.h" />
-    <ClInclude Include="p2List.h" />
     <ClInclude Include="j1Module.h" />
     <ClInclude Include="p2Point.h" />
     <ClInclude Include="j1Render.h" />
     <ClInclude Include="j1Textures.h" />
     <ClInclude Include="j1Window.h" />
-    <ClInclude Include="p2SString.h" />
     <ClInclude Include="PugiXml\src\pugiconfig.hpp" />
     <ClInclude Include="PugiXml\src\pugixml.hpp" />
+    <ClInclude Include="j1TitleScene.h" />
+    <ClInclude Include="Unit.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="TODOS.txt" />

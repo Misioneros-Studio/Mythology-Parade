@@ -2,13 +2,14 @@
 #include "p2Log.h"
 #include "j1App.h"
 #include "j1Window.h"
+
 #include "j1Render.h"
 
 #define VSYNC true
 
 j1Render::j1Render() : j1Module()
 {
-	name.create("renderer");
+	name.append("renderer");
 	background.r = 0;
 	background.g = 0;
 	background.b = 0;
@@ -47,6 +48,7 @@ bool j1Render::Awake(pugi::xml_node& config)
 		camera.x = 0;
 		camera.y = 0;
 	}
+	active = true;
 
 	return ret;
 }
@@ -128,15 +130,28 @@ iPoint j1Render::ScreenToWorld(int x, int y) const
 	return ret;
 }
 
+iPoint j1Render::WorldToScreen(int x, int y) const
+{
+	iPoint ret;
+	int scale = App->win->GetScale();
+
+	ret.x = (x + camera.x / scale);
+	ret.y = (y + camera.y / scale);
+
+	return ret;
+}
+
+
+
 // Blit to screen
-bool j1Render::Blit(SDL_Texture* texture, int x, int y, const SDL_Rect* section, float speed, double angle, int pivot_x, int pivot_y) const
+bool j1Render::Blit(SDL_Texture* texture, int x, int y, const SDL_Rect* section, float speed, double angle, int pivot_x, int pivot_y, float scal) const
 {
 	bool ret = true;
 	uint scale = App->win->GetScale();
-
+	scal = scal * scale;
 	SDL_Rect rect;
-	rect.x = (int)(camera.x * speed) + x * scale;
-	rect.y = (int)(camera.y * speed) + y * scale;
+	rect.x = (int)(camera.x * speed) + x * scal;
+	rect.y = (int)(camera.y * speed) + y * scal;
 
 	if (section != NULL)
 	{
@@ -146,6 +161,50 @@ bool j1Render::Blit(SDL_Texture* texture, int x, int y, const SDL_Rect* section,
 	else
 	{
 		SDL_QueryTexture(texture, NULL, NULL, &rect.w, &rect.h);
+	}
+	//if (scal != 1)LOG("%f,%d", scal, rect.h);
+
+	rect.w *= scal;
+	rect.h *= scal;
+	if (rect.w == 0)
+		rect.w = 1;
+	if (rect.h == 0)
+		rect.h = 1;
+	SDL_Point* p = NULL;
+	SDL_Point pivot;
+
+	if (pivot_x != INT_MAX && pivot_y != INT_MAX)
+	{
+		pivot.x = pivot_x;
+		pivot.y = pivot_y;
+		p = &pivot;
+	}
+
+	if (SDL_RenderCopyEx(renderer, texture, section, &rect, angle, p, SDL_FLIP_NONE) != 0)
+	{
+		LOG("Cannot blit to screen. SDL_RenderCopy error: %s", SDL_GetError());
+		ret = false;
+	}
+
+	return ret;
+}
+bool j1Render::Blit(SDL_Texture* texture, int x, int y, iPoint size, const SDL_Rect* section, float speed, SDL_RendererFlip flip, double angle, int pivot_x, int pivot_y) const
+{
+	bool ret = true;
+	uint scale = App->win->GetScale();
+
+	SDL_Rect rect;
+	rect.x = (int)(camera.x * speed) + x * scale;
+	rect.y = (int)(camera.y * speed) + y * scale;
+
+	if (!size.IsZero())
+	{
+		rect.w = size.x;
+		rect.h = size.y;
+	}
+	else
+	{
+		return false;
 	}
 
 	rect.w *= scale;
@@ -161,7 +220,7 @@ bool j1Render::Blit(SDL_Texture* texture, int x, int y, const SDL_Rect* section,
 		p = &pivot;
 	}
 
-	if (SDL_RenderCopyEx(renderer, texture, section, &rect, angle, p, SDL_FLIP_NONE) != 0)
+	if (SDL_RenderCopyEx(renderer, texture, section, &rect, angle, p, flip) != 0)
 	{
 		LOG("Cannot blit to screen. SDL_RenderCopy error: %s", SDL_GetError());
 		ret = false;
@@ -220,6 +279,49 @@ bool j1Render::DrawLine(int x1, int y1, int x2, int y2, Uint8 r, Uint8 g, Uint8 
 	}
 
 	return ret;
+}
+
+bool j1Render::DrawQuadTree(TreeType type, QuadNode* node)
+{
+	//This method needs to be upgraded to a generic display type
+	SDL_Rect quad = { node->x , node->y , node->w,  node->h };
+
+	switch (type)
+	{
+	case NORMAL:
+		App->render->DrawLine(quad.x, quad.y, quad.x, quad.y + quad.h, 255, 255, 255);
+		App->render->DrawLine(quad.x, quad.y, quad.x + quad.w, quad.y, 255, 255, 255);
+
+		App->render->DrawLine(quad.x + quad.w, quad.y + quad.h, quad.x + quad.w, quad.y, 255, 255, 255);
+		App->render->DrawLine(quad.x + quad.w, quad.y + quad.h, quad.x, quad.y + quad.h, 255, 255, 255);
+		break;
+
+
+	case ISOMETRIC:
+
+		App->render->DrawLine(quad.x, quad.y, quad.x - quad.w / 2, quad.y + quad.h / 2, 255, 255, 255);
+		App->render->DrawLine(quad.x, quad.y, quad.x + quad.w / 2, quad.y + quad.h / 2, 255, 255, 255);
+
+		App->render->DrawLine(quad.x - quad.w / 2, quad.y + quad.h / 2, quad.x, quad.y + quad.h, 255, 255, 255);
+		App->render->DrawLine(quad.x + quad.w / 2, quad.y + quad.h / 2, quad.x, quad.y + quad.h, 255, 255, 255);
+		break;
+
+	}
+
+	for (int i = 0; i < QUADNODE_CHILD_NUMBER; i++)
+	{
+		if (node->childs[i])
+		{
+			DrawQuadTree(type, node->childs[i]);
+		}
+	}
+	return true;
+}
+
+void j1Render::BlitInsideQuad(SDL_Texture* texture, SDL_Rect sprite, SDL_Rect quad)
+{
+	SDL_Point p = { 0, 0 };
+	SDL_RenderCopyEx(renderer, texture, &sprite, &quad, 0, &p, SDL_FLIP_NONE);
 }
 
 bool j1Render::DrawCircle(int x, int y, int radius, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool use_camera) const
