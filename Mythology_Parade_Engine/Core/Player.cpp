@@ -9,6 +9,7 @@
 Player::Player()
 {
 	InitVikings();
+	InitGreek();
 
 	tick2 = SDL_GetTicks();
 	player_win = player_lose = false;
@@ -263,4 +264,20 @@ void Player::InitVikings()
 	App->entityManager->CreateUnitEntity(UnitType::MONK, monkPos);
 	App->entityManager->CreateUnitEntity(UnitType::ASSASSIN, assassinPos);
 
+}
+
+void Player::InitGreek()
+{
+	iPoint fortress = { 102,41 };
+	fortress = App->map->MapToWorld(fortress.x, fortress.y);
+	App->entityManager->CreateBuildingEntity(fortress, BuildingType::FORTRESS, App->entityManager->buildingsData[4]);
+
+	iPoint monkPos = { 106,34 };
+	iPoint assassinPos = { 109,37 };
+	monkPos = App->map->MapToWorld(monkPos.x, monkPos.y);
+	assassinPos = App->map->MapToWorld(assassinPos.x, assassinPos.y);
+	
+
+	App->entityManager->CreateUnitEntity(UnitType::MONK, monkPos);
+	App->entityManager->CreateUnitEntity(UnitType::ASSASSIN, assassinPos);
 }

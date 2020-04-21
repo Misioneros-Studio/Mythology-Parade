@@ -29,6 +29,7 @@ public:
 	std::list<Entity*> GetEntitiesSelected();
 
 	void InitVikings();
+	void InitGreek();
 
 private:
 	std::string faith, sacrifice, prayer;
