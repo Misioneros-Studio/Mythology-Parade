@@ -19,6 +19,12 @@ enum BuildingStatus
 	FINISHED,
 	DESTROYED
 };
+enum BuildingAction
+{
+	RESEARCHING,
+	PRODUCING,
+	NOTHING
+};
 struct BuildingInfo;
 
 class Building: public Entity, public HealthSystem
@@ -32,13 +38,19 @@ public:
 	int GetInfluence() { return influence; }
 	int GetDamage() { return damage; }
 	int GetMaxCap() { return maxCap; }
+
+	void StartProducing(int time, std::string thing_producing);
+	void StartResearching(int time, std::string thing_producing);
+
 	void CreateUnit(BuildingType);
+
 private:
 
 	bool Awake(pugi::xml_node&);
 	bool Update(float dt) override;
-	void Draw_Construction_Bar(int blitWidth);
-	bool Draw(float dt) override;
+
+	void Draw_Construction_Bar(int blitWidth, int bar_used = 0);
+	void Draw();
 
 	//Stats
 	int defenses;
@@ -46,20 +58,29 @@ private:
 	int damage;
 	int maxCap;
 	int time_construction;
+
+	int time_research;
+	int time_producing;
+	bool researched;
+
 	int nearbyMonks;
 	std::string description;
 
-	//Used when constructing
+	//Used when constructing/producing
 	float percentage_constructing;
 	j1Timer timer_construction;
 	bool first_time_constructing;
+	std::string element_producing;
 	
 
 	//Settigns
 	BuildingType buildingType;
-	BuildingStatus buildingStatus;
 	int tileLenght;
 	SDL_Rect original_spriteRect;
+
+public:
+	BuildingStatus buildingStatus;
+	BuildingAction buildingAction;
 
 
 

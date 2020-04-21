@@ -50,24 +50,26 @@ bool j1TitleScene::Start()
 	App->gui->sfx_UI[(int)UI_Audio::CONFIRMATION] = App->audio->LoadFx("audio/ui/Click_Standard2.wav");
 	App->gui->sfx_UI[(int)UI_Audio::CLOSE] = App->audio->LoadFx("audio/ui/Close_Menu.wav");
 
-	ui_button[0] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, nullptr, { 35,145,237,38 }, { 787,240,237,38 }, "NEW", { 787,342,237,38 }, { 787,291,237,38 }, false, { 0,0,0,0 }, this,
+
+	ui_button[0] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, nullptr, { 1535,145,237,38 }, { 787,240,237,38 }, "NEW", { 787,342,237,38 }, { 787,291,237,38 }, false, { 0,0,0,0 }, this,
 		(int)UI_Audio::MAIN_MENU);
-	ui_text[0] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 122,158,237,38 }, { 0,0,100,100 }, "New Game", { 0,0,0,255 });
-	ui_button[1] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, nullptr, { 35,220,237,38 }, { 787,240,237,38 }, "LOAD", { 787,342,237,38 }, { 787,291,237,38 }, false, { 0,0,0,0 }, this,
+	ui_text[0] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 1622,158,237,38 }, { 0,0,100,100 }, "New Game", { 0,0,0,255 });
+	ui_button[1] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, nullptr, { 1535,220,237,38 }, { 787,240,237,38 }, "LOAD", { 787,342,237,38 }, { 787,291,237,38 }, false, { 0,0,0,0 }, this,
 		(int)UI_Audio::MAIN_MENU);
-	ui_text[1] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 119,232,237,38 }, { 0,0,100,100 }, "Load Game", { 0,0,0,255 });
-	ui_button[2] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, nullptr, { 35,295,237,38 }, { 787,240,237,38 }, "TUTORIAL", { 787,342,237,38 }, { 787,291,237,38 }, false, { 0,0,0,0 }, 
+	ui_text[1] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 1619,232,237,38 }, { 0,0,100,100 }, "Load Game", { 0,0,0,255 });
+	ui_button[2] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, nullptr, { 1535,295,237,38 }, { 787,240,237,38 }, "TUTORIAL", { 787,342,237,38 }, { 787,291,237,38 }, false, { 0,0,0,0 },
 		this, (int)UI_Audio::MAIN_MENU);
-	ui_text[2] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 128,307,237,38 }, { 0,0,100,100 }, "Tutorial", { 0,0,0,255 });
-	ui_button[3] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, nullptr, { 35,370,237,38 }, { 787,240,237,38 }, "OPTIONS", { 787,342,237,38 }, { 787,291,237,38 }, false, { 0,0,0,0 }, this,
+	ui_text[2] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 1628,307,237,38 }, { 0,0,100,100 }, "Tutorial", { 0,0,0,255 });
+	ui_button[3] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, nullptr, { 1535,370,237,38 }, { 787,240,237,38 }, "OPTIONS", { 787,342,237,38 }, { 787,291,237,38 }, false, { 0,0,0,0 }, this,
 		(int)UI_Audio::MAIN_MENU);
-	ui_text[3] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 129,382,237,38 }, { 0,0,100,100 }, "Options", { 0,0,0,255 });
-	ui_button[4] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, nullptr, {35,445,237,38 }, { 787,240,237,38 }, "CREDITS", { 787,342,237,38 }, { 787,291,237,38 }, false, { 0,0,0,0 }, this,
+	ui_text[3] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 1629,382,237,38 }, { 0,0,100,100 }, "Options", { 0,0,0,255 });
+	ui_button[4] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, nullptr, { 1535,445,237,38 }, { 787,240,237,38 }, "CREDITS", { 787,342,237,38 }, { 787,291,237,38 }, false, { 0,0,0,0 }, this,
 		(int)UI_Audio::MAIN_MENU);
-	ui_text[4] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 127,457,237,38 }, { 0,0,100,100 }, "Credits");
-	ui_button[5] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, nullptr, { 35,520,237,38 }, { 787,240,237,38 }, "EXIT", { 787,342,237,38 }, { 787,291,237,38 }, false, { 0,0,0,0 }, this,
+	ui_text[4] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 1627,457,237,38 }, { 0,0,100,100 }, "Credits");
+	ui_button[5] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, nullptr, { 1535,520,237,38 }, { 787,240,237,38 }, "EXIT", { 787,342,237,38 }, { 787,291,237,38 }, false, { 0,0,0,0 }, this,
 		(int)UI_Audio::MAIN_MENU);
-	ui_text[5] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 140,532,237,38 }, { 0,0,100,100 }, "Exit", { 0,0,0,255 });
+	ui_text[5] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 1640,532,237,38 }, { 0,0,100,100 }, "Exit", { 0,0,0,255 });
+	
 
 	close_menus = CloseTitleSceneMenus::None;
 
@@ -82,7 +84,8 @@ bool j1TitleScene::Start()
 // Called each loop iteration
 bool j1TitleScene::PreUpdate()
 {
-
+	if (ui_button[0]->GetScreenRect().x!=35&&App->fade_to_black->current_step==App->fade_to_black->none)
+		MoveMenu();
 	return true;
 }
 
@@ -91,19 +94,19 @@ bool j1TitleScene::Update(float dt)
 {
 	switch (close_menus)
 	{
-	case::CloseTitleSceneMenus::Credits:
+	case CloseTitleSceneMenus::Credits:
 		DeactivateCredits();
 		close_menus = CloseTitleSceneMenus::None;
 		break;
-	case::CloseTitleSceneMenus::Tutorial:
+	case CloseTitleSceneMenus::Tutorial:
 		DeactivateTutorial();
 		close_menus = CloseTitleSceneMenus::None;
 		break;
-	case::CloseTitleSceneMenus::Options:
+	case CloseTitleSceneMenus::Options:
 		DeactivateOptionsMenu();
 		close_menus = CloseTitleSceneMenus::None;
 		break;
-	case::CloseTitleSceneMenus::Confirmation:
+	case CloseTitleSceneMenus::Confirmation:
 		DeactivateConfirmationMenu();
 		close_menus = CloseTitleSceneMenus::None;
 		break;
@@ -148,7 +151,27 @@ bool j1TitleScene::CleanUp()
 }
 
 
-
+void j1TitleScene::MoveMenu() {
+	for (int i = 0; i < 6; i++)
+	{
+		bool stop = false;
+		SDL_Rect r = ui_button[i]->GetScreenRect();
+		float n = 35 + r.x;
+		r.x -= 0.1*n;
+		if (r.x < 35) {
+			n = 35 - r.x;
+			r.x = 35;
+			stop = true;
+		}
+		ui_button[i]->SetRect(r);
+		r = ui_text[i]->GetScreenRect();
+		if (stop == true)
+			r.x -= n;
+		else
+			r.x -= 0.1*n;
+		ui_text[i]->SetRect(r);
+	}
+}
 
 // Called when clicking options button in pause menu
 void j1TitleScene::ActivateOptionsMenu() {

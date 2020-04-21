@@ -35,6 +35,16 @@ bool Player::Awake()
 
 bool Player::Start()
 {
+
+	tick2 = SDL_GetTicks();
+	player_win = player_lose = false;
+	currencySystem.faith = 0;
+	currencySystem.prayers = 0;
+	currencySystem.sacrifices = 0;
+	dontSelect = false;
+	num_encampment = num_monastery = num_temple = 0;
+	time_production_victory = 300;
+
 	return true;
 }
 
@@ -135,9 +145,10 @@ void Player::SelectionDraw_Logic()
 		if (App->input->GetMouseButtonDown(1) == KEY_UP)
 		{
 			listEntities.clear();
+			buildingSelect = nullptr;
 			ClickLogic();
 			SeeEntitiesInside();
-			App->scene->HUDUpdateSelection(listEntities);
+			App->scene->HUDUpdateSelection(listEntities, (Building*)buildingSelect);
 		}
 	}
 }
@@ -203,7 +214,7 @@ void Player::PlayerInputs()
 			App->entityManager->DeleteEntity(it._Ptr->_Myval);
 		}
 		listEntities.clear();
-		App->scene->HUDUpdateSelection(listEntities);
+		App->scene->HUDUpdateSelection(listEntities, nullptr);
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN && App->scene->godMode)
@@ -268,6 +279,18 @@ void Player::ClickLogic()
 		}
 	}
 }
+
+int Player::GetFaith() {
+	return currencySystem.faith;
+}
+
+int Player::GetPrayers() {
+	return currencySystem.prayers;
+}
+
+int Player::GetSacrifices() {
+	return currencySystem.sacrifices;
+
 
 void Player::InitVikings() 
 {

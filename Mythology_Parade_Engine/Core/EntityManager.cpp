@@ -24,8 +24,12 @@ bool EntityManager::Awake(pugi::xml_node& a)
 	pugi::xml_document buildings;
 	buildings.load_file(a.child("buildings").attribute("file").as_string());
 	LoadBuildingsData(buildings.child("map").child("objectgroup"));
-	construction_bar_back = { 1300,512,106,18 };
-	construction_bar_front = { 1303,500,100,12 };
+	life_bar_front = { 1310,523,115,10 };
+	research_bar_front = { 1310,543,115,10 };
+	construction_bar_back = { 1299,560,125,17 };
+	construction_bar_front = { 1310,503,115,10 };
+	construction_bar_empty = { 1299,582,125,17 };
+
 
 	//Not working because renderer is not created yet ;-;
 	//std::string path = "assets/buildings/";
@@ -161,22 +165,27 @@ bool EntityManager::Update(float dt)
 		iPoint mouse = App->map->GetMousePositionOnMap();
 		iPoint spawnPos = App->map->MapToWorld(mouse.x, mouse.y);
 		spawnPos.y += App->map->data.tile_height / 2;
+		bool viking = false;
 		switch (buildingTestIndex) {
 		case 0:
+			viking = true;
 		case 4:
-			CreateBuildingEntity(spawnPos, BuildingType::FORTRESS, buildingsData[buildingTestIndex]);
+			CreateBuildingEntity(spawnPos, BuildingType::FORTRESS, buildingsData[buildingTestIndex], viking);
 			break;
 		case 1:
+			viking = true;
 		case 5:
-			CreateBuildingEntity(spawnPos, BuildingType::MONASTERY , buildingsData[buildingTestIndex]);
+			CreateBuildingEntity(spawnPos, BuildingType::MONASTERY , buildingsData[buildingTestIndex], viking);
 			break;
 		case 2:
+			viking = true;
 		case 6:
-			CreateBuildingEntity(spawnPos, BuildingType::TEMPLE, buildingsData[buildingTestIndex]);
+			CreateBuildingEntity(spawnPos, BuildingType::TEMPLE, buildingsData[buildingTestIndex], viking);
 			break;
 		case 3:
+			viking = true;
 		case 7:
-			CreateBuildingEntity(spawnPos, BuildingType::ENCAMPMENT, buildingsData[buildingTestIndex]);
+			CreateBuildingEntity(spawnPos, BuildingType::ENCAMPMENT, buildingsData[buildingTestIndex], viking);
 			break;
 		}
 		
@@ -354,6 +363,7 @@ Entity* EntityManager::CreatePlayerEntity()
 
 	ret->type = EntityType::PLAYER;
 	entities[EntityType::PLAYER].push_back(ret);
+	ret->Start();
 
 	return ret;
 }
@@ -428,7 +438,6 @@ Entity* EntityManager::CreateBuildingEntity(iPoint pos, BuildingType type, Build
 		ret = new Building(BuildingType::ENCAMPMENT, pos, info);
 		break;
 	}
-
 	ret->type = EntityType::BUILDING;
 	ret->texture = entitySpriteSheets[SpriteSheetType::BUILDINGS];
 

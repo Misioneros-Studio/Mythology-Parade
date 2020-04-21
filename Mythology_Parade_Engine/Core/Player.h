@@ -27,6 +27,9 @@ public:
 	void PlayerInputs();
 	void ClickLogic();
 	std::list<Entity*> GetEntitiesSelected();
+	int GetFaith();
+	int GetPrayers();
+	int GetSacrifices();
 
 	void InitVikings();
 	void InitGreek();
@@ -45,6 +48,10 @@ private:
 public:
 	bool player_win = false;
 	bool player_lose = false;
+	int num_monastery;
+	int num_temple;
+	int num_encampment;
+	int time_production_victory;
 	CivilizationType player_type;
   
 

@@ -68,9 +68,14 @@ public:
 	int faith;
 	int prayers;
 
+	int time_sacrifices;
+	int time_prayers;
+
+
 private:
 	int faithRatio;
 	int basefaithRatio;
+
 };
 
 #endif // !_J1CURRENCYSYSTEM_

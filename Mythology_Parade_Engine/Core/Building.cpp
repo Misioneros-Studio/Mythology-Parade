@@ -2,12 +2,11 @@
 #include "p2Log.h"
 Building::Building(BuildingType type, iPoint pos, BuildingInfo info)
 {
-	damage = 25;
-	SetMaxHealth(500);
-	defenses = 500;
-	maxCap = 1;
+
 	position = pos;
 	buildingStatus = CONSTRUCTING;
+	buildingAction = NOTHING;
+	time_producing = 0;
 	percentage_constructing = 0;
 	first_time_constructing = true;
 	buildingType = type;
@@ -17,25 +16,61 @@ Building::Building(BuildingType type, iPoint pos, BuildingInfo info)
 	switch (buildingType)
 	{
 	case FORTRESS:
-		time_construction = 0;
+		this->buildingType = BuildingType::FORTRESS;
+		time_construction =time_research = 0;
+		damage = 25;
+		SetMaxHealth(500);
+		defenses = 500;
+		influence = 20;
+		maxCap = 1;
+		description = "I'm a fortress";
+		researched = true;
 		break;
 	case MONASTERY:
-		time_construction = 60;
+		this->buildingType = BuildingType::MONASTERY;
+		time_research = 60;
+		time_construction = 180;
+		damage = 15;
+		SetMaxHealth(250);
+		defenses = 250;
+		influence = 10;
+		maxCap = 5;
+		description = "I'm a monastery";
+		App->entityManager->getPlayer()->num_monastery++;
+		researched = false;
 		break;
 	case TEMPLE:
-		time_construction = 90;
+		this->buildingType = BuildingType::TEMPLE;
+		time_research = 90;
+		time_construction = 150;
+		damage = 15;
+		SetMaxHealth(200);
+		defenses = 200;
+		influence = 10;
+		maxCap = 8;
+		description = "I'm a temple";
+		App->entityManager->getPlayer()->num_temple++;
+		researched = false;
 		break;
 	case ENCAMPMENT:
-		time_construction = 90;
+		this->buildingType = BuildingType::ENCAMPMENT;
+		time_research = 90;
+		time_construction = 180;
+		damage = 20;
+		SetMaxHealth(350);
+		defenses = 350;
+		influence = 10;
+		maxCap = 7;
+		description = "I'm an encampment";
+		App->entityManager->getPlayer()->num_encampment++;
+		researched = false;
 		break;
 	default:
 		break;
 	}
-	description = "I'm a fortress";
-	SetMaxHealth(300);
+	HealthSystem::Init();
 
 
-	civilization = info.civilization;
 	original_spriteRect = spriteRect = info.spriteRect;
 	blitRect = info.blitSize;
 
@@ -98,6 +133,26 @@ bool Building::Update(float dt)
 			percentage_constructing = (float)actual_construction_time / (float)time_construction;
 		}
 	}
+	else if (buildingAction != NOTHING) {
+		int actual_construction_time = timer_construction.ReadSec();
+		if (actual_construction_time >= time_producing)
+		{
+
+			if (buildingAction == PRODUCING) {
+				App->scene->FinishProduction(element_producing);
+			}
+			else if(buildingAction==RESEARCHING){
+				App->scene->FinishResearching(element_producing);
+			}
+			buildingAction = NOTHING;
+			percentage_constructing = 1;
+
+		}
+		else
+		{
+			percentage_constructing = (float)actual_construction_time / (float)time_producing;
+		}
+	}
 	if (App->input->GetKey(SDL_SCANCODE_3) == KEY_DOWN)
 	{
 		buildingStatus = DESTROYED;
@@ -112,31 +167,39 @@ bool Building::Update(float dt)
 		buildingStatus = FINISHED;
 		first_time_constructing = false;
 	}
-	int blitWidth;
+	int blitWidth = tileLenght * App->map->data.tile_width;
 	if(buildingStatus==DESTROYED)
 	{
 		spriteRect = App->entityManager->destructedSpriteRect;
 
-		blitWidth = tileLenght * App->map->data.tile_width;
 		blitRect = App->entityManager->CalculateBuildingSize(blitWidth, spriteRect.w, spriteRect.h);
 	}
 	else if (buildingStatus==CONSTRUCTING)
 	{
 		spriteRect = App->entityManager->constructorSpriteRect;
 
-		blitWidth = tileLenght * App->map->data.tile_width;
 		blitRect = App->entityManager->CalculateBuildingSize(blitWidth, spriteRect.w, spriteRect.h);
 	}
 	else if (buildingStatus==FINISHED)
 	{
 		spriteRect = original_spriteRect;
 
-		blitWidth = tileLenght * App->map->data.tile_width;
 		blitRect = App->entityManager->CalculateBuildingSize(blitWidth, spriteRect.w, spriteRect.h);
 	}
 
+	//Draw();
+	if (buildingStatus == CONSTRUCTING || buildingAction==PRODUCING) 
+  {
+		Draw_Construction_Bar(blitWidth);
+	}
+	else if (buildingAction == RESEARCHING) 
+  {
+		Draw_Construction_Bar(blitWidth, 2);
+	}
+
 	//IF MONASTERY DETECTS NEARBY MONKS,INCREASE FAITH
-	if (buildingType == BuildingType::MONASTERY) {
+	if (buildingType == BuildingType::MONASTERY) 
+  {
 		std::list<Entity*> list =  App->entityManager->entities[EntityType::UNIT];
 		int count = 0;
 		for each (Unit* var in list)
@@ -151,11 +214,6 @@ bool Building::Update(float dt)
 			nearbyMonks = count;
 			App->entityManager->getPlayer()->IncreaseFaithRatio(nearbyMonks);			
 		}
-	}
-
-	//Draw();
-	if (buildingStatus == CONSTRUCTING) {
-		Draw_Construction_Bar(blitWidth);
 	}
   
 	return ret;
@@ -177,12 +235,37 @@ bool Building::Draw(float dt)
 	return true;
 }
 
-void Building::Draw_Construction_Bar(int blitWidth)
+void Building::Draw_Construction_Bar(int blitWidth, int bar_used)
 {
 	SDL_Rect construction_spriteRect = App->entityManager->construction_bar_back;
-	App->render->Blit(texture, position.x+ 0.15* blitWidth, position.y + ((32 / 2) * tileLenght) - 1.25*blitRect.y, &construction_spriteRect);
-	construction_spriteRect = App->entityManager->construction_bar_front;
+	iPoint pos = { position.x + (int)(0.15 * blitWidth),position.y + (int)(((32 / 2) * tileLenght) - 1.25 * blitRect.y) };
+	App->render->Blit(texture, pos.x, pos.y, &construction_spriteRect);
+	if (bar_used == 0)
+		construction_spriteRect = App->entityManager->construction_bar_front;
+	else if(bar_used==1)
+		construction_spriteRect = App->entityManager->life_bar_front;
+	else if(bar_used==2)
+		construction_spriteRect = App->entityManager->research_bar_front;
 	int sprite_rect_width = percentage_constructing * construction_spriteRect.w;
-	App->render->Blit(texture, position.x+ 0.15* blitWidth+3, position.y + ((32 / 2) * tileLenght) - 1.25*blitRect.y+3, { sprite_rect_width, construction_spriteRect.h },
+	App->render->Blit(texture, pos.x + 11, pos.y + 3, { sprite_rect_width, construction_spriteRect.h },
 		&construction_spriteRect);
+	construction_spriteRect = App->entityManager->construction_bar_empty;
+	App->render->Blit(texture, pos.x,pos.y, &construction_spriteRect);
+}
+
+
+void Building::StartProducing(int time, std::string thing_producing) {
+	buildingAction = PRODUCING;
+	percentage_constructing = 0;
+	time_producing = time;
+	element_producing = thing_producing;
+	timer_construction.Start();
+}
+
+void Building::StartResearching(int time, std::string thing_producing) {
+	buildingAction = RESEARCHING;
+	percentage_constructing = 0;
+	time_producing = time;
+	element_producing = thing_producing;
+	timer_construction.Start();
 }

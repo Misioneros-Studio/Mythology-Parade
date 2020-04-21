@@ -16,6 +16,9 @@ Unit::Unit(UnitType type, iPoint pos): unitType(type), state(AnimationType::IDLE
 	switch (type)
 	{
 	case UnitType::MONK:
+		time_production = 90;
+		time_research = 0;
+		researched = true;
 		Init(1);
 		break;
 	}

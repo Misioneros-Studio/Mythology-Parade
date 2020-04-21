@@ -13,6 +13,7 @@ enum class CloseSceneMenus {
 	Options,
 	Confirmation,
 	Confirmation_and_Pause,
+	Research,
 	Unknown
 };
 
@@ -23,8 +24,10 @@ class ButtonUI;
 class TextUI;
 class QuadTree;
 class Entity;
+class Building;
 enum class UnitType;
 enum BuildingType;
+enum CivilizationType;
 
 class j1Scene : public j1Module
 {
@@ -78,7 +81,7 @@ public:
 	void RestartGame();
 
 	// Called when selecting troops or buildings
-	void HUDUpdateSelection(std::list<Entity*>);
+	void HUDUpdateSelection(std::list<Entity*>, Building*);
 
 	// Called when deleting the list of troops in the HUD
 	void HUDDeleteListTroops();
@@ -93,16 +96,26 @@ public:
 	void UpdateSelectedThing();
 
 	//Called when creating or updating the action buttons
-	void ManageActionButtons(bool create_buttons = false);
+	void ManageActionButtons(bool create_buttons = false, bool viking = true);
 
 	// Called to get the rect of the sprite of the portrait
 	SDL_Rect GetSpritePortrait(int type_of_portrait, UnitType unit_type);
 
 	// Called to get the rect of the sprite of the portrait of the building
-	SDL_Rect GetSpritePortraitBuilding(int type_of_portrait, BuildingType building_type);
+	SDL_Rect GetSpritePortraitBuilding(int type_of_portrait, BuildingType building_type, CivilizationType civilization);
+
+	//Called when clicking the research button
+	void ActivateResearchMenu();
+
+	//Called when clicking close button in the research menu
+	void DeactivateResearchMenu();
 
 
 	void OnClick(UI* element, float argument = 0);
+
+	void FinishProduction(std::string thing_produced);
+
+	void FinishResearching(std::string);
 
 	void DoWinOrLoseWindow(int type, bool win);
 
@@ -112,7 +125,7 @@ private:
 		Assassin,
 		Pikeman,
 		Monk,
-		Cleric,
+		Priest,
 		Fortress,
 		Temple,
 		Encampment,
@@ -149,7 +162,16 @@ private:
 	Type_Selected type_thing_selected;
 	ButtonUI* hud_button_actions[5];
 	ImageUI* hud_button_actions_unclickable[5];
+	WindowUI* ui_research_window;
+	ButtonUI* ui_button_research[3];
+	TextUI* ui_text_research[8];
 
+
+
+	//////////////// TEMPORAL VARIABLES FOR VERTICAL SLICE ONLY
+	bool research_monastery;
+	bool research_temple;
+	bool research_encampment;
 
 public:
 	SDL_Texture* debugBlue_tex;

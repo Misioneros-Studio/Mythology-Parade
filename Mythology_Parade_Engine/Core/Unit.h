@@ -42,6 +42,9 @@ private:
 public: 
 	//Unit Type
 	UnitType unitType;
+	int time_production;
+	int time_research;
+	bool researched;
 
 public:
 	Unit(UnitType, iPoint);
