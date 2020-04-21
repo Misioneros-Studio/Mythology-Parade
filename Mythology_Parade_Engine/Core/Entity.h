@@ -41,6 +41,11 @@ public:
 		return true;
 	}
 
+	virtual bool Draw(float dt) 
+	{
+		return true;
+	}
+
 	// Called each loop iteration
 	virtual bool PreUpdate()
 	{
@@ -90,8 +95,11 @@ public:
 	//Copy of node
 	pugi::xml_node entity_node;
 
+	bool displayDebug;
+
 protected:
 	SDL_RendererFlip flipState;
+	SDL_Rect collisionRect;
 };
 
 #endif // !ENTITY_H

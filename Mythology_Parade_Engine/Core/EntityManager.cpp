@@ -386,6 +386,30 @@ Entity* EntityManager::CreateUnitEntity(UnitType type, iPoint pos)
 	return ret;
 }
 
+void EntityManager::DrawEverything() 
+{
+	float dt = App->GetDT();
+	Entity* ent = nullptr;
+
+	for (unsigned i = 1; i < entities.size(); i++)
+	{
+		for (std::list<Entity*>::iterator it = entities[(EntityType)i].begin(); it != entities[(EntityType)i].end(); it++)
+		{
+			switch ((EntityType)i)
+			{
+			case EntityType::BUILDING:
+				ent = (Building*)it._Ptr->_Myval;
+				break;
+
+			case EntityType::UNIT:
+				ent = (Unit*)it._Ptr->_Myval;
+				break;
+			}
+			ent->Draw(dt);
+		}
+	}
+}
+
 Entity* EntityManager::CreateBuildingEntity(iPoint pos, BuildingType type, BuildingInfo info)
 {
 	Entity* ret = nullptr;

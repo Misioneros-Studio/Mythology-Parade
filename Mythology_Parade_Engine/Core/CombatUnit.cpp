@@ -6,7 +6,6 @@ CombatUnit::CombatUnit(UnitType type, iPoint pos) : Unit(type, pos), range(0), d
 	//TODO 10: Change textures
 	unitType = type;
 	position = pos;
-	state = AnimationType::IDLE;
 	switch (unitType)
 	{
 	case UnitType::ASSASSIN:
@@ -96,7 +95,7 @@ void CombatUnit::Init(int maxHealth, int damage, int range, int speed)
 
 bool CombatUnit::Update(float dt) 
 {
-	Unit::Update(dt);
+	//Unit::Update(dt);
 	return true;
 }
 

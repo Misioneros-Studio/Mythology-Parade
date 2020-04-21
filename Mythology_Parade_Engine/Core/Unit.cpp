@@ -6,6 +6,9 @@
 Unit::Unit(UnitType type, iPoint pos): unitType(type), state(AnimationType::IDLE), _isSelected(false), moveSpeed(1)
 {
 	
+	displayDebug = App->entityManager->getPlayer()->displayDebug;
+
+	collisionRect = { 0, 0, 30, -55 };
 	unitType = type;
 	position = pos;
 	state = AnimationType::IDLE;
@@ -44,7 +47,7 @@ bool Unit::Update(float dt)
 	bool ret = true;
 
 	//Allawys blit the sprite at the end
-	ret = Draw(dt);
+	//ret = Draw(dt);
 
 	//Return
 	return ret;
@@ -166,10 +169,13 @@ bool Unit::Draw(float dt)
 	blitRect = { (int)(currentAnim.sprites[num_current_anim].rect.w / 1.5f), (int)(currentAnim.sprites[num_current_anim].rect.h / 1.5f) };
 
 	App->render->Blit(texture, position.x - blitRect.x / 2, position.y - blitRect.y, blitRect, &currentAnim.sprites[num_current_anim].rect, 1.f, flipState);
-	App->render->DrawQuad({ position.x, position.y, 5, 5 }, 0, 255, 0);
 
-	collisionRect.x = position.x;
-	collisionRect.y = position.y;
+	if (displayDebug) 
+	{
+		collisionRect.x = position.x - (collisionRect.w / 2);
+		collisionRect.y = position.y;
+		App->render->DrawQuad(collisionRect, 0, 255, 0, 50);
+	}
 
 	return true;
 }

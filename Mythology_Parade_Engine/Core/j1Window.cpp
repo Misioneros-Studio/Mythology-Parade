@@ -119,6 +119,15 @@ bool j1Window::ToggleFullscreen()
 	Uint32 fullscreenFlag = SDL_WINDOW_FULLSCREEN;
 	bool isFullscreen = SDL_GetWindowFlags(window) & fullscreenFlag;
 	SDL_SetWindowFullscreen(window, isFullscreen ? 0 : fullscreenFlag);
+	SDL_ShowCursor(0);
+
+
+	j1Timer timer;
+	uint32 old = timer.Read();
+	SDL_SetRenderTarget(App->render->renderer, App->minimap->texture);
+	App->minimap->CreateMinimap();
+	SDL_SetRenderTarget(App->render->renderer, NULL);
+	LOG("%i", timer.Read() - old);
 
 	return isFullscreen;
 }

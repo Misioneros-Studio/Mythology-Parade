@@ -2,6 +2,8 @@
 #define __j1WINDOW_H__
 
 #include "j1Module.h"
+#include "j1Minimap.h"
+#include"j1Render.h"
 
 struct SDL_Window;
 struct SDL_Surface;

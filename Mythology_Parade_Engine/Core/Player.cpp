@@ -8,6 +8,7 @@
 
 Player::Player()
 {
+
 	InitVikings();
 	InitGreek();
 
@@ -20,6 +21,7 @@ Player::Player()
 
 	player_type = CivilizationType::VIKING;
 
+	displayDebug = false;
 }
 
 Player::~Player()
@@ -212,6 +214,24 @@ void Player::PlayerInputs()
 	if (App->input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN && App->scene->godMode)
 	{
 		player_lose = true;
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_F7) == KEY_DOWN && App->scene->godMode)
+	{
+		//Display collisions
+		displayDebug = !displayDebug;
+
+		for (int i = 1; i < App->entityManager->entities.size(); i++)
+		{
+			std::list<Entity*>::iterator it = App->entityManager->entities[(EntityType)i].begin();
+
+			Entity* ent = nullptr;
+			for (it; it != App->entityManager->entities[(EntityType)i].end(); ++it)
+			{
+				ent = it._Ptr->_Myval;
+				ent->displayDebug = displayDebug;
+			}
+		}
 	}
 }
 
