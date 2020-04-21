@@ -50,7 +50,7 @@ private:
 	bool Update(float dt) override;
 
 	void Draw_Construction_Bar(int blitWidth, int bar_used = 0);
-	void Draw();
+	bool Draw(float dt);
 
 	//Stats
 	int defenses;

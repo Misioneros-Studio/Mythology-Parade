@@ -38,9 +38,11 @@ bool Player::Start()
 
 	tick2 = SDL_GetTicks();
 	player_win = player_lose = false;
+
 	currencySystem.faith = 0;
 	currencySystem.prayers = 0;
 	currencySystem.sacrifices = 0;
+
 	dontSelect = false;
 	num_encampment = num_monastery = num_temple = 0;
 	time_production_victory = 300;
@@ -280,16 +282,20 @@ void Player::ClickLogic()
 	}
 }
 
-int Player::GetFaith() {
+int Player::GetFaith() 
+{
 	return currencySystem.faith;
 }
 
-int Player::GetPrayers() {
+int Player::GetPrayers() 
+{
 	return currencySystem.prayers;
 }
 
-int Player::GetSacrifices() {
+int Player::GetSacrifices() 
+{
 	return currencySystem.sacrifices;
+}
 
 
 void Player::InitVikings() 
