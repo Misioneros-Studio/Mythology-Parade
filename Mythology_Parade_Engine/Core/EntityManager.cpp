@@ -109,8 +109,7 @@ bool EntityManager::Update(float dt)
 	//TODO: Move this logic to the player
 	if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
-		crPreview.active = !crPreview.active;
-		UpdateBuildPreview(buildingTestIndex);
+		EnterBuildMode();
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN) 
@@ -125,6 +124,7 @@ bool EntityManager::Update(float dt)
 			buildingTestIndex = 0;
 		}
 		UpdateBuildPreview(buildingTestIndex);
+
 	}
 
 	if (crPreview.active)
@@ -202,9 +202,26 @@ bool EntityManager::Update(float dt)
 				}
 			}
 		}
+		//Onces you build disable building mode
+		crPreview.active = false;
 	}
 
 	return true;
+}
+
+void EntityManager::SetBuildIndex(int i)
+{
+	if (i < MAX_BUILDING_TYPES - 1) {
+		buildingTestIndex = i;
+	}
+
+	UpdateBuildPreview(buildingTestIndex);
+}
+
+void EntityManager::EnterBuildMode()
+{
+	crPreview.active = !crPreview.active;
+	UpdateBuildPreview(buildingTestIndex);
 }
 
 bool EntityManager::PostUpdate() 

@@ -152,6 +152,11 @@ std::list<Entity*> Player::GetEntitiesSelected()
 	return listEntities;
 }
 
+Building* Player::GetSelectedBuild()
+{
+	return (Building*) buildingSelect;
+}
+
 void Player::SeeEntitiesInside()
 {
 	//ALERT MAYK
