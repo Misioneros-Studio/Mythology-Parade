@@ -8,6 +8,17 @@
 
 Player::Player()
 {
+	InitVikings();
+
+	tick2 = SDL_GetTicks();
+	player_win = player_lose = false;
+	CurrencySystem::faith = 0;
+	CurrencySystem::prayers = 0;
+	CurrencySystem::sacrifices = 0;
+	dontSelect = false;
+
+	player_type = CivilizationType::VIKING;
+
 }
 
 Player::~Player()
@@ -16,18 +27,11 @@ Player::~Player()
 
 bool Player::Awake()
 {
-	player_type = CivilizationType::VIKING;
 	return true;
 }
 
 bool Player::Start()
 {
-	tick2 = SDL_GetTicks();
-	player_win = player_lose = false;
-	CurrencySystem::faith = 0;
-	CurrencySystem::prayers = 0;
-	CurrencySystem::sacrifices = 0;
-	dontSelect = false;
 	return true;
 }
 
@@ -49,6 +53,9 @@ bool Player::PreUpdate()
 	faith = std::to_string(CurrencySystem::faith);
 	sacrifice = std::to_string(CurrencySystem::sacrifices);
 	prayer = std::to_string(CurrencySystem::prayers);
+
+
+
 
 	return true;
 }
@@ -75,6 +82,7 @@ bool Player::Update(float dt)
 		SelectionDraw_Logic(); 
 		PlayerInputs();
 	}
+
 
 
 	return true;
@@ -146,7 +154,7 @@ void Player::SeeEntitiesInside()
 		{
 			if ((it._Ptr->_Myval->position.y >= preClicked.y && it._Ptr->_Myval->position.y <= postClicked.y) || it._Ptr->_Myval->position.y <= preClicked.y && it._Ptr->_Myval->position.y >= postClicked.y)
 			{
-				if (it._Ptr->_Myval->civilization = player_type)
+				if (it._Ptr->_Myval->civilization == player_type)
 				{
 					listEntities.push_back(it._Ptr->_Myval);
 				}
@@ -215,7 +223,10 @@ void Player::ClickLogic()
 		{
 			if (preClicked.y >= it._Ptr->_Myval->position.y && preClicked.y <= it._Ptr->_Myval->position.y + it._Ptr->_Myval->spriteRect.h)
 			{
-				buildingSelect = it._Ptr->_Myval;
+				if (it._Ptr->_Myval->civilization == player_type)
+				{
+					buildingSelect = it._Ptr->_Myval;
+				}
 			}
 		}
 	}
@@ -227,9 +238,29 @@ void Player::ClickLogic()
 			{
 				if (preClicked.y >= it._Ptr->_Myval->position.y && preClicked.y <= it._Ptr->_Myval->position.y + it._Ptr->_Myval->blitRect.y)
 				{
-					listEntities.push_back(it._Ptr->_Myval);
+					if (it._Ptr->_Myval->civilization == player_type)
+					{
+						listEntities.push_back(it._Ptr->_Myval);
+					}
 				}
 			}
 		}
 	}
+}
+
+void Player::InitVikings() 
+{
+	iPoint fortress = { 122,21 };
+	fortress = App->map->MapToWorld(fortress.x, fortress.y);
+	App->entityManager->CreateBuildingEntity(fortress, BuildingType::FORTRESS, App->entityManager->buildingsData[0]);
+
+	iPoint monkPos = { 119,26 };
+	iPoint assassinPos = { 121,28 };
+	monkPos = App->map->MapToWorld(monkPos.x, monkPos.y);
+	assassinPos = App->map->MapToWorld(assassinPos.x, assassinPos.y);
+
+
+	App->entityManager->CreateUnitEntity(UnitType::MONK, monkPos);
+	App->entityManager->CreateUnitEntity(UnitType::ASSASSIN, assassinPos);
+
 }
