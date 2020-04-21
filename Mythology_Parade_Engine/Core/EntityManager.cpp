@@ -163,6 +163,7 @@ bool EntityManager::Update(float dt)
 
 	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN && crPreview.active && crPreview.canBuild)
 	{
+		int faithToDescrease = 0; //Just here for testing, move it to somewhere else
 		iPoint mouse = App->map->GetMousePositionOnMap();
 		iPoint spawnPos = App->map->MapToWorld(mouse.x, mouse.y);
 		spawnPos.y += App->map->data.tile_height / 2;
@@ -178,6 +179,7 @@ bool EntityManager::Update(float dt)
 			viking = true;
 		case 5:
 			CreateBuildingEntity(spawnPos, BuildingType::MONASTERY , buildingsData[buildingTestIndex]);
+			faithToDescrease = 200;
 			break;
 		case 2:
 			viking = true;
@@ -188,6 +190,7 @@ bool EntityManager::Update(float dt)
 			viking = true;
 		case 7:
 			CreateBuildingEntity(spawnPos, BuildingType::ENCAMPMENT, buildingsData[buildingTestIndex]);
+			faithToDescrease = 200;
 			break;
 		}
 		
@@ -203,6 +206,7 @@ bool EntityManager::Update(float dt)
 			}
 		}
 		//Onces you build disable building mode
+		App->entityManager->getPlayer()->DecreaseFaith(faithToDescrease);
 		crPreview.active = false;
 	}
 
