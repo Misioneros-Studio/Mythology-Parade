@@ -269,7 +269,7 @@ void Player::ClickLogic()
 			{
 				if (preClicked.y >= it._Ptr->_Myval->position.y && preClicked.y <= it._Ptr->_Myval->position.y + it._Ptr->_Myval->blitRect.y)
 				{
-					if (it._Ptr->_Myval->civilization == player_type)
+					//if (it._Ptr->_Myval->civilization = player_type)
 					{
 						listEntities.push_back(it._Ptr->_Myval);
 					}
