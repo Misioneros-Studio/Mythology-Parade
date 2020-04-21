@@ -11,7 +11,14 @@ Building::Building(BuildingType type, iPoint pos, BuildingInfo info)
 	first_time_constructing = true;
 	buildingType = type;
 
-	displayDebug = App->entityManager->getPlayer()->displayDebug;
+	if (App->entityManager->getPlayer()) 
+	{
+		displayDebug = App->entityManager->getPlayer()->displayDebug;
+	}
+	else
+	{
+		displayDebug = false;
+	}
 
 	switch (buildingType)
 	{
@@ -189,17 +196,17 @@ bool Building::Update(float dt)
 
 	//Draw();
 	if (buildingStatus == CONSTRUCTING || buildingAction==PRODUCING) 
-  {
+	{
 		Draw_Construction_Bar(blitWidth);
 	}
 	else if (buildingAction == RESEARCHING) 
-  {
+	{
 		Draw_Construction_Bar(blitWidth, 2);
 	}
 
 	//IF MONASTERY DETECTS NEARBY MONKS,INCREASE FAITH
 	if (buildingType == BuildingType::MONASTERY) 
-  {
+	{
 		std::list<Entity*> list =  App->entityManager->entities[EntityType::UNIT];
 		int count = 0;
 		for each (Unit* var in list)
@@ -225,8 +232,6 @@ bool Building::Draw(float dt)
 	//App->render->DrawQuad({position.x, position.y + (tileHeight /2) * (height + 1), texturewidth, -textureHeight}, 255, 250, 20);
 	App->render->Blit(texture, position.x, position.y + ((App->map->data.tile_height / 2) * tileLenght) - blitRect.y, {blitRect.x, blitRect.y}, &spriteRect);
 	
-
-
 	if (displayDebug) 
 	{
 		App->render->DrawQuad(collisionRect, 255, 0, 0, 50);

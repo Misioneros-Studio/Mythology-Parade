@@ -6,7 +6,14 @@
 Unit::Unit(UnitType type, iPoint pos): unitType(type), state(AnimationType::IDLE), _isSelected(false), moveSpeed(1)
 {
 	
-	displayDebug = App->entityManager->getPlayer()->displayDebug;
+	if (App->entityManager->getPlayer())
+	{
+		displayDebug = App->entityManager->getPlayer()->displayDebug;
+	}
+	else
+	{
+		displayDebug = false;
+	}
 
 	collisionRect = { 0, 0, 30, -55 };
 	unitType = type;

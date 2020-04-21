@@ -54,6 +54,7 @@ bool j1Scene::Start()
 
 		mapLimitsRect = App->map->GetMapRect();
 		App->pathfinding->maxPathLenght = App->map->GetMapMaxLenght();
+		App->entityManager->LoadBuildingsBlitRect();
 
 		SDL_ShowCursor(0);
 

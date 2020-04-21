@@ -112,6 +112,8 @@ public:
 	iPoint CalculateBuildingSize(int, int, int);
 	void DrawEverything();
 
+	void LoadBuildingsBlitRect();
+
 	Player* getPlayer();
 
 public:

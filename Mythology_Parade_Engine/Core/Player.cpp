@@ -8,20 +8,7 @@
 
 Player::Player()
 {
-
-	InitVikings();
-	InitGreek();
-
-	tick2 = SDL_GetTicks();
-	player_win = player_lose = false;
-	CurrencySystem::faith = 0;
-	CurrencySystem::prayers = 0;
-	CurrencySystem::sacrifices = 0;
-	dontSelect = false;
-
-	player_type = CivilizationType::VIKING;
-
-	displayDebug = false;
+	Start();
 }
 
 Player::~Player()
@@ -39,13 +26,18 @@ bool Player::Start()
 	tick2 = SDL_GetTicks();
 	player_win = player_lose = false;
 
-	currencySystem.faith = 0;
-	currencySystem.prayers = 0;
-	currencySystem.sacrifices = 0;
+	CurrencySystem::faith = 0;
+	CurrencySystem::prayers = 0;
+	CurrencySystem::sacrifices = 0;
 
 	dontSelect = false;
 	num_encampment = num_monastery = num_temple = 0;
 	time_production_victory = 300;
+
+	InitVikings();
+	InitGreek();
+	player_type = CivilizationType::VIKING;
+	displayDebug = false;
 
 	return true;
 }
@@ -229,7 +221,7 @@ void Player::PlayerInputs()
 		player_lose = true;
 	}
 
-	if (App->input->GetKey(SDL_SCANCODE_F7) == KEY_DOWN && App->scene->godMode)
+	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN && App->scene->godMode)
 	{
 		//Display collisions
 		displayDebug = !displayDebug;
@@ -284,17 +276,17 @@ void Player::ClickLogic()
 
 int Player::GetFaith() 
 {
-	return currencySystem.faith;
+	return CurrencySystem::faith;
 }
 
 int Player::GetPrayers() 
 {
-	return currencySystem.prayers;
+	return CurrencySystem::prayers;
 }
 
 int Player::GetSacrifices() 
 {
-	return currencySystem.sacrifices;
+	return CurrencySystem::sacrifices;
 }
 
 

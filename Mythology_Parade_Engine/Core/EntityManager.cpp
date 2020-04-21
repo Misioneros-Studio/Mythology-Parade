@@ -61,15 +61,6 @@ bool EntityManager::Start()
 	animations[UnitType::MONK] = animationManager.Load("assets/units/Monk.tmx", UnitType::MONK);
 	animations[UnitType::PRIEST] = animationManager.Load("assets/units/Priest.tmx", UnitType::PRIEST);
 
-	for (int i = 0; i < buildingsData.size(); i++)
-	{
-		BuildingInfo* info = &buildingsData[i];
-		int blitWidth = info->tileLenght * App->map->data.tile_width;
-		info->blitSize = CalculateBuildingSize(blitWidth, info->spriteRect.w, info->spriteRect.h);
-
-	}
-
-
 	for (unsigned i = 0; i < entities.size(); i++)
 	{
 		for (std::list<Entity*>::iterator it = entities[(EntityType)i].begin(); it != entities[(EntityType)i].end(); it++)
@@ -79,6 +70,16 @@ bool EntityManager::Start()
 	}
 
 	return true;
+}
+
+void EntityManager::LoadBuildingsBlitRect() 
+{
+	for (int i = 0; i < buildingsData.size(); i++)
+	{
+		BuildingInfo* info = &buildingsData[i];
+		int blitWidth = info->tileLenght * App->map->data.tile_width;
+		info->blitSize = CalculateBuildingSize(blitWidth, info->spriteRect.w, info->spriteRect.h);
+	}
 }
 
 // Called each loop iteration
@@ -361,10 +362,9 @@ Entity* EntityManager::CreatePlayerEntity()
 	Entity* ret = nullptr;
 
 	ret = new Player();
-
 	ret->type = EntityType::PLAYER;
+
 	entities[EntityType::PLAYER].push_back(ret);
-	ret->Start();
 
 	return ret;
 }
@@ -406,16 +406,7 @@ void EntityManager::DrawEverything()
 	{
 		for (std::list<Entity*>::iterator it = entities[(EntityType)i].begin(); it != entities[(EntityType)i].end(); it++)
 		{
-			switch ((EntityType)i)
-			{
-			case EntityType::BUILDING:
-				ent = (Building*)it._Ptr->_Myval;
-				break;
-
-			case EntityType::UNIT:
-				ent = (Unit*)it._Ptr->_Myval;
-				break;
-			}
+			ent = it._Ptr->_Myval;
 			ent->Draw(dt);
 		}
 	}
