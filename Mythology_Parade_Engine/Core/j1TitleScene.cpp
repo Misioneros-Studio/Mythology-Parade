@@ -94,19 +94,19 @@ bool j1TitleScene::Update(float dt)
 {
 	switch (close_menus)
 	{
-	case::CloseTitleSceneMenus::Credits:
+	case CloseTitleSceneMenus::Credits:
 		DeactivateCredits();
 		close_menus = CloseTitleSceneMenus::None;
 		break;
-	case::CloseTitleSceneMenus::Tutorial:
+	case CloseTitleSceneMenus::Tutorial:
 		DeactivateTutorial();
 		close_menus = CloseTitleSceneMenus::None;
 		break;
-	case::CloseTitleSceneMenus::Options:
+	case CloseTitleSceneMenus::Options:
 		DeactivateOptionsMenu();
 		close_menus = CloseTitleSceneMenus::None;
 		break;
-	case::CloseTitleSceneMenus::Confirmation:
+	case CloseTitleSceneMenus::Confirmation:
 		DeactivateConfirmationMenu();
 		close_menus = CloseTitleSceneMenus::None;
 		break;

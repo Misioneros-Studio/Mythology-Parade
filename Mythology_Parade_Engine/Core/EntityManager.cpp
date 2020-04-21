@@ -24,10 +24,12 @@ bool EntityManager::Awake(pugi::xml_node& a)
 	pugi::xml_document buildings;
 	buildings.load_file(a.child("buildings").attribute("file").as_string());
 	LoadBuildingsData(buildings.child("map").child("objectgroup"));
-	life_bar_front = { 1299,519,125,17 };
-	research_bar_front = { 1299,539,125,17 };
-	construction_bar_back = { 1299,559,125,17 };
-	construction_bar_front = { 1299,499,125,17 };
+	life_bar_front = { 1310,523,115,10 };
+	research_bar_front = { 1310,543,115,10 };
+	construction_bar_back = { 1299,560,125,17 };
+	construction_bar_front = { 1310,503,115,10 };
+	construction_bar_empty = { 1299,582,125,17 };
+
 
 	//Not working because renderer is not created yet ;-;
 	//std::string path = "assets/buildings/";
@@ -360,6 +362,7 @@ Entity* EntityManager::CreatePlayerEntity()
 
 	ret->type = EntityType::PLAYER;
 	entities[EntityType::PLAYER].push_back(ret);
+	ret->Start();
 
 	return ret;
 }

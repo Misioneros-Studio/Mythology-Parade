@@ -133,6 +133,9 @@ bool j1Scene::Start()
 	//Creating players
 	App->entityManager->CreatePlayerEntity();
 
+
+	research_encampment = research_monastery = research_temple = false;
+
 	return true;
 }
 
@@ -182,21 +185,25 @@ bool j1Scene::Update(float dt)
 	// Gui ---
 	switch (close_menus)
 	{
-	case::CloseSceneMenus::Pause:
+	case CloseSceneMenus::Pause:
 		DeactivatePauseMenu();
 		close_menus = CloseSceneMenus::None;
 		break;
-	case::CloseSceneMenus::Options:
+	case CloseSceneMenus::Options:
 		DeactivateOptionsMenu();
 		close_menus = CloseSceneMenus::None;
 		break;
-	case::CloseSceneMenus::Confirmation:
+	case CloseSceneMenus::Confirmation:
 		DeactivateConfirmationMenu();
 		close_menus = CloseSceneMenus::None;
 		break;
-	case::CloseSceneMenus::Confirmation_and_Pause:
+	case CloseSceneMenus::Confirmation_and_Pause:
 		DeactivateConfirmationMenu();
 		DeactivatePauseMenu();
+		close_menus = CloseSceneMenus::None;
+		break;
+	case CloseSceneMenus::Research:
+		DeactivateResearchMenu();
 		close_menus = CloseSceneMenus::None;
 		break;
 	}
@@ -336,6 +343,7 @@ bool j1Scene::CleanUp()
 	App->tex->UnLoad(debugRed_tex);
 	App->tex->UnLoad(winlose_tex);
 
+	DeactivateResearchMenu();
 	DeactivateConfirmationMenu();
 	DeactivateOptionsMenu();
 	DeactivatePauseMenu();
@@ -769,7 +777,7 @@ void j1Scene::ManageActionButtons(bool create_buttons, bool viking) {
 			Building* building = (Building*)thing_selected;
 			if (building->buildingStatus == FINISHED) {
 				if (viking == true) {
-					if (App->entityManager->getPlayer()->GetFaith() >= 200 && App->entityManager->getPlayer()->num_temple < 8) {
+					if (App->entityManager->getPlayer()->GetFaith() >= 200 && App->entityManager->getPlayer()->num_temple < 8 && research_temple == true) {
 						hud_button_actions[0] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 200,604,99,60 }, { 2,2,99,60 }, "Produce_Temple", { 2,124,99,60 }, { 2,63,99,60 },
 							false, { 0,0,0,0 }, this, (int)UI_Audio::MAIN_MENU, false, -1.0F, 1);
 					}
@@ -777,7 +785,7 @@ void j1Scene::ManageActionButtons(bool create_buttons, bool viking) {
 						hud_button_actions_unclickable[0] = (ImageUI*)App->gui->CreateUIElement(Type::IMAGE, ui_ingame, { 200,604,99,60 }, { 329,313,99,60 }, "", { 0,0,0,0 }, { 0,0,0,0 }, false,
 							{ 0,0,0,0 }, nullptr, 0, false, -1.0F, 1);
 					}
-					if (App->entityManager->getPlayer()->GetFaith() >= 200 && App->entityManager->getPlayer()->num_encampment < 7) {
+					if (App->entityManager->getPlayer()->GetFaith() >= 200 && App->entityManager->getPlayer()->num_encampment < 7 && research_encampment == true) {
 						hud_button_actions[1] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 304,613,99,51 }, { 104,11,99,51 }, "Produce_Encampment", { 104,133,99,51 },
 							{ 104,72,99,51 }, false, { 0,0,0,0 }, this, (int)UI_Audio::MAIN_MENU, false, -1.0F, 1);
 					}
@@ -785,7 +793,7 @@ void j1Scene::ManageActionButtons(bool create_buttons, bool viking) {
 						hud_button_actions_unclickable[1] = (ImageUI*)App->gui->CreateUIElement(Type::IMAGE, ui_ingame, { 304,613,99,51 }, { 430,322,99,51 }, "", { 0,0,0,0 }, { 0,0,0,0 }, false,
 							{ 0,0,0,0 }, nullptr, 0, false, -1.0F, 1);
 					}
-					if (App->entityManager->getPlayer()->GetFaith() >= 200 && App->entityManager->getPlayer()->num_monastery < 5) {
+					if (App->entityManager->getPlayer()->GetFaith() >= 200 && App->entityManager->getPlayer()->num_monastery < 5 && research_monastery == true) {
 						hud_button_actions[2] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 408,612,99,52 }, { 206,10,99,52 }, "Produce_Monastery", { 206,132,99,52 },
 							{ 206,71,99,52 }, false, { 0,0,0,0 }, this, (int)UI_Audio::MAIN_MENU, false, -1.0F, 1);
 					}
@@ -795,7 +803,7 @@ void j1Scene::ManageActionButtons(bool create_buttons, bool viking) {
 					}
 				}
 				else {
-					if (App->entityManager->getPlayer()->GetFaith() >= 200 && App->entityManager->getPlayer()->num_temple < 8) {
+					if (App->entityManager->getPlayer()->GetFaith() >= 200 && App->entityManager->getPlayer()->num_temple < 8 && research_temple == true) {
 						hud_button_actions[0] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 200,602,99,62 }, { 308,0,99,62 }, "Produce_Temple", { 308,122,99,62 },
 							{ 308,61,99,62 }, false, { 0,0,0,0 }, this, (int)UI_Audio::MAIN_MENU, false, -1.0F, 1);
 					}
@@ -803,7 +811,7 @@ void j1Scene::ManageActionButtons(bool create_buttons, bool viking) {
 						hud_button_actions_unclickable[0] = (ImageUI*)App->gui->CreateUIElement(Type::IMAGE, ui_ingame, { 200,602,99,62 }, { 329,246,99,62 }, "", { 0,0,0,0 }, { 0,0,0,0 }, false,
 							{ 0,0,0,0 }, nullptr, 0, false, -1.0F, 1);
 					}
-					if (App->entityManager->getPlayer()->GetFaith() >= 200 && App->entityManager->getPlayer()->num_encampment < 7) {
+					if (App->entityManager->getPlayer()->GetFaith() >= 200 && App->entityManager->getPlayer()->num_encampment < 7 && research_encampment == true) {
 						hud_button_actions[1] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 304,613,99,51 }, { 410,11,99,51 }, "Produce_Encampment", { 410,133,99,51 },
 							{ 410,72,99,51 }, false, { 0,0,0,0 }, this, (int)UI_Audio::MAIN_MENU, false, -1.0F, 1);
 					}
@@ -811,7 +819,7 @@ void j1Scene::ManageActionButtons(bool create_buttons, bool viking) {
 						hud_button_actions_unclickable[1] = (ImageUI*)App->gui->CreateUIElement(Type::IMAGE, ui_ingame, { 304,613,99,51 }, { 430,257,99,51 }, "", { 0,0,0,0 }, { 0,0,0,0 }, false,
 							{ 0,0,0,0 }, nullptr, 0, false, -1.0F, 1);
 					}
-					if (App->entityManager->getPlayer()->GetFaith() >= 200 && App->entityManager->getPlayer()->num_monastery < 5) {
+					if (App->entityManager->getPlayer()->GetFaith() >= 200 && App->entityManager->getPlayer()->num_monastery < 5 && research_monastery == true) {
 						hud_button_actions[2] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 408,612,99,52 }, { 512,10,99,52 }, "Produce_Monastery", { 512,132,99,52 },
 							{ 512,71,99,52 }, false, { 0,0,0,0 }, this, (int)UI_Audio::MAIN_MENU, false, -1.0F, 1);
 					}
@@ -820,7 +828,7 @@ void j1Scene::ManageActionButtons(bool create_buttons, bool viking) {
 							{ 0,0,0,0 }, nullptr, 0, false, -1.0F, 1);
 					}
 				}
-				if (App->entityManager->getPlayer()->GetFaith() >= 600) {
+				if (App->entityManager->getPlayer()->GetFaith() >= 600 && building->buildingAction == NOTHING) {
 					hud_button_actions[3] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 512,621,67,41 }, { 75,540,67,41 }, "Produce_Victory", { 75,632,67,41 },
 						{ 75,586,67,41 }, false, { 0,0,0,0 }, this, (int)UI_Audio::MAIN_MENU, false, -1.0F, 1);
 				}
@@ -828,8 +836,13 @@ void j1Scene::ManageActionButtons(bool create_buttons, bool viking) {
 					hud_button_actions_unclickable[3] = (ImageUI*)App->gui->CreateUIElement(Type::IMAGE, ui_ingame, { 512,621,67,41 }, { 75,678,67,41 }, "", { 0,0,0,0 }, { 0,0,0,0 }, false,
 						{ 0,0,0,0 }, nullptr, 0, false, -1.0F, 1);
 				}
-				hud_button_actions[4] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 584,626,36,36 }, { 16,227,36,36 }, "Research", { 98,227,36,36 },
-					{ 57,227,36,36 }, false, { 0,0,0,0 }, this, (int)UI_Audio::MAIN_MENU);
+				if (building->buildingAction == NOTHING) {
+					hud_button_actions[4] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 584,626,36,36 }, { 16,227,36,36 }, "Research", { 98,227,36,36 },
+						{ 57,227,36,36 }, false, { 0,0,0,0 }, this, (int)UI_Audio::MAIN_MENU);
+				}
+				else {
+					hud_button_actions_unclickable[4] = (ImageUI*)App->gui->CreateUIElement(Type::IMAGE, ui_ingame, { 584,626,36,36 }, { 98,484,36,36 });
+				}
 			}
 			break;
 		}
@@ -846,7 +859,7 @@ void j1Scene::ManageActionButtons(bool create_buttons, bool viking) {
 		{
 			Building* building = (Building*)thing_selected;
 			if (building->buildingStatus == FINISHED) {
-				if (App->entityManager->getPlayer()->GetFaith() >= 100 && App->entityManager->getPlayer()->GetSacrifices() >= 10) {
+				if (App->entityManager->getPlayer()->GetFaith() >= 100 && App->entityManager->getPlayer()->GetSacrifices() >= 10 && building->buildingAction == NOTHING) {
 					hud_button_actions[0] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 200,613,67,41 }, { 215,185,67,41 }, "Produce_Assassin", { 215,275,67,41 },
 						{ 215,230,67,41 }, false, { 0,0,0,0 }, this, (int)UI_Audio::MAIN_MENU, false, -1.0F, 1);
 				}
@@ -863,7 +876,7 @@ void j1Scene::ManageActionButtons(bool create_buttons, bool viking) {
 		{
 			Building* building = (Building*)thing_selected;
 			if (building->buildingStatus == FINISHED) {
-				if (App->entityManager->getPlayer()->GetFaith() >= 50) {
+				if (App->entityManager->getPlayer()->GetFaith() >= 50 && building->buildingAction == NOTHING) {
 					hud_button_actions[0] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 200,613,67,41 }, { 73,185,67,41 }, "Produce_Monk", { 73,275,67,41 },
 						{ 73,230,67,41 }, false, { 0,0,0,0 }, this, (int)UI_Audio::MAIN_MENU, false, -1.0F, 1);
 				}
@@ -871,7 +884,7 @@ void j1Scene::ManageActionButtons(bool create_buttons, bool viking) {
 					hud_button_actions_unclickable[0] = (ImageUI*)App->gui->CreateUIElement(Type::IMAGE, ui_ingame, { 200,613,67,41 }, { 407,382,67,41 }, "", { 0,0,0,0 }, { 0,0,0,0 }, false,
 						{ 0,0,0,0 }, nullptr, 0, false, -1.0F, 1);
 				}
-				if (App->entityManager->getPlayer()->GetFaith() >= 40) {
+				if (App->entityManager->getPlayer()->GetFaith() >= 40 && building->buildingAction == NOTHING) {
 					hud_button_actions[1] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 272,613,67,41 }, { 3,540,67,41 }, "Produce_Sacrifices", { 3,632,67,41 },
 						{ 3,586,67,41 }, false, { 0,0,0,0 }, this, (int)UI_Audio::MAIN_MENU, false, -1.0F, 1);
 				}
@@ -879,7 +892,7 @@ void j1Scene::ManageActionButtons(bool create_buttons, bool viking) {
 					hud_button_actions_unclickable[1] = (ImageUI*)App->gui->CreateUIElement(Type::IMAGE, ui_ingame, { 272,613,67,41 }, { 3,678,67,41 }, "", { 0,0,0,0 }, { 0,0,0,0 }, false,
 						{ 0,0,0,0 }, nullptr, 0, false, -1.0F, 1);
 				}
-				if (App->entityManager->getPlayer()->GetFaith() >= 40) {
+				if (App->entityManager->getPlayer()->GetFaith() >= 40 && building->buildingAction == NOTHING) {
 					hud_button_actions[2] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 344,613,67,41 }, { 146,540,67,41 }, "Produce_Prayers", { 146,632,67,41 },
 						{ 146,586,67,41 }, false, { 0,0,0,0 }, this, (int)UI_Audio::MAIN_MENU, false, -1.0F, 1);
 				}
@@ -920,7 +933,7 @@ void j1Scene::ManageActionButtons(bool create_buttons, bool viking) {
 			Building* building = (Building*)thing_selected;
 			if (building->buildingStatus == FINISHED) {
 				if (viking == true) {
-					if (hud_button_actions[0] == nullptr && App->entityManager->getPlayer()->GetFaith() >= 200 && App->entityManager->getPlayer()->num_temple < 8) {
+					if (hud_button_actions[0] == nullptr && App->entityManager->getPlayer()->GetFaith() >= 200 && App->entityManager->getPlayer()->num_temple < 8 && research_temple == true) {
 						if (hud_button_actions_unclickable[0] != nullptr) {
 							App->gui->DeleteUIElement(hud_button_actions_unclickable[0]);
 							hud_button_actions_unclickable[0] = nullptr;
@@ -928,7 +941,8 @@ void j1Scene::ManageActionButtons(bool create_buttons, bool viking) {
 						hud_button_actions[0] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 200,604,99,60 }, { 2,2,99,60 }, "Produce_Temple", { 2,124,99,60 }, { 2,63,99,60 },
 							false, { 0,0,0,0 }, this, (int)UI_Audio::MAIN_MENU, false, -1.0F, 1);
 					}
-					else if (hud_button_actions_unclickable[0] == nullptr && (App->entityManager->getPlayer()->GetFaith() < 200 || App->entityManager->getPlayer()->num_temple >= 8)) {
+					else if (hud_button_actions_unclickable[0] == nullptr && (App->entityManager->getPlayer()->GetFaith() < 200 || App->entityManager->getPlayer()->num_temple >= 8 || 
+						research_temple == false)) {
 						if (hud_button_actions[0] != nullptr) {
 							App->gui->DeleteUIElement(hud_button_actions[0]);
 							hud_button_actions[0] = nullptr;
@@ -936,7 +950,7 @@ void j1Scene::ManageActionButtons(bool create_buttons, bool viking) {
 						hud_button_actions_unclickable[0] = (ImageUI*)App->gui->CreateUIElement(Type::IMAGE, ui_ingame, { 200,604,99,60 }, { 329,313,99,60 }, "", { 0,0,0,0 }, { 0,0,0,0 }, false,
 							{ 0,0,0,0 }, nullptr, 0, false, -1.0F, 1);
 					}
-					if (hud_button_actions[1] == nullptr && App->entityManager->getPlayer()->GetFaith() >= 200 && App->entityManager->getPlayer()->num_encampment < 7) {
+					if (hud_button_actions[1] == nullptr && App->entityManager->getPlayer()->GetFaith() >= 200 && App->entityManager->getPlayer()->num_encampment < 7 && research_encampment == true) {
 						if (hud_button_actions_unclickable[1] != nullptr) {
 							App->gui->DeleteUIElement(hud_button_actions_unclickable[1]);
 							hud_button_actions_unclickable[1] = nullptr;
@@ -944,7 +958,8 @@ void j1Scene::ManageActionButtons(bool create_buttons, bool viking) {
 						hud_button_actions[1] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 304,613,99,51 }, { 104,11,99,51 }, "Produce_Encampment", { 104,133,99,51 },
 							{ 104,72,99,51 }, false, { 0,0,0,0 }, this, (int)UI_Audio::MAIN_MENU, false, -1.0F, 1);
 					}
-					else if (hud_button_actions_unclickable[1] == nullptr && (App->entityManager->getPlayer()->GetFaith() < 200 || App->entityManager->getPlayer()->num_encampment >= 7)) {
+					else if (hud_button_actions_unclickable[1] == nullptr && (App->entityManager->getPlayer()->GetFaith() < 200 || App->entityManager->getPlayer()->num_encampment >= 7 || 
+						research_encampment == false)) {
 						if (hud_button_actions[1] != nullptr) {
 							App->gui->DeleteUIElement(hud_button_actions[1]);
 							hud_button_actions[1] = nullptr;
@@ -952,7 +967,7 @@ void j1Scene::ManageActionButtons(bool create_buttons, bool viking) {
 						hud_button_actions_unclickable[1] = (ImageUI*)App->gui->CreateUIElement(Type::IMAGE, ui_ingame, { 304,613,99,51 }, { 430,322,99,51 }, "", { 0,0,0,0 }, { 0,0,0,0 }, false,
 							{ 0,0,0,0 }, nullptr, 0, false, -1.0F, 1);
 					}
-					if (hud_button_actions[2] == nullptr && App->entityManager->getPlayer()->GetFaith() >= 200 && App->entityManager->getPlayer()->num_monastery < 5) {
+					if (hud_button_actions[2] == nullptr && App->entityManager->getPlayer()->GetFaith() >= 200 && App->entityManager->getPlayer()->num_monastery < 5 && research_monastery == true) {
 						if (hud_button_actions_unclickable[2] != nullptr) {
 							App->gui->DeleteUIElement(hud_button_actions_unclickable[2]);
 							hud_button_actions_unclickable[2] = nullptr;
@@ -960,7 +975,8 @@ void j1Scene::ManageActionButtons(bool create_buttons, bool viking) {
 						hud_button_actions[2] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 408,612,99,52 }, { 206,10,99,52 }, "Produce_Monastery", { 206,132,99,52 },
 							{ 206,71,99,52 }, false, { 0,0,0,0 }, this, (int)UI_Audio::MAIN_MENU, false, -1.0F, 1);
 					}
-					else if (hud_button_actions_unclickable[2] == nullptr && (App->entityManager->getPlayer()->GetFaith() < 200 || App->entityManager->getPlayer()->num_monastery >= 5)) {
+					else if (hud_button_actions_unclickable[2] == nullptr && (App->entityManager->getPlayer()->GetFaith() < 200 || App->entityManager->getPlayer()->num_monastery >= 5 || 
+						research_monastery == false)) {
 						if (hud_button_actions[2] != nullptr) {
 							App->gui->DeleteUIElement(hud_button_actions[2]);
 							hud_button_actions[2] = nullptr;
@@ -970,7 +986,7 @@ void j1Scene::ManageActionButtons(bool create_buttons, bool viking) {
 					}
 				}
 				else {
-					if (hud_button_actions[0] == nullptr && App->entityManager->getPlayer()->GetFaith() >= 200 && App->entityManager->getPlayer()->num_temple < 8) {
+					if (hud_button_actions[0] == nullptr && App->entityManager->getPlayer()->GetFaith() >= 200 && App->entityManager->getPlayer()->num_temple < 8 && research_temple == true) {
 						if (hud_button_actions_unclickable[0] != nullptr) {
 							App->gui->DeleteUIElement(hud_button_actions_unclickable[0]);
 							hud_button_actions_unclickable[0] = nullptr;
@@ -978,7 +994,8 @@ void j1Scene::ManageActionButtons(bool create_buttons, bool viking) {
 						hud_button_actions[0] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 200,602,99,62 }, { 308,0,99,62 }, "Produce_Temple", { 308,122,99,62 }, { 308,61,99,62 },
 							false, { 0,0,0,0 }, this, (int)UI_Audio::MAIN_MENU, false, -1.0F, 1);
 					}
-					else if (hud_button_actions_unclickable[0] == nullptr && (App->entityManager->getPlayer()->GetFaith() < 200 || App->entityManager->getPlayer()->num_temple >= 8)) {
+					else if (hud_button_actions_unclickable[0] == nullptr && (App->entityManager->getPlayer()->GetFaith() < 200 || App->entityManager->getPlayer()->num_temple >= 8 || 
+						research_temple == false)) {
 						if (hud_button_actions[0] != nullptr) {
 							App->gui->DeleteUIElement(hud_button_actions[0]);
 							hud_button_actions[0] = nullptr;
@@ -986,7 +1003,7 @@ void j1Scene::ManageActionButtons(bool create_buttons, bool viking) {
 						hud_button_actions_unclickable[0] = (ImageUI*)App->gui->CreateUIElement(Type::IMAGE, ui_ingame, { 200,602,99,62 }, { 329,246,99,62 }, "", { 0,0,0,0 }, { 0,0,0,0 }, false,
 							{ 0,0,0,0 }, nullptr, 0, false, -1.0F, 1);
 					}
-					if (hud_button_actions[1] == nullptr && App->entityManager->getPlayer()->GetFaith() >= 200 && App->entityManager->getPlayer()->num_encampment < 7) {
+					if (hud_button_actions[1] == nullptr && App->entityManager->getPlayer()->GetFaith() >= 200 && App->entityManager->getPlayer()->num_encampment < 7 && research_encampment == true) {
 						if (hud_button_actions_unclickable[1] != nullptr) {
 							App->gui->DeleteUIElement(hud_button_actions_unclickable[1]);
 							hud_button_actions_unclickable[1] = nullptr;
@@ -994,7 +1011,8 @@ void j1Scene::ManageActionButtons(bool create_buttons, bool viking) {
 						hud_button_actions[1] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 304,613,99,51 }, { 410,11,99,51 }, "Produce_Encampment", { 410,133,99,51 },
 							{ 410,72,99,51 }, false, { 0,0,0,0 }, this, (int)UI_Audio::MAIN_MENU, false, -1.0F, 1);
 					}
-					else if (hud_button_actions_unclickable[1] == nullptr && (App->entityManager->getPlayer()->GetFaith() < 200 || App->entityManager->getPlayer()->num_encampment >= 7)) {
+					else if (hud_button_actions_unclickable[1] == nullptr && (App->entityManager->getPlayer()->GetFaith() < 200 || App->entityManager->getPlayer()->num_encampment >= 7 || 
+						research_encampment == false)) {
 						if (hud_button_actions[1] != nullptr) {
 							App->gui->DeleteUIElement(hud_button_actions[1]);
 							hud_button_actions[1] = nullptr;
@@ -1002,7 +1020,7 @@ void j1Scene::ManageActionButtons(bool create_buttons, bool viking) {
 						hud_button_actions_unclickable[1] = (ImageUI*)App->gui->CreateUIElement(Type::IMAGE, ui_ingame, { 304,613,99,51 }, { 430,257,99,51 }, "", { 0,0,0,0 }, { 0,0,0,0 }, false,
 							{ 0,0,0,0 }, nullptr, 0, false, -1.0F, 1);
 					}
-					if (hud_button_actions[2] == nullptr && App->entityManager->getPlayer()->GetFaith() >= 200 && App->entityManager->getPlayer()->num_monastery < 5) {
+					if (hud_button_actions[2] == nullptr && App->entityManager->getPlayer()->GetFaith() >= 200 && App->entityManager->getPlayer()->num_monastery < 5 && research_monastery == true) {
 						if (hud_button_actions_unclickable[2] != nullptr) {
 							App->gui->DeleteUIElement(hud_button_actions_unclickable[2]);
 							hud_button_actions_unclickable[2] = nullptr;
@@ -1010,7 +1028,8 @@ void j1Scene::ManageActionButtons(bool create_buttons, bool viking) {
 						hud_button_actions[2] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 408,612,99,52 }, { 512,10,99,52 }, "Produce_Monastery", { 512,132,99,52 },
 							{ 512,71,99,52 }, false, { 0,0,0,0 }, this, (int)UI_Audio::MAIN_MENU, false, -1.0F, 1);
 					}
-					else if (hud_button_actions_unclickable[2] == nullptr && (App->entityManager->getPlayer()->GetFaith() < 200 || App->entityManager->getPlayer()->num_monastery >= 5)) {
+					else if (hud_button_actions_unclickable[2] == nullptr && (App->entityManager->getPlayer()->GetFaith() < 200 || App->entityManager->getPlayer()->num_monastery >= 5 || 
+						research_monastery == false)) {
 						if (hud_button_actions[2] != nullptr) {
 							App->gui->DeleteUIElement(hud_button_actions[2]);
 							hud_button_actions[2] = nullptr;
@@ -1019,7 +1038,7 @@ void j1Scene::ManageActionButtons(bool create_buttons, bool viking) {
 							{ 0,0,0,0 }, nullptr, 0, false, -1.0F, 1);
 					}
 				}
-				if (hud_button_actions[3] == nullptr && App->entityManager->getPlayer()->GetFaith() >= 600) {
+				if (hud_button_actions[3] == nullptr && App->entityManager->getPlayer()->GetFaith() >= 600 && building->buildingAction == NOTHING) {
 					if (hud_button_actions_unclickable[3] != nullptr) {
 						App->gui->DeleteUIElement(hud_button_actions_unclickable[3]);
 						hud_button_actions_unclickable[3] = nullptr;
@@ -1027,13 +1046,28 @@ void j1Scene::ManageActionButtons(bool create_buttons, bool viking) {
 					hud_button_actions[3] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 512,621,67,41 }, { 75,540,67,41 }, "Produce_Victory", { 75,632,67,41 },
 						{ 75,586,67,41 }, false, { 0,0,0,0 }, this, (int)UI_Audio::MAIN_MENU, false, -1.0F, 1);
 				}
-				else if (hud_button_actions_unclickable[3] == nullptr && App->entityManager->getPlayer()->GetFaith() < 600) {
+				else if (hud_button_actions_unclickable[3] == nullptr && (App->entityManager->getPlayer()->GetFaith() < 600 || building->buildingAction != NOTHING)) {
 					if (hud_button_actions[3] != nullptr) {
 						App->gui->DeleteUIElement(hud_button_actions[3]);
 						hud_button_actions[3] = nullptr;
 					}
 					hud_button_actions_unclickable[3] = (ImageUI*)App->gui->CreateUIElement(Type::IMAGE, ui_ingame, { 512,621,67,41 }, { 75,678,67,41 }, "", { 0,0,0,0 }, { 0,0,0,0 }, false,
 						{ 0,0,0,0 }, nullptr, 0, false, -1.0F, 1);
+				}
+				if (hud_button_actions[4] == nullptr && building->buildingAction == NOTHING) {
+					if (hud_button_actions_unclickable[4] != nullptr) {
+						App->gui->DeleteUIElement(hud_button_actions_unclickable[4]);
+						hud_button_actions_unclickable[4] = nullptr;
+					}
+					hud_button_actions[4] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 584,626,36,36 }, { 16,227,36,36 }, "Research", { 98,227,36,36 },
+						{ 57,227,36,36 }, false, { 0,0,0,0 }, this, (int)UI_Audio::MAIN_MENU);
+				}
+				else if (hud_button_actions_unclickable[4] == nullptr && building->buildingAction != NOTHING) {
+					if (hud_button_actions[4] != nullptr) {
+						App->gui->DeleteUIElement(hud_button_actions[4]);
+						hud_button_actions[4] = nullptr;
+					}
+					hud_button_actions_unclickable[4] = (ImageUI*)App->gui->CreateUIElement(Type::IMAGE, ui_ingame, { 584,626,36,36 }, { 98,484,36,36 });
 				}
 			}
 			break;
@@ -1042,7 +1076,8 @@ void j1Scene::ManageActionButtons(bool create_buttons, bool viking) {
 		{
 			Building* building = (Building*)thing_selected;
 			if (building->buildingStatus == FINISHED) {
-				if (hud_button_actions[0] == nullptr && App->entityManager->getPlayer()->GetFaith() >= 100 && App->entityManager->getPlayer()->GetSacrifices() >= 10) {
+				if (hud_button_actions[0] == nullptr && App->entityManager->getPlayer()->GetFaith() >= 100 && App->entityManager->getPlayer()->GetSacrifices() >= 10 && 
+					building->buildingAction == NOTHING) {
 					if (hud_button_actions_unclickable[0] != nullptr) {
 						App->gui->DeleteUIElement(hud_button_actions_unclickable[0]);
 						hud_button_actions_unclickable[0] = nullptr;
@@ -1050,7 +1085,8 @@ void j1Scene::ManageActionButtons(bool create_buttons, bool viking) {
 					hud_button_actions[0] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 200,613,67,41 }, { 215,185,67,41 }, "Produce_Assassin", { 215,275,67,41 },
 						{ 215,230,67,41 }, false, { 0,0,0,0 }, this, (int)UI_Audio::MAIN_MENU, false, -1.0F, 1);
 				}
-				else if (hud_button_actions_unclickable[0] == nullptr && (App->entityManager->getPlayer()->GetFaith() < 100 || App->entityManager->getPlayer()->GetSacrifices() < 10)) {
+				else if (hud_button_actions_unclickable[0] == nullptr && (App->entityManager->getPlayer()->GetFaith() < 100 || App->entityManager->getPlayer()->GetSacrifices() < 10 || 
+					building->buildingAction != NOTHING)) {
 					if (hud_button_actions[0] != nullptr) {
 						App->gui->DeleteUIElement(hud_button_actions[0]);
 						hud_button_actions[0] = nullptr;
@@ -1065,7 +1101,7 @@ void j1Scene::ManageActionButtons(bool create_buttons, bool viking) {
 		{
 			Building* building = (Building*)thing_selected;
 			if (building->buildingStatus == FINISHED) {
-				if (hud_button_actions[0] == nullptr && App->entityManager->getPlayer()->GetFaith() >= 50) {
+				if (hud_button_actions[0] == nullptr && App->entityManager->getPlayer()->GetFaith() >= 50 && building->buildingAction == NOTHING) {
 					if (hud_button_actions_unclickable[0] != nullptr) {
 						App->gui->DeleteUIElement(hud_button_actions_unclickable[0]);
 						hud_button_actions_unclickable[0] = nullptr;
@@ -1073,7 +1109,7 @@ void j1Scene::ManageActionButtons(bool create_buttons, bool viking) {
 					hud_button_actions[0] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 200,613,67,41 }, { 73,185,67,41 }, "Produce_Monk", { 73,275,67,41 },
 						{ 73,230,67,41 }, false, { 0,0,0,0 }, this, (int)UI_Audio::MAIN_MENU, false, -1.0F, 1);
 				}
-				else if (hud_button_actions_unclickable[0] == nullptr && App->entityManager->getPlayer()->GetFaith() < 20) {
+				else if (hud_button_actions_unclickable[0] == nullptr && (App->entityManager->getPlayer()->GetFaith() < 50 || building->buildingAction != NOTHING)) {
 					if (hud_button_actions[0] != nullptr) {
 						App->gui->DeleteUIElement(hud_button_actions[0]);
 						hud_button_actions[0] = nullptr;
@@ -1081,7 +1117,7 @@ void j1Scene::ManageActionButtons(bool create_buttons, bool viking) {
 					hud_button_actions_unclickable[0] = (ImageUI*)App->gui->CreateUIElement(Type::IMAGE, ui_ingame, { 200,613,67,41 }, { 407,382,67,41 }, "", { 0,0,0,0 }, { 0,0,0,0 }, false,
 						{ 0,0,0,0 }, nullptr, 0, false, -1.0F, 1);
 				}
-				if (hud_button_actions[1] == nullptr && App->entityManager->getPlayer()->GetFaith() >= 40) {
+				if (hud_button_actions[1] == nullptr && App->entityManager->getPlayer()->GetFaith() >= 40 && building->buildingAction == NOTHING) {
 					if (hud_button_actions_unclickable[1] != nullptr) {
 						App->gui->DeleteUIElement(hud_button_actions_unclickable[1]);
 						hud_button_actions_unclickable[1] = nullptr;
@@ -1089,7 +1125,7 @@ void j1Scene::ManageActionButtons(bool create_buttons, bool viking) {
 					hud_button_actions[1] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 272,613,67,41 }, { 3,540,67,41 }, "Produce_Sacrifices", { 3,632,67,41 },
 						{ 3,586,67,41 }, false, { 0,0,0,0 }, this, (int)UI_Audio::MAIN_MENU, false, -1.0F, 1);
 				}
-				else if (hud_button_actions_unclickable[1] == nullptr && App->entityManager->getPlayer()->GetFaith() < 20) {
+				else if (hud_button_actions_unclickable[1] == nullptr && (App->entityManager->getPlayer()->GetFaith() < 20 || building->buildingAction != NOTHING)) {
 					if (hud_button_actions[1] != nullptr) {
 						App->gui->DeleteUIElement(hud_button_actions[1]);
 						hud_button_actions[1] = nullptr;
@@ -1097,7 +1133,7 @@ void j1Scene::ManageActionButtons(bool create_buttons, bool viking) {
 					hud_button_actions_unclickable[1] = (ImageUI*)App->gui->CreateUIElement(Type::IMAGE, ui_ingame, { 272,613,67,41 }, { 3,678,67,41 }, "", { 0,0,0,0 }, { 0,0,0,0 }, false,
 						{ 0,0,0,0 }, nullptr, 0, false, -1.0F, 1);
 				}
-				if (hud_button_actions[2] == nullptr && App->entityManager->getPlayer()->GetFaith() >= 40) {
+				if (hud_button_actions[2] == nullptr && App->entityManager->getPlayer()->GetFaith() >= 40 && building->buildingAction == NOTHING) {
 					if (hud_button_actions_unclickable[2] != nullptr) {
 						App->gui->DeleteUIElement(hud_button_actions_unclickable[2]);
 						hud_button_actions_unclickable[2] = nullptr;
@@ -1105,7 +1141,7 @@ void j1Scene::ManageActionButtons(bool create_buttons, bool viking) {
 					hud_button_actions[2] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 344,613,67,41 }, { 146,540,67,41 }, "Produce_Prayers", { 146,632,67,41 },
 						{ 146,586,67,41 }, false, { 0,0,0,0 }, this, (int)UI_Audio::MAIN_MENU, false, -1.0F, 1);
 				}
-				else if (hud_button_actions_unclickable[2] == nullptr && App->entityManager->getPlayer()->GetFaith() < 20) {
+				else if (hud_button_actions_unclickable[2] == nullptr && (App->entityManager->getPlayer()->GetFaith() < 20 || building->buildingAction != NOTHING)) {
 					if (hud_button_actions[2] != nullptr) {
 						App->gui->DeleteUIElement(hud_button_actions[2]);
 						hud_button_actions[2] = nullptr;
@@ -1194,6 +1230,74 @@ SDL_Rect j1Scene::GetSpritePortraitBuilding(int type_of_portrait, BuildingType b
 	return sprite;
 }
 
+//Called when clicking the research button
+void j1Scene::ActivateResearchMenu() {
+	if (ui_research_window == nullptr) {
+		ui_research_window = (WindowUI*)App->gui->CreateUIElement(Type::WINDOW, nullptr, { 410,200,459,268 }, { 790,408,459,168 });		
+		ui_button_research[0] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_research_window, { 520,400,237,38 }, { 787,240,237,38 }, "CLOSE RESEARCH", { 787,342,237,38 },
+			{ 787,291,237,38 }, false, { 0,0,0,0 }, this, (int)UI_Audio::CLOSE);
+		ui_text_research[0] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 619,412,237,38 }, { 0,0,100,100 }, "Close", { 0,0,0,255 });
+		ui_text_research[1] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 583,212,237,38 }, { 0,0,100,100 }, "RESEARCH", { 255,255,255,255 }, { 1,0,0,0 });
+		if (research_monastery == false) {
+			ui_button_research[1] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_research_window, { 580,340,117,24 }, { 834, 125, 117, 24 }, "RESEARCH MONASTERY", { 834,149,117,24 },
+				{ 834,101,117,24 }, false, { 0,0,0,0 }, this, (int)UI_Audio::CLOSE);
+			ui_text_research[2] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 609,345,237,38 }, { 0,0,100,100 }, "Research", { 0,0,0,255 });
+			ui_text_research[3] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 600,272,237,38 }, { 0,0,100,100 }, "MONASTERY", { 255,255,255,255 });
+			ui_text_research[4] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 513,307,237,38 }, { 0,0,100,100 }, "Produces monks, sacrifices and prayers", { 255,255,255,255 });
+		}
+		else if(research_encampment==false||research_temple==false){
+			if (research_encampment == false && research_temple == false) {
+				ui_button_research[1] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_research_window, { 450,340,117,24 }, { 834, 125, 117, 24 }, "RESEARCH ENCAMPMENT", { 834,149,117,24 },
+					{ 834,101,117,24 }, false, { 0,0,0,0 }, this, (int)UI_Audio::CLOSE);
+				ui_text_research[2] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 479,345,237,38 }, { 0,0,100,100 }, "Research", { 0,0,0,255 });
+				ui_text_research[3] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 465,272,237,38 }, { 0,0,100,100 }, "ENCAMPMENT", { 255,255,255,255 });
+				ui_text_research[4] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 446,307,237,38 }, { 0,0,100,100 }, "Produces assassins", { 255,255,255,255 });
+				ui_button_research[2] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_research_window, { 710,340,117,24 }, { 834, 125, 117, 24 }, "RESEARCH TEMPLE", { 834,149,117,24 },
+					{ 834,101,117,24 }, false, { 0,0,0,0 }, this, (int)UI_Audio::CLOSE);
+				ui_text_research[5] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 739,345,237,38 }, { 0,0,100,100 }, "Research", { 0,0,0,255 });
+				ui_text_research[6] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 745,272,237,38 }, { 0,0,100,100 }, "TEMPLE", { 255,255,255,255 });
+				ui_text_research[7] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 673,307,237,38 }, { 0,0,100,100 }, "Useless in the vertical slice", { 255,255,255,255 });
+			}
+			else if (research_encampment == false) {
+				ui_button_research[1] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_research_window, { 580,340,117,24 }, { 834, 125, 117, 24 }, "RESEARCH ENCAMPMENT", { 834,149,117,24 },
+					{ 834,101,117,24 }, false, { 0,0,0,0 }, this, (int)UI_Audio::CLOSE);
+				ui_text_research[2] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 609,345,237,38 }, { 0,0,100,100 }, "Research", { 0,0,0,255 });
+				ui_text_research[3] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 595,272,237,38 }, { 0,0,100,100 }, "ENCAMPMENT", { 255,255,255,255 });
+				ui_text_research[4] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 576,307,237,38 }, { 0,0,100,100 }, "Produces assassins", { 255,255,255,255 });
+			}
+			else {
+				ui_button_research[1] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_research_window, { 580,340,117,24 }, { 834, 125, 117, 24 }, "RESEARCH TEMPLE", { 834,149,117,24 },
+					{ 834,101,117,24 }, false, { 0,0,0,0 }, this, (int)UI_Audio::CLOSE);
+				ui_text_research[2] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 609,345,237,38 }, { 0,0,100,100 }, "Research", { 0,0,0,255 });
+				ui_text_research[3] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 615,272,237,38 }, { 0,0,100,100 }, "TEMPLE", { 255,255,255,255 });
+				ui_text_research[4] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 553,307,237,38 }, { 0,0,100,100 }, "Useless in the vertical slice", { 255,255,255,255 });
+			}
+		}
+	}
+	paused_game = true;
+}
+
+//Called when clicking close button in the research menu
+void j1Scene::DeactivateResearchMenu() {
+	if (ui_research_window != nullptr) {
+		App->gui->DeleteUIElement(ui_research_window);
+		ui_research_window = nullptr;
+		for (int i = 2; i >= 0; i--) {
+			if (ui_button_research[i] != nullptr) {
+				App->gui->DeleteUIElement(ui_button_research[i]);
+				ui_button_research[i] = nullptr;
+			}
+		}
+		for (int i = 7; i >= 0; i--) {
+			if (ui_text_research[i] != nullptr) {
+				App->gui->DeleteUIElement(ui_text_research[i]);
+				ui_text_research[i] = nullptr;
+			}
+		}
+	}
+	paused_game = false;
+}
+
 void j1Scene::OnClick(UI* element, float argument)
 {
 
@@ -1266,6 +1370,10 @@ void j1Scene::OnClick(UI* element, float argument)
 				BackToTitleMenu();
 			}
 		}
+		else if (element->name == "CLOSE RESEARCH")
+		{
+			close_menus = CloseSceneMenus::Research;
+		}
 		else if (element->name == "FULLSCREEN") {
 			if (ui_button_options[1]->sprite1.y == 21) {
 				ui_button_options[1]->sprite1.y = ui_button_options[1]->sprite2.y = ui_button_options[1]->sprite3.y = 61;
@@ -1277,6 +1385,24 @@ void j1Scene::OnClick(UI* element, float argument)
 		else if (element->name == "CLOSE")
 		{
 			close_menus = CloseSceneMenus::Pause;
+		}
+		else if (element->name == "Research") {
+			ActivateResearchMenu();
+		}
+		else if (element->name == "RESEARCH MONASTERY") {
+			Building* building = (Building*)thing_selected;
+			building->StartResearching(60, "Monastery");
+			close_menus = CloseSceneMenus::Research;
+		}
+		else if (element->name == "RESEARCH TEMPLE") {
+			Building* building = (Building*)thing_selected;
+			building->StartResearching(90, "Temple");
+			close_menus = CloseSceneMenus::Research;
+		}
+		else if (element->name == "RESEARCH ENCAMPMENT") {
+			Building* building = (Building*)thing_selected;
+			building->StartResearching(90, "Encampment");
+			close_menus = CloseSceneMenus::Research;
 		}
 		else if (element->name == "Produce_Temple")
 		{
@@ -1366,4 +1492,16 @@ void j1Scene::DoWinOrLoseWindow(int type, bool win) {
 
 void j1Scene::FinishProduction(std::string thing_produced) {
 	int i;
+}
+
+void j1Scene::FinishResearching(std::string thing_researched) {
+	if (thing_researched == "Monastery") {
+		research_monastery = true;
+	}
+	else if (thing_researched == "Temple") {
+		research_temple = true;
+	}
+	else if (thing_researched == "Encampment") {
+		research_encampment = true;
+	}
 }

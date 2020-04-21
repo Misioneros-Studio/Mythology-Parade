@@ -39,6 +39,7 @@ public:
 	int GetDamage() { return damage; }
 	int GetMaxCap() { return maxCap; }
 	void StartProducing(int time, std::string thing_producing);
+	void StartResearching(int time, std::string thing_producing);
 private:
 
 	bool Awake(pugi::xml_node&);

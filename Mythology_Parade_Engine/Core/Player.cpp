@@ -39,7 +39,7 @@ bool Player::PreUpdate()
 	tick1 = SDL_GetTicks();
 	if (tick1 - tick2 >= 2000) 
 	{
-		currencySystem.faith += 2;
+		currencySystem.faith += 200;
 		currencySystem.sacrifices += 3;
 		currencySystem.prayers += 5;
 		tick2 = SDL_GetTicks();

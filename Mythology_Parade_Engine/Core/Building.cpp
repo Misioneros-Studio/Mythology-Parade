@@ -109,13 +109,20 @@ bool Building::Update(float dt)
 			percentage_constructing = (float)actual_construction_time / (float)time_construction;
 		}
 	}
-	else if (buildingAction == PRODUCING) {
+	else if (buildingAction != NOTHING) {
 		int actual_construction_time = timer_construction.ReadSec();
 		if (actual_construction_time >= time_producing)
 		{
+
+			if (buildingAction == PRODUCING) {
+				App->scene->FinishProduction(element_producing);
+			}
+			else if(buildingAction==RESEARCHING){
+				App->scene->FinishResearching(element_producing);
+			}
 			buildingAction = NOTHING;
 			percentage_constructing = 1;
-			App->scene->FinishProduction(element_producing);
+
 		}
 		else
 		{
@@ -178,7 +185,8 @@ void Building::Draw()
 void Building::Draw_Construction_Bar(int blitWidth, int bar_used)
 {
 	SDL_Rect construction_spriteRect = App->entityManager->construction_bar_back;
-	App->render->Blit(texture, position.x+ 0.15* blitWidth, position.y + ((32 / 2) * tileLenght) - 1.25*blitRect.y, &construction_spriteRect);
+	iPoint pos = { position.x + (int)(0.15 * blitWidth),position.y + (int)(((32 / 2) * tileLenght) - 1.25 * blitRect.y) };
+	App->render->Blit(texture, pos.x, pos.y, &construction_spriteRect);
 	if (bar_used == 0)
 		construction_spriteRect = App->entityManager->construction_bar_front;
 	else if(bar_used==1)
@@ -186,13 +194,23 @@ void Building::Draw_Construction_Bar(int blitWidth, int bar_used)
 	else if(bar_used==2)
 		construction_spriteRect = App->entityManager->research_bar_front;
 	int sprite_rect_width = percentage_constructing * construction_spriteRect.w;
-	App->render->Blit(texture, position.x+ 0.15* blitWidth+3, position.y + ((32 / 2) * tileLenght) - 1.25*blitRect.y+3, { sprite_rect_width, construction_spriteRect.h },
+	App->render->Blit(texture, pos.x + 11, pos.y + 3, { sprite_rect_width, construction_spriteRect.h },
 		&construction_spriteRect);
+	construction_spriteRect = App->entityManager->construction_bar_empty;
+	App->render->Blit(texture, pos.x,pos.y, &construction_spriteRect);
 }
 
 
 void Building::StartProducing(int time, std::string thing_producing) {
 	buildingAction = PRODUCING;
+	percentage_constructing = 0;
+	time_producing = time;
+	element_producing = thing_producing;
+	timer_construction.Start();
+}
+
+void Building::StartResearching(int time, std::string thing_producing) {
+	buildingAction = RESEARCHING;
 	percentage_constructing = 0;
 	time_producing = time;
 	element_producing = thing_producing;

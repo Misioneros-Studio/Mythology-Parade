@@ -13,6 +13,7 @@ enum class CloseSceneMenus {
 	Options,
 	Confirmation,
 	Confirmation_and_Pause,
+	Research,
 	Unknown
 };
 
@@ -103,10 +104,18 @@ public:
 	// Called to get the rect of the sprite of the portrait of the building
 	SDL_Rect GetSpritePortraitBuilding(int type_of_portrait, BuildingType building_type, CivilizationType civilization);
 
+	//Called when clicking the research button
+	void ActivateResearchMenu();
+
+	//Called when clicking close button in the research menu
+	void DeactivateResearchMenu();
+
 
 	void OnClick(UI* element, float argument = 0);
 
 	void FinishProduction(std::string thing_produced);
+
+	void FinishResearching(std::string);
 
 	void DoWinOrLoseWindow(int type, bool win);
 
@@ -153,7 +162,16 @@ private:
 	Type_Selected type_thing_selected;
 	ButtonUI* hud_button_actions[5];
 	ImageUI* hud_button_actions_unclickable[5];
+	WindowUI* ui_research_window;
+	ButtonUI* ui_button_research[3];
+	TextUI* ui_text_research[8];
 
+
+
+	//////////////// TEMPORAL VARIABLES FOR VERTICAL SLICE ONLY
+	bool research_monastery;
+	bool research_temple;
+	bool research_encampment;
 
 public:
 	SDL_Texture* debugBlue_tex;

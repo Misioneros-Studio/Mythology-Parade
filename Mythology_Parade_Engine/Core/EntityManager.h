@@ -131,6 +131,7 @@ public:
 	SDL_Rect constructorSpriteRect;
 	SDL_Rect destructedSpriteRect;
 	SDL_Rect construction_bar_back;
+	SDL_Rect construction_bar_empty;
 	SDL_Rect construction_bar_front;
 	SDL_Rect life_bar_front;
 	SDL_Rect research_bar_front;
