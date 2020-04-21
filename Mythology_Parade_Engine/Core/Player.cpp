@@ -26,7 +26,7 @@ bool Player::Start()
 	tick2 = SDL_GetTicks();
 	player_win = player_lose = false;
 
-	CurrencySystem::faith = 0;
+	CurrencySystem::faith = 500;
 	CurrencySystem::prayers = 0;
 	CurrencySystem::sacrifices = 0;
 
@@ -49,8 +49,6 @@ bool Player::PreUpdate()
 	{
 		
 		IncreaseFaith();
-		CurrencySystem::sacrifices += 3;
-		CurrencySystem::prayers += 5;
 		tick2 = SDL_GetTicks();
 	}
 
