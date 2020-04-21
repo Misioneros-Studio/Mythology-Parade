@@ -255,9 +255,9 @@ void Player::ClickLogic()
 		{
 			if (click.y <= it._Ptr->_Myval->getCollisionRect().y && click.y >= it._Ptr->_Myval->getCollisionRect().y + it._Ptr->_Myval->getCollisionRect().h)
 			{
-				if (it._Ptr->_Myval->civilization = player_type)
+				//if (it._Ptr->_Myval->civilization = player_type)
 				{
-					buildingSelect = it._Ptr->_Myval;
+						buildingSelect = it._Ptr->_Myval;
 				}
 			}
 		}
