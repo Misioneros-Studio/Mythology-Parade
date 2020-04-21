@@ -185,6 +185,7 @@ bool Unit::Draw(float dt)
 
 	if (displayDebug) 
 	{
+
 		App->render->DrawQuad(collisionRect, 0, 255, 0, 50);
 	}
 

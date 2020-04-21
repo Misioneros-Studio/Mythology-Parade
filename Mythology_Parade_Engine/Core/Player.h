@@ -27,10 +27,10 @@ public:
 	void PlayerInputs();
 	void ClickLogic();
 	std::list<Entity*> GetEntitiesSelected();
+	Building* GetSelectedBuild();
 	int GetFaith();
 	int GetPrayers();
 	int GetSacrifices();
-
 	void InitVikings();
 	void InitGreek();
 
@@ -44,6 +44,7 @@ private:
 	Entity* buildingSelect;
 
 	bool dontSelect;
+	bool oneTime;
 	iPoint click;
 
 public:

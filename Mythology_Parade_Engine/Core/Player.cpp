@@ -8,18 +8,7 @@
 
 Player::Player()
 {
-	player_win = player_lose = false;
-
-	CurrencySystem::faith = 0;
-	CurrencySystem::prayers = 0;
-	CurrencySystem::sacrifices = 0;
-
-	dontSelect = false;
-	num_encampment = num_monastery = num_temple = 0;
-	time_production_victory = 300;
-
-	player_type = CivilizationType::VIKING;
-	displayDebug = false;
+	Start();
 }
 
 Player::~Player()
@@ -35,9 +24,19 @@ bool Player::Start()
 {
 
 	tick2 = SDL_GetTicks();
+	player_win = player_lose = false;
 
-	InitVikings();
-	InitGreek();
+	CurrencySystem::faith = 0;
+	CurrencySystem::prayers = 0;
+	CurrencySystem::sacrifices = 0;
+
+	dontSelect = false;
+	num_encampment = num_monastery = num_temple = 0;
+	time_production_victory = 300;
+
+	player_type = CivilizationType::VIKING;
+	displayDebug = false;
+	oneTime = true;
 
 	return true;
 }
@@ -60,6 +59,13 @@ bool Player::PreUpdate()
 	faith = std::to_string(CurrencySystem::faith);
 	sacrifice = std::to_string(CurrencySystem::sacrifices);
 	prayer = std::to_string(CurrencySystem::prayers);
+
+	if (oneTime)
+	{
+		InitVikings();
+		InitGreek();
+		oneTime = false;
+	}
 
 	return true;
 }
@@ -149,6 +155,11 @@ std::list<Entity*> Player::GetEntitiesSelected()
 	return listEntities;
 }
 
+Building* Player::GetSelectedBuild()
+{
+	return (Building*) buildingSelect;
+}
+
 void Player::SeeEntitiesInside()
 {
 	//ALERT MAYK
@@ -199,13 +210,16 @@ void Player::PlayerInputs()
 
 	if (App->input->GetKey(SDL_SCANCODE_F4) == KEY_DOWN && App->scene->godMode)
 	{
-		std::list<Entity*>::iterator it = listEntities.begin();
-		for (it; it != listEntities.end(); ++it)
+		if (!listEntities.empty())
 		{
-			App->entityManager->DeleteEntity(it._Ptr->_Myval);
+			std::list<Entity*>::iterator it = listEntities.begin();
+			for (it; it != listEntities.end(); ++it)
+			{
+				App->entityManager->DeleteEntity(it._Ptr->_Myval);
+			}
+			listEntities.clear();
+			App->scene->HUDUpdateSelection(listEntities, nullptr);
 		}
-		listEntities.clear();
-		App->scene->HUDUpdateSelection(listEntities, nullptr);
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN && App->scene->godMode)

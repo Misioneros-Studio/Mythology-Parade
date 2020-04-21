@@ -32,7 +32,7 @@ void CurrencySystem::IncreaseFaith()
 
 void CurrencySystem::DecreaseFaith(int number)
 {
-	if (App->scene->paused_game)
+	if (!App->scene->paused_game)
 	{
 		if (number > 0)
 		{

@@ -42,7 +42,8 @@ public:
 	void StartProducing(int time, std::string thing_producing);
 	void StartResearching(int time, std::string thing_producing);
 
-	void CreateUnit(BuildingType);
+
+	void CreateUnit();
 
 private:
 
@@ -51,6 +52,8 @@ private:
 
 	void Draw_Construction_Bar(int blitWidth, int bar_used = 0);
 	bool Draw(float dt);
+
+	void FinishProduction(std::string thing_produced);
 
 	//Stats
 	int defenses;

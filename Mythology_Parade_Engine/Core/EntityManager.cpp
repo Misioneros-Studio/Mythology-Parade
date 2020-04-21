@@ -109,8 +109,7 @@ bool EntityManager::Update(float dt)
 	//TODO: Move this logic to the player
 	if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
-		crPreview.active = !crPreview.active;
-		UpdateBuildPreview(buildingTestIndex);
+		EnterBuildMode();
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN) 
@@ -118,7 +117,6 @@ bool EntityManager::Update(float dt)
 		if (buildingTestIndex < MAX_BUILDING_TYPES - 1) 
 		{
 			buildingTestIndex++;
-			LOG("Building Index: %i", buildingTestIndex);
 		}
 		else
 		{
@@ -163,6 +161,7 @@ bool EntityManager::Update(float dt)
 
 	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN && crPreview.active && crPreview.canBuild)
 	{
+		int faithToDescrease = 0;
 		iPoint mouse = App->map->GetMousePositionOnMap();
 		iPoint spawnPos = App->map->MapToWorld(mouse.x, mouse.y);
 		spawnPos.y += App->map->data.tile_height / 2;
@@ -178,6 +177,7 @@ bool EntityManager::Update(float dt)
 			viking = true;
 		case 5:
 			CreateBuildingEntity(spawnPos, BuildingType::MONASTERY , buildingsData[buildingTestIndex]);
+			faithToDescrease = 200;
 			break;
 		case 2:
 			viking = true;
@@ -188,6 +188,7 @@ bool EntityManager::Update(float dt)
 			viking = true;
 		case 7:
 			CreateBuildingEntity(spawnPos, BuildingType::ENCAMPMENT, buildingsData[buildingTestIndex]);
+			faithToDescrease = 200;
 			break;
 		}
 		
@@ -202,10 +203,15 @@ bool EntityManager::Update(float dt)
 				}
 			}
 		}
+		//Onces you build disable building mode
+		App->entityManager->getPlayer()->DecreaseFaith(faithToDescrease);
+		crPreview.active = false;
 	}
 
 	return true;
 }
+
+
 
 bool EntityManager::PostUpdate() 
 {
@@ -443,6 +449,19 @@ Entity* EntityManager::CreateBuildingEntity(iPoint pos, BuildingType type, Build
 	return ret;
 }
 
+void EntityManager::EnterBuildMode()
+{
+	crPreview.active = !crPreview.active;
+	UpdateBuildPreview(buildingTestIndex);
+}
+void EntityManager::SetBuildIndex(int index)
+{
+	if (index < MAX_BUILDING_TYPES - 1) {
+		buildingTestIndex = index;
+	}
+
+	UpdateBuildPreview(buildingTestIndex);
+}
 
 //Called when deleting a new Entity
 bool EntityManager::DeleteEntity(Entity* e)
