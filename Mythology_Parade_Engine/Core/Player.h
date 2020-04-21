@@ -44,6 +44,7 @@ private:
 	Entity* buildingSelect;
 
 	bool dontSelect;
+	bool oneTime;
 
 public:
 	bool player_win = false;

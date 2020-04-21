@@ -34,10 +34,9 @@ bool Player::Start()
 	num_encampment = num_monastery = num_temple = 0;
 	time_production_victory = 300;
 
-	InitVikings();
-	InitGreek();
 	player_type = CivilizationType::VIKING;
 	displayDebug = false;
+	oneTime = true;
 
 	return true;
 }
@@ -61,7 +60,12 @@ bool Player::PreUpdate()
 	sacrifice = std::to_string(CurrencySystem::sacrifices);
 	prayer = std::to_string(CurrencySystem::prayers);
 
-
+	if (oneTime)
+	{
+		InitVikings();
+		InitGreek();
+		oneTime = !oneTime;
+	}
 
 
 	return true;
@@ -260,9 +264,9 @@ void Player::ClickLogic()
 		it = App->entityManager->entities[EntityType::UNIT].begin();
 		for (it; it != App->entityManager->entities[EntityType::UNIT].end(); ++it)
 		{
-			if (preClicked.x >= it._Ptr->_Myval->position.x && preClicked.x <= it._Ptr->_Myval->position.x + it._Ptr->_Myval->blitRect.x)
+			if (preClicked.x >= it._Ptr->_Myval->getCollisionRect().x && preClicked.x <= it._Ptr->_Myval->getCollisionRect().x + it._Ptr->_Myval->getCollisionRect().x)
 			{
-				if (preClicked.y >= it._Ptr->_Myval->position.y && preClicked.y <= it._Ptr->_Myval->position.y + it._Ptr->_Myval->blitRect.y)
+				if (preClicked.y >= it._Ptr->_Myval->getCollisionRect().y && preClicked.y <= it._Ptr->_Myval->getCollisionRect().y + it._Ptr->_Myval->getCollisionRect().y)
 				{
 					if (it._Ptr->_Myval->civilization == player_type)
 					{
