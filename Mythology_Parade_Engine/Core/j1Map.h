@@ -5,6 +5,7 @@
 #include "j1Module.h"
 #include "PugiXml/src/pugixml.hpp"
 #include"j1Input.h"
+#include "EntityManager.h"
 
 // ----------------------------------------------------
 struct Properties
@@ -94,7 +95,9 @@ struct MapData
 	SDL_Color			background_color;
 	MapTypes			type;
 	std::list<TileSet*>	tilesets;
-	std::list<MapLayer*>	layers;
+
+	std::list<MapLayer*>	downLayers;
+	std::list<MapLayer*>	topLayers;
 };
 
 // ----------------------------------------------------
@@ -140,6 +143,7 @@ private:
 	bool LoadLayer(pugi::xml_node& node, MapLayer* layer);
 	bool LoadProperties(pugi::xml_node& node, Properties& properties);
 
+	void DrawMapLayer(int layerIndex);
 
 public:
 

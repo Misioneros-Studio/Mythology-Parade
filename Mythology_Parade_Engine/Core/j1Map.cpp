@@ -43,7 +43,7 @@ void j1Map::Draw()
 	iPoint B = WorldToMap(-App->render->camera.x + App->render->camera.w, -App->render->camera.y + App->render->camera.h);
 
 	//int blits = 0;
-	for (std::list<MapLayer*>::iterator it = data.layers.begin(); it != data.layers.end(); it++)
+	for (std::list<MapLayer*>::iterator it = data.downLayers.begin(); it != data.downLayers.end(); it++)
 	{
 		MapLayer* layer = it._Ptr->_Myval;
 
@@ -62,6 +62,46 @@ void j1Map::Draw()
 				int y = (a - b) / 2;
 
 				if (x >= 0 && y >= 0 && x < data.width && y < data.height) 
+				{
+					int tile_id = layer->Get(x, y);
+					if (tile_id > 0)
+					{
+						TileSet* tileset = GetTilesetFromTileId(tile_id);
+
+						SDL_Rect r = tileset->GetTileRect(tile_id);
+						iPoint pos = MapToWorld(x, y);
+
+						App->render->Blit(tileset->texture, pos.x, pos.y, &r);
+
+						//blits++;
+					}
+				}
+
+			}
+		}
+	}
+
+	App->entityManager->DrawEverything();
+
+	for (std::list<MapLayer*>::iterator it = data.topLayers.begin(); it != data.topLayers.end(); it++)
+	{
+		MapLayer* layer = it._Ptr->_Myval;
+
+		if (layer->properties.Get("Nodraw") != 0)
+			continue;
+
+		//Approach 2.0
+		for (int a = A.x + A.y - 2; a <= B.x + B.y - 5 /* or 2*/; a++)
+		{
+			for (int b = A.x - A.y - 2; b <= B.x - B.y + 2; b++)
+			{
+				if ((b & 1) != (a & 1))
+					continue;
+
+				int x = (a + b) / 2;
+				int y = (a - b) / 2;
+
+				if (x >= 0 && y >= 0 && x < data.width && y < data.height)
 				{
 					int tile_id = layer->Get(x, y);
 					if (tile_id > 0)
@@ -223,11 +263,11 @@ bool j1Map::CleanUp()
 	data.tilesets.clear();
 
 	// Remove all layers
-	for (std::list<MapLayer*>::iterator it = data.layers.begin(); it != data.layers.end(); it++)
+	for (std::list<MapLayer*>::iterator it = data.downLayers.begin(); it != data.downLayers.end(); it++)
 	{
 		RELEASE(it._Ptr->_Myval);
 	}
-	data.layers.clear();
+	data.downLayers.clear();
 
 	// Clean up the pugui tree
 	map_file.reset();
@@ -286,16 +326,14 @@ bool j1Map::Load(const char* file_name)
 
 			if (ret == true) 
 			{
-				//if (lay->properties.Get("afterLayer", 1) == 0) 
-				//{
-
-				//}
-				//else
-				//{
-				//	data.layers.push_back(lay);
-				//}
-
-				data.layers.push_back(lay);
+				if (lay->properties.Get("afterLayer", 1) == 0) 
+				{
+					data.topLayers.push_back(lay);
+				}
+				else
+				{
+					data.downLayers.push_back(lay);
+				}
 			}
 
 	}
@@ -315,7 +353,7 @@ bool j1Map::Load(const char* file_name)
 			LOG("spacing: %d margin: %d", s->spacing, s->margin);
 		}
 
-		for (std::list<MapLayer*>::iterator it = data.layers.begin(); it != data.layers.end(); it++)
+		for (std::list<MapLayer*>::iterator it = data.downLayers.begin(); it != data.downLayers.end(); it++)
 		{
 			MapLayer* l = it._Ptr->_Myval;
 			LOG("Layer ----");
@@ -520,7 +558,7 @@ bool j1Map::CreateWalkabilityMap(int& width, int& height, uchar** buffer)
 {
 	bool ret = false;
 
-	for (std::list<MapLayer*>::iterator it = data.layers.begin(); it != data.layers.end(); it++)
+	for (std::list<MapLayer*>::iterator it = data.downLayers.begin(); it != data.downLayers.end(); it++)
 	{
 		MapLayer* layer = it._Ptr->_Myval;
 

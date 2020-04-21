@@ -4,7 +4,7 @@
 #include "CurrencySystem.h"
 #include "Unit.h"
 #include "Building.h"
-
+#include"p2Log.h"
 #include "j1Input.h"
 #include "EntityManager.h"
 
@@ -31,9 +31,10 @@ public:
 	int GetPrayers();
 	int GetSacrifices();
 
-private:
-	CurrencySystem currencySystem;
+	void InitVikings();
+	void InitGreek();
 
+private:
 	std::string faith, sacrifice, prayer;
 
 	int tick1 = 0, tick2 = 0;
@@ -53,6 +54,7 @@ public:
 	int time_production_victory;
 	CivilizationType player_type;
   
+
 };
 
 

@@ -38,12 +38,17 @@ public:
 	int GetInfluence() { return influence; }
 	int GetDamage() { return damage; }
 	int GetMaxCap() { return maxCap; }
+
 	void StartProducing(int time, std::string thing_producing);
 	void StartResearching(int time, std::string thing_producing);
+
+	void CreateUnit(BuildingType);
+
 private:
 
 	bool Awake(pugi::xml_node&);
 	bool Update(float dt) override;
+
 	void Draw_Construction_Bar(int blitWidth, int bar_used = 0);
 	void Draw();
 
@@ -53,10 +58,12 @@ private:
 	int damage;
 	int maxCap;
 	int time_construction;
+
 	int time_research;
 	int time_producing;
 	bool researched;
 
+	int nearbyMonks;
 	std::string description;
 
 	//Used when constructing/producing

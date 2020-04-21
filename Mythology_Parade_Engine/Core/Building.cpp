@@ -1,6 +1,6 @@
 #include "Building.h"
-
-Building::Building(BuildingType buildingType, iPoint pos, BuildingInfo info)
+#include "p2Log.h"
+Building::Building(BuildingType type, iPoint pos, BuildingInfo info)
 {
 
 	position = pos;
@@ -9,6 +9,9 @@ Building::Building(BuildingType buildingType, iPoint pos, BuildingInfo info)
 	time_producing = 0;
 	percentage_constructing = 0;
 	first_time_constructing = true;
+	buildingType = type;
+
+	displayDebug = App->entityManager->getPlayer()->displayDebug;
 
 	switch (buildingType)
 	{
@@ -70,8 +73,12 @@ Building::Building(BuildingType buildingType, iPoint pos, BuildingInfo info)
 
 	original_spriteRect = spriteRect = info.spriteRect;
 	blitRect = info.blitSize;
+
+
 	//buildingType = info.buildingType;
 	tileLenght = info.tileLenght;
+
+	collisionRect = { position.x, position.y + ((App->map->data.tile_height / 2) * tileLenght), blitRect.x, -blitRect.y};
 
 	timer_construction.Start();
 }
@@ -83,6 +90,23 @@ Building::~Building()
 const char* Building::GetDescription()
 {
 	return description.c_str();
+}
+
+void Building::CreateUnit(BuildingType type)
+{
+	switch (type)
+	{
+	case FORTRESS:
+		break;
+	case MONASTERY:
+		App->entityManager->CreateUnitEntity(UnitType::MONK, { position.x + 5,position.y });
+		break;
+	case TEMPLE:
+		break;
+	case ENCAMPMENT:
+		App->entityManager->CreateUnitEntity(UnitType::ASSASSIN, { position.x + 5,position.y });
+		break;
+	}
 }
 
 bool Building::Awake(pugi::xml_node& a)
@@ -163,23 +187,52 @@ bool Building::Update(float dt)
 		blitRect = App->entityManager->CalculateBuildingSize(blitWidth, spriteRect.w, spriteRect.h);
 	}
 
-	Draw();
-	if (buildingStatus == CONSTRUCTING || buildingAction==PRODUCING) {
+	//Draw();
+	if (buildingStatus == CONSTRUCTING || buildingAction==PRODUCING) 
+  {
 		Draw_Construction_Bar(blitWidth);
 	}
-	else if (buildingAction == RESEARCHING) {
+	else if (buildingAction == RESEARCHING) 
+  {
 		Draw_Construction_Bar(blitWidth, 2);
 	}
 
+	//IF MONASTERY DETECTS NEARBY MONKS,INCREASE FAITH
+	if (buildingType == BuildingType::MONASTERY) 
+  {
+		std::list<Entity*> list =  App->entityManager->entities[EntityType::UNIT];
+		int count = 0;
+		for each (Unit* var in list)
+		{
+			if (var->unitType == UnitType::MONK) {
+				if(position.DistanceManhattan(var->position) < 300)
+				count++;
+			}
+		}
+		if (nearbyMonks != count) 
+		{
+			nearbyMonks = count;
+			App->entityManager->getPlayer()->IncreaseFaithRatio(nearbyMonks);			
+		}
+	}
+  
 	return ret;
 }
 
-void Building::Draw()
+bool Building::Draw(float dt)
 {
 	//lengh = 4, lenght is the number of tiles this building uses
 	//App->render->DrawQuad({position.x, position.y + (tileHeight /2) * (height + 1), texturewidth, -textureHeight}, 255, 250, 20);
-	App->render->Blit(texture, position.x, position.y + ((32 / 2) * tileLenght) - blitRect.y, {blitRect.x, blitRect.y}, &spriteRect);
-	App->render->DrawQuad({position.x, position.y, 4, -4}, 255, 0, 0);
+	App->render->Blit(texture, position.x, position.y + ((App->map->data.tile_height / 2) * tileLenght) - blitRect.y, {blitRect.x, blitRect.y}, &spriteRect);
+	
+
+
+	if (displayDebug) 
+	{
+		App->render->DrawQuad(collisionRect, 255, 0, 0, 50);
+	}
+
+	return true;
 }
 
 void Building::Draw_Construction_Bar(int blitWidth, int bar_used)

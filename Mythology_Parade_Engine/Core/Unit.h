@@ -76,12 +76,10 @@ protected:
 	AnimationType state;
 	Unit* enemyTarget;
 
-	SDL_Rect collisionRect = {0, 0, 30, -55 };
-
 	std::vector<iPoint> entPath;
 	//void SetTarget();
 	//void CheckState();
-
+	
 };
 
 #endif // !__UNIT_H__

@@ -117,6 +117,7 @@ bool EntityManager::Update(float dt)
 		if (buildingTestIndex < MAX_BUILDING_TYPES - 1) 
 		{
 			buildingTestIndex++;
+			LOG("Building Index: %i", buildingTestIndex);
 		}
 		else
 		{
@@ -395,7 +396,31 @@ Entity* EntityManager::CreateUnitEntity(UnitType type, iPoint pos)
 	return ret;
 }
 
-Entity* EntityManager::CreateBuildingEntity(iPoint pos, BuildingType type, BuildingInfo info, bool viking)
+void EntityManager::DrawEverything() 
+{
+	float dt = App->GetDT();
+	Entity* ent = nullptr;
+
+	for (unsigned i = 1; i < entities.size(); i++)
+	{
+		for (std::list<Entity*>::iterator it = entities[(EntityType)i].begin(); it != entities[(EntityType)i].end(); it++)
+		{
+			switch ((EntityType)i)
+			{
+			case EntityType::BUILDING:
+				ent = (Building*)it._Ptr->_Myval;
+				break;
+
+			case EntityType::UNIT:
+				ent = (Unit*)it._Ptr->_Myval;
+				break;
+			}
+			ent->Draw(dt);
+		}
+	}
+}
+
+Entity* EntityManager::CreateBuildingEntity(iPoint pos, BuildingType type, BuildingInfo info)
 {
 	Entity* ret = nullptr;
 	switch (type)
@@ -413,10 +438,6 @@ Entity* EntityManager::CreateBuildingEntity(iPoint pos, BuildingType type, Build
 		ret = new Building(BuildingType::ENCAMPMENT, pos, info);
 		break;
 	}
-	if (viking == true)
-		ret->civilization = CivilizationType::VIKING;
-	else
-		ret->civilization = CivilizationType::GREEK;
 	ret->type = EntityType::BUILDING;
 	ret->texture = entitySpriteSheets[SpriteSheetType::BUILDINGS];
 

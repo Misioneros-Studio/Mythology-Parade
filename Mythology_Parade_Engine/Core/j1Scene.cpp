@@ -1386,7 +1386,8 @@ void j1Scene::OnClick(UI* element, float argument)
 		{
 			close_menus = CloseSceneMenus::Pause;
 		}
-		else if (element->name == "Research") {
+		else if (element->name == "Research") 
+    {
 			ActivateResearchMenu();
 		}
 		else if (element->name == "RESEARCH MONASTERY") {
@@ -1440,6 +1441,11 @@ void j1Scene::OnClick(UI* element, float argument)
 		{
 			Building* building = (Building*)thing_selected;
 			building->StartProducing(App->entityManager->getPlayer()->time_prayers, "Prayers");
+    }
+		else if (element->name == "Upgrade") {
+			//Upgrade level
+			CombatUnit* unit =(CombatUnit*)App->entityManager->getPlayer()->GetEntitiesSelected().begin()._Ptr->_Myval;
+			unit->LevelUp();
 		}
 		break;
 

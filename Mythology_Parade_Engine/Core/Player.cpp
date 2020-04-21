@@ -8,6 +8,20 @@
 
 Player::Player()
 {
+
+	InitVikings();
+	InitGreek();
+
+	tick2 = SDL_GetTicks();
+	player_win = player_lose = false;
+	CurrencySystem::faith = 0;
+	CurrencySystem::prayers = 0;
+	CurrencySystem::sacrifices = 0;
+	dontSelect = false;
+
+	player_type = CivilizationType::VIKING;
+
+	displayDebug = false;
 }
 
 Player::~Player()
@@ -16,12 +30,12 @@ Player::~Player()
 
 bool Player::Awake()
 {
-	player_type = CivilizationType::VIKING;
 	return true;
 }
 
 bool Player::Start()
 {
+
 	tick2 = SDL_GetTicks();
 	player_win = player_lose = false;
 	currencySystem.faith = 0;
@@ -30,6 +44,7 @@ bool Player::Start()
 	dontSelect = false;
 	num_encampment = num_monastery = num_temple = 0;
 	time_production_victory = 300;
+
 	return true;
 }
 
@@ -39,17 +54,21 @@ bool Player::PreUpdate()
 	tick1 = SDL_GetTicks();
 	if (tick1 - tick2 >= 2000) 
 	{
-		currencySystem.faith += 2;
-		currencySystem.sacrifices += 3;
-		currencySystem.prayers += 5;
+		
+		IncreaseFaith();
+		CurrencySystem::sacrifices += 3;
+		CurrencySystem::prayers += 5;
 		tick2 = SDL_GetTicks();
 	}
 
 
 	//Sending all numbers to strings to print
-	faith = std::to_string(currencySystem.faith);
-	sacrifice = std::to_string(currencySystem.sacrifices);
-	prayer = std::to_string(currencySystem.prayers);
+	faith = std::to_string(CurrencySystem::faith);
+	sacrifice = std::to_string(CurrencySystem::sacrifices);
+	prayer = std::to_string(CurrencySystem::prayers);
+
+
+
 
 	return true;
 }
@@ -76,6 +95,7 @@ bool Player::Update(float dt)
 		SelectionDraw_Logic(); 
 		PlayerInputs();
 	}
+
 
 
 	return true;
@@ -148,7 +168,10 @@ void Player::SeeEntitiesInside()
 		{
 			if ((it._Ptr->_Myval->position.y >= preClicked.y && it._Ptr->_Myval->position.y <= postClicked.y) || it._Ptr->_Myval->position.y <= preClicked.y && it._Ptr->_Myval->position.y >= postClicked.y)
 			{
-				listEntities.push_back(it._Ptr->_Myval);
+				if (it._Ptr->_Myval->civilization == player_type)
+				{
+					listEntities.push_back(it._Ptr->_Myval);
+				}
 			}
 		}
 	}
@@ -166,7 +189,7 @@ void Player::PlayerInputs()
 
 	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_REPEAT && App->scene->godMode)
 	{
-		currencySystem.IncreaseAll(10);
+		CurrencySystem::IncreaseAll(10);
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN && App->scene->godMode)
@@ -203,6 +226,24 @@ void Player::PlayerInputs()
 	{
 		player_lose = true;
 	}
+
+	if (App->input->GetKey(SDL_SCANCODE_F7) == KEY_DOWN && App->scene->godMode)
+	{
+		//Display collisions
+		displayDebug = !displayDebug;
+
+		for (int i = 1; i < App->entityManager->entities.size(); i++)
+		{
+			std::list<Entity*>::iterator it = App->entityManager->entities[(EntityType)i].begin();
+
+			Entity* ent = nullptr;
+			for (it; it != App->entityManager->entities[(EntityType)i].end(); ++it)
+			{
+				ent = it._Ptr->_Myval;
+				ent->displayDebug = displayDebug;
+			}
+		}
+	}
 }
 
 void Player::ClickLogic()
@@ -214,7 +255,10 @@ void Player::ClickLogic()
 		{
 			if (preClicked.y >= it._Ptr->_Myval->position.y && preClicked.y <= it._Ptr->_Myval->position.y + it._Ptr->_Myval->spriteRect.h)
 			{
-				buildingSelect = it._Ptr->_Myval;
+				if (it._Ptr->_Myval->civilization == player_type)
+				{
+					buildingSelect = it._Ptr->_Myval;
+				}
 			}
 		}
 	}
@@ -226,12 +270,16 @@ void Player::ClickLogic()
 			{
 				if (preClicked.y >= it._Ptr->_Myval->position.y && preClicked.y <= it._Ptr->_Myval->position.y + it._Ptr->_Myval->blitRect.y)
 				{
-					listEntities.push_back(it._Ptr->_Myval);
+					if (it._Ptr->_Myval->civilization == player_type)
+					{
+						listEntities.push_back(it._Ptr->_Myval);
+					}
 				}
 			}
 		}
 	}
 }
+
 int Player::GetFaith() {
 	return currencySystem.faith;
 }
@@ -242,4 +290,37 @@ int Player::GetPrayers() {
 
 int Player::GetSacrifices() {
 	return currencySystem.sacrifices;
+
+
+void Player::InitVikings() 
+{
+	iPoint fortress = { 122,21 };
+	fortress = App->map->MapToWorld(fortress.x, fortress.y);
+	App->entityManager->CreateBuildingEntity(fortress, BuildingType::FORTRESS, App->entityManager->buildingsData[0]);
+
+	iPoint monkPos = { 119,26 };
+	iPoint assassinPos = { 121,28 };
+	monkPos = App->map->MapToWorld(monkPos.x, monkPos.y);
+	assassinPos = App->map->MapToWorld(assassinPos.x, assassinPos.y);
+
+
+	App->entityManager->CreateUnitEntity(UnitType::MONK, monkPos);
+	App->entityManager->CreateUnitEntity(UnitType::ASSASSIN, assassinPos);
+
+}
+
+void Player::InitGreek()
+{
+	iPoint fortress = { 102,41 };
+	fortress = App->map->MapToWorld(fortress.x, fortress.y);
+	App->entityManager->CreateBuildingEntity(fortress, BuildingType::FORTRESS, App->entityManager->buildingsData[4]);
+
+	iPoint monkPos = { 106,34 };
+	iPoint assassinPos = { 109,37 };
+	monkPos = App->map->MapToWorld(monkPos.x, monkPos.y);
+	assassinPos = App->map->MapToWorld(assassinPos.x, assassinPos.y);
+	
+
+	App->entityManager->CreateUnitEntity(UnitType::MONK, monkPos);
+	App->entityManager->CreateUnitEntity(UnitType::ASSASSIN, assassinPos);
 }
