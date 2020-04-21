@@ -246,17 +246,16 @@ void Player::PlayerInputs()
 
 void Player::ClickLogic()
 {
+	App->input->GetMousePosition(click.x,click.y);
+	click = App->render->ScreenToWorld(click.x, click.y);
 	std::list<Entity*>::iterator it = App->entityManager->entities[EntityType::BUILDING].begin();
 	for (it; it != App->entityManager->entities[EntityType::BUILDING].end(); ++it)
 	{
-		if (preClicked.x >= it._Ptr->_Myval->position.x && preClicked.x <= it._Ptr->_Myval->position.x + it._Ptr->_Myval->spriteRect.w)
+		if (click.x >= it._Ptr->_Myval->getCollisionRect().x && click.x <= it._Ptr->_Myval->getCollisionRect().x + it._Ptr->_Myval->getCollisionRect().w)
 		{
-			if (preClicked.y >= it._Ptr->_Myval->position.y && preClicked.y <= it._Ptr->_Myval->position.y + it._Ptr->_Myval->spriteRect.h)
+			if (click.y <= it._Ptr->_Myval->getCollisionRect().y && click.y >= it._Ptr->_Myval->getCollisionRect().y + it._Ptr->_Myval->getCollisionRect().h)
 			{
-				if (it._Ptr->_Myval->civilization == player_type)
-				{
-					buildingSelect = it._Ptr->_Myval;
-				}
+				buildingSelect = it._Ptr->_Myval;
 			}
 		}
 	}
@@ -264,14 +263,11 @@ void Player::ClickLogic()
 		it = App->entityManager->entities[EntityType::UNIT].begin();
 		for (it; it != App->entityManager->entities[EntityType::UNIT].end(); ++it)
 		{
-			if (preClicked.x >= it._Ptr->_Myval->getCollisionRect().x && preClicked.x <= it._Ptr->_Myval->getCollisionRect().x + it._Ptr->_Myval->getCollisionRect().x)
+			if (click.x >= it._Ptr->_Myval->getCollisionRect().x && click.x <= it._Ptr->_Myval->getCollisionRect().x + it._Ptr->_Myval->getCollisionRect().w)
 			{
-				if (preClicked.y >= it._Ptr->_Myval->getCollisionRect().y && preClicked.y <= it._Ptr->_Myval->getCollisionRect().y + it._Ptr->_Myval->getCollisionRect().y)
+				if (click.y <= it._Ptr->_Myval->getCollisionRect().y && click.y >= it._Ptr->_Myval->getCollisionRect().y + it._Ptr->_Myval->getCollisionRect().h)
 				{
-					if (it._Ptr->_Myval->civilization == player_type)
-					{
-						listEntities.push_back(it._Ptr->_Myval);
-					}
+					listEntities.push_back(it._Ptr->_Myval);
 				}
 			}
 		}

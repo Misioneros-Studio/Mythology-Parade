@@ -45,6 +45,7 @@ private:
 
 	bool dontSelect;
 	bool oneTime;
+	iPoint click;
 
 public:
 	bool player_win = false;
