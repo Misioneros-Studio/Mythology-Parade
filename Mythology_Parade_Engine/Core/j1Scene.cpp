@@ -1439,7 +1439,7 @@ void j1Scene::OnClick(UI* element, float argument)
 		else if (element->name == "Produce_Prayers")
 		{
 			Building* building = (Building*)thing_selected;
-			building->StartProducing(10, "Prayers");
+			building->StartProducing(App->entityManager->getPlayer()->time_prayers, "Prayers");
 		}
 		break;
 
