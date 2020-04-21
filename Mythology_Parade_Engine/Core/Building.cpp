@@ -11,6 +11,8 @@ Building::Building(BuildingType buildingType, iPoint pos, BuildingInfo info)
 	percentage_constructing = 0;
 	first_time_constructing = true;
 
+	displayDebug = App->entityManager->getPlayer()->displayDebug;
+
 	switch (buildingType)
 	{
 	case FORTRESS:
@@ -35,8 +37,12 @@ Building::Building(BuildingType buildingType, iPoint pos, BuildingInfo info)
 	civilization = info.civilization;
 	original_spriteRect = spriteRect = info.spriteRect;
 	blitRect = info.blitSize;
+
+
 	//buildingType = info.buildingType;
 	tileLenght = info.tileLenght;
+
+	collisionRect = { position.x, position.y + ((App->map->data.tile_height / 2) * tileLenght), blitRect.x, -blitRect.y};
 
 	timer_construction.Start();
 }
@@ -122,8 +128,14 @@ bool Building::Draw(float dt)
 {
 	//lengh = 4, lenght is the number of tiles this building uses
 	//App->render->DrawQuad({position.x, position.y + (tileHeight /2) * (height + 1), texturewidth, -textureHeight}, 255, 250, 20);
-	App->render->Blit(texture, position.x, position.y + ((32 / 2) * tileLenght) - blitRect.y, {blitRect.x, blitRect.y}, &spriteRect);
-	App->render->DrawQuad({position.x, position.y, 4, -4}, 255, 0, 0);
+	App->render->Blit(texture, position.x, position.y + ((App->map->data.tile_height / 2) * tileLenght) - blitRect.y, {blitRect.x, blitRect.y}, &spriteRect);
+	
+
+
+	if (displayDebug) 
+	{
+		App->render->DrawQuad(collisionRect, 255, 0, 0, 50);
+	}
 
 	return true;
 }

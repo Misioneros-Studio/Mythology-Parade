@@ -4,7 +4,7 @@
 #include "CurrencySystem.h"
 #include "Unit.h"
 #include "Building.h"
-
+#include"p2Log.h"
 #include "j1Input.h"
 #include "EntityManager.h"
 
