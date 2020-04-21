@@ -28,6 +28,9 @@ public:
 	void ClickLogic();
 	std::list<Entity*> GetEntitiesSelected();
 
+	void InitVikings();
+	void InitGreek();
+
 private:
 	std::string faith, sacrifice, prayer;
 
@@ -44,6 +47,7 @@ public:
 	bool player_lose = false;
 	CivilizationType player_type;
   
+
 };
 
 
