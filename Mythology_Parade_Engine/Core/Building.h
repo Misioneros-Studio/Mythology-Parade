@@ -38,7 +38,7 @@ private:
 	bool Awake(pugi::xml_node&);
 	bool Update(float dt) override;
 	void Draw_Construction_Bar(int blitWidth);
-	void Draw();
+	bool Draw(float dt) override;
 
 	//Stats
 	int defenses;
