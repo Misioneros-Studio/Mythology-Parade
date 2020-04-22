@@ -27,7 +27,7 @@ public:
 	bool CleanUp();
 
 	// Play a music file
-	bool PlayMusic(int channel, const char* path, float fade_time = DEFAULT_MUSIC_FADE_TIME, int volume = 200);
+	bool PlayMusic(const char* path, float fade_time = DEFAULT_MUSIC_FADE_TIME, int volume = 200);
 
 	// Load a WAV in memory
 	unsigned int LoadFx(const char* path);

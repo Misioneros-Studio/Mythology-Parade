@@ -107,7 +107,7 @@ void Building::CreateUnit()
 		break;
 	case MONASTERY:
 		App->entityManager->CreateUnitEntity(UnitType::MONK, { position.x - 30,position.y }, civilization);
-		if (Mix_Playing(6) == 0) {
+		if (Mix_Playing(4) == 0) {
 			App->entityManager->FxUnits(6, App->entityManager->CreateMonk_sound, position.x, position.y);
 		}
 		break;
@@ -116,7 +116,7 @@ void Building::CreateUnit()
 	case ENCAMPMENT:
 		App->entityManager->CreateUnitEntity(UnitType::ASSASSIN, { position.x - 20,position.y }, civilization);
 		
-		if(Mix_Playing(7) == 0) {
+		if(Mix_Playing(4) == 0) {
 			App->entityManager->FxUnits(7, App->entityManager->CreateAssasin_sound, position.x, position.y);
 		}
 		break;

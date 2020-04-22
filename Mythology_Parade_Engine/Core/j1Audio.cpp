@@ -82,7 +82,7 @@ bool j1Audio::CleanUp()
 }
 
 // Play a music file
-bool j1Audio::PlayMusic(int channel, const char* path, float fade_time, int volume)
+bool j1Audio::PlayMusic(const char* path, float fade_time, int volume)
 {
 	bool ret = true;
 	

@@ -58,7 +58,7 @@ bool EntityManager::Awake(pugi::xml_node& a)
 	increase_sacrifice = App->audio->LoadFx("audio/fx/Increase_sacrifice.wav");
 	Walking_troops = App->audio->LoadFx("audio/fx/Walking_troop.wav");
 	CreateMonk_sound = App->audio->LoadFx("audio/fx/Appear_monk.wav");
-	CreateMonk_sound = App->audio->LoadFx("audio/fx/Appear_assasin.wav");
+	CreateAssasin_sound = App->audio->LoadFx("audio/fx/Appear_assasin.wav");
 	Research_sound = App->audio->LoadFx("audio/fx/Research_Sound.wav");
 
 	return true;
