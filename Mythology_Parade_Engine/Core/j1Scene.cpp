@@ -1483,8 +1483,8 @@ void j1Scene::DoWinOrLoseWindow(int type, bool win) {
 
 	if (type == 1) {
 		if (win == true) {
-			App->render->Blit(winlose_tex, 230, 100, &sec_win, NULL, 0.0F);
 			App->render->Blit(winlose_tex, 230, 100, &sec_viking, NULL, 0.0F);
+			App->render->Blit(winlose_tex, 230, 100, &sec_win, NULL, 0.0F);
 		}
 		else {
 			App->render->Blit(winlose_tex, 230, 100, &sec_greek, NULL, 0.0F);
