@@ -30,7 +30,7 @@ struct BuildingInfo;
 class Building: public Entity, public HealthSystem
 {
 public:
-	Building(BuildingType, iPoint, BuildingInfo);
+	Building(BuildingType, iPoint, BuildingInfo, CivilizationType);
 	~Building();
 	
 	const char* GetDescription();

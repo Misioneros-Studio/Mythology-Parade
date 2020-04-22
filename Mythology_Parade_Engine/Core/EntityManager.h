@@ -106,7 +106,7 @@ public:
 
 	Entity* CreatePlayerEntity(CivilizationType type);
 	Entity* CreateUnitEntity(UnitType, iPoint, CivilizationType type_civ);
-	Entity* CreateBuildingEntity(iPoint, BuildingType, BuildingInfo);
+	Entity* CreateBuildingEntity(iPoint, BuildingType, BuildingInfo, CivilizationType type_civ);
 	void UpdateBuildPreview(int);
 	void SetBuildIndex(int);
 

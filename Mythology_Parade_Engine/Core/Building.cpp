@@ -1,6 +1,6 @@
 #include "Building.h"
 #include "p2Log.h"
-Building::Building(BuildingType type, iPoint pos, BuildingInfo info)
+Building::Building(BuildingType type, iPoint pos, BuildingInfo info, CivilizationType type_civ)
 {
 
 	position = pos;
@@ -10,6 +10,7 @@ Building::Building(BuildingType type, iPoint pos, BuildingInfo info)
 	percentage_constructing = 0;
 	first_time_constructing = true;
 	buildingType = type;
+	civilization = type_civ;
 
 	if (App->entityManager->getPlayer()) 
 	{

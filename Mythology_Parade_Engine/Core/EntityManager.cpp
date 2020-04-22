@@ -171,23 +171,23 @@ bool EntityManager::Update(float dt)
 		case 0:
 			viking = true;
 		case 4:
-			CreateBuildingEntity(spawnPos, BuildingType::FORTRESS, buildingsData[buildingTestIndex]);
+			CreateBuildingEntity(spawnPos, BuildingType::FORTRESS, buildingsData[buildingTestIndex], CivilizationType::VIKING);
 			break;
 		case 1:
 			viking = true;
 		case 5:
-			CreateBuildingEntity(spawnPos, BuildingType::MONASTERY , buildingsData[buildingTestIndex]);
+			CreateBuildingEntity(spawnPos, BuildingType::MONASTERY , buildingsData[buildingTestIndex], CivilizationType::VIKING);
 			faithToDescrease = 200;
 			break;
 		case 2:
 			viking = true;
 		case 6:
-			CreateBuildingEntity(spawnPos, BuildingType::TEMPLE, buildingsData[buildingTestIndex]);
+			CreateBuildingEntity(spawnPos, BuildingType::TEMPLE, buildingsData[buildingTestIndex], CivilizationType::VIKING);
 			break;
 		case 3:
 			viking = true;
 		case 7:
-			CreateBuildingEntity(spawnPos, BuildingType::ENCAMPMENT, buildingsData[buildingTestIndex]);
+			CreateBuildingEntity(spawnPos, BuildingType::ENCAMPMENT, buildingsData[buildingTestIndex], CivilizationType::VIKING);
 			faithToDescrease = 200;
 			break;
 		}
@@ -419,22 +419,22 @@ void EntityManager::DrawEverything()
 	}
 }
 
-Entity* EntityManager::CreateBuildingEntity(iPoint pos, BuildingType type, BuildingInfo info)
+Entity* EntityManager::CreateBuildingEntity(iPoint pos, BuildingType type, BuildingInfo info, CivilizationType type_civ)
 {
 	Entity* ret = nullptr;
 	switch (type)
 	{
 	case FORTRESS:
-		ret = new Building(BuildingType::FORTRESS, pos, info);
+		ret = new Building(BuildingType::FORTRESS, pos, info, type_civ);
 		break;
 	case MONASTERY:
-		ret = new Building(BuildingType::MONASTERY, pos, info);
+		ret = new Building(BuildingType::MONASTERY, pos, info, type_civ);
 		break;
 	case TEMPLE:
-		ret = new Building(BuildingType::TEMPLE, pos, info);
+		ret = new Building(BuildingType::TEMPLE, pos, info, type_civ);
 		break;
 	case ENCAMPMENT:
-		ret = new Building(BuildingType::ENCAMPMENT, pos, info);
+		ret = new Building(BuildingType::ENCAMPMENT, pos, info, type_civ);
 		break;
 	}
 	ret->type = EntityType::BUILDING;

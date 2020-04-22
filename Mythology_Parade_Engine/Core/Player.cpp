@@ -59,15 +59,17 @@ bool Player::PreUpdate()
 	sacrifice = std::to_string(CurrencySystem::sacrifices);
 	prayer = std::to_string(CurrencySystem::prayers);
 
+	InitGreek();
+	InitVikings();
+
+
 	if (oneTime)
 	{
 		if (civilization == CivilizationType::GREEK)
 		{
-			InitGreek();
 		}
 		else if (civilization == CivilizationType::VIKING)
 		{
-			InitVikings();
 		}
 		oneTime = false;
 	}
@@ -302,7 +304,7 @@ void Player::InitVikings()
 {
 	iPoint fortress = { 122,21 };
 	fortress = App->map->MapToWorld(fortress.x, fortress.y);
-	App->entityManager->CreateBuildingEntity(fortress, BuildingType::FORTRESS, App->entityManager->buildingsData[0]);
+	App->entityManager->CreateBuildingEntity(fortress, BuildingType::FORTRESS, App->entityManager->buildingsData[0], civilization);
 
 	iPoint monkPos = { 119,26 };
 	iPoint assassinPos = { 121,28 };
@@ -319,7 +321,7 @@ void Player::InitGreek()
 {
 	iPoint fortress = { 102,41 };
 	fortress = App->map->MapToWorld(fortress.x, fortress.y);
-	App->entityManager->CreateBuildingEntity(fortress, BuildingType::FORTRESS, App->entityManager->buildingsData[4]);
+	App->entityManager->CreateBuildingEntity(fortress, BuildingType::FORTRESS, App->entityManager->buildingsData[4], civilization);
 
 	iPoint monkPos = { 106,34 };
 	iPoint assassinPos = { 109,37 };
