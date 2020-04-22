@@ -1441,16 +1441,19 @@ void j1Scene::OnClick(UI* element, float argument)
 		else if (element->name == "Produce_Victory")
 		{
 			Building* building = (Building*)thing_selected;
+			App->entityManager->getPlayer()->DecreaseFaith(600);  
 			building->StartProducing(App->entityManager->getPlayer()->time_production_victory, "Victory");
 		}
 		else if (element->name == "Produce_Sacrifices")
 		{
 			Building* building = (Building*)thing_selected;
+			App->entityManager->getPlayer()->DecreaseFaith(40);
 			building->StartProducing(App->entityManager->getPlayer()->time_sacrifices, "Sacrifices");
 		}
 		else if (element->name == "Produce_Prayers")
 		{
 			Building* building = (Building*)thing_selected;
+			App->entityManager->getPlayer()->DecreaseFaith(40);
 			building->StartProducing(App->entityManager->getPlayer()->time_prayers, "Prayers");
     }
 		else if (element->name == "Upgrade") {
