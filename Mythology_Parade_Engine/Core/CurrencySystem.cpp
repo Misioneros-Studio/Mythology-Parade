@@ -5,10 +5,10 @@
 CurrencySystem::CurrencySystem()
 {
 	faith = 0;
-	sacrifices = 0;
-	prayers = 0;
+	sacrifices = 10;
+	prayers = 10;
 
-	time_prayers = time_sacrifices = 120;
+	time_prayers = time_sacrifices = 10;
 
 	basefaithRatio = 2;
 	faithRatio = basefaithRatio;

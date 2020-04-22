@@ -10,7 +10,6 @@ Player::Player(CivilizationType type)
 {
 	civilization = type;
 	Start();
-
 }
 
 Player::~Player()
@@ -34,7 +33,7 @@ bool Player::Start()
 
 	dontSelect = false;
 	num_encampment = num_monastery = num_temple = 0;
-	time_production_victory = 300;
+	time_production_victory = 10;
 
 	displayDebug = false;
 	oneTime = true;
@@ -61,14 +60,8 @@ bool Player::PreUpdate()
 
 	if (oneTime)
 	{
-		if (civilization == CivilizationType::GREEK)
-		{
-			InitGreek();
-		}
-		else if (civilization == CivilizationType::VIKING)
-		{
-			InitVikings();
-		}
+		InitVikings();
+		InitGreek();
 		oneTime = false;
 	}
 

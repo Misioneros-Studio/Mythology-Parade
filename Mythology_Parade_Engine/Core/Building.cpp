@@ -269,7 +269,26 @@ void Building::StartProducing(int time, std::string thing_producing) {
 
 void Building::FinishProduction(std::string thing_produced)
 {
+	if (thing_produced == "Sacrifices") {
+		App->entityManager->getPlayer()->sacrifices += 40;
+		LOG("%i",App->entityManager->getPlayer()->sacrifices);
+	}
+	else if (thing_produced == "Prayers") {
+		App->entityManager->getPlayer()->prayers += 40;
+		LOG("%i",App->entityManager->getPlayer()->prayers);
+	}
+	else if (thing_produced == "Victory") {
+		if (civilization == CivilizationType::VIKING) {
+			App->entityManager->getPlayer()->player_win = true;
+		}
+		else if (civilization == CivilizationType::GREEK) 
+		{
+			App->entityManager->getPlayer()->player_lose = true;
+		}
+	}
+	else {
 	CreateUnit();
+	}
 }
 
 void Building::StartResearching(int time, std::string thing_producing) {

@@ -551,5 +551,6 @@ iPoint EntityManager::CalculateBuildingSize(int bw, int w, int h)
 
 Player* EntityManager::getPlayer() 
 {
-	return (Player*)App->entityManager->entities[EntityType::PLAYER].begin()._Ptr->_Myval;
+	Player* player = (Player*)App->entityManager->entities[EntityType::PLAYER].begin()._Ptr->_Myval;
+	return player;
 }

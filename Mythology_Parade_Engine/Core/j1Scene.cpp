@@ -132,9 +132,10 @@ bool j1Scene::Start()
 	App->audio->PlayMusic("audio/music/Ambient1.ogg");
   
 	//Creating players
-	App->entityManager->CreatePlayerEntity(CivilizationType::VIKING);
-	App->entityManager->CreatePlayerEntity(CivilizationType::GREEK);
+	//App->entityManager->CreatePlayerEntity(CivilizationType::GREEK); // ENEMY
+	App->entityManager->CreatePlayerEntity(CivilizationType::VIKING); // OUR
 
+	
 
 	research_encampment = research_monastery = research_temple = false;
 
@@ -1460,12 +1461,7 @@ void j1Scene::OnClick(UI* element, float argument)
 			unit->LevelUp();
 		}
 		break;
-
-	default:
-		break;
 	}
-
-
 }
 
 
