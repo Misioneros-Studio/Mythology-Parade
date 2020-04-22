@@ -376,21 +376,21 @@ Entity* EntityManager::CreatePlayerEntity(CivilizationType type)
 	return ret;
 }
 
-Entity* EntityManager::CreateUnitEntity(UnitType type, iPoint pos)
+Entity* EntityManager::CreateUnitEntity(UnitType type, iPoint pos, CivilizationType type_civ)
 {
 	Entity* ret = nullptr;
 
 	switch (type)
 	{
 	case UnitType::ASSASSIN:
-		ret = new CombatUnit(UnitType::ASSASSIN, pos);
+		ret = new CombatUnit(UnitType::ASSASSIN, pos, type_civ);
 		break;
 	case UnitType::MONK:
-		ret = new Unit(UnitType::MONK, pos);
+		ret = new Unit(UnitType::MONK, pos, type_civ);
 		//ret->texture = animationManager.character_tmx_data.texture;
 		break;
 	case UnitType::PIKEMAN:
-		ret = new CombatUnit(UnitType::PIKEMAN, pos);
+		ret = new CombatUnit(UnitType::PIKEMAN, pos, type_civ);
 		break;
 	}
 	ret->type = EntityType::UNIT;
