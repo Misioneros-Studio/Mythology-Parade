@@ -1453,7 +1453,7 @@ void j1Scene::OnClick(UI* element, float argument)
 		else if (element->name == "Produce_Prayers")
 		{
 			Building* building = (Building*)thing_selected;
-			App->entityManager->getPlayer()->DecreaseFaith(40);
+			App->entityManager->getPlayer()->DecreaseFaith(100);
 			building->StartProducing(App->entityManager->getPlayer()->time_prayers, "Prayers");
     }
 		else if (element->name == "Upgrade") {

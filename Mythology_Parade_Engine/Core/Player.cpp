@@ -260,15 +260,12 @@ void Player::ClickLogic()
 		{
 			if (click.y <= it._Ptr->_Myval->getCollisionRect().y && click.y >= it._Ptr->_Myval->getCollisionRect().y + it._Ptr->_Myval->getCollisionRect().h)
 			{
-				//if (it._Ptr->_Myval->civilization = player_type)
-				{
-						buildingSelect = it._Ptr->_Myval;
-						LOG("%i",buildingSelect->civilization);
-				}
+				buildingSelect = it._Ptr->_Myval;
 			}
 		}
 	}
-	if (listEntities.empty()) {
+	if (listEntities.empty()) 
+	{
 		it = App->entityManager->entities[EntityType::UNIT].begin();
 		for (it; it != App->entityManager->entities[EntityType::UNIT].end(); ++it)
 		{
@@ -276,10 +273,8 @@ void Player::ClickLogic()
 			{
 				if (click.y <= it._Ptr->_Myval->getCollisionRect().y && click.y >= it._Ptr->_Myval->getCollisionRect().y + it._Ptr->_Myval->getCollisionRect().h)
 				{
-					//if (it._Ptr->_Myval->civilization = player_type)
-					{
+					if (it._Ptr->_Myval->civilization == civilization)
 						listEntities.push_back(it._Ptr->_Myval);
-					}
 				}
 			}
 		}
@@ -331,6 +326,6 @@ void Player::InitGreek()
 	assassinPos = App->map->MapToWorld(assassinPos.x, assassinPos.y);
 	
 
-	App->entityManager->CreateUnitEntity(UnitType::MONK, monkPos,civilization);
-	App->entityManager->CreateUnitEntity(UnitType::ASSASSIN, assassinPos,civilization);
+	App->entityManager->CreateUnitEntity(UnitType::MONK, monkPos,CivilizationType::GREEK);
+	App->entityManager->CreateUnitEntity(UnitType::ASSASSIN, assassinPos,CivilizationType::GREEK);
 }
