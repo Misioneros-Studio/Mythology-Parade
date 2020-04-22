@@ -34,6 +34,8 @@ public:
 
 	bool ToggleFullscreen();
 
+	bool isFullscreen();
+
 public:
 	//The window we'll be rendering to
 	SDL_Window* window;

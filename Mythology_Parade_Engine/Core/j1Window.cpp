@@ -131,3 +131,9 @@ bool j1Window::ToggleFullscreen()
 
 	return isFullscreen;
 }
+
+bool j1Window::isFullscreen() {
+	Uint32 fullscreenFlag = SDL_WINDOW_FULLSCREEN;
+	bool isFullscreen = SDL_GetWindowFlags(window) & fullscreenFlag;
+	return isFullscreen;
+}
