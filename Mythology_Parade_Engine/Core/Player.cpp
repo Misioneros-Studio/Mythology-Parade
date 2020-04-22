@@ -8,8 +8,8 @@
 
 Player::Player(CivilizationType type)
 {
-	Start();
 	player_type = type;
+	Start();
 
 }
 
@@ -61,8 +61,14 @@ bool Player::PreUpdate()
 
 	if (oneTime)
 	{
-		InitVikings();
-		InitGreek();
+		if (player_type == CivilizationType::GREEK)
+		{
+			InitGreek();
+		}
+		else if (player_type == CivilizationType::VIKING)
+		{
+			InitVikings();
+		}
 		oneTime = false;
 	}
 
