@@ -235,7 +235,7 @@ void Player::PlayerInputs()
 		//Display collisions
 		displayDebug = !displayDebug;
 
-		for (int i = 1; i < App->entityManager->entities.size(); i++)
+		for (unsigned int i = 1; i < App->entityManager->entities.size(); i++)
 		{
 			std::list<Entity*>::iterator it = App->entityManager->entities[(EntityType)i].begin();
 

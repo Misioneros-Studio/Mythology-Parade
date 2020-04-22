@@ -147,19 +147,51 @@ bool j1Scene::PreUpdate()
 	if (App->input->GetMouseButtonDown(SDL_BUTTON_RIGHT) == KEY_DOWN)
 	{
 		//TMP: Temporal pathfinding debug
-		Entity* ent = App->entityManager->entities[EntityType::UNIT].begin()._Ptr->_Myval;
-		iPoint origin = App->map->WorldToMap(ent->position.x, ent->position.y);
-		iPoint ending = App->map->GetMousePositionOnMap();
+		std::list<Entity*> list = App->entityManager->getPlayer()->GetEntitiesSelected();
 
-		if (origin != ending)
-			App->pathfinding->RequestPath(origin, ending);
+		if (list.size() == 1) 
+		{
+			Entity* ent = App->entityManager->getPlayer()->GetEntitiesSelected().begin()._Ptr->_Myval;
+
+			iPoint origin = App->map->WorldToMap(ent->position.x, ent->position.y);
+			iPoint ending = App->map->GetMousePositionOnMap();
+
+			if (origin != ending)
+				App->pathfinding->RequestPath(origin, ending, ent);
+		}
+		else if(list.size() >= 2)
+		{
+			center = { 0, 0 };
+			float n = App->entityManager->getPlayer()->GetEntitiesSelected().size();
+
+
+			float x = 0, y = 0;
+
+			int i = 0;
+			for (std::list<Entity*>::iterator it = list.begin(); it != list.end(); it++)
+			{
+				x += it._Ptr->_Myval->position.x;
+				y += it._Ptr->_Myval->position.y;
+				i++;
+			}
+			LOG("%i", i);
+			/*	LOG("%f, %f, %f", x, y, n);*/
+			x /= n;
+			y /= n;
+			center = { x, y };
+		}
+
 	}
-	if (App->pathfinding->pathfinderList[0].pathCompleted)
-	{
-		Unit* ent = (Unit*)App->entityManager->entities[EntityType::UNIT].begin()._Ptr->_Myval;
-		ent->SetPath(*App->pathfinding->pathfinderList.begin()->GetLastPath());
-		App->pathfinding->pathfinderList[0].pathCompleted = false;
-	}
+	//if (App->pathfinding->pathfinderList[0].pathCompleted)
+	//{
+
+	//	for (std::list<Entity*>::iterator it = App->entityManager->getPlayer()->GetEntitiesSelected().begin(); it != App->entityManager->getPlayer()->GetEntitiesSelected().end(); it++)
+	//	{
+	//		Unit* ent = (Unit*)it._Ptr->_Myval;
+	//		ent->SetPath(*App->pathfinding->pathfinderList.begin()->GetLastPath());
+	//	}
+	//		App->pathfinding->pathfinderList[0].pathCompleted = false;
+	//}
 
 
 	// Move Camera if click on the minimap
@@ -273,6 +305,7 @@ bool j1Scene::Update(float dt)
 
 
 	App->map->Draw();
+	App->render->DrawLine(0, 0, center.x, center.y, 0, 255, 0);
 
 
 	//Quad draw
@@ -285,17 +318,6 @@ bool j1Scene::Update(float dt)
 	{
 		p = App->map->MapToWorld(p.x, p.y);
 		App->render->Blit(debugBlue_tex, p.x, p.y);
-	}
-
-	for (int i = 0; i < App->pathfinding->pathfinderList.size(); i++)
-	{
-		std::vector<iPoint> path = *App->pathfinding->pathfinderList[i].GetLastPath();
-
-		for (uint i = 0; i < path.size(); ++i)
-		{
-			iPoint pos = App->map->MapToWorld(path.at(i).x, path.at(i).y);
-			App->render->Blit(debugBlue_tex, pos.x, pos.y);
-		}
 	}
 
 	if (App->entityManager->getPlayer() != nullptr) {

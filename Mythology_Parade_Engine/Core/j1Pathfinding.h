@@ -7,6 +7,7 @@
 #include "j1Timer.h"
 #include "PathFinder.h"
 
+#include"Entity.h"
 
 #include <vector>
 #include <queue>
@@ -45,7 +46,7 @@ public:
 	// Utility: return the walkability value of a tile
 	uchar GetTileAt(const iPoint& pos) const;
 
-	void RequestPath(const iPoint& origin, const iPoint& destination);
+	void RequestPath(const iPoint& origin, const iPoint& destination, Entity* requestUnit);
 
 	bool Start() override;
 
