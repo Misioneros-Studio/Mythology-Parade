@@ -107,6 +107,13 @@ void Unit::MoveToTarget()
 	}
 
 	state = AnimationType::WALK;
+	if (Mix_Playing(3) == 0) {
+		FxUnits(3, App->entityManager->Walking_troops, position.x, position.y);
+	}
+	/*if (Mix_Playing(4) == 0) {
+		App->audio->PlayFx(4, App->entityManager->Walking_troops);
+	}*/
+
 
 	iPoint currentIso = position + increment;
 	iPoint targetIso = App->map->MapToWorld(targetPosition.x, targetPosition.y);
@@ -253,5 +260,26 @@ Direction Unit::getMovementDirection(iPoint target)
 void Unit::SetPath(const std::vector<iPoint> s_path)
 {
 	entPath = s_path;
+}
+void Unit::FxUnits(int channel, int fx, int posx, int posy) {
+	Mix_Playing(channel);
+	Mix_HaltChannel(channel);
+	
+	int distance = ((posx - App->render->camera.x * App->render->camera.x) + (posy - App->render->camera.y * App->render->camera.y)); 
+	distance = distance; 
+	int volume = (distance * 255) / App->render->camera.w;
+	if (volume < 0) { volume = 0; } if (volume > 255) { volume = 255; }
+
+	float angle = 90;
+	if (App->render->camera.y == 0) {
+		angle = atan(-App->render->camera.x);
+	}
+	else {
+		angle = atan((-App->render->camera.x) / (App->render->camera.y));
+	}
+	angle = angle * 57 + 360;
+	
+	Mix_SetPosition(channel,angle, volume);
+	App->audio->PlayFx(channel, fx, 0);
 }
 

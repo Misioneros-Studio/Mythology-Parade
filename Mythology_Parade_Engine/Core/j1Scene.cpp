@@ -106,6 +106,9 @@ bool j1Scene::Start()
 	App->gui->sfx_UI[(int)UI_Audio::EXIT] = App->audio->LoadFx("audio/ui/Exit.wav");
 	App->gui->sfx_UI[(int)UI_Audio::CLOSE] = App->audio->LoadFx("audio/ui/Close_Menu.wav");
 
+	WinViking_sound = App->audio->LoadFx("audio/fx/WinVikings.wav");
+	WinGreek_sound = App->audio->LoadFx("audio/fx/win_greeks.wav");
+	Lose_sound = App->audio->LoadFx("audio/fx/lose_sound.wav");
 	for (int i = 0; i < 4; i++)
 	{
 		if (i < 3)
@@ -319,6 +322,18 @@ bool j1Scene::Update(float dt)
 		}
 	}
 	//App->render->DrawQuad(mapLimitsRect, 255, 255, 255, 40);
+
+	/*CheckSpatial Audio
+	if (App->input->GetKey(SDL_SCANCODE_M) == KEY_DOWN) {
+		Mix_HaltChannel(-1);
+		Mix_SetPosition(2, 270, 200);
+		App->audio->PlayFx(2, WinGreek_sound, 1);
+	}
+	if (App->input->GetKey(SDL_SCANCODE_O) == KEY_DOWN) {
+		Mix_HaltChannel(-1);
+		Mix_SetPosition(3, 90, 1);
+		App->audio->PlayFx(3, WinGreek_sound, 1);
+	}*/
 
 	return true;
 }
@@ -1481,10 +1496,16 @@ void j1Scene::DoWinOrLoseWindow(int type, bool win) {
 		if (win == true) {
 			App->render->Blit(winlose_tex, 230, 100, &sec_win, NULL, 0.0F);
 			App->render->Blit(winlose_tex, 230, 100, &sec_viking, NULL, 0.0F);
+			if (Mix_Playing(3) == 0) {
+				App->audio->PlayFx(3, WinViking_sound);
+			}
 		}
 		else {
 			App->render->Blit(winlose_tex, 230, 100, &sec_greek, NULL, 0.0F);
 			App->render->Blit(winlose_tex, 230, 100, &sec_lose, NULL, 0.0F);
+			if (Mix_Playing(3) == 0) {
+				App->audio->PlayFx(3, Lose_sound);
+			}
 		}
 	}
 
@@ -1492,10 +1513,16 @@ void j1Scene::DoWinOrLoseWindow(int type, bool win) {
 		if (win == true) {
 			App->render->Blit(winlose_tex, 230, 100, &sec_greek, NULL, 0.0F);
 			App->render->Blit(winlose_tex, 230, 100, &sec_lose, NULL, 0.0F);
+			if (Mix_Playing(3) == 0) {
+				App->audio->PlayFx(3, WinGreek_sound);
+			}
 		}
 		else {
 			App->render->Blit(winlose_tex, 230, 100, &sec_viking, NULL, 0.0F);
 			App->render->Blit(winlose_tex, 230, 100, &sec_win, NULL, 0.0F);
+			if (Mix_Playing(3) == 0) {
+				App->audio->PlayFx(3, Lose_sound);
+			}
 		}
 	}
 	if (timer_win_lose.ReadSec() >= 5) {

@@ -48,6 +48,16 @@ bool EntityManager::Awake(pugi::xml_node& a)
 	}
 	active = false;
 
+	//LoadingFX
+	Building_destruction = App->audio->LoadFx("audio/fx/Building_destruction.wav");
+	Building_placed = App->audio->LoadFx("audio/fx/BuildingPlaced.wav");
+	Decrease_Faith = App->audio->LoadFx("audio/fx/Descrease_FAITH.wav");
+	Getting_resources = App->audio->LoadFx("audio/fx/Getting_Resources.wav");
+	hit_1 = App->audio->LoadFx("audio/fx/hit_1.wav");
+	increase_prayers = App->audio->LoadFx("audio/fx/Increase_prayers.wav");
+	increase_sacrifice = App->audio->LoadFx("audio/fx/Increase_sacrifice.wav");
+	Walking_troops = App->audio->LoadFx("audio/fx/Walking_troop.wav");
+
 	return true;
 }
 

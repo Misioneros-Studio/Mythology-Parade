@@ -9,6 +9,7 @@
 #include"j1Input.h"
 #include"j1Map.h"
 #include"j1Pathfinding.h"
+#include"j1Audio.h"
 
 #include<vector>
 #include <algorithm>
@@ -143,6 +144,17 @@ public:
 	SDL_Rect research_bar_front;
 
 	std::unordered_map<UnitType, std::unordered_map<AnimationType, std::unordered_map<Direction, Animation_char>>> animations;
+
+	int Building_destruction;
+	int Building_placed;
+	int Decrease_Faith;
+	int Getting_resources;
+	int hit_1;
+	int Increase_faith;
+	int increase_prayers;
+	int increase_sacrifice;
+	int Walking_troops;
+
 
 };
 #endif // !_ENTITYMANAGER_H

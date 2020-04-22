@@ -2,8 +2,11 @@
 #define __j1AUDIO_H__
 
 #include "j1Module.h"
+#include "SDL_mixer/include/SDL_mixer.h"
 
 #define DEFAULT_MUSIC_FADE_TIME 2.0f
+#define MAX_VOLUME 150
+#define MAX_SFX 80
 
 struct _Mix_Music;
 struct Mix_Chunk;
@@ -30,7 +33,7 @@ public:
 	unsigned int LoadFx(const char* path);
 
 	// Play a previously loaded WAV
-	bool PlayFx(unsigned int fx, int repeat = 0);
+	bool PlayFx(int channel, unsigned int fx, int repeat = 0);
 
 	// Clean all fxs to change scene
 	bool CleanFxs();
@@ -38,6 +41,7 @@ public:
 private:
 
 	_Mix_Music*			music = NULL;
+	int sfxList[MAX_SFX];
 	std::list<Mix_Chunk*>	fx;
 };
 
