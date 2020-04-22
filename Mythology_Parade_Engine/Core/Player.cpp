@@ -6,9 +6,11 @@
 #include "j1Gui.h"
 #include "EntityManager.h"
 
-Player::Player()
+Player::Player(CivilizationType type)
 {
 	Start();
+	player_type = type;
+
 }
 
 Player::~Player()
@@ -34,7 +36,6 @@ bool Player::Start()
 	num_encampment = num_monastery = num_temple = 0;
 	time_production_victory = 300;
 
-	player_type = CivilizationType::VIKING;
 	displayDebug = false;
 	oneTime = true;
 

@@ -363,11 +363,11 @@ bool EntityManager::CleanUp()
 //	return ret;
 //}
 
-Entity* EntityManager::CreatePlayerEntity()
+Entity* EntityManager::CreatePlayerEntity(CivilizationType type)
 {
 	Entity* ret = nullptr;
 
-	ret = new Player();
+	ret = new Player(type);
 	ret->type = EntityType::PLAYER;
 
 	entities[EntityType::PLAYER].push_back(ret);
