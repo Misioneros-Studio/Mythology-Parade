@@ -6,9 +6,11 @@
 #include "j1Gui.h"
 #include "EntityManager.h"
 
-Player::Player()
+Player::Player(CivilizationType type)
 {
+	civilization = type;
 	Start();
+
 }
 
 Player::~Player()
@@ -34,7 +36,6 @@ bool Player::Start()
 	num_encampment = num_monastery = num_temple = 0;
 	time_production_victory = 300;
 
-	player_type = CivilizationType::VIKING;
 	displayDebug = false;
 	oneTime = true;
 
@@ -60,8 +61,14 @@ bool Player::PreUpdate()
 
 	if (oneTime)
 	{
-		InitVikings();
-		InitGreek();
+		if (civilization == CivilizationType::GREEK)
+		{
+			InitGreek();
+		}
+		else if (civilization == CivilizationType::VIKING)
+		{
+			InitVikings();
+		}
 		oneTime = false;
 	}
 
@@ -73,19 +80,9 @@ bool Player::Update(float dt)
 	App->scene->ui_text_ingame[0]->SetString(faith);
 	App->scene->ui_text_ingame[1]->SetString(sacrifice);
 	App->scene->ui_text_ingame[2]->SetString(prayer);
-	
-	//if (App->input->GetKey(SDL_SCANCODE_5) == KEY_DOWN && !App->entityManager->crPreview.active) 
-	//{
-	//	//Unit spawn
-	//	iPoint mouse = App->map->GetMousePositionOnMap();
-	//	iPoint spawnPos = App->map->TileCenterPoint(mouse);
-
-	//	//Todo change assassin for the type of unit
-	//	App->entityManager->CreateUnitEntity(UnitType::MONK, spawnPos);
-	//}
   
 	//Selection logics and drawing
-	if (!App->scene->paused_game)
+	if (!App->scene->paused_game && civilization == CivilizationType::VIKING)
 	{
 		SelectionDraw_Logic(); 
 		PlayerInputs();
@@ -196,14 +193,14 @@ void Player::PlayerInputs()
 	{
 		iPoint mouse = App->map->GetMousePositionOnMap();
 		iPoint spawnPos = App->map->TileCenterPoint(mouse);
-		App->entityManager->CreateUnitEntity(UnitType::ASSASSIN, spawnPos);
+		App->entityManager->CreateUnitEntity(UnitType::ASSASSIN, spawnPos, civilization);
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN && App->scene->godMode)
 	{
 		iPoint mouse = App->map->GetMousePositionOnMap();
 		iPoint spawnPos = App->map->TileCenterPoint(mouse);
-		App->entityManager->CreateUnitEntity(UnitType::MONK, spawnPos);
+		App->entityManager->CreateUnitEntity(UnitType::MONK, spawnPos, civilization);
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_F4) == KEY_DOWN && App->scene->godMode)
@@ -260,7 +257,7 @@ void Player::ClickLogic()
 		{
 			if (click.y <= it._Ptr->_Myval->getCollisionRect().y && click.y >= it._Ptr->_Myval->getCollisionRect().y + it._Ptr->_Myval->getCollisionRect().h)
 			{
-				//if (it._Ptr->_Myval->civilization = player_type)
+				//if (it._Ptr->_Myval->civilization == player_type)
 				{
 						buildingSelect = it._Ptr->_Myval;
 				}
@@ -275,7 +272,7 @@ void Player::ClickLogic()
 			{
 				if (click.y <= it._Ptr->_Myval->getCollisionRect().y && click.y >= it._Ptr->_Myval->getCollisionRect().y + it._Ptr->_Myval->getCollisionRect().h)
 				{
-					//if (it._Ptr->_Myval->civilization = player_type)
+					if (it._Ptr->_Myval->civilization == player_type)
 					{
 						listEntities.push_back(it._Ptr->_Myval);
 					}
@@ -313,8 +310,8 @@ void Player::InitVikings()
 	assassinPos = App->map->MapToWorld(assassinPos.x, assassinPos.y);
 
 
-	App->entityManager->CreateUnitEntity(UnitType::MONK, monkPos);
-	App->entityManager->CreateUnitEntity(UnitType::ASSASSIN, assassinPos);
+	App->entityManager->CreateUnitEntity(UnitType::MONK, monkPos, civilization);
+	App->entityManager->CreateUnitEntity(UnitType::ASSASSIN, assassinPos, civilization);
 
 }
 
@@ -330,6 +327,6 @@ void Player::InitGreek()
 	assassinPos = App->map->MapToWorld(assassinPos.x, assassinPos.y);
 	
 
-	App->entityManager->CreateUnitEntity(UnitType::MONK, monkPos);
-	App->entityManager->CreateUnitEntity(UnitType::ASSASSIN, assassinPos);
+	App->entityManager->CreateUnitEntity(UnitType::MONK, monkPos, civilization);
+	App->entityManager->CreateUnitEntity(UnitType::ASSASSIN, assassinPos, civilization);
 }

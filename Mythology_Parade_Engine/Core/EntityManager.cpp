@@ -363,11 +363,11 @@ bool EntityManager::CleanUp()
 //	return ret;
 //}
 
-Entity* EntityManager::CreatePlayerEntity()
+Entity* EntityManager::CreatePlayerEntity(CivilizationType type)
 {
 	Entity* ret = nullptr;
 
-	ret = new Player();
+	ret = new Player(type);
 	ret->type = EntityType::PLAYER;
 
 	entities[EntityType::PLAYER].push_back(ret);
@@ -376,21 +376,21 @@ Entity* EntityManager::CreatePlayerEntity()
 	return ret;
 }
 
-Entity* EntityManager::CreateUnitEntity(UnitType type, iPoint pos)
+Entity* EntityManager::CreateUnitEntity(UnitType type, iPoint pos, CivilizationType type_civ)
 {
 	Entity* ret = nullptr;
 
 	switch (type)
 	{
 	case UnitType::ASSASSIN:
-		ret = new CombatUnit(UnitType::ASSASSIN, pos);
+		ret = new CombatUnit(UnitType::ASSASSIN, pos, type_civ);
 		break;
 	case UnitType::MONK:
-		ret = new Unit(UnitType::MONK, pos);
+		ret = new Unit(UnitType::MONK, pos, type_civ);
 		//ret->texture = animationManager.character_tmx_data.texture;
 		break;
 	case UnitType::PIKEMAN:
-		ret = new CombatUnit(UnitType::PIKEMAN, pos);
+		ret = new CombatUnit(UnitType::PIKEMAN, pos, type_civ);
 		break;
 	}
 	ret->type = EntityType::UNIT;
