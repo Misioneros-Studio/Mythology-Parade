@@ -129,6 +129,8 @@ public:
 	//The way to store the spritesheets
 	std::unordered_map<SpriteSheetType, SDL_Texture*> entitySpriteSheets;
 	std::vector<BuildingInfo> buildingsData;
+	void FxUnits(int channel, int fx, int posx, int posy);
+	int volume;
 
 private:
 	int buildingTestIndex = 0;
@@ -156,7 +158,7 @@ public:
 	int Walking_troops;
 	int CreateMonk_sound;
 	int CreateAssasin_sound;
-
+	int Research_sound;
 
 };
 #endif // !_ENTITYMANAGER_H

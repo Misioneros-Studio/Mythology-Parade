@@ -66,8 +66,7 @@ public:
 	void MoveToTarget();
 	Direction getMovementDirection(iPoint);
 	void SetPath(const std::vector<iPoint>);
-	void FxUnits(int channel, int fx, int posx, int posy);
-	int volume;
+	
 
 
 protected:
