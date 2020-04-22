@@ -154,6 +154,8 @@ public:
 	int increase_prayers;
 	int increase_sacrifice;
 	int Walking_troops;
+	int CreateMonk_sound;
+	int CreateAssasin_sound;
 
 
 };

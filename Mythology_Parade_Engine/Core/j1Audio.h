@@ -27,7 +27,7 @@ public:
 	bool CleanUp();
 
 	// Play a music file
-	bool PlayMusic(const char* path, float fade_time = DEFAULT_MUSIC_FADE_TIME);
+	bool PlayMusic(int channel, const char* path, float fade_time = DEFAULT_MUSIC_FADE_TIME, int volume = 200);
 
 	// Load a WAV in memory
 	unsigned int LoadFx(const char* path);
@@ -43,6 +43,7 @@ private:
 	_Mix_Music*			music = NULL;
 	int sfxList[MAX_SFX];
 	std::list<Mix_Chunk*>	fx;
+	int MusicVolume;
 };
 
 #endif // __j1AUDIO_H__

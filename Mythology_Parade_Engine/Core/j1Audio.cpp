@@ -82,10 +82,23 @@ bool j1Audio::CleanUp()
 }
 
 // Play a music file
-bool j1Audio::PlayMusic(const char* path, float fade_time)
+bool j1Audio::PlayMusic(int channel, const char* path, float fade_time, int volume)
 {
 	bool ret = true;
+	
+	if (volume < 0) {
+		volume = 0;
+	}
+	Mix_VolumeMusic(volume);
 
+	if (volume > 200)
+	{
+		MusicVolume = 200;
+	}
+	else
+	{
+		MusicVolume = volume;
+	}
 	if(!active)
 		return false;
 
