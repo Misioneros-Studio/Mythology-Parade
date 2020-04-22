@@ -13,7 +13,7 @@ private:
 	int speed;
 
 public:
-	CombatUnit(UnitType, iPoint, CivilizationType);
+	CombatUnit(UnitType, iPoint);
 	~CombatUnit();
 
 	bool Update(float);

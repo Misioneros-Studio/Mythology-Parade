@@ -3,7 +3,7 @@
 #include "j1Textures.h"
 #include "j1Input.h"
 
-Unit::Unit(UnitType type, iPoint pos, CivilizationType type_civ): unitType(type), state(AnimationType::IDLE), _isSelected(false), moveSpeed(1)
+Unit::Unit(UnitType type, iPoint pos): unitType(type), state(AnimationType::IDLE), _isSelected(false), moveSpeed(1)
 {
 	
 	if (App->entityManager->getPlayer())
@@ -18,7 +18,6 @@ Unit::Unit(UnitType type, iPoint pos, CivilizationType type_civ): unitType(type)
 	collisionRect = { 0, 0, 30, -55 };
 	unitType = type;
 	position = pos;
-	civilization = type_civ;
 	state = AnimationType::IDLE;
 	//Init Units
 	switch (type)

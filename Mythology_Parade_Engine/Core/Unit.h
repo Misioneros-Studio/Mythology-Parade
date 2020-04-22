@@ -47,7 +47,7 @@ public:
 	bool researched;
 
 public:
-	Unit(UnitType, iPoint, CivilizationType);
+	Unit(UnitType, iPoint);
 	virtual ~Unit();
 
 	void Init(int maxHealth);

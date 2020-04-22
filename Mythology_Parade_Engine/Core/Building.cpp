@@ -106,12 +106,12 @@ void Building::CreateUnit()
 	case FORTRESS:
 		break;
 	case MONASTERY:
-		App->entityManager->CreateUnitEntity(UnitType::MONK, { position.x - 30,position.y }, civilization);
+		App->entityManager->CreateUnitEntity(UnitType::MONK, { position.x - 30,position.y });
 		break;
 	case TEMPLE:
 		break;
 	case ENCAMPMENT:
-		App->entityManager->CreateUnitEntity(UnitType::ASSASSIN, { position.x - 20,position.y }, civilization);
+		App->entityManager->CreateUnitEntity(UnitType::ASSASSIN, { position.x - 20,position.y });
 		break;
 	}
 }
