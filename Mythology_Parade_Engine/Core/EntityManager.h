@@ -29,7 +29,7 @@ enum CivilizationType {
 	NONE
 };
 
-struct CreationPreview 
+struct CreationPreview
 {
 	bool active = false;
 	int width;
@@ -38,7 +38,7 @@ struct CreationPreview
 
 };
 
-struct BuildingInfo 
+struct BuildingInfo
 {
 	CivilizationType civilization;
 	SDL_Rect spriteRect;
@@ -48,7 +48,7 @@ struct BuildingInfo
 	int tileLenght;
 };
 
-enum class SpriteSheetType 
+enum class SpriteSheetType
 {
 	BUILDINGS,
 	ASSASSIN,
@@ -105,8 +105,8 @@ public:
 	bool DeleteEntity(Entity*);
 
 	Entity* CreatePlayerEntity();
-	Entity* CreateUnitEntity(UnitType, iPoint);
-	Entity* CreateBuildingEntity(iPoint, BuildingType, BuildingInfo);
+	Entity* CreateUnitEntity(UnitType, iPoint, CivilizationType);
+	Entity* CreateBuildingEntity(iPoint, BuildingType, BuildingInfo, CivilizationType);
 	void UpdateBuildPreview(int);
 	void SetBuildIndex(int);
 

@@ -36,7 +36,7 @@ bool j1Scene::Awake(pugi::xml_node& config)
 
 	App->scene->active = false;
 	SDL_ShowCursor(0);
-  
+
 	return ret;
 }
 
@@ -64,13 +64,13 @@ bool j1Scene::Start()
 	ui_ingame=(ImageUI*)App->gui->CreateUIElement(Type::IMAGE, nullptr, { 0,590,1280,130 }, { 0,590,1280,130 });
 
 
-	for (int i = 0; i < 3; i++) 
+	for (int i = 0; i < 3; i++)
 	{
 		ui_text_ingame[i] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 104,610+(i*33),237,38 }, { 0,0,100,100 }, "9999", { 255,255,255,255 }, { 1,0,0,0 });
 	}
-	for (int i = 0; i < 8; i++) 
+	for (int i = 0; i < 8; i++)
 	{
-		if (i != 7) 
+		if (i != 7)
 		{
 			ui_button[i] = nullptr;
 		}
@@ -128,9 +128,9 @@ bool j1Scene::Start()
 	//size = iPoint(App->map->data.width * App->map->data.tile_width, App->map->data.height * App->map->data.tile_height);
 	//quadTree = new QuadTree(TreeType::ISOMETRIC, position.x + (App->map->data.tile_width / 2), position.y, size.x, size.y);
 	//quadTree->baseNode->SubDivide(quadTree->baseNode, 5);
-  
+
 	App->audio->PlayMusic("audio/music/Ambient1.ogg");
-  
+
 	//Creating players
 	App->entityManager->CreatePlayerEntity();
 
@@ -235,31 +235,31 @@ bool j1Scene::Update(float dt)
 		}
 	}
 
-	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT) 
+	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
 	{
-		if (correctedCamera.y + App->render->camera.h + floor(1000.0f * dt) <= mapLimitsRect.h) 
+		if (correctedCamera.y + App->render->camera.h + floor(1000.0f * dt) <= mapLimitsRect.h)
 		{
 			App->render->camera.y -= floor(1000.0f * dt);
 		}
-		else 
+		else
 		{
 			App->render->camera.y = -mapLimitsRect.h + App->render->camera.h;
 		}
 	}
 
-	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT) 
+	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
 	{
 		if (correctedCamera.x - floor(1000.0f * dt) >= mapLimitsRect.x)
 		{
 			App->render->camera.x += floor(1000.0f * dt);
 		}
-		else 
+		else
 		{
 			App->render->camera.x = -mapLimitsRect.x;
 		}
 	}
 
-	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT) 
+	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
 	{
 		if (correctedCamera.x + App->render->camera.w + floor(1000.0f * dt) <= mapLimitsRect.x + mapLimitsRect.w)
 		{
@@ -367,25 +367,25 @@ bool j1Scene::CleanUp()
 void j1Scene::ActivatePauseMenu() {
 	if (ui_pause_window == nullptr) {
 		ui_pause_window = (WindowUI*)App->gui->CreateUIElement(Type::WINDOW, nullptr, { 410,100,459,531 }, { 216,21,459,531 });
-		ui_button[0] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_pause_window, { 520,160,237,38 }, { 787,240,237,38 }, "SAVE", { 787,342,237,38 }, { 787,291,237,38 }, false, 
+		ui_button[0] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_pause_window, { 520,160,237,38 }, { 787,240,237,38 }, "SAVE", { 787,342,237,38 }, { 787,291,237,38 }, false,
 			{ 0,0,0,0 }, this,(int)UI_Audio::SAVE);
 		ui_text[0] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 607,172,237,38 }, { 0,0,100,100 }, "Save Game", {0,0,0,255});
-		ui_button[1] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_pause_window, { 520,220,237,38 }, { 787,240,237,38 }, "LOAD", { 787,342,237,38 }, { 787,291,237,38 }, false, 
+		ui_button[1] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_pause_window, { 520,220,237,38 }, { 787,240,237,38 }, "LOAD", { 787,342,237,38 }, { 787,291,237,38 }, false,
 			{ 0,0,0,0 }, this, (int)UI_Audio::LOAD);
 		ui_text[1] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 604,232,237,38 }, { 0,0,100,100 }, "Load Game", { 0,0,0,255 });
-		ui_button[2] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_pause_window, { 520,280,237,38 }, { 787,240,237,38 }, "OPTIONS", { 787,342,237,38 }, { 787,291,237,38 }, false, 
+		ui_button[2] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_pause_window, { 520,280,237,38 }, { 787,240,237,38 }, "OPTIONS", { 787,342,237,38 }, { 787,291,237,38 }, false,
 			{ 0,0,0,0 }, this, (int)UI_Audio::OPTIONS);
 		ui_text[2] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 613,292,237,38 }, { 0,0,100,100 }, "Options", { 0,0,0,255 });
-		ui_button[3] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_pause_window, { 520,340,237,38 }, { 787,240,237,38 }, "RESTART", { 787,342,237,38 }, { 787,291,237,38 }, false, 
+		ui_button[3] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_pause_window, { 520,340,237,38 }, { 787,240,237,38 }, "RESTART", { 787,342,237,38 }, { 787,291,237,38 }, false,
 			{ 0,0,0,0 }, this, (int)UI_Audio::RESTART);
 		ui_text[3] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 614,352,237,38 }, { 0,0,100,100 }, "Restart", { 0,0,0,255 });
 		ui_button[4] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_pause_window, { 520,400,237,38 }, { 787,240,237,38 }, "SURRENDER", { 787,342,237,38 }, { 787,291,237,38 }, false,
 			{ 0,0,0,0 }, this, (int)UI_Audio::SURRENDER);
 		ui_text[4] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 607,412,237,38 }, { 0,0,100,100 }, "Surrender");
-		ui_button[5] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_pause_window, { 520,460,237,38 }, { 787,240,237,38 }, "EXIT", { 787,342,237,38 }, { 787,291,237,38 }, false, 
+		ui_button[5] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_pause_window, { 520,460,237,38 }, { 787,240,237,38 }, "EXIT", { 787,342,237,38 }, { 787,291,237,38 }, false,
 			{ 0,0,0,0 }, this, (int)UI_Audio::EXIT);
 		ui_text[5] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 625,472,237,38 }, { 0,0,100,100 }, "Exit", { 0,0,0,255 });
-		ui_button[6] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_pause_window, { 520,560,237,38 }, { 787,240,237,38 }, "CLOSE", { 787,342,237,38 }, { 787,291,237,38 }, false, 
+		ui_button[6] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_pause_window, { 520,560,237,38 }, { 787,240,237,38 }, "CLOSE", { 787,342,237,38 }, { 787,291,237,38 }, false,
 			{ 0,0,0,0 }, this, (int)UI_Audio::CLOSE);
 		ui_text[6] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 620,572,237,38 }, { 0,0,100,100 }, "Close", { 0,0,0,255 });
 		ui_text[7] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 604,112,237,38 }, { 0,0,100,100 }, "PAUSE", { 255,255,255,255 }, { 1,0,0,0 });
@@ -424,6 +424,9 @@ void j1Scene::ActivateOptionsMenu() {
 			{ 787,291,237,38 }, false, { 0,0,0,0 }, this, (int)UI_Audio::CLOSE);
 		ui_button_options[1]= (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_options_window, { 570,250,36,36 }, { 16,21,36,36 }, "FULLSCREEN", { 98,21,36,36 },
 			{ 57,21,36,36 }, false, { 0,0,0,0 }, this, (int)UI_Audio::MAIN_MENU);
+		if (App->win->isFullscreen() == true) {
+			ui_button_options[1]->sprite1.y = ui_button_options[1]->sprite2.y = ui_button_options[1]->sprite3.y = 61;
+		}
 		ui_text_options[0] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 619,312,237,38 }, { 0,0,100,100 }, "Close", { 0,0,0,255 });
 		ui_text_options[1] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 583,212,237,38 }, { 0,0,100,100 }, "OPTIONS", { 255,255,255,255 }, { 1,0,0,0 });
 		ui_text_options[2] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 620,260,237,38 }, { 0,0,100,100 }, "FULLSCREEN", { 255,255,255,255 });
@@ -638,7 +641,7 @@ void j1Scene::HUDUpdateSelection(std::list<Entity*> listEntities, Building* buil
 	}
 	else if(building_selected!=nullptr){
 		thing_selected = building_selected;
-		hud_selected_troop = (ImageUI*)App->gui->CreateUIElement(Type::IMAGE, (UI*)ui_ingame, { 640,613,76,105 }, GetSpritePortraitBuilding(0, building_selected->GetBuildingType(), 
+		hud_selected_troop = (ImageUI*)App->gui->CreateUIElement(Type::IMAGE, (UI*)ui_ingame, { 640,613,76,105 }, GetSpritePortraitBuilding(0, building_selected->GetBuildingType(),
 			building_selected->civilization), "Building", { 0,0,0,0 }, { 0,0,0,0 }, false, { 0,0,0,0 }, nullptr, 0, false, -1.0F, 1);
 		hud_stats_selected_troop[0] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, (UI*)ui_ingame, position_name, { 0,0,100,100 }, "Building", { 0,0,0,255 });
 		switch (building_selected->GetBuildingType()) {
@@ -847,7 +850,7 @@ void j1Scene::ManageActionButtons(bool create_buttons, bool viking) {
 			}
 			break;
 		}
-		case Type_Selected::Temple: 
+		case Type_Selected::Temple:
 		{
 			Building* building = (Building*)thing_selected;
 			if (building->buildingStatus == FINISHED) {
@@ -942,7 +945,7 @@ void j1Scene::ManageActionButtons(bool create_buttons, bool viking) {
 						hud_button_actions[0] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 200,604,99,60 }, { 2,2,99,60 }, "Produce_Temple", { 2,124,99,60 }, { 2,63,99,60 },
 							false, { 0,0,0,0 }, this, (int)UI_Audio::MAIN_MENU, false, -1.0F, 1);
 					}
-					else if (hud_button_actions_unclickable[0] == nullptr && (App->entityManager->getPlayer()->GetFaith() < 200 || App->entityManager->getPlayer()->num_temple >= 8 || 
+					else if (hud_button_actions_unclickable[0] == nullptr && (App->entityManager->getPlayer()->GetFaith() < 200 || App->entityManager->getPlayer()->num_temple >= 8 ||
 						research_temple == false)) {
 						if (hud_button_actions[0] != nullptr) {
 							App->gui->DeleteUIElement(hud_button_actions[0]);
@@ -959,7 +962,7 @@ void j1Scene::ManageActionButtons(bool create_buttons, bool viking) {
 						hud_button_actions[1] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 304,613,99,51 }, { 104,11,99,51 }, "Produce_Encampment", { 104,133,99,51 },
 							{ 104,72,99,51 }, false, { 0,0,0,0 }, this, (int)UI_Audio::MAIN_MENU, false, -1.0F, 1);
 					}
-					else if (hud_button_actions_unclickable[1] == nullptr && (App->entityManager->getPlayer()->GetFaith() < 200 || App->entityManager->getPlayer()->num_encampment >= 7 || 
+					else if (hud_button_actions_unclickable[1] == nullptr && (App->entityManager->getPlayer()->GetFaith() < 200 || App->entityManager->getPlayer()->num_encampment >= 7 ||
 						research_encampment == false)) {
 						if (hud_button_actions[1] != nullptr) {
 							App->gui->DeleteUIElement(hud_button_actions[1]);
@@ -976,7 +979,7 @@ void j1Scene::ManageActionButtons(bool create_buttons, bool viking) {
 						hud_button_actions[2] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 408,612,99,52 }, { 206,10,99,52 }, "Produce_Monastery", { 206,132,99,52 },
 							{ 206,71,99,52 }, false, { 0,0,0,0 }, this, (int)UI_Audio::MAIN_MENU, false, -1.0F, 1);
 					}
-					else if (hud_button_actions_unclickable[2] == nullptr && (App->entityManager->getPlayer()->GetFaith() < 200 || App->entityManager->getPlayer()->num_monastery >= 5 || 
+					else if (hud_button_actions_unclickable[2] == nullptr && (App->entityManager->getPlayer()->GetFaith() < 200 || App->entityManager->getPlayer()->num_monastery >= 5 ||
 						research_monastery == false)) {
 						if (hud_button_actions[2] != nullptr) {
 							App->gui->DeleteUIElement(hud_button_actions[2]);
@@ -995,7 +998,7 @@ void j1Scene::ManageActionButtons(bool create_buttons, bool viking) {
 						hud_button_actions[0] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 200,602,99,62 }, { 308,0,99,62 }, "Produce_Temple", { 308,122,99,62 }, { 308,61,99,62 },
 							false, { 0,0,0,0 }, this, (int)UI_Audio::MAIN_MENU, false, -1.0F, 1);
 					}
-					else if (hud_button_actions_unclickable[0] == nullptr && (App->entityManager->getPlayer()->GetFaith() < 200 || App->entityManager->getPlayer()->num_temple >= 8 || 
+					else if (hud_button_actions_unclickable[0] == nullptr && (App->entityManager->getPlayer()->GetFaith() < 200 || App->entityManager->getPlayer()->num_temple >= 8 ||
 						research_temple == false)) {
 						if (hud_button_actions[0] != nullptr) {
 							App->gui->DeleteUIElement(hud_button_actions[0]);
@@ -1012,7 +1015,7 @@ void j1Scene::ManageActionButtons(bool create_buttons, bool viking) {
 						hud_button_actions[1] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 304,613,99,51 }, { 410,11,99,51 }, "Produce_Encampment", { 410,133,99,51 },
 							{ 410,72,99,51 }, false, { 0,0,0,0 }, this, (int)UI_Audio::MAIN_MENU, false, -1.0F, 1);
 					}
-					else if (hud_button_actions_unclickable[1] == nullptr && (App->entityManager->getPlayer()->GetFaith() < 200 || App->entityManager->getPlayer()->num_encampment >= 7 || 
+					else if (hud_button_actions_unclickable[1] == nullptr && (App->entityManager->getPlayer()->GetFaith() < 200 || App->entityManager->getPlayer()->num_encampment >= 7 ||
 						research_encampment == false)) {
 						if (hud_button_actions[1] != nullptr) {
 							App->gui->DeleteUIElement(hud_button_actions[1]);
@@ -1029,7 +1032,7 @@ void j1Scene::ManageActionButtons(bool create_buttons, bool viking) {
 						hud_button_actions[2] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 408,612,99,52 }, { 512,10,99,52 }, "Produce_Monastery", { 512,132,99,52 },
 							{ 512,71,99,52 }, false, { 0,0,0,0 }, this, (int)UI_Audio::MAIN_MENU, false, -1.0F, 1);
 					}
-					else if (hud_button_actions_unclickable[2] == nullptr && (App->entityManager->getPlayer()->GetFaith() < 200 || App->entityManager->getPlayer()->num_monastery >= 5 || 
+					else if (hud_button_actions_unclickable[2] == nullptr && (App->entityManager->getPlayer()->GetFaith() < 200 || App->entityManager->getPlayer()->num_monastery >= 5 ||
 						research_monastery == false)) {
 						if (hud_button_actions[2] != nullptr) {
 							App->gui->DeleteUIElement(hud_button_actions[2]);
@@ -1077,7 +1080,7 @@ void j1Scene::ManageActionButtons(bool create_buttons, bool viking) {
 		{
 			Building* building = (Building*)thing_selected;
 			if (building->buildingStatus == FINISHED) {
-				if (hud_button_actions[0] == nullptr && App->entityManager->getPlayer()->GetFaith() >= 100 && App->entityManager->getPlayer()->GetSacrifices() >= 10 && 
+				if (hud_button_actions[0] == nullptr && App->entityManager->getPlayer()->GetFaith() >= 100 && App->entityManager->getPlayer()->GetSacrifices() >= 10 &&
 					building->buildingAction == NOTHING) {
 					if (hud_button_actions_unclickable[0] != nullptr) {
 						App->gui->DeleteUIElement(hud_button_actions_unclickable[0]);
@@ -1086,7 +1089,7 @@ void j1Scene::ManageActionButtons(bool create_buttons, bool viking) {
 					hud_button_actions[0] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 200,613,67,41 }, { 215,185,67,41 }, "Produce_Assassin", { 215,275,67,41 },
 						{ 215,230,67,41 }, false, { 0,0,0,0 }, this, (int)UI_Audio::MAIN_MENU, false, -1.0F, 1);
 				}
-				else if (hud_button_actions_unclickable[0] == nullptr && (App->entityManager->getPlayer()->GetFaith() < 100 || App->entityManager->getPlayer()->GetSacrifices() < 10 || 
+				else if (hud_button_actions_unclickable[0] == nullptr && (App->entityManager->getPlayer()->GetFaith() < 100 || App->entityManager->getPlayer()->GetSacrifices() < 10 ||
 					building->buildingAction != NOTHING)) {
 					if (hud_button_actions[0] != nullptr) {
 						App->gui->DeleteUIElement(hud_button_actions[0]);
@@ -1234,7 +1237,7 @@ SDL_Rect j1Scene::GetSpritePortraitBuilding(int type_of_portrait, BuildingType b
 //Called when clicking the research button
 void j1Scene::ActivateResearchMenu() {
 	if (ui_research_window == nullptr) {
-		ui_research_window = (WindowUI*)App->gui->CreateUIElement(Type::WINDOW, nullptr, { 410,200,459,268 }, { 790,408,459,168 });		
+		ui_research_window = (WindowUI*)App->gui->CreateUIElement(Type::WINDOW, nullptr, { 410,200,459,268 }, { 790,408,459,168 });
 		ui_button_research[0] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_research_window, { 520,400,237,38 }, { 787,240,237,38 }, "CLOSE RESEARCH", { 787,342,237,38 },
 			{ 787,291,237,38 }, false, { 0,0,0,0 }, this, (int)UI_Audio::CLOSE);
 		ui_text_research[0] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 619,412,237,38 }, { 0,0,100,100 }, "Close", { 0,0,0,255 });
@@ -1376,6 +1379,7 @@ void j1Scene::OnClick(UI* element, float argument)
 			close_menus = CloseSceneMenus::Research;
 		}
 		else if (element->name == "FULLSCREEN") {
+			App->win->ToggleFullscreen();
 			if (ui_button_options[1]->sprite1.y == 21) {
 				ui_button_options[1]->sprite1.y = ui_button_options[1]->sprite2.y = ui_button_options[1]->sprite3.y = 61;
 			}
@@ -1387,7 +1391,7 @@ void j1Scene::OnClick(UI* element, float argument)
 		{
 			close_menus = CloseSceneMenus::Pause;
 		}
-		else if (element->name == "Research") 
+		else if (element->name == "Research")
     {
 			ActivateResearchMenu();
 		}
@@ -1437,16 +1441,19 @@ void j1Scene::OnClick(UI* element, float argument)
 		else if (element->name == "Produce_Victory")
 		{
 			Building* building = (Building*)thing_selected;
+			App->entityManager->getPlayer()->DecreaseFaith(600);
 			building->StartProducing(App->entityManager->getPlayer()->time_production_victory, "Victory");
 		}
 		else if (element->name == "Produce_Sacrifices")
 		{
 			Building* building = (Building*)thing_selected;
+			App->entityManager->getPlayer()->DecreaseFaith(40);
 			building->StartProducing(App->entityManager->getPlayer()->time_sacrifices, "Sacrifices");
 		}
 		else if (element->name == "Produce_Prayers")
 		{
 			Building* building = (Building*)thing_selected;
+			App->entityManager->getPlayer()->DecreaseFaith(100);
 			building->StartProducing(App->entityManager->getPlayer()->time_prayers, "Prayers");
     }
 		else if (element->name == "Upgrade") {
@@ -1478,8 +1485,8 @@ void j1Scene::DoWinOrLoseWindow(int type, bool win) {
 
 	if (type == 1) {
 		if (win == true) {
-			App->render->Blit(winlose_tex, 230, 100, &sec_win, NULL, 0.0F);
 			App->render->Blit(winlose_tex, 230, 100, &sec_viking, NULL, 0.0F);
+			App->render->Blit(winlose_tex, 230, 100, &sec_win, NULL, 0.0F);
 		}
 		else {
 			App->render->Blit(winlose_tex, 230, 100, &sec_greek, NULL, 0.0F);

@@ -72,7 +72,7 @@ bool EntityManager::Start()
 	return true;
 }
 
-void EntityManager::LoadBuildingsBlitRect() 
+void EntityManager::LoadBuildingsBlitRect()
 {
 	for (int i = 0; i < buildingsData.size(); i++)
 	{
@@ -105,16 +105,16 @@ bool EntityManager::Update(float dt)
 			it._Ptr->_Myval->Update(dt);
 		}
 	}
-  
+
 	//TODO: Move this logic to the player
 	if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
 		EnterBuildMode();
 	}
 
-	if (App->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN) 
+	if (App->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN)
 	{
-		if (buildingTestIndex < MAX_BUILDING_TYPES - 1) 
+		if (buildingTestIndex < MAX_BUILDING_TYPES - 1)
 		{
 			buildingTestIndex++;
 		}
@@ -140,7 +140,7 @@ bool EntityManager::Update(float dt)
 				{
 					if (i == 0)
 					{
-						if (crPreview.canBuild && App->pathfinding->IsWalkable({ x, y }) == false) 
+						if (crPreview.canBuild && App->pathfinding->IsWalkable({ x, y }) == false)
 						{
 							debugTex = App->scene->debugRed_tex;
 							crPreview.canBuild = false;
@@ -166,32 +166,32 @@ bool EntityManager::Update(float dt)
 		iPoint spawnPos = App->map->MapToWorld(mouse.x, mouse.y);
 		spawnPos.y += App->map->data.tile_height / 2;
 		bool viking = false;
-		switch (buildingTestIndex) 
+		switch (buildingTestIndex)
 		{
 		case 0:
 			viking = true;
 		case 4:
-			CreateBuildingEntity(spawnPos, BuildingType::FORTRESS, buildingsData[buildingTestIndex]);
+			CreateBuildingEntity(spawnPos, BuildingType::FORTRESS, buildingsData[buildingTestIndex],CivilizationType::VIKING);
 			break;
 		case 1:
 			viking = true;
 		case 5:
-			CreateBuildingEntity(spawnPos, BuildingType::MONASTERY , buildingsData[buildingTestIndex]);
+			CreateBuildingEntity(spawnPos, BuildingType::MONASTERY , buildingsData[buildingTestIndex],CivilizationType::VIKING);
 			faithToDescrease = 200;
 			break;
 		case 2:
 			viking = true;
 		case 6:
-			CreateBuildingEntity(spawnPos, BuildingType::TEMPLE, buildingsData[buildingTestIndex]);
+			CreateBuildingEntity(spawnPos, BuildingType::TEMPLE, buildingsData[buildingTestIndex], CivilizationType::VIKING);
 			break;
 		case 3:
 			viking = true;
 		case 7:
-			CreateBuildingEntity(spawnPos, BuildingType::ENCAMPMENT, buildingsData[buildingTestIndex]);
+			CreateBuildingEntity(spawnPos, BuildingType::ENCAMPMENT, buildingsData[buildingTestIndex], CivilizationType::VIKING);
 			faithToDescrease = 200;
 			break;
 		}
-		
+
 		for (int y = mouse.y; y > mouse.y - crPreview.height; y--)
 		{
 			for (int x = mouse.x; x < mouse.x + crPreview.width; x++)
@@ -213,7 +213,7 @@ bool EntityManager::Update(float dt)
 
 
 
-bool EntityManager::PostUpdate() 
+bool EntityManager::PostUpdate()
 {
 	return true;
 }
@@ -369,6 +369,7 @@ Entity* EntityManager::CreatePlayerEntity()
 
 	ret = new Player();
 	ret->type = EntityType::PLAYER;
+	ret->civilization = CivilizationType::VIKING;
 
 	entities[EntityType::PLAYER].push_back(ret);
 	entities[EntityType::PLAYER].begin()._Ptr->_Myval->Start();
@@ -376,7 +377,7 @@ Entity* EntityManager::CreatePlayerEntity()
 	return ret;
 }
 
-Entity* EntityManager::CreateUnitEntity(UnitType type, iPoint pos)
+Entity* EntityManager::CreateUnitEntity(UnitType type, iPoint pos, CivilizationType civilization)
 {
 	Entity* ret = nullptr;
 
@@ -393,6 +394,7 @@ Entity* EntityManager::CreateUnitEntity(UnitType type, iPoint pos)
 		ret = new CombatUnit(UnitType::PIKEMAN, pos);
 		break;
 	}
+	ret->civilization = civilization;
 	ret->type = EntityType::UNIT;
 	ret->texture = animationManager.charData[type].texture;
 
@@ -404,7 +406,7 @@ Entity* EntityManager::CreateUnitEntity(UnitType type, iPoint pos)
 	return ret;
 }
 
-void EntityManager::DrawEverything() 
+void EntityManager::DrawEverything()
 {
 	float dt = App->GetDT();
 	Entity* ent = nullptr;
@@ -419,7 +421,7 @@ void EntityManager::DrawEverything()
 	}
 }
 
-Entity* EntityManager::CreateBuildingEntity(iPoint pos, BuildingType type, BuildingInfo info)
+Entity* EntityManager::CreateBuildingEntity(iPoint pos, BuildingType type, BuildingInfo info, CivilizationType civilization)
 {
 	Entity* ret = nullptr;
 	switch (type)
@@ -437,6 +439,7 @@ Entity* EntityManager::CreateBuildingEntity(iPoint pos, BuildingType type, Build
 		ret = new Building(BuildingType::ENCAMPMENT, pos, info);
 		break;
 	}
+	ret->civilization = civilization;
 	ret->type = EntityType::BUILDING;
 	ret->texture = entitySpriteSheets[SpriteSheetType::BUILDINGS];
 
@@ -466,7 +469,7 @@ void EntityManager::SetBuildIndex(int index)
 //Called when deleting a new Entity
 bool EntityManager::DeleteEntity(Entity* e)
 {
-	if (e != nullptr) 
+	if (e != nullptr)
 	{
 		entities[e->type].remove(e);
 		delete e;
@@ -475,7 +478,7 @@ bool EntityManager::DeleteEntity(Entity* e)
 	return false;
 }
 
-void EntityManager::UpdateBuildPreview(int index) 
+void EntityManager::UpdateBuildPreview(int index)
 {
 	BuildingInfo data = buildingsData[index];
 	crPreview.height = data.tileLenght;
@@ -544,12 +547,12 @@ void EntityManager::LoadBuildingsData(pugi::xml_node& node)
 	}
 }
 
-iPoint EntityManager::CalculateBuildingSize(int bw, int w, int h) 
+iPoint EntityManager::CalculateBuildingSize(int bw, int w, int h)
 {
 	return {bw , (bw * h) / w};
 }
 
-Player* EntityManager::getPlayer() 
+Player* EntityManager::getPlayer()
 {
 	return (Player*)App->entityManager->entities[EntityType::PLAYER].begin()._Ptr->_Myval;
 }

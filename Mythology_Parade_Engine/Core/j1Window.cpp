@@ -114,7 +114,7 @@ uint j1Window::GetScale() const
 	return scale;
 }
 
-bool j1Window::ToggleFullscreen() 
+bool j1Window::ToggleFullscreen()
 {
 	Uint32 fullscreenFlag = SDL_WINDOW_FULLSCREEN;
 	bool isFullscreen = SDL_GetWindowFlags(window) & fullscreenFlag;
@@ -129,5 +129,11 @@ bool j1Window::ToggleFullscreen()
 	SDL_SetRenderTarget(App->render->renderer, NULL);
 	LOG("%i", timer.Read() - old);
 
+	return isFullscreen;
+}
+
+bool j1Window::isFullscreen() {
+	Uint32 fullscreenFlag = SDL_WINDOW_FULLSCREEN;
+	bool isFullscreen = SDL_GetWindowFlags(window) & fullscreenFlag;
 	return isFullscreen;
 }
