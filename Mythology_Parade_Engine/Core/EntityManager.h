@@ -9,6 +9,7 @@
 #include"j1Input.h"
 #include"j1Map.h"
 #include"j1Pathfinding.h"
+#include"j1Audio.h"
 
 #include<vector>
 #include <algorithm>
@@ -130,6 +131,8 @@ public:
 	//The way to store the spritesheets
 	std::unordered_map<SpriteSheetType, SDL_Texture*> entitySpriteSheets;
 	std::vector<BuildingInfo> buildingsData;
+	void FxUnits(int channel, int fx, int posx, int posy);
+	int volume;
 
 private:
 	int buildingTestIndex = 0;
@@ -145,6 +148,19 @@ public:
 	SDL_Rect research_bar_front;
 
 	std::unordered_map<UnitType, std::unordered_map<AnimationType, std::unordered_map<Direction, Animation_char>>> animations;
+
+	int Building_destruction;
+	int Building_placed;
+	int Decrease_Faith;
+	int Getting_resources;
+	int hit_1;
+	int Increase_faith;
+	int increase_prayers;
+	int increase_sacrifice;
+	int Walking_troops;
+	int CreateMonk_sound;
+	int CreateAssasin_sound;
+	int Research_sound;
 
 };
 #endif // !_ENTITYMANAGER_H
