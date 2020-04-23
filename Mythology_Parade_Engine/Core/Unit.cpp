@@ -158,15 +158,6 @@ bool Unit::Draw(float dt)
 		entPath.erase(entPath.begin(), entPath.begin() + 1);
 	}
 
-	if (entPath.size() > 0)
-	{
-		for (uint i = 0; i < entPath.size(); ++i)
-		{
-			iPoint pos = App->map->MapToWorld(entPath.at(i).x, entPath.at(i).y);
-			App->render->Blit(App->scene->debugBlue_tex, pos.x, pos.y);
-		}
-	}
-
 
 	if (targetPosition != iPoint(-1, -1))
 		MoveToTarget();
@@ -182,7 +173,14 @@ bool Unit::Draw(float dt)
 
 	if (displayDebug) 
 	{
-
+		if (entPath.size() > 0)
+		{
+			for (uint i = 0; i < entPath.size(); ++i)
+			{
+				iPoint pos = App->map->MapToWorld(entPath.at(i).x, entPath.at(i).y);
+				App->render->Blit(App->scene->debugBlue_tex, pos.x, pos.y);
+			}
+		}
 		App->render->DrawQuad(collisionRect, 0, 255, 0, 50);
 	}
 
