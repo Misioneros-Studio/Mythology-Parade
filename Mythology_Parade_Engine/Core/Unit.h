@@ -45,6 +45,7 @@ public:
 	int time_production;
 	int time_research;
 	bool researched;
+	Unit* enemyTarget;
 
 public:
 	Unit(UnitType, iPoint);
@@ -67,16 +68,23 @@ public:
 	Direction getMovementDirection(iPoint);
 	void SetPath(const std::vector<iPoint>);
 
+	void StateMachineActions(float dt);
+	void Kill(iPoint);
+
 protected:
 	//Animation
 	Direction currentDirection;
 	Animation_char currentAnim;
 
 	iPoint targetPosition;
+	iPoint directionToTarget;
+	fPoint normalizedDirection;
+
 	AnimationType state;
-	Unit* enemyTarget;
 
 	std::vector<iPoint> entPath;
+
+	float timeToDespawn;
 	//void SetTarget();
 	//void CheckState();
 	

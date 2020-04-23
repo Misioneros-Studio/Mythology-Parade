@@ -2,8 +2,9 @@
 #include "p2Log.h"
 #include "j1Textures.h"
 #include "j1Input.h"
+#include"CombatUnit.h"
 
-Unit::Unit(UnitType type, iPoint pos): unitType(type), state(AnimationType::IDLE), _isSelected(false), moveSpeed(1)
+Unit::Unit(UnitType type, iPoint pos): unitType(type), state(AnimationType::IDLE), _isSelected(false), moveSpeed(60)
 {
 	
 	if (App->entityManager->getPlayer())
@@ -17,8 +18,14 @@ Unit::Unit(UnitType type, iPoint pos): unitType(type), state(AnimationType::IDLE
 
 	collisionRect = { 0, 0, 30, -55 };
 	unitType = type;
-	position = pos;
+	position = {(float)pos.x, (float)pos.y};
 	state = AnimationType::IDLE;
+	flipState = SDL_FLIP_NONE;
+	directionToTarget = {0, 0};
+	normalizedDirection = { 0, 0 };
+
+	timeToDespawn = 1.f;
+
 	//Init Units
 	switch (type)
 	{
@@ -57,6 +64,7 @@ bool Unit::Update(float dt)
 	bool ret = true;
 
 	//Allawys blit the sprite at the end
+	StateMachineActions(dt);
 	//ret = Draw(dt);
 
 	//Return
@@ -77,64 +85,55 @@ void Unit::MoveToTarget()
 {
 	//if (!isSelected())
 	//	return;
+	float speed = moveSpeed * App->GetDT();
 
-	////move function logic
-	iPoint increment = { 0, 0 };
-
-	switch (currentDirection)
+	//Fast fix for ft increasing bug
+	if (App->GetDT() >= 0.5f) 
 	{
-	case Direction::UP:
-		increment = { 0, -2 };
-		break;
-	case Direction::LATERAL:
-		increment = { 2, 0 };
-		break;
-	case Direction::DOWN:
-		increment = { 0, 2 };
-		break;
-	case Direction::DIAGONAL_DOWN:
-		increment = { 2, 1 };
-		break;
-	case Direction::DIAGONAL_UP:
-		increment = { 2, -1 };
-		break;
+		speed = 0.f;
 	}
 
-	if (flipState == SDL_FLIP_NONE)
-	{
-		increment.x *= -1;
-	}
-
+  
 	state = AnimationType::WALK;
+	if (Mix_Playing(3) == 0) 
+	{
+		App->entityManager->FxUnits(3, App->entityManager->Walking_troops, position.x, position.y);
+	}
 
-	iPoint currentIso = position + increment;
 	iPoint targetIso = App->map->MapToWorld(targetPosition.x, targetPosition.y);
 	targetIso += App->map->GetTilesHalfSize();
 
-	if (currentIso.y > targetIso.y)
+	//App->render->DrawLine(position.x, position.y, targetIso.x, targetIso.y, 255, 0, 0);
+
+	fPoint cast = { (float)targetIso.x, (float)targetIso.y };
+
+	fPoint increment = { normalizedDirection.x * speed,  normalizedDirection.y * speed };
+
+	position = position + increment;
+
+	//state = AnimationType::WALK;
+
+	if (position.DistanceManhattan(cast) <= 5)
 	{
-		currentIso.x += App->map->data.tile_width / 2;
-		currentIso.y += App->map->data.tile_height / 2;
-	}
-
-	currentIso = App->map->WorldToMap(currentIso.x, currentIso.y);
-
-	if (currentIso == targetPosition)
-	{
-		position = App->map->MapToWorld(targetPosition.x, targetPosition.y);
-		position += App->map->GetTilesHalfSize();
-
+		position = App->map->MapToWorld((float)targetPosition.x, (float)targetPosition.y);
+		position += App->map->GetTilesHalfSizeFloat();
 
 		targetPosition.ResetAsPosition();
 		if (entPath.size() <= 0)
 		{
-			ChangeState(targetPosition, AnimationType::IDLE);
+			if (enemyTarget != nullptr && unitType != UnitType::MONK) 
+			{
+				ChangeState(App->map->WorldToMap(enemyTarget->position.x, enemyTarget->position.y), AnimationType::ATTACK);
+			}
+			else
+			{
+				ChangeState(targetPosition, AnimationType::IDLE);
+			}
+
+
 		}
 	}
-	else
-	{
-		position += increment;
-	}
+	
 }
 
 void Unit::Init(int maxHealth)
@@ -148,7 +147,7 @@ void Unit::Init(int maxHealth)
 
 void Unit::ChangeState(iPoint isoLookPosition, AnimationType newState)
 {
-	if (targetPosition == iPoint(-1, -1) && entPath.size() == 0)
+	if (isoLookPosition == iPoint(-1, -1) && entPath.size() == 0)
 	{
 		currentAnim = App->entityManager->animations[unitType][AnimationType::IDLE][currentDirection];
 	}
@@ -158,6 +157,7 @@ void Unit::ChangeState(iPoint isoLookPosition, AnimationType newState)
 		if (App->entityManager->animations[unitType][newState][currentDirection].name != currentAnim.name)
 			currentAnim = App->entityManager->animations[unitType][newState][currentDirection];
 	}
+	state = newState;
 }
 
 bool Unit::Draw(float dt)
@@ -166,6 +166,15 @@ bool Unit::Draw(float dt)
 	{
 		targetPosition.x = entPath[0].x;
 		targetPosition.y = entPath[0].y;
+
+		iPoint rest = {(int)position.x, (int)position.y};
+
+		iPoint fTarget = App->map->MapToWorld(targetPosition.x, targetPosition.y);
+		fTarget += App->map->GetTilesHalfSize();
+
+		directionToTarget = fTarget - rest;
+		normalizedDirection = fPoint::Normalize((fPoint)directionToTarget);
+
 		ChangeState(targetPosition, AnimationType::WALK);
 		entPath.erase(entPath.begin(), entPath.begin() + 1);
 	}
@@ -174,18 +183,27 @@ bool Unit::Draw(float dt)
 	if (targetPosition != iPoint(-1, -1))
 		MoveToTarget();
 
-
 	int num_current_anim = currentAnim.GetSprite();
 	blitRect = { (int)(currentAnim.sprites[num_current_anim].rect.w / 1.5f), (int)(currentAnim.sprites[num_current_anim].rect.h / 1.5f) };
 
-	App->render->Blit(texture, position.x - blitRect.x / 2, position.y - blitRect.y, blitRect, &currentAnim.sprites[num_current_anim].rect, 1.f, flipState);
-
+	//Collider update
 	collisionRect.x = position.x - (collisionRect.w / 2);
 	collisionRect.y = position.y;
 
+	App->render->Blit(texture, position.x - blitRect.x / 2, position.y - blitRect.y, blitRect, &currentAnim.sprites[num_current_anim].rect, 1.f, flipState);
+
+	//App->render->DrawQuad({(int)position.x, (int)position.y, 2, 2}, 0, 255, 0);
+
 	if (displayDebug) 
 	{
-
+		if (entPath.size() > 0)
+		{
+			for (uint i = 0; i < entPath.size(); ++i)
+			{
+				iPoint pos = App->map->MapToWorld(entPath.at(i).x, entPath.at(i).y);
+				App->render->Blit(App->scene->debugBlue_tex, pos.x, pos.y);
+			}
+		}
 		App->render->DrawQuad(collisionRect, 0, 255, 0, 50);
 	}
 
@@ -253,4 +271,49 @@ void Unit::SetPath(const std::vector<iPoint> s_path)
 {
 	entPath = s_path;
 }
+
+
+void Unit::Kill(iPoint direction)
+{
+	ChangeState(direction, AnimationType::DIE);
+}
+void Unit::StateMachineActions(float dt)
+{
+	//LOG("%i", state);
+	switch (state)
+	{
+	case AnimationType::ATTACK:
+		if (currentAnim.current_sprite == currentAnim.num_sprites - 1)
+		{
+			CombatUnit* unit = (CombatUnit*)this;
+			if (enemyTarget->RecieveDamage(unit->GetDamageValue()))
+			{
+				enemyTarget->Kill(App->map->WorldToMap(position.x, position.y));
+				enemyTarget = nullptr;
+				ChangeState(targetPosition, AnimationType::IDLE);
+			}
+		}
+
+		break;
+	case AnimationType::DIE:
+
+		timeToDespawn -= dt;
+
+		if (timeToDespawn <= 0) 
+		{
+			App->entityManager->DeleteEntity(this);
+		}
+
+		break;
+	case AnimationType::HIT:
+		break;
+	case AnimationType::IDLE:
+		break;
+	case AnimationType::WALK:
+		break;
+	default:
+		break;
+	}
+}
+
 

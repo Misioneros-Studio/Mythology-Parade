@@ -61,6 +61,9 @@ bool j1Scene::Start()
 		RELEASE_ARRAY(data);
 	}
 
+	App->render->camera.x = -2683;
+	App->render->camera.y = -2000;
+
 	ui_ingame=(ImageUI*)App->gui->CreateUIElement(Type::IMAGE, nullptr, { 0,590,1280,130 }, { 0,590,1280,130 });
 
 
@@ -106,6 +109,9 @@ bool j1Scene::Start()
 	App->gui->sfx_UI[(int)UI_Audio::EXIT] = App->audio->LoadFx("audio/ui/Exit.wav");
 	App->gui->sfx_UI[(int)UI_Audio::CLOSE] = App->audio->LoadFx("audio/ui/Close_Menu.wav");
 
+	WinViking_sound = App->audio->LoadFx("audio/fx/WinVikings.wav");
+	WinGreek_sound = App->audio->LoadFx("audio/fx/win_greeks.wav");
+	Lose_sound = App->audio->LoadFx("audio/fx/lose_sound.wav");
 	for (int i = 0; i < 4; i++)
 	{
 		if (i < 3)
@@ -129,7 +135,7 @@ bool j1Scene::Start()
 	//quadTree = new QuadTree(TreeType::ISOMETRIC, position.x + (App->map->data.tile_width / 2), position.y, size.x, size.y);
 	//quadTree->baseNode->SubDivide(quadTree->baseNode, 5);
 
-	App->audio->PlayMusic("audio/music/Ambient1.ogg");
+	App->audio->PlayMusic("audio/music/Ambient1.ogg", 2.0F, 150);
 
 	//Creating players
 	App->entityManager->CreatePlayerEntity();
@@ -147,18 +153,64 @@ bool j1Scene::PreUpdate()
 	if (App->input->GetMouseButtonDown(SDL_BUTTON_RIGHT) == KEY_DOWN)
 	{
 		//TMP: Temporal pathfinding debug
-		Entity* ent = App->entityManager->entities[EntityType::UNIT].begin()._Ptr->_Myval;
-		iPoint origin = App->map->WorldToMap(ent->position.x, ent->position.y);
-		iPoint ending = App->map->GetMousePositionOnMap();
+		std::list<Entity*> list = App->entityManager->getPlayer()->GetEntitiesSelected();
 
-		if (origin != ending)
-			App->pathfinding->RequestPath(origin, ending);
-	}
-	if (App->pathfinding->pathfinderList[0].pathCompleted)
-	{
-		Unit* ent = (Unit*)App->entityManager->entities[EntityType::UNIT].begin()._Ptr->_Myval;
-		ent->SetPath(*App->pathfinding->pathfinderList.begin()->GetLastPath());
-		App->pathfinding->pathfinderList[0].pathCompleted = false;
+		if(list.size() > 0)
+		{
+			float n = App->entityManager->getPlayer()->GetEntitiesSelected().size();
+			float x = 0, y = 0;
+
+			for (std::list<Entity*>::iterator it = list.begin(); it != list.end(); it++)
+			{
+				x += it._Ptr->_Myval->position.x;
+				y += it._Ptr->_Myval->position.y;
+			}
+
+			x /= n;
+			y /= n;
+
+			iPoint origin = App->map->WorldToMap((int)x, (int)y);
+			iPoint ending = App->map->GetMousePositionOnMap();
+
+
+			int posX, posY;
+			App->input->GetMousePosition(posX, posY);
+			iPoint p = App->render->ScreenToWorld(posX, posY);
+			p = App->render->ScreenToWorld(posX, posY);
+
+			CivilizationType playerCiv = App->entityManager->getPlayer()->civilization;
+			bool attacking = false;
+
+			for (std::list<Entity*>::iterator it = App->entityManager->entities[EntityType::UNIT].begin(); it != App->entityManager->entities[EntityType::UNIT].end(); it++)
+			{
+				SDL_Rect collider = it._Ptr->_Myval->getCollisionRect();
+				if (it._Ptr->_Myval->civilization != playerCiv && EntityManager::IsPointInsideQuad(collider, p.x, p.y))
+				{
+					Unit* unt = nullptr;
+					for (std::list<Entity*>::iterator sel = list.begin(); sel != list.end(); sel++)
+					{
+						unt = (Unit*)sel._Ptr->_Myval;
+						unt->enemyTarget = (Unit*)it._Ptr->_Myval;
+						attacking = true;
+					}
+				}
+			}
+
+			if (!attacking)
+			{
+				Unit* unt = nullptr;
+				for (std::list<Entity*>::iterator sel = list.begin(); sel != list.end(); sel++)
+				{
+					unt = (Unit*)sel._Ptr->_Myval;
+					unt->enemyTarget = nullptr;
+				}
+			}
+
+			if (origin != ending)
+				App->pathfinding->RequestPath(origin, ending, list);
+
+		}
+
 	}
 
 
@@ -287,17 +339,6 @@ bool j1Scene::Update(float dt)
 		App->render->Blit(debugBlue_tex, p.x, p.y);
 	}
 
-	for (int i = 0; i < App->pathfinding->pathfinderList.size(); i++)
-	{
-		std::vector<iPoint> path = *App->pathfinding->pathfinderList[i].GetLastPath();
-
-		for (uint i = 0; i < path.size(); ++i)
-		{
-			iPoint pos = App->map->MapToWorld(path.at(i).x, path.at(i).y);
-			App->render->Blit(debugBlue_tex, pos.x, pos.y);
-		}
-	}
-
 	if (App->entityManager->getPlayer() != nullptr) {
 		if (App->entityManager->getPlayer()->player_win == true) {
 			if (App->entityManager->getPlayer()->player_type == CivilizationType::VIKING) {
@@ -318,6 +359,18 @@ bool j1Scene::Update(float dt)
 		}
 	}
 	//App->render->DrawQuad(mapLimitsRect, 255, 255, 255, 40);
+
+	/*CheckSpatial Audio
+	if (App->input->GetKey(SDL_SCANCODE_M) == KEY_DOWN) {
+		Mix_HaltChannel(-1);
+		Mix_SetPosition(2, 270, 200);
+		App->audio->PlayFx(2, WinGreek_sound, 1);
+	}
+	if (App->input->GetKey(SDL_SCANCODE_O) == KEY_DOWN) {
+		Mix_HaltChannel(-1);
+		Mix_SetPosition(3, 90, 1);
+		App->audio->PlayFx(3, WinGreek_sound, 1);
+	}*/
 
 	return true;
 }
@@ -1486,11 +1539,17 @@ void j1Scene::DoWinOrLoseWindow(int type, bool win) {
 	if (type == 1) {
 		if (win == true) {
 			App->render->Blit(winlose_tex, 230, 100, &sec_viking, NULL, 0.0F);
-			App->render->Blit(winlose_tex, 230, 100, &sec_win, NULL, 0.0F);
+			if (Mix_Playing(3) == 0)
+      {
+				App->audio->PlayFx(3, WinViking_sound);
+			}
 		}
 		else {
 			App->render->Blit(winlose_tex, 230, 100, &sec_greek, NULL, 0.0F);
 			App->render->Blit(winlose_tex, 230, 100, &sec_lose, NULL, 0.0F);
+			if (Mix_Playing(3) == 0) {
+				App->audio->PlayFx(3, Lose_sound);
+			}
 		}
 	}
 
@@ -1498,10 +1557,16 @@ void j1Scene::DoWinOrLoseWindow(int type, bool win) {
 		if (win == true) {
 			App->render->Blit(winlose_tex, 230, 100, &sec_greek, NULL, 0.0F);
 			App->render->Blit(winlose_tex, 230, 100, &sec_lose, NULL, 0.0F);
+			if (Mix_Playing(3) == 0) {
+				App->audio->PlayFx(3, WinGreek_sound);
+			}
 		}
 		else {
 			App->render->Blit(winlose_tex, 230, 100, &sec_viking, NULL, 0.0F);
 			App->render->Blit(winlose_tex, 230, 100, &sec_win, NULL, 0.0F);
+			if (Mix_Playing(3) == 0) {
+				App->audio->PlayFx(3, Lose_sound);
+			}
 		}
 	}
 	if (timer_win_lose.ReadSec() >= 5) {
