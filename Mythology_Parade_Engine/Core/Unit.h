@@ -67,7 +67,6 @@ public:
 	void MoveToTarget();
 	Direction getMovementDirection(iPoint);
 	void SetPath(const std::vector<iPoint>);
-
 	void StateMachineActions(float dt);
 	void Kill(iPoint);
 
