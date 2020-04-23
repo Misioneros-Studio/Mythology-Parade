@@ -5,7 +5,7 @@ CombatUnit::CombatUnit(UnitType type, iPoint pos) : Unit(type, pos), range(0), d
 {
 	//TODO 10: Change textures
 	unitType = type;
-	position = pos;
+	position = {(float)pos.x, (float)pos.y};
 	switch (unitType)
 	{
 	case UnitType::ASSASSIN:

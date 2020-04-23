@@ -3,7 +3,7 @@
 Building::Building(BuildingType type, iPoint pos, BuildingInfo info)
 {
 
-	position = pos;
+	position = { (float)pos.x, (float)pos.y};
 	buildingStatus = CONSTRUCTING;
 	buildingAction = NOTHING;
 	time_producing = 0;
@@ -85,7 +85,7 @@ Building::Building(BuildingType type, iPoint pos, BuildingInfo info)
 	//buildingType = info.buildingType;
 	tileLenght = info.tileLenght;
 
-	collisionRect = { position.x, position.y + ((App->map->data.tile_height / 2) * tileLenght), blitRect.x, -blitRect.y};
+	collisionRect = { (int)position.x, (int)position.y + ((App->map->data.tile_height / 2) * tileLenght), blitRect.x, -blitRect.y};
 
 	timer_construction.Start();
 }
@@ -106,12 +106,12 @@ void Building::CreateUnit()
 	case FORTRESS:
 		break;
 	case MONASTERY:
-		App->entityManager->CreateUnitEntity(UnitType::MONK, { position.x - 30,position.y },civilization);
+		App->entityManager->CreateUnitEntity(UnitType::MONK, { (int)position.x - 30, (int)position.y },civilization);
 		break;
 	case TEMPLE:
 		break;
 	case ENCAMPMENT:
-		App->entityManager->CreateUnitEntity(UnitType::ASSASSIN, { position.x - 20,position.y },civilization);
+		App->entityManager->CreateUnitEntity(UnitType::ASSASSIN, { (int)position.x - 20, (int)position.y },civilization);
 		break;
 	}
 }
@@ -243,7 +243,7 @@ bool Building::Draw(float dt)
 void Building::Draw_Construction_Bar(int blitWidth, int bar_used)
 {
 	SDL_Rect construction_spriteRect = App->entityManager->construction_bar_back;
-	iPoint pos = { position.x + (int)(0.15 * blitWidth),position.y + (int)(((32 / 2) * tileLenght) - 1.25 * blitRect.y) };
+	iPoint pos = { (int)position.x + (int)(0.15 * blitWidth), (int)position.y + (int)(((32 / 2) * tileLenght) - 1.25 * blitRect.y) };
 	App->render->Blit(texture, pos.x, pos.y, &construction_spriteRect);
 	if (bar_used == 0)
 		construction_spriteRect = App->entityManager->construction_bar_front;

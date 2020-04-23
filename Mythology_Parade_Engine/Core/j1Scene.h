@@ -4,6 +4,7 @@
 #include "j1Module.h"
 #include "j1Timer.h"
 #include "SDL/include/SDL.h"
+#include"p2Point.h"
 
 struct SDL_Rect;
 

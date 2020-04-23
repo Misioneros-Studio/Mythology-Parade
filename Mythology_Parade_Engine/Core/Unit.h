@@ -73,6 +73,8 @@ protected:
 	Animation_char currentAnim;
 
 	iPoint targetPosition;
+	iPoint directionToTarget;
+
 	AnimationType state;
 	Unit* enemyTarget;
 

@@ -74,7 +74,7 @@ bool EntityManager::Start()
 
 void EntityManager::LoadBuildingsBlitRect() 
 {
-	for (int i = 0; i < buildingsData.size(); i++)
+	for (unsigned int i = 0; i < buildingsData.size(); i++)
 	{
 		BuildingInfo* info = &buildingsData[i];
 		int blitWidth = info->tileLenght * App->map->data.tile_width;
@@ -231,18 +231,18 @@ bool EntityManager::CleanUp()
 		}
 		entities[(EntityType)i].clear();
 	}
-	for (int i = 0; i < entitySpriteSheets.size(); i++)
+	for (unsigned int i = 0; i < entitySpriteSheets.size(); i++)
 	{
 		if(entitySpriteSheets[(SpriteSheetType)i])
 			App->tex->UnLoad(entitySpriteSheets[(SpriteSheetType)i]);
 	}
 	entities.clear();
 
-	for (int i = 0; i < animations.size(); i++)
+	for (unsigned int i = 0; i < animations.size(); i++)
 	{
-		for (int k = 0; k < animations[(UnitType)i].size(); k++)
+		for (unsigned int k = 0; k < animations[(UnitType)i].size(); k++)
 		{
-			for (int j = 0; j < animations[(UnitType)i][(AnimationType)k].size(); j++)
+			for (unsigned int j = 0; j < animations[(UnitType)i][(AnimationType)k].size(); j++)
 			{
 				animations[(UnitType)i][(AnimationType)k][(Direction)j].Clean();
 			}

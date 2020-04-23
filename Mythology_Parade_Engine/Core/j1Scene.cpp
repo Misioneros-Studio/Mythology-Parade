@@ -147,18 +147,30 @@ bool j1Scene::PreUpdate()
 	if (App->input->GetMouseButtonDown(SDL_BUTTON_RIGHT) == KEY_DOWN)
 	{
 		//TMP: Temporal pathfinding debug
-		Entity* ent = App->entityManager->entities[EntityType::UNIT].begin()._Ptr->_Myval;
-		iPoint origin = App->map->WorldToMap(ent->position.x, ent->position.y);
-		iPoint ending = App->map->GetMousePositionOnMap();
+		std::list<Entity*> list = App->entityManager->getPlayer()->GetEntitiesSelected();
+		
+		if(list.size() > 0)
+		{
+			float n = App->entityManager->getPlayer()->GetEntitiesSelected().size();
+			float x = 0, y = 0;
 
-		if (origin != ending)
-			App->pathfinding->RequestPath(origin, ending);
-	}
-	if (App->pathfinding->pathfinderList[0].pathCompleted)
-	{
-		Unit* ent = (Unit*)App->entityManager->entities[EntityType::UNIT].begin()._Ptr->_Myval;
-		ent->SetPath(*App->pathfinding->pathfinderList.begin()->GetLastPath());
-		App->pathfinding->pathfinderList[0].pathCompleted = false;
+			for (std::list<Entity*>::iterator it = list.begin(); it != list.end(); it++)
+			{
+				x += it._Ptr->_Myval->position.x;
+				y += it._Ptr->_Myval->position.y;
+			}
+
+			x /= n;
+			y /= n;
+
+			iPoint origin = App->map->WorldToMap((int)x, (int)y);
+			iPoint ending = App->map->GetMousePositionOnMap();
+
+			if (origin != ending)
+				App->pathfinding->RequestPath(origin, ending, list);
+
+		}
+
 	}
 
 
@@ -285,17 +297,6 @@ bool j1Scene::Update(float dt)
 	{
 		p = App->map->MapToWorld(p.x, p.y);
 		App->render->Blit(debugBlue_tex, p.x, p.y);
-	}
-
-	for (int i = 0; i < App->pathfinding->pathfinderList.size(); i++)
-	{
-		std::vector<iPoint> path = *App->pathfinding->pathfinderList[i].GetLastPath();
-
-		for (uint i = 0; i < path.size(); ++i)
-		{
-			iPoint pos = App->map->MapToWorld(path.at(i).x, path.at(i).y);
-			App->render->Blit(debugBlue_tex, pos.x, pos.y);
-		}
 	}
 
 	if (App->entityManager->getPlayer() != nullptr) {
