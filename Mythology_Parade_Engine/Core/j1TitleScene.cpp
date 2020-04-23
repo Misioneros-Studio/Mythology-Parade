@@ -78,7 +78,7 @@ bool j1TitleScene::Start()
 
 
 	title_assets_tex = App->tex->Load("gui/TitleAssets.png");
-	App->audio->PlayMusic("audio/music/MainTitle_Use.ogg");
+	App->audio->PlayMusic("audio/music/MainTitle_Use.ogg", 2.0F, 90);
 	return true;
 }
 
