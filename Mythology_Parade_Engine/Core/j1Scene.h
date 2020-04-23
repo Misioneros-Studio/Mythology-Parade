@@ -180,6 +180,9 @@ public:
 
 	TextUI* ui_text_ingame[3];
 	CloseSceneMenus close_menus;
+	uint WinViking_sound;
+	uint WinGreek_sound;
+	uint Lose_sound;
 };
 
 #endif // __j1SCENE_H__
