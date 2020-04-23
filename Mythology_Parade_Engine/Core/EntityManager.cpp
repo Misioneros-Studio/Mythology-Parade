@@ -205,17 +205,6 @@ bool EntityManager::Update(float dt)
 			break;
 		}
 		
-		for (int y = mouse.y; y > mouse.y - crPreview.height; y--)
-		{
-			for (int x = mouse.x; x < mouse.x + crPreview.width; x++)
-			{
-
-				if (IN_RANGE(x, 0, App->map->data.width - 1) == 1 && IN_RANGE(y, 0, App->map->data.height - 1) == 1)
-				{
-					App->pathfinding->ChangeMapValue({x, y}, 0);
-				}
-			}
-		}
 		//Onces you build disable building mode
 		App->entityManager->getPlayer()->DecreaseFaith(faithToDescrease);
 		crPreview.active = false;
@@ -452,6 +441,24 @@ Entity* EntityManager::CreateBuildingEntity(iPoint pos, BuildingType type, Build
 		ret = new Building(BuildingType::ENCAMPMENT, pos, info);
 		break;
 	}
+
+
+	iPoint iso = pos;
+	iso += App->map->GetTilesHalfSize();
+	iso = App->map->WorldToMap(iso.x, iso.y);
+
+	for (int y = iso.y; y > iso.y - info.tileLenght; y--)
+	{
+		for (int x = iso.x; x < iso.x + info.tileLenght; x++)
+		{
+
+			if (IN_RANGE(x, 0, App->map->data.width - 1) == 1 && IN_RANGE(y, 0, App->map->data.height - 1) == 1)
+			{
+				App->pathfinding->ChangeMapValue({ x, y }, 0);
+			}
+		}
+	}
+
 	ret->civilization = civilization;
 	ret->type = EntityType::BUILDING;
 	ret->texture = entitySpriteSheets[SpriteSheetType::BUILDINGS];
@@ -558,6 +565,8 @@ void EntityManager::LoadBuildingsData(pugi::xml_node& node)
 				buildingsData.push_back(info);
 		}
 	}
+
+
 }
 
 iPoint EntityManager::CalculateBuildingSize(int bw, int w, int h) 
@@ -565,11 +574,22 @@ iPoint EntityManager::CalculateBuildingSize(int bw, int w, int h)
 	return {bw , (bw * h) / w};
 }
 
-Player* EntityManager::getPlayer() 
+Player* EntityManager::getPlayer() const
 {
 	return (Player*)App->entityManager->entities[EntityType::PLAYER].begin()._Ptr->_Myval;
 }
-void EntityManager::FxUnits(int channel, int fx, int posx, int posy) {
+
+bool EntityManager::IsPointInsideQuad(SDL_Rect rect, int x, int y)
+{
+
+	if (x >= rect.x && x <= rect.x + rect.w && y >= rect.y + rect.h && y <= rect.y)
+		return true;
+
+	return false;
+}
+
+void EntityManager::FxUnits(int channel, int fx, int posx, int posy) 
+{
 	Mix_Playing(channel);
 	Mix_HaltChannel(channel);
 
@@ -595,3 +615,4 @@ void EntityManager::FxUnits(int channel, int fx, int posx, int posy) {
 	Mix_SetPosition(channel, angle, volume);
 	App->audio->PlayFx(channel, fx, 0);
 }
+

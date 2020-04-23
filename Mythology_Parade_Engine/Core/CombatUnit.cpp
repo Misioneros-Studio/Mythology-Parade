@@ -14,7 +14,7 @@ CombatUnit::CombatUnit(UnitType type, iPoint pos) : Unit(type, pos), range(0), d
 		researched = true;
 		//Change texture
 		LevelSystem::Init(3500, 6500, 9500);
-		CombatUnit::Init(100, 15, 1, 4);
+		CombatUnit::Init(100, 15, 1, 80);
 		break;
 	case UnitType::PIKEMAN:
 		time_production = 90;
@@ -22,7 +22,7 @@ CombatUnit::CombatUnit(UnitType type, iPoint pos) : Unit(type, pos), range(0), d
 		researched = false;
 		//Change Texture
 		LevelSystem::Init(3000, 6000, 9500);
-		CombatUnit::Init(110, 25, 1, 2);
+		CombatUnit::Init(110, 25, 1, 40);
 		break;
 	case UnitType::EXPLORER:
 		break;
@@ -101,7 +101,8 @@ void CombatUnit::Init(int maxHealth, int damage, int range, int speed)
 
 bool CombatUnit::Update(float dt) 
 {
-	//Unit::Update(dt);
+	Unit::Update(dt);
+
 	return true;
 }
 

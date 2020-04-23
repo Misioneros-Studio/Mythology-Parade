@@ -61,6 +61,9 @@ bool j1Scene::Start()
 		RELEASE_ARRAY(data);
 	}
 
+	App->render->camera.x = -2683;
+	App->render->camera.y = -2000;
+
 	ui_ingame=(ImageUI*)App->gui->CreateUIElement(Type::IMAGE, nullptr, { 0,590,1280,130 }, { 0,590,1280,130 });
 
 
@@ -168,6 +171,40 @@ bool j1Scene::PreUpdate()
 
 			iPoint origin = App->map->WorldToMap((int)x, (int)y);
 			iPoint ending = App->map->GetMousePositionOnMap();
+
+
+			int posX, posY;
+			App->input->GetMousePosition(posX, posY);
+			iPoint p = App->render->ScreenToWorld(posX, posY);
+			p = App->render->ScreenToWorld(posX, posY);
+
+			CivilizationType playerCiv = App->entityManager->getPlayer()->civilization;
+			bool attacking = false;
+
+			for (std::list<Entity*>::iterator it = App->entityManager->entities[EntityType::UNIT].begin(); it != App->entityManager->entities[EntityType::UNIT].end(); it++) 
+			{
+				SDL_Rect collider = it._Ptr->_Myval->getCollisionRect();
+				if (it._Ptr->_Myval->civilization != playerCiv && EntityManager::IsPointInsideQuad(collider, p.x, p.y))
+				{
+					Unit* unt = nullptr;
+					for (std::list<Entity*>::iterator sel = list.begin(); sel != list.end(); sel++)
+					{
+						unt = (Unit*)sel._Ptr->_Myval;
+						unt->enemyTarget = (Unit*)it._Ptr->_Myval;
+						attacking = true;
+					}
+				}
+			}
+
+			if (!attacking) 
+			{
+				Unit* unt = nullptr;
+				for (std::list<Entity*>::iterator sel = list.begin(); sel != list.end(); sel++)
+				{
+					unt = (Unit*)sel._Ptr->_Myval;
+					unt->enemyTarget = nullptr;
+				}
+			}
 
 			if (origin != ending)
 				App->pathfinding->RequestPath(origin, ending, list);
