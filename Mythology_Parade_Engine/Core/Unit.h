@@ -47,7 +47,7 @@ public:
 	bool researched;
 
 public:
-	Unit(UnitType, iPoint, CivilizationType);
+	Unit(UnitType, iPoint);
 	virtual ~Unit();
 
 	void Init(int maxHealth);
@@ -75,6 +75,8 @@ protected:
 	Animation_char currentAnim;
 
 	iPoint targetPosition;
+	iPoint directionToTarget;
+
 	AnimationType state;
 	Unit* enemyTarget;
 

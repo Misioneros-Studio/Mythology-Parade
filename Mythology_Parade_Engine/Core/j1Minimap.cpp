@@ -119,6 +119,32 @@ bool j1Minimap::CreateMinimap() {
 			}
 		}
 	}
+
+	for (std::list<MapLayer*>::iterator it = App->map->data.topLayers.begin(); ret == true && it != App->map->data.topLayers.end(); it++)
+	{
+		MapLayer* layer = it._Ptr->_Myval;
+
+		if (layer->properties.Get("Nodraw") != 0)
+			continue;
+
+		int half_width = map_width * 0.5f;
+
+		for (int y = 0; y < App->map->data.height; ++y)
+		{
+			for (int x = 0; x < App->map->data.width; ++x)
+			{
+				int tile_id = layer->Get(x, y);
+				if (tile_id > 0)
+				{
+					TileSet* tileset = App->map->GetTilesetFromTileId(tile_id);
+
+					SDL_Rect r = tileset->GetTileRect(tile_id);
+					iPoint pos = App->map->MapToWorld(x, y);
+					App->render->Blit(tileset->texture, pos.x + half_width, pos.y, &r, 0.0f, (0.0), 2147483647, 2147483647, scale);
+				}
+			}
+		}
+	}
 	
 	return true;
 }

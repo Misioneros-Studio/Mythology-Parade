@@ -12,7 +12,7 @@ class Unit;
 class Player : public Entity, public CurrencySystem
 {
 public:
-	Player(CivilizationType type);
+	Player();
 	~Player();
 
 	bool Awake();

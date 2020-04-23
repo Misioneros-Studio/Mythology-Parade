@@ -8,6 +8,7 @@
 #include "j1TitleScene.h"
 #include"j1Audio.h"
 #include"j1FadeToBlack.h"
+#include "j1Window.h"
 
 j1TitleScene::j1TitleScene() : j1Module()
 {
@@ -181,6 +182,9 @@ void j1TitleScene::ActivateOptionsMenu() {
 			false, { 0,0,0,0 }, this, (int)UI_Audio::CLOSE);
 		ui_button_options[1] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_options_window, { 570,250,36,36 }, { 16,21,36,36 }, "FULLSCREEN", { 98,21,36,36 },
 			{ 57,21,36,36 }, false, { 0,0,0,0 }, this, (int)UI_Audio::MAIN_MENU);
+		if (App->win->isFullscreen() == true) {
+			ui_button_options[1]->sprite1.y = ui_button_options[1]->sprite2.y = ui_button_options[1]->sprite3.y = 61;
+		}
 		ui_text_options[0] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 619,312,237,38 }, { 0,0,100,100 }, "Close", { 0,0,0,255 });
 		ui_text_options[1] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 583,212,237,38 }, { 0,0,100,100 }, "OPTIONS", { 255,255,255,255 }, { 1,0,0,0 });
 		ui_text_options[2] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 620,260,237,38 }, { 0,0,100,100 }, "FULLSCREEN", { 255,255,255,255 });
@@ -413,6 +417,7 @@ void j1TitleScene::OnClick(UI* element, float argument)
 			close_menus = CloseTitleSceneMenus::Confirmation;
 		}
 		else if (element->name == "FULLSCREEN") {
+			App->win->ToggleFullscreen();
 			if (ui_button_options[1]->sprite1.y == 21) {
 				ui_button_options[1]->sprite1.y = ui_button_options[1]->sprite2.y = ui_button_options[1]->sprite3.y = 61;
 			}

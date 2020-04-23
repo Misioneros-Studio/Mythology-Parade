@@ -1,12 +1,11 @@
 #include "CombatUnit.h"
 #include "p2Log.h"
 
-CombatUnit::CombatUnit(UnitType type, iPoint pos, CivilizationType type_civ) : Unit(type, pos, type_civ), range(0), damage(0)
+CombatUnit::CombatUnit(UnitType type, iPoint pos) : Unit(type, pos), range(0), damage(0)
 {
 	//TODO 10: Change textures
 	unitType = type;
-	position = pos;
-	civilization = type_civ;
+	position = {(float)pos.x, (float)pos.y};
 	switch (unitType)
 	{
 	case UnitType::ASSASSIN:

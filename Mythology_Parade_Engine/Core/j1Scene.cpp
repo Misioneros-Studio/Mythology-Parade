@@ -135,8 +135,7 @@ bool j1Scene::Start()
 	App->audio->PlayMusic("audio/music/Ambient1.ogg", 2.0F, 150);
   
 	//Creating players
-	App->entityManager->CreatePlayerEntity(CivilizationType::VIKING);
-	App->entityManager->CreatePlayerEntity(CivilizationType::GREEK);
+	App->entityManager->CreatePlayerEntity();
 
 
 	research_encampment = research_monastery = research_temple = false;
@@ -151,18 +150,30 @@ bool j1Scene::PreUpdate()
 	if (App->input->GetMouseButtonDown(SDL_BUTTON_RIGHT) == KEY_DOWN)
 	{
 		//TMP: Temporal pathfinding debug
-		Entity* ent = App->entityManager->entities[EntityType::UNIT].begin()._Ptr->_Myval;
-		iPoint origin = App->map->WorldToMap(ent->position.x, ent->position.y);
-		iPoint ending = App->map->GetMousePositionOnMap();
+		std::list<Entity*> list = App->entityManager->getPlayer()->GetEntitiesSelected();
+		
+		if(list.size() > 0)
+		{
+			float n = App->entityManager->getPlayer()->GetEntitiesSelected().size();
+			float x = 0, y = 0;
 
-		if (origin != ending)
-			App->pathfinding->RequestPath(origin, ending);
-	}
-	if (App->pathfinding->pathfinderList[0].pathCompleted)
-	{
-		Unit* ent = (Unit*)App->entityManager->entities[EntityType::UNIT].begin()._Ptr->_Myval;
-		ent->SetPath(*App->pathfinding->pathfinderList.begin()->GetLastPath());
-		App->pathfinding->pathfinderList[0].pathCompleted = false;
+			for (std::list<Entity*>::iterator it = list.begin(); it != list.end(); it++)
+			{
+				x += it._Ptr->_Myval->position.x;
+				y += it._Ptr->_Myval->position.y;
+			}
+
+			x /= n;
+			y /= n;
+
+			iPoint origin = App->map->WorldToMap((int)x, (int)y);
+			iPoint ending = App->map->GetMousePositionOnMap();
+
+			if (origin != ending)
+				App->pathfinding->RequestPath(origin, ending, list);
+
+		}
+
 	}
 
 
@@ -289,17 +300,6 @@ bool j1Scene::Update(float dt)
 	{
 		p = App->map->MapToWorld(p.x, p.y);
 		App->render->Blit(debugBlue_tex, p.x, p.y);
-	}
-
-	for (int i = 0; i < App->pathfinding->pathfinderList.size(); i++)
-	{
-		std::vector<iPoint> path = *App->pathfinding->pathfinderList[i].GetLastPath();
-
-		for (uint i = 0; i < path.size(); ++i)
-		{
-			iPoint pos = App->map->MapToWorld(path.at(i).x, path.at(i).y);
-			App->render->Blit(debugBlue_tex, pos.x, pos.y);
-		}
 	}
 
 	if (App->entityManager->getPlayer() != nullptr) {
@@ -440,6 +440,9 @@ void j1Scene::ActivateOptionsMenu() {
 			{ 787,291,237,38 }, false, { 0,0,0,0 }, this, (int)UI_Audio::CLOSE);
 		ui_button_options[1]= (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_options_window, { 570,250,36,36 }, { 16,21,36,36 }, "FULLSCREEN", { 98,21,36,36 },
 			{ 57,21,36,36 }, false, { 0,0,0,0 }, this, (int)UI_Audio::MAIN_MENU);
+		if (App->win->isFullscreen() == true) {
+			ui_button_options[1]->sprite1.y = ui_button_options[1]->sprite2.y = ui_button_options[1]->sprite3.y = 61;
+		}
 		ui_text_options[0] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 619,312,237,38 }, { 0,0,100,100 }, "Close", { 0,0,0,255 });
 		ui_text_options[1] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 583,212,237,38 }, { 0,0,100,100 }, "OPTIONS", { 255,255,255,255 }, { 1,0,0,0 });
 		ui_text_options[2] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 620,260,237,38 }, { 0,0,100,100 }, "FULLSCREEN", { 255,255,255,255 });
@@ -1392,6 +1395,7 @@ void j1Scene::OnClick(UI* element, float argument)
 			close_menus = CloseSceneMenus::Research;
 		}
 		else if (element->name == "FULLSCREEN") {
+			App->win->ToggleFullscreen();
 			if (ui_button_options[1]->sprite1.y == 21) {
 				ui_button_options[1]->sprite1.y = ui_button_options[1]->sprite2.y = ui_button_options[1]->sprite3.y = 61;
 			}
@@ -1453,16 +1457,19 @@ void j1Scene::OnClick(UI* element, float argument)
 		else if (element->name == "Produce_Victory")
 		{
 			Building* building = (Building*)thing_selected;
+			App->entityManager->getPlayer()->DecreaseFaith(600);  
 			building->StartProducing(App->entityManager->getPlayer()->time_production_victory, "Victory");
 		}
 		else if (element->name == "Produce_Sacrifices")
 		{
 			Building* building = (Building*)thing_selected;
+			App->entityManager->getPlayer()->DecreaseFaith(40);
 			building->StartProducing(App->entityManager->getPlayer()->time_sacrifices, "Sacrifices");
 		}
 		else if (element->name == "Produce_Prayers")
 		{
 			Building* building = (Building*)thing_selected;
+			App->entityManager->getPlayer()->DecreaseFaith(100);
 			building->StartProducing(App->entityManager->getPlayer()->time_prayers, "Prayers");
     }
 		else if (element->name == "Upgrade") {
@@ -1494,9 +1501,9 @@ void j1Scene::DoWinOrLoseWindow(int type, bool win) {
 
 	if (type == 1) {
 		if (win == true) {
-			App->render->Blit(winlose_tex, 230, 100, &sec_win, NULL, 0.0F);
 			App->render->Blit(winlose_tex, 230, 100, &sec_viking, NULL, 0.0F);
-			if (Mix_Playing(3) == 0) {
+			if (Mix_Playing(3) == 0) 
+      {
 				App->audio->PlayFx(3, WinViking_sound);
 			}
 		}
