@@ -10,7 +10,7 @@ Building::Building(BuildingType type, iPoint pos, BuildingInfo info)
 	percentage_constructing = 0;
 	first_time_constructing = true;
 	buildingType = type;
-
+	
 	if (App->entityManager->getPlayer()) 
 	{
 		displayDebug = App->entityManager->getPlayer()->displayDebug;
@@ -106,12 +106,12 @@ void Building::CreateUnit()
 	case FORTRESS:
 		break;
 	case MONASTERY:
-		App->entityManager->CreateUnitEntity(UnitType::MONK, { (int)position.x - 30, (int)position.y });
+		App->entityManager->CreateUnitEntity(UnitType::MONK, { (int)position.x - 30, (int)position.y },civilization);
 		break;
 	case TEMPLE:
 		break;
 	case ENCAMPMENT:
-		App->entityManager->CreateUnitEntity(UnitType::ASSASSIN, { (int)position.x - 20, (int)position.y });
+		App->entityManager->CreateUnitEntity(UnitType::ASSASSIN, { (int)position.x - 20, (int)position.y },civilization);
 		break;
 	}
 }
@@ -269,7 +269,29 @@ void Building::StartProducing(int time, std::string thing_producing) {
 
 void Building::FinishProduction(std::string thing_produced)
 {
+	if (thing_produced == "Victory") 
+	{
+		if (civilization == CivilizationType::VIKING)
+		{
+			App->entityManager->getPlayer()->player_win = true;
+		}
+		else
+		{
+			App->entityManager->getPlayer()->player_lose = true;
+		}
+	}
+	else if(thing_produced == "Sacrifices")
+	{
+		App->entityManager->getPlayer()->sacrifices += 1;
+	}
+	else if(thing_produced == "Prayers")
+	{
+		App->entityManager->getPlayer()->prayers += 1;
+	}
+	else
+	{
 	CreateUnit();
+	}
 }
 
 void Building::StartResearching(int time, std::string thing_producing) {

@@ -105,8 +105,8 @@ public:
 	bool DeleteEntity(Entity*);
 
 	Entity* CreatePlayerEntity();
-	Entity* CreateUnitEntity(UnitType, iPoint);
-	Entity* CreateBuildingEntity(iPoint, BuildingType, BuildingInfo);
+	Entity* CreateUnitEntity(UnitType, iPoint, CivilizationType);
+	Entity* CreateBuildingEntity(iPoint, BuildingType, BuildingInfo, CivilizationType);
 	void UpdateBuildPreview(int);
 	void SetBuildIndex(int);
 

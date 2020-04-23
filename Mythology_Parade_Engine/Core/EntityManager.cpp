@@ -171,23 +171,23 @@ bool EntityManager::Update(float dt)
 		case 0:
 			viking = true;
 		case 4:
-			CreateBuildingEntity(spawnPos, BuildingType::FORTRESS, buildingsData[buildingTestIndex]);
+			CreateBuildingEntity(spawnPos, BuildingType::FORTRESS, buildingsData[buildingTestIndex],CivilizationType::VIKING);
 			break;
 		case 1:
 			viking = true;
 		case 5:
-			CreateBuildingEntity(spawnPos, BuildingType::MONASTERY , buildingsData[buildingTestIndex]);
+			CreateBuildingEntity(spawnPos, BuildingType::MONASTERY , buildingsData[buildingTestIndex],CivilizationType::VIKING);
 			faithToDescrease = 200;
 			break;
 		case 2:
 			viking = true;
 		case 6:
-			CreateBuildingEntity(spawnPos, BuildingType::TEMPLE, buildingsData[buildingTestIndex]);
+			CreateBuildingEntity(spawnPos, BuildingType::TEMPLE, buildingsData[buildingTestIndex], CivilizationType::VIKING);
 			break;
 		case 3:
 			viking = true;
 		case 7:
-			CreateBuildingEntity(spawnPos, BuildingType::ENCAMPMENT, buildingsData[buildingTestIndex]);
+			CreateBuildingEntity(spawnPos, BuildingType::ENCAMPMENT, buildingsData[buildingTestIndex], CivilizationType::VIKING);
 			faithToDescrease = 200;
 			break;
 		}
@@ -369,6 +369,7 @@ Entity* EntityManager::CreatePlayerEntity()
 
 	ret = new Player();
 	ret->type = EntityType::PLAYER;
+	ret->civilization = CivilizationType::VIKING;
 
 	entities[EntityType::PLAYER].push_back(ret);
 	entities[EntityType::PLAYER].begin()._Ptr->_Myval->Start();
@@ -376,7 +377,7 @@ Entity* EntityManager::CreatePlayerEntity()
 	return ret;
 }
 
-Entity* EntityManager::CreateUnitEntity(UnitType type, iPoint pos)
+Entity* EntityManager::CreateUnitEntity(UnitType type, iPoint pos, CivilizationType civilization)
 {
 	Entity* ret = nullptr;
 
@@ -393,6 +394,7 @@ Entity* EntityManager::CreateUnitEntity(UnitType type, iPoint pos)
 		ret = new CombatUnit(UnitType::PIKEMAN, pos);
 		break;
 	}
+	ret->civilization = civilization;
 	ret->type = EntityType::UNIT;
 	ret->texture = animationManager.charData[type].texture;
 
@@ -419,7 +421,7 @@ void EntityManager::DrawEverything()
 	}
 }
 
-Entity* EntityManager::CreateBuildingEntity(iPoint pos, BuildingType type, BuildingInfo info)
+Entity* EntityManager::CreateBuildingEntity(iPoint pos, BuildingType type, BuildingInfo info, CivilizationType civilization)
 {
 	Entity* ret = nullptr;
 	switch (type)
@@ -437,6 +439,7 @@ Entity* EntityManager::CreateBuildingEntity(iPoint pos, BuildingType type, Build
 		ret = new Building(BuildingType::ENCAMPMENT, pos, info);
 		break;
 	}
+	ret->civilization = civilization;
 	ret->type = EntityType::BUILDING;
 	ret->texture = entitySpriteSheets[SpriteSheetType::BUILDINGS];
 
