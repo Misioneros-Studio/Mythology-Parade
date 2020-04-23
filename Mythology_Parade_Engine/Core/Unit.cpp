@@ -3,7 +3,7 @@
 #include "j1Textures.h"
 #include "j1Input.h"
 
-Unit::Unit(UnitType type, iPoint pos): unitType(type), state(AnimationType::IDLE), _isSelected(false), moveSpeed(1)
+Unit::Unit(UnitType type, iPoint pos): unitType(type), state(AnimationType::IDLE), _isSelected(false), moveSpeed(20)
 {
 	
 	if (App->entityManager->getPlayer())
@@ -21,6 +21,7 @@ Unit::Unit(UnitType type, iPoint pos): unitType(type), state(AnimationType::IDLE
 	state = AnimationType::IDLE;
 	flipState = SDL_FLIP_NONE;
 	directionToTarget = {0, 0};
+	normalizedDirection = { 0, 0 };
 	//Init Units
 	switch (type)
 	{
@@ -97,7 +98,7 @@ void Unit::MoveToTarget()
 
 	fPoint cast = { (float)targetIso.x, (float)targetIso.y };
 
-	increment = { directionToTarget.x * speed,  directionToTarget.y * speed };
+	increment = { normalizedDirection.x * speed,  normalizedDirection.y * speed };
 
 	position = position + increment;
 
@@ -153,6 +154,7 @@ bool Unit::Draw(float dt)
 		fTarget += App->map->GetTilesHalfSize();
 
 		directionToTarget = fTarget - rest;
+		normalizedDirection = fPoint::Normalize((fPoint)directionToTarget);
 
 		ChangeState(targetPosition, AnimationType::WALK);
 		entPath.erase(entPath.begin(), entPath.begin() + 1);

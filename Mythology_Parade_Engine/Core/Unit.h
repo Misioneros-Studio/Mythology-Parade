@@ -74,6 +74,7 @@ protected:
 
 	iPoint targetPosition;
 	iPoint directionToTarget;
+	fPoint normalizedDirection;
 
 	AnimationType state;
 	Unit* enemyTarget;
