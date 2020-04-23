@@ -301,7 +301,8 @@ void Unit::StateMachineActions(float dt)
 
 		if (timeToDespawn <= 0) 
 		{
-			App->entityManager->DeleteEntity(this);
+			//App->entityManager->DeleteEntity(this);
+			toDelete = true;
 		}
 
 		break;

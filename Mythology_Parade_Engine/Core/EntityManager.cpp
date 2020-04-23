@@ -115,7 +115,22 @@ bool EntityManager::Update(float dt)
 	{
 		for (std::list<Entity*>::iterator it = entities[(EntityType)i].begin(); it != entities[(EntityType)i].end(); it++)
 		{
-			it._Ptr->_Myval->Update(dt);
+			(*it)->Update(dt);
+		}
+	}
+
+
+	for (std::list<Entity*>::iterator it = entities[EntityType::UNIT].begin(); it != entities[EntityType::UNIT].end(); it++)
+	{
+		if ((*it)->type == EntityType::UNIT) 
+		{
+			Unit* tmp = (Unit*)it._Ptr->_Myval;
+			if (tmp->toDelete) 
+			{
+				entities[EntityType::UNIT].erase(it);
+				delete tmp;
+			}
+
 		}
 	}
   

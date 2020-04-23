@@ -162,5 +162,6 @@ public:
 	int CreateAssasin_sound;
 	int Research_sound;
 
+
 };
 #endif // !_ENTITYMANAGER_H

@@ -46,6 +46,7 @@ public:
 	int time_research;
 	bool researched;
 	Unit* enemyTarget;
+	bool toDelete = false;
 
 public:
 	Unit(UnitType, iPoint);
