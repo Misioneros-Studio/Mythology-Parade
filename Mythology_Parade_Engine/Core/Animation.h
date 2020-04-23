@@ -28,6 +28,7 @@ enum class Direction
 
 struct Sprite
 {
+	Sprite();
 	SDL_Rect rect;
 	SDL_Rect AABB_rect;
 	int frames = 0;
@@ -36,6 +37,7 @@ struct Sprite
 
 struct Animation_char
 {
+	Animation_char();
 	bool loop = true;
 	std::string name;
 	int num_sprites = 0;

@@ -5,7 +5,12 @@
 
 Unit::Unit(UnitType type, iPoint pos): unitType(type), state(AnimationType::IDLE), _isSelected(false), moveSpeed(1)
 {
-	
+	enemyTarget = nullptr;
+	researched = false;
+	time_production = 0;
+	time_research = 0;
+	currentDirection = Direction::UP;
+	flipState = SDL_FLIP_NONE;
 	if (App->entityManager->getPlayer())
 	{
 		displayDebug = App->entityManager->getPlayer()->displayDebug;
@@ -173,7 +178,6 @@ bool Unit::Draw(float dt)
 
 	if (targetPosition != iPoint(-1, -1))
 		MoveToTarget();
-
 
 	int num_current_anim = currentAnim.GetSprite();
 	blitRect = { (int)(currentAnim.sprites[num_current_anim].rect.w / 1.5f), (int)(currentAnim.sprites[num_current_anim].rect.h / 1.5f) };

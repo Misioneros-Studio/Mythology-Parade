@@ -142,3 +142,16 @@ Animation_char Animation::LoadAnimation(pugi::xml_node& obj_group, int row, int 
 
 	return anim;
 }
+
+Sprite::Sprite()
+{
+	AABB_rect = { 0,0,0,0 };
+	rect = { 0,0,0,0 };
+}
+
+Animation_char::Animation_char()
+{
+	
+	name.empty();
+	
+}
