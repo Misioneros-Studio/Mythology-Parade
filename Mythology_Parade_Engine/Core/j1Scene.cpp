@@ -148,50 +148,30 @@ bool j1Scene::PreUpdate()
 	{
 		//TMP: Temporal pathfinding debug
 		std::list<Entity*> list = App->entityManager->getPlayer()->GetEntitiesSelected();
-
-		if (list.size() == 1) 
+		
+		if(list.size() > 0)
 		{
-			Entity* ent = App->entityManager->getPlayer()->GetEntitiesSelected().begin()._Ptr->_Myval;
-
-			iPoint origin = App->map->WorldToMap(ent->position.x, ent->position.y);
-			iPoint ending = App->map->GetMousePositionOnMap();
-
-			if (origin != ending)
-				App->pathfinding->RequestPath(origin, ending, ent);
-		}
-		else if(list.size() >= 2)
-		{
-			center = { 0, 0 };
 			float n = App->entityManager->getPlayer()->GetEntitiesSelected().size();
-
-
 			float x = 0, y = 0;
 
-			int i = 0;
 			for (std::list<Entity*>::iterator it = list.begin(); it != list.end(); it++)
 			{
 				x += it._Ptr->_Myval->position.x;
 				y += it._Ptr->_Myval->position.y;
-				i++;
 			}
-			LOG("%i", i);
-			/*	LOG("%f, %f, %f", x, y, n);*/
+
 			x /= n;
 			y /= n;
-			center = { x, y };
+
+			iPoint origin = App->map->WorldToMap((int)x, (int)y);
+			iPoint ending = App->map->GetMousePositionOnMap();
+
+			if (origin != ending)
+				App->pathfinding->RequestPath(origin, ending, list);
+
 		}
 
 	}
-	//if (App->pathfinding->pathfinderList[0].pathCompleted)
-	//{
-
-	//	for (std::list<Entity*>::iterator it = App->entityManager->getPlayer()->GetEntitiesSelected().begin(); it != App->entityManager->getPlayer()->GetEntitiesSelected().end(); it++)
-	//	{
-	//		Unit* ent = (Unit*)it._Ptr->_Myval;
-	//		ent->SetPath(*App->pathfinding->pathfinderList.begin()->GetLastPath());
-	//	}
-	//		App->pathfinding->pathfinderList[0].pathCompleted = false;
-	//}
 
 
 	// Move Camera if click on the minimap
@@ -305,7 +285,6 @@ bool j1Scene::Update(float dt)
 
 
 	App->map->Draw();
-	App->render->DrawLine(0, 0, center.x, center.y, 0, 255, 0);
 
 
 	//Quad draw

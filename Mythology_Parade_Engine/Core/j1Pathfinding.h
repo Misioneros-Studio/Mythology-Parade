@@ -46,7 +46,7 @@ public:
 	// Utility: return the walkability value of a tile
 	uchar GetTileAt(const iPoint& pos) const;
 
-	void RequestPath(const iPoint& origin, const iPoint& destination, Entity* requestUnit);
+	void RequestPath(const iPoint& origin, const iPoint& destination, std::list<Entity*> requestUnit);
 
 	bool Start() override;
 

@@ -180,8 +180,6 @@ public:
 
 	TextUI* ui_text_ingame[3];
 	CloseSceneMenus close_menus;
-
-	fPoint center;
 };
 
 #endif // __j1SCENE_H__

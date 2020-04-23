@@ -16,7 +16,7 @@ PathFinder::~PathFinder()
 
 
 
-void PathFinder::PreparePath(const iPoint& o, const iPoint& d, Entity* req)
+void PathFinder::PreparePath(const iPoint& o, const iPoint& d, std::list <Entity*> req)
 {
 	// Add the origin tile to open
 	if (open.GetNodeLowestScore() == NULL)
@@ -26,7 +26,7 @@ void PathFinder::PreparePath(const iPoint& o, const iPoint& d, Entity* req)
 
 	origin = o;
 	destination = d;
-	requestUnit = req;
+	requestUnitsList = req;
 
 	int currentDistance = destination.DistanceManhattan(origin);
 
@@ -65,8 +65,12 @@ bool PathFinder::IteratePath()
 		open.list.clear();
 		close.list.clear();
 
-		Unit* unit = (Unit*)requestUnit;
-		unit->SetPath(last_path);
+		for (std::list<Entity*>::iterator it = requestUnitsList.begin(); it != requestUnitsList.end(); ++it)
+		{
+			Unit* unit = (Unit*)it._Ptr->_Myval;
+			unit->SetPath(last_path);
+		}
+		requestUnitsList.clear();
 
 		LOG("Path finished");
 		//requestUnit->SetPath(last_path);
@@ -270,7 +274,7 @@ int PathNode::CalculateF(const iPoint& destination)
 }
 #pragma endregion
 
-PathRequest::PathRequest(iPoint o, iPoint d, Entity* req)
+PathRequest::PathRequest(iPoint o, iPoint d, std::list<Entity*> req)
 {
 	origin = o;
 	destination = d;

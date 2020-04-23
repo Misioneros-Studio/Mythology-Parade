@@ -74,7 +74,7 @@ uchar j1PathFinding::GetTileAt(const iPoint& pos) const
 
 // TODO 3: Remember, now we want to iterate from all PathFinders and check if it's available.
 
-void j1PathFinding::RequestPath(const iPoint& origin, const iPoint& destination, Entity* requestUnit)
+void j1PathFinding::RequestPath(const iPoint& origin, const iPoint& destination, std::list<Entity*> requestUnit)
 {
 	LOG("Requesting a path...");
 	if (!IsWalkable(origin) || !IsWalkable(destination))
