@@ -123,11 +123,14 @@ public:
 	bool Load(const char* path);
 
 	iPoint MapToWorld(int x, int y) const;
+	fPoint MapToWorld(float x, float y) const;
 	iPoint WorldToMap(int x, int y) const;
 
 	iPoint GetMousePositionOnMap();
 	iPoint TileCenterPoint(iPoint);
+
 	iPoint GetTilesHalfSize();
+	fPoint GetTilesHalfSizeFloat();
 
 	SDL_Rect GetMapRect();
 

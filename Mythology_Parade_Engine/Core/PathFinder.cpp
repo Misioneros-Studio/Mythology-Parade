@@ -2,6 +2,7 @@
 #include "p2Log.h"
 #include "j1App.h"
 #include "j1Pathfinding.h"
+#include"Unit.h"
 
 PathFinder::PathFinder() : last_path(DEFAULT_PATH_LENGTH), pathCompleted(false), max_iterations(5), available(true)
 {
@@ -15,7 +16,7 @@ PathFinder::~PathFinder()
 
 
 
-void PathFinder::PreparePath(const iPoint& o, const iPoint& d)
+void PathFinder::PreparePath(const iPoint& o, const iPoint& d, std::list <Entity*> req)
 {
 	// Add the origin tile to open
 	if (open.GetNodeLowestScore() == NULL)
@@ -25,6 +26,7 @@ void PathFinder::PreparePath(const iPoint& o, const iPoint& d)
 
 	origin = o;
 	destination = d;
+	requestUnitsList = req;
 
 	int currentDistance = destination.DistanceManhattan(origin);
 
@@ -62,6 +64,25 @@ bool PathFinder::IteratePath()
 		available = true;
 		open.list.clear();
 		close.list.clear();
+
+		bool walkingToEnemy = false;
+		for (std::list<Entity*>::iterator it = requestUnitsList.begin(); it != requestUnitsList.end(); ++it)
+		{
+			Unit* unit = (Unit*)it._Ptr->_Myval;
+
+			if (!walkingToEnemy && unit->enemyTarget != nullptr) 
+			{
+				last_path.pop_back();
+				walkingToEnemy = true;
+			}
+
+			unit->SetPath(last_path);
+		}
+		requestUnitsList.clear();
+
+		LOG("Path finished");
+		//requestUnit->SetPath(last_path);
+
 		RELEASE(node);
 		return false;
 	}
@@ -261,8 +282,9 @@ int PathNode::CalculateF(const iPoint& destination)
 }
 #pragma endregion
 
-PathRequest::PathRequest(iPoint o, iPoint d)
+PathRequest::PathRequest(iPoint o, iPoint d, std::list<Entity*> req)
 {
 	origin = o;
 	destination = d;
+	requestEntity = req;
 }

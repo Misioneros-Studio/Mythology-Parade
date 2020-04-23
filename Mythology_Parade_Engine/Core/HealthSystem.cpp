@@ -8,7 +8,7 @@ void HealthSystem::Init()
 	health = maxHealth;
 }
 
-void HealthSystem::RecieveDamage(int value)
+bool HealthSystem::RecieveDamage(int value)
 {
 	if (!App->scene->godMode)
 	{
@@ -18,6 +18,7 @@ void HealthSystem::RecieveDamage(int value)
 		if (health <= 0)
 			isDeath = true;
 	}
+	return isDeath;
 }
 int HealthSystem::GetHealth()
 {
