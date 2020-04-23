@@ -82,23 +82,10 @@ bool j1Audio::CleanUp()
 }
 
 // Play a music file
-bool j1Audio::PlayMusic(const char* path, float fade_time, int volume)
+bool j1Audio::PlayMusic(const char* path, float fade_time)
 {
 	bool ret = true;
-	
-	if (volume < 0) {
-		volume = 0;
-	}
-	Mix_VolumeMusic(volume);
 
-	if (volume > 200)
-	{
-		MusicVolume = 200;
-	}
-	else
-	{
-		MusicVolume = volume;
-	}
 	if(!active)
 		return false;
 
@@ -172,7 +159,7 @@ unsigned int j1Audio::LoadFx(const char* path)
 }
 
 // Play WAV
-bool j1Audio::PlayFx(int channel, unsigned int id, int repeat)
+bool j1Audio::PlayFx(unsigned int id, int repeat)
 {
 	bool ret = false;
 
@@ -186,7 +173,7 @@ bool j1Audio::PlayFx(int channel, unsigned int id, int repeat)
 		std::advance(it, id - 1);
 
 		if(it._Ptr->_Myval != fx.end()._Ptr->_Myval)
-			Mix_PlayChannel(channel, it._Ptr->_Myval, repeat);
+			Mix_PlayChannel(-1, it._Ptr->_Myval, repeat);
 	}
 
 	return ret;

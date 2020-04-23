@@ -4,7 +4,6 @@
 #include "j1Module.h"
 #include "j1Timer.h"
 #include "SDL/include/SDL.h"
-#include"p2Point.h"
 
 struct SDL_Rect;
 
@@ -180,9 +179,6 @@ public:
 
 	TextUI* ui_text_ingame[3];
 	CloseSceneMenus close_menus;
-	uint WinViking_sound;
-	uint WinGreek_sound;
-	uint Lose_sound;
 };
 
 #endif // __j1SCENE_H__

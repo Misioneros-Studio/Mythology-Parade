@@ -81,7 +81,7 @@ public:
 	EntityType type;
 
 	SDL_Texture* texture; //Change it to Character_TMX
-	fPoint position;
+	iPoint position;
 
 	//Rect in the spritesheet
 	SDL_Rect spriteRect;

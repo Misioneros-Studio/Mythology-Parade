@@ -74,7 +74,7 @@ uchar j1PathFinding::GetTileAt(const iPoint& pos) const
 
 // TODO 3: Remember, now we want to iterate from all PathFinders and check if it's available.
 
-void j1PathFinding::RequestPath(const iPoint& origin, const iPoint& destination, std::list<Entity*> requestUnit)
+void j1PathFinding::RequestPath(const iPoint& origin, const iPoint& destination)
 {
 	LOG("Requesting a path...");
 	if (!IsWalkable(origin) || !IsWalkable(destination))
@@ -83,7 +83,7 @@ void j1PathFinding::RequestPath(const iPoint& origin, const iPoint& destination,
 		return;
 	}
 
-	pathRequestList.push(PathRequest(origin, destination, requestUnit));
+	pathRequestList.push(PathRequest(origin, destination));
 	LOG("Path added to Path Request List");
 }
 
@@ -112,7 +112,7 @@ bool j1PathFinding::Update(float dt)
 				PathRequest request = pathRequestList.front();
 				pathRequestList.pop();
 
-				pathfinderList[i].PreparePath(request.origin, request.destination, request.requestEntity);
+				pathfinderList[i].PreparePath(request.origin, request.destination);
 				break;
 			}
 		}

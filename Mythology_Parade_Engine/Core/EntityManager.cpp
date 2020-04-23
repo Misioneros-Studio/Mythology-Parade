@@ -48,19 +48,6 @@ bool EntityManager::Awake(pugi::xml_node& a)
 	}
 	active = false;
 
-	//LoadingFX
-	Building_destruction = App->audio->LoadFx("audio/fx/Building_destruction.wav");
-	Building_placed = App->audio->LoadFx("audio/fx/BuildingPlaced.wav");
-	Decrease_Faith = App->audio->LoadFx("audio/fx/Descrease_FAITH.wav");
-	Getting_resources = App->audio->LoadFx("audio/fx/Getting_Resources.wav");
-	hit_1 = App->audio->LoadFx("audio/fx/hit_1.wav");
-	increase_prayers = App->audio->LoadFx("audio/fx/Increase_prayers.wav");
-	increase_sacrifice = App->audio->LoadFx("audio/fx/Increase_sacrifice.wav");
-	Walking_troops = App->audio->LoadFx("audio/fx/Walking_troop.wav");
-	CreateMonk_sound = App->audio->LoadFx("audio/fx/Appear_monk.wav");
-	CreateAssasin_sound = App->audio->LoadFx("audio/fx/Appear_assasin.wav");
-	Research_sound = App->audio->LoadFx("audio/fx/Research_Sound.wav");
-
 	return true;
 }
 
@@ -87,7 +74,7 @@ bool EntityManager::Start()
 
 void EntityManager::LoadBuildingsBlitRect()
 {
-	for (unsigned int i = 0; i < buildingsData.size(); i++)
+	for (int i = 0; i < buildingsData.size(); i++)
 	{
 		BuildingInfo* info = &buildingsData[i];
 		int blitWidth = info->tileLenght * App->map->data.tile_width;
@@ -205,6 +192,17 @@ bool EntityManager::Update(float dt)
 			break;
 		}
 
+		for (int y = mouse.y; y > mouse.y - crPreview.height; y--)
+		{
+			for (int x = mouse.x; x < mouse.x + crPreview.width; x++)
+			{
+
+				if (IN_RANGE(x, 0, App->map->data.width - 1) == 1 && IN_RANGE(y, 0, App->map->data.height - 1) == 1)
+				{
+					App->pathfinding->ChangeMapValue({x, y}, 0);
+				}
+			}
+		}
 		//Onces you build disable building mode
 		App->entityManager->getPlayer()->DecreaseFaith(faithToDescrease);
 		crPreview.active = false;
@@ -233,18 +231,18 @@ bool EntityManager::CleanUp()
 		}
 		entities[(EntityType)i].clear();
 	}
-	for (unsigned int i = 0; i < entitySpriteSheets.size(); i++)
+	for (int i = 0; i < entitySpriteSheets.size(); i++)
 	{
 		if(entitySpriteSheets[(SpriteSheetType)i])
 			App->tex->UnLoad(entitySpriteSheets[(SpriteSheetType)i]);
 	}
 	entities.clear();
 
-	for (unsigned int i = 0; i < animations.size(); i++)
+	for (int i = 0; i < animations.size(); i++)
 	{
-		for (unsigned int k = 0; k < animations[(UnitType)i].size(); k++)
+		for (int k = 0; k < animations[(UnitType)i].size(); k++)
 		{
-			for (unsigned int j = 0; j < animations[(UnitType)i][(AnimationType)k].size(); j++)
+			for (int j = 0; j < animations[(UnitType)i][(AnimationType)k].size(); j++)
 			{
 				animations[(UnitType)i][(AnimationType)k][(Direction)j].Clean();
 			}
@@ -441,24 +439,6 @@ Entity* EntityManager::CreateBuildingEntity(iPoint pos, BuildingType type, Build
 		ret = new Building(BuildingType::ENCAMPMENT, pos, info);
 		break;
 	}
-
-
-	iPoint iso = pos;
-	iso += App->map->GetTilesHalfSize();
-	iso = App->map->WorldToMap(iso.x, iso.y);
-
-	for (int y = iso.y; y > iso.y - info.tileLenght; y--)
-	{
-		for (int x = iso.x; x < iso.x + info.tileLenght; x++)
-		{
-
-			if (IN_RANGE(x, 0, App->map->data.width - 1) == 1 && IN_RANGE(y, 0, App->map->data.height - 1) == 1)
-			{
-				App->pathfinding->ChangeMapValue({ x, y }, 0);
-			}
-		}
-	}
-
 	ret->civilization = civilization;
 	ret->type = EntityType::BUILDING;
 	ret->texture = entitySpriteSheets[SpriteSheetType::BUILDINGS];
@@ -565,8 +545,6 @@ void EntityManager::LoadBuildingsData(pugi::xml_node& node)
 				buildingsData.push_back(info);
 		}
 	}
-
-
 }
 
 iPoint EntityManager::CalculateBuildingSize(int bw, int w, int h)
@@ -574,44 +552,7 @@ iPoint EntityManager::CalculateBuildingSize(int bw, int w, int h)
 	return {bw , (bw * h) / w};
 }
 
-Player* EntityManager::getPlayer() const
+Player* EntityManager::getPlayer()
 {
 	return (Player*)App->entityManager->entities[EntityType::PLAYER].begin()._Ptr->_Myval;
-}
-
-bool EntityManager::IsPointInsideQuad(SDL_Rect rect, int x, int y)
-{
-
-	if (x >= rect.x && x <= rect.x + rect.w && y >= rect.y + rect.h && y <= rect.y)
-		return true;
-
-	return false;
-}
-
-void EntityManager::FxUnits(int channel, int fx, int posx, int posy)
-{
-	Mix_Playing(channel);
-	Mix_HaltChannel(channel);
-
-	int distance = ((posx - App->render->camera.x * App->render->camera.x) + (posy - App->render->camera.y * App->render->camera.y));
-	distance = distance;
-	int volume = (distance * 2000) / App->render->camera.w;
-	if (volume < 0) {
-		volume = 0;
-	}
-	if (volume > 200) {
-		volume = 200;
-	}
-
-	float angle = 90;
-	if (App->render->camera.y == 0) {
-		angle = atan(-App->render->camera.x);
-	}
-	else {
-		angle = atan((-App->render->camera.x) / (App->render->camera.y));
-	}
-	angle = angle * 57 + 360;
-
-	Mix_SetPosition(channel, angle, volume);
-	App->audio->PlayFx(channel, fx, 0);
 }

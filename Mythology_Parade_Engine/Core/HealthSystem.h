@@ -16,7 +16,7 @@ public:
 	void Init();
 
 	//Function to substract health from enemy attack
-	bool RecieveDamage(int value);
+	void RecieveDamage(int value);
 
 	//Getters
 	int GetHealth();

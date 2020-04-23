@@ -38,11 +38,6 @@ public:
 		return(*this);
 	}
 
-	operator p2Point<float>() const 
-	{
-		return {(float)x, (float)y};
-	}
-
 	// Math ------------------------------------------------
 	p2Point operator -(const p2Point &v) const
 	{
@@ -131,18 +126,6 @@ public:
 		TYPE fy = y - v.y;
 
 		return sqrtf((fx*fx) + (fy*fy));
-	}
-
-	static p2Point Normalize(p2Point& vec) 
-	{
-		//Normilize vector
-		p2Point norm;
-		float mag = sqrt((vec.x * vec.x) + (vec.y * vec.y));
-
-		norm.x = vec.x / mag;
-		norm.y = vec.y / mag;
-
-		return norm;
 	}
 
 	TYPE DistanceNoSqrt(const p2Point& v) const

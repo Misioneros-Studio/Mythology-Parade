@@ -2,17 +2,14 @@
 #define __PATHFINDER_H__
 #include "p2Point.h"
 #include <vector>
-#include"Entity.h"
 
 #pragma region Structs
 
-struct PathRequest 
-{
+struct PathRequest {
 	iPoint origin;
 	iPoint destination;
-	std::list <Entity*> requestEntity;
 
-	PathRequest(iPoint, iPoint, std::list <Entity*>);
+	PathRequest(iPoint, iPoint);
 };
 
 struct PathList;
@@ -68,7 +65,7 @@ public:
 	~PathFinder();
 
 	// Main function to request a path from A to B
-	void PreparePath(const iPoint& origin, const iPoint& destination, std::list <Entity*> req);
+	void PreparePath(const iPoint& origin, const iPoint& destination);
 
 
 	// To request all tiles involved in the last generated path
@@ -88,8 +85,6 @@ private:
 
 	iPoint origin;
 	iPoint destination;
-
-	std::list<Entity*> requestUnitsList;
 
 	int max_iterations;
 

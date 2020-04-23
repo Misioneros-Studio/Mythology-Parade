@@ -2,8 +2,8 @@
 
 <config>
   <app>
-    <title>Mythology-Parade</title>
-    <organization>Misioneros-Studio</organization>
+    <title>Game Development Testbed</title>
+    <organization>UPC</organization>
   </app>
 	
   <renderer>

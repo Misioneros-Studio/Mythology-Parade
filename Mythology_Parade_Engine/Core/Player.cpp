@@ -235,7 +235,7 @@ void Player::PlayerInputs()
 		//Display collisions
 		displayDebug = !displayDebug;
 
-		for (unsigned int i = 1; i < App->entityManager->entities.size(); i++)
+		for (int i = 1; i < App->entityManager->entities.size(); i++)
 		{
 			std::list<Entity*>::iterator it = App->entityManager->entities[(EntityType)i].begin();
 
@@ -273,12 +273,8 @@ void Player::ClickLogic()
 			{
 				if (click.y <= it._Ptr->_Myval->getCollisionRect().y && click.y >= it._Ptr->_Myval->getCollisionRect().y + it._Ptr->_Myval->getCollisionRect().h)
 				{
-					if (it._Ptr->_Myval->civilization == civilization) 
-					{
+					if (it._Ptr->_Myval->civilization == civilization)
 						listEntities.push_back(it._Ptr->_Myval);
-						if (preClicked == postClicked)
-							return;
-					}
 				}
 			}
 		}
@@ -305,8 +301,6 @@ void Player::InitVikings()
 {
 	iPoint fortress = { 122,21 };
 	fortress = App->map->MapToWorld(fortress.x, fortress.y);
-	fortress.x -= App->map->GetTilesHalfSize().x;
-
 	App->entityManager->CreateBuildingEntity(fortress, BuildingType::FORTRESS, App->entityManager->buildingsData[0],CivilizationType::VIKING);
 
 	iPoint monkPos = { 119,26 };
@@ -324,8 +318,6 @@ void Player::InitGreek()
 {
 	iPoint fortress = { 102,41 };
 	fortress = App->map->MapToWorld(fortress.x, fortress.y);
-	fortress.x -= App->map->GetTilesHalfSize().x;
-
 	App->entityManager->CreateBuildingEntity(fortress, BuildingType::FORTRESS, App->entityManager->buildingsData[4],CivilizationType::GREEK);
 
 	iPoint monkPos = { 106,34 };

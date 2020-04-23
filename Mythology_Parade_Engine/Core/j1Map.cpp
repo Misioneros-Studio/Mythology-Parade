@@ -149,10 +149,6 @@ iPoint j1Map::GetTilesHalfSize()
 {
 	return { data.tile_width / 2, data.tile_height / 2 };
 }
-fPoint j1Map::GetTilesHalfSizeFloat()
-{
-	return { data.tile_width * 0.5f, data.tile_height * 0.5f};
-}
 
 int j1Map::GetMapMaxLenght()
 {
@@ -196,29 +192,6 @@ SDL_Rect j1Map::GetMapRect()
 iPoint j1Map::MapToWorld(int x, int y) const
 {
 	iPoint ret;
-
-	if (data.type == MAPTYPE_ORTHOGONAL)
-	{
-		ret.x = x * data.tile_width;
-		ret.y = y * data.tile_height;
-	}
-	else if (data.type == MAPTYPE_ISOMETRIC)
-	{
-		ret.x = (x - y) * (data.tile_width * 0.5f);
-		ret.y = (x + y) * (data.tile_height * 0.5f);
-	}
-	else
-	{
-		LOG("Unknown map type");
-		ret.x = x; ret.y = y;
-	}
-
-	return ret;
-}
-
-fPoint j1Map::MapToWorld(float x, float y) const
-{
-	fPoint ret;
 
 	if (data.type == MAPTYPE_ORTHOGONAL)
 	{

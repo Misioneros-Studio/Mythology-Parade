@@ -143,7 +143,7 @@
     <property name="dir" type="int" value="3"/>
     <property name="row" value="5"/>
     <property name="sprites" value="16"/>
-    <property name="type" value="DIE_DOWN"/>
+    <property name="type" value="DIE_DIAG_DOWN"/>
    </properties>
    <animation>
     <frame tileid="85" duration="2"/>
@@ -224,7 +224,7 @@
     <property name="dir" type="int" value="2"/>
     <property name="row" value="8"/>
     <property name="sprites" value="16"/>
-    <property name="type" value="DIE_DIAG_DOWN"/>
+    <property name="type" value="DIE_DOWN"/>
    </properties>
    <animation>
     <frame tileid="136" duration="2"/>
