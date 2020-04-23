@@ -172,17 +172,31 @@ bool j1Scene::PreUpdate()
 			iPoint p = App->render->ScreenToWorld(posX, posY);
 			p = App->render->ScreenToWorld(posX, posY);
 
+			CivilizationType playerCiv = App->entityManager->getPlayer()->civilization;
+			bool attacking = false;
+
 			for (std::list<Entity*>::iterator it = App->entityManager->entities[EntityType::UNIT].begin(); it != App->entityManager->entities[EntityType::UNIT].end(); it++) 
 			{
 				SDL_Rect collider = it._Ptr->_Myval->getCollisionRect();
-				if (it._Ptr->_Myval->civilization != App->entityManager->getPlayer()->civilization && EntityManager::IsPointInsideQuad(collider, p.x, p.y)) 
+				if (it._Ptr->_Myval->civilization != playerCiv && EntityManager::IsPointInsideQuad(collider, p.x, p.y))
 				{
 					Unit* unt = nullptr;
 					for (std::list<Entity*>::iterator sel = list.begin(); sel != list.end(); sel++)
 					{
 						unt = (Unit*)sel._Ptr->_Myval;
 						unt->enemyTarget = (Unit*)it._Ptr->_Myval;
+						attacking = true;
 					}
+				}
+			}
+
+			if (!attacking) 
+			{
+				Unit* unt = nullptr;
+				for (std::list<Entity*>::iterator sel = list.begin(); sel != list.end(); sel++)
+				{
+					unt = (Unit*)sel._Ptr->_Myval;
+					unt->enemyTarget = nullptr;
 				}
 			}
 

@@ -101,7 +101,8 @@ void CombatUnit::Init(int maxHealth, int damage, int range, int speed)
 
 bool CombatUnit::Update(float dt) 
 {
-	//Unit::Update(dt);
+	Unit::Update(dt);
+
 	return true;
 }
 

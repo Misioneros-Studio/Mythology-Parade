@@ -65,9 +65,17 @@ bool PathFinder::IteratePath()
 		open.list.clear();
 		close.list.clear();
 
+		bool walkingToEnemy = false;
 		for (std::list<Entity*>::iterator it = requestUnitsList.begin(); it != requestUnitsList.end(); ++it)
 		{
 			Unit* unit = (Unit*)it._Ptr->_Myval;
+
+			if (!walkingToEnemy && unit->enemyTarget != nullptr) 
+			{
+				last_path.pop_back();
+				walkingToEnemy = true;
+			}
+
 			unit->SetPath(last_path);
 		}
 		requestUnitsList.clear();

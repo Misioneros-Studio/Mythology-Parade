@@ -117,7 +117,7 @@ public:
 
 	void LoadBuildingsBlitRect();
 
-	Player* getPlayer();
+	Player* getPlayer() const;
 
 	static bool IsPointInsideQuad(SDL_Rect rect, int x, int y);
 

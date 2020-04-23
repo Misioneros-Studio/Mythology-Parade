@@ -2,8 +2,9 @@
 #include "p2Log.h"
 #include "j1Textures.h"
 #include "j1Input.h"
+#include"CombatUnit.h"
 
-Unit::Unit(UnitType type, iPoint pos): unitType(type), state(AnimationType::IDLE), _isSelected(false), moveSpeed(20)
+Unit::Unit(UnitType type, iPoint pos): unitType(type), state(AnimationType::IDLE), _isSelected(false), moveSpeed(60)
 {
 	
 	if (App->entityManager->getPlayer())
@@ -22,6 +23,9 @@ Unit::Unit(UnitType type, iPoint pos): unitType(type), state(AnimationType::IDLE
 	flipState = SDL_FLIP_NONE;
 	directionToTarget = {0, 0};
 	normalizedDirection = { 0, 0 };
+
+	timeToDespawn = 1.f;
+
 	//Init Units
 	switch (type)
 	{
@@ -60,6 +64,7 @@ bool Unit::Update(float dt)
 	bool ret = true;
 
 	//Allawys blit the sprite at the end
+	StateMachineActions(dt);
 	//ret = Draw(dt);
 
 	//Return
@@ -109,7 +114,16 @@ void Unit::MoveToTarget()
 		targetPosition.ResetAsPosition();
 		if (entPath.size() <= 0)
 		{
-			ChangeState(targetPosition, AnimationType::IDLE);
+			if (enemyTarget != nullptr && unitType != UnitType::MONK) 
+			{
+				ChangeState(App->map->WorldToMap(enemyTarget->position.x, enemyTarget->position.y), AnimationType::ATTACK);
+			}
+			else
+			{
+				ChangeState(targetPosition, AnimationType::IDLE);
+			}
+
+
 		}
 	}
 	
@@ -126,7 +140,7 @@ void Unit::Init(int maxHealth)
 
 void Unit::ChangeState(iPoint isoLookPosition, AnimationType newState)
 {
-	if (targetPosition == iPoint(-1, -1) && entPath.size() == 0)
+	if (isoLookPosition == iPoint(-1, -1) && entPath.size() == 0)
 	{
 		currentAnim = App->entityManager->animations[unitType][AnimationType::IDLE][currentDirection];
 	}
@@ -136,6 +150,7 @@ void Unit::ChangeState(iPoint isoLookPosition, AnimationType newState)
 		if (App->entityManager->animations[unitType][newState][currentDirection].name != currentAnim.name)
 			currentAnim = App->entityManager->animations[unitType][newState][currentDirection];
 	}
+	state = newState;
 }
 
 bool Unit::Draw(float dt)
@@ -169,6 +184,7 @@ bool Unit::Draw(float dt)
 	collisionRect.y = position.y;
 
 	App->render->Blit(texture, position.x - blitRect.x / 2, position.y - blitRect.y, blitRect, &currentAnim.sprites[num_current_anim].rect, 1.f, flipState);
+	App->render->DrawQuad({(int)position.x, (int)position.y, 2, 2}, 0, 255, 0);
 
 	if (displayDebug) 
 	{
@@ -247,4 +263,52 @@ void Unit::SetPath(const std::vector<iPoint> s_path)
 {
 	entPath = s_path;
 }
+
+void Unit::Kill(iPoint direction)
+{
+	ChangeState(direction, AnimationType::DIE);
+}
+
+void Unit::StateMachineActions(float dt)
+{
+	//LOG("%i", state);
+	switch (state)
+	{
+	case AnimationType::ATTACK:
+		if (currentAnim.current_sprite == currentAnim.num_sprites - 1)
+		{
+			CombatUnit* unit = (CombatUnit*)this;
+			if (enemyTarget->RecieveDamage(unit->GetDamageValue()))
+			{
+				enemyTarget->Kill(App->map->WorldToMap(position.x, position.y));
+				enemyTarget = nullptr;
+				ChangeState(targetPosition, AnimationType::IDLE);
+			}
+		}
+
+		break;
+	case AnimationType::DIE:
+
+		timeToDespawn -= dt;
+
+		if (timeToDespawn <= 0) 
+		{
+			App->entityManager->DeleteEntity(this);
+		}
+
+		break;
+	case AnimationType::HIT:
+		break;
+	case AnimationType::IDLE:
+		break;
+	case AnimationType::WALK:
+		break;
+	default:
+		break;
+	}
+
+
+}
+
+
 

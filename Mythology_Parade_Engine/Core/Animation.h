@@ -56,22 +56,26 @@ public:
 
 	int GetSprite()
 	{
-		if (sprites[current_sprite].current_frame != sprites[current_sprite].frames)
+		if (!finished) 
 		{
-			sprites[current_sprite].current_frame = sprites[current_sprite].current_frame + 1;
-		}
-		else {
-			sprites[current_sprite].current_frame = 0;
-			current_sprite++;
-		}
-		if (loop) {
-			if (current_sprite == num_sprites) {
-				current_sprite = 0;
+			if (sprites[current_sprite].current_frame != sprites[current_sprite].frames)
+			{
+				sprites[current_sprite].current_frame = sprites[current_sprite].current_frame + 1;
 			}
-		}
-		else if (current_sprite == num_sprites) {
-			current_sprite = num_sprites;
-			finished = true;
+			else {
+				sprites[current_sprite].current_frame = 0;
+				current_sprite++;
+			}
+			if (loop) {
+				if (current_sprite == num_sprites) {
+					current_sprite = 0;
+				}
+			}
+			else if (current_sprite == num_sprites - 1)
+			{
+				current_sprite = num_sprites - 1;
+				finished = true;
+			}
 		}
 		return current_sprite;
 	}

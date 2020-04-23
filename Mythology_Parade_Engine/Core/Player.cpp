@@ -305,6 +305,8 @@ void Player::InitVikings()
 {
 	iPoint fortress = { 122,21 };
 	fortress = App->map->MapToWorld(fortress.x, fortress.y);
+	fortress.x -= App->map->GetTilesHalfSize().x;
+
 	App->entityManager->CreateBuildingEntity(fortress, BuildingType::FORTRESS, App->entityManager->buildingsData[0],CivilizationType::VIKING);
 
 	iPoint monkPos = { 119,26 };
@@ -322,6 +324,8 @@ void Player::InitGreek()
 {
 	iPoint fortress = { 102,41 };
 	fortress = App->map->MapToWorld(fortress.x, fortress.y);
+	fortress.x -= App->map->GetTilesHalfSize().x;
+
 	App->entityManager->CreateBuildingEntity(fortress, BuildingType::FORTRESS, App->entityManager->buildingsData[4],CivilizationType::GREEK);
 
 	iPoint monkPos = { 106,34 };

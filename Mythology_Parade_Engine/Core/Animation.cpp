@@ -70,6 +70,11 @@ std::unordered_map<AnimationType, std::unordered_map<Direction, Animation_char>>
 			}
 			animations[type][dir] = LoadAnimation(group, row, sprite_num, name, &charData[s_type]);
 
+			if (type == AnimationType::DIE || type == AnimationType::HIT) 
+			{
+				animations[type][dir].loop = false;
+			}
+
 			group = group.next_sibling("tile");
 		}
 	}
@@ -138,6 +143,7 @@ Animation_char Animation::LoadAnimation(pugi::xml_node& obj_group, int row, int 
 		rect_x += cData->tile_width;
 		i++;
 	}
+
 	anim.loop = true;
 
 	return anim;
