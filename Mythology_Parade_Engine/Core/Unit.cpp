@@ -96,11 +96,9 @@ void Unit::MoveToTarget()
   
 	state = AnimationType::WALK;
 	if (Mix_Playing(3) == 0) 
-  {
+	{
 		App->entityManager->FxUnits(3, App->entityManager->Walking_troops, position.x, position.y);
 	}
-	
-	iPoint currentIso = position + increment;
 
 	iPoint targetIso = App->map->MapToWorld(targetPosition.x, targetPosition.y);
 	targetIso += App->map->GetTilesHalfSize();
