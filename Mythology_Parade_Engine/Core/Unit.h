@@ -45,6 +45,7 @@ public:
 	int time_production;
 	int time_research;
 	bool researched;
+	Unit* enemyTarget;
 
 public:
 	Unit(UnitType, iPoint);
@@ -77,7 +78,6 @@ protected:
 	fPoint normalizedDirection;
 
 	AnimationType state;
-	Unit* enemyTarget;
 
 	std::vector<iPoint> entPath;
 	//void SetTarget();

@@ -166,6 +166,26 @@ bool j1Scene::PreUpdate()
 			iPoint origin = App->map->WorldToMap((int)x, (int)y);
 			iPoint ending = App->map->GetMousePositionOnMap();
 
+
+			int posX, posY;
+			App->input->GetMousePosition(posX, posY);
+			iPoint p = App->render->ScreenToWorld(posX, posY);
+			p = App->render->ScreenToWorld(posX, posY);
+
+			for (std::list<Entity*>::iterator it = App->entityManager->entities[EntityType::UNIT].begin(); it != App->entityManager->entities[EntityType::UNIT].end(); it++) 
+			{
+				SDL_Rect collider = it._Ptr->_Myval->getCollisionRect();
+				if (it._Ptr->_Myval->civilization != App->entityManager->getPlayer()->civilization && EntityManager::IsPointInsideQuad(collider, p.x, p.y)) 
+				{
+					Unit* unt = nullptr;
+					for (std::list<Entity*>::iterator sel = list.begin(); sel != list.end(); sel++)
+					{
+						unt = (Unit*)sel._Ptr->_Myval;
+						unt->enemyTarget = (Unit*)it._Ptr->_Myval;
+					}
+				}
+			}
+
 			if (origin != ending)
 				App->pathfinding->RequestPath(origin, ending, list);
 

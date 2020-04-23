@@ -556,3 +556,12 @@ Player* EntityManager::getPlayer()
 {
 	return (Player*)App->entityManager->entities[EntityType::PLAYER].begin()._Ptr->_Myval;
 }
+
+bool EntityManager::IsPointInsideQuad(SDL_Rect rect, int x, int y)
+{
+
+	if (x >= rect.x && x <= rect.x + rect.w && y >= rect.y && y <= rect.y + rect.h)
+		return true;
+
+	return false;
+}

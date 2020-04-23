@@ -273,8 +273,12 @@ void Player::ClickLogic()
 			{
 				if (click.y <= it._Ptr->_Myval->getCollisionRect().y && click.y >= it._Ptr->_Myval->getCollisionRect().y + it._Ptr->_Myval->getCollisionRect().h)
 				{
-					if (it._Ptr->_Myval->civilization == civilization)
+					if (it._Ptr->_Myval->civilization == civilization) 
+					{
 						listEntities.push_back(it._Ptr->_Myval);
+						if (preClicked == postClicked)
+							return;
+					}
 				}
 			}
 		}

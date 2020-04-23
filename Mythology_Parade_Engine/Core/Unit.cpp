@@ -80,9 +80,6 @@ void Unit::MoveToTarget()
 {
 	//if (!isSelected())
 	//	return;
-
-	fPoint increment = { 0, 0 };
-
 	float speed = moveSpeed * App->GetDT();
 
 	//Fast fix for ft increasing bug
@@ -98,7 +95,7 @@ void Unit::MoveToTarget()
 
 	fPoint cast = { (float)targetIso.x, (float)targetIso.y };
 
-	increment = { normalizedDirection.x * speed,  normalizedDirection.y * speed };
+	fPoint increment = { normalizedDirection.x * speed,  normalizedDirection.y * speed };
 
 	position = position + increment;
 

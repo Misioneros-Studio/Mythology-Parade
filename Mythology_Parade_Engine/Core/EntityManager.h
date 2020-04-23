@@ -119,6 +119,8 @@ public:
 
 	Player* getPlayer();
 
+	static bool IsPointInsideQuad(SDL_Rect rect, int x, int y);
+
 public:
 
 	std::unordered_map<EntityType, std::list<Entity*>> entities;
