@@ -96,7 +96,7 @@ void Unit::MoveToTarget()
 	iPoint targetIso = App->map->MapToWorld(targetPosition.x, targetPosition.y);
 	targetIso += App->map->GetTilesHalfSize();
 
-	App->render->DrawLine(position.x, position.y, targetIso.x, targetIso.y, 255, 0, 0);
+	//App->render->DrawLine(position.x, position.y, targetIso.x, targetIso.y, 255, 0, 0);
 
 	fPoint cast = { (float)targetIso.x, (float)targetIso.y };
 
@@ -184,7 +184,8 @@ bool Unit::Draw(float dt)
 	collisionRect.y = position.y;
 
 	App->render->Blit(texture, position.x - blitRect.x / 2, position.y - blitRect.y, blitRect, &currentAnim.sprites[num_current_anim].rect, 1.f, flipState);
-	App->render->DrawQuad({(int)position.x, (int)position.y, 2, 2}, 0, 255, 0);
+
+	//App->render->DrawQuad({(int)position.x, (int)position.y, 2, 2}, 0, 255, 0);
 
 	if (displayDebug) 
 	{

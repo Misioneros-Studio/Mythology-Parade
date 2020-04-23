@@ -61,6 +61,9 @@ bool j1Scene::Start()
 		RELEASE_ARRAY(data);
 	}
 
+	App->render->camera.x = -2683;
+	App->render->camera.y = -2000;
+
 	ui_ingame=(ImageUI*)App->gui->CreateUIElement(Type::IMAGE, nullptr, { 0,590,1280,130 }, { 0,590,1280,130 });
 
 
