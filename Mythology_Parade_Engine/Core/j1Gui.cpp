@@ -103,9 +103,7 @@ bool j1Gui::PostUpdate()
 	}
 
 	iPoint rect_position = App->minimap->WorldToMinimap(-App->render->camera.x, -App->render->camera.y);
-	if(App->minimap->active==true)
-		App->render->DrawQuad({ rect_position.x, rect_position.y, (int)(App->render->camera.w * App->minimap->scale),(int)(App->render->camera.h * App->minimap->scale) }, 255, 255, 255, 255, 
-			false, false);
+	App->render->DrawQuad({ rect_position.x, rect_position.y, (int)(App->render->camera.w * App->minimap->scale),(int)(App->render->camera.h * App->minimap->scale) }, 255, 255, 255, 255, false, false);
 
 
 	//Show cursor ------------------------------
@@ -780,7 +778,7 @@ bool ButtonUI::PreUpdate() {
 	else pushed = false;
 	if (pushed && !App->gui->lockClick && !isLocked)
 	{
-		App->audio->PlayFx(1,click_sfx);
+		App->audio->PlayFx(click_sfx);
 		//Button clicked
 		if (listener)
 		{
