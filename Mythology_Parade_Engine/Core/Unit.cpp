@@ -90,6 +90,15 @@ void Unit::MoveToTarget()
 		speed = 0.f;
 	}
 
+  
+	state = AnimationType::WALK;
+	if (Mix_Playing(3) == 0) 
+  {
+		App->entityManager->FxUnits(3, App->entityManager->Walking_troops, position.x, position.y);
+	}
+	
+	iPoint currentIso = position + increment;
+
 	iPoint targetIso = App->map->MapToWorld(targetPosition.x, targetPosition.y);
 	targetIso += App->map->GetTilesHalfSize();
 
@@ -248,4 +257,5 @@ void Unit::SetPath(const std::vector<iPoint> s_path)
 {
 	entPath = s_path;
 }
+
 

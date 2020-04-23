@@ -107,11 +107,20 @@ void Building::CreateUnit()
 		break;
 	case MONASTERY:
 		App->entityManager->CreateUnitEntity(UnitType::MONK, { (int)position.x - 30, (int)position.y },civilization);
+		if (Mix_Playing(4) == 0) 
+    {
+			App->entityManager->FxUnits(6, App->entityManager->CreateMonk_sound, position.x, position.y);
+		}
 		break;
 	case TEMPLE:
 		break;
 	case ENCAMPMENT:
 		App->entityManager->CreateUnitEntity(UnitType::ASSASSIN, { (int)position.x - 20, (int)position.y },civilization);
+		if(Mix_Playing(4) == 0)
+    {
+			App->entityManager->FxUnits(7, App->entityManager->CreateAssasin_sound, position.x, position.y);
+		}
+
 		break;
 	}
 }
@@ -134,6 +143,7 @@ bool Building::Update(float dt)
 			buildingStatus = FINISHED;
 			percentage_constructing = 1;
 			first_time_constructing = false;
+
 		}
 		else
 		{
@@ -265,6 +275,7 @@ void Building::StartProducing(int time, std::string thing_producing) {
 	time_producing = time;
 	element_producing = thing_producing;
 	timer_construction.Start();
+	
 }
 
 void Building::FinishProduction(std::string thing_produced)

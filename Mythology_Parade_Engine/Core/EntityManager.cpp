@@ -48,6 +48,19 @@ bool EntityManager::Awake(pugi::xml_node& a)
 	}
 	active = false;
 
+	//LoadingFX
+	Building_destruction = App->audio->LoadFx("audio/fx/Building_destruction.wav");
+	Building_placed = App->audio->LoadFx("audio/fx/BuildingPlaced.wav");
+	Decrease_Faith = App->audio->LoadFx("audio/fx/Descrease_FAITH.wav");
+	Getting_resources = App->audio->LoadFx("audio/fx/Getting_Resources.wav");
+	hit_1 = App->audio->LoadFx("audio/fx/hit_1.wav");
+	increase_prayers = App->audio->LoadFx("audio/fx/Increase_prayers.wav");
+	increase_sacrifice = App->audio->LoadFx("audio/fx/Increase_sacrifice.wav");
+	Walking_troops = App->audio->LoadFx("audio/fx/Walking_troop.wav");
+	CreateMonk_sound = App->audio->LoadFx("audio/fx/Appear_monk.wav");
+	CreateAssasin_sound = App->audio->LoadFx("audio/fx/Appear_assasin.wav");
+	Research_sound = App->audio->LoadFx("audio/fx/Research_Sound.wav");
+
 	return true;
 }
 
@@ -555,4 +568,30 @@ iPoint EntityManager::CalculateBuildingSize(int bw, int w, int h)
 Player* EntityManager::getPlayer() 
 {
 	return (Player*)App->entityManager->entities[EntityType::PLAYER].begin()._Ptr->_Myval;
+}
+void EntityManager::FxUnits(int channel, int fx, int posx, int posy) {
+	Mix_Playing(channel);
+	Mix_HaltChannel(channel);
+
+	int distance = ((posx - App->render->camera.x * App->render->camera.x) + (posy - App->render->camera.y * App->render->camera.y));
+	distance = distance;
+	int volume = (distance * 2000) / App->render->camera.w;
+	if (volume < 0) {
+		volume = 0;
+	} 
+	if (volume > 200) {
+		volume = 200; 
+	}
+
+	float angle = 90;
+	if (App->render->camera.y == 0) {
+		angle = atan(-App->render->camera.x);
+	}
+	else {
+		angle = atan((-App->render->camera.x) / (App->render->camera.y));
+	}
+	angle = angle * 57 + 360;
+
+	Mix_SetPosition(channel, angle, volume);
+	App->audio->PlayFx(channel, fx, 0);
 }
