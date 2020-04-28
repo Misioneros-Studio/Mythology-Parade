@@ -14,6 +14,14 @@
 j1Gui::j1Gui() : j1Module()
 {
 	name.append("gui");
+	atlas_file_name_num_0 = "";
+	atlas_file_name_num_1 = "";
+	UIs.clear();
+	atlas_num_0 = nullptr;
+	atlas_num_1 = nullptr;
+	cursor_tex = nullptr;
+	lockClick = false;
+	LOG("%s", atlas_file_name_num_0.c_str());
 }
 
 // Destructor

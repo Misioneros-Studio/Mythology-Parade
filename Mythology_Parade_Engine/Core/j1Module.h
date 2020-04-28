@@ -16,7 +16,9 @@ class j1Module
 public:
 
 	j1Module() : active(false)
-	{}
+	{
+		int hola = 0;
+	}
 
 	virtual ~j1Module()
 	{}

@@ -22,6 +22,15 @@
 j1Scene::j1Scene() : j1Module()
 {
 	name.append("scene");
+	ui_research_window = nullptr;
+	winlose_tex = nullptr;
+	
+	ui_winlose_window = nullptr;
+	for (uint i = 0; i < 4; i++)
+	{
+		ui_text_winlose[i] = nullptr;
+	}
+
 }
 
 // Destructor
@@ -1539,6 +1548,7 @@ void j1Scene::DoWinOrLoseWindow(int type, bool win) {
 	if (type == 1) {
 		if (win == true) {
 			App->render->Blit(winlose_tex, 230, 100, &sec_viking, NULL, 0.0F);
+			App->render->Blit(winlose_tex, 230, 100, &sec_win, NULL, 0.0F);
 			if (Mix_Playing(3) == 0) 
       {
 				App->audio->PlayFx(3, WinViking_sound);

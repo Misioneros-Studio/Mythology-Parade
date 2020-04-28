@@ -207,6 +207,9 @@
     <ClInclude Include="j1FadeToBlack.h">
       <Filter>Core\Modules</Filter>
     </ClInclude>
+    <ClInclude Include="MemLeaks.h">
+      <Filter>Core\Tools</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Tools">

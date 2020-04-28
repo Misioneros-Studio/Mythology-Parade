@@ -23,9 +23,8 @@ Unit::Unit(UnitType type, iPoint pos): unitType(type), state(AnimationType::IDLE
 	flipState = SDL_FLIP_NONE;
 	directionToTarget = {0, 0};
 	normalizedDirection = { 0, 0 };
-
 	timeToDespawn = 1.f;
-
+	currentDirection = Direction::UP;
 	//Init Units
 	switch (type)
 	{
