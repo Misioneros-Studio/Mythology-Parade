@@ -33,14 +33,15 @@ public:
 	
 	which_fade actual_change = unknown;
 
-	bool FadeToBlack(which_fade fade, float time = 2.0f);
+	std::string actual_civilization;
+
+	bool FadeToBlack(which_fade fade, float time = 2.0f, std::string civilization = "");
 
 private:
 
 	j1Module* module_on = nullptr;
 	j1Module* module_off = nullptr;
 	bool changing_to_scene = false;
-
 
 
 	Uint32 start_time = 0;
