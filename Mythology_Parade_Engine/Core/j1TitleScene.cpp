@@ -29,16 +29,6 @@ bool j1TitleScene::Awake(pugi::xml_node& config)
 
 	active = false;
 
-	for (int i = 0; i < 4; i++) {
-		if (i != 3) {
-			ui_button_civilization[i] = nullptr;
-		}
-		ui_text_civilization[i] = nullptr;
-	}
-	ui_civilization_window = nullptr;
-
-
-
 	return ret;
 }
 
@@ -85,14 +75,6 @@ bool j1TitleScene::Start()
 	close_menus = CloseTitleSceneMenus::None;
 
 
-	for (int i = 0; i < 4; i++) {
-		if (i != 3) {
-			ui_button_civilization[i] = nullptr;
-		}
-		ui_text_civilization[i] = nullptr;
-	}
-	ui_civilization_window = nullptr;
-
 
 
 	title_assets_tex = App->tex->Load("gui/TitleAssets.png");
@@ -129,10 +111,6 @@ bool j1TitleScene::Update(float dt)
 		DeactivateConfirmationMenu();
 		close_menus = CloseTitleSceneMenus::None;
 		break;
-	case CloseTitleSceneMenus::Civilization:
-		DeactivateCivilizationMenu();
-		close_menus = CloseTitleSceneMenus::None;
-		break;
 	}
 	SDL_Rect sec2 = { 0, 0, App->render->camera.w, App->render->camera.h };
 	App->render->Blit(title_assets_tex, 0, 0, &sec2, 0.f);
@@ -153,7 +131,6 @@ bool j1TitleScene::PostUpdate()
 bool j1TitleScene::CleanUp()
 {
 	LOG("Freeing title scene");
-	DeactivateCivilizationMenu();
 	DeactivateCredits();
 	DeactivateOptionsMenu();
 	DeactivateTutorial();
@@ -245,53 +222,6 @@ void j1TitleScene::DeactivateOptionsMenu() {
 	
 }
 
-
-// Called when clicking new game button in menu
-void j1TitleScene::ActivatCivilizationMenu() {
-	if (ui_civilization_window == nullptr) {
-		ui_civilization_window = (WindowUI*)App->gui->CreateUIElement(Type::WINDOW, nullptr, { 410,200,459,168 }, { 790,408,459,168 });
-		ui_button_civilization[0] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_civilization_window, { 520,300,237,38 }, { 787,240,237,38 }, "CLOSE CIVILIZATION", { 787,342,237,38 },
-			{ 787,291,237,38 },	false, { 0,0,0,0 }, this, (int)UI_Audio::CLOSE);
-		ui_button_civilization[1] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_civilization_window, { 450,250,117,38 }, { 834,125,117,24 }, "GREEK", { 834,149,117,24 },
-			{ 834,101,117,24 }, false, { 0,0,0,0 }, this, (int)UI_Audio::MAIN_MENU);
-		ui_button_civilization[2] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_civilization_window, { 710,250,117,38 }, { 834,125,117,24 }, "VIKING", { 834,149,117,24 },
-			{ 834,101,117,24 }, false, { 0,0,0,0 }, this, (int)UI_Audio::MAIN_MENU);
-		ui_text_civilization[0] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 619,312,237,38 }, { 0,0,100,100 }, "Close", { 0,0,0,255 });
-		ui_text_civilization[1] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 463,212,237,38 }, { 0,0,100,100 }, "CHOOSE YOUR CIVILIZATION", { 255,255,255,255 }, { 1,0,0,0 });
-		ui_text_civilization[2] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 470,256,237,38 }, { 0,0,100,100 }, "Greek", { 0,0,0,255 }, { 1,0,0,0 });
-		ui_text_civilization[3] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 725,256,237,38 }, { 0,0,100,100 }, "Viking", { 0,0,0,255 }, { 1,0,0,0 });
-	}
-	for (int i = 0; i < 5; i++) {
-		if (ui_button[i] != nullptr) {
-			ui_button[i]->front = false;
-		}
-	}
-}
-
-// Called when clicking close button in civilization menu or after picking a civilization
-void j1TitleScene::DeactivateCivilizationMenu() {
-	if (ui_civilization_window != nullptr) {
-		App->gui->DeleteUIElement(ui_civilization_window);
-		ui_civilization_window = nullptr;
-		for (int i = 2; i >= 0; i--) {
-			if (ui_button_civilization[i] != nullptr) {
-				App->gui->DeleteUIElement(ui_button_civilization[i]);
-				ui_button_civilization[i] = nullptr;
-			}
-		}
-		for (int i = 3; i >= 0; i--) {
-			if (ui_text_civilization[i] != nullptr) {
-				App->gui->DeleteUIElement(ui_text_civilization[i]);
-				ui_text_civilization[i] = nullptr;
-			}
-		}
-	}
-	for (int i = 0; i < 5; i++) {
-		if (ui_button[i] != nullptr) {
-			ui_button[i]->front = true;
-		}
-	}
-}
 
 // Called when clicking options button in pause menu
 void j1TitleScene::ActivateTutorial() {
@@ -433,11 +363,8 @@ void j1TitleScene::OnClick(UI* element, float argument)
 
 		if (element->name == "NEW")
 		{
-			ActivatCivilizationMenu();
-		}
-		else if (element->name == "CLOSE CIVILIZATION")
-		{
-			close_menus = CloseTitleSceneMenus::Civilization;
+			App->fade_to_black->FadeToBlack(which_fade::title_to_scene, 2);
+			destroy = true;
 		}
 		else if (element->name == "LOAD")
 		{
@@ -488,16 +415,6 @@ void j1TitleScene::OnClick(UI* element, float argument)
 				exitGame = true;
 			}
 			close_menus = CloseTitleSceneMenus::Confirmation;
-		}
-		else if (element->name == "GREEK")
-		{
-			App->fade_to_black->FadeToBlack(which_fade::title_to_scene, 2, "greek");
-			destroy = true;
-		}
-		else if (element->name == "VIKING")
-		{
-			App->fade_to_black->FadeToBlack(which_fade::title_to_scene, 2, "viking");
-			destroy = true;
 		}
 		else if (element->name == "FULLSCREEN") {
 			App->win->ToggleFullscreen();
