@@ -6,6 +6,9 @@
 
 #pragma region Structs
 
+#define MOVE_DIAGONAL_COST 14
+#define MOVE_STRAIGHT_COST 10
+
 struct PathRequest 
 {
 	iPoint origin;
@@ -18,21 +21,20 @@ struct PathRequest
 struct PathList;
 struct PathNode
 {
-	// Convenient constructors
-	PathNode();
+	PathNode(iPoint);
 	PathNode(int g, int h, const iPoint& pos, const PathNode* parent);
-	PathNode(const PathNode& node);
 
 	// Fills a list (PathList) of all valid adjacent pathnodes
 	uint FindWalkableAdjacents(PathList& list_to_fill) const;
-	// Calculates this tile score
-	int Score() const;
+
 	// Calculate the F for a specific destination tile
-	int CalculateF(const iPoint& destination);
+	void CalculateFCost();
 
 	// -----------
-	int g;
-	int h;
+	int gCost;
+	int hCost;
+	int fCost;
+
 	iPoint pos;
 	const PathNode* parent; // needed to reconstruct the path in the end
 };
@@ -90,6 +92,8 @@ private:
 	iPoint destination;
 
 	std::list<Entity*> requestUnitsList;
+
+	int CalculateDistanceCost(const iPoint& a,const iPoint& b);
 
 	int max_iterations;
 

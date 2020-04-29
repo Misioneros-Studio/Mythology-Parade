@@ -18,9 +18,14 @@ PathFinder::~PathFinder()
 
 void PathFinder::PreparePath(const iPoint& o, const iPoint& d, std::list <Entity*> req)
 {
+	PathNode startNode(o);
+	startNode.gCost = 0;
+	startNode.hCost = CalculateDistanceCost(o, d);
+	startNode.CalculateFCost();
+
 	// Add the origin tile to open
 	if (open.GetNodeLowestScore() == NULL)
-		open.list.push_back(PathNode(0, o.DistanceTo(destination), o, nullptr));
+		open.list.push_back(startNode);
 
 	uint iterations = 0;
 
@@ -41,9 +46,10 @@ bool PathFinder::IteratePath()
 	//TODO 2: This function won't need a loop inside anymore, we are controlling this loop outside
 	bool ret = true;
 
-	PathNode* node = new PathNode(*open.GetNodeLowestScore());
-	close.list.push_back(*node);
+	PathNode* node = open.GetNodeLowestScore();
+	
 	open.list.erase(*open.Find(node->pos));
+	close.list.push_back(*node);
 
 
 	if (node->pos == destination) {
@@ -98,16 +104,20 @@ bool PathFinder::IteratePath()
 		if (close.Find(adjacentNodes.list[i].pos) == NULL) {
 			// If it is NOT found, calculate its F and add it to the open list
 			if (open.Find(adjacentNodes.list[i].pos) == NULL) {
-				adjacentNodes.list[i].CalculateF(destination);
+				adjacentNodes.list[i].gCost = CalculateDistanceCost(node->pos, adjacentNodes.list[i].pos);
+				adjacentNodes.list[i].hCost = CalculateDistanceCost(adjacentNodes.list[i].pos, destination);
+				adjacentNodes.list[i].CalculateFCost();
 				open.list.push_back(adjacentNodes.list[i]);
 			}
 			// If it is already in the open list, check if it is a better path (compare G)
 			else {
-				if (adjacentNodes.list[i].g < open.Find(adjacentNodes.list[i].pos)->_Ptr->g) {
+				int tentativeCost = node->gCost + CalculateDistanceCost(node->pos, adjacentNodes.list[i].pos);
+				if (tentativeCost < open.Find(adjacentNodes.list[i].pos)->_Ptr->gCost) {
 					// If it is a better path, Update the parent
-					adjacentNodes.list[i].CalculateF(destination);
-					open.list.erase(*open.Find(adjacentNodes.list[i].pos));
-					open.list.push_back(adjacentNodes.list[i]);
+					adjacentNodes.list[i].parent = node;
+					adjacentNodes.list[i].gCost = tentativeCost;
+					adjacentNodes.list[i].hCost = CalculateDistanceCost(adjacentNodes.list[i].pos, destination);
+					adjacentNodes.list[i].CalculateFCost();;
 				}
 			}
 		}
@@ -143,6 +153,14 @@ bool PathFinder::Update()
 	return ret;
 }
 
+int PathFinder::CalculateDistanceCost(const iPoint& a,const iPoint& b)
+{
+	int xDistance = abs(a.x - b.x);
+	int yDistance = abs(a.y - b.y);
+	int remaining = abs(xDistance - yDistance);
+	return MOVE_DIAGONAL_COST * min(xDistance, yDistance) + MOVE_STRAIGHT_COST * remaining;
+}
+
 
 #pragma region PathList
 
@@ -166,32 +184,31 @@ std::vector<PathNode>::const_iterator* PathList::Find(const iPoint& point) const
 // ---------------------------------------------------------------------------------
 PathNode* PathList::GetNodeLowestScore()
 {
-	PathNode* ret = NULL;
+	PathNode* lowestFCostNode = &list[0];
 	int min = 65535;
 
 	if (list.empty()) {
-		return ret;
+		return nullptr;
 	}
 
-
-	for (int i = list.size() - 1; i >= 0; i--)
+	for (int i = 0; i < list.size(); i++)
 	{
-		if (list[i].Score() < min) {
-			min = list[i].Score();
-			ret = &list[i];
+		if (lowestFCostNode->fCost >= list[i].fCost) {
+			if (lowestFCostNode->fCost == list[i].fCost) {
+				if (lowestFCostNode->hCost > list[i].hCost) {
+					lowestFCostNode = &list[i];
+				}
+				else {
+					lowestFCostNode = &list[i];
+				}
+			}
+			else {
+			lowestFCostNode = &list[i];
+			}
 		}
 	}
 
-	//while (item)
-	//{
-	//	if (item->Score() < min)
-	//	{
-	//		min = item->Score();
-	//		ret = item;
-	//	}
-	//	item = item--;
-	//}
-	return ret;
+	return lowestFCostNode;
 }
 #pragma endregion
 
@@ -202,14 +219,16 @@ PathNode* PathList::GetNodeLowestScore()
 // PathNode -------------------------------------------------------------------------
 // Convenient constructors
 // ----------------------------------------------------------------------------------
-PathNode::PathNode() : g(-1), h(-1), pos(-1, -1), parent(NULL)
+
+
+PathNode::PathNode(iPoint position)
+{
+	pos = position;
+}
+
+PathNode::PathNode(int g, int h, const iPoint& pos, const PathNode* parent) : gCost(g), hCost(h), pos(pos), parent(parent)
 {}
 
-PathNode::PathNode(int g, int h, const iPoint& pos, const PathNode* parent) : g(g), h(h), pos(pos), parent(parent)
-{}
-
-PathNode::PathNode(const PathNode& node) : g(node.g), h(node.h), pos(node.pos), parent(node.parent)
-{}
 
 // PathNode -------------------------------------------------------------------------
 // Fills a list (PathList) of all valid adjacent pathnodes
@@ -217,68 +236,60 @@ PathNode::PathNode(const PathNode& node) : g(node.g), h(node.h), pos(node.pos), 
 uint PathNode::FindWalkableAdjacents(PathList& list_to_fill) const
 {
 	iPoint cell;
-	uint before = list_to_fill.list.size();
+	list_to_fill.list.clear();
 
 	// north
 	cell.create(pos.x, pos.y + 1);
 	if (App->pathfinding->IsWalkable(cell))
-		list_to_fill.list.push_back(PathNode(-1, -1, cell, this));
+		list_to_fill.list.push_back(PathNode(90000, 90000, cell, this));
 
 	//// north - east
 	cell.create(pos.x + 1, pos.y + 1);
 	if (App->pathfinding->IsWalkable(cell))
-		list_to_fill.list.push_back(PathNode(0, -1, cell, this));
+		list_to_fill.list.push_back(PathNode(90000, 90000, cell, this));
 	//	
 	//// north - west
 	cell.create(pos.x - 1, pos.y + 1);
 	if (App->pathfinding->IsWalkable(cell))
-		list_to_fill.list.push_back(PathNode(0, -1, cell, this));
+		list_to_fill.list.push_back(PathNode(90000, 90000, cell, this));
 
 	// south
 	cell.create(pos.x, pos.y - 1);
 	if (App->pathfinding->IsWalkable(cell))
-		list_to_fill.list.push_back(PathNode(-1, -1, cell, this));
+		list_to_fill.list.push_back(PathNode(90000, 90000, cell, this));
 
 	//// south - east
 	cell.create(pos.x + 1, pos.y - 1);
 	if (App->pathfinding->IsWalkable(cell))
-		list_to_fill.list.push_back(PathNode(-1, -1, cell, this));
+		list_to_fill.list.push_back(PathNode(90000, 90000, cell, this));
 
 	//// south -west
 	cell.create(pos.x - 1, pos.y - 1);
 	if (App->pathfinding->IsWalkable(cell))
-		list_to_fill.list.push_back(PathNode(-1, -1, cell, this));
+		list_to_fill.list.push_back(PathNode(90000, 9000, cell, this));
 
 	// east
 	cell.create(pos.x + 1, pos.y);
 	if (App->pathfinding->IsWalkable(cell))
-		list_to_fill.list.push_back(PathNode(-1, -1, cell, this));
+		list_to_fill.list.push_back(PathNode(90000, 90000, cell, this));
 
 	// west
 	cell.create(pos.x - 1, pos.y);
 	if (App->pathfinding->IsWalkable(cell))
-		list_to_fill.list.push_back(PathNode(-1, -1, cell, this));
+		list_to_fill.list.push_back(PathNode(90000, 90000, cell, this));
 
 	return list_to_fill.list.size();
 }
 
-// PathNode -------------------------------------------------------------------------
-// Calculates this tile score
-// ----------------------------------------------------------------------------------
-int PathNode::Score() const
-{
-	return g + h;
-}
 
 // PathNode -------------------------------------------------------------------------
 // Calculate the F for a specific destination tile
 // ----------------------------------------------------------------------------------
-int PathNode::CalculateF(const iPoint& destination)
-{
-	g = parent->g + 1;
-	h = pos.DistanceManhattan(destination);
 
-	return g + h;
+void PathNode::CalculateFCost()
+{
+
+	fCost = gCost + hCost;
 }
 #pragma endregion
 
