@@ -184,7 +184,8 @@ bool j1Scene::PreUpdate()
 
 			iPoint origin = App->map->WorldToMap((int)x, (int)y);
 			iPoint ending = App->map->GetMousePositionOnMap();
-
+			LOG("Origin: %i, %i", origin.x, origin.y);
+			LOG("Ending: %i, %i", ending.x, ending.y);
 
 			int posX, posY;
 			App->input->GetMousePosition(posX, posY);

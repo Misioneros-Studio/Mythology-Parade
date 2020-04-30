@@ -154,7 +154,7 @@ int PathFinder::CalculateDistanceCost(const iPoint& a, const iPoint& b)
 	int xDistance = abs(a.x - b.x);
 	int yDistance = abs(a.y - b.y);
 	int remaining = abs(xDistance - yDistance);
-	return MOVE_DIAGONAL_COST * min(xDistance, yDistance) * MOVE_STRAIGHT_COST * remaining;
+	return MOVE_DIAGONAL_COST * min(xDistance, yDistance) + MOVE_STRAIGHT_COST * remaining;
 }
 
 
