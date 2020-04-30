@@ -2,9 +2,12 @@
 #define __PATHFINDER_H__
 #include "p2Point.h"
 #include <vector>
-#include"Entity.h"
+#include "Entity.h"
 
 #pragma region Structs
+
+#define MOVE_DIAGONAL_COST 14
+#define MOVE_STRAIGHT_COST 10
 
 struct PathRequest 
 {
@@ -28,11 +31,12 @@ struct PathNode
 	// Calculates this tile score
 	int Score() const;
 	// Calculate the F for a specific destination tile
-	int CalculateF(const iPoint& destination);
+	void CalculateFCost();
 
 	// -----------
-	int g;
-	int h;
+	int gCost;
+	int hCost;
+	int fCost;
 	iPoint pos;
 	const PathNode* parent; // needed to reconstruct the path in the end
 };
@@ -77,6 +81,8 @@ public:
 	std::vector<iPoint> last_path;
 
 	bool Update();
+
+	int CalculateDistanceCost(const iPoint& a, const iPoint& b);
 
 	bool pathCompleted;
 	bool available;

@@ -98,14 +98,20 @@ bool PathFinder::IteratePath()
 		if (close.Find(adjacentNodes.list[i].pos) == NULL) {
 			// If it is NOT found, calculate its F and add it to the open list
 			if (open.Find(adjacentNodes.list[i].pos) == NULL) {
-				adjacentNodes.list[i].CalculateF(destination);
+				adjacentNodes.list[i].gCost = CalculateDistanceCost(node->pos, adjacentNodes.list[i].pos);
+				adjacentNodes.list[i].hCost = CalculateDistanceCost(adjacentNodes.list[i].pos, destination);
+				adjacentNodes.list[i].CalculateFCost();
 				open.list.push_back(adjacentNodes.list[i]);
 			}
 			// If it is already in the open list, check if it is a better path (compare G)
 			else {
-				if (adjacentNodes.list[i].g < open.Find(adjacentNodes.list[i].pos)->_Ptr->g) {
+				int tentativeCost = node->gCost + CalculateDistanceCost(node->pos, adjacentNodes.list[i].pos);
+				if (tentativeCost < open.Find(adjacentNodes.list[i].pos)->_Ptr->gCost) {
 					// If it is a better path, Update the parent
-					adjacentNodes.list[i].CalculateF(destination);
+					adjacentNodes.list[i].parent = node;
+					adjacentNodes.list[i].gCost = tentativeCost;
+					adjacentNodes.list[i].hCost = CalculateDistanceCost(adjacentNodes.list[i].pos,destination);
+					adjacentNodes.list[i].CalculateFCost();
 					open.list.erase(*open.Find(adjacentNodes.list[i].pos));
 					open.list.push_back(adjacentNodes.list[i]);
 				}
@@ -141,6 +147,14 @@ bool PathFinder::Update()
 			break;
 	}
 	return ret;
+}
+
+int PathFinder::CalculateDistanceCost(const iPoint& a, const iPoint& b)
+{
+	int xDistance = abs(a.x - b.x);
+	int yDistance = abs(a.y - b.y);
+	int remaining = abs(xDistance - yDistance);
+	return MOVE_DIAGONAL_COST * min(xDistance, yDistance) * MOVE_STRAIGHT_COST * remaining;
 }
 
 
@@ -202,13 +216,13 @@ PathNode* PathList::GetNodeLowestScore()
 // PathNode -------------------------------------------------------------------------
 // Convenient constructors
 // ----------------------------------------------------------------------------------
-PathNode::PathNode() : g(-1), h(-1), pos(-1, -1), parent(NULL)
+PathNode::PathNode() : gCost(-1), hCost(-1), pos(-1, -1), parent(NULL)
 {}
 
-PathNode::PathNode(int g, int h, const iPoint& pos, const PathNode* parent) : g(g), h(h), pos(pos), parent(parent)
+PathNode::PathNode(int g, int h, const iPoint& pos, const PathNode* parent) : gCost(g), hCost(h), pos(pos), parent(parent)
 {}
 
-PathNode::PathNode(const PathNode& node) : g(node.g), h(node.h), pos(node.pos), parent(node.parent)
+PathNode::PathNode(const PathNode& node) : gCost(node.gCost), hCost(node.hCost), pos(node.pos), parent(node.parent)
 {}
 
 // PathNode -------------------------------------------------------------------------
@@ -267,19 +281,17 @@ uint PathNode::FindWalkableAdjacents(PathList& list_to_fill) const
 // ----------------------------------------------------------------------------------
 int PathNode::Score() const
 {
-	return g + h;
+	return gCost + hCost;
+}
+
+void PathNode::CalculateFCost()
+{
+	fCost = gCost + hCost;
 }
 
 // PathNode -------------------------------------------------------------------------
 // Calculate the F for a specific destination tile
 // ----------------------------------------------------------------------------------
-int PathNode::CalculateF(const iPoint& destination)
-{
-	g = parent->g + 1;
-	h = pos.DistanceManhattan(destination);
-
-	return g + h;
-}
 #pragma endregion
 
 PathRequest::PathRequest(iPoint o, iPoint d, std::list<Entity*> req)
