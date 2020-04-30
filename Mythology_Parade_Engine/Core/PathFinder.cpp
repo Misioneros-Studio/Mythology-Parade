@@ -19,11 +19,12 @@ PathFinder::~PathFinder()
 void PathFinder::PreparePath(const iPoint& o, const iPoint& d, std::list <Entity*> req)
 {
 	// Add the origin tile to open
-	if (open.GetNodeLowestScore() == NULL)
-		open.list.push_back(PathNode(0, o.DistanceTo(destination), o, nullptr));
+	if (open.GetNodeLowestScore() == NULL) {
+		open.list.push_back(PathNode(0,CalculateDistanceCost(o,d),o,nullptr));
+	}
 
 	uint iterations = 0;
-
+	
 	origin = o;
 	destination = d;
 	requestUnitsList = req;
@@ -41,13 +42,13 @@ bool PathFinder::IteratePath()
 	//TODO 2: This function won't need a loop inside anymore, we are controlling this loop outside
 	bool ret = true;
 
-	PathNode* node = new PathNode(*open.GetNodeLowestScore());
-	close.list.push_back(*node);
-	open.list.erase(*open.Find(node->pos));
+	PathNode* currentNode = new PathNode(*open.GetNodeLowestScore());
+	close.list.push_back(*currentNode);
+	open.list.erase(*open.Find(currentNode->pos));
 
 
-	if (node->pos == destination) {
-		const PathNode* iterator = node;
+	if (currentNode->pos == destination) {
+		const PathNode* iterator = currentNode;
 
 		last_path.clear();
 		// Backtrack to create the final path
@@ -83,32 +84,33 @@ bool PathFinder::IteratePath()
 		LOG("Path finished");
 		//requestUnit->SetPath(last_path);
 
-		RELEASE(node);
+		RELEASE(currentNode);
 		return false;
 	}
 
 
 	PathList adjacentNodes;
-	uint numNodes = node->FindWalkableAdjacents(adjacentNodes);
+	uint numNodes = currentNode->FindWalkableAdjacents(adjacentNodes);
 
 
 	for (uint i = 0; i < numNodes; i++)
 	{
 		// ignore nodes in the closed list
 		if (close.Find(adjacentNodes.list[i].pos) == NULL) {
+			int tentativeCost = currentNode->gCost + CalculateDistanceCost(currentNode->pos, adjacentNodes.list[i].pos);
 			// If it is NOT found, calculate its F and add it to the open list
 			if (open.Find(adjacentNodes.list[i].pos) == NULL) {
-				adjacentNodes.list[i].gCost = CalculateDistanceCost(node->pos, adjacentNodes.list[i].pos);
+				adjacentNodes.list[i].gCost = tentativeCost;
 				adjacentNodes.list[i].hCost = CalculateDistanceCost(adjacentNodes.list[i].pos, destination);
 				adjacentNodes.list[i].CalculateFCost();
 				open.list.push_back(adjacentNodes.list[i]);
 			}
 			// If it is already in the open list, check if it is a better path (compare G)
 			else {
-				int tentativeCost = node->gCost + CalculateDistanceCost(node->pos, adjacentNodes.list[i].pos);
+				
 				if (tentativeCost < open.Find(adjacentNodes.list[i].pos)->_Ptr->gCost) {
 					// If it is a better path, Update the parent
-					adjacentNodes.list[i].parent = node;
+					adjacentNodes.list[i].parent = currentNode;
 					adjacentNodes.list[i].gCost = tentativeCost;
 					adjacentNodes.list[i].hCost = CalculateDistanceCost(adjacentNodes.list[i].pos,destination);
 					adjacentNodes.list[i].CalculateFCost();
@@ -220,9 +222,11 @@ PathNode::PathNode() : gCost(-1), hCost(-1), pos(-1, -1), parent(NULL)
 {}
 
 PathNode::PathNode(int g, int h, const iPoint& pos, const PathNode* parent) : gCost(g), hCost(h), pos(pos), parent(parent)
-{}
+{
+	fCost = g + h;
+}
 
-PathNode::PathNode(const PathNode& node) : gCost(node.gCost), hCost(node.hCost), pos(node.pos), parent(node.parent)
+PathNode::PathNode(const PathNode& node) : gCost(node.gCost), hCost(node.hCost), pos(node.pos), parent(node.parent),fCost(node.fCost)
 {}
 
 // PathNode -------------------------------------------------------------------------
