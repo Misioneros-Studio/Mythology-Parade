@@ -24,6 +24,7 @@
 j1FadeToBlack::j1FadeToBlack()
 {
 	screen = { 0, 0, 1280,720 };
+	actual_civilization = "";
 }
 
 j1FadeToBlack::~j1FadeToBlack()
@@ -32,6 +33,7 @@ j1FadeToBlack::~j1FadeToBlack()
 // Load assets
 bool j1FadeToBlack::Start()
 {
+	actual_civilization = "";
 	SDL_SetRenderDrawBlendMode(App->render->renderer, SDL_BLENDMODE_BLEND);
 	return true;
 }
@@ -99,17 +101,22 @@ bool j1FadeToBlack::PostUpdate()
 }
 
 // Fade to black. At mid point deactivate one module, then activate the other
-bool j1FadeToBlack::FadeToBlack(which_fade fade2, float time)
+bool j1FadeToBlack::FadeToBlack(which_fade fade2, float time, std::string civilization)
 {
+
 	bool ret = false;
 
 	if (current_step == fade_step::none)
 	{
+		actual_civilization = "";
+
 		actual_change = fade2;
 		current_step = fade_step::fade_to_black;
 		start_time = SDL_GetTicks();
 		total_time = (Uint32)(time * 0.5f * 1000.0f);
 
+		if (civilization != "")
+			actual_civilization = civilization;
 		ret = true;
 	}
 

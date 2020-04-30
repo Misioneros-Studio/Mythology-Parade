@@ -9,6 +9,7 @@ enum class CloseTitleSceneMenus{
 	Tutorial,
 	Options,
 	Confirmation,
+	Civilization,
 	Unknown
 };
 struct SDL_Texture;
@@ -66,6 +67,12 @@ public:
 	// Called when clicking close button in credits
 	void DeactivateCredits();
 
+	// Called when clicking new game button in menu
+	void ActivatCivilizationMenu();
+
+	// Called when clicking close button in civilization menu or after picking a civilization
+	void DeactivateCivilizationMenu();
+
 	// Called when clicking a button in the menu with confirmation message
 	void ActivateConfirmationMenu(std::string str);
 
@@ -93,6 +100,9 @@ private:
 	ButtonUI* ui_button_confirmation[2];
 	TextUI* ui_text_confirmation[4];
 	std::string confirmation_option;
+	WindowUI* ui_civilization_window;
+	ButtonUI* ui_button_civilization[3];
+	TextUI* ui_text_civilization[4];
 public:
 	CloseTitleSceneMenus close_menus;
 };
