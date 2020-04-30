@@ -380,16 +380,29 @@ bool EntityManager::CleanUp()
 //	return ret;
 //}
 
-Entity* EntityManager::CreatePlayerEntity()
+Entity* EntityManager::CreatePlayerEntity(std::string civilization_string)
 {
 	Entity* ret = nullptr;
 
 	ret = new Player();
 	ret->type = EntityType::PLAYER;
-	ret->civilization = CivilizationType::VIKING;
+	Player* p = (Player*)ret;
 
 	entities[EntityType::PLAYER].push_back(ret);
 	entities[EntityType::PLAYER].begin()._Ptr->_Myval->Start();
+
+	if (civilization_string == "viking") {
+		ret->civilization = CivilizationType::VIKING;
+		p->player_type = CivilizationType::VIKING;
+	}
+	else if (civilization_string == "greek") {
+		ret->civilization = CivilizationType::GREEK;
+		p->player_type = CivilizationType::GREEK;
+	}
+	else {
+		ret->civilization = CivilizationType::VIKING;
+		p->player_type = CivilizationType::VIKING;
+	}
 
 	return ret;
 }

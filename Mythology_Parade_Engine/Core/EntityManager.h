@@ -105,7 +105,7 @@ public:
 
 	bool DeleteEntity(Entity*);
 
-	Entity* CreatePlayerEntity();
+	Entity* CreatePlayerEntity(std::string civilization_string = "");
 	Entity* CreateUnitEntity(UnitType, iPoint, CivilizationType);
 	Entity* CreateBuildingEntity(iPoint, BuildingType, BuildingInfo, CivilizationType);
 	void UpdateBuildPreview(int);

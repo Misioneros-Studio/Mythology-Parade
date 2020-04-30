@@ -147,8 +147,12 @@ bool j1Scene::Start()
 	App->audio->PlayMusic("audio/music/Ambient1.ogg", 2.0F, 150);
   
 	//Creating players
-	App->entityManager->CreatePlayerEntity();
-
+	App->entityManager->CreatePlayerEntity(App->fade_to_black->actual_civilization);
+	
+	if (App->entityManager->getPlayer()->player_type == CivilizationType::VIKING)
+		App->render->camera.x = -2683;
+	else if (App->entityManager->getPlayer()->player_type == CivilizationType::GREEK)
+		App->render->camera.x = -1683;
 
 	research_encampment = research_monastery = research_temple = false;
 
