@@ -135,6 +135,10 @@ bool Building::Awake(pugi::xml_node& a)
 bool Building::Update(float dt)
 {
 	bool ret = true;
+	if (App->scene->paused_game == true && timer_construction.isPaused() == false)
+		timer_construction.Pause();
+	else if (App->scene->paused_game == false && timer_construction.isPaused() == true)
+		timer_construction.Resume();
 	if (first_time_constructing == true && buildingStatus == CONSTRUCTING)
 	{
 		int actual_construction_time = timer_construction.ReadSec();
