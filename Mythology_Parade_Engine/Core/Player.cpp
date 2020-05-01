@@ -4,6 +4,7 @@
 #include "j1Scene.h"
 #include "j1Input.h"
 #include "j1Gui.h"
+#include "HUD.h"
 #include "EntityManager.h"
 
 Player::Player()
@@ -70,9 +71,9 @@ bool Player::PreUpdate()
 
 bool Player::Update(float dt)
 {
-	App->scene->ui_text_ingame[0]->SetString(faith);
-	App->scene->ui_text_ingame[1]->SetString(sacrifice);
-	App->scene->ui_text_ingame[2]->SetString(prayer);
+	App->scene->hud->ui_text_ingame[0]->SetString(faith);
+	App->scene->hud->ui_text_ingame[1]->SetString(sacrifice);
+	App->scene->hud->ui_text_ingame[2]->SetString(prayer);
 	
 	//if (App->input->GetKey(SDL_SCANCODE_5) == KEY_DOWN && !App->entityManager->crPreview.active) 
 	//{
@@ -143,7 +144,7 @@ void Player::SelectionDraw_Logic()
 			buildingSelect = nullptr;
 			ClickLogic();
 			SeeEntitiesInside();
-			App->scene->HUDUpdateSelection(listEntities, (Building*)buildingSelect);
+			App->scene->hud->HUDUpdateSelection(listEntities, (Building*)buildingSelect);
 		}
 	}
 }
@@ -216,7 +217,7 @@ void Player::PlayerInputs()
 				App->entityManager->DeleteEntity(it._Ptr->_Myval);
 			}
 			listEntities.clear();
-			App->scene->HUDUpdateSelection(listEntities, nullptr);
+			App->scene->hud->HUDUpdateSelection(listEntities, nullptr);
 		}
 	}
 
