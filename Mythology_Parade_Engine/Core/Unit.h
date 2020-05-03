@@ -23,9 +23,12 @@ enum class UnitType
 	FOOTMAN,
 	MONK,
 	CLERIC,
-	MISSIONARY
+	MISSIONARY,
+	DRAUGAR,
+	JOTNAR,
+	CYCLOP,
+	MINOTAUR
 };
-
 class Unit : public Entity, public HealthSystem
 {
 private:

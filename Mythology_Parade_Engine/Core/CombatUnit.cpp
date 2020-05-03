@@ -30,6 +30,38 @@ CombatUnit::CombatUnit(UnitType type, iPoint pos) : Unit(type, pos), range(0), d
 		break;
 	case UnitType::FOOTMAN:
 		break;
+	case UnitType::JOTNAR:
+		time_production = 7;
+		time_research = 210;
+		researched = true;
+		//Change texture
+		LevelSystem::Init(-1, -1, -1);
+		CombatUnit::Init(150, 0, 1, 80);
+		break;
+	case UnitType::DRAUGAR:
+		time_production = 7;
+		time_research = 210;
+		researched = true;
+		//Change texture
+		LevelSystem::Init(-1, -1, -1);
+		CombatUnit::Init(40, 0, 1, 80);
+		break;
+	case UnitType::CYCLOP:
+		time_production = 7;
+		time_research = 210;
+		researched = true;
+		//Change texture
+		LevelSystem::Init(-1, -1, -1);
+		CombatUnit::Init(150, 0, 1, 80);
+		break;
+	case UnitType::MINOTAUR:
+		time_production = 7;
+		time_research = 210;
+		researched = true;
+		//Change texture
+		LevelSystem::Init(-1, -1, -1);
+		CombatUnit::Init(40, 0, 1, 80);
+		break;
 	}
 }
 
