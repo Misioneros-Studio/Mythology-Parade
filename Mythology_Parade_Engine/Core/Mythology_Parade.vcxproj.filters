@@ -97,6 +97,9 @@
     <ClCompile Include="j1FadeToBlack.cpp">
       <Filter>Core\Modules</Filter>
     </ClCompile>
+    <ClCompile Include="HUD.cpp">
+      <Filter>Core\Scenes\HUD</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1Window.h">
@@ -210,6 +213,9 @@
     <ClInclude Include="MemLeaks.h">
       <Filter>Core\Tools</Filter>
     </ClInclude>
+    <ClInclude Include="HUD.h">
+      <Filter>Core\Scenes\HUD</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Tools">
@@ -250,6 +256,9 @@
     </Filter>
     <Filter Include="Core\Entities\Player">
       <UniqueIdentifier>{3dcd2ce1-3295-4ae1-87f2-feb1ee4efadf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Scenes\HUD">
+      <UniqueIdentifier>{da84361d-6a45-4d6b-bcab-93f5aaf4d801}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
