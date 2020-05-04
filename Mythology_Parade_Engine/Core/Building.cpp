@@ -275,7 +275,13 @@ bool Building::Draw(float dt)
 void Building::Draw_Construction_Bar(int blitWidth, int bar_used)
 {
 	SDL_Rect construction_spriteRect = App->entityManager->construction_bar_back;
-	iPoint pos = { (int)position.x + (int)(0.15 * blitWidth), (int)position.y + (int)(((32 / 2) * tileLenght) - 1.25 * blitRect.y) };
+	iPoint pos;
+	if (blitWidth==128)
+		pos = { (int)position.x + 1, (int)position.y + (int)(((32 / 2) * tileLenght) - 1.25 * blitRect.y) };
+	else if (blitWidth==192)
+		pos = { (int)position.x + 33, (int)position.y + (int)(((32 / 2) * tileLenght) - 1.25 * blitRect.y) };
+	else
+		pos = { (int)position.x, (int)position.y + (int)(((32 / 2) * tileLenght) - 1.25 * blitRect.y) };
 	App->render->Blit(texture, pos.x, pos.y, &construction_spriteRect);
 	if (bar_used == 0)
 		construction_spriteRect = App->entityManager->construction_bar_front;
