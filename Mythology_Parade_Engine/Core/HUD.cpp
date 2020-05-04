@@ -12,7 +12,7 @@
 
 //Constructor
 HUD::HUD() {
-	this->StartHUD();
+	StartHUD();
 }
 
 //Destructor
