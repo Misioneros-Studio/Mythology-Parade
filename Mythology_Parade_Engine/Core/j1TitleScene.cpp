@@ -29,16 +29,6 @@ bool j1TitleScene::Awake(pugi::xml_node& config)
 
 	active = false;
 
-	for (int i = 0; i < 4; i++) {
-		if (i != 3) {
-			ui_button_civilization[i] = nullptr;
-		}
-		ui_text_civilization[i] = nullptr;
-	}
-	ui_civilization_window = nullptr;
-
-
-
 	return ret;
 }
 
@@ -89,12 +79,28 @@ bool j1TitleScene::Start()
 		if (i != 3) {
 			ui_button_civilization[i] = nullptr;
 		}
+		if (i < 3) {
+			if (i != 2) {
+				ui_button_options[i] = nullptr;
+				ui_text_tutorial[i] = nullptr;
+				ui_text_credits[i] = nullptr;
+				ui_button_confirmation[i] = nullptr;
+			}
+			ui_text_options[i] = nullptr;
+		}
 		ui_text_civilization[i] = nullptr;
+		ui_text_confirmation[i] = nullptr;
 	}
+	ui_tutorial_options = nullptr;
+	ui_button_credits = nullptr;
+
 	ui_civilization_window = nullptr;
+	ui_confirmation_window = nullptr;
+	ui_tutorial_window = nullptr;
+	ui_options_window = nullptr;
+	ui_credits_window = nullptr;
 
-
-
+	confirmation_option = "";
 	title_assets_tex = App->tex->Load("gui/TitleAssets.png");
 	App->audio->PlayMusic("audio/music/MainTitle_Use.ogg", 2.0F, 90);
 	return true;
