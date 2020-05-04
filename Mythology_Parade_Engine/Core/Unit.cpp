@@ -16,7 +16,6 @@ Unit::Unit(UnitType type, iPoint pos): unitType(type), state(AnimationType::IDLE
 		displayDebug = false;
 	}
 
-	collisionRect = { 0, 0, 30, -55 };
 	unitType = type;
 	position = {(float)pos.x, (float)pos.y};
 	state = AnimationType::IDLE;
@@ -33,6 +32,7 @@ Unit::Unit(UnitType type, iPoint pos): unitType(type), state(AnimationType::IDLE
 		time_research = 0;
 		researched = true;
 		Init(1);
+		collisionRect = { 0, 0, 30, -55 };
 		break;
 	}
 

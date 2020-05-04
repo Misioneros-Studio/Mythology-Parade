@@ -15,6 +15,7 @@ CombatUnit::CombatUnit(UnitType type, iPoint pos) : Unit(type, pos), range(0), d
 		//Change texture
 		LevelSystem::Init(3500, 6500, 9500);
 		CombatUnit::Init(100, 15, 1, 80);
+		collisionRect = { 0, 0, 30, -55 };
 		break;
 	case UnitType::PIKEMAN:
 		time_production = 90;
@@ -23,6 +24,7 @@ CombatUnit::CombatUnit(UnitType type, iPoint pos) : Unit(type, pos), range(0), d
 		//Change Texture
 		LevelSystem::Init(3000, 6000, 9500);
 		CombatUnit::Init(110, 25, 1, 40);
+		collisionRect = { 0, 0, 30, -55 };
 		break;
 	case UnitType::EXPLORER:
 		break;
@@ -37,6 +39,7 @@ CombatUnit::CombatUnit(UnitType type, iPoint pos) : Unit(type, pos), range(0), d
 		//Change texture
 		LevelSystem::Init(-1, -1, -1);
 		CombatUnit::Init(150, 0, 1, 80);
+		collisionRect = { 0, 0, 123, -175 };
 		break;
 	case UnitType::DRAUGAR:
 		time_production = 7;
@@ -45,6 +48,7 @@ CombatUnit::CombatUnit(UnitType type, iPoint pos) : Unit(type, pos), range(0), d
 		//Change texture
 		LevelSystem::Init(-1, -1, -1);
 		CombatUnit::Init(40, 0, 1, 80);
+		collisionRect = { 0, 0, 40, -60 };
 		break;
 	case UnitType::CYCLOP:
 		time_production = 7;
@@ -53,6 +57,7 @@ CombatUnit::CombatUnit(UnitType type, iPoint pos) : Unit(type, pos), range(0), d
 		//Change texture
 		LevelSystem::Init(-1, -1, -1);
 		CombatUnit::Init(150, 0, 1, 80);
+		collisionRect = { 0, 0, 118, -130 };
 		break;
 	case UnitType::MINOTAUR:
 		time_production = 7;
@@ -61,6 +66,7 @@ CombatUnit::CombatUnit(UnitType type, iPoint pos) : Unit(type, pos), range(0), d
 		//Change texture
 		LevelSystem::Init(-1, -1, -1);
 		CombatUnit::Init(40, 0, 1, 80);
+		collisionRect = { 0, 0, 60, -67 };
 		break;
 	}
 }
