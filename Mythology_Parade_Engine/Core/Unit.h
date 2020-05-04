@@ -16,6 +16,7 @@ enum class ReligiousType
 
 enum class UnitType 
 {
+	NONE=-1,
 	PIKEMAN,
 	ASSASSIN,
 	EXPLORER,
@@ -23,7 +24,8 @@ enum class UnitType
 	FOOTMAN,
 	MONK,
 	CLERIC,
-	MISSIONARY
+	MISSIONARY,
+	UNKNOWN
 };
 
 class Unit : public Entity, public HealthSystem

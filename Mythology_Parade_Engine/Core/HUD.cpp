@@ -24,55 +24,65 @@ HUD::~HUD() {
 void HUD::StartHUD() {
 	ui_research_window = nullptr;
 	ui_winlose_window = nullptr;
-	for (uint i = 0; i < 4; i++)
-	{
-		ui_text_winlose[i] = nullptr;
-	}
+	ui_pause_window = nullptr;
+	ui_options_window = nullptr;
+	ui_confirmation_window = nullptr;
+
+	type_thing_selected = Type_Selected::Unknown;
+
+
 
 	start_timer = false;
 	ui_ingame = (ImageUI*)App->gui->CreateUIElement(Type::IMAGE, nullptr, { 0,590,1280,130 }, { 0,590,1280,130 });
 
-
-	for (int i = 0; i < 3; i++)
-	{
-		ui_text_ingame[i] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 104,610 + (i * 33),237,38 }, { 0,0,100,100 }, "9999", { 255,255,255,255 }, { 1,0,0,0 });
-	}
-	for (int i = 0; i < 8; i++)
-	{
-		if (i != 7)
-		{
-			ui_button[i] = nullptr;
-		}
-		ui_text[i] = nullptr;
-	}
+	
 	for (int i = 0; i < 13; i++)
 	{
 		hud_list_troops[i] = nullptr;
 		hud_number_troops[i] = nullptr;
 		hud_stats_selected_troop[i] = nullptr;
+		number_of_troops[i] = 0;
+		type_of_troops[i] = UnitType::NONE;
+		if (i < 8)
+		{
+			if (i < 7)
+			{
+				ui_button[i] = nullptr;
+				if (i < 5) {
+					hud_button_actions[i] = nullptr;
+					hud_button_actions_unclickable[i] = nullptr;
+					if (i < 4) {
+						ui_text_winlose[i] = nullptr;
+						ui_text_confirmation[i] = nullptr;
+						if (i < 3) {
+							ui_button_confirmation[i] = nullptr;
+							ui_text_ingame[i] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 104,610 + (i * 33),237,38 }, { 0,0,100,100 }, "9999", { 255,255,255,255 }, { 1,0,0,0 });
+							ui_text_options[i] = nullptr;
+							ui_button_research[i] = nullptr;
+							if (i < 2) {
+								ui_button_winlose[i] = nullptr;
+								ui_button_options[i] = nullptr;
+							}
+						}
+					}
+				}
+			}
+			ui_text[i] = nullptr;
+			ui_text_research[i] = nullptr;
+		}
 	}
 
-	for (int i = 0; i < 5; i++) {
-		hud_button_actions[i] = nullptr;
-		hud_button_actions_unclickable[i] = nullptr;
-	}
-
+	
 	hud_selected_troop = nullptr;
 	thing_selected = nullptr;
 
-	for (int i = 0; i < 4; i++)
-	{
-		if (i < 3)
-		{
-			ui_button_confirmation[i] = nullptr;
-		}
-		ui_text_confirmation[i] = nullptr;
-	}
+	
 	confirmation_option = "";
 
 	close_menus = CloseSceneMenus::None;
 
 	research_encampment = research_monastery = research_temple = false;
+
 }
 
 // Called when clicking esc

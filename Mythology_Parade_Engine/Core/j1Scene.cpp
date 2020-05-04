@@ -89,6 +89,7 @@ bool j1Scene::Start()
 	
 
 	paused_game = false;
+	godMode = false;
 
 	winlose_tex = App->tex->Load("gui/WinLoseBackground.png");
 
@@ -108,8 +109,6 @@ bool j1Scene::Start()
 		App->render->camera.x = -2683;
 	else if (App->entityManager->getPlayer()->player_type == CivilizationType::GREEK)
 		App->render->camera.x = -1683;
-
-
 
 	return true;
 }
