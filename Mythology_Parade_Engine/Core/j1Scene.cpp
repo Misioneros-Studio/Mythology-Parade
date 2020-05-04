@@ -365,24 +365,25 @@ bool j1Scene::CleanUp()
 	App->tex->UnLoad(debugBlue_tex);
 	App->tex->UnLoad(debugRed_tex);
 	App->tex->UnLoad(winlose_tex);
-
-	hud->DeactivateResearchMenu();
-	hud->DeactivateConfirmationMenu();
-	hud->DeactivateOptionsMenu();
-	hud->DeactivatePauseMenu();
-	hud->HUDDeleteListTroops();
-	hud->HUDDeleteSelectedTroop();
-	hud->HUDDeleteActionButtons();
-	App->gui->DeleteUIElement(hud->ui_ingame);
-	hud->ui_ingame = nullptr;
-	for (int i = 0; i < 3; i++)
-	{
-		App->gui->DeleteUIElement(hud->ui_text_ingame[i]);
-		hud->ui_text_ingame[i] = nullptr;
+	if (hud != nullptr) {
+		hud->DeactivateResearchMenu();
+		hud->DeactivateConfirmationMenu();
+		hud->DeactivateOptionsMenu();
+		hud->DeactivatePauseMenu();
+		hud->HUDDeleteListTroops();
+		hud->HUDDeleteSelectedTroop();
+		hud->HUDDeleteActionButtons();
+		App->gui->DeleteUIElement(hud->ui_ingame);
+		hud->ui_ingame = nullptr;
+		for (int i = 0; i < 3; i++)
+		{
+			App->gui->DeleteUIElement(hud->ui_text_ingame[i]);
+			hud->ui_text_ingame[i] = nullptr;
+		}
+		//quadTree->Clear();
+		delete hud;
+		hud = nullptr;
 	}
-	//quadTree->Clear();
-	delete hud;
-	hud = nullptr;
 	return true;
 }
 
