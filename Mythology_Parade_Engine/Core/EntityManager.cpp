@@ -156,10 +156,11 @@ bool EntityManager::Update(float dt)
 	if (crPreview.active)
 	{
 		iPoint mouse = App->map->GetMousePositionOnMap();
+		BuildingInfo build = buildingsData[buildingTestIndex];
 
 		crPreview.canBuild = true;
 		debugTex = App->scene->debugBlue_tex;
-
+		
 		for (int i = 0; i <= 1; i++)
 		{
 			for (int y = mouse.y; y > mouse.y - crPreview.height; y--)
@@ -185,6 +186,10 @@ bool EntityManager::Update(float dt)
 				}
 			}
 		}
+
+		//Preview of build
+		iPoint p = App->map->MapToWorld(mouse.x, mouse.y);
+		App->render->Blit(entitySpriteSheets[SpriteSheetType::BUILDINGS], p.x, p.y + ((App->map->data.tile_height / 2) * build.tileLenght) - build.blitSize.y, { build.blitSize.x, build.blitSize.y }, &build.spriteRect);
 	}
 
 	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN && crPreview.active && crPreview.canBuild)

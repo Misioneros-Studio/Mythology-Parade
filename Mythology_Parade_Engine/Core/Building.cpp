@@ -2,15 +2,32 @@
 #include "p2Log.h"
 Building::Building(BuildingType type, iPoint pos, BuildingInfo info)
 {
-
-	position = { (float)pos.x, (float)pos.y};
-	buildingStatus = CONSTRUCTING;
-	buildingAction = NOTHING;
-	time_producing = 0;
+	//default inits with none value
+	damage = 0;
+	defenses = 0;
+	influence = 0;
+	maxCap = 0;
+	nearbyMonks = 0;
+	researched = false;
+	time_construction = 0;
+	time_research = 0;
 	percentage_constructing = 0;
+	time_producing = 0;
 	first_time_constructing = true;
+	/*---------------*/
+
+	//inits with some values
+	position = { (float)pos.x, (float)pos.y};
+	buildingStatus = BuildingStatus::CONSTRUCTING;
+	buildingAction = BuildingAction::NOTHING;
+
 	buildingType = type;
-	
+	original_spriteRect = spriteRect = info.spriteRect;
+	blitRect = info.blitSize;
+
+	tileLenght = info.tileLenght;
+	int blitWidth = tileLenght * App->map->data.tile_width;
+
 	if (App->entityManager->getPlayer()) 
 	{
 		displayDebug = App->entityManager->getPlayer()->displayDebug;
@@ -76,16 +93,17 @@ Building::Building(BuildingType type, iPoint pos, BuildingInfo info)
 		break;
 	}
 	HealthSystem::Init();
+	collisionRect = { (int)position.x, (int)position.y + ((App->map->data.tile_height / 2) * tileLenght), blitRect.x, -blitRect.y };
+	spriteRect = App->entityManager->constructorSpriteRect;
+	blitRect = App->entityManager->CalculateBuildingSize(blitWidth, spriteRect.w, spriteRect.h);
+	switch (buildingType)
+	{
+	case BuildingType::FORTRESS:
+		spriteRect = original_spriteRect;
+		blitRect = App->entityManager->CalculateBuildingSize(blitWidth, spriteRect.w, spriteRect.h);
+		break;
+	}
 
-
-	original_spriteRect = spriteRect = info.spriteRect;
-	blitRect = info.blitSize;
-
-
-	//buildingType = info.buildingType;
-	tileLenght = info.tileLenght;
-
-	collisionRect = { (int)position.x, (int)position.y + ((App->map->data.tile_height / 2) * tileLenght), blitRect.x, -blitRect.y};
 
 	timer_construction.Start();
 }
@@ -139,12 +157,12 @@ bool Building::Update(float dt)
 		timer_construction.Pause();
 	else if (App->scene->paused_game == false && timer_construction.isPaused() == true)
 		timer_construction.Resume();
-	if (first_time_constructing == true && buildingStatus == CONSTRUCTING)
+	if (first_time_constructing == true && buildingStatus == BuildingStatus::CONSTRUCTING)
 	{
 		int actual_construction_time = timer_construction.ReadSec();
 		if (actual_construction_time >= time_construction)
 		{
-			buildingStatus = FINISHED;
+			buildingStatus = BuildingStatus::FINISHED;
 			percentage_constructing = 1;
 			first_time_constructing = false;
 
@@ -154,18 +172,18 @@ bool Building::Update(float dt)
 			percentage_constructing = (float)actual_construction_time / (float)time_construction;
 		}
 	}
-	else if (buildingAction != NOTHING) {
+	else if (buildingAction != BuildingAction::NOTHING) {
 		int actual_construction_time = timer_construction.ReadSec();
 		if (actual_construction_time >= time_producing)
 		{
 
-			if (buildingAction == PRODUCING) {
+			if (buildingAction == BuildingAction::PRODUCING) {
 				FinishProduction(element_producing);
 			}
-			else if(buildingAction==RESEARCHING){
+			else if(buildingAction== BuildingAction::RESEARCHING){
 				App->scene->FinishResearching(element_producing);
 			}
-			buildingAction = NOTHING;
+			buildingAction = BuildingAction::NOTHING;
 			percentage_constructing = 1;
 
 		}
@@ -176,32 +194,32 @@ bool Building::Update(float dt)
 	}
 	if (App->input->GetKey(SDL_SCANCODE_3) == KEY_DOWN)
 	{
-		buildingStatus = DESTROYED;
+		buildingStatus = BuildingStatus::DESTROYED;
 		first_time_constructing = false;
 	}
 	if (App->input->GetKey(SDL_SCANCODE_4) == KEY_DOWN)
 	{
-		buildingStatus = CONSTRUCTING;
+		buildingStatus = BuildingStatus::CONSTRUCTING;
 	}
 	if (App->input->GetKey(SDL_SCANCODE_5) == KEY_DOWN)
 	{
-		buildingStatus = FINISHED;
+		buildingStatus = BuildingStatus::FINISHED;
 		first_time_constructing = false;
 	}
 	int blitWidth = tileLenght * App->map->data.tile_width;
-	if(buildingStatus==DESTROYED)
+	if(buildingStatus== BuildingStatus::DESTROYED)
 	{
 		spriteRect = App->entityManager->destructedSpriteRect;
 
 		blitRect = App->entityManager->CalculateBuildingSize(blitWidth, spriteRect.w, spriteRect.h);
 	}
-	else if (buildingStatus==CONSTRUCTING)
+	else if (buildingStatus== BuildingStatus::CONSTRUCTING)
 	{
 		spriteRect = App->entityManager->constructorSpriteRect;
 
 		blitRect = App->entityManager->CalculateBuildingSize(blitWidth, spriteRect.w, spriteRect.h);
 	}
-	else if (buildingStatus==FINISHED)
+	else if (buildingStatus== BuildingStatus::FINISHED)
 	{
 		spriteRect = original_spriteRect;
 
@@ -209,11 +227,11 @@ bool Building::Update(float dt)
 	}
 
 	//Draw();
-	if (buildingStatus == CONSTRUCTING || buildingAction==PRODUCING) 
+	if (buildingStatus == BuildingStatus::CONSTRUCTING || buildingAction== BuildingAction::PRODUCING)
 	{
 		Draw_Construction_Bar(blitWidth);
 	}
-	else if (buildingAction == RESEARCHING) 
+	else if (buildingAction == BuildingAction::RESEARCHING)
 	{
 		Draw_Construction_Bar(blitWidth, 2);
 	}
@@ -274,7 +292,7 @@ void Building::Draw_Construction_Bar(int blitWidth, int bar_used)
 
 
 void Building::StartProducing(int time, std::string thing_producing) {
-	buildingAction = PRODUCING;
+	buildingAction = BuildingAction::PRODUCING;
 	percentage_constructing = 0;
 	time_producing = time;
 	element_producing = thing_producing;
@@ -310,7 +328,7 @@ void Building::FinishProduction(std::string thing_produced)
 }
 
 void Building::StartResearching(int time, std::string thing_producing) {
-	buildingAction = RESEARCHING;
+	buildingAction = BuildingAction::RESEARCHING;
 	percentage_constructing = 0;
 	time_producing = time;
 	element_producing = thing_producing;

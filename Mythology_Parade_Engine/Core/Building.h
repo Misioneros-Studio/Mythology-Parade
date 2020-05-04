@@ -13,13 +13,13 @@ enum BuildingType
 	TEMPLE,
 	ENCAMPMENT
 };
-enum BuildingStatus
+enum class BuildingStatus
 {
 	CONSTRUCTING,
 	FINISHED,
 	DESTROYED
 };
-enum BuildingAction
+enum class BuildingAction
 {
 	RESEARCHING,
 	PRODUCING,
