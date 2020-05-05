@@ -100,6 +100,9 @@
     <ClCompile Include="HUD.cpp">
       <Filter>Core\Scenes\HUD</Filter>
     </ClCompile>
+    <ClCompile Include="j1ElementsAnimation.cpp">
+      <Filter>Core\Modules</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1Window.h">
@@ -215,6 +218,9 @@
     </ClInclude>
     <ClInclude Include="HUD.h">
       <Filter>Core\Scenes\HUD</Filter>
+    </ClInclude>
+    <ClInclude Include="j1ElementsAnimation.h">
+      <Filter>Core\Modules</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
