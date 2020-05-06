@@ -16,7 +16,6 @@
 #include "CombatUnit.h"
 #include "j1Scene.h"
 #include "j1FadeToBlack.h"
-#include "j1ElementsAnimation.h"
 #include "HUD.h"
 
 #include"QuadTree.h"
@@ -117,11 +116,6 @@ bool j1Scene::Start()
 // Called each loop iteration
 bool j1Scene::PreUpdate()
 {
-	//To PLAYER WIN PROVISIONAL
-	if (App->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN) {
-		App->entityManager->getPlayer()->player_win = true;
-	}
-
 
 	// debug pathfing ------------------
 	if (App->input->GetMouseButtonDown(SDL_BUTTON_RIGHT) == KEY_DOWN)
@@ -593,25 +587,33 @@ void j1Scene::DoWinOrLoseWindow(int type, bool win) {
 	SDL_Rect sec_win = { 807, 0,807, 345 };
 	SDL_Rect sec_lose = { 807, 345,807, 345 };
 
-	if (hud->start_timer == false)
+	if (hud->start_timer == false) {
 		hud->timer_win_lose.Start();
+		animation_win_lose_timer.Start();
+	}
 
 	hud->start_timer = true;
 
+	if (animation_win_lose_timer.ReadSec() <= 2) {
+		global_pos = DoTransitionWinLose(230, 100, winlose_tex, animation_win_lose_timer);
+	}
+
+	else if (animation_win_lose_timer.ReadSec() >=2) {
+		global_pos.y = 100;
+	}
+
 	if (type == 1) {
 		if (win == true) {
-			App->elements_animation->Transition(which_animation::up_and_fade, winlose_tex, sec_viking, 230, 100);
-			//App->render->Blit(winlose_tex, 230, 100, &sec_viking, NULL, 0.0F);
-			App->render->Blit(winlose_tex, 230, 100, &sec_win, NULL, 0.0F);
+			App->render->Blit(winlose_tex, global_pos.x, global_pos.y, &sec_viking, NULL, 0.0F);
+			App->render->Blit(winlose_tex, global_pos.x, global_pos.y, &sec_win, NULL, 0.0F);
 			if (Mix_Playing(3) == 0) 
-      {
+			{
 				App->audio->PlayFx(3, WinViking_sound);
 			}
 		}
 		else {
-			App->elements_animation->Transition(which_animation::up_and_fade, winlose_tex, sec_greek, 230, 100);
-			//App->render->Blit(winlose_tex, 230, 100, &sec_greek, NULL, 0.0F);
-			App->render->Blit(winlose_tex, 230, 100, &sec_lose, NULL, 0.0F);
+			App->render->Blit(winlose_tex, global_pos.x, global_pos.y, &sec_greek, NULL, 0.0F);
+			App->render->Blit(winlose_tex, global_pos.x, global_pos.y, &sec_lose, NULL, 0.0F);
 			if (Mix_Playing(3) == 0) {
 				App->audio->PlayFx(3, Lose_sound);
 			}
@@ -620,17 +622,15 @@ void j1Scene::DoWinOrLoseWindow(int type, bool win) {
 
 	if (type == 2) {
 		if (win == true) {
-			App->elements_animation->Transition(which_animation::up_and_fade, winlose_tex, sec_greek, 230, 100);
-			//App->render->Blit(winlose_tex, 230, 100, &sec_greek, NULL, 0.0F);
-			App->render->Blit(winlose_tex, 230, 100, &sec_lose, NULL, 0.0F);
+			App->render->Blit(winlose_tex, global_pos.x, global_pos.y, &sec_greek, NULL, 0.0F);
+			App->render->Blit(winlose_tex, global_pos.x, global_pos.y, &sec_lose, NULL, 0.0F);
 			if (Mix_Playing(3) == 0) {
 				App->audio->PlayFx(3, WinGreek_sound);
 			}
 		}
 		else {
-			App->elements_animation->Transition(which_animation::up_and_fade, winlose_tex, sec_viking, 230, 100);
-			//App->render->Blit(winlose_tex, 230, 100, &sec_viking, NULL, 0.0F);
-			App->render->Blit(winlose_tex, 230, 100, &sec_win, NULL, 0.0F);
+			App->render->Blit(winlose_tex, global_pos.x, global_pos.y, &sec_viking, NULL, 0.0F);
+			App->render->Blit(winlose_tex, global_pos.x, global_pos.y, &sec_win, NULL, 0.0F);
 			if (Mix_Playing(3) == 0) {
 				App->audio->PlayFx(3, Lose_sound);
 			}
@@ -652,4 +652,27 @@ void j1Scene::FinishResearching(std::string thing_researched) {
 	else if (thing_researched == "Encampment") {
 		hud->research_encampment = true;
 	}
+}
+
+
+fPoint j1Scene::DoTransitionWinLose(int pos_x, int pos_y, SDL_Texture* tex, j1Timer time) {
+	fPoint position_global;
+	position_global.x = pos_x;
+
+	if (first_time_timer_win == false) {
+		animation_win_lose_timer.Start();
+		first_time_timer_win = true;
+	}
+
+	float percentatge = time.ReadSec() *0.5f;
+	position_global.y = LerpValue(percentatge, 200, 100);
+
+	SDL_SetTextureAlphaMod(tex, 255*percentatge);
+
+	return position_global;
+}
+
+float j1Scene::LerpValue(float percent, float start, float end)
+{
+	return start + percent * (end - start);
 }

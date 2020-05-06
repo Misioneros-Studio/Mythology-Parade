@@ -20,7 +20,6 @@
 #include "Console.h"
 #include "EntityManager.h"
 #include "j1FadeToBlack.h"
-#include "j1ElementsAnimation.h"
 #include "j1App.h"
 
 
@@ -45,7 +44,6 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	console = new Console();
 	entityManager = new EntityManager();
 	fade_to_black = new j1FadeToBlack();
-	elements_animation = new j1ElementsAnimation();
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
@@ -72,7 +70,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 
 	// render last to swap buffer
 	AddModule(fade_to_black);
-	AddModule(elements_animation);
+
 	AddModule(render);
 
 

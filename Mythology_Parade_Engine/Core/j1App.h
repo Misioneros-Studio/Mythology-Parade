@@ -25,7 +25,6 @@ class j1Gui;
 class Console;
 class EntityManager;
 class j1FadeToBlack;
-class j1ElementsAnimation;
 
 class j1App
 {
@@ -111,7 +110,6 @@ public:
 	Console*			console = NULL;
 	EntityManager*		entityManager = NULL;
 	j1FadeToBlack*		fade_to_black = NULL;
-	j1ElementsAnimation* elements_animation = NULL;
  
 	bool				restart_scene = false;
 
