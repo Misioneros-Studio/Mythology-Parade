@@ -32,43 +32,8 @@ CombatUnit::CombatUnit(UnitType type, iPoint pos) : Unit(type, pos), range(0), d
 		break;
 	case UnitType::FOOTMAN:
 		break;
-	case UnitType::JOTNAR:
-		time_production = 7;
-		time_research = 210;
-		researched = true;
-		//Change texture
-		LevelSystem::Init(-1, -1, -1);
-		CombatUnit::Init(150, 0, 1, 80);
-		collisionRect = { 0, 0, 123, -175 };
-		break;
-	case UnitType::DRAUGAR:
-		time_production = 7;
-		time_research = 210;
-		researched = true;
-		//Change texture
-		LevelSystem::Init(-1, -1, -1);
-		CombatUnit::Init(40, 0, 1, 80);
-		collisionRect = { 0, 0, 40, -60 };
-		break;
-	case UnitType::CYCLOP:
-		time_production = 7;
-		time_research = 210;
-		researched = true;
-		//Change texture
-		LevelSystem::Init(-1, -1, -1);
-		CombatUnit::Init(150, 0, 1, 80);
-		collisionRect = { 0, 0, 118, -130 };
-		break;
-	case UnitType::MINOTAUR:
-		time_production = 7;
-		time_research = 210;
-		researched = true;
-		//Change texture
-		LevelSystem::Init(-1, -1, -1);
-		CombatUnit::Init(40, 0, 1, 80);
-		collisionRect = { 0, 0, 60, -67 };
-		break;
 	}
+	realDamage = damage;
 }
 
 CombatUnit::~CombatUnit()
@@ -122,6 +87,11 @@ void CombatUnit::LevelUp()
 	}
 }
 
+void CombatUnit::SetDamage(int d)
+{
+	damage = realDamage + d;
+}
+
 
 
 void CombatUnit::Init(int maxHealth, int damage, int range, int speed)
@@ -140,6 +110,26 @@ void CombatUnit::Init(int maxHealth, int damage, int range, int speed)
 bool CombatUnit::Update(float dt) 
 {
 	Unit::Update(dt);
+
+	if (civilization == CivilizationType::VIKING)
+	{
+		std::list<Entity*> list = App->entityManager->entities[EntityType::UNIT];
+		int count = 0;
+		for each (Unit * var in list)
+		{
+			if (var->unitType == UnitType::MINOTAUR)
+			{
+				SetDefaultHealth();
+				if (position.DistanceManhattan(var->position) < 300)
+				{
+					IncreaseHealth(-20);
+					LOG("%i", GetHealth());
+				}
+						
+			}
+		}
+	}
+	
 
 	return true;
 }
@@ -173,5 +163,10 @@ void CombatUnit::IncreaseSpeed(int value)
 void CombatUnit::IncreaseDamage(int value)
 {
 	damage += value;
+}
+
+void CombatUnit::SetDefaultHealth()
+{
+	HealthSystem::SetDefaultHealth();
 }
 

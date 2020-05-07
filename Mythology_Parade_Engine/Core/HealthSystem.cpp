@@ -5,7 +5,7 @@
 void HealthSystem::Init()
 {
 	isDeath = false;
-	health = maxHealth;
+	health = defaultHealth = maxHealth;
 }
 
 bool HealthSystem::RecieveDamage(int value)
@@ -34,5 +34,10 @@ void HealthSystem::IncreaseHealth(int value)
 {
 	health += value;
 	maxHealth += value;
+}
+
+void HealthSystem::SetDefaultHealth()
+{
+	maxHealth = defaultHealth;
 }
 

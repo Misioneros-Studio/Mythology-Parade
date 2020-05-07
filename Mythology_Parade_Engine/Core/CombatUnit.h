@@ -19,6 +19,10 @@ public:
 	bool Update(float);
 	void Action(Entity*) override;
 	void LevelUp();
+	void SetDamage(int d);
+
+	int realDamage;
+
 private:
 	void Init(int maxHealth, int damage, int range, int speed);
 
@@ -29,7 +33,8 @@ public:
 	void IncreaseHealth(int);
 	void IncreaseSpeed(int);
 	void IncreaseDamage(int);
-
+	void SetDefaultHealth();
+	
 };
 
 #endif // !__COMBATUNIT_H__

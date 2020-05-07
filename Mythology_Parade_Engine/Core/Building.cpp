@@ -77,7 +77,7 @@ Building::Building(BuildingType type, iPoint pos, BuildingInfo info)
 	}
 	HealthSystem::Init();
 
-
+	mainDef = defenses;
 	original_spriteRect = spriteRect = info.spriteRect;
 	blitRect = info.blitSize;
 
@@ -232,7 +232,41 @@ bool Building::Update(float dt)
 			App->entityManager->getPlayer()->IncreaseFaithRatio(nearbyMonks);			
 		}
 	}
-  
+
+	//IF BUILDING DETECTS CYCLOP
+	if (civilization == CivilizationType::GREEK)
+	{
+		std::list<Entity*> list = App->entityManager->entities[EntityType::UNIT];
+		int count = 0;
+		for each (Unit * var in list)
+		{
+			if (var->unitType == UnitType::CYCLOP) {
+				if (position.DistanceManhattan(var->position) < 100)
+					count++;
+			}
+		}
+		defenses = mainDef;
+		defenses += 50 * count;
+	}
+
+	//IF BUILDING DETECTS JOTNAR
+	if (civilization == CivilizationType::VIKING)
+	{
+		std::list<Entity*> list = App->entityManager->entities[EntityType::UNIT];
+		int count = 0;
+		for each (Unit * var in list)
+		{
+			if (var->unitType == UnitType::JOTNAR) {
+				if (position.DistanceManhattan(var->position) < 100)
+					count++;
+			}
+		}
+		defenses = mainDef;
+		defenses += 50 * count;
+	}
+
+
+
 	return ret;
 }
 
