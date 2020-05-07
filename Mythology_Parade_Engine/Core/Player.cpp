@@ -203,7 +203,7 @@ void Player::PlayerInputs()
 	{
 		iPoint mouse = App->map->GetMousePositionOnMap();
 		iPoint spawnPos = App->map->TileCenterPoint(mouse);
-		App->entityManager->CreateUnitEntity(UnitType::CYCLOP , spawnPos, civilization);
+		App->entityManager->CreateUnitEntity(UnitType::MINOTAUR , spawnPos, civilization);
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_F4) == KEY_DOWN && App->scene->godMode)
@@ -315,8 +315,8 @@ void Player::InitVikings()
 	assassinPos = App->map->MapToWorld(assassinPos.x, assassinPos.y);
 
 
-	App->entityManager->CreateUnitEntity(UnitType::MONK, monkPos,civilization);
-	App->entityManager->CreateUnitEntity(UnitType::ASSASSIN, assassinPos,civilization);
+	App->entityManager->CreateUnitEntity(UnitType::MONK, monkPos, CivilizationType::VIKING);
+	App->entityManager->CreateUnitEntity(UnitType::ASSASSIN, assassinPos, CivilizationType::VIKING);
 
 }
 
