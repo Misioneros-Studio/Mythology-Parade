@@ -51,6 +51,7 @@ void HUD::StartHUD() {
 				if (i < 5) {
 					hud_button_actions[i] = nullptr;
 					hud_button_actions_unclickable[i] = nullptr;
+					ui_volume_sliders[i] = nullptr;
 					if (i < 4) {
 						ui_text_winlose[i] = nullptr;
 						ui_text_confirmation[i] = nullptr;
@@ -63,6 +64,7 @@ void HUD::StartHUD() {
 								ui_button_winlose[i] = nullptr;
 								ui_button_options[i] = nullptr;
 								ui_pause_black_screen[i] = nullptr;
+								ui_text_volume_sliders[i] = nullptr;
 							}
 						}
 					}
@@ -151,18 +153,29 @@ void HUD::ActivateOptionsMenu() {
 		uint w, h;
 		App->win->GetWindowSize(w, h);
 		ui_pause_black_screen[1] = (ImageUI*)App->gui->CreateUIElement(Type::IMAGE, nullptr, { 0,0,(int)w,(int)h }, "", 255, 255, 255, 100);
-		ui_options_window = (WindowUI*)App->gui->CreateUIElement(Type::WINDOW, nullptr, { 410,200,459,168 }, { 790,408,459,168 });
-
-		ui_button_options[0] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_options_window, { 520,300,237,38 }, { 787,240,237,38 }, "CLOSE OPTIONS", { 787,342,237,38 },
-			{ 787,291,237,38 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::CLOSE);
-		ui_button_options[1] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_options_window, { 570,250,36,36 }, { 16,21,36,36 }, "FULLSCREEN", { 98,21,36,36 },
+		ui_options_window = (WindowUI*)App->gui->CreateUIElement(Type::WINDOW, nullptr, { 410,200,459,321 }, { 1278,4,459,321 });
+		ui_button_options[0] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_options_window, { 520,453,237,38 }, { 787,240,237,38 }, "CLOSE OPTIONS", { 787,342,237,38 }, { 787,291,237,38 },
+			false, { 0,0,0,0 }, App->scene, (int)UI_Audio::CLOSE);
+		ui_button_options[1] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_options_window, { 570,260,36,36 }, { 16,21,36,36 }, "FULLSCREEN", { 98,21,36,36 },
 			{ 57,21,36,36 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::MAIN_MENU);
 		if (App->win->isFullscreen() == true) {
 			ui_button_options[1]->sprite1.y = ui_button_options[1]->sprite2.y = ui_button_options[1]->sprite3.y = 61;
 		}
-		ui_text_options[0] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 619,312,237,38 }, { 0,0,100,100 }, "Close", { 0,0,0,255 });
-		ui_text_options[1] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 583,212,237,38 }, { 0,0,100,100 }, "OPTIONS", { 255,255,255,255 }, { 1,0,0,0 });
-		ui_text_options[2] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 620,260,237,38 }, { 0,0,100,100 }, "FULLSCREEN", { 255,255,255,255 });
+		ui_text_options[0] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, ui_options_window, { 619,465,237,38 }, { 0,0,100,100 }, "Close", { 0,0,0,255 });
+		ui_text_options[1] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, ui_options_window, { 583,212,237,38 }, { 0,0,100,100 }, "OPTIONS", { 255,255,255,255 }, { 1,0,0,0 });
+		ui_text_options[2] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, ui_options_window, { 620,270,237,38 }, { 0,0,100,100 }, "FULLSCREEN", { 255,255,255,255 });
+		ui_text_volume_sliders[0] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, ui_options_window, { 590,314,237,38 }, { 0,0,100,100 }, "MUSIC'S VOLUME", { 255,255,255,255 });
+		ui_volume_sliders[0] = (ImageUI*)App->gui->CreateUIElement(Type::IMAGE, ui_options_window, { 548,340,(int)(181 * ((float)App->audio->GetVolumeMusic() / (float)128)),17 },
+			{ 1072,250,181,17 });
+		ui_volume_sliders[1] = (ImageUI*)App->gui->CreateUIElement(Type::IMAGE, ui_options_window, { 531,334,215,30 }, { 1053,350,215,30 });
+		ui_volume_sliders[2] = (ImageUI*)App->gui->CreateUIElement(Type::IMAGE, ui_options_window, { 548,337,36,24 }, { 1072,180,36,24 }, "VOLUME_CONTROL", { 0,0,0,0 }, { 0,0,0,0 },
+			true, { 548,337,181,0 }, App->audio, 0, false, ((float)App->audio->GetVolumeMusic() / (float)128));
+		ui_text_volume_sliders[1] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, ui_options_window, { 598,379,237,38 }, { 0,0,100,100 }, "FX'S VOLUME", { 255,255,255,255 });
+		ui_volume_sliders[3] = (ImageUI*)App->gui->CreateUIElement(Type::IMAGE, ui_options_window, { 548,405,(int)(181 * ((float)App->audio->GetVolumeFx() / (float)128)),17 },
+			{ 1072,250,181,17 });
+		ui_volume_sliders[4] = (ImageUI*)App->gui->CreateUIElement(Type::IMAGE, ui_options_window, { 531,399,215,30 }, { 1053,350,215,30 });
+		ui_volume_sliders[5] = (ImageUI*)App->gui->CreateUIElement(Type::IMAGE, ui_options_window, { 548,402,36,24 }, { 1072,180,36,24 }, "FX_CONTROL", { 0,0,0,0 }, { 0,0,0,0 },
+			true, { 548,402,181,0 }, App->audio, 0, false, ((float)App->audio->GetVolumeFx() / (float)128));
 	}
 	for (int i = 0; i < 7; i++) {
 		if (ui_button[i] != nullptr) {
@@ -180,16 +193,26 @@ void HUD::DeactivateOptionsMenu() {
 			App->gui->DeleteUIElement(ui_pause_black_screen[1]);
 			ui_pause_black_screen[1] = nullptr;
 		}
-		for (int i = 1; i >= 0; i--) {
-			if (ui_button_options[i] != nullptr) {
-				App->gui->DeleteUIElement(ui_button_options[i]);
-				ui_button_options[i] = nullptr;
+		for (int i = 5; i >= 0; i--) {
+			if (ui_volume_sliders[i] != nullptr) {
+				App->gui->DeleteUIElement(ui_volume_sliders[i]);
+				ui_volume_sliders[i] = nullptr;
 			}
-		}
-		for (int i = 2; i >= 0; i--) {
-			if (ui_text_options[i] != nullptr) {
-				App->gui->DeleteUIElement(ui_text_options[i]);
-				ui_text_options[i] = nullptr;
+			if (i < 3) {
+				if (i < 2) {
+					if (ui_button_options[i] != nullptr) {
+						App->gui->DeleteUIElement(ui_button_options[i]);
+						ui_button_options[i] = nullptr;
+					}
+					if (ui_text_volume_sliders[i] != nullptr) {
+						App->gui->DeleteUIElement(ui_text_volume_sliders[i]);
+						ui_text_volume_sliders[i] = nullptr;
+					}
+				}
+				if (ui_text_options[i] != nullptr) {
+					App->gui->DeleteUIElement(ui_text_options[i]);
+					ui_text_options[i] = nullptr;
+				}
 			}
 		}
 	}
@@ -1042,4 +1065,14 @@ void HUD::PauseGame() {
 void HUD::ResumeGame() {
 	App->scene->paused_game = false;
 	App->gui->ActivateButtons();
+}
+
+//Called when updating the scene to change the width of the sliders
+void HUD::UpdateSlider(int index) {
+	if (index == 0) {
+		ui_volume_sliders[0]->quad.w = (int)(181 * ((float)App->audio->GetVolumeMusic() / (float)128));
+	}
+	else if (index == 3) {
+		ui_volume_sliders[3]->quad.w = (int)(181 * ((float)App->audio->GetVolumeFx() / (float)128));
+	}
 }

@@ -75,21 +75,23 @@ bool j1TitleScene::Start()
 	close_menus = CloseTitleSceneMenus::None;
 
 
-	for (int i = 0; i < 4; i++) {
-		if (i < 3) {
-			if (i < 2) {
-				ui_button_options[i] = nullptr;
-				ui_text_tutorial[i] = nullptr;
-				ui_text_credits[i] = nullptr;
-				ui_button_confirmation[i] = nullptr;
-				ui_text_volume_sliders[i] = nullptr;
-			}
-			ui_button_civilization[i] = nullptr;
-			ui_text_options[i] = nullptr;
-		}
-		ui_text_civilization[i] = nullptr;
-		ui_text_confirmation[i] = nullptr;
+	for (int i = 0; i < 6; i++) {
 		ui_volume_sliders[i] = nullptr;
+		if (i < 4) {
+			if (i < 3) {
+				if (i < 2) {
+					ui_button_options[i] = nullptr;
+					ui_text_tutorial[i] = nullptr;
+					ui_text_credits[i] = nullptr;
+					ui_button_confirmation[i] = nullptr;
+					ui_text_volume_sliders[i] = nullptr;
+				}
+				ui_button_civilization[i] = nullptr;
+				ui_text_options[i] = nullptr;
+			}
+			ui_text_civilization[i] = nullptr;
+			ui_text_confirmation[i] = nullptr;
+		}
 	}
 	ui_tutorial_options = nullptr;
 	ui_button_credits = nullptr;
@@ -142,6 +144,12 @@ bool j1TitleScene::Update(float dt)
 		DeactivateCivilizationMenu();
 		close_menus = CloseTitleSceneMenus::None;
 		break;
+	}
+	if (ui_volume_sliders[0] != nullptr) {
+		ui_volume_sliders[0]->quad.w= (int)(181 * ((float)App->audio->GetVolumeMusic() / (float)128));
+	}
+	if (ui_volume_sliders[3] != nullptr) {
+		ui_volume_sliders[3]->quad.w= (int)(181 * ((float)App->audio->GetVolumeFx() / (float)128));
 	}
 	SDL_Rect sec2 = { 0, 0, App->render->camera.w, App->render->camera.h };
 	App->render->Blit(title_assets_tex, 0, 0, &sec2, 0.f);
@@ -212,21 +220,29 @@ void j1TitleScene::ActivateOptionsMenu() {
 		uint w, h;
 		App->win->GetWindowSize(w, h);
 		ui_pause_black_screen = (ImageUI*)App->gui->CreateUIElement(Type::IMAGE, nullptr, { 0,0,(int)w,(int)h }, "", 255, 255, 255, 100);
-		ui_options_window = (WindowUI*)App->gui->CreateUIElement(Type::WINDOW, nullptr, { 410,200,459,168 }, { 790,408,459,168 });
-		ui_button_options[0] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_options_window, { 520,300,237,38 }, { 787,240,237,38 }, "CLOSE OPTIONS", { 787,342,237,38 }, { 787,291,237,38 },
+		ui_options_window = (WindowUI*)App->gui->CreateUIElement(Type::WINDOW, nullptr, { 410,200,459,321 }, { 1278,4,459,321 });
+		ui_button_options[0] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_options_window, { 520,453,237,38 }, { 787,240,237,38 }, "CLOSE OPTIONS", { 787,342,237,38 }, { 787,291,237,38 },
 			false, { 0,0,0,0 }, this, (int)UI_Audio::CLOSE);
-		ui_button_options[1] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_options_window, { 570,250,36,36 }, { 16,21,36,36 }, "FULLSCREEN", { 98,21,36,36 },
+		ui_button_options[1] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_options_window, { 570,260,36,36 }, { 16,21,36,36 }, "FULLSCREEN", { 98,21,36,36 },
 			{ 57,21,36,36 }, false, { 0,0,0,0 }, this, (int)UI_Audio::MAIN_MENU);
 		if (App->win->isFullscreen() == true) {
 			ui_button_options[1]->sprite1.y = ui_button_options[1]->sprite2.y = ui_button_options[1]->sprite3.y = 61;
 		}
-		ui_text_options[0] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, ui_options_window, { 619,312,237,38 }, { 0,0,100,100 }, "Close", { 0,0,0,255 });
+		ui_text_options[0] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, ui_options_window, { 619,465,237,38 }, { 0,0,100,100 }, "Close", { 0,0,0,255 });
 		ui_text_options[1] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, ui_options_window, { 583,212,237,38 }, { 0,0,100,100 }, "OPTIONS", { 255,255,255,255 }, { 1,0,0,0 });
-		ui_text_options[2] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, ui_options_window, { 620,260,237,38 }, { 0,0,100,100 }, "FULLSCREEN", { 255,255,255,255 });
-		ui_volume_sliders[0]=(ImageUI*)App->gui->CreateUIElement(Type::IMAGE, ui_options_window, { 450,270,238,36 }, { 787,342,238,36 });
-		int num = App->audio->GetVolumeMusic();
-		ui_volume_sliders[1]=(ImageUI*)App->gui->CreateUIElement(Type::IMAGE, ui_options_window, { 460,280,14,9 }, { 1008,66,14,9 }, "VOLUME_CONTROL", { 0,0,0,0 }, { 0,0,0,0 },
-			true, { 450,270,230,0 }, App->audio, 0, false, ((float)App->audio->GetVolumeMusic() / (float)128));
+		ui_text_options[2] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, ui_options_window, { 620,270,237,38 }, { 0,0,100,100 }, "FULLSCREEN", { 255,255,255,255 });
+		ui_text_volume_sliders[0] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, ui_options_window, { 590,314,237,38 }, { 0,0,100,100 }, "MUSIC'S VOLUME", { 255,255,255,255 });
+		ui_volume_sliders[0] = (ImageUI*)App->gui->CreateUIElement(Type::IMAGE, ui_options_window, { 548,340,(int)(181* ((float)App->audio->GetVolumeMusic() / (float)128)),17 }, 
+			{ 1072,250,181,17 });
+		ui_volume_sliders[1]=(ImageUI*)App->gui->CreateUIElement(Type::IMAGE, ui_options_window, { 531,334,215,30 }, { 1053,350,215,30 });
+		ui_volume_sliders[2]=(ImageUI*)App->gui->CreateUIElement(Type::IMAGE, ui_options_window, { 548,337,36,24 }, { 1072,180,36,24 }, "VOLUME_CONTROL", { 0,0,0,0 }, { 0,0,0,0 },
+			true, { 548,337,181,0 }, App->audio, 0, false, ((float)App->audio->GetVolumeMusic() / (float)128));
+		ui_text_volume_sliders[1] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, ui_options_window, { 598,379,237,38 }, { 0,0,100,100 }, "FX'S VOLUME", { 255,255,255,255 });
+		ui_volume_sliders[3] = (ImageUI*)App->gui->CreateUIElement(Type::IMAGE, ui_options_window, { 548,405,(int)(181 * ((float)App->audio->GetVolumeFx() / (float)128)),17 },
+			{ 1072,250,181,17 });
+		ui_volume_sliders[4] = (ImageUI*)App->gui->CreateUIElement(Type::IMAGE, ui_options_window, { 531,399,215,30 }, { 1053,350,215,30 });
+		ui_volume_sliders[5] = (ImageUI*)App->gui->CreateUIElement(Type::IMAGE, ui_options_window, { 548,402,36,24 }, { 1072,180,36,24 }, "FX_CONTROL", { 0,0,0,0 }, { 0,0,0,0 },
+			true, { 548,402,181,0 }, App->audio, 0, false, ((float)App->audio->GetVolumeFx() / (float)128));
 
 	}
 	for (int i = 0; i < 5; i++) {
@@ -245,24 +261,30 @@ void j1TitleScene::DeactivateOptionsMenu() {
 			App->gui->DeleteUIElement(ui_pause_black_screen);
 			ui_pause_black_screen = nullptr;
 		}
-		for (int i = 2; i >= 0; i--) {
-			if (i < 2) {
-				if (ui_button_options[i] != nullptr) {
-					App->gui->DeleteUIElement(ui_button_options[i]);
-					ui_button_options[i] = nullptr;
-				}
-			}
-			if (ui_text_options[i] != nullptr) {
-				App->gui->DeleteUIElement(ui_text_options[i]);
-				ui_text_options[i] = nullptr;
-			}
+		for (int i = 5; i >= 0; i--) {
 			if (ui_volume_sliders[i] != nullptr) {
 				App->gui->DeleteUIElement(ui_volume_sliders[i]);
 				ui_volume_sliders[i] = nullptr;
 			}
+			if (i < 3) {
+				if (i < 2) {
+					if (ui_button_options[i] != nullptr) {
+						App->gui->DeleteUIElement(ui_button_options[i]);
+						ui_button_options[i] = nullptr;
+					}
+					if (ui_text_volume_sliders[i] != nullptr) {
+						App->gui->DeleteUIElement(ui_text_volume_sliders[i]);
+						ui_text_volume_sliders[i] = nullptr;
+					}
+				}
+				if (ui_text_options[i] != nullptr) {
+					App->gui->DeleteUIElement(ui_text_options[i]);
+					ui_text_options[i] = nullptr;
+				}
+			}
 		}
 	}
-	for (int i = 0; i < 5; i++) {
+	for (int i = 0; i < 6; i++) {
 		if (ui_button[i] != nullptr) {
 			ui_button[i]->front = true;
 		}
@@ -289,7 +311,7 @@ void j1TitleScene::ActivatCivilizationMenu() {
 		ui_text_civilization[2] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 470,256,237,38 }, { 0,0,100,100 }, "Greek", { 0,0,0,255 }, { 1,0,0,0 });
 		ui_text_civilization[3] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 725,256,237,38 }, { 0,0,100,100 }, "Viking", { 0,0,0,255 }, { 1,0,0,0 });
 	}
-	for (int i = 0; i < 5; i++) {
+	for (int i = 0; i < 6; i++) {
 		if (ui_button[i] != nullptr) {
 			ui_button[i]->front = false;
 		}
@@ -320,7 +342,7 @@ void j1TitleScene::DeactivateCivilizationMenu() {
 			}
 		}
 	}
-	for (int i = 0; i < 5; i++) {
+	for (int i = 0; i < 6; i++) {
 		if (ui_button[i] != nullptr) {
 			ui_button[i]->front = true;
 		}
@@ -339,7 +361,7 @@ void j1TitleScene::ActivateTutorial() {
 		ui_text_tutorial[0] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 619,312,237,38 }, { 0,0,100,100 }, "Close", { 0,0,0,255 });
 		ui_text_tutorial[1] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 583,212,237,38 }, { 0,0,100,100 }, "TUTORIAL", { 255,255,255,255 }, { 1,0,0,0 });
 	}
-	for (int i = 0; i < 5; i++) {
+	for (int i = 0; i < 6; i++) {
 		if (ui_button[i] != nullptr) {
 			ui_button[i]->front = false;
 		}
@@ -366,7 +388,7 @@ void j1TitleScene::DeactivateTutorial() {
 			}
 		}
 	}
-	for (int i = 0; i < 5; i++) {
+	for (int i = 0; i < 6; i++) {
 		if (ui_button[i] != nullptr) {
 			ui_button[i]->front = true;
 		}
@@ -387,7 +409,7 @@ void j1TitleScene::ActivateCredits() {
 		ui_text_credits[0] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 619,312,237,38 }, { 0,0,100,100 }, "Close", { 0,0,0,255 });
 		ui_text_credits[1] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 583,212,237,38 }, { 0,0,100,100 }, "CREDITS", { 255,255,255,255 }, { 1,0,0,0 });
 	}
-	for (int i = 0; i < 5; i++) {
+	for (int i = 0; i < 6; i++) {
 		if (ui_button[i] != nullptr) {
 			ui_button[i]->front = false;
 		}
@@ -414,7 +436,7 @@ void j1TitleScene::DeactivateCredits() {
 			}
 		}
 	}
-	for (int i = 0; i < 5; i++) {
+	for (int i = 0; i < 6; i++) {
 		if (ui_button[i] != nullptr) {
 			ui_button[i]->front = true;
 		}
@@ -441,7 +463,7 @@ void j1TitleScene::ActivateConfirmationMenu(std::string str) {
 		ui_text_confirmation[3] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 640 - (6 * size),247,237,38 }, { 0,0,100,100 }, text, { 255,255,255,255 }, { 1,0,0,0 });
 
 	}
-	for (int i = 0; i < 5; i++) {
+	for (int i = 0; i < 6; i++) {
 		if (ui_button[i] != nullptr) {
 			ui_button[i]->front = false;
 		}
@@ -472,7 +494,7 @@ void j1TitleScene::DeactivateConfirmationMenu() {
 			}
 		}
 	}
-	for (int i = 0; i < 5; i++) {
+	for (int i = 0; i < 6; i++) {
 		if (ui_button[i] != nullptr) {
 			ui_button[i]->front = true;
 		}
