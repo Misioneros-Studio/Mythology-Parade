@@ -291,6 +291,10 @@ public:
 
 	void WorkWithTextInput(std::string text);
 
+	void DeactivateButtons();
+
+	void ActivateButtons();
+
 private:
 
 	std::list <UI*> UIs;

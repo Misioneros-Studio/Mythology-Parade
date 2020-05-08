@@ -322,6 +322,26 @@ void j1Gui::ReturnConsole() {
 	}
 }
 
+void j1Gui::ActivateButtons() {
+	for (std::list<UI*>::iterator it = UIs.begin(); it != UIs.end(); it++)
+	{
+		if (it._Ptr->_Myval->type == Type::BUTTON) {
+			ButtonUI* button = (ButtonUI*)it._Ptr->_Myval;
+			button->front = true;
+		}
+	}
+}
+
+void j1Gui::DeactivateButtons() {
+	for (std::list<UI*>::iterator it = UIs.begin(); it != UIs.end(); it++)
+	{
+		if (it._Ptr->_Myval->type == Type::BUTTON) {
+			ButtonUI* button = (ButtonUI*)it._Ptr->_Myval;
+			button->front = false;
+		}
+	}
+}
+
 void j1Gui::WorkWithTextInput(std::string text) {
 	bool exit = false;
 	for (std::list<UI*>::iterator it = UIs.begin(); it != UIs.end() && exit == false; it++)

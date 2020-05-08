@@ -88,6 +88,7 @@ void HUD::StartHUD() {
 // Called when clicking esc
 void HUD::ActivatePauseMenu() {
 	if (ui_pause_window == nullptr) {
+		PauseGame();
 		uint w, h;
 		App->win->GetWindowSize(w, h);
 		ui_pause_black_screen[0] = (ImageUI*)App->gui->CreateUIElement(Type::IMAGE, nullptr, { 0,0,(int)w,(int)h }, "", 255, 255, 255, 100);
@@ -115,7 +116,6 @@ void HUD::ActivatePauseMenu() {
 		ui_text[6] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 620,522,237,38 }, { 0,0,100,100 }, "Close", { 0,0,0,255 });
 		ui_text[7] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 604,62,237,38 }, { 0,0,100,100 }, "PAUSE", { 255,255,255,255 }, { 1,0,0,0 });
 	}
-	App->scene->paused_game = true;
 }
 
 // Called when clicking close button in pause menu
@@ -140,7 +140,8 @@ void HUD::DeactivatePauseMenu() {
 			}
 		}
 	}
-	App->scene->paused_game = false;
+	ResumeGame();
+
 }
 
 
@@ -959,6 +960,7 @@ SDL_Rect HUD::GetSpritePortraitBuilding(int type_of_portrait, BuildingType build
 //Called when clicking the research button
 void HUD::ActivateResearchMenu() {
 	if (ui_research_window == nullptr) {
+		PauseGame();
 		uint w, h;
 		App->win->GetWindowSize(w, h);
 		ui_pause_black_screen[1] = (ImageUI*)App->gui->CreateUIElement(Type::IMAGE, nullptr, { 0,0,(int)w,(int)h }, "", 255, 255, 255, 100);
@@ -1003,7 +1005,6 @@ void HUD::ActivateResearchMenu() {
 			}
 		}
 	}
-	App->scene->paused_game = true;
 }
 
 //Called when clicking close button in the research menu
@@ -1028,5 +1029,17 @@ void HUD::DeactivateResearchMenu() {
 			}
 		}
 	}
+	ResumeGame();
+}
+
+//Called when pausing the game
+void HUD::PauseGame() {
+	App->scene->paused_game = true;
+	App->gui->DeactivateButtons();
+}
+
+//Called when resuming the game
+void HUD::ResumeGame() {
 	App->scene->paused_game = false;
+	App->gui->ActivateButtons();
 }

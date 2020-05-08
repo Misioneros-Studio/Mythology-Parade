@@ -89,6 +89,12 @@ public:
 	//Called when clicking close button in the research menu
 	void DeactivateResearchMenu();
 
+	//Called when pausing the game
+	void PauseGame();
+
+	//Called when resuming the game
+	void ResumeGame();
+
 private:
 	enum class Type_Selected {
 		None,
