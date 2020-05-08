@@ -102,6 +102,8 @@ private:
 	WindowUI* ui_civilization_window;
 	ButtonUI* ui_button_civilization[3];
 	TextUI* ui_text_civilization[4];
+	ImageUI* ui_volume_sliders[4];
+	TextUI* ui_text_volume_sliders[2];
 public:
 	CloseTitleSceneMenus close_menus;
 };

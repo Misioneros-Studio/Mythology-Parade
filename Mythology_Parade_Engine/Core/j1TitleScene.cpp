@@ -76,20 +76,20 @@ bool j1TitleScene::Start()
 
 
 	for (int i = 0; i < 4; i++) {
-		if (i != 3) {
-			ui_button_civilization[i] = nullptr;
-		}
 		if (i < 3) {
 			if (i != 2) {
 				ui_button_options[i] = nullptr;
 				ui_text_tutorial[i] = nullptr;
 				ui_text_credits[i] = nullptr;
 				ui_button_confirmation[i] = nullptr;
+				ui_text_volume_sliders[i] = nullptr;
 			}
+			ui_button_civilization[i] = nullptr;
 			ui_text_options[i] = nullptr;
 		}
 		ui_text_civilization[i] = nullptr;
 		ui_text_confirmation[i] = nullptr;
+		ui_volume_sliders[i] = nullptr;
 	}
 	ui_tutorial_options = nullptr;
 	ui_button_credits = nullptr;
@@ -214,9 +214,14 @@ void j1TitleScene::ActivateOptionsMenu() {
 		if (App->win->isFullscreen() == true) {
 			ui_button_options[1]->sprite1.y = ui_button_options[1]->sprite2.y = ui_button_options[1]->sprite3.y = 61;
 		}
-		ui_text_options[0] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 619,312,237,38 }, { 0,0,100,100 }, "Close", { 0,0,0,255 });
-		ui_text_options[1] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 583,212,237,38 }, { 0,0,100,100 }, "OPTIONS", { 255,255,255,255 }, { 1,0,0,0 });
-		ui_text_options[2] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 620,260,237,38 }, { 0,0,100,100 }, "FULLSCREEN", { 255,255,255,255 });
+		ui_text_options[0] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, ui_options_window, { 619,312,237,38 }, { 0,0,100,100 }, "Close", { 0,0,0,255 });
+		ui_text_options[1] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, ui_options_window, { 583,212,237,38 }, { 0,0,100,100 }, "OPTIONS", { 255,255,255,255 }, { 1,0,0,0 });
+		ui_text_options[2] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, ui_options_window, { 620,260,237,38 }, { 0,0,100,100 }, "FULLSCREEN", { 255,255,255,255 });
+		ui_volume_sliders[0]=(ImageUI*)App->gui->CreateUIElement(Type::IMAGE, ui_options_window, { 450,270,238,36 }, { 787,342,238,36 });
+		int num = App->audio->GetVolumeMusic();
+		ui_volume_sliders[1]=(ImageUI*)App->gui->CreateUIElement(Type::IMAGE, ui_options_window, { 460,280,14,9 }, { 1008,66,14,9 }, "VOLUME_CONTROL", { 0,0,0,0 }, { 0,0,0,0 },
+			true, { 450,270,230,0 }, App->audio, 0, false, ((float)App->audio->GetVolumeMusic() / (float)128));
+
 	}
 	for (int i = 0; i < 5; i++) {
 		if (ui_button[i] != nullptr) {
@@ -230,16 +235,20 @@ void j1TitleScene::DeactivateOptionsMenu() {
 	if (ui_options_window != nullptr) {
 		App->gui->DeleteUIElement(ui_options_window);
 		ui_options_window = nullptr;
-		for (int i = 1; i >= 0; i--) {
-			if (ui_button_options[i] != nullptr) {
-				App->gui->DeleteUIElement(ui_button_options[i]);
-				ui_button_options[i] = nullptr;
-			}
-		}
 		for (int i = 2; i >= 0; i--) {
+			if (i < 2) {
+				if (ui_button_options[i] != nullptr) {
+					App->gui->DeleteUIElement(ui_button_options[i]);
+					ui_button_options[i] = nullptr;
+				}
+			}
 			if (ui_text_options[i] != nullptr) {
 				App->gui->DeleteUIElement(ui_text_options[i]);
 				ui_text_options[i] = nullptr;
+			}
+			if (ui_volume_sliders[i] != nullptr) {
+				App->gui->DeleteUIElement(ui_volume_sliders[i]);
+				ui_volume_sliders[i] = nullptr;
 			}
 		}
 	}
@@ -279,16 +288,18 @@ void j1TitleScene::DeactivateCivilizationMenu() {
 	if (ui_civilization_window != nullptr) {
 		App->gui->DeleteUIElement(ui_civilization_window);
 		ui_civilization_window = nullptr;
-		for (int i = 2; i >= 0; i--) {
-			if (ui_button_civilization[i] != nullptr) {
-				App->gui->DeleteUIElement(ui_button_civilization[i]);
-				ui_button_civilization[i] = nullptr;
-			}
-		}
 		for (int i = 3; i >= 0; i--) {
-			if (ui_text_civilization[i] != nullptr) {
-				App->gui->DeleteUIElement(ui_text_civilization[i]);
-				ui_text_civilization[i] = nullptr;
+			if (i < 3) {
+				if (ui_button_civilization[i] != nullptr) {
+					App->gui->DeleteUIElement(ui_button_civilization[i]);
+					ui_button_civilization[i] = nullptr;
+				}
+			}
+			for (int i = 3; i >= 0; i--) {
+				if (ui_text_civilization[i] != nullptr) {
+					App->gui->DeleteUIElement(ui_text_civilization[i]);
+					ui_text_civilization[i] = nullptr;
+				}
 			}
 		}
 	}

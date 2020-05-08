@@ -78,7 +78,7 @@ bool j1Gui::PreUpdate()
 		std::list<UI*>::iterator it = UIs.begin();
 		std::advance(it, count);
 
-		if (it._Ptr->_Myval != UIs.end()._Ptr->_Myval)
+		if (it._Ptr->_Myval != UIs.end()._Ptr->_Myval && it._Ptr->_Myval->focus == true)
 			it._Ptr->_Myval->Move();
 	}
 	for(std::list<UI*>::iterator it = UIs.begin(); it != UIs.end(); it++)
@@ -778,14 +778,17 @@ bool ButtonUI::PreUpdate() {
 		over = true;
 	else over = false;
 	bool button = false;
-	if (App->input->GetMouseButtonDown(1) == KEY_DOWN || App->input->GetMouseButtonDown(1) == KEY_REPEAT) {
+	bool just_pushed = false;
+	if (App->input->GetMouseButtonDown(1) == KEY_DOWN && over == true) {
+		just_pushed = true;
+	}
+	if (App->input->GetMouseButtonDown(1) == KEY_REPEAT && pushed == true && over == true) {
 		pushing = true;
 	}
-	if (App->input->GetMouseButtonDown(1) == KEY_UP || App->input->GetKey(SDL_SCANCODE_RETURN))
+	if (App->input->GetMouseButtonDown(1) == KEY_UP && pushed == true && over == true)
 		button = true;
-	if (over == true && button == true)
-		pushed = true;
-	else pushed = false;
+	if (button == false)
+		pushed = false;
 	if (pushed && !App->gui->lockClick && !isLocked)
 	{
 		App->audio->PlayFx(1,click_sfx);
@@ -796,7 +799,7 @@ bool ButtonUI::PreUpdate() {
 		}
 		App->gui->lockClick = true;
 	}
-	if (pushing == true && over == true)
+	if (just_pushed == true || pushing == true)
 		pushed = true;
 	UI::PreUpdate();
 

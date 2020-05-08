@@ -37,6 +37,21 @@ public:
 
 	// Clean all fxs to change scene
 	bool CleanFxs();
+
+	// Change volume music
+	void ChangeVolumeMusic(float);
+
+	// Change volume fxs
+	void ChangeVolumeFx(float);
+
+	// Get volume music
+	int GetVolumeMusic();
+
+	// Get volume fxs
+	int GetVolumeFx();
+
+	void OnClick(UI*, float);
+
 private:
 
 	_Mix_Music*			music = NULL;
