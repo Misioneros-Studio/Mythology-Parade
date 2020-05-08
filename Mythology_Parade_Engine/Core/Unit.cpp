@@ -23,6 +23,8 @@ Unit::Unit(UnitType type, iPoint pos): unitType(type), state(AnimationType::IDLE
 	directionToTarget = {0, 0};
 	normalizedDirection = { 0, 0 };
 	timeToDespawn = 1.f;
+	insideMinotaur = false;
+	insideDraugar = false;
 	currentDirection = Direction::UP;
 	//Init Units
 	switch (type)
@@ -93,6 +95,65 @@ bool Unit::Update(float dt)
 	//Allawys blit the sprite at the end
 	StateMachineActions(dt);
 	//ret = Draw(dt);
+
+	//MINOTAUR PASSIVE EFFECT
+	if (civilization == CivilizationType::VIKING)
+	{
+		std::list<Entity*> list = App->entityManager->entities[EntityType::UNIT];
+		for each (Unit * var in list)
+		{
+			if (var->unitType == UnitType::MINOTAUR)
+			{
+				if (position.DistanceManhattan(var->position) < 300)
+				{
+					if (!insideMinotaur)
+					{
+						IncreaseHealth(-20);
+						insideMinotaur = true;
+					}
+				}
+				else
+				{
+					if (insideMinotaur)
+					{
+						SetDefaultHealth();
+						insideMinotaur = false;
+					}
+				}
+			}
+		}
+	}
+
+	//DRAUGAR PASSIVE EFFECT
+	if (civilization == CivilizationType::GREEK)
+	{
+		std::list<Entity*> list = App->entityManager->entities[EntityType::UNIT];
+		for each (Unit * var in list)
+		{
+			if (var->unitType == UnitType::DRAUGAR)
+			{
+				if (position.DistanceManhattan(var->position) < 300)
+				{
+					if (!insideDraugar)
+					{
+						IncreaseHealth(-20);
+						insideDraugar = true;
+					}
+					LOG("%i", GetHealth());
+				}
+				else
+				{
+					if (insideDraugar)
+					{
+						SetDefaultHealth();
+						insideDraugar = false;
+					}
+				}
+			}
+		}
+	}
+
+
 
 	//Return
 	return ret;

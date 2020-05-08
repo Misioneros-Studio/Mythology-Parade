@@ -51,6 +51,9 @@ public:
 	Unit* enemyTarget;
 	bool toDelete = false;
 
+	bool insideMinotaur;
+	bool insideDraugar;
+
 public:
 	Unit(UnitType, iPoint);
 	virtual ~Unit();

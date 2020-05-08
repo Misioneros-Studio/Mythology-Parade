@@ -39,5 +39,6 @@ void HealthSystem::IncreaseHealth(int value)
 void HealthSystem::SetDefaultHealth()
 {
 	maxHealth = defaultHealth;
+	health += 20;
 }
 

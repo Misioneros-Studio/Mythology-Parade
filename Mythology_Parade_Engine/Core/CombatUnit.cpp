@@ -109,27 +109,7 @@ void CombatUnit::Init(int maxHealth, int damage, int range, int speed)
 
 bool CombatUnit::Update(float dt) 
 {
-	Unit::Update(dt);
-
-	if (civilization == CivilizationType::VIKING)
-	{
-		std::list<Entity*> list = App->entityManager->entities[EntityType::UNIT];
-		int count = 0;
-		for each (Unit * var in list)
-		{
-			if (var->unitType == UnitType::MINOTAUR)
-			{
-				SetDefaultHealth();
-				if (position.DistanceManhattan(var->position) < 300)
-				{
-					IncreaseHealth(-20);
-					LOG("%i", GetHealth());
-				}
-						
-			}
-		}
-	}
-	
+	Unit::Update(dt);	
 
 	return true;
 }
