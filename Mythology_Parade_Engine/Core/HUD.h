@@ -126,7 +126,7 @@ private:
 	WindowUI* ui_research_window;
 	ButtonUI* ui_button_research[3];
 	TextUI* ui_text_research[8];
-	ImageUI* ui_pause_black_screen;
+	ImageUI* ui_pause_black_screen[2];
 
 public:
 	ImageUI* ui_ingame;

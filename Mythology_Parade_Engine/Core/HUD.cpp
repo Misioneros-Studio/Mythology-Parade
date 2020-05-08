@@ -62,6 +62,7 @@ void HUD::StartHUD() {
 							if (i < 2) {
 								ui_button_winlose[i] = nullptr;
 								ui_button_options[i] = nullptr;
+								ui_pause_black_screen[i] = nullptr;
 							}
 						}
 					}
@@ -75,7 +76,6 @@ void HUD::StartHUD() {
 	
 	hud_selected_troop = nullptr;
 	thing_selected = nullptr;
-	ui_pause_black_screen = nullptr;
 	
 	confirmation_option = "";
 
@@ -90,7 +90,7 @@ void HUD::ActivatePauseMenu() {
 	if (ui_pause_window == nullptr) {
 		uint w, h;
 		App->win->GetWindowSize(w, h);
-		ui_pause_black_screen = (ImageUI*)App->gui->CreateUIElement(Type::IMAGE, nullptr, { 0,0,(int)w,(int)h }, "", 255, 255, 255, 100);
+		ui_pause_black_screen[0] = (ImageUI*)App->gui->CreateUIElement(Type::IMAGE, nullptr, { 0,0,(int)w,(int)h }, "", 255, 255, 255, 100);
 		ui_pause_window = (WindowUI*)App->gui->CreateUIElement(Type::WINDOW, nullptr, { 410,50,459,531 }, { 216,21,459,531 });
 		ui_button[0] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_pause_window, { 520,110,237,38 }, { 787,240,237,38 }, "SAVE", { 787,342,237,38 }, { 787,291,237,38 }, false,
 			{ 0,0,0,0 }, App->scene, (int)UI_Audio::SAVE);
@@ -123,9 +123,9 @@ void HUD::DeactivatePauseMenu() {
 	if (ui_pause_window != nullptr) {
 		App->gui->DeleteUIElement(ui_pause_window);
 		ui_pause_window = nullptr;
-		if (ui_pause_black_screen != nullptr) {
-			App->gui->DeleteUIElement(ui_pause_black_screen);
-			ui_pause_black_screen = nullptr;
+		if (ui_pause_black_screen[0] != nullptr) {
+			App->gui->DeleteUIElement(ui_pause_black_screen[0]);
+			ui_pause_black_screen[0] = nullptr;
 		}
 		for (int i = 7; i >= 0; i--) {
 			if (i != 7) {
@@ -147,6 +147,9 @@ void HUD::DeactivatePauseMenu() {
 // Called when clicking options button in pause menu
 void HUD::ActivateOptionsMenu() {
 	if (ui_options_window == nullptr) {
+		uint w, h;
+		App->win->GetWindowSize(w, h);
+		ui_pause_black_screen[1] = (ImageUI*)App->gui->CreateUIElement(Type::IMAGE, nullptr, { 0,0,(int)w,(int)h }, "", 255, 255, 255, 100);
 		ui_options_window = (WindowUI*)App->gui->CreateUIElement(Type::WINDOW, nullptr, { 410,200,459,168 }, { 790,408,459,168 });
 
 		ui_button_options[0] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_options_window, { 520,300,237,38 }, { 787,240,237,38 }, "CLOSE OPTIONS", { 787,342,237,38 },
@@ -172,6 +175,10 @@ void HUD::DeactivateOptionsMenu() {
 	if (ui_options_window != nullptr) {
 		App->gui->DeleteUIElement(ui_options_window);
 		ui_options_window = nullptr;
+		if (ui_pause_black_screen[1] != nullptr) {
+			App->gui->DeleteUIElement(ui_pause_black_screen[1]);
+			ui_pause_black_screen[1] = nullptr;
+		}
 		for (int i = 1; i >= 0; i--) {
 			if (ui_button_options[i] != nullptr) {
 				App->gui->DeleteUIElement(ui_button_options[i]);
@@ -195,6 +202,9 @@ void HUD::DeactivateOptionsMenu() {
 // Called when clicking a button in the menu with confirmation message
 void HUD::ActivateConfirmationMenu(std::string str) {
 	if (ui_confirmation_window == nullptr) {
+		uint w, h;
+		App->win->GetWindowSize(w, h);
+		ui_pause_black_screen[1] = (ImageUI*)App->gui->CreateUIElement(Type::IMAGE, nullptr, { 0,0,(int)w,(int)h }, "", 255, 255, 255, 100);
 		ui_confirmation_window = (WindowUI*)App->gui->CreateUIElement(Type::WINDOW, nullptr, { 410,200,459,168 }, { 790,408,459,168 });
 		ui_button_confirmation[0] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_confirmation_window, { 470,300,117,38 }, { 834,125,117,24 }, "YES", { 834,149,117,24 },
 			{ 834,101,117,24 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::CONFIRMATION);
@@ -221,6 +231,10 @@ void HUD::DeactivateConfirmationMenu() {
 	if (ui_confirmation_window != nullptr) {
 		App->gui->DeleteUIElement(ui_confirmation_window);
 		ui_confirmation_window = nullptr;
+		if (ui_pause_black_screen[1] != nullptr) {
+			App->gui->DeleteUIElement(ui_pause_black_screen[1]);
+			ui_pause_black_screen[1] = nullptr;
+		}
 		for (int i = 3; i >= 0; i--) {
 			if (i < 2)
 			{
@@ -945,6 +959,9 @@ SDL_Rect HUD::GetSpritePortraitBuilding(int type_of_portrait, BuildingType build
 //Called when clicking the research button
 void HUD::ActivateResearchMenu() {
 	if (ui_research_window == nullptr) {
+		uint w, h;
+		App->win->GetWindowSize(w, h);
+		ui_pause_black_screen[1] = (ImageUI*)App->gui->CreateUIElement(Type::IMAGE, nullptr, { 0,0,(int)w,(int)h }, "", 255, 255, 255, 100);
 		ui_research_window = (WindowUI*)App->gui->CreateUIElement(Type::WINDOW, nullptr, { 410,200,459,268 }, { 790,408,459,168 });
 		ui_button_research[0] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_research_window, { 520,400,237,38 }, { 787,240,237,38 }, "CLOSE RESEARCH", { 787,342,237,38 },
 			{ 787,291,237,38 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::CLOSE);
@@ -994,6 +1011,10 @@ void HUD::DeactivateResearchMenu() {
 	if (ui_research_window != nullptr) {
 		App->gui->DeleteUIElement(ui_research_window);
 		ui_research_window = nullptr;
+		if (ui_pause_black_screen[1] != nullptr) {
+			App->gui->DeleteUIElement(ui_pause_black_screen[1]);
+			ui_pause_black_screen[1] = nullptr;
+		}
 		for (int i = 2; i >= 0; i--) {
 			if (ui_button_research[i] != nullptr) {
 				App->gui->DeleteUIElement(ui_button_research[i]);

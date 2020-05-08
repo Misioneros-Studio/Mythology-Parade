@@ -77,7 +77,7 @@ bool j1TitleScene::Start()
 
 	for (int i = 0; i < 4; i++) {
 		if (i < 3) {
-			if (i != 2) {
+			if (i < 2) {
 				ui_button_options[i] = nullptr;
 				ui_text_tutorial[i] = nullptr;
 				ui_text_credits[i] = nullptr;
@@ -93,12 +93,15 @@ bool j1TitleScene::Start()
 	}
 	ui_tutorial_options = nullptr;
 	ui_button_credits = nullptr;
+	ui_pause_black_screen = nullptr;
+
 
 	ui_civilization_window = nullptr;
 	ui_confirmation_window = nullptr;
 	ui_tutorial_window = nullptr;
 	ui_options_window = nullptr;
 	ui_credits_window = nullptr;
+
 
 	confirmation_option = "";
 	title_assets_tex = App->tex->Load("gui/TitleAssets.png");
@@ -206,6 +209,9 @@ void j1TitleScene::MoveMenu() {
 // Called when clicking options button in pause menu
 void j1TitleScene::ActivateOptionsMenu() {
 	if (ui_options_window == nullptr) {
+		uint w, h;
+		App->win->GetWindowSize(w, h);
+		ui_pause_black_screen = (ImageUI*)App->gui->CreateUIElement(Type::IMAGE, nullptr, { 0,0,(int)w,(int)h }, "", 255, 255, 255, 100);
 		ui_options_window = (WindowUI*)App->gui->CreateUIElement(Type::WINDOW, nullptr, { 410,200,459,168 }, { 790,408,459,168 });
 		ui_button_options[0] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_options_window, { 520,300,237,38 }, { 787,240,237,38 }, "CLOSE OPTIONS", { 787,342,237,38 }, { 787,291,237,38 },
 			false, { 0,0,0,0 }, this, (int)UI_Audio::CLOSE);
@@ -235,6 +241,10 @@ void j1TitleScene::DeactivateOptionsMenu() {
 	if (ui_options_window != nullptr) {
 		App->gui->DeleteUIElement(ui_options_window);
 		ui_options_window = nullptr;
+		if (ui_pause_black_screen != nullptr) {
+			App->gui->DeleteUIElement(ui_pause_black_screen);
+			ui_pause_black_screen = nullptr;
+		}
 		for (int i = 2; i >= 0; i--) {
 			if (i < 2) {
 				if (ui_button_options[i] != nullptr) {
@@ -264,6 +274,9 @@ void j1TitleScene::DeactivateOptionsMenu() {
 // Called when clicking new game button in menu
 void j1TitleScene::ActivatCivilizationMenu() {
 	if (ui_civilization_window == nullptr) {
+		uint w, h;
+		App->win->GetWindowSize(w, h);
+		ui_pause_black_screen = (ImageUI*)App->gui->CreateUIElement(Type::IMAGE, nullptr, { 0,0,(int)w,(int)h }, "", 255, 255, 255, 100);
 		ui_civilization_window = (WindowUI*)App->gui->CreateUIElement(Type::WINDOW, nullptr, { 410,200,459,168 }, { 790,408,459,168 });
 		ui_button_civilization[0] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_civilization_window, { 520,300,237,38 }, { 787,240,237,38 }, "CLOSE CIVILIZATION", { 787,342,237,38 },
 			{ 787,291,237,38 },	false, { 0,0,0,0 }, this, (int)UI_Audio::CLOSE);
@@ -288,6 +301,10 @@ void j1TitleScene::DeactivateCivilizationMenu() {
 	if (ui_civilization_window != nullptr) {
 		App->gui->DeleteUIElement(ui_civilization_window);
 		ui_civilization_window = nullptr;
+		if (ui_pause_black_screen != nullptr) {
+			App->gui->DeleteUIElement(ui_pause_black_screen);
+			ui_pause_black_screen = nullptr;
+		}
 		for (int i = 3; i >= 0; i--) {
 			if (i < 3) {
 				if (ui_button_civilization[i] != nullptr) {
@@ -313,6 +330,9 @@ void j1TitleScene::DeactivateCivilizationMenu() {
 // Called when clicking options button in pause menu
 void j1TitleScene::ActivateTutorial() {
 	if (ui_tutorial_window == nullptr) {
+		uint w, h;
+		App->win->GetWindowSize(w, h);
+		ui_pause_black_screen = (ImageUI*)App->gui->CreateUIElement(Type::IMAGE, nullptr, { 0,0,(int)w,(int)h }, "", 255, 255, 255, 100);
 		ui_tutorial_window = (WindowUI*)App->gui->CreateUIElement(Type::WINDOW, nullptr, { 410,200,459,168 }, { 790,408,459,168 });
 		ui_tutorial_options = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_tutorial_window, { 520,300,237,38 }, { 787,240,237,38 }, "CLOSE TUTORIAL", { 787,342,237,38 },
 			{ 787,291,237,38 }, false, { 0,0,0,0 }, this, (int)UI_Audio::CLOSE);
@@ -331,6 +351,10 @@ void j1TitleScene::DeactivateTutorial() {
 	if (ui_tutorial_window != nullptr) {
 		App->gui->DeleteUIElement(ui_tutorial_window);
 		ui_tutorial_window = nullptr;
+		if (ui_pause_black_screen != nullptr) {
+			App->gui->DeleteUIElement(ui_pause_black_screen);
+			ui_pause_black_screen = nullptr;
+		}
 		if (ui_tutorial_options != nullptr) {
 			App->gui->DeleteUIElement(ui_tutorial_options);
 			ui_tutorial_options = nullptr;
@@ -354,6 +378,9 @@ void j1TitleScene::DeactivateTutorial() {
 // Called when clicking options button in pause menu
 void j1TitleScene::ActivateCredits() {
 	if (ui_credits_window == nullptr) {
+		uint w, h;
+		App->win->GetWindowSize(w, h);
+		ui_pause_black_screen = (ImageUI*)App->gui->CreateUIElement(Type::IMAGE, nullptr, { 0,0,(int)w,(int)h }, "", 255, 255, 255, 100);
 		ui_credits_window = (WindowUI*)App->gui->CreateUIElement(Type::WINDOW, nullptr, { 410,200,459,168 }, { 790,408,459,168 });
 		ui_button_credits = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_credits_window, { 520,300,237,38 }, { 787,240,237,38 }, "CLOSE CREDITS", { 787,342,237,38 }, { 787,291,237,38 },
 			false, { 0,0,0,0 }, this, (int)UI_Audio::CLOSE);
@@ -372,6 +399,10 @@ void j1TitleScene::DeactivateCredits() {
 	if (ui_credits_window != nullptr) {
 		App->gui->DeleteUIElement(ui_credits_window);
 		ui_credits_window = nullptr;
+		if (ui_pause_black_screen != nullptr) {
+			App->gui->DeleteUIElement(ui_pause_black_screen);
+			ui_pause_black_screen = nullptr;
+		}
 		if (ui_button_credits != nullptr) {
 			App->gui->DeleteUIElement(ui_button_credits);
 			ui_button_credits = nullptr;
@@ -394,6 +425,9 @@ void j1TitleScene::DeactivateCredits() {
 // Called when clicking a button in the menu with confirmation message
 void j1TitleScene::ActivateConfirmationMenu(std::string str) {
 	if (ui_confirmation_window == nullptr) {
+		uint w, h;
+		App->win->GetWindowSize(w, h);
+		ui_pause_black_screen = (ImageUI*)App->gui->CreateUIElement(Type::IMAGE, nullptr, { 0,0,(int)w,(int)h }, "", 255, 255, 255, 100);
 		ui_confirmation_window = (WindowUI*)App->gui->CreateUIElement(Type::WINDOW, nullptr, { 410,200,459,168 }, { 790,408,459,168 });
 		ui_button_confirmation[0] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_confirmation_window, { 470,300,117,38 }, { 834,125,117,24 }, "YES", { 834,149,117,24 },
 			{ 834,101,117,24 }, false, { 0,0,0,0 }, this, (int)UI_Audio::CONFIRMATION);
@@ -420,6 +454,10 @@ void j1TitleScene::DeactivateConfirmationMenu() {
 	if (ui_confirmation_window != nullptr) {
 		App->gui->DeleteUIElement(ui_confirmation_window);
 		ui_confirmation_window = nullptr;
+		if (ui_pause_black_screen != nullptr) {
+			App->gui->DeleteUIElement(ui_pause_black_screen);
+			ui_pause_black_screen = nullptr;
+		}
 		for (int i = 3; i >= 0; i--) {
 			if (i < 2)
 			{

@@ -104,6 +104,7 @@ private:
 	TextUI* ui_text_civilization[4];
 	ImageUI* ui_volume_sliders[4];
 	TextUI* ui_text_volume_sliders[2];
+	ImageUI* ui_pause_black_screen;
 public:
 	CloseTitleSceneMenus close_menus;
 };
