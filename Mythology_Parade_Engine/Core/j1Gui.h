@@ -127,6 +127,7 @@ public:
 	int green;
 	int blue;
 	int alpha;
+	bool unclicked;
 };
 class WindowUI :public UI
 {

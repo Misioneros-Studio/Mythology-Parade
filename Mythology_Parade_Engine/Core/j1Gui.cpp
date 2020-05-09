@@ -575,6 +575,7 @@ ImageUI::ImageUI(Type type, UI* p, SDL_Rect r, SDL_Rect sprite, bool d, bool f, 
 	drag_position_1 = { drag_area.w + drag_area.x - GetLocalRect().w,drag_area.h + drag_area.y - GetLocalRect().h };
 	square = false;
 	red = green = blue = alpha = 0;
+	unclicked = false;
 	if (drag_position_scroll_bar != -1) {
 		quad.x = drag_position_0.x + (drag_position_scroll_bar * (drag_position_1.x - drag_position_0.x));
 		SetScreenRect(quad);
@@ -597,6 +598,7 @@ ImageUI::ImageUI(Type type, UI* p, SDL_Rect r, int re, int g, int b, int a, bool
 }
 
 bool ImageUI::PreUpdate() {
+	unclicked = false;
 	int x, y;
 	iPoint initial_position = GetScreenPos();
 	App->input->GetMousePosition(x, y);
@@ -608,6 +610,8 @@ bool ImageUI::PreUpdate() {
 	}
 	if (focus == true && App->input->GetMouseButtonDown(1) == KEY_UP) {
 		focus = false;
+		unclicked = true;
+
 	}
 	UI::PreUpdate();
 	if (initial_position != GetScreenPos()) {

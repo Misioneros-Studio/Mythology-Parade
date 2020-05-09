@@ -1074,5 +1074,8 @@ void HUD::UpdateSlider(int index) {
 	}
 	else if (index == 3) {
 		ui_volume_sliders[3]->quad.w = (int)(181 * ((float)App->audio->GetVolumeFx() / (float)128));
+		if (ui_volume_sliders[5]->unclicked == true) {
+			App->audio->PlayFx(-1, App->gui->sfx_UI[(int)UI_Audio::LOAD]);
+		}
 	}
 }

@@ -50,6 +50,7 @@ bool j1TitleScene::Start()
 	App->gui->sfx_UI[(int)UI_Audio::MAIN_MENU] = App->audio->LoadFx("audio/ui/Click_Main_Menu.wav");
 	App->gui->sfx_UI[(int)UI_Audio::CONFIRMATION] = App->audio->LoadFx("audio/ui/Click_Standard2.wav");
 	App->gui->sfx_UI[(int)UI_Audio::CLOSE] = App->audio->LoadFx("audio/ui/Close_Menu.wav");
+	App->gui->sfx_UI[(int)UI_Audio::LOAD] = App->audio->LoadFx("audio/ui/load.wav");
 
 
 	ui_button[0] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, nullptr, { 1535,145,237,38 }, { 787,240,237,38 }, "NEW", { 787,342,237,38 }, { 787,291,237,38 }, false, { 0,0,0,0 }, this,
@@ -150,6 +151,9 @@ bool j1TitleScene::Update(float dt)
 	}
 	if (ui_volume_sliders[3] != nullptr) {
 		ui_volume_sliders[3]->quad.w= (int)(181 * ((float)App->audio->GetVolumeFx() / (float)128));
+		if (ui_volume_sliders[5]->unclicked == true) {
+			App->audio->PlayFx(-1, App->gui->sfx_UI[(int)UI_Audio::LOAD]);
+		}
 	}
 	SDL_Rect sec2 = { 0, 0, App->render->camera.w, App->render->camera.h };
 	App->render->Blit(title_assets_tex, 0, 0, &sec2, 0.f);
