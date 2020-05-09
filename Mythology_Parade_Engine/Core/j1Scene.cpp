@@ -100,7 +100,7 @@ bool j1Scene::Start()
 	//quadTree = new QuadTree(TreeType::ISOMETRIC, position.x + (App->map->data.tile_width / 2), position.y, size.x, size.y);
 	//quadTree->baseNode->SubDivide(quadTree->baseNode, 5);
   
-	App->audio->PlayMusic("audio/music/Ambient1.ogg", 2.0F, 150);
+	App->audio->PlayMusic("audio/music/Ambient1.ogg", 2.0F);
   
 	//Creating players
 	App->entityManager->CreatePlayerEntity(App->fade_to_black->actual_civilization);

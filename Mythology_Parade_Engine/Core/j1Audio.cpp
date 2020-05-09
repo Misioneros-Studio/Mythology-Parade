@@ -12,6 +12,7 @@ j1Audio::j1Audio() : j1Module()
 {
 	music = NULL;
 	name.append("audio");
+	MusicVolume = 200;
 }
 
 // Destructor
@@ -83,14 +84,11 @@ bool j1Audio::CleanUp()
 }
 
 // Play a music file
-bool j1Audio::PlayMusic(const char* path, float fade_time, int volume)
+bool j1Audio::PlayMusic(const char* path, float fade_time)
 {
 	bool ret = true;
-	
-	if (volume < 0) {
-		volume = 0;
-	}
-	Mix_VolumeMusic(volume);
+
+	int volume = GetVolumeMusic();
 
 	if (volume > 200)
 	{
