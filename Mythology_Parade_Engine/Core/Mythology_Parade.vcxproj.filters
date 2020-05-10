@@ -100,6 +100,9 @@
     <ClCompile Include="HUD.cpp">
       <Filter>Core\Scenes\HUD</Filter>
     </ClCompile>
+    <ClCompile Include="ResearchMenu.cpp">
+      <Filter>Core\Scenes\Research Menu</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1Window.h">
@@ -216,6 +219,9 @@
     <ClInclude Include="HUD.h">
       <Filter>Core\Scenes\HUD</Filter>
     </ClInclude>
+    <ClInclude Include="ResearchMenu.h">
+      <Filter>Core\Scenes\Research Menu</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Tools">
@@ -259,6 +265,9 @@
     </Filter>
     <Filter Include="Core\Scenes\HUD">
       <UniqueIdentifier>{da84361d-6a45-4d6b-bcab-93f5aaf4d801}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Scenes\Research Menu">
+      <UniqueIdentifier>{52f59738-0827-4e4d-82e8-5555aabdb47c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

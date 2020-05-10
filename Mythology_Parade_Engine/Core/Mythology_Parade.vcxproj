@@ -108,6 +108,7 @@
     <ClCompile Include="j1Window.cpp" />
     <ClCompile Include="PugiXml\src\pugixml.cpp" />
     <ClCompile Include="j1TitleScene.cpp" />
+    <ClCompile Include="ResearchMenu.cpp" />
     <ClCompile Include="Unit.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -148,6 +149,7 @@
     <ClInclude Include="PugiXml\src\pugiconfig.hpp" />
     <ClInclude Include="PugiXml\src\pugixml.hpp" />
     <ClInclude Include="j1TitleScene.h" />
+    <ClInclude Include="ResearchMenu.h" />
     <ClInclude Include="Unit.h" />
   </ItemGroup>
   <ItemGroup>

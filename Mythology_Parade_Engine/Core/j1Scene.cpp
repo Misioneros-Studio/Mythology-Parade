@@ -17,6 +17,7 @@
 #include "j1Scene.h"
 #include "j1FadeToBlack.h"
 #include "HUD.h"
+#include "ResearchMenu.h"
 
 #include"QuadTree.h"
 
@@ -39,6 +40,7 @@ bool j1Scene::Awake(pugi::xml_node& config)
 	App->scene->active = false;
 	SDL_ShowCursor(0);
 	hud = nullptr;
+	research_menu = nullptr;
   
 	return ret;
 }
@@ -46,7 +48,8 @@ bool j1Scene::Awake(pugi::xml_node& config)
 // Called before the first frame
 bool j1Scene::Start()
 {
-	hud = new HUD();
+	research_menu = new ResearchMenu();
+	hud = new HUD(research_menu);
 	if (App->map->Load("MainMap.tmx") == true)
 	{
 		int w, h;
@@ -354,7 +357,10 @@ bool j1Scene::PostUpdate()
 {
 	if (hud->thing_selected != nullptr) {
 		hud->UpdateSelectedThing();
-		hud->ManageActionButtons();
+		if (App->entityManager->getPlayer()->player_type == CivilizationType::VIKING)
+			hud->ManageActionButtons();
+		else if (App->entityManager->getPlayer()->player_type == CivilizationType::GREEK)
+			hud->ManageActionButtons(false, false);
 	}
 	bool ret = true;
 
@@ -506,12 +512,12 @@ void j1Scene::OnClick(UI* element, float argument)
 			hud->close_menus = CloseSceneMenus::Pause;
 		}
 		else if (element->name == "Research") 
-    {
+		{
 			hud->ActivateResearchMenu();
 		}
 		else if (element->name == "RESEARCH MONASTERY") {
 			Building* building = (Building*)hud->thing_selected;
-			building->StartResearching(10, "Monastery");
+			building->StartResearching(60, "Monastery");
 			hud->close_menus = CloseSceneMenus::Research;
 		}
 		else if (element->name == "RESEARCH TEMPLE") {
@@ -521,7 +527,47 @@ void j1Scene::OnClick(UI* element, float argument)
 		}
 		else if (element->name == "RESEARCH ENCAMPMENT") {
 			Building* building = (Building*)hud->thing_selected;
-			building->StartResearching(10, "Encampment");
+			building->StartResearching(90, "Encampment");
+			hud->close_menus = CloseSceneMenus::Research;
+		}
+		else if (element->name == "RESEARCH CLERIC") {
+			Building* building = (Building*)hud->thing_selected;
+			building->StartResearching(70, "Cleric");
+			hud->close_menus = CloseSceneMenus::Research;
+		}
+		else if (element->name == "RESEARCH ASSASSIN") {
+			Building* building = (Building*)hud->thing_selected;
+			building->StartResearching(70, "Assassin");
+			hud->close_menus = CloseSceneMenus::Research;
+		}
+		else if (element->name == "RESEARCH LAWFUL BEAST") {
+			Building* building = (Building*)hud->thing_selected;
+			building->StartResearching(210, "Lawful Beast");
+			hud->close_menus = CloseSceneMenus::Research;
+		}
+		else if (element->name == "RESEARCH CHAOTIC BEAST") {
+			Building* building = (Building*)hud->thing_selected;
+			building->StartResearching(210, "Chaotic Beast");
+			hud->close_menus = CloseSceneMenus::Research;
+		}
+		else if (element->name == "RESEARCH LAWFUL MIRACLE") {
+			Building* building = (Building*)hud->thing_selected;
+			building->StartResearching(240, "Lawful Miracle");
+			hud->close_menus = CloseSceneMenus::Research;
+		}
+		else if (element->name == "RESEARCH CHAOTIC MIRACLE") {
+			Building* building = (Building*)hud->thing_selected;
+			building->StartResearching(240, "Chaotic Miracle");
+			hud->close_menus = CloseSceneMenus::Research;
+		}
+		else if (element->name == "RESEARCH LAWFUL VICTORY") {
+			Building* building = (Building*)hud->thing_selected;
+			building->StartResearching(420, "Lawful Victory");
+			hud->close_menus = CloseSceneMenus::Research;
+		}
+		else if (element->name == "RESEARCH CHAOTIC VICTORY") {
+			Building* building = (Building*)hud->thing_selected;
+			building->StartResearching(420, "Chaotic Victory");
 			hud->close_menus = CloseSceneMenus::Research;
 		}
 		else if (element->name == "Produce_Temple")
@@ -639,12 +685,36 @@ void j1Scene::DoWinOrLoseWindow(int type, bool win) {
 
 void j1Scene::FinishResearching(std::string thing_researched) {
 	if (thing_researched == "Monastery") {
-		hud->research_monastery = true;
+		research_menu->research_monastery = true;
 	}
 	else if (thing_researched == "Temple") {
-		hud->research_temple = true;
+		research_menu->research_temple = true;
 	}
 	else if (thing_researched == "Encampment") {
-		hud->research_encampment = true;
+		research_menu->research_encampment = true;
+	}
+	else if (thing_researched == "Cleric") {
+		research_menu->research_cleric = true;
+	}
+	else if (thing_researched == "Assassin") {
+		research_menu->research_assassin = true;
+	}
+	else if (thing_researched == "Lawful Beast") {
+		research_menu->research_lawful_beast = true;
+	}
+	else if (thing_researched == "Chaotic Beast") {
+		research_menu->research_chaotic_beast = true;
+	}
+	else if (thing_researched == "Lawful Miracle") {
+		research_menu->research_lawful_miracle = true;
+	}
+	else if (thing_researched == "Chaotic Miracle") {
+		research_menu->research_chaotic_miracle = true;
+	}
+	else if (thing_researched == "Lawful Victory") {
+		research_menu->research_lawful_victory = true;
+	}
+	else if (thing_researched == "Chaotic Victory") {
+		research_menu->research_chaotic_victory = true;
 	}
 }

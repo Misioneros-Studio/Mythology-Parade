@@ -22,6 +22,7 @@ enum class UnitType;
 enum BuildingType;
 enum CivilizationType;
 class HUD;
+class ResearchMenu;
 
 class j1Scene : public j1Module
 {
@@ -77,6 +78,7 @@ public:
 	bool godMode;
 
 	HUD* hud;
+	ResearchMenu* research_menu;
 	uint WinViking_sound;
 	uint WinGreek_sound;
 	uint Lose_sound;
