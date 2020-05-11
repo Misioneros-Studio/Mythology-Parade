@@ -18,7 +18,7 @@ HUD::HUD(ResearchMenu* r) {
 
 //Destructor
 HUD::~HUD() {
-
+	research_menu = nullptr;
 }
 
 // Called before the first frame

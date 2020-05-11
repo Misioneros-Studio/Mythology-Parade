@@ -394,6 +394,8 @@ bool j1Scene::CleanUp()
 		//quadTree->Clear();
 		delete hud;
 		hud = nullptr;
+		delete research_menu;
+		research_menu = nullptr;
 	}
 	return true;
 }
