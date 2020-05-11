@@ -25,6 +25,7 @@ j1Scene::j1Scene() : j1Module()
 {
 	name.append("scene");
 	winlose_tex = nullptr;
+	clickToPath = false;
 }
 
 // Destructor
@@ -123,66 +124,13 @@ bool j1Scene::PreUpdate()
 	// debug pathfing ------------------
 	if (App->input->GetMouseButtonDown(SDL_BUTTON_RIGHT) == KEY_DOWN)
 	{
-		//TMP: Temporal pathfinding debug
-		std::list<Entity*> list = App->entityManager->getPlayer()->GetEntitiesSelected();
-		
-		if(list.size() > 0)
-		{
-			float n = App->entityManager->getPlayer()->GetEntitiesSelected().size();
-			float x = 0, y = 0;
-
-			for (std::list<Entity*>::iterator it = list.begin(); it != list.end(); it++)
-			{
-				x += it._Ptr->_Myval->position.x;
-				y += it._Ptr->_Myval->position.y;
-			}
-
-			x /= n;
-			y /= n;
-
-			iPoint origin = App->map->WorldToMap((int)x, (int)y);
-			iPoint ending = App->map->GetMousePositionOnMap();
-			LOG("Origin: %i, %i", origin.x, origin.y);
-			LOG("Ending: %i, %i", ending.x, ending.y);
-
-			int posX, posY;
-			App->input->GetMousePosition(posX, posY);
-			iPoint p = App->render->ScreenToWorld(posX, posY);
-			p = App->render->ScreenToWorld(posX, posY);
-
-			CivilizationType playerCiv = App->entityManager->getPlayer()->civilization;
-			bool attacking = false;
-
-			for (std::list<Entity*>::iterator it = App->entityManager->entities[EntityType::UNIT].begin(); it != App->entityManager->entities[EntityType::UNIT].end(); it++) 
-			{
-				SDL_Rect collider = it._Ptr->_Myval->getCollisionRect();
-				if (it._Ptr->_Myval->civilization != playerCiv && EntityManager::IsPointInsideQuad(collider, p.x, p.y))
-				{
-					Unit* unt = nullptr;
-					for (std::list<Entity*>::iterator sel = list.begin(); sel != list.end(); sel++)
-					{
-						unt = (Unit*)sel._Ptr->_Myval;
-						unt->enemyTarget = (Unit*)it._Ptr->_Myval;
-						attacking = true;
-					}
-				}
-			}
-
-			if (!attacking) 
-			{
-				Unit* unt = nullptr;
-				for (std::list<Entity*>::iterator sel = list.begin(); sel != list.end(); sel++)
-				{
-					unt = (Unit*)sel._Ptr->_Myval;
-					unt->enemyTarget = nullptr;
-				}
-			}
-
-			if (origin != ending)
-				App->pathfinding->RequestPath(origin, ending, list);
-
-		}
-
+		ClickToPath();
+	}	
+	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN && clickToPath)
+	{
+		ClickToPath();
+		clickToPath = false;
+		App->entityManager->getPlayer()->dontSelect = true;
 	}
 
 
@@ -200,8 +148,70 @@ bool j1Scene::PreUpdate()
 			App->render->camera.y = -(minimap_mouse_position.y - App->render->camera.h * 0.5f);
 		}
 	}
-
 	return true;
+}
+
+void j1Scene::ClickToPath()
+{
+	//TMP: Temporal pathfinding debug
+	std::list<Entity*> list = App->entityManager->getPlayer()->GetEntitiesSelected();
+
+	if (list.size() > 0)
+	{
+		float n = App->entityManager->getPlayer()->GetEntitiesSelected().size();
+		float x = 0, y = 0;
+
+		for (std::list<Entity*>::iterator it = list.begin(); it != list.end(); it++)
+		{
+			x += it._Ptr->_Myval->position.x;
+			y += it._Ptr->_Myval->position.y;
+		}
+
+		x /= n;
+		y /= n;
+
+		iPoint origin = App->map->WorldToMap((int)x, (int)y);
+		iPoint ending = App->map->GetMousePositionOnMap();
+		LOG("Origin: %i, %i", origin.x, origin.y);
+		LOG("Ending: %i, %i", ending.x, ending.y);
+
+		int posX, posY;
+		App->input->GetMousePosition(posX, posY);
+		iPoint p = App->render->ScreenToWorld(posX, posY);
+		p = App->render->ScreenToWorld(posX, posY);
+
+		CivilizationType playerCiv = App->entityManager->getPlayer()->civilization;
+		bool attacking = false;
+
+		for (std::list<Entity*>::iterator it = App->entityManager->entities[EntityType::UNIT].begin(); it != App->entityManager->entities[EntityType::UNIT].end(); it++)
+		{
+			SDL_Rect collider = it._Ptr->_Myval->getCollisionRect();
+			if (it._Ptr->_Myval->civilization != playerCiv && EntityManager::IsPointInsideQuad(collider, p.x, p.y))
+			{
+				Unit* unt = nullptr;
+				for (std::list<Entity*>::iterator sel = list.begin(); sel != list.end(); sel++)
+				{
+					unt = (Unit*)sel._Ptr->_Myval;
+					unt->enemyTarget = (Unit*)it._Ptr->_Myval;
+					attacking = true;
+				}
+			}
+		}
+
+		if (!attacking)
+		{
+			Unit* unt = nullptr;
+			for (std::list<Entity*>::iterator sel = list.begin(); sel != list.end(); sel++)
+			{
+				unt = (Unit*)sel._Ptr->_Myval;
+				unt->enemyTarget = nullptr;
+			}
+		}
+
+		if (origin != ending)
+			App->pathfinding->RequestPath(origin, ending, list);
+
+	}
 }
 
 // Called each loop iteration
@@ -310,11 +320,13 @@ bool j1Scene::Update(float dt)
 	//if (App->input->drawDebug)
 	//	App->render->DrawQuadTree(quadTree->type, quadTree->baseNode);
 
-	iPoint p = App->map->GetMousePositionOnMap();
-	if (!App->entityManager->crPreview.active && IN_RANGE(p.x, 0, App->map->data.width-1) == 1 && IN_RANGE(p.y, 0, App->map->data.height-1) == 1)
-	{
-		p = App->map->MapToWorld(p.x, p.y);
-		App->render->Blit(debugBlue_tex, p.x, p.y);
+	if (godMode) {
+		iPoint p = App->map->GetMousePositionOnMap();
+		if (!App->entityManager->crPreview.active && IN_RANGE(p.x, 0, App->map->data.width - 1) == 1 && IN_RANGE(p.y, 0, App->map->data.height - 1) == 1)
+		{
+			p = App->map->MapToWorld(p.x, p.y);
+			App->render->Blit(debugBlue_tex, p.x, p.y);
+		}
 	}
 
 	if (App->entityManager->getPlayer() != nullptr) {
@@ -618,11 +630,15 @@ void j1Scene::OnClick(UI* element, float argument)
 			Building* building = (Building*)hud->thing_selected;
 			App->entityManager->getPlayer()->DecreaseFaith(100);
 			building->StartProducing(App->entityManager->getPlayer()->time_prayers, "Prayers");
-    }
+		}
 		else if (element->name == "Upgrade") {
 			//Upgrade level
 			CombatUnit* unit =(CombatUnit*)App->entityManager->getPlayer()->GetEntitiesSelected().begin()._Ptr->_Myval;
 			unit->LevelUp();
+		}
+		else if (element->name == "Move")
+		{
+			clickToPath = true;
 		}
 		break;
 
@@ -729,7 +745,7 @@ void j1Scene::FinishResearching(std::string thing_researched) {
 	}
 	else if (thing_researched == "Chaotic Victory") {
 		research_menu->research_chaotic_victory = true;
-	}
+	}	
 }
 
 

@@ -43,11 +43,11 @@ private:
 	std::list<Entity*> listEntities;
 	Entity* buildingSelect;
 
-	bool dontSelect;
 	bool oneTime;
 	iPoint click;
 
 public:
+	bool dontSelect;
 	bool player_win = false;
 	bool player_lose = false;
 	int num_monastery;
