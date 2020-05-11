@@ -55,7 +55,17 @@ public:
 	int num_encampment;
 	int time_production_victory;
 	CivilizationType player_type;
-  
+	bool research_monastery;
+	bool research_temple;
+	bool research_encampment;
+	bool research_cleric;
+	bool research_assassin;
+	bool research_lawful_beast;
+	bool research_chaotic_beast;
+	bool research_lawful_miracle;
+	bool research_chaotic_miracle;
+	bool research_lawful_victory;
+	bool research_chaotic_victory;
 
 };
 
