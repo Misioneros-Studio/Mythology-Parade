@@ -50,49 +50,54 @@ bool j1TitleScene::Start()
 	App->gui->sfx_UI[(int)UI_Audio::MAIN_MENU] = App->audio->LoadFx("audio/ui/Click_Main_Menu.wav");
 	App->gui->sfx_UI[(int)UI_Audio::CONFIRMATION] = App->audio->LoadFx("audio/ui/Click_Standard2.wav");
 	App->gui->sfx_UI[(int)UI_Audio::CLOSE] = App->audio->LoadFx("audio/ui/Close_Menu.wav");
+	App->gui->sfx_UI[(int)UI_Audio::LOAD] = App->audio->LoadFx("audio/ui/load.wav");
 
 
-	ui_button[0] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, nullptr, { 1535,145,237,38 }, { 787,240,237,38 }, "NEW", { 787,342,237,38 }, { 787,291,237,38 }, false, { 0,0,0,0 }, this,
-		(int)UI_Audio::MAIN_MENU);
-	ui_text[0] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 1622,158,237,38 }, { 0,0,100,100 }, "New Game", { 0,0,0,255 });
-	ui_button[1] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, nullptr, { 1535,220,237,38 }, { 787,240,237,38 }, "LOAD", { 787,342,237,38 }, { 787,291,237,38 }, false, { 0,0,0,0 }, this,
-		(int)UI_Audio::MAIN_MENU);
-	ui_text[1] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 1619,232,237,38 }, { 0,0,100,100 }, "Load Game", { 0,0,0,255 });
-	ui_button[2] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, nullptr, { 1535,295,237,38 }, { 787,240,237,38 }, "TUTORIAL", { 787,342,237,38 }, { 787,291,237,38 }, false, { 0,0,0,0 },
-		this, (int)UI_Audio::MAIN_MENU);
-	ui_text[2] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 1628,307,237,38 }, { 0,0,100,100 }, "Tutorial", { 0,0,0,255 });
-	ui_button[3] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, nullptr, { 1535,370,237,38 }, { 787,240,237,38 }, "OPTIONS", { 787,342,237,38 }, { 787,291,237,38 }, false, { 0,0,0,0 }, this,
-		(int)UI_Audio::MAIN_MENU);
-	ui_text[3] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 1629,382,237,38 }, { 0,0,100,100 }, "Options", { 0,0,0,255 });
-	ui_button[4] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, nullptr, { 1535,445,237,38 }, { 787,240,237,38 }, "CREDITS", { 787,342,237,38 }, { 787,291,237,38 }, false, { 0,0,0,0 }, this,
-		(int)UI_Audio::MAIN_MENU);
-	ui_text[4] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 1627,457,237,38 }, { 0,0,100,100 }, "Credits");
-	ui_button[5] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, nullptr, { 1535,520,237,38 }, { 787,240,237,38 }, "EXIT", { 787,342,237,38 }, { 787,291,237,38 }, false, { 0,0,0,0 }, this,
-		(int)UI_Audio::MAIN_MENU);
-	ui_text[5] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 1640,532,237,38 }, { 0,0,100,100 }, "Exit", { 0,0,0,255 });
+	ui_button[0] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, nullptr, { 1535,145,237,38 }, { 787,240,237,38 }, "NEW", { 787,342,237,38 }, { 787,291,237,38 }, false,
+		{ 0,0,0,0 }, this, (int)UI_Audio::MAIN_MENU));
+	ui_text[0] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 1622,158,237,38 }, { 0,0,100,100 }, "New Game", { 0,0,0,255 }));
+	ui_button[1] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, nullptr, { 1535,220,237,38 }, { 787,240,237,38 }, "LOAD", { 787,342,237,38 }, { 787,291,237,38 }, false, 
+		{ 0,0,0,0 }, this, (int)UI_Audio::MAIN_MENU));
+	ui_text[1] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 1619,232,237,38 }, { 0,0,100,100 }, "Load Game", { 0,0,0,255 }));
+	ui_button[2] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, nullptr, { 1535,295,237,38 }, { 787,240,237,38 }, "TUTORIAL", { 787,342,237,38 }, { 787,291,237,38 }, false,
+		{ 0,0,0,0 }, this, (int)UI_Audio::MAIN_MENU));
+	ui_text[2] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 1628,307,237,38 }, { 0,0,100,100 }, "Tutorial", { 0,0,0,255 }));
+	ui_button[3] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, nullptr, { 1535,370,237,38 }, { 787,240,237,38 }, "OPTIONS", { 787,342,237,38 }, { 787,291,237,38 }, false, 
+		{ 0,0,0,0 }, this, (int)UI_Audio::MAIN_MENU));
+	ui_text[3] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 1629,382,237,38 }, { 0,0,100,100 }, "Options", { 0,0,0,255 }));
+	ui_button[4] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, nullptr, { 1535,445,237,38 }, { 787,240,237,38 }, "CREDITS", { 787,342,237,38 }, { 787,291,237,38 }, false,
+		{ 0,0,0,0 }, this, (int)UI_Audio::MAIN_MENU));
+	ui_text[4] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 1627,457,237,38 }, { 0,0,100,100 }, "Credits"));
+	ui_button[5] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, nullptr, { 1535,520,237,38 }, { 787,240,237,38 }, "EXIT", { 787,342,237,38 }, { 787,291,237,38 }, false, 
+		{ 0,0,0,0 }, this, (int)UI_Audio::MAIN_MENU));
+	ui_text[5] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 1640,532,237,38 }, { 0,0,100,100 }, "Exit", { 0,0,0,255 }));
 	
 
 	close_menus = CloseTitleSceneMenus::None;
 
 
-	for (int i = 0; i < 4; i++) {
-		if (i != 3) {
-			ui_button_civilization[i] = nullptr;
-		}
-		if (i < 3) {
-			if (i != 2) {
-				ui_button_options[i] = nullptr;
-				ui_text_tutorial[i] = nullptr;
-				ui_text_credits[i] = nullptr;
-				ui_button_confirmation[i] = nullptr;
+	for (int i = 0; i < 6; i++) {
+		ui_volume_sliders[i] = nullptr;
+		if (i < 4) {
+			if (i < 3) {
+				if (i < 2) {
+					ui_button_options[i] = nullptr;
+					ui_text_tutorial[i] = nullptr;
+					ui_text_credits[i] = nullptr;
+					ui_button_confirmation[i] = nullptr;
+					ui_text_volume_sliders[i] = nullptr;
+				}
+				ui_button_civilization[i] = nullptr;
+				ui_text_options[i] = nullptr;
 			}
-			ui_text_options[i] = nullptr;
+			ui_text_civilization[i] = nullptr;
+			ui_text_confirmation[i] = nullptr;
 		}
-		ui_text_civilization[i] = nullptr;
-		ui_text_confirmation[i] = nullptr;
 	}
 	ui_tutorial_options = nullptr;
 	ui_button_credits = nullptr;
+	ui_pause_black_screen = nullptr;
+
 
 	ui_civilization_window = nullptr;
 	ui_confirmation_window = nullptr;
@@ -100,9 +105,10 @@ bool j1TitleScene::Start()
 	ui_options_window = nullptr;
 	ui_credits_window = nullptr;
 
+
 	confirmation_option = "";
 	title_assets_tex = App->tex->Load("gui/TitleAssets.png");
-	App->audio->PlayMusic("audio/music/MainTitle_Use.ogg", 2.0F, 90);
+	App->audio->PlayMusic("audio/music/MainTitle-Use2.ogg", 2.0F);
 	return true;
 }
 
@@ -139,6 +145,15 @@ bool j1TitleScene::Update(float dt)
 		DeactivateCivilizationMenu();
 		close_menus = CloseTitleSceneMenus::None;
 		break;
+	}
+	if (ui_volume_sliders[0] != nullptr) {
+		ui_volume_sliders[0]->quad.w= (int)(181 * ((float)App->audio->GetVolumeMusic() / (float)128));
+	}
+	if (ui_volume_sliders[3] != nullptr) {
+		ui_volume_sliders[3]->quad.w= (int)(181 * ((float)App->audio->GetVolumeFx() / (float)128));
+		if (ui_volume_sliders[5]->unclicked == true) {
+			App->audio->PlayFx(-1, App->gui->sfx_UI[(int)UI_Audio::LOAD]);
+		}
 	}
 	SDL_Rect sec2 = { 0, 0, App->render->camera.w, App->render->camera.h };
 	App->render->Blit(title_assets_tex, 0, 0, &sec2, 0.f);
@@ -206,17 +221,33 @@ void j1TitleScene::MoveMenu() {
 // Called when clicking options button in pause menu
 void j1TitleScene::ActivateOptionsMenu() {
 	if (ui_options_window == nullptr) {
-		ui_options_window = (WindowUI*)App->gui->CreateUIElement(Type::WINDOW, nullptr, { 410,200,459,168 }, { 790,408,459,168 });
-		ui_button_options[0] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_options_window, { 520,300,237,38 }, { 787,240,237,38 }, "CLOSE OPTIONS", { 787,342,237,38 }, { 787,291,237,38 },
-			false, { 0,0,0,0 }, this, (int)UI_Audio::CLOSE);
-		ui_button_options[1] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_options_window, { 570,250,36,36 }, { 16,21,36,36 }, "FULLSCREEN", { 98,21,36,36 },
-			{ 57,21,36,36 }, false, { 0,0,0,0 }, this, (int)UI_Audio::MAIN_MENU);
+		uint w, h;
+		App->win->GetWindowSize(w, h);
+		ui_pause_black_screen = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, nullptr, { 0,0,(int)w,(int)h }, "", 255, 255, 255, 100));
+		ui_options_window = static_cast<WindowUI*>(App->gui->CreateUIElement(Type::WINDOW, nullptr, { 410,200,459,321 }, { 1278,4,459,321 }));
+		ui_button_options[0] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_options_window, { 520,453,237,38 }, { 787,240,237,38 }, "CLOSE OPTIONS", { 787,342,237,38 },
+			{ 787,291,237,38 }, false, { 0,0,0,0 }, this, (int)UI_Audio::CLOSE));
+		ui_button_options[1] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_options_window, { 570,260,36,36 }, { 16,21,36,36 }, "FULLSCREEN", { 98,21,36,36 },
+			{ 57,21,36,36 }, false, { 0,0,0,0 }, this, (int)UI_Audio::MAIN_MENU));
 		if (App->win->isFullscreen() == true) {
 			ui_button_options[1]->sprite1.y = ui_button_options[1]->sprite2.y = ui_button_options[1]->sprite3.y = 61;
 		}
-		ui_text_options[0] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 619,312,237,38 }, { 0,0,100,100 }, "Close", { 0,0,0,255 });
-		ui_text_options[1] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 583,212,237,38 }, { 0,0,100,100 }, "OPTIONS", { 255,255,255,255 }, { 1,0,0,0 });
-		ui_text_options[2] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 620,260,237,38 }, { 0,0,100,100 }, "FULLSCREEN", { 255,255,255,255 });
+		ui_text_options[0] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, ui_options_window, { 619,465,237,38 }, { 0,0,100,100 }, "Close", { 0,0,0,255 }));
+		ui_text_options[1] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, ui_options_window, { 583,212,237,38 }, { 0,0,100,100 }, "OPTIONS", { 255,255,255,255 }, { 1,0,0,0 }));
+		ui_text_options[2] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, ui_options_window, { 620,270,237,38 }, { 0,0,100,100 }, "FULLSCREEN", { 255,255,255,255 }));
+		ui_text_volume_sliders[0] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, ui_options_window, { 590,314,237,38 }, { 0,0,100,100 }, "MUSIC'S VOLUME", { 255,255,255,255 }));
+		ui_volume_sliders[0] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, ui_options_window, { 548,340,(int)(181* ((float)App->audio->GetVolumeMusic() / (float)128)),17 },
+			{ 1072,250,181,17 }));
+		ui_volume_sliders[1]=static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, ui_options_window, { 531,334,215,30 }, { 1053,350,215,30 }));
+		ui_volume_sliders[2]=static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, ui_options_window, { 548,337,36,24 }, { 1072,180,36,24 }, "VOLUME_CONTROL", { 0,0,0,0 }, { 0,0,0,0 },
+			true, { 548,337,181,0 }, App->audio, 0, false, ((float)App->audio->GetVolumeMusic() / (float)128)));
+		ui_text_volume_sliders[1] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, ui_options_window, { 598,379,237,38 }, { 0,0,100,100 }, "FX'S VOLUME", { 255,255,255,255 }));
+		ui_volume_sliders[3] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, ui_options_window, { 548,405,(int)(181 * ((float)App->audio->GetVolumeFx() / (float)128)),17 },
+			{ 1072,250,181,17 }));
+		ui_volume_sliders[4] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, ui_options_window, { 531,399,215,30 }, { 1053,350,215,30 }));
+		ui_volume_sliders[5] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, ui_options_window, { 548,402,36,24 }, { 1072,180,36,24 }, "FX_CONTROL", { 0,0,0,0 }, { 0,0,0,0 },
+			true, { 548,402,181,0 }, App->audio, 0, false, ((float)App->audio->GetVolumeFx() / (float)128)));
+
 	}
 	for (int i = 0; i < 5; i++) {
 		if (ui_button[i] != nullptr) {
@@ -230,20 +261,34 @@ void j1TitleScene::DeactivateOptionsMenu() {
 	if (ui_options_window != nullptr) {
 		App->gui->DeleteUIElement(ui_options_window);
 		ui_options_window = nullptr;
-		for (int i = 1; i >= 0; i--) {
-			if (ui_button_options[i] != nullptr) {
-				App->gui->DeleteUIElement(ui_button_options[i]);
-				ui_button_options[i] = nullptr;
-			}
+		if (ui_pause_black_screen != nullptr) {
+			App->gui->DeleteUIElement(ui_pause_black_screen);
+			ui_pause_black_screen = nullptr;
 		}
-		for (int i = 2; i >= 0; i--) {
-			if (ui_text_options[i] != nullptr) {
-				App->gui->DeleteUIElement(ui_text_options[i]);
-				ui_text_options[i] = nullptr;
+		for (int i = 5; i >= 0; i--) {
+			if (ui_volume_sliders[i] != nullptr) {
+				App->gui->DeleteUIElement(ui_volume_sliders[i]);
+				ui_volume_sliders[i] = nullptr;
+			}
+			if (i < 3) {
+				if (i < 2) {
+					if (ui_button_options[i] != nullptr) {
+						App->gui->DeleteUIElement(ui_button_options[i]);
+						ui_button_options[i] = nullptr;
+					}
+					if (ui_text_volume_sliders[i] != nullptr) {
+						App->gui->DeleteUIElement(ui_text_volume_sliders[i]);
+						ui_text_volume_sliders[i] = nullptr;
+					}
+				}
+				if (ui_text_options[i] != nullptr) {
+					App->gui->DeleteUIElement(ui_text_options[i]);
+					ui_text_options[i] = nullptr;
+				}
 			}
 		}
 	}
-	for (int i = 0; i < 5; i++) {
+	for (int i = 0; i < 6; i++) {
 		if (ui_button[i] != nullptr) {
 			ui_button[i]->front = true;
 		}
@@ -255,19 +300,23 @@ void j1TitleScene::DeactivateOptionsMenu() {
 // Called when clicking new game button in menu
 void j1TitleScene::ActivatCivilizationMenu() {
 	if (ui_civilization_window == nullptr) {
-		ui_civilization_window = (WindowUI*)App->gui->CreateUIElement(Type::WINDOW, nullptr, { 410,200,459,168 }, { 790,408,459,168 });
-		ui_button_civilization[0] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_civilization_window, { 520,300,237,38 }, { 787,240,237,38 }, "CLOSE CIVILIZATION", { 787,342,237,38 },
-			{ 787,291,237,38 },	false, { 0,0,0,0 }, this, (int)UI_Audio::CLOSE);
-		ui_button_civilization[1] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_civilization_window, { 450,250,117,38 }, { 834,125,117,24 }, "GREEK", { 834,149,117,24 },
-			{ 834,101,117,24 }, false, { 0,0,0,0 }, this, (int)UI_Audio::MAIN_MENU);
-		ui_button_civilization[2] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_civilization_window, { 710,250,117,38 }, { 834,125,117,24 }, "VIKING", { 834,149,117,24 },
-			{ 834,101,117,24 }, false, { 0,0,0,0 }, this, (int)UI_Audio::MAIN_MENU);
-		ui_text_civilization[0] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 619,312,237,38 }, { 0,0,100,100 }, "Close", { 0,0,0,255 });
-		ui_text_civilization[1] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 463,212,237,38 }, { 0,0,100,100 }, "CHOOSE YOUR CIVILIZATION", { 255,255,255,255 }, { 1,0,0,0 });
-		ui_text_civilization[2] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 470,256,237,38 }, { 0,0,100,100 }, "Greek", { 0,0,0,255 }, { 1,0,0,0 });
-		ui_text_civilization[3] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 725,256,237,38 }, { 0,0,100,100 }, "Viking", { 0,0,0,255 }, { 1,0,0,0 });
+		uint w, h;
+		App->win->GetWindowSize(w, h);
+		ui_pause_black_screen = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, nullptr, { 0,0,(int)w,(int)h }, "", 255, 255, 255, 100));
+		ui_civilization_window = static_cast<WindowUI*>(App->gui->CreateUIElement(Type::WINDOW, nullptr, { 410,200,459,168 }, { 790,408,459,168 }));
+		ui_button_civilization[0] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_civilization_window, { 520,300,237,38 }, { 787,240,237,38 }, "CLOSE CIVILIZATION", 
+			{ 787,342,237,38 }, { 787,291,237,38 },	false, { 0,0,0,0 }, this, (int)UI_Audio::CLOSE));
+		ui_button_civilization[1] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_civilization_window, { 450,250,117,38 }, { 834,125,117,24 }, "GREEK", { 834,149,117,24 },
+			{ 834,101,117,24 }, false, { 0,0,0,0 }, this, (int)UI_Audio::MAIN_MENU));
+		ui_button_civilization[2] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_civilization_window, { 710,250,117,38 }, { 834,125,117,24 }, "VIKING", { 834,149,117,24 },
+			{ 834,101,117,24 }, false, { 0,0,0,0 }, this, (int)UI_Audio::MAIN_MENU));
+		ui_text_civilization[0] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 619,312,237,38 }, { 0,0,100,100 }, "Close", { 0,0,0,255 }));
+		ui_text_civilization[1] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 463,212,237,38 }, { 0,0,100,100 }, "CHOOSE YOUR CIVILIZATION", { 255,255,255,255 },
+			{ 1,0,0,0 }));
+		ui_text_civilization[2] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 470,256,237,38 }, { 0,0,100,100 }, "Greek", { 0,0,0,255 }, { 1,0,0,0 }));
+		ui_text_civilization[3] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 725,256,237,38 }, { 0,0,100,100 }, "Viking", { 0,0,0,255 }, { 1,0,0,0 }));
 	}
-	for (int i = 0; i < 5; i++) {
+	for (int i = 0; i < 6; i++) {
 		if (ui_button[i] != nullptr) {
 			ui_button[i]->front = false;
 		}
@@ -279,20 +328,26 @@ void j1TitleScene::DeactivateCivilizationMenu() {
 	if (ui_civilization_window != nullptr) {
 		App->gui->DeleteUIElement(ui_civilization_window);
 		ui_civilization_window = nullptr;
-		for (int i = 2; i >= 0; i--) {
-			if (ui_button_civilization[i] != nullptr) {
-				App->gui->DeleteUIElement(ui_button_civilization[i]);
-				ui_button_civilization[i] = nullptr;
-			}
+		if (ui_pause_black_screen != nullptr) {
+			App->gui->DeleteUIElement(ui_pause_black_screen);
+			ui_pause_black_screen = nullptr;
 		}
 		for (int i = 3; i >= 0; i--) {
-			if (ui_text_civilization[i] != nullptr) {
-				App->gui->DeleteUIElement(ui_text_civilization[i]);
-				ui_text_civilization[i] = nullptr;
+			if (i < 3) {
+				if (ui_button_civilization[i] != nullptr) {
+					App->gui->DeleteUIElement(ui_button_civilization[i]);
+					ui_button_civilization[i] = nullptr;
+				}
+			}
+			for (int i = 3; i >= 0; i--) {
+				if (ui_text_civilization[i] != nullptr) {
+					App->gui->DeleteUIElement(ui_text_civilization[i]);
+					ui_text_civilization[i] = nullptr;
+				}
 			}
 		}
 	}
-	for (int i = 0; i < 5; i++) {
+	for (int i = 0; i < 6; i++) {
 		if (ui_button[i] != nullptr) {
 			ui_button[i]->front = true;
 		}
@@ -302,13 +357,16 @@ void j1TitleScene::DeactivateCivilizationMenu() {
 // Called when clicking options button in pause menu
 void j1TitleScene::ActivateTutorial() {
 	if (ui_tutorial_window == nullptr) {
-		ui_tutorial_window = (WindowUI*)App->gui->CreateUIElement(Type::WINDOW, nullptr, { 410,200,459,168 }, { 790,408,459,168 });
-		ui_tutorial_options = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_tutorial_window, { 520,300,237,38 }, { 787,240,237,38 }, "CLOSE TUTORIAL", { 787,342,237,38 },
-			{ 787,291,237,38 }, false, { 0,0,0,0 }, this, (int)UI_Audio::CLOSE);
-		ui_text_tutorial[0] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 619,312,237,38 }, { 0,0,100,100 }, "Close", { 0,0,0,255 });
-		ui_text_tutorial[1] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 583,212,237,38 }, { 0,0,100,100 }, "TUTORIAL", { 255,255,255,255 }, { 1,0,0,0 });
+		uint w, h;
+		App->win->GetWindowSize(w, h);
+		ui_pause_black_screen = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, nullptr, { 0,0,(int)w,(int)h }, "", 255, 255, 255, 100));
+		ui_tutorial_window = static_cast<WindowUI*>(App->gui->CreateUIElement(Type::WINDOW, nullptr, { 410,200,459,168 }, { 790,408,459,168 }));
+		ui_tutorial_options = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_tutorial_window, { 520,300,237,38 }, { 787,240,237,38 }, "CLOSE TUTORIAL", { 787,342,237,38 },
+			{ 787,291,237,38 }, false, { 0,0,0,0 }, this, (int)UI_Audio::CLOSE));
+		ui_text_tutorial[0] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 619,312,237,38 }, { 0,0,100,100 }, "Close", { 0,0,0,255 }));
+		ui_text_tutorial[1] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 583,212,237,38 }, { 0,0,100,100 }, "TUTORIAL", { 255,255,255,255 }, { 1,0,0,0 }));
 	}
-	for (int i = 0; i < 5; i++) {
+	for (int i = 0; i < 6; i++) {
 		if (ui_button[i] != nullptr) {
 			ui_button[i]->front = false;
 		}
@@ -320,6 +378,10 @@ void j1TitleScene::DeactivateTutorial() {
 	if (ui_tutorial_window != nullptr) {
 		App->gui->DeleteUIElement(ui_tutorial_window);
 		ui_tutorial_window = nullptr;
+		if (ui_pause_black_screen != nullptr) {
+			App->gui->DeleteUIElement(ui_pause_black_screen);
+			ui_pause_black_screen = nullptr;
+		}
 		if (ui_tutorial_options != nullptr) {
 			App->gui->DeleteUIElement(ui_tutorial_options);
 			ui_tutorial_options = nullptr;
@@ -331,7 +393,7 @@ void j1TitleScene::DeactivateTutorial() {
 			}
 		}
 	}
-	for (int i = 0; i < 5; i++) {
+	for (int i = 0; i < 6; i++) {
 		if (ui_button[i] != nullptr) {
 			ui_button[i]->front = true;
 		}
@@ -343,13 +405,16 @@ void j1TitleScene::DeactivateTutorial() {
 // Called when clicking options button in pause menu
 void j1TitleScene::ActivateCredits() {
 	if (ui_credits_window == nullptr) {
-		ui_credits_window = (WindowUI*)App->gui->CreateUIElement(Type::WINDOW, nullptr, { 410,200,459,168 }, { 790,408,459,168 });
-		ui_button_credits = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_credits_window, { 520,300,237,38 }, { 787,240,237,38 }, "CLOSE CREDITS", { 787,342,237,38 }, { 787,291,237,38 },
-			false, { 0,0,0,0 }, this, (int)UI_Audio::CLOSE);
-		ui_text_credits[0] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 619,312,237,38 }, { 0,0,100,100 }, "Close", { 0,0,0,255 });
-		ui_text_credits[1] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 583,212,237,38 }, { 0,0,100,100 }, "CREDITS", { 255,255,255,255 }, { 1,0,0,0 });
+		uint w, h;
+		App->win->GetWindowSize(w, h);
+		ui_pause_black_screen = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, nullptr, { 0,0,(int)w,(int)h }, "", 255, 255, 255, 100));
+		ui_credits_window = static_cast<WindowUI*>(App->gui->CreateUIElement(Type::WINDOW, nullptr, { 410,200,459,168 }, { 790,408,459,168 }));
+		ui_button_credits = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_credits_window, { 520,300,237,38 }, { 787,240,237,38 }, "CLOSE CREDITS", { 787,342,237,38 }, 
+			{ 787,291,237,38 }, false, { 0,0,0,0 }, this, (int)UI_Audio::CLOSE));
+		ui_text_credits[0] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 619,312,237,38 }, { 0,0,100,100 }, "Close", { 0,0,0,255 }));
+		ui_text_credits[1] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 583,212,237,38 }, { 0,0,100,100 }, "CREDITS", { 255,255,255,255 }, { 1,0,0,0 }));
 	}
-	for (int i = 0; i < 5; i++) {
+	for (int i = 0; i < 6; i++) {
 		if (ui_button[i] != nullptr) {
 			ui_button[i]->front = false;
 		}
@@ -361,6 +426,10 @@ void j1TitleScene::DeactivateCredits() {
 	if (ui_credits_window != nullptr) {
 		App->gui->DeleteUIElement(ui_credits_window);
 		ui_credits_window = nullptr;
+		if (ui_pause_black_screen != nullptr) {
+			App->gui->DeleteUIElement(ui_pause_black_screen);
+			ui_pause_black_screen = nullptr;
+		}
 		if (ui_button_credits != nullptr) {
 			App->gui->DeleteUIElement(ui_button_credits);
 			ui_button_credits = nullptr;
@@ -372,7 +441,7 @@ void j1TitleScene::DeactivateCredits() {
 			}
 		}
 	}
-	for (int i = 0; i < 5; i++) {
+	for (int i = 0; i < 6; i++) {
 		if (ui_button[i] != nullptr) {
 			ui_button[i]->front = true;
 		}
@@ -383,20 +452,24 @@ void j1TitleScene::DeactivateCredits() {
 // Called when clicking a button in the menu with confirmation message
 void j1TitleScene::ActivateConfirmationMenu(std::string str) {
 	if (ui_confirmation_window == nullptr) {
-		ui_confirmation_window = (WindowUI*)App->gui->CreateUIElement(Type::WINDOW, nullptr, { 410,200,459,168 }, { 790,408,459,168 });
-		ui_button_confirmation[0] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_confirmation_window, { 470,300,117,38 }, { 834,125,117,24 }, "YES", { 834,149,117,24 },
-			{ 834,101,117,24 }, false, { 0,0,0,0 }, this, (int)UI_Audio::CONFIRMATION);
-		ui_text_confirmation[0] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 509,306,237,38 }, { 0,0,100,100 }, "Yes", { 0,0,0,255 }, { 1,0,0,0 });
-		ui_button_confirmation[1] = (ButtonUI*)App->gui->CreateUIElement(Type::BUTTON, ui_confirmation_window, { 690,300,117,38 }, { 834,125,117,24 }, "NO", { 834,149,117,24 },
-			{ 834,101,117,24 }, false, { 0,0,0,0 }, this, (int)UI_Audio::CONFIRMATION);
-		ui_text_confirmation[1] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 731,306,237,38 }, { 0,0,100,100 }, "No", { 0,0,0,255 }, { 1,0,0,0 });
+		uint w, h;
+		App->win->GetWindowSize(w, h);
+		ui_pause_black_screen = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, nullptr, { 0,0,(int)w,(int)h }, "", 255, 255, 255, 100));
+		ui_confirmation_window = static_cast<WindowUI*>(App->gui->CreateUIElement(Type::WINDOW, nullptr, { 410,200,459,168 }, { 790,408,459,168 }));
+		ui_button_confirmation[0] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_confirmation_window, { 470,300,117,38 }, { 834,125,117,24 }, "YES", { 834,149,117,24 },
+			{ 834,101,117,24 }, false, { 0,0,0,0 }, this, (int)UI_Audio::CONFIRMATION));
+		ui_text_confirmation[0] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 509,306,237,38 }, { 0,0,100,100 }, "Yes", { 0,0,0,255 }, { 1,0,0,0 }));
+		ui_button_confirmation[1] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_confirmation_window, { 690,300,117,38 }, { 834,125,117,24 }, "NO", { 834,149,117,24 },
+			{ 834,101,117,24 }, false, { 0,0,0,0 }, this, (int)UI_Audio::CONFIRMATION));
+		ui_text_confirmation[1] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 731,306,237,38 }, { 0,0,100,100 }, "No", { 0,0,0,255 }, { 1,0,0,0 }));
 		std::string text = str + " ?";
-		ui_text_confirmation[2] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 463,212,237,38 }, { 0,0,100,100 }, "ARE YOU SURE YOU WANT TO", { 255,255,255,255 }, { 1,0,0,0 });
+		ui_text_confirmation[2] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 463,212,237,38 }, { 0,0,100,100 }, "ARE YOU SURE YOU WANT TO", { 255,255,255,255 }, 
+			{ 1,0,0,0 }));
 		int size = text.length();
-		ui_text_confirmation[3] = (TextUI*)App->gui->CreateUIElement(Type::TEXT, nullptr, { 640 - (6 * size),247,237,38 }, { 0,0,100,100 }, text, { 255,255,255,255 }, { 1,0,0,0 });
+		ui_text_confirmation[3] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 640 - (6 * size),247,237,38 }, { 0,0,100,100 }, text, { 255,255,255,255 }, { 1,0,0,0 }));
 
 	}
-	for (int i = 0; i < 5; i++) {
+	for (int i = 0; i < 6; i++) {
 		if (ui_button[i] != nullptr) {
 			ui_button[i]->front = false;
 		}
@@ -409,6 +482,10 @@ void j1TitleScene::DeactivateConfirmationMenu() {
 	if (ui_confirmation_window != nullptr) {
 		App->gui->DeleteUIElement(ui_confirmation_window);
 		ui_confirmation_window = nullptr;
+		if (ui_pause_black_screen != nullptr) {
+			App->gui->DeleteUIElement(ui_pause_black_screen);
+			ui_pause_black_screen = nullptr;
+		}
 		for (int i = 3; i >= 0; i--) {
 			if (i < 2)
 			{
@@ -423,7 +500,7 @@ void j1TitleScene::DeactivateConfirmationMenu() {
 			}
 		}
 	}
-	for (int i = 0; i < 5; i++) {
+	for (int i = 0; i < 6; i++) {
 		if (ui_button[i] != nullptr) {
 			ui_button[i]->front = true;
 		}

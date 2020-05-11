@@ -89,6 +89,15 @@ public:
 	//Called when clicking close button in the research menu
 	void DeactivateResearchMenu();
 
+	//Called when pausing the game
+	void PauseGame();
+
+	//Called when resuming the game
+	void ResumeGame();
+
+	//Called when updating the scene to change the width of the sliders
+	void UpdateSlider(int index);
+
 private:
 	enum class Type_Selected {
 		None,
@@ -126,6 +135,8 @@ private:
 	WindowUI* ui_research_window;
 	ButtonUI* ui_button_research[3];
 	TextUI* ui_text_research[8];
+	ImageUI* ui_pause_black_screen[2];
+	TextUI* ui_text_volume_sliders[2];
 
 public:
 	ImageUI* ui_ingame;
@@ -136,6 +147,7 @@ public:
 	Entity* thing_selected;
 	j1Timer timer_win_lose;
 	bool start_timer;
+	ImageUI* ui_volume_sliders[6];
 
 
 

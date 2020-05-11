@@ -56,6 +56,8 @@ bool j1Input::PreUpdate()
 
 	const Uint8* keys = SDL_GetKeyboardState(NULL);
 
+	mouse_motion_x = mouse_motion_y = 0;
+
 	for (int i = 0; i < MAX_KEYS; ++i)
 	{
 		if (keys[i] == 1)

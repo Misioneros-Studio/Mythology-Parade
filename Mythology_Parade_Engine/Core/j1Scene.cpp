@@ -100,7 +100,7 @@ bool j1Scene::Start()
 	//quadTree = new QuadTree(TreeType::ISOMETRIC, position.x + (App->map->data.tile_width / 2), position.y, size.x, size.y);
 	//quadTree->baseNode->SubDivide(quadTree->baseNode, 5);
   
-	App->audio->PlayMusic("audio/music/Ambient1.ogg", 2.0F, 150);
+	App->audio->PlayMusic("audio/music/Ambient1.ogg", 2.0F);
   
 	//Creating players
 	App->entityManager->CreatePlayerEntity(App->fade_to_black->actual_civilization);
@@ -239,6 +239,12 @@ bool j1Scene::Update(float dt)
 	if (App->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
 		hud->ActivatePauseMenu();
 
+	if (paused_game == true) {
+		if (hud->ui_volume_sliders[0] != nullptr)
+			hud->UpdateSlider(0);
+		if (hud->ui_volume_sliders[3] != nullptr)
+			hud->UpdateSlider(3);
+	}
 
 	SDL_Rect correctedCamera = App->render->camera;
 	correctedCamera.x = -correctedCamera.x;

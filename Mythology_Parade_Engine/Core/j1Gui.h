@@ -127,6 +127,7 @@ public:
 	int green;
 	int blue;
 	int alpha;
+	bool unclicked;
 };
 class WindowUI :public UI
 {
@@ -290,6 +291,10 @@ public:
 	void ReturnConsole();
 
 	void WorkWithTextInput(std::string text);
+
+	void DeactivateButtons();
+
+	void ActivateButtons();
 
 private:
 
