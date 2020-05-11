@@ -2,25 +2,25 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="j1Window.cpp">
-      <Filter>Core\Modules</Filter>
+      <Filter>Core\Entities\Modules</Filter>
     </ClCompile>
     <ClCompile Include="j1Audio.cpp">
-      <Filter>Core\Modules</Filter>
+      <Filter>Core\Entities\Modules</Filter>
     </ClCompile>
     <ClCompile Include="j1App.cpp">
       <Filter>Core</Filter>
     </ClCompile>
     <ClCompile Include="j1Input.cpp">
-      <Filter>Core\Modules</Filter>
+      <Filter>Core\Entities\Modules</Filter>
     </ClCompile>
     <ClCompile Include="j1Main.cpp">
       <Filter>Core</Filter>
     </ClCompile>
     <ClCompile Include="j1Render.cpp">
-      <Filter>Core\Modules</Filter>
+      <Filter>Core\Entities\Modules</Filter>
     </ClCompile>
     <ClCompile Include="j1Textures.cpp">
-      <Filter>Core\Modules</Filter>
+      <Filter>Core\Entities\Modules</Filter>
     </ClCompile>
     <ClCompile Include="p2Log.cpp">
       <Filter>Tools</Filter>
@@ -32,10 +32,10 @@
       <Filter>Core\Tools\PuguiXML</Filter>
     </ClCompile>
     <ClCompile Include="j1Map.cpp">
-      <Filter>Core\Modules</Filter>
+      <Filter>Core\Entities\Modules</Filter>
     </ClCompile>
     <ClCompile Include="j1Pathfinding.cpp">
-      <Filter>Core\Modules</Filter>
+      <Filter>Core\Entities\Modules</Filter>
     </ClCompile>
     <ClCompile Include="j1Timer.cpp">
       <Filter>Core\Tools</Filter>
@@ -44,19 +44,19 @@
       <Filter>Core\Tools</Filter>
     </ClCompile>
     <ClCompile Include="j1Fonts.cpp">
-      <Filter>Core\Modules</Filter>
+      <Filter>Core\Entities\Modules</Filter>
     </ClCompile>
     <ClCompile Include="j1Gui.cpp">
-      <Filter>Core\Modules</Filter>
+      <Filter>Core\Entities\Modules</Filter>
     </ClCompile>
     <ClCompile Include="QuadTree.cpp">
       <Filter>Core\Tools\Trees</Filter>
     </ClCompile>
     <ClCompile Include="Console.cpp">
-      <Filter>Core\Modules</Filter>
+      <Filter>Core\Entities\Modules</Filter>
     </ClCompile>
     <ClCompile Include="EntityManager.cpp">
-      <Filter>Core\Modules</Filter>
+      <Filter>Core\Entities\Modules</Filter>
     </ClCompile>
     <ClCompile Include="HealthSystem.cpp">
       <Filter>Core\System Classes</Filter>
@@ -80,48 +80,48 @@
       <Filter>Core\System Classes</Filter>
     </ClCompile>
     <ClCompile Include="Animation.cpp">
-      <Filter>Core\Modules</Filter>
+      <Filter>Core\Entities\Modules</Filter>
     </ClCompile>
     <ClCompile Include="j1TitleScene.cpp">
       <Filter>Core\Scenes</Filter>
     </ClCompile>
     <ClCompile Include="j1Minimap.cpp">
-      <Filter>Core\Modules</Filter>
+      <Filter>Core\Entities\Modules</Filter>
     </ClCompile>
     <ClCompile Include="j1LogoScene.cpp">
       <Filter>Core\Scenes</Filter>
     </ClCompile>
     <ClCompile Include="PathFinder.cpp">
-      <Filter>Core\Modules</Filter>
+      <Filter>Core\Entities\Modules</Filter>
     </ClCompile>
     <ClCompile Include="j1FadeToBlack.cpp">
-      <Filter>Core\Modules</Filter>
+      <Filter>Core\Entities\Modules</Filter>
     </ClCompile>
     <ClCompile Include="HUD.cpp">
-      <Filter>Core\Scenes\HUD</Filter>
+      <Filter>Core\HUD</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1Window.h">
-      <Filter>Core\Modules</Filter>
+      <Filter>Core\Entities\Modules</Filter>
     </ClInclude>
     <ClInclude Include="j1Audio.h">
-      <Filter>Core\Modules</Filter>
+      <Filter>Core\Entities\Modules</Filter>
     </ClInclude>
     <ClInclude Include="j1App.h">
       <Filter>Core</Filter>
     </ClInclude>
     <ClInclude Include="j1Input.h">
-      <Filter>Core\Modules</Filter>
+      <Filter>Core\Entities\Modules</Filter>
     </ClInclude>
     <ClInclude Include="j1Module.h">
       <Filter>Core</Filter>
     </ClInclude>
     <ClInclude Include="j1Render.h">
-      <Filter>Core\Modules</Filter>
+      <Filter>Core\Entities\Modules</Filter>
     </ClInclude>
     <ClInclude Include="j1Textures.h">
-      <Filter>Core\Modules</Filter>
+      <Filter>Core\Entities\Modules</Filter>
     </ClInclude>
     <ClInclude Include="p2Defs.h">
       <Filter>Tools</Filter>
@@ -142,10 +142,10 @@
       <Filter>Core\Tools\PuguiXML</Filter>
     </ClInclude>
     <ClInclude Include="j1Map.h">
-      <Filter>Core\Modules</Filter>
+      <Filter>Core\Entities\Modules</Filter>
     </ClInclude>
     <ClInclude Include="j1Pathfinding.h">
-      <Filter>Core\Modules</Filter>
+      <Filter>Core\Entities\Modules</Filter>
     </ClInclude>
     <ClInclude Include="j1Timer.h">
       <Filter>Core\Tools</Filter>
@@ -154,19 +154,19 @@
       <Filter>Core\Tools</Filter>
     </ClInclude>
     <ClInclude Include="j1Fonts.h">
-      <Filter>Core\Modules</Filter>
+      <Filter>Core\Entities\Modules</Filter>
     </ClInclude>
     <ClInclude Include="j1Gui.h">
-      <Filter>Core\Modules</Filter>
+      <Filter>Core\Entities\Modules</Filter>
     </ClInclude>
     <ClInclude Include="QuadTree.h">
       <Filter>Core\Tools\Trees</Filter>
     </ClInclude>
     <ClInclude Include="Console.h">
-      <Filter>Core\Modules</Filter>
+      <Filter>Core\Entities\Modules</Filter>
     </ClInclude>
     <ClInclude Include="EntityManager.h">
-      <Filter>Core\Modules</Filter>
+      <Filter>Core\Entities\Modules</Filter>
     </ClInclude>
     <ClInclude Include="Entity.h">
       <Filter>Core\Entities</Filter>
@@ -193,28 +193,28 @@
       <Filter>Core\System Classes</Filter>
     </ClInclude>
     <ClInclude Include="Animation.h">
-      <Filter>Core\Modules</Filter>
+      <Filter>Core\Entities\Modules</Filter>
     </ClInclude>
     <ClInclude Include="j1TitleScene.h">
       <Filter>Core\Scenes</Filter>
     </ClInclude>
     <ClInclude Include="j1Minimap.h">
-      <Filter>Core\Modules</Filter>
+      <Filter>Core\Entities\Modules</Filter>
     </ClInclude>
     <ClInclude Include="j1LogoScene.h">
       <Filter>Core\Scenes</Filter>
     </ClInclude>
     <ClInclude Include="PathFinder.h">
-      <Filter>Core\Modules</Filter>
+      <Filter>Core\Entities\Modules</Filter>
     </ClInclude>
     <ClInclude Include="j1FadeToBlack.h">
-      <Filter>Core\Modules</Filter>
+      <Filter>Core\Entities\Modules</Filter>
     </ClInclude>
     <ClInclude Include="MemLeaks.h">
       <Filter>Core\Tools</Filter>
     </ClInclude>
     <ClInclude Include="HUD.h">
-      <Filter>Core\Scenes\HUD</Filter>
+      <Filter>Core\HUD</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -232,9 +232,6 @@
     </Filter>
     <Filter Include="Core\Scenes">
       <UniqueIdentifier>{e07660eb-d36f-4cc9-af59-324d31c2f2f6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Core\Modules">
-      <UniqueIdentifier>{244722d1-90ce-423d-8e7a-556211865a32}</UniqueIdentifier>
     </Filter>
     <Filter Include="Core\Tools\Trees">
       <UniqueIdentifier>{c47eb193-3016-4949-8f56-a6fb90788276}</UniqueIdentifier>
@@ -257,7 +254,10 @@
     <Filter Include="Core\Entities\Player">
       <UniqueIdentifier>{3dcd2ce1-3295-4ae1-87f2-feb1ee4efadf}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Core\Scenes\HUD">
+    <Filter Include="Core\Entities\Modules">
+      <UniqueIdentifier>{244722d1-90ce-423d-8e7a-556211865a32}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\HUD">
       <UniqueIdentifier>{da84361d-6a45-4d6b-bcab-93f5aaf4d801}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
