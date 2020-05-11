@@ -25,6 +25,7 @@ class Building;
 enum class UnitType;
 enum BuildingType;
 enum CivilizationType;
+class ResearchMenu;
 
 class HUD
 {
@@ -33,13 +34,13 @@ class HUD
 public:
 
 	//Constructor
-	HUD();
+	HUD(ResearchMenu* r);
 
 	//Destructor
 	~HUD();
 
 	// Called before the first frame
-	void StartHUD();
+	void StartHUD(ResearchMenu* r);
 
 	// Called when clicking esc
 	void ActivatePauseMenu();
@@ -132,11 +133,9 @@ private:
 	Type_Selected type_thing_selected;
 	ButtonUI* hud_button_actions[5];
 	ImageUI* hud_button_actions_unclickable[5];
-	WindowUI* ui_research_window;
-	ButtonUI* ui_button_research[3];
-	TextUI* ui_text_research[8];
 	ImageUI* ui_pause_black_screen[2];
 	TextUI* ui_text_volume_sliders[2];
+	ResearchMenu* research_menu;
 
 public:
 	ImageUI* ui_ingame;
@@ -148,13 +147,6 @@ public:
 	j1Timer timer_win_lose;
 	bool start_timer;
 	ImageUI* ui_volume_sliders[6];
-
-
-
-	//////////////// TEMPORAL VARIABLES FOR VERTICAL SLICE ONLY
-	bool research_monastery;
-	bool research_temple;
-	bool research_encampment;
 };
 
-#endif // !__LEVELSYSTEM__H_
+#endif // !__HUD__H_

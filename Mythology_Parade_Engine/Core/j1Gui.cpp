@@ -16,9 +16,11 @@ j1Gui::j1Gui() : j1Module()
 	name.append("gui");
 	atlas_file_name_num_0 = "";
 	atlas_file_name_num_1 = "";
+	atlas_file_name_num_2 = "";
 	UIs.clear();
 	atlas_num_0 = nullptr;
 	atlas_num_1 = nullptr;
+	atlas_num_2 = nullptr;
 	cursor_tex = nullptr;
 	lockClick = false;
 	LOG("%s", atlas_file_name_num_0.c_str());
@@ -36,6 +38,7 @@ bool j1Gui::Awake(pugi::xml_node& conf)
 
 	atlas_file_name_num_0 = conf.child("atlas_0").attribute("file").as_string("");
 	atlas_file_name_num_1 = conf.child("atlas_1").attribute("file").as_string("");
+	atlas_file_name_num_2 = conf.child("atlas_2").attribute("file").as_string("");
 	active = false;
 
 	return ret;
@@ -46,6 +49,7 @@ bool j1Gui::Start()
 {
 	atlas_num_0 = App->tex->Load(atlas_file_name_num_0.c_str());
 	atlas_num_1 = App->tex->Load(atlas_file_name_num_1.c_str());
+	atlas_num_2 = App->tex->Load(atlas_file_name_num_2.c_str());
 	for (int i = 0; i < 9; i++) {
 		sfx_UI[i] = 0;
 	}
@@ -147,6 +151,10 @@ bool j1Gui::CleanUp()
 	{
 		App->tex->UnLoad(atlas_num_1);
 	}
+	if (atlas_num_2)
+	{
+		App->tex->UnLoad(atlas_num_2);
+	}
 	App->tex->UnLoad(cursor_tex);
 	return true;
 }
@@ -158,6 +166,8 @@ const SDL_Texture* j1Gui::GetAtlas(int number_atlas) const
 		return atlas_num_0;
 	else if (number_atlas == 1)
 		return atlas_num_1;
+	else if (number_atlas == 2)
+		return atlas_num_2;
 }
 
 // class Gui ---------------------------------------------------
