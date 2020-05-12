@@ -84,8 +84,6 @@ void CombatUnit::LevelUp()
 	}
 }
 
-
-
 void CombatUnit::Init(int maxHealth, int damage, int range, int speed)
 {
 	Unit::Init(maxHealth);
@@ -102,6 +100,23 @@ void CombatUnit::Init(int maxHealth, int damage, int range, int speed)
 bool CombatUnit::Update(float dt) 
 {
 	Unit::Update(dt);
+
+
+	switch (this->GetLevel())
+	{
+	case (1):
+		App->render->Blit(level_tex, (position.x-6), (position.y - 65), &level_rect,1,0,0,0,1);
+		break;									  
+	case (2):									  
+		App->render->Blit(level_tex, (position.x-2), (position.y - 65), &level_rect, 1, 0, 0, 0, 1);
+		App->render->Blit(level_tex, (position.x-10), (position.y - 65), &level_rect, 1, 0, 0, 0, 1);
+		break;									  
+	case (3):									  
+		App->render->Blit(level_tex, (position.x-6), (position.y - 65), &level_rect, 1, 0, 0, 0, 1);
+		App->render->Blit(level_tex, (position.x-14), (position.y - 65), &level_rect, 1, 0, 0, 0, 1);
+		App->render->Blit(level_tex, (position.x+2), (position.y - 65), &level_rect, 1, 0, 0, 0, 1);
+		break;
+	}
 
 	return true;
 }
