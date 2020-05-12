@@ -62,6 +62,7 @@ public:
 	void SetMoveSpeed(int);
 
 	bool isSelected();
+	void SetSelected(bool value);
 
 	virtual bool Draw(float dt);
 	virtual void Action(Entity*);
