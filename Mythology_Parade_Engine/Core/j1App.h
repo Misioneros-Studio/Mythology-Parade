@@ -25,6 +25,7 @@ class j1Gui;
 class Console;
 class EntityManager;
 class j1FadeToBlack;
+class j1ModuleParticles;
 
 class j1App
 {
@@ -110,6 +111,7 @@ public:
 	Console*			console = NULL;
 	EntityManager*		entityManager = NULL;
 	j1FadeToBlack*		fade_to_black = NULL;
+	j1ModuleParticles*	particles = NULL;
  
 	bool				restart_scene = false;
 

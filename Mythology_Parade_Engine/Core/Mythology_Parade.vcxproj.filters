@@ -103,6 +103,18 @@
     <ClCompile Include="ResearchMenu.cpp">
       <Filter>Core\Scenes\Research Menu</Filter>
     </ClCompile>
+    <ClCompile Include="j1Emiter.cpp">
+      <Filter>Core\Tools\Particles</Filter>
+    </ClCompile>
+    <ClCompile Include="j1ParticleSystem.cpp">
+      <Filter>Core\Tools\Particles</Filter>
+    </ClCompile>
+    <ClCompile Include="j1Particle.cpp">
+      <Filter>Core\Tools\Particles</Filter>
+    </ClCompile>
+    <ClCompile Include="j1ModuleParticles.cpp">
+      <Filter>Core\Tools\Particles</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1Window.h">
@@ -222,6 +234,21 @@
     <ClInclude Include="ResearchMenu.h">
       <Filter>Core\Scenes\Research Menu</Filter>
     </ClInclude>
+    <ClInclude Include="j1Emiter.h">
+      <Filter>Core\Tools\Particles</Filter>
+    </ClInclude>
+    <ClInclude Include="j1ParticleSystem.h">
+      <Filter>Core\Tools\Particles</Filter>
+    </ClInclude>
+    <ClInclude Include="j1Particle.h">
+      <Filter>Core\Tools\Particles</Filter>
+    </ClInclude>
+    <ClInclude Include="ClassicAnimation.h">
+      <Filter>Core\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="j1ModuleParticles.h">
+      <Filter>Core\Tools\Particles</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Tools">
@@ -268,6 +295,9 @@
     </Filter>
     <Filter Include="Core\Scenes\Research Menu">
       <UniqueIdentifier>{52f59738-0827-4e4d-82e8-5555aabdb47c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Tools\Particles">
+      <UniqueIdentifier>{5a45f453-e654-4c7f-98df-242d10c7ca55}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

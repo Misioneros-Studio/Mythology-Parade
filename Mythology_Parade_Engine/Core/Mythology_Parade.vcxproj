@@ -84,6 +84,7 @@
     <ClCompile Include="HealthSystem.cpp" />
     <ClCompile Include="CurrencySystem.cpp" />
     <ClCompile Include="HUD.cpp" />
+    <ClCompile Include="j1Emiter.cpp" />
     <ClCompile Include="j1FadeToBlack.cpp" />
     <ClCompile Include="j1Fonts.cpp" />
     <ClCompile Include="j1Gui.cpp" />
@@ -94,6 +95,9 @@
     <ClCompile Include="j1Input.cpp" />
     <ClCompile Include="j1Map.cpp" />
     <ClCompile Include="j1Minimap.cpp" />
+    <ClCompile Include="j1ModuleParticles.cpp" />
+    <ClCompile Include="j1Particle.cpp" />
+    <ClCompile Include="j1ParticleSystem.cpp" />
     <ClCompile Include="j1Pathfinding.cpp" />
     <ClCompile Include="j1PerfTimer.cpp" />
     <ClCompile Include="LevelSystem.cpp" />
@@ -121,12 +125,17 @@
     <ClInclude Include="HealthSystem.h" />
     <ClInclude Include="CurrencySystem.h" />
     <ClInclude Include="HUD.h" />
+    <ClInclude Include="ClassicAnimation.h" />
+    <ClInclude Include="j1Emiter.h" />
     <ClInclude Include="j1FadeToBlack.h" />
     <ClInclude Include="j1Fonts.h" />
     <ClInclude Include="j1Gui.h" />
     <ClInclude Include="j1LogoScene.h" />
     <ClInclude Include="j1Map.h" />
     <ClInclude Include="j1Minimap.h" />
+    <ClInclude Include="j1Particle.h" />
+    <ClInclude Include="j1ModuleParticles.h" />
+    <ClInclude Include="j1ParticleSystem.h" />
     <ClInclude Include="j1Pathfinding.h" />
     <ClInclude Include="j1PerfTimer.h" />
     <ClInclude Include="LevelSystem.h" />
