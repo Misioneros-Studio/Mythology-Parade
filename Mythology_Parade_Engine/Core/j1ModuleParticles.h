@@ -32,7 +32,6 @@ public:
 
 private:
 	j1ParticleSystem* particleSystem;
-	std::list<iPoint> arrows_list;
 
 	float dtime;
 

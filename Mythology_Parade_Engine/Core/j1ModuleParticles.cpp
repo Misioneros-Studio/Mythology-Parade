@@ -25,9 +25,9 @@ bool j1ModuleParticles::Start()
 {
 
 
-	arrow_animation.PushBack(SDL_Rect{ 0, 0, 10, 10 }, 1, 0, 0);
-	arrow_animation.PushBack(SDL_Rect{ 0, 12, 6, 6 }, 1, 0, 0);
-	arrow_animation.PushBack(SDL_Rect{ 7, 11, 8, 8 }, 1, 0, 0);
+	arrow_animation.PushBack(SDL_Rect{ 256, 193, 10, 10 }, 1, 0, 0);
+	arrow_animation.PushBack(SDL_Rect{ 256, 207, 6, 6 }, 1, 0, 0);
+	arrow_animation.PushBack(SDL_Rect{ 264, 205, 8, 8 }, 1, 0, 0);
 
 	particles_tex = App->tex->Load("assets/particles.png");
 	arrow_rect = { 0,0,64,32 };
@@ -96,8 +96,7 @@ void j1ModuleParticles::DeleteAllParticles()
 void j1ModuleParticles::DoUnitsPathParticles(int pos_x, int pos_y)
 {
 	fPoint pos_global= App->map->MapToWorld(pos_x, pos_y);
-
-	arrows_list.push_back(pos_global);
+	//pos_global = App->render->WorldToScreen(pos_global.x, pos_global.y);
 
 	j1Emiter emiter(pos_global.x, pos_global.y,0,-1,0,2,0,0,0,0,0,0,30,0.2f, &arrow_rect, particles_tex, arrow_animation, true, 1);
 
@@ -109,24 +108,21 @@ void j1ModuleParticles::DoLogoScreenParticles()
 	rect = { 0, 0, 10, 400 };
 	rect2 = { 0, 0, 550, 10 };
 
-	SDL_Texture* snowball = App->tex->Load("particleTextures/bolaNieve.png");
-
 	ClassicAnimation anim1;
-	anim1.PushBack(SDL_Rect{ 0, 0, 10, 10 }, 1, 0, 0);
-
 	ClassicAnimation anim2;
-	anim2.PushBack(SDL_Rect{ 0, 12, 6, 6 }, 1, 0, 0);
-
 	ClassicAnimation anim3;
-	anim3.PushBack(SDL_Rect{ 7, 11, 8, 8 }, 1, 0, 0);
 
-	j1Emiter emiterBigSnowBall(0, 20, 2, 2, 2, -3, 0, 0, 0, 1, 5, 0, 6, 3.5, &rect, snowball, anim1, true, 0);
-	j1Emiter emiterMidSnowBall(0, 20, 2, 2, 3, -2, 0, 0, 0, 1, 5, 0, 8, 3.5, &rect, snowball, anim2, true, 0);
-	j1Emiter emiterLittleSnowBall(0, 20, 3, 2, 3, -2, 0, 0, 0, 1, 5, 0, 8, 3.5, &rect, snowball, anim3, true, 0);
+	anim1.PushBack(SDL_Rect{ 256, 193, 10, 10 }, 1, 0, 0);
+	anim2.PushBack(SDL_Rect{ 256, 207, 6, 6 }, 1, 0, 0);
+	anim3.PushBack(SDL_Rect{ 264, 205, 8, 8 }, 1, 0, 0);
 
-	j1Emiter emiterBigSnowBall2(20, 0, 2, 2, 2, -3, 0, 0, 0, 1, 5, 0, 6, 3.5, &rect2, snowball, anim1, true, 0);
-	j1Emiter emiterMidSnowBall2(20, 0, 2, 2, 3, -2, 0, 0, 0, 1, 5, 0, 8, 3.5, &rect2, snowball, anim2, true, 0);
-	j1Emiter emiterLittleSnowBall2(20, 0, 3, 2, 3, -2, 0, 0, 0, 1, 5, 0, 8, 3.5, &rect2, snowball, anim3, true, 0);
+	j1Emiter emiterBigSnowBall(0, 20, 2, 2, 2, -3, 0, 0, 0, 1, 5, 0, 6, 3.5, &rect, App->tex->Load("assets/particles.png"), anim1, true, 0);
+	j1Emiter emiterMidSnowBall(0, 20, 2, 2, 3, -2, 0, 0, 0, 1, 5, 0, 8, 3.5, &rect, App->tex->Load("assets/particles.png"), anim2, true, 0);
+	j1Emiter emiterLittleSnowBall(0, 20, 3, 2, 3, -2, 0, 0, 0, 1, 5, 0, 8, 3.5, &rect, App->tex->Load("assets/particles.png"), anim3, true, 0);
+
+	j1Emiter emiterBigSnowBall2(20, 0, 2, 2, 2, -3, 0, 0, 0, 1, 5, 0, 6, 3.5, &rect2, App->tex->Load("assets/particles.png"), anim1, true, 0);
+	j1Emiter emiterMidSnowBall2(20, 0, 2, 2, 3, -2, 0, 0, 0, 1, 5, 0, 8, 3.5, &rect2, App->tex->Load("assets/particles.png"), anim2, true, 0);
+	j1Emiter emiterLittleSnowBall2(20, 0, 3, 2, 3, -2, 0, 0, 0, 1, 5, 0, 8, 3.5, &rect2, App->tex->Load("assets/particles.png"), anim3, true, 0);
 
 	particleSystem->PushEmiter(emiterBigSnowBall);
 	particleSystem->PushEmiter(emiterMidSnowBall);
