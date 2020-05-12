@@ -158,15 +158,7 @@ void j1Particle::PostUpdate(float dt)
 
 void j1Particle::Draw(float dt)
 {
-	if (fade == true)
-	{
-		Uint8 transparency = life / originalLife * 255;
-		App->render->Blit(texture, position[0], position[1], &animation.GetCurrentFrameBox(dt));
-	}
-
-	else
-		App->render->Blit(texture, position[0], position[1], &animation.GetCurrentFrameBox(dt));
-
+	App->render->Blit(texture, position[0], position[1], &animation.GetCurrentFrameBox(dt));
 }
 
 void j1Particle::Move(float dt)

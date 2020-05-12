@@ -31,12 +31,14 @@ class ClassicAnimation
 public:
 	bool loop = true;
 	Frame frames[MAX_FRAMES];
+	float speed = 1;
 
 private:
 	float framesPassed = 0;
 	int currentFrame = 0;
 	int lastFrame = 0;
 	int loops = 0;
+
 
 public:
 
@@ -55,8 +57,8 @@ public:
 
 	Frame& GetCurrentFrame(float dt)
 	{
-		if (framesPassed * dt < frames[currentFrame].maxFrames * dt)
-			framesPassed += dt;
+		if (framesPassed * dt*speed < frames[currentFrame].maxFrames * dt*speed)
+			framesPassed += dt*speed;
 		else
 		{
 			framesPassed = 0;

@@ -84,16 +84,20 @@ j1Emiter::j1Emiter(float positionX, float positionY, float particleSpeedX, float
 
 void j1Emiter::Start()
 {
-
 	int maxParticles = particlesRate * particlesLifeTime + 1;
 
-	particlesPerFrame = particlesRate * 16 / 1000;
-
-	particleVector.reserve(maxParticles);
-
-	for (int i = 0; i < maxParticles; i++)
-	{
+	if (particlesRate == 1 || maxParticles==1) {
 		CreateParticle();
+	}
+	else if (particlesRate > 1) {
+		particlesPerFrame = particlesRate * 16 / 1000;
+
+		particleVector.reserve(maxParticles);
+
+		for (int i = 0; i < maxParticles; i++)
+		{
+			CreateParticle();
+		}
 	}
 
 	if (areaOfSpawn == nullptr)
@@ -115,7 +119,6 @@ void j1Emiter::Start()
 		}
 	}
 
-
 	if (particleVariationSpeed[0] == NULL)
 	{
 		randomizeSpeedX = false;
@@ -125,7 +128,6 @@ void j1Emiter::Start()
 	{
 		randomizeSpeedY = false;
 	}
-
 
 	if (particleVariationAcceleration[0] == NULL)
 	{
@@ -228,16 +230,12 @@ void j1Emiter::ThrowParticles() {
 
 		for (int i = 0; i < particleVector.size(); i++)
 		{
-			//TODO 2: Call Activate(), use Generate...() functions to get the parameters Activate() needs.
-			//Activate returns false if the particle is already active, and true if we activate it.
-
 			if (particleVector[i].Activate())
 			{
 				particleVector[i].Reset(GeneratePosX(), GeneratePosY(), GenerateSpeedX(), GenerateSpeedY(), GenerateAccelerationX(), GenerateAccelerationY(), GenerateAngularSpeed());
 				emited++;
 			}
 
-			//If we activated the necesary particles this frame, break
 			if ((int)particlesEmited == emited)
 				break;
 

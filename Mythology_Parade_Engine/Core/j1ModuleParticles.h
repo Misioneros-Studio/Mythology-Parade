@@ -29,6 +29,7 @@ public:
 	void DeleteAllParticles();
 	void DoUnitsPathParticles(int pos_x, int pos_y);
 	void DoLogoScreenParticles();
+	void DoExplosion(int pos_x, int pos_y);
 
 private:
 	j1ParticleSystem* particleSystem;
@@ -41,6 +42,7 @@ private:
 	SDL_Rect arrow_rect;
 	SDL_Texture* particles_tex;
 	ClassicAnimation arrow_animation;
+	ClassicAnimation explosion_animation;
 };
 
 #endif //__J1MODULEPARTICLES__

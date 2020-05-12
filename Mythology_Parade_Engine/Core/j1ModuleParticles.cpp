@@ -2,6 +2,7 @@
 #include "j1ModuleParticles.h"
 #include "j1Emiter.h"
 #include "j1ParticleSystem.h"
+#include "j1Particle.h"
 #include "j1Textures.h"
 #include "j1Input.h"
 #include "j1Map.h"
@@ -23,7 +24,16 @@ j1ModuleParticles::~j1ModuleParticles()
 
 bool j1ModuleParticles::Start()
 {
-
+	explosion_animation.PushBack(SDL_Rect{ 0, 0, 59, 59 }, 1, 0, 0);
+	explosion_animation.PushBack(SDL_Rect{ 59, 0, 59, 59 }, 1, 0, 0);
+	explosion_animation.PushBack(SDL_Rect{ 118, 0, 59, 59 }, 1, 0, 0);
+	explosion_animation.PushBack(SDL_Rect{ 177, 0, 59, 59 }, 1, 0, 0);
+	explosion_animation.PushBack(SDL_Rect{ 236, 0, 59, 59 }, 1, 0, 0);
+	explosion_animation.PushBack(SDL_Rect{ 295, 0, 59, 59 }, 1, 0, 0);
+	explosion_animation.PushBack(SDL_Rect{ 354, 0, 59, 59 }, 1, 0, 0);
+	explosion_animation.PushBack(SDL_Rect{ 413, 0, 59, 59 }, 1, 0, 0);
+	explosion_animation.speed = 20;
+	explosion_animation.loop = false;
 
 	arrow_animation.PushBack(SDL_Rect{ 256, 193, 10, 10 }, 1, 0, 0);
 	arrow_animation.PushBack(SDL_Rect{ 256, 207, 6, 6 }, 1, 0, 0);
@@ -96,11 +106,12 @@ void j1ModuleParticles::DeleteAllParticles()
 void j1ModuleParticles::DoUnitsPathParticles(int pos_x, int pos_y)
 {
 	fPoint pos_global= App->map->MapToWorld(pos_x, pos_y);
-	//pos_global = App->render->WorldToScreen(pos_global.x, pos_global.y);
 
 	j1Emiter emiter(pos_global.x, pos_global.y,0,-1,0,2,0,0,0,0,0,0,30,0.2f, &arrow_rect, particles_tex, arrow_animation, true, 1);
+	j1Emiter explosion(pos_global.x, pos_global.y, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 1, &arrow_rect, particles_tex, explosion_animation, true, 1);
 
 	particleSystem->PushEmiter(emiter);
+	particleSystem->PushEmiter(explosion);
 }
 
 void j1ModuleParticles::DoLogoScreenParticles()
@@ -132,4 +143,13 @@ void j1ModuleParticles::DoLogoScreenParticles()
 	particleSystem->PushEmiter(emiterMidSnowBall2);
 	particleSystem->PushEmiter(emiterLittleSnowBall2);
 
+}
+
+void j1ModuleParticles::DoExplosion(int pos_x, int pos_y)
+{
+	fPoint pos_global = App->map->MapToWorld(pos_x, pos_y);
+
+	j1Emiter explosion(pos_global.x, pos_global.y, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 1, &arrow_rect, particles_tex, explosion_animation, true, 1);
+
+	particleSystem->PushEmiter(explosion);
 }

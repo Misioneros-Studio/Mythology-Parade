@@ -179,7 +179,7 @@ void j1Scene::ClickToPath()
 		LOG("Origin: %i, %i", origin.x, origin.y);
 		LOG("Ending: %i, %i", ending.x, ending.y);
 
-		App->particles->DoUnitsPathParticles(ending.x, ending.y);
+
 
 		int posX, posY;
 		App->input->GetMousePosition(posX, posY);
@@ -206,6 +206,7 @@ void j1Scene::ClickToPath()
 
 		if (!attacking)
 		{
+			App->particles->DoUnitsPathParticles(ending.x, ending.y);
 			Unit* unt = nullptr;
 			for (std::list<Entity*>::iterator sel = list.begin(); sel != list.end(); sel++)
 			{
