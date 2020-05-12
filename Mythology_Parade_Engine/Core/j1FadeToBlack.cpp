@@ -20,6 +20,7 @@
 #include "j1Gui.h"
 #include "Console.h"
 #include "EntityManager.h"
+#include "j1ModuleParticles.h"
 
 j1FadeToBlack::j1FadeToBlack()
 {
@@ -57,6 +58,7 @@ bool j1FadeToBlack::PostUpdate()
 			case(which_fade::logo_to_title):
 				App->logo_scene->Disable();
 				App->title_scene->Enable();
+				//App->particles->Disable();
 				break;
 				
 			case(which_fade::title_to_scene):

@@ -23,8 +23,11 @@ public:
 
 	void Move(int x, int y);
 
-private:
+public:
 	std::vector<j1Emiter> emiterVector;
+
+private:
+
 	std::vector<float>	position;
 
 	bool active;

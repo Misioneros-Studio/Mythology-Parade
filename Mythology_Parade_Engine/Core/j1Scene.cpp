@@ -18,7 +18,7 @@
 #include "j1FadeToBlack.h"
 #include "HUD.h"
 #include "ResearchMenu.h"
-
+#include "j1ModuleParticles.h"
 #include"QuadTree.h"
 
 j1Scene::j1Scene() : j1Module()
@@ -26,6 +26,8 @@ j1Scene::j1Scene() : j1Module()
 	name.append("scene");
 	winlose_tex = nullptr;
 	clickToPath = false;
+
+
 }
 
 // Destructor
@@ -75,6 +77,8 @@ bool j1Scene::Start()
   //Load building debug textures
 	debugBlue_tex = App->tex->Load("maps/path2.png");
 	debugRed_tex = App->tex->Load("maps/cantBuild.png");
+
+
 
 	App->audio->CleanFxs();
 
@@ -174,6 +178,8 @@ void j1Scene::ClickToPath()
 		iPoint ending = App->map->GetMousePositionOnMap();
 		LOG("Origin: %i, %i", origin.x, origin.y);
 		LOG("Ending: %i, %i", ending.x, ending.y);
+
+		App->particles->DoUnitsPathParticles(ending.x, ending.y);
 
 		int posX, posY;
 		App->input->GetMousePosition(posX, posY);

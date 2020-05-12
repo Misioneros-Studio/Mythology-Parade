@@ -4,6 +4,7 @@
 #define __J1MODULEPARTICLES__
 
 #include "j1Module.h"
+#include "ClassicAnimation.h"
 #include "SDL/include/SDL.h"
 #pragma comment( lib, "SDL/libx86/SDL2.lib" )
 #pragma comment( lib, "SDL/libx86/SDL2main.lib" )
@@ -23,15 +24,22 @@ public:
 	bool PreUpdate();
 	bool Update(float dt);
 	bool PostUpdate();
+	bool CleanUp();
+
+	void DeleteAllParticles();
+	void DoUnitsPathParticles(int pos_x, int pos_y);
 
 private:
-	std::list<j1Emiter> particleArray;
 	j1ParticleSystem* particleSystem;
 
 	float dtime;
 
 	SDL_Rect rect;
 	SDL_Rect rect2;
+
+	SDL_Rect arrow_rect;
+	SDL_Texture* particles_tex;
+	ClassicAnimation arrow_animation;
 };
 
 #endif //__J1MODULEPARTICLES__

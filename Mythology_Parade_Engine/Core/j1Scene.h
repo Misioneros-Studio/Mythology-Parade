@@ -5,6 +5,7 @@
 #include "j1Timer.h"
 #include "SDL/include/SDL.h"
 #include"p2Point.h"
+#include"ClassicAnimation.h"
 
 struct SDL_Rect;
 
@@ -72,7 +73,6 @@ private:
 	fPoint global_pos;
 	SDL_Rect mapLimitsRect;
 	SDL_Texture* winlose_tex;
-
 
 public:
 	SDL_Texture* debugBlue_tex;
