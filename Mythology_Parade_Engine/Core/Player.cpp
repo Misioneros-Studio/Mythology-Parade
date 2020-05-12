@@ -92,8 +92,6 @@ bool Player::Update(float dt)
 		PlayerInputs();
 	}
 
-
-
 	return true;
 }
 
@@ -140,6 +138,11 @@ void Player::SelectionDraw_Logic()
 
 		if (App->input->GetMouseButtonDown(1) == KEY_UP)
 		{
+			for each (Unit* unit in listEntities)
+			{
+				unit->SetSelected(false);
+			}
+
 			listEntities.clear();
 			buildingSelect = nullptr;
 			ClickLogic();
@@ -171,6 +174,8 @@ void Player::SeeEntitiesInside()
 			{
 				if (it._Ptr->_Myval->civilization == player_type)
 				{
+					Unit* unit = static_cast<Unit*>(it._Ptr->_Myval);
+					unit->SetSelected(true);
 					listEntities.push_back(it._Ptr->_Myval);
 				}
 			}
@@ -276,6 +281,8 @@ void Player::ClickLogic()
 				{
 					if (it._Ptr->_Myval->civilization == civilization) 
 					{
+						Unit* unit = static_cast<Unit*>(it._Ptr->_Myval);
+						unit->SetSelected(true);
 						listEntities.push_back(it._Ptr->_Myval);
 						if (preClicked == postClicked)
 							return;
