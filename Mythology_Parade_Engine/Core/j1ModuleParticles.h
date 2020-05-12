@@ -28,9 +28,11 @@ public:
 
 	void DeleteAllParticles();
 	void DoUnitsPathParticles(int pos_x, int pos_y);
+	void DoLogoScreenParticles();
 
 private:
 	j1ParticleSystem* particleSystem;
+	std::list<iPoint> arrows_list;
 
 	float dtime;
 

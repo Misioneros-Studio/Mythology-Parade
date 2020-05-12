@@ -17,7 +17,7 @@ public:
 
 	j1Emiter(float positionX, float positionY, float particleSpeedX, float particleSpeedY, int particleVariationSpeedX, int particleVariationSpeedY, float particleAccelerationX,
 		float particleAccelerationY, int particleVariationAccelerationX, int particleVariationAccelerationY, float particleAngularSpeed, int particleVariableAngularSpeed,
-		float particlesRate, float particlesLifeTime, SDL_Rect* areaOfSpawn, SDL_Texture* texture, ClassicAnimation particleAnimation, bool fade);
+		float particlesRate, float particlesLifeTime, SDL_Rect* areaOfSpawn, SDL_Texture* texture, ClassicAnimation particleAnimation, bool fade, int time);
 
 	~j1Emiter();
 
@@ -83,6 +83,10 @@ private:
 	bool randomizeAngularSpeed;
 
 	bool fadeParticles;
+
+	bool total_time;
+	j1Timer timer_particles;
+	bool do_it_one = false;
 
 	bool active;
 };

@@ -58,7 +58,8 @@ bool j1FadeToBlack::PostUpdate()
 			case(which_fade::logo_to_title):
 				App->logo_scene->Disable();
 				App->title_scene->Enable();
-				//App->particles->Disable();
+				App->particles->Disable();
+				App->particles->Enable();
 				break;
 				
 			case(which_fade::title_to_scene):
@@ -68,7 +69,8 @@ bool j1FadeToBlack::PostUpdate()
 				App->pathfinding->Enable();
 				App->scene->Enable();
 				App->minimap->Enable();
-
+				App->particles->Disable();
+				App->particles->Enable();
 				break;
 
 			case(which_fade::scene_to_title):
@@ -77,6 +79,8 @@ bool j1FadeToBlack::PostUpdate()
 				App->scene->Disable();
 				App->minimap->Disable();
 				App->title_scene->Enable();
+				App->particles->Disable();
+				App->particles->Enable();
 				break;
 			}
 

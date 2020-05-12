@@ -8,7 +8,7 @@
 #include "j1LogoScene.h"
 #include"j1Audio.h"
 #include"j1FadeToBlack.h"
-
+#include"j1ModuleParticles.h"
 
 j1LogoScene::j1LogoScene() : j1Module()
 {
@@ -27,6 +27,7 @@ bool j1LogoScene::Start()
 	debug_tex = App->tex->Load("gui/Logo.png");
 	sfx_logo= App->audio->LoadFx("audio/titlescene/introscene2.wav");
 	App->audio->PlayFx(1,sfx_logo);
+	App->particles->DoLogoScreenParticles();
 	return true;
 }
 

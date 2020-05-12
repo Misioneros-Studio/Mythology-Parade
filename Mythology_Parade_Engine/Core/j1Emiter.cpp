@@ -44,9 +44,10 @@ j1Emiter::j1Emiter(std::vector<float>& position, std::vector<float>& particleSpe
 }
 
 
+
 j1Emiter::j1Emiter(float positionX, float positionY, float particleSpeedX, float particleSpeedY, int particleVariationSpeedX, int particleVariationSpeedY,
 	float particleAccelerationX, float particleAccelerationY, int particleVariationAccelerationX, int particleVariationAccelerationY, float particleAngularSpeed,
-	int particleVariableAngularSpeed, float particlesRate, float particlesLifeTime, SDL_Rect* areaOfSpawn, SDL_Texture* texture, ClassicAnimation particleAnimation, bool fade) : position{ positionX, positionY },
+	int particleVariableAngularSpeed, float particlesRate, float particlesLifeTime, SDL_Rect* areaOfSpawn, SDL_Texture* texture, ClassicAnimation particleAnimation, bool fade, int time) : position{ positionX, positionY },
 	particleSpeed{ particleSpeedX, particleSpeedY },
 	particleVariationSpeed{ particleVariationSpeedX, particleVariationSpeedY },
 	particleAcceleration{ particleAccelerationX, particleAccelerationY },
@@ -74,19 +75,18 @@ j1Emiter::j1Emiter(float positionX, float positionY, float particleSpeedX, float
 
 	active(true),
 
-	fadeParticles(fade)
+	fadeParticles(fade),
+	
+	total_time(time)
 {
 	Start();
 }
 
-
 void j1Emiter::Start()
 {
-	//TODO 3: Just calculate the max number of particles you will have in screen
-	//particles rate * particles life time
+
 	int maxParticles = particlesRate * particlesLifeTime + 1;
 
-	//We assume that the game will allways go at 60 FPS
 	particlesPerFrame = particlesRate * 16 / 1000;
 
 	particleVector.reserve(maxParticles);
@@ -96,7 +96,6 @@ void j1Emiter::Start()
 		CreateParticle();
 	}
 
-	//Set all the bools to check what variables will be randomized in the Generate() functions
 	if (areaOfSpawn == nullptr)
 	{
 		randomizePosX = false;
@@ -142,6 +141,11 @@ void j1Emiter::Start()
 	{
 		randomizeAngularSpeed = false;
 	}
+
+	if (total_time != 0) {
+		timer_particles.Start();
+		do_it_one = true;
+	}
 }
 
 
@@ -176,6 +180,11 @@ void j1Emiter::Update(float dt) {
 
 	int numParticles = particleVector.size();
 
+	if (do_it_one == true) {
+		if (timer_particles.ReadSec() >= total_time) {
+			this->Desactivate();
+		}
+	}
 
 	for (int i = 0; i < numParticles; i++)
 	{
