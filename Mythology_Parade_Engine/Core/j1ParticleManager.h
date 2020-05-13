@@ -5,6 +5,11 @@
 #include "SDL/include/SDL.h"
 #include "j1Particle.h"
 #include <vector>
+#include "p2Point.h"
+
+enum class ParticleAnimation {
+	Explosion,
+};
 
 class j1ParticleManager : public j1Module
 {
@@ -12,7 +17,9 @@ public:
 	j1ParticleManager();
 	~j1ParticleManager();
 
-	void CreateParticle();
+	void CreateParticle(iPoint pos, fPoint speed, float life, ParticleAnimation animation);
+
+	void UpdateParticleAnimation(ParticleAnimation animation);
 
 	bool Start() override;
 	bool Update(float dt) override;
@@ -20,8 +27,11 @@ public:
 
 private:
 
-	std::vector<j1Particle*> particleList;
+	void CreateExplosionAnimation();
+	std::list<j1Particle*> particleList;
 	SDL_Texture* texture;
+	ClassicAnimation explosion_animation;
+	ClassicAnimation current_animation;
 
 };
 

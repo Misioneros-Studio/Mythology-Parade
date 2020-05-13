@@ -55,7 +55,7 @@ public:
 	}
 
 
-	Frame& GetCurrentFrame(float dt)
+	Frame& GetCurrentFrame(float dt, bool& last)
 	{
 		if (framesPassed * dt*speed < frames[currentFrame].maxFrames * dt*speed)
 			framesPassed += dt*speed;
@@ -70,16 +70,19 @@ public:
 		{
 			currentFrame = (loop) ? 0.0f : lastFrame - 1;
 			loops++;
+			if (!loop)
+				last = true;
 		}
 
 
 		return frames[currentFrame];
 	}
 
-
-	SDL_Rect& GetCurrentFrameBox(float dt)
+	SDL_Rect& GetCurrentFrameBox(float dt, bool& last)
 	{
-		return GetCurrentFrame(dt).frame;
+		Frame& frame = GetCurrentFrame(dt,last);
+		
+		return frame.frame;
 	}
 
 

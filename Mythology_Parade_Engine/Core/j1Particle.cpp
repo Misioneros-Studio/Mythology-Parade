@@ -158,7 +158,10 @@ void j1Particle::PostUpdate(float dt)
 
 void j1Particle::Draw(float dt)
 {
-	App->render->Blit(texture, position[0], position[1], &animation.GetCurrentFrameBox(dt));
+	bool last = false;
+	App->render->Blit(texture, position[0], position[1], &animation.GetCurrentFrameBox(dt,last));
+	if (last)
+		Desactivate();
 }
 
 void j1Particle::Move(float dt)
@@ -188,6 +191,11 @@ void j1Particle::CheckLife(float dt)
 void j1Particle::Desactivate()
 {
 	active = false;
+}
+
+bool j1Particle::IsActive()
+{
+	return active;
 }
 
 

@@ -111,7 +111,7 @@ bool j1TitleScene::Start()
 	title_assets_tex = App->tex->Load("gui/TitleAssets.png");
 	App->audio->PlayMusic("audio/music/MainTitle-Use2.ogg", 2.0F);
 
-	App->particleManager->CreateParticle();
+	App->particleManager->CreateParticle({ 100,100 }, { 1.f,0 }, 10.f, ParticleAnimation::Explosion);
 	return true;
 }
 
