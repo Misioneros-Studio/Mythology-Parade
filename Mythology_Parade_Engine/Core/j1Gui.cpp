@@ -9,6 +9,7 @@
 #include "j1Gui.h"
 #include "j1Minimap.h"
 #include "Console.h"
+#include "j1Scene.h"
 #include "j1Audio.h"
 
 j1Gui::j1Gui() : j1Module()
@@ -22,7 +23,7 @@ j1Gui::j1Gui() : j1Module()
 	atlas_num_1 = nullptr;
 	atlas_num_2 = nullptr;
 	cursor_tex = nullptr;
-	lockClick = false;
+	lockClick = cursor_attack = cursor_move = false;
 	LOG("%s", atlas_file_name_num_0.c_str());
 }
 
@@ -125,6 +126,11 @@ bool j1Gui::PostUpdate()
 	App->input->GetMousePosition(x, y);
 	iPoint p = App->render->ScreenToWorld(x, y);
 	SDL_Rect sec = { 0, 0, 54, 45 };
+	if (cursor_move == true && App->scene->active == true && App->scene->paused_game == false)
+		sec = { 162,0,36,36 };
+	if (cursor_attack == true && App->scene->active == true && App->scene->paused_game == false)
+		sec = { 216,0,35,33 };
+
 
 	p = App->render->ScreenToWorld(x, y);
 
