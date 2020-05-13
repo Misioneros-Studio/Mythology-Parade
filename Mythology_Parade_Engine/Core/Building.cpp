@@ -340,3 +340,8 @@ void Building::StartResearching(int time, std::string thing_producing) {
 	element_producing = thing_producing;
 	timer_construction.Start();
 }
+
+void Building::SetTimeProducing(int time)
+{
+	time_producing = time_construction = time;
+}

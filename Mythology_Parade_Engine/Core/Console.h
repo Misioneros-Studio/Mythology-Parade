@@ -15,7 +15,8 @@ enum class commands {
 	quit,
 	FPS,
 	map,
-	fullscreen
+	fullscreen,
+	time10
 };
 
 class Console :public j1Module {

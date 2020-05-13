@@ -40,9 +40,6 @@ public:
 	//Return if research_window is active or not (nullptr)
 	bool CheckReasearchWindow();
 
-	//Called to create the button or image to research the monastery;
-	void CreateMonasteryButton();
-
 	//Called to create the button or image to research the temple;
 	void CreateTempleButton();
 
@@ -76,7 +73,7 @@ public:
 
 private:
 	WindowUI* ui_research_window;
-	ButtonUI* ui_button_research[12];
+	ButtonUI* ui_button_research[11];
 	ImageUI* ui_image_research[11];
 	TextUI* ui_text_research[2];
 	Player* player;

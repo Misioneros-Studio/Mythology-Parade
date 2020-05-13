@@ -534,11 +534,6 @@ void j1Scene::OnClick(UI* element, float argument)
 		{
 			hud->ActivateResearchMenu();
 		}
-		else if (element->name == "RESEARCH MONASTERY") {
-			Building* building = (Building*)hud->thing_selected;
-			building->StartResearching(60, "Monastery");
-			hud->close_menus = CloseSceneMenus::Research;
-		}
 		else if (element->name == "RESEARCH TEMPLE") {
 			Building* building = (Building*)hud->thing_selected;
 			building->StartResearching(90, "Temple");
@@ -592,18 +587,30 @@ void j1Scene::OnClick(UI* element, float argument)
 		else if (element->name == "Produce_Temple")
 		{
 			//CONSTRUCT TEMPLE
+			App->entityManager->EnterBuildMode();
+			if (App->entityManager->getPlayer()->civilization == CivilizationType::VIKING)
+				App->entityManager->SetBuildIndex(2);
+			else if (App->entityManager->getPlayer()->civilization == CivilizationType::GREEK)
+				App->entityManager->SetBuildIndex(6);
 		}
 		else if (element->name == "Produce_Encampment")
 		{
 			//CONSTRUCT ENCAMPMENT
 			App->entityManager->EnterBuildMode();
-			App->entityManager->SetBuildIndex(3);
+			if(App->entityManager->getPlayer()->civilization==CivilizationType::VIKING)
+				App->entityManager->SetBuildIndex(3);
+			else if (App->entityManager->getPlayer()->civilization == CivilizationType::GREEK)
+				App->entityManager->SetBuildIndex(7);
+
 		}
 		else if (element->name == "Produce_Monastery")
 		{
 			//CONSTRUCT MONASTERY
 			App->entityManager->EnterBuildMode();
-			App->entityManager->SetBuildIndex(1);
+			if (App->entityManager->getPlayer()->civilization == CivilizationType::VIKING)
+				App->entityManager->SetBuildIndex(1);
+			else if (App->entityManager->getPlayer()->civilization == CivilizationType::GREEK)
+				App->entityManager->SetBuildIndex(5);
 		}
 		else if (element->name == "Produce_Assassin")
 		{
@@ -717,10 +724,7 @@ void j1Scene::DoWinOrLoseWindow(int type, bool win) {
 }
 
 void j1Scene::FinishResearching(std::string thing_researched) {
-	if (thing_researched == "Monastery") {
-		App->entityManager->getPlayer()->research_monastery = true;
-	}
-	else if (thing_researched == "Temple") {
+	if (thing_researched == "Temple") {
 		App->entityManager->getPlayer()->research_temple = true;
 	}
 	else if (thing_researched == "Encampment") {
