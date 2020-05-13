@@ -75,12 +75,6 @@ bool j1Audio::PostUpdate()
 		}
 	}
 
-	if (a_actual_change == which_audio_fade::change_volume) {
-
-		Mix_VolumeMusic(volume_fade);
-		a_actual_change = which_audio_fade::none;
-	}
-
 	return true;
 }
 
@@ -244,6 +238,10 @@ void j1Audio::FadeAudio(which_audio_fade w_fade, float time, int volume) {
 	a_timer.Start();
 	a_total_time = time;
 	volume_fade = volume;
+
+	if (a_actual_change == which_audio_fade::change_volume) {
+		Mix_VolumeMusic(volume_fade);
+	}
 }
 // Change volume music
 void j1Audio::ChangeVolumeMusic(float volume) {
