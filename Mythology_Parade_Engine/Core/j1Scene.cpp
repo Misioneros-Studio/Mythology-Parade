@@ -222,6 +222,7 @@ bool j1Scene::Update(float dt)
 	switch (hud->close_menus)
 	{
 	case CloseSceneMenus::Pause:
+		App->audio->FadeAudio(which_audio_fade::change_volume, 2, 150);
 		hud->DeactivatePauseMenu();
 		hud->close_menus = CloseSceneMenus::None;
 		break;
@@ -250,14 +251,16 @@ bool j1Scene::Update(float dt)
 	//if (App->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
 	//	App->SaveGame("save_game.xml");
 
-	if (App->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
+	if (App->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN) {
 		hud->ActivatePauseMenu();
+		App->audio->FadeAudio(which_audio_fade::change_volume, 2, 50);
 
-	if (paused_game == true) {
-		if (hud->ui_volume_sliders[0] != nullptr)
-			hud->UpdateSlider(0);
-		if (hud->ui_volume_sliders[3] != nullptr)
-			hud->UpdateSlider(3);
+    if (paused_game == true) {
+      if (hud->ui_volume_sliders[0] != nullptr)
+        hud->UpdateSlider(0);
+      if (hud->ui_volume_sliders[3] != nullptr)
+        hud->UpdateSlider(3);
+    }
 	}
 
 	SDL_Rect correctedCamera = App->render->camera;

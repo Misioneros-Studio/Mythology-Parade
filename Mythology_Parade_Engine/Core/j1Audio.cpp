@@ -4,6 +4,7 @@
 #include "j1Audio.h"
 #include "j1Gui.h"
 
+#include "SDL/include/SDL_timer.h"
 #include "SDL/include/SDL.h"
 #include "SDL_mixer\include\SDL_mixer.h"
 #pragma comment( lib, "SDL_mixer/libx86/SDL2_mixer.lib" )
@@ -54,6 +55,33 @@ bool j1Audio::Awake(pugi::xml_node& config)
 	active = true;
 
 	return ret;
+}
+
+
+bool j1Audio::PostUpdate()
+{
+	if (a_actual_change == which_audio_fade::none)
+		return true;
+
+	float now = a_timer.ReadSec();
+
+	if (a_actual_change == which_audio_fade::fade_out) {
+
+		Mix_FadeOutMusic((int)(a_total_time * 1000.0f));
+
+		if (a_timer.ReadSec() >= a_total_time)
+		{
+			a_actual_change = which_audio_fade::none;
+		}
+	}
+
+	if (a_actual_change == which_audio_fade::change_volume) {
+
+		Mix_VolumeMusic(volume_fade);
+		a_actual_change = which_audio_fade::none;
+	}
+
+	return true;
 }
 
 // Called before quitting
@@ -209,6 +237,14 @@ bool j1Audio::CleanFxs() {
 	return ret;
 }
 
+
+void j1Audio::FadeAudio(which_audio_fade w_fade, float time, int volume) {
+
+	a_actual_change = w_fade;
+	a_timer.Start();
+	a_total_time = time;
+	volume_fade = volume;
+  
 // Change volume music
 void j1Audio::ChangeVolumeMusic(float volume) {
 	int volume_int = volume * 128;
@@ -253,6 +289,5 @@ void j1Audio::OnClick(UI* element, float volume)
 	default:
 		break;
 	}
-
 
 }
