@@ -42,6 +42,8 @@ public:
 	// Called before all Updates
 	bool PreUpdate();
 
+	void ClickToPath();
+
 	// Called each loop iteration
 	bool Update(float dt);
 
@@ -77,7 +79,7 @@ public:
 	SDL_Texture* debugRed_tex;
 	bool paused_game;
 	bool godMode;
-
+	bool clickToPath;
 	bool first_time_timer_win = false;
 	j1Timer animation_win_lose_timer;
 

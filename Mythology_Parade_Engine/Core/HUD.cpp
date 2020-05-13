@@ -92,7 +92,7 @@ void HUD::ActivatePauseMenu() {
 		PauseGame();
 		uint w, h;
 		App->win->GetWindowSize(w, h);
-		ui_pause_black_screen[0] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, nullptr, { 0,0,(int)w,(int)h }, "", 255, 255, 255, 100));
+		ui_pause_black_screen[0] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, nullptr, { 0,0,(int)w,(int)h }, "", 0, 0, 0, 150));
 		ui_pause_window = static_cast<WindowUI*>(App->gui->CreateUIElement(Type::WINDOW, nullptr, { 410,50,459,531 }, { 216,21,459,531 }));
 		ui_button[0] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_pause_window, { 520,110,237,38 }, { 787,240,237,38 }, "SAVE", { 787,342,237,38 }, 
 			{ 787,291,237,38 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::SAVE));
@@ -151,7 +151,7 @@ void HUD::ActivateOptionsMenu() {
 	if (ui_options_window == nullptr) {
 		uint w, h;
 		App->win->GetWindowSize(w, h);
-		ui_pause_black_screen[1] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, nullptr, { 0,0,(int)w,(int)h }, "", 255, 255, 255, 100));
+		ui_pause_black_screen[1] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, nullptr, { 0,0,(int)w,(int)h }, "", 0, 0, 0, 150));
 		ui_options_window = static_cast<WindowUI*>(App->gui->CreateUIElement(Type::WINDOW, nullptr, { 410,200,459,321 }, { 1278,4,459,321 }));
 		ui_button_options[0] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_options_window, { 520,453,237,38 }, { 787,240,237,38 }, "CLOSE OPTIONS", { 787,342,237,38 }, 
 			{ 787,291,237,38 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::CLOSE));
@@ -227,7 +227,7 @@ void HUD::ActivateConfirmationMenu(std::string str) {
 	if (ui_confirmation_window == nullptr) {
 		uint w, h;
 		App->win->GetWindowSize(w, h);
-		ui_pause_black_screen[1] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, nullptr, { 0,0,(int)w,(int)h }, "", 255, 255, 255, 100));
+		ui_pause_black_screen[1] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, nullptr, { 0,0,(int)w,(int)h }, "", 0, 0, 0, 150));
 		ui_confirmation_window = static_cast<WindowUI*>(App->gui->CreateUIElement(Type::WINDOW, nullptr, { 410,200,459,168 }, { 790,408,459,168 }));
 		ui_button_confirmation[0] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_confirmation_window, { 470,300,117,38 }, { 834,125,117,24 }, "YES", { 834,149,117,24 },
 			{ 834,101,117,24 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::CONFIRMATION));
@@ -1001,7 +1001,7 @@ void HUD::ActivateResearchMenu() {
 		PauseGame();
 		uint w, h;
 		App->win->GetWindowSize(w, h);
-		ui_pause_black_screen[1] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, nullptr, { 0,0,(int)w,(int)h }, "", 255, 255, 255, 100));
+		ui_pause_black_screen[1] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, nullptr, { 0,0,(int)w,(int)h }, "", 0, 0, 0, 150));
 		research_menu->ActivateResearchMenu();
 		/*
 		ui_research_window = static_cast<WindowUI*>(App->gui->CreateUIElement(Type::WINDOW, nullptr, { 410,200,459,268 }, { 790,408,459,168 }));
