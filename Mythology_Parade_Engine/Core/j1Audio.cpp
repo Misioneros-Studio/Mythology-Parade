@@ -244,7 +244,7 @@ void j1Audio::FadeAudio(which_audio_fade w_fade, float time, int volume) {
 	a_timer.Start();
 	a_total_time = time;
 	volume_fade = volume;
-  
+}
 // Change volume music
 void j1Audio::ChangeVolumeMusic(float volume) {
 	int volume_int = volume * 128;
