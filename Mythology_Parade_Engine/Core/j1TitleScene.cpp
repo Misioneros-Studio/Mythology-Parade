@@ -6,9 +6,10 @@
 #include "j1Input.h"
 #include "j1Render.h"
 #include "j1TitleScene.h"
-#include"j1Audio.h"
-#include"j1FadeToBlack.h"
+#include "j1Audio.h"
+#include "j1FadeToBlack.h"
 #include "j1Window.h"
+#include "j1ParticleManager.h"
 
 j1TitleScene::j1TitleScene() : j1Module()
 {
@@ -109,6 +110,8 @@ bool j1TitleScene::Start()
 	confirmation_option = "";
 	title_assets_tex = App->tex->Load("gui/TitleAssets.png");
 	App->audio->PlayMusic("audio/music/MainTitle-Use2.ogg", 2.0F);
+
+	App->particleManager->CreateParticle();
 	return true;
 }
 

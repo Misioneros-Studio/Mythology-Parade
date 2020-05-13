@@ -16,11 +16,11 @@ public:
 
 	bool Start() override;
 	bool Update(float dt) override;
-	//bool CleanUp() override;
+	bool CleanUp() override;
 
 private:
 
-	std::vector<j1Particle> particleList;
+	std::vector<j1Particle*> particleList;
 	SDL_Texture* texture;
 
 };

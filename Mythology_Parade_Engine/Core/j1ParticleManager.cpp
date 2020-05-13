@@ -17,13 +17,14 @@ void j1ParticleManager::CreateParticle()
 
 	anim1.PushBack(SDL_Rect{ 256, 193, 10, 10 }, 1, 0, 0);
 
-	particleList.push_back(j1Particle(100, 100, 0, 0, 0, 0, 0, 0, 10.f, App->tex->Load("assets/particles.png"), anim1, false));
+	particleList.push_back(new j1Particle(100, 100, 0, 0, 0, 0, 0, 0, 10.f,texture , anim1, false));
 
 }
 
 bool j1ParticleManager::Start()
 {
 	LOG("j1ParticleManager Started");
+	texture = App->tex->Load("assets/particles.png");
 	return true;
 }
 
@@ -32,16 +33,28 @@ bool j1ParticleManager::Update(float dt)
 	if (!particleList.empty()) 
 	{
 
-		for each (j1Particle particle in particleList)
+		for each (j1Particle* particle in particleList)
 		{
-			particle.Update(dt);
+			particle->Update(dt);
 		}
 
-		for each (j1Particle particle in particleList)
+		for each (j1Particle* particle in particleList)
 		{
-			particle.PostUpdate(dt);
+			particle->PostUpdate(dt);
 		}
 	}
 	return true;
 }
+
+bool j1ParticleManager::CleanUp()
+{
+	for each (j1Particle* particle in particleList)
+	{
+		delete particle;
+	}
+	particleList.clear();
+	return true;
+}
+
+
 
