@@ -202,29 +202,36 @@ bool EntityManager::Update(float dt)
 		iPoint mouse = App->map->GetMousePositionOnMap();
 		iPoint spawnPos = App->map->MapToWorld(mouse.x, mouse.y);
 		spawnPos.y += App->map->data.tile_height / 2;
-		bool viking = false;
 		switch (buildingTestIndex) 
 		{
 		case 0:
-			viking = true;
+			CreateBuildingEntity(spawnPos, BuildingType::FORTRESS, buildingsData[buildingTestIndex], CivilizationType::VIKING);
+			break;
 		case 4:
-			CreateBuildingEntity(spawnPos, BuildingType::FORTRESS, buildingsData[buildingTestIndex],CivilizationType::VIKING);
+			CreateBuildingEntity(spawnPos, BuildingType::FORTRESS, buildingsData[buildingTestIndex],CivilizationType::GREEK);
 			break;
 		case 1:
-			viking = true;
+			CreateBuildingEntity(spawnPos, BuildingType::MONASTERY, buildingsData[buildingTestIndex], CivilizationType::VIKING);
+			faithToDescrease = 200;
+			break;
 		case 5:
-			CreateBuildingEntity(spawnPos, BuildingType::MONASTERY , buildingsData[buildingTestIndex],CivilizationType::VIKING);
+			CreateBuildingEntity(spawnPos, BuildingType::MONASTERY , buildingsData[buildingTestIndex],CivilizationType::GREEK);
 			faithToDescrease = 200;
 			break;
 		case 2:
-			viking = true;
-		case 6:
 			CreateBuildingEntity(spawnPos, BuildingType::TEMPLE, buildingsData[buildingTestIndex], CivilizationType::VIKING);
+			faithToDescrease = 200;
+			break;
+		case 6:
+			CreateBuildingEntity(spawnPos, BuildingType::TEMPLE, buildingsData[buildingTestIndex], CivilizationType::GREEK);
+			faithToDescrease = 200;
 			break;
 		case 3:
-			viking = true;
-		case 7:
 			CreateBuildingEntity(spawnPos, BuildingType::ENCAMPMENT, buildingsData[buildingTestIndex], CivilizationType::VIKING);
+			faithToDescrease = 200;
+
+		case 7:
+			CreateBuildingEntity(spawnPos, BuildingType::ENCAMPMENT, buildingsData[buildingTestIndex], CivilizationType::GREEK);
 			faithToDescrease = 200;
 			break;
 		}

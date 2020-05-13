@@ -651,6 +651,30 @@ void j1Scene::OnClick(UI* element, float argument)
 		{
 			clickToPath = true;
 		}
+		else if (element->name == "Attack")
+		{
+		//BERNAT & JORDI
+		}
+		else if (element->name == "Produce_Cleric")
+		{
+		//BERNAT
+		}
+		else if (element->name == "Produce_Chaotic_Beast")
+		{
+		//BERNAT
+		}
+		else if (element->name == "Produce_Lawful_Beast")
+		{
+		//BERNAT
+		}
+		else if (element->name == "Produce_Lawful_Miracle")
+		{
+		//BERNAT
+		}
+		else if (element->name == "Produce_Chaotic_Miracle")
+		{
+		//BERNAT
+		}
 		break;
 
 	default:
