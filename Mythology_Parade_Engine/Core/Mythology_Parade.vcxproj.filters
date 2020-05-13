@@ -103,6 +103,12 @@
     <ClCompile Include="ResearchMenu.cpp">
       <Filter>Core\Scenes\Research Menu</Filter>
     </ClCompile>
+    <ClCompile Include="j1Particle.cpp">
+      <Filter>Core\Particles</Filter>
+    </ClCompile>
+    <ClCompile Include="j1ParticleManager.cpp">
+      <Filter>Core\Modules</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1Window.h">
@@ -222,6 +228,15 @@
     <ClInclude Include="ResearchMenu.h">
       <Filter>Core\Scenes\Research Menu</Filter>
     </ClInclude>
+    <ClInclude Include="j1Particle.h">
+      <Filter>Core\Particles</Filter>
+    </ClInclude>
+    <ClInclude Include="ClassicAnimation.h">
+      <Filter>Core\Particles</Filter>
+    </ClInclude>
+    <ClInclude Include="j1ParticleManager.h">
+      <Filter>Core\Modules</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Tools">
@@ -268,6 +283,9 @@
     </Filter>
     <Filter Include="Core\Modules">
       <UniqueIdentifier>{244722d1-90ce-423d-8e7a-556211865a32}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Particles">
+      <UniqueIdentifier>{e4eb74c7-d5c5-4cd7-9dea-485c75783fc5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
