@@ -17,6 +17,7 @@
 #include "j1Scene.h"
 #include "j1FadeToBlack.h"
 #include "HUD.h"
+#include "ResearchMenu.h"
 
 #include"QuadTree.h"
 
@@ -24,6 +25,7 @@ j1Scene::j1Scene() : j1Module()
 {
 	name.append("scene");
 	winlose_tex = nullptr;
+	clickToPath = false;
 }
 
 // Destructor
@@ -39,6 +41,7 @@ bool j1Scene::Awake(pugi::xml_node& config)
 	App->scene->active = false;
 	SDL_ShowCursor(0);
 	hud = nullptr;
+	research_menu = nullptr;
   
 	return ret;
 }
@@ -46,7 +49,7 @@ bool j1Scene::Awake(pugi::xml_node& config)
 // Called before the first frame
 bool j1Scene::Start()
 {
-	hud = new HUD();
+
 	if (App->map->Load("MainMap.tmx") == true)
 	{
 		int w, h;
@@ -100,85 +103,35 @@ bool j1Scene::Start()
 	//quadTree = new QuadTree(TreeType::ISOMETRIC, position.x + (App->map->data.tile_width / 2), position.y, size.x, size.y);
 	//quadTree->baseNode->SubDivide(quadTree->baseNode, 5);
   
-	App->audio->PlayMusic("audio/music/Ambient1.ogg", 2.0F, 150);
-  
+	App->audio->PlayMusic("audio/music/Ambient1.ogg", 2.0F);
+
 	//Creating players
-	App->entityManager->CreatePlayerEntity(App->fade_to_black->actual_civilization);
-	
-	if (App->entityManager->getPlayer()->player_type == CivilizationType::VIKING)
+	Player* player = static_cast<Player*>(App->entityManager->CreatePlayerEntity(App->fade_to_black->actual_civilization));
+
+	if (player->player_type == CivilizationType::VIKING)
 		App->render->camera.x = -2683;
-	else if (App->entityManager->getPlayer()->player_type == CivilizationType::GREEK)
+	else if (player->player_type == CivilizationType::GREEK)
 		App->render->camera.x = -1683;
 
+	research_menu = new ResearchMenu(player);
+	hud = new HUD(research_menu);
 	return true;
 }
 
 // Called each loop iteration
 bool j1Scene::PreUpdate()
 {
+
 	// debug pathfing ------------------
 	if (App->input->GetMouseButtonDown(SDL_BUTTON_RIGHT) == KEY_DOWN)
 	{
-		//TMP: Temporal pathfinding debug
-		std::list<Entity*> list = App->entityManager->getPlayer()->GetEntitiesSelected();
-		
-		if(list.size() > 0)
-		{
-			float n = App->entityManager->getPlayer()->GetEntitiesSelected().size();
-			float x = 0, y = 0;
-
-			for (std::list<Entity*>::iterator it = list.begin(); it != list.end(); it++)
-			{
-				x += it._Ptr->_Myval->position.x;
-				y += it._Ptr->_Myval->position.y;
-			}
-
-			x /= n;
-			y /= n;
-
-			iPoint origin = App->map->WorldToMap((int)x, (int)y);
-			iPoint ending = App->map->GetMousePositionOnMap();
-			LOG("Origin: %i, %i", origin.x, origin.y);
-			LOG("Ending: %i, %i", ending.x, ending.y);
-
-			int posX, posY;
-			App->input->GetMousePosition(posX, posY);
-			iPoint p = App->render->ScreenToWorld(posX, posY);
-			p = App->render->ScreenToWorld(posX, posY);
-
-			CivilizationType playerCiv = App->entityManager->getPlayer()->civilization;
-			bool attacking = false;
-
-			for (std::list<Entity*>::iterator it = App->entityManager->entities[EntityType::UNIT].begin(); it != App->entityManager->entities[EntityType::UNIT].end(); it++) 
-			{
-				SDL_Rect collider = it._Ptr->_Myval->getCollisionRect();
-				if (it._Ptr->_Myval->civilization != playerCiv && EntityManager::IsPointInsideQuad(collider, p.x, p.y))
-				{
-					Unit* unt = nullptr;
-					for (std::list<Entity*>::iterator sel = list.begin(); sel != list.end(); sel++)
-					{
-						unt = (Unit*)sel._Ptr->_Myval;
-						unt->enemyTarget = (Unit*)it._Ptr->_Myval;
-						attacking = true;
-					}
-				}
-			}
-
-			if (!attacking) 
-			{
-				Unit* unt = nullptr;
-				for (std::list<Entity*>::iterator sel = list.begin(); sel != list.end(); sel++)
-				{
-					unt = (Unit*)sel._Ptr->_Myval;
-					unt->enemyTarget = nullptr;
-				}
-			}
-
-			if (origin != ending)
-				App->pathfinding->RequestPath(origin, ending, list);
-
-		}
-
+		ClickToPath();
+	}	
+	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN && clickToPath)
+	{
+		ClickToPath();
+		clickToPath = false;
+		App->entityManager->getPlayer()->dontSelect = true;
 	}
 
 
@@ -196,8 +149,70 @@ bool j1Scene::PreUpdate()
 			App->render->camera.y = -(minimap_mouse_position.y - App->render->camera.h * 0.5f);
 		}
 	}
-
 	return true;
+}
+
+void j1Scene::ClickToPath()
+{
+	//TMP: Temporal pathfinding debug
+	std::list<Entity*> list = App->entityManager->getPlayer()->GetEntitiesSelected();
+
+	if (list.size() > 0)
+	{
+		float n = App->entityManager->getPlayer()->GetEntitiesSelected().size();
+		float x = 0, y = 0;
+
+		for (std::list<Entity*>::iterator it = list.begin(); it != list.end(); it++)
+		{
+			x += it._Ptr->_Myval->position.x;
+			y += it._Ptr->_Myval->position.y;
+		}
+
+		x /= n;
+		y /= n;
+
+		iPoint origin = App->map->WorldToMap((int)x, (int)y);
+		iPoint ending = App->map->GetMousePositionOnMap();
+		LOG("Origin: %i, %i", origin.x, origin.y);
+		LOG("Ending: %i, %i", ending.x, ending.y);
+
+		int posX, posY;
+		App->input->GetMousePosition(posX, posY);
+		iPoint p = App->render->ScreenToWorld(posX, posY);
+		p = App->render->ScreenToWorld(posX, posY);
+
+		CivilizationType playerCiv = App->entityManager->getPlayer()->civilization;
+		bool attacking = false;
+
+		for (std::list<Entity*>::iterator it = App->entityManager->entities[EntityType::UNIT].begin(); it != App->entityManager->entities[EntityType::UNIT].end(); it++)
+		{
+			SDL_Rect collider = it._Ptr->_Myval->getCollisionRect();
+			if (it._Ptr->_Myval->civilization != playerCiv && EntityManager::IsPointInsideQuad(collider, p.x, p.y))
+			{
+				Unit* unt = nullptr;
+				for (std::list<Entity*>::iterator sel = list.begin(); sel != list.end(); sel++)
+				{
+					unt = (Unit*)sel._Ptr->_Myval;
+					unt->enemyTarget = (Unit*)it._Ptr->_Myval;
+					attacking = true;
+				}
+			}
+		}
+
+		if (!attacking)
+		{
+			Unit* unt = nullptr;
+			for (std::list<Entity*>::iterator sel = list.begin(); sel != list.end(); sel++)
+			{
+				unt = (Unit*)sel._Ptr->_Myval;
+				unt->enemyTarget = nullptr;
+			}
+		}
+
+		if (origin != ending)
+			App->pathfinding->RequestPath(origin, ending, list);
+
+	}
 }
 
 // Called each loop iteration
@@ -239,6 +254,13 @@ bool j1Scene::Update(float dt)
 	if (App->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN) {
 		hud->ActivatePauseMenu();
 		App->audio->FadeAudio(which_audio_fade::change_volume, 2, 50);
+
+    if (paused_game == true) {
+      if (hud->ui_volume_sliders[0] != nullptr)
+        hud->UpdateSlider(0);
+      if (hud->ui_volume_sliders[3] != nullptr)
+        hud->UpdateSlider(3);
+    }
 	}
 
 	SDL_Rect correctedCamera = App->render->camera;
@@ -302,11 +324,13 @@ bool j1Scene::Update(float dt)
 	//if (App->input->drawDebug)
 	//	App->render->DrawQuadTree(quadTree->type, quadTree->baseNode);
 
-	iPoint p = App->map->GetMousePositionOnMap();
-	if (!App->entityManager->crPreview.active && IN_RANGE(p.x, 0, App->map->data.width-1) == 1 && IN_RANGE(p.y, 0, App->map->data.height-1) == 1)
-	{
-		p = App->map->MapToWorld(p.x, p.y);
-		App->render->Blit(debugBlue_tex, p.x, p.y);
+	if (godMode) {
+		iPoint p = App->map->GetMousePositionOnMap();
+		if (!App->entityManager->crPreview.active && IN_RANGE(p.x, 0, App->map->data.width - 1) == 1 && IN_RANGE(p.y, 0, App->map->data.height - 1) == 1)
+		{
+			p = App->map->MapToWorld(p.x, p.y);
+			App->render->Blit(debugBlue_tex, p.x, p.y);
+		}
 	}
 
 	if (App->entityManager->getPlayer() != nullptr) {
@@ -350,7 +374,10 @@ bool j1Scene::PostUpdate()
 {
 	if (hud->thing_selected != nullptr) {
 		hud->UpdateSelectedThing();
-		hud->ManageActionButtons();
+		if (App->entityManager->getPlayer()->player_type == CivilizationType::VIKING)
+			hud->ManageActionButtons();
+		else if (App->entityManager->getPlayer()->player_type == CivilizationType::GREEK)
+			hud->ManageActionButtons(false, false);
 	}
 	bool ret = true;
 
@@ -384,6 +411,8 @@ bool j1Scene::CleanUp()
 		//quadTree->Clear();
 		delete hud;
 		hud = nullptr;
+		delete research_menu;
+		research_menu = nullptr;
 	}
 	return true;
 }
@@ -502,12 +531,12 @@ void j1Scene::OnClick(UI* element, float argument)
 			hud->close_menus = CloseSceneMenus::Pause;
 		}
 		else if (element->name == "Research") 
-    {
+		{
 			hud->ActivateResearchMenu();
 		}
 		else if (element->name == "RESEARCH MONASTERY") {
 			Building* building = (Building*)hud->thing_selected;
-			building->StartResearching(10, "Monastery");
+			building->StartResearching(60, "Monastery");
 			hud->close_menus = CloseSceneMenus::Research;
 		}
 		else if (element->name == "RESEARCH TEMPLE") {
@@ -517,7 +546,47 @@ void j1Scene::OnClick(UI* element, float argument)
 		}
 		else if (element->name == "RESEARCH ENCAMPMENT") {
 			Building* building = (Building*)hud->thing_selected;
-			building->StartResearching(10, "Encampment");
+			building->StartResearching(90, "Encampment");
+			hud->close_menus = CloseSceneMenus::Research;
+		}
+		else if (element->name == "RESEARCH CLERIC") {
+			Building* building = (Building*)hud->thing_selected;
+			building->StartResearching(70, "Cleric");
+			hud->close_menus = CloseSceneMenus::Research;
+		}
+		else if (element->name == "RESEARCH ASSASSIN") {
+			Building* building = (Building*)hud->thing_selected;
+			building->StartResearching(70, "Assassin");
+			hud->close_menus = CloseSceneMenus::Research;
+		}
+		else if (element->name == "RESEARCH LAWFUL BEAST") {
+			Building* building = (Building*)hud->thing_selected;
+			building->StartResearching(210, "Lawful Beast");
+			hud->close_menus = CloseSceneMenus::Research;
+		}
+		else if (element->name == "RESEARCH CHAOTIC BEAST") {
+			Building* building = (Building*)hud->thing_selected;
+			building->StartResearching(210, "Chaotic Beast");
+			hud->close_menus = CloseSceneMenus::Research;
+		}
+		else if (element->name == "RESEARCH LAWFUL MIRACLE") {
+			Building* building = (Building*)hud->thing_selected;
+			building->StartResearching(240, "Lawful Miracle");
+			hud->close_menus = CloseSceneMenus::Research;
+		}
+		else if (element->name == "RESEARCH CHAOTIC MIRACLE") {
+			Building* building = (Building*)hud->thing_selected;
+			building->StartResearching(240, "Chaotic Miracle");
+			hud->close_menus = CloseSceneMenus::Research;
+		}
+		else if (element->name == "RESEARCH LAWFUL VICTORY") {
+			Building* building = (Building*)hud->thing_selected;
+			building->StartResearching(420, "Lawful Victory");
+			hud->close_menus = CloseSceneMenus::Research;
+		}
+		else if (element->name == "RESEARCH CHAOTIC VICTORY") {
+			Building* building = (Building*)hud->thing_selected;
+			building->StartResearching(420, "Chaotic Victory");
 			hud->close_menus = CloseSceneMenus::Research;
 		}
 		else if (element->name == "Produce_Temple")
@@ -565,11 +634,15 @@ void j1Scene::OnClick(UI* element, float argument)
 			Building* building = (Building*)hud->thing_selected;
 			App->entityManager->getPlayer()->DecreaseFaith(100);
 			building->StartProducing(App->entityManager->getPlayer()->time_prayers, "Prayers");
-    }
+		}
 		else if (element->name == "Upgrade") {
 			//Upgrade level
 			CombatUnit* unit =(CombatUnit*)App->entityManager->getPlayer()->GetEntitiesSelected().begin()._Ptr->_Myval;
 			unit->LevelUp();
+		}
+		else if (element->name == "Move")
+		{
+			clickToPath = true;
 		}
 		break;
 
@@ -588,23 +661,33 @@ void j1Scene::DoWinOrLoseWindow(int type, bool win) {
 	SDL_Rect sec_win = { 807, 0,807, 345 };
 	SDL_Rect sec_lose = { 807, 345,807, 345 };
 
-	if (hud->start_timer == false)
+	if (hud->start_timer == false) {
 		hud->timer_win_lose.Start();
+		animation_win_lose_timer.Start();
+	}
 
 	hud->start_timer = true;
 
+	if (animation_win_lose_timer.ReadSec() <= 2) {
+		global_pos = DoTransitionWinLose(230, 100, winlose_tex, animation_win_lose_timer);
+	}
+
+	else if (animation_win_lose_timer.ReadSec() >=2) {
+		global_pos.y = 100;
+	}
+
 	if (type == 1) {
 		if (win == true) {
-			App->render->Blit(winlose_tex, 230, 100, &sec_viking, NULL, 0.0F);
-			App->render->Blit(winlose_tex, 230, 100, &sec_win, NULL, 0.0F);
+			App->render->Blit(winlose_tex, global_pos.x, global_pos.y, &sec_viking, NULL, 0.0F);
+			App->render->Blit(winlose_tex, global_pos.x, global_pos.y, &sec_win, NULL, 0.0F);
 			if (Mix_Playing(3) == 0) 
-      {
+			{
 				App->audio->PlayFx(3, WinViking_sound);
 			}
 		}
 		else {
-			App->render->Blit(winlose_tex, 230, 100, &sec_greek, NULL, 0.0F);
-			App->render->Blit(winlose_tex, 230, 100, &sec_lose, NULL, 0.0F);
+			App->render->Blit(winlose_tex, global_pos.x, global_pos.y, &sec_greek, NULL, 0.0F);
+			App->render->Blit(winlose_tex, global_pos.x, global_pos.y, &sec_lose, NULL, 0.0F);
 			if (Mix_Playing(3) == 0) {
 				App->audio->PlayFx(3, Lose_sound);
 			}
@@ -613,15 +696,15 @@ void j1Scene::DoWinOrLoseWindow(int type, bool win) {
 
 	if (type == 2) {
 		if (win == true) {
-			App->render->Blit(winlose_tex, 230, 100, &sec_greek, NULL, 0.0F);
-			App->render->Blit(winlose_tex, 230, 100, &sec_lose, NULL, 0.0F);
+			App->render->Blit(winlose_tex, global_pos.x, global_pos.y, &sec_greek, NULL, 0.0F);
+			App->render->Blit(winlose_tex, global_pos.x, global_pos.y, &sec_lose, NULL, 0.0F);
 			if (Mix_Playing(3) == 0) {
 				App->audio->PlayFx(3, WinGreek_sound);
 			}
 		}
 		else {
-			App->render->Blit(winlose_tex, 230, 100, &sec_viking, NULL, 0.0F);
-			App->render->Blit(winlose_tex, 230, 100, &sec_win, NULL, 0.0F);
+			App->render->Blit(winlose_tex, global_pos.x, global_pos.y, &sec_viking, NULL, 0.0F);
+			App->render->Blit(winlose_tex, global_pos.x, global_pos.y, &sec_win, NULL, 0.0F);
 			if (Mix_Playing(3) == 0) {
 				App->audio->PlayFx(3, Lose_sound);
 			}
@@ -635,12 +718,60 @@ void j1Scene::DoWinOrLoseWindow(int type, bool win) {
 
 void j1Scene::FinishResearching(std::string thing_researched) {
 	if (thing_researched == "Monastery") {
-		hud->research_monastery = true;
+		App->entityManager->getPlayer()->research_monastery = true;
 	}
 	else if (thing_researched == "Temple") {
-		hud->research_temple = true;
+		App->entityManager->getPlayer()->research_temple = true;
 	}
 	else if (thing_researched == "Encampment") {
-		hud->research_encampment = true;
+		App->entityManager->getPlayer()->research_encampment = true;
 	}
+	else if (thing_researched == "Cleric") {
+		App->entityManager->getPlayer()->research_cleric = true;
+	}
+	else if (thing_researched == "Assassin") {
+		App->entityManager->getPlayer()->research_assassin = true;
+	}
+	else if (thing_researched == "Lawful Beast") {
+		App->entityManager->getPlayer()->research_lawful_beast = true;
+	}
+	else if (thing_researched == "Chaotic Beast") {
+		App->entityManager->getPlayer()->research_chaotic_beast = true;
+	}
+	else if (thing_researched == "Lawful Miracle") {
+		App->entityManager->getPlayer()->research_lawful_miracle = true;
+	}
+	else if (thing_researched == "Chaotic Miracle") {
+		App->entityManager->getPlayer()->research_chaotic_miracle = true;
+	}
+	else if (thing_researched == "Lawful Victory") {
+		App->entityManager->getPlayer()->research_lawful_victory = true;
+	}
+	else if (thing_researched == "Chaotic Victory") {
+		App->entityManager->getPlayer()->research_chaotic_victory = true;
+	}
+
+}
+
+
+fPoint j1Scene::DoTransitionWinLose(int pos_x, int pos_y, SDL_Texture* tex, j1Timer time) {
+	fPoint position_global;
+	position_global.x = pos_x;
+
+	if (first_time_timer_win == false) {
+		animation_win_lose_timer.Start();
+		first_time_timer_win = true;
+	}
+
+	float percentatge = time.ReadSec() *0.5f;
+	position_global.y = LerpValue(percentatge, 200, 100);
+
+	SDL_SetTextureAlphaMod(tex, 255*percentatge);
+
+	return position_global;
+}
+
+float j1Scene::LerpValue(float percent, float start, float end)
+{
+	return start + percent * (end - start);
 }

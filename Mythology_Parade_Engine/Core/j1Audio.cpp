@@ -2,6 +2,7 @@
 #include "p2Log.h"
 #include "j1App.h"
 #include "j1Audio.h"
+#include "j1Gui.h"
 
 #include "SDL/include/SDL_timer.h"
 #include "SDL/include/SDL.h"
@@ -12,6 +13,7 @@ j1Audio::j1Audio() : j1Module()
 {
 	music = NULL;
 	name.append("audio");
+	MusicVolume = 200;
 }
 
 // Destructor
@@ -110,14 +112,11 @@ bool j1Audio::CleanUp()
 }
 
 // Play a music file
-bool j1Audio::PlayMusic(const char* path, float fade_time, int volume)
+bool j1Audio::PlayMusic(const char* path, float fade_time)
 {
 	bool ret = true;
-	
-	if (volume < 0) {
-		volume = 0;
-	}
-	Mix_VolumeMusic(volume);
+
+	int volume = GetVolumeMusic();
 
 	if (volume > 200)
 	{
@@ -238,10 +237,57 @@ bool j1Audio::CleanFxs() {
 	return ret;
 }
 
+
 void j1Audio::FadeAudio(which_audio_fade w_fade, float time, int volume) {
 
 	a_actual_change = w_fade;
 	a_timer.Start();
 	a_total_time = time;
 	volume_fade = volume;
+  
+// Change volume music
+void j1Audio::ChangeVolumeMusic(float volume) {
+	int volume_int = volume * 128;
+	Mix_VolumeMusic(volume_int);
+}
+
+// Change volume fxs
+void j1Audio::ChangeVolumeFx(float volume) {
+	int volume_int = volume * 128;
+	Mix_Volume(-1, volume_int);
+}
+
+// Get volume music
+int j1Audio::GetVolumeMusic() {
+	return Mix_VolumeMusic(-1);
+}
+
+// Get volume fxs
+int j1Audio::GetVolumeFx() {
+	return Mix_Volume(-1, -1);
+}
+
+void j1Audio::OnClick(UI* element, float volume)
+{
+
+	switch (element->type)
+	{
+
+	case Type::IMAGE:
+
+		if (element->name.compare("VOLUME_CONTROL") == 0)
+		{
+			ChangeVolumeMusic(volume);
+		}
+		else if (element->name.compare("FX_CONTROL")==0)
+		{
+			ChangeVolumeFx(volume);
+		}
+		break;
+
+
+	default:
+		break;
+	}
+
 }

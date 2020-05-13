@@ -39,6 +39,9 @@ bool Player::Start()
 	displayDebug = false;
 	oneTime = true;
 
+	research_assassin = research_chaotic_beast = research_chaotic_miracle = research_cleric = research_encampment = research_lawful_beast = research_lawful_miracle = research_lawful_victory =
+		research_monastery = research_temple = research_chaotic_victory = false;
+
 	return true;
 }
 
@@ -92,8 +95,6 @@ bool Player::Update(float dt)
 		PlayerInputs();
 	}
 
-
-
 	return true;
 }
 
@@ -140,6 +141,11 @@ void Player::SelectionDraw_Logic()
 
 		if (App->input->GetMouseButtonDown(1) == KEY_UP)
 		{
+			for each (Unit* unit in listEntities)
+			{
+				unit->SetSelected(false);
+			}
+
 			listEntities.clear();
 			buildingSelect = nullptr;
 			ClickLogic();
@@ -171,6 +177,8 @@ void Player::SeeEntitiesInside()
 			{
 				if (it._Ptr->_Myval->civilization == player_type)
 				{
+					Unit* unit = static_cast<Unit*>(it._Ptr->_Myval);
+					unit->SetSelected(true);
 					listEntities.push_back(it._Ptr->_Myval);
 				}
 			}
@@ -261,7 +269,9 @@ void Player::ClickLogic()
 		{
 			if (click.y <= it._Ptr->_Myval->getCollisionRect().y && click.y >= it._Ptr->_Myval->getCollisionRect().y + it._Ptr->_Myval->getCollisionRect().h)
 			{
-				buildingSelect = it._Ptr->_Myval;
+				if (it._Ptr->_Myval->civilization == civilization) {
+					buildingSelect = it._Ptr->_Myval;
+				}
 			}
 		}
 	}
@@ -276,6 +286,8 @@ void Player::ClickLogic()
 				{
 					if (it._Ptr->_Myval->civilization == civilization) 
 					{
+						Unit* unit = static_cast<Unit*>(it._Ptr->_Myval);
+						unit->SetSelected(true);
 						listEntities.push_back(it._Ptr->_Myval);
 						if (preClicked == postClicked)
 							return;
@@ -316,8 +328,8 @@ void Player::InitVikings()
 	assassinPos = App->map->MapToWorld(assassinPos.x, assassinPos.y);
 
 
-	App->entityManager->CreateUnitEntity(UnitType::MONK, monkPos,civilization);
-	App->entityManager->CreateUnitEntity(UnitType::ASSASSIN, assassinPos,civilization);
+	App->entityManager->CreateUnitEntity(UnitType::MONK, monkPos, CivilizationType::VIKING);
+	App->entityManager->CreateUnitEntity(UnitType::ASSASSIN, assassinPos, CivilizationType::VIKING);
 
 }
 

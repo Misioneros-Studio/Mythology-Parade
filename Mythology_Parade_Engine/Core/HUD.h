@@ -25,6 +25,7 @@ class Building;
 enum class UnitType;
 enum BuildingType;
 enum CivilizationType;
+class ResearchMenu;
 
 class HUD
 {
@@ -33,13 +34,13 @@ class HUD
 public:
 
 	//Constructor
-	HUD();
+	HUD(ResearchMenu* r);
 
 	//Destructor
 	~HUD();
 
 	// Called before the first frame
-	void StartHUD();
+	void StartHUD(ResearchMenu* r);
 
 	// Called when clicking esc
 	void ActivatePauseMenu();
@@ -89,6 +90,15 @@ public:
 	//Called when clicking close button in the research menu
 	void DeactivateResearchMenu();
 
+	//Called when pausing the game
+	void PauseGame();
+
+	//Called when resuming the game
+	void ResumeGame();
+
+	//Called when updating the scene to change the width of the sliders
+	void UpdateSlider(int index);
+
 private:
 	enum class Type_Selected {
 		None,
@@ -123,9 +133,9 @@ private:
 	Type_Selected type_thing_selected;
 	ButtonUI* hud_button_actions[5];
 	ImageUI* hud_button_actions_unclickable[5];
-	WindowUI* ui_research_window;
-	ButtonUI* ui_button_research[3];
-	TextUI* ui_text_research[8];
+	ImageUI* ui_pause_black_screen[2];
+	TextUI* ui_text_volume_sliders[2];
+	ResearchMenu* research_menu;
 
 public:
 	ImageUI* ui_ingame;
@@ -136,13 +146,7 @@ public:
 	Entity* thing_selected;
 	j1Timer timer_win_lose;
 	bool start_timer;
-
-
-
-	//////////////// TEMPORAL VARIABLES FOR VERTICAL SLICE ONLY
-	bool research_monastery;
-	bool research_temple;
-	bool research_encampment;
+	ImageUI* ui_volume_sliders[6];
 };
 
-#endif // !__LEVELSYSTEM__H_
+#endif // !__HUD__H_

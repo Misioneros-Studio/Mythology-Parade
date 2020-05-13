@@ -15,7 +15,6 @@ Unit::Unit(UnitType type, iPoint pos): unitType(type), state(AnimationType::IDLE
 	{
 		displayDebug = false;
 	}
-
 	collisionRect = { 0, 0, 30, -55 };
 	unitType = type;
 	position = {(float)pos.x, (float)pos.y};
@@ -79,6 +78,13 @@ bool Unit::isSelected()
 {
 	return _isSelected;
 }
+
+void Unit::SetSelected(bool value)
+{
+	_isSelected = value;
+}
+
+
 
 void Unit::MoveToTarget()
 {

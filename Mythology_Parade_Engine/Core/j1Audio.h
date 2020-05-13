@@ -37,7 +37,7 @@ public:
 	bool CleanUp();
 
 	// Play a music file
-	bool PlayMusic(const char* path, float fade_time = DEFAULT_MUSIC_FADE_TIME, int volume = 200);
+	bool PlayMusic(const char* path, float fade_time = DEFAULT_MUSIC_FADE_TIME);
 
 	// Load a WAV in memory
 	unsigned int LoadFx(const char* path);
@@ -48,10 +48,26 @@ public:
 	// Clean all fxs to change scene
 	bool CleanFxs();
 
+
 	int GetMusicVolume() { return MusicVolume; };
 	void SetMusicVolume(int mus) { MusicVolume=mus; };
 
 	void FadeAudio(which_audio_fade w_fade, float time = 2.0f, int volume=50);
+
+	// Change volume music
+	void ChangeVolumeMusic(float);
+
+	// Change volume fxs
+	void ChangeVolumeFx(float);
+
+	// Get volume music
+	int GetVolumeMusic();
+
+	// Get volume fxs
+	int GetVolumeFx();
+
+	void OnClick(UI*, float);
+
 
 private:
 

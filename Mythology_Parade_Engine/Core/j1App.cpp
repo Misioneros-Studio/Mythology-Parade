@@ -70,6 +70,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(audio);
 	// render last to swap buffer
 	AddModule(fade_to_black);
+
 	AddModule(render);
 
 
