@@ -563,7 +563,7 @@ void HUD::ManageActionButtons(bool create_buttons, bool viking) {
 						hud_button_actions_unclickable[1] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, ui_ingame, { 304,613,99,51 }, { 430,322,99,51 }, "", { 0,0,0,0 }, 
 							{ 0,0,0,0 }, false, { 0,0,0,0 }, nullptr, 0, false, -1.0F, 1));
 					}
-					if (player->GetFaith() >= 200 && player->num_monastery < 5 && player->research_monastery == true) {
+					if (player->GetFaith() >= 200 && player->num_monastery < 5) {
 						hud_button_actions[2] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 408,612,99,52 }, { 206,10,99,52 }, "Produce_Monastery",
 							{ 206,132,99,52 }, { 206,71,99,52 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::MAIN_MENU, false, -1.0F, 1));
 					}
@@ -589,7 +589,7 @@ void HUD::ManageActionButtons(bool create_buttons, bool viking) {
 						hud_button_actions_unclickable[1] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, ui_ingame, { 304,613,99,51 }, { 430,257,99,51 }, "", { 0,0,0,0 }, 
 							{ 0,0,0,0 }, false,	{ 0,0,0,0 }, nullptr, 0, false, -1.0F, 1));
 					}
-					if (player->GetFaith() >= 200 && player->num_monastery < 5 && player->research_monastery == true) {
+					if (player->GetFaith() >= 200 && player->num_monastery < 5) {
 						hud_button_actions[2] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 408,612,99,52 }, { 512,10,99,52 }, "Produce_Monastery",
 							{ 512,132,99,52 }, { 512,71,99,52 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::MAIN_MENU, false, -1.0F, 1));
 					}
@@ -735,7 +735,7 @@ void HUD::ManageActionButtons(bool create_buttons, bool viking) {
 						hud_button_actions_unclickable[1] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, ui_ingame, { 304,613,99,51 }, { 430,322,99,51 }, "", { 0,0,0,0 }, 
 							{ 0,0,0,0 }, false, { 0,0,0,0 }, nullptr, 0, false, -1.0F, 1));
 					}
-					if (hud_button_actions[2] == nullptr && player->GetFaith() >= 200 && player->num_monastery < 5 && player->research_monastery == true) {
+					if (hud_button_actions[2] == nullptr && player->GetFaith() >= 200 && player->num_monastery < 5) {
 						if (hud_button_actions_unclickable[2] != nullptr) {
 							App->gui->DeleteUIElement(hud_button_actions_unclickable[2]);
 							hud_button_actions_unclickable[2] = nullptr;
@@ -743,7 +743,7 @@ void HUD::ManageActionButtons(bool create_buttons, bool viking) {
 						hud_button_actions[2] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 408,612,99,52 }, { 206,10,99,52 }, "Produce_Monastery", 
 							{ 206,132,99,52 }, { 206,71,99,52 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::MAIN_MENU, false, -1.0F, 1));
 					}
-					else if (hud_button_actions_unclickable[2] == nullptr && (player->GetFaith() < 200 || player->num_monastery >= 5 || player->research_monastery == false)) {
+					else if (hud_button_actions_unclickable[2] == nullptr && (player->GetFaith() < 200 || player->num_monastery >= 5)) {
 						if (hud_button_actions[2] != nullptr) {
 							App->gui->DeleteUIElement(hud_button_actions[2]);
 							hud_button_actions[2] = nullptr;
@@ -785,7 +785,7 @@ void HUD::ManageActionButtons(bool create_buttons, bool viking) {
 						hud_button_actions_unclickable[1] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, ui_ingame, { 304,613,99,51 }, { 430,257,99,51 }, "", { 0,0,0,0 },
 							{ 0,0,0,0 }, false, { 0,0,0,0 }, nullptr, 0, false, -1.0F, 1));
 					}
-					if (hud_button_actions[2] == nullptr && player->GetFaith() >= 200 && player->num_monastery < 5 && player->research_monastery == true) {
+					if (hud_button_actions[2] == nullptr && player->GetFaith() >= 200 && player->num_monastery < 5) {
 						if (hud_button_actions_unclickable[2] != nullptr) {
 							App->gui->DeleteUIElement(hud_button_actions_unclickable[2]);
 							hud_button_actions_unclickable[2] = nullptr;
@@ -793,7 +793,7 @@ void HUD::ManageActionButtons(bool create_buttons, bool viking) {
 						hud_button_actions[2] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 408,612,99,52 }, { 512,10,99,52 }, "Produce_Monastery", 
 							{ 512,132,99,52 }, { 512,71,99,52 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::MAIN_MENU, false, -1.0F, 1));
 					}
-					else if (hud_button_actions_unclickable[2] == nullptr && (player->GetFaith() < 200 || player->num_monastery >= 5 || player->research_monastery == false)) {
+					else if (hud_button_actions_unclickable[2] == nullptr && (player->GetFaith() < 200 || player->num_monastery >= 5)) {
 						if (hud_button_actions[2] != nullptr) {
 							App->gui->DeleteUIElement(hud_button_actions[2]);
 							hud_button_actions[2] = nullptr;

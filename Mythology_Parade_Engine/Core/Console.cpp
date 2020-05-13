@@ -4,6 +4,8 @@
 #include "Console.h"
 #include "j1Gui.h"
 #include "j1Input.h"
+#include "Building.h"
+#include "EntityManager.h"
 #include "SDL/include/SDL_keyboard.h"
 #include "j1Window.h"
 
@@ -104,7 +106,9 @@ std::string Console::CheckCommand() {
 		command = commands::map;
 	else if (!strcmp(command_text.c_str(), "fullscreen") || !strcmp(command_text.c_str(), "FULLSCREEN"))
 		command = commands::fullscreen;
-	else {
+	else if (!strcmp(command_text.c_str(), "time 10") || !strcmp(command_text.c_str(), "time10"))
+		command = commands::time10;
+	else{
 		std::string three_letters_command = argument = console_input->GetLabel();
 		int num_of_letters = three_letters_command.size();
 		for (int i = 3; i < num_of_letters; i++) {
@@ -157,6 +161,20 @@ void Console::ExecuteCommand(std::string argument) {
 	case commands::map:
 		LOG("Map");
 		break;
+
+	case commands::time10:
+	{
+		if (App->entityManager->active == true) {
+			std::list<Entity*> list = App->entityManager->entities[EntityType::BUILDING];
+			for each (Building * building in list)
+			{
+				building->SetTimeProducing(10);
+			}
+		}
+		else
+			LOG("COULDN'T DO IT");
+		break;
+	}
 
 	case commands::none:
 		LOG("Command not found");

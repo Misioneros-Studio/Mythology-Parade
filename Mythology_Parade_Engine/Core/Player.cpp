@@ -40,7 +40,7 @@ bool Player::Start()
 	oneTime = true;
 
 	research_assassin = research_chaotic_beast = research_chaotic_miracle = research_cleric = research_encampment = research_lawful_beast = research_lawful_miracle = research_lawful_victory =
-		research_monastery = research_temple = research_chaotic_victory = false;
+		research_temple = research_chaotic_victory = false;
 
 	return true;
 }

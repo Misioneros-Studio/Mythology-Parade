@@ -55,7 +55,6 @@ public:
 	int num_encampment;
 	int time_production_victory;
 	CivilizationType player_type;
-	bool research_monastery;
 	bool research_temple;
 	bool research_encampment;
 	bool research_cleric;

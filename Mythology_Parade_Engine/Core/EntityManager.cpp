@@ -135,12 +135,16 @@ bool EntityManager::Update(float dt)
 	}
   
 	//TODO: Move this logic to the player
-	if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
+	if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN && App->scene->godMode==true)
 	{
 		EnterBuildMode();
 	}
+	
+	if (crPreview.active == true && App->input->GetMouseButtonDown(3) == KEY_UP) {
+		EnterBuildMode();
+	}
 
-	if (App->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN) 
+	if (App->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN && App->scene->godMode == true)
 	{
 		if (buildingTestIndex < MAX_BUILDING_TYPES - 1) 
 		{
@@ -512,7 +516,7 @@ void EntityManager::EnterBuildMode()
 }
 void EntityManager::SetBuildIndex(int index)
 {
-	if (index < MAX_BUILDING_TYPES - 1) {
+	if (index < MAX_BUILDING_TYPES) {
 		buildingTestIndex = index;
 	}
 
