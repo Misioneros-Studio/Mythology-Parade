@@ -14,22 +14,7 @@ j1ParticleManager::~j1ParticleManager()
 
 }
 
-void j1ParticleManager::CreateParticle(iPoint pos, fPoint speed, float life, ParticleAnimation animation)
-{
-	UpdateParticleAnimation(animation);
 
-	particleList.push_back(new j1Particle(pos.x, pos.y, speed.x, speed.y, 0, 0, 0, 0, life, texture, current_animation, false));
-}
-
-void j1ParticleManager::UpdateParticleAnimation(ParticleAnimation animation)
-{
-	switch (animation)
-	{
-	case ParticleAnimation::Explosion:
-		current_animation = explosion_animation;
-		break;
-	}
-}
 
 bool j1ParticleManager::Start()
 {
@@ -41,19 +26,7 @@ bool j1ParticleManager::Start()
 	return true;
 }
 
-void j1ParticleManager::CreateExplosionAnimation()
-{
-	explosion_animation.PushBack(SDL_Rect{ 0, 0, 59, 59 }, 1, 0, 0);
-	explosion_animation.PushBack(SDL_Rect{ 59, 0, 59, 59 }, 1, 0, 0);
-	explosion_animation.PushBack(SDL_Rect{ 118, 0, 59, 59 }, 1, 0, 0);
-	explosion_animation.PushBack(SDL_Rect{ 177, 0, 59, 59 }, 1, 0, 0);
-	explosion_animation.PushBack(SDL_Rect{ 236, 0, 59, 59 }, 1, 0, 0);
-	explosion_animation.PushBack(SDL_Rect{ 295, 0, 59, 59 }, 1, 0, 0);
-	explosion_animation.PushBack(SDL_Rect{ 354, 0, 59, 59 }, 2, 0, 0);
-	explosion_animation.PushBack(SDL_Rect{ 413, 0, 59, 59 }, 1, 0, 0);
-	explosion_animation.speed = 15.f;
-	explosion_animation.loop = true;
-}
+
 
 bool j1ParticleManager::Update(float dt)
 {
@@ -89,6 +62,38 @@ bool j1ParticleManager::CleanUp()
 	texture = nullptr;
 
 	return true;
+}
+
+void j1ParticleManager::CreateParticle(iPoint pos, fPoint speed, float life, ParticleAnimation animation)
+{
+	UpdateParticleAnimation(animation);
+
+	particleList.push_back(new j1Particle(pos.x, pos.y, speed.x, speed.y, 0, 0, 0, 0, life, texture, current_animation, false));
+}
+
+
+void j1ParticleManager::UpdateParticleAnimation(ParticleAnimation animation)
+{
+	switch (animation)
+	{
+	case ParticleAnimation::Explosion:
+		current_animation = explosion_animation;
+		break;
+	}
+}
+
+void j1ParticleManager::CreateExplosionAnimation()
+{
+	explosion_animation.PushBack(SDL_Rect{ 0, 0, 59, 59 }, 1, 0, 0);
+	explosion_animation.PushBack(SDL_Rect{ 59, 0, 59, 59 }, 1, 0, 0);
+	explosion_animation.PushBack(SDL_Rect{ 118, 0, 59, 59 }, 1, 0, 0);
+	explosion_animation.PushBack(SDL_Rect{ 177, 0, 59, 59 }, 1, 0, 0);
+	explosion_animation.PushBack(SDL_Rect{ 236, 0, 59, 59 }, 1, 0, 0);
+	explosion_animation.PushBack(SDL_Rect{ 295, 0, 59, 59 }, 1, 0, 0);
+	explosion_animation.PushBack(SDL_Rect{ 354, 0, 59, 59 }, 2, 0, 0);
+	explosion_animation.PushBack(SDL_Rect{ 413, 0, 59, 59 }, 1, 0, 0);
+	explosion_animation.speed = 15.f;
+	explosion_animation.loop = true;
 }
 
 
