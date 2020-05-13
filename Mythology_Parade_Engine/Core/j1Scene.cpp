@@ -49,8 +49,7 @@ bool j1Scene::Awake(pugi::xml_node& config)
 // Called before the first frame
 bool j1Scene::Start()
 {
-	research_menu = new ResearchMenu();
-	hud = new HUD(research_menu);
+
 	if (App->map->Load("MainMap.tmx") == true)
 	{
 		int w, h;
@@ -105,15 +104,17 @@ bool j1Scene::Start()
 	//quadTree->baseNode->SubDivide(quadTree->baseNode, 5);
   
 	App->audio->PlayMusic("audio/music/Ambient1.ogg", 2.0F);
-  
+
 	//Creating players
-	App->entityManager->CreatePlayerEntity(App->fade_to_black->actual_civilization);
-	
-	if (App->entityManager->getPlayer()->player_type == CivilizationType::VIKING)
+	Player* player = static_cast<Player*>(App->entityManager->CreatePlayerEntity(App->fade_to_black->actual_civilization));
+
+	if (player->player_type == CivilizationType::VIKING)
 		App->render->camera.x = -2683;
-	else if (App->entityManager->getPlayer()->player_type == CivilizationType::GREEK)
+	else if (player->player_type == CivilizationType::GREEK)
 		App->render->camera.x = -1683;
 
+	research_menu = new ResearchMenu(player);
+	hud = new HUD(research_menu);
 	return true;
 }
 
@@ -714,38 +715,39 @@ void j1Scene::DoWinOrLoseWindow(int type, bool win) {
 
 void j1Scene::FinishResearching(std::string thing_researched) {
 	if (thing_researched == "Monastery") {
-		research_menu->research_monastery = true;
+		App->entityManager->getPlayer()->research_monastery = true;
 	}
 	else if (thing_researched == "Temple") {
-		research_menu->research_temple = true;
+		App->entityManager->getPlayer()->research_temple = true;
 	}
 	else if (thing_researched == "Encampment") {
-		research_menu->research_encampment = true;
+		App->entityManager->getPlayer()->research_encampment = true;
 	}
 	else if (thing_researched == "Cleric") {
-		research_menu->research_cleric = true;
+		App->entityManager->getPlayer()->research_cleric = true;
 	}
 	else if (thing_researched == "Assassin") {
-		research_menu->research_assassin = true;
+		App->entityManager->getPlayer()->research_assassin = true;
 	}
 	else if (thing_researched == "Lawful Beast") {
-		research_menu->research_lawful_beast = true;
+		App->entityManager->getPlayer()->research_lawful_beast = true;
 	}
 	else if (thing_researched == "Chaotic Beast") {
-		research_menu->research_chaotic_beast = true;
+		App->entityManager->getPlayer()->research_chaotic_beast = true;
 	}
 	else if (thing_researched == "Lawful Miracle") {
-		research_menu->research_lawful_miracle = true;
+		App->entityManager->getPlayer()->research_lawful_miracle = true;
 	}
 	else if (thing_researched == "Chaotic Miracle") {
-		research_menu->research_chaotic_miracle = true;
+		App->entityManager->getPlayer()->research_chaotic_miracle = true;
 	}
 	else if (thing_researched == "Lawful Victory") {
-		research_menu->research_lawful_victory = true;
+		App->entityManager->getPlayer()->research_lawful_victory = true;
 	}
 	else if (thing_researched == "Chaotic Victory") {
-		research_menu->research_chaotic_victory = true;
-	}	
+		App->entityManager->getPlayer()->research_chaotic_victory = true;
+	}
+
 }
 
 

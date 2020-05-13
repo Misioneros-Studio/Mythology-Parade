@@ -14,6 +14,7 @@ class Building;
 enum class UnitType;
 enum BuildingType;
 enum CivilizationType;
+class Player;
 
 class ResearchMenu
 {
@@ -22,13 +23,13 @@ class ResearchMenu
 public:
 
 	//Constructor
-	ResearchMenu();
+	ResearchMenu(Player* player);
 
 	//Destructor
 	~ResearchMenu();
 
 	// Called before the first frame
-	void StartResearchMenu();
+	void StartResearchMenu(Player* play);
 
 	//Called when clicking the research button
 	void ActivateResearchMenu();
@@ -78,19 +79,7 @@ private:
 	ButtonUI* ui_button_research[12];
 	ImageUI* ui_image_research[11];
 	TextUI* ui_text_research[2];
-
-public:
-	bool research_monastery;
-	bool research_temple;
-	bool research_encampment;
-	bool research_cleric;
-	bool research_assassin;
-	bool research_lawful_beast;
-	bool research_chaotic_beast;
-	bool research_lawful_miracle;
-	bool research_chaotic_miracle;
-	bool research_lawful_victory;
-	bool research_chaotic_victory;
+	Player* player;
 };
 
 #endif // !__RESEARCHMENU_H__

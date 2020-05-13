@@ -39,6 +39,9 @@ bool Player::Start()
 	displayDebug = false;
 	oneTime = true;
 
+	research_assassin = research_chaotic_beast = research_chaotic_miracle = research_cleric = research_encampment = research_lawful_beast = research_lawful_miracle = research_lawful_victory =
+		research_monastery = research_temple = research_chaotic_victory = false;
+
 	return true;
 }
 
@@ -266,7 +269,9 @@ void Player::ClickLogic()
 		{
 			if (click.y <= it._Ptr->_Myval->getCollisionRect().y && click.y >= it._Ptr->_Myval->getCollisionRect().y + it._Ptr->_Myval->getCollisionRect().h)
 			{
-				buildingSelect = it._Ptr->_Myval;
+				if (it._Ptr->_Myval->civilization == civilization) {
+					buildingSelect = it._Ptr->_Myval;
+				}
 			}
 		}
 	}
@@ -323,8 +328,8 @@ void Player::InitVikings()
 	assassinPos = App->map->MapToWorld(assassinPos.x, assassinPos.y);
 
 
-	App->entityManager->CreateUnitEntity(UnitType::MONK, monkPos,civilization);
-	App->entityManager->CreateUnitEntity(UnitType::ASSASSIN, assassinPos,civilization);
+	App->entityManager->CreateUnitEntity(UnitType::MONK, monkPos, CivilizationType::VIKING);
+	App->entityManager->CreateUnitEntity(UnitType::ASSASSIN, assassinPos, CivilizationType::VIKING);
 
 }
 
