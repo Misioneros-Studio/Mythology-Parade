@@ -20,6 +20,7 @@
 #include "Console.h"
 #include "EntityManager.h"
 #include "j1FadeToBlack.h"
+#include "j1ParticleManager.h"
 #include "j1App.h"
 
 
@@ -44,6 +45,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	console = new Console();
 	entityManager = new EntityManager();
 	fade_to_black = new j1FadeToBlack();
+	particleManager = new j1ParticleManager();
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
@@ -60,7 +62,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(logo_scene);
 	AddModule(title_scene);
 	AddModule(scene);
-
+	AddModule(particleManager);
 	AddModule(minimap);
 	AddModule(gui);
 	AddModule(console);

@@ -65,7 +65,7 @@ j1Particle::j1Particle(float positionX, float positionY, float speedX, float spe
 	animation(animation),
 
 	fade(fade),
-	active(false)
+	active(true)
 {}
 
 
