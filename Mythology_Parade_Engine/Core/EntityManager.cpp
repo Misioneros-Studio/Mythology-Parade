@@ -229,6 +229,7 @@ bool EntityManager::Update(float dt)
 		case 3:
 			CreateBuildingEntity(spawnPos, BuildingType::ENCAMPMENT, buildingsData[buildingTestIndex], CivilizationType::VIKING);
 			faithToDescrease = 200;
+			break;
 
 		case 7:
 			CreateBuildingEntity(spawnPos, BuildingType::ENCAMPMENT, buildingsData[buildingTestIndex], CivilizationType::GREEK);
