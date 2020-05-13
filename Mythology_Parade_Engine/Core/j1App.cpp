@@ -373,6 +373,23 @@ void j1App::SaveGame(const char* file) const
 	// we should be checking if that file actually exist
 	// from the "GetSaveGames" list ... should we overwrite ?
 
+	bool ret = true;
+
+	// xml object were we will store all data
+	pugi::xml_document data;
+	pugi::xml_node root;
+
+	root = data;
+
+	std::list<j1Module*>::const_iterator it = modules.begin();
+
+	for (it; it != modules.end() && ret == true; it++)
+	{
+		if (it._Ptr->_Myval != nullptr)
+			ret = it._Ptr->_Myval->CleanUp();
+	}
+
+
 	want_to_save = true;
 	save_game.append(file);
 }
