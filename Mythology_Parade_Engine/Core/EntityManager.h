@@ -101,7 +101,7 @@ public:
 	//bool Load(pugi::xml_node&);
 
 	////Called when saving the game
-	//bool Save(pugi::xml_node&) const;
+	bool Save(pugi::xml_node&) const;
 
 	bool DeleteEntity(Entity*);
 

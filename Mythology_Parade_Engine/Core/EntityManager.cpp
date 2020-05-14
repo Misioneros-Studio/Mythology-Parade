@@ -298,17 +298,15 @@ bool EntityManager::CleanUp()
 //}
 //
 ////Called when saving the game
-//bool EntityManager::Save(pugi::xml_node& s) const
-//{
-//	pugi::xml_node s2 = s;
-//	for (unsigned int i = 0; i < entities.count(); i++)
-//	{
-//		s2 = s.append_child(entities.At(i)->data->name.GetString());
-//		entities.At(i)->data->Save(s2);
-//		s2.append_attribute("id") = i;
-//	}
-//	return true;
-//}
+
+bool EntityManager::Save(pugi::xml_node& s) const
+{
+	for (unsigned int i = 0; i < 4; i++)
+	{
+
+	}
+	return true;
+}
 
 //Called when creating a new Entity
 //Entity* EntityManager::CreateEntity(EntityType type, UnitType unitType)
