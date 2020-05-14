@@ -453,7 +453,6 @@ void j1Scene::OnClick(UI* element, float argument)
 		{
 			hud->confirmation_option = "SAVE";
 			hud->ActivateConfirmationMenu("SAVE THE GAME");
-			App->SaveGame("info.xml");
 		}
 		else if (element->name == "LOAD")
 		{
@@ -493,7 +492,7 @@ void j1Scene::OnClick(UI* element, float argument)
 			hud->close_menus = CloseSceneMenus::Confirmation;
 			if (hud->confirmation_option.compare("SAVE") == 0)
 			{
-				App->SaveGame("save_game.xml");
+				App->SaveGame("info.xml");
 			}
 			else if (hud->confirmation_option.compare("LOAD") == 0)
 			{

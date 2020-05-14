@@ -301,9 +301,11 @@ bool EntityManager::CleanUp()
 
 bool EntityManager::Save(pugi::xml_node& s) const
 {
-	for (unsigned int i = 0; i < 4; i++)
+	pugi::xml_node node = s.append_child("entities");
+	std::list<Entity*> list = App->entityManager->entities[EntityType::UNIT];
+	for each (Unit* var in list)
 	{
-
+		node.append_child(var->name.c_str());
 	}
 	return true;
 }

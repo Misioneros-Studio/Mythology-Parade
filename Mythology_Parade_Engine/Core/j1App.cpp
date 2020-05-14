@@ -426,18 +426,26 @@ bool j1App::SavegameNow()
 	LOG("Saving Game State to %s...", save_game.c_str());
 
 	// xml object were we will store all data
-	pugi::xml_document data;
-	data.load_file("info.xml");
+	pugi::xml_document doc;
+
+	pugi::xml_parse_result result = doc.load_file(save_game.c_str());
+
+	if (result){  
+		LOG("%s %s","succes loading document info",result.description());
+	}
+	else {
+		LOG("%s %s", "fail loading document info", result.description());
+	}
+
 	pugi::xml_node root;
 	
-	root = data.append_child("info");
-
+	root = doc.append_child("info");
 	for (std::list<j1Module*>::iterator it = modules.begin(); it != modules.end() && ret == true; it++)
 	{
 		ret = it._Ptr->_Myval->Save(root);
 	}
 
-	data.reset();
+	doc.reset();
 	want_to_save = false;
 	return ret;
 }
