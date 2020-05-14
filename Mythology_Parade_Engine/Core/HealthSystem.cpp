@@ -30,6 +30,11 @@ void HealthSystem::SetMaxHealth(int value)
 	maxHealth = value;
 }
 
+int HealthSystem::GetMaxHealth()
+{
+	return maxHealth;
+}
+
 void HealthSystem::IncreaseHealth(int value)
 {
 	health += value;

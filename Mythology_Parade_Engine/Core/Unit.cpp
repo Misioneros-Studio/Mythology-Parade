@@ -3,8 +3,9 @@
 #include "j1Textures.h"
 #include "j1Input.h"
 #include"CombatUnit.h"
+#include "j1Gui.h"
 
-Unit::Unit(UnitType type, iPoint pos): unitType(type), state(AnimationType::IDLE), _isSelected(false), moveSpeed(60)
+Unit::Unit(UnitType type, iPoint pos): unitType(type), state(AnimationType::IDLE),  moveSpeed(60)
 {
 	
 	if (App->entityManager->getPlayer())
@@ -34,6 +35,7 @@ Unit::Unit(UnitType type, iPoint pos): unitType(type), state(AnimationType::IDLE
 		Init(1);
 		break;
 	}
+	SetSelected(false);
 
 }
 
@@ -54,6 +56,7 @@ bool Unit::Start()
 	//position_rect.w = 125;
 	//position_rect.h = 112;
 	//LOG("%s", image_source.c_str());
+	combat_unit = false;
 	return ret;
 }
 
@@ -66,6 +69,8 @@ bool Unit::Update(float dt)
 	//ret = Draw(dt);
 
 	//Return
+	if (isSelected())
+		Draw_Life_Bar();
 	return ret;
 }
 
@@ -73,17 +78,6 @@ void Unit::SetMoveSpeed(int value)
 {
 	moveSpeed = value;
 }
-
-bool Unit::isSelected()
-{
-	return _isSelected;
-}
-
-void Unit::SetSelected(bool value)
-{
-	_isSelected = value;
-}
-
 
 
 void Unit::MoveToTarget()
@@ -281,6 +275,29 @@ void Unit::SetPath(const std::vector<iPoint> s_path)
 void Unit::Kill(iPoint direction)
 {
 	ChangeState(direction, AnimationType::DIE);
+}
+void Unit::Draw_Life_Bar()
+{
+	SDL_Rect life_spriteRect = App->entityManager->unit_life_bar_back;
+	iPoint pos;
+	if (combat_unit == true) {
+		CombatUnit* comb_unit = static_cast<CombatUnit*>(this);
+		if (comb_unit->GetLevel() > 0)
+			pos = { (int)position.x - 38, (int)position.y - 75 };
+		else
+			pos = { (int)position.x - 38, (int)position.y - 65 };
+	}
+	else 
+		pos = { (int)position.x - 38, (int)position.y - 60 };
+
+	App->render->Blit(App->gui->GetTexture(), pos.x, pos.y, &life_spriteRect);
+	life_spriteRect = App->entityManager->unit_life_bar_front;
+	float percentage_life = (float)GetHealth() / (float)GetMaxHealth();
+	int sprite_rect_width = percentage_life * life_spriteRect.w;
+	App->render->Blit(App->gui->GetTexture(), pos.x + 7, pos.y + 2, { sprite_rect_width, life_spriteRect.h },
+		& life_spriteRect);
+	life_spriteRect = App->entityManager->unit_life_bar_empty;
+	App->render->Blit(App->gui->GetTexture(), pos.x, pos.y, &life_spriteRect);
 }
 void Unit::StateMachineActions(float dt)
 {

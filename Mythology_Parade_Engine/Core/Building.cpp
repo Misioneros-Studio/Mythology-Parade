@@ -5,6 +5,7 @@ Building::Building(BuildingType type, iPoint pos, BuildingInfo info)
 	//default inits with none value
 	damage = 0;
 	defenses = 0;
+	max_defenses = 0;
 	influence = 0;
 	maxCap = 0;
 	nearbyMonks = 0;
@@ -44,7 +45,7 @@ Building::Building(BuildingType type, iPoint pos, BuildingInfo info)
 		time_construction =time_research = 0;
 		damage = 25;
 		SetMaxHealth(500);
-		defenses = 500;
+		defenses = max_defenses = 500;
 		influence = 20;
 		maxCap = 1;
 		description = "I'm a fortress";
@@ -56,7 +57,7 @@ Building::Building(BuildingType type, iPoint pos, BuildingInfo info)
 		time_construction = 20;
 		damage = 15;
 		SetMaxHealth(250);
-		defenses = 250;
+		defenses = max_defenses = 250;
 		influence = 10;
 		maxCap = 5;
 		description = "I'm a monastery";
@@ -69,7 +70,7 @@ Building::Building(BuildingType type, iPoint pos, BuildingInfo info)
 		time_construction = 150;
 		damage = 15;
 		SetMaxHealth(200);
-		defenses = 200;
+		defenses = max_defenses = 200;
 		influence = 10;
 		maxCap = 8;
 		description = "I'm a temple";
@@ -82,7 +83,7 @@ Building::Building(BuildingType type, iPoint pos, BuildingInfo info)
 		time_construction = 20;
 		damage = 20;
 		SetMaxHealth(350);
-		defenses = 350;
+		defenses = max_defenses = 350;
 		influence = 10;
 		maxCap = 7;
 		description = "I'm an encampment";
@@ -104,6 +105,7 @@ Building::Building(BuildingType type, iPoint pos, BuildingInfo info)
 		break;
 	}
 
+	SetSelected(false);
 
 	timer_construction.Start();
 }
@@ -157,6 +159,7 @@ bool Building::Update(float dt)
 		timer_construction.Pause();
 	else if (App->scene->paused_game == false && timer_construction.isPaused() == true)
 		timer_construction.Resume();
+	percentage_life = (float)defenses / (float)max_defenses;
 	if (first_time_constructing == true && buildingStatus == BuildingStatus::CONSTRUCTING)
 	{
 		int actual_construction_time = timer_construction.ReadSec();
@@ -227,15 +230,19 @@ bool Building::Update(float dt)
 	}
 
 	//Draw();
+	bool active_building = false;
 	if (buildingStatus == BuildingStatus::CONSTRUCTING || buildingAction== BuildingAction::PRODUCING)
 	{
-		Draw_Construction_Bar(blitWidth);
+		Draw_Building_Bar(blitWidth);
+		active_building = true;
 	}
 	else if (buildingAction == BuildingAction::RESEARCHING)
 	{
-		Draw_Construction_Bar(blitWidth, 2);
+		Draw_Building_Bar(blitWidth, 2);
+		active_building = true;
 	}
-
+	if (isSelected())
+		Draw_Building_Bar(blitWidth, 1, active_building);
 	//IF MONASTERY DETECTS NEARBY MONKS,INCREASE FAITH
 	if (buildingType == BuildingType::MONASTERY) 
 	{
@@ -272,16 +279,26 @@ bool Building::Draw(float dt)
 	return true;
 }
 
-void Building::Draw_Construction_Bar(int blitWidth, int bar_used)
+void Building::Draw_Building_Bar(int blitWidth, int bar_used, bool building_active)
 {
 	SDL_Rect construction_spriteRect = App->entityManager->construction_bar_back;
 	iPoint pos;
-	if (blitWidth==128)
-		pos = { (int)position.x + 1, (int)position.y + (int)(((32 / 2) * tileLenght) - 1.25 * blitRect.y) };
-	else if (blitWidth==192)
-		pos = { (int)position.x + 33, (int)position.y + (int)(((32 / 2) * tileLenght) - 1.25 * blitRect.y) };
-	else
-		pos = { (int)position.x, (int)position.y + (int)(((32 / 2) * tileLenght) - 1.25 * blitRect.y) };
+	if (building_active == false) {
+		if (blitWidth == 128)
+			pos = { (int)position.x + 1, (int)position.y + (int)(((32 / 2) * tileLenght) - 1.25 * blitRect.y) };
+		else if (blitWidth == 192)
+			pos = { (int)position.x + 33, (int)position.y + (int)(((32 / 2) * tileLenght) - 1.25 * blitRect.y) };
+		else
+			pos = { (int)position.x, (int)position.y + (int)(((32 / 2) * tileLenght) - 1.25 * blitRect.y) };
+	}
+	else {
+		if (blitWidth == 128)
+			pos = { (int)position.x + 1, ((int)position.y + (int)(((32 / 2) * tileLenght) - 1.25 * blitRect.y) - 22) };
+		else if (blitWidth == 192)
+			pos = { (int)position.x + 33, ((int)position.y + (int)(((32 / 2) * tileLenght) - 1.25 * blitRect.y) - 22) };
+		else
+			pos = { (int)position.x, ((int)position.y + (int)(((32 / 2) * tileLenght) - 1.25 * blitRect.y) - 22) };
+	}
 	App->render->Blit(texture, pos.x, pos.y, &construction_spriteRect);
 	if (bar_used == 0)
 		construction_spriteRect = App->entityManager->construction_bar_front;
@@ -289,11 +306,16 @@ void Building::Draw_Construction_Bar(int blitWidth, int bar_used)
 		construction_spriteRect = App->entityManager->life_bar_front;
 	else if(bar_used==2)
 		construction_spriteRect = App->entityManager->research_bar_front;
-	int sprite_rect_width = percentage_constructing * construction_spriteRect.w;
+	int sprite_rect_width;
+	if (bar_used != 1)
+		sprite_rect_width = percentage_constructing * construction_spriteRect.w;
+	else
+		sprite_rect_width = percentage_life * construction_spriteRect.w;
 	App->render->Blit(texture, pos.x + 11, pos.y + 3, { sprite_rect_width, construction_spriteRect.h },
 		&construction_spriteRect);
 	construction_spriteRect = App->entityManager->construction_bar_empty;
 	App->render->Blit(texture, pos.x,pos.y, &construction_spriteRect);
+
 }
 
 

@@ -342,6 +342,11 @@ void j1Gui::ActivateButtons() {
 	}
 }
 
+SDL_Texture* j1Gui::GetTexture()
+{
+	return atlas_num_0;
+}
+
 void j1Gui::DeactivateButtons() {
 	for (std::list<UI*>::iterator it = UIs.begin(); it != UIs.end(); it++)
 	{

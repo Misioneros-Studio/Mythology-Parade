@@ -146,6 +146,9 @@ public:
 	SDL_Rect construction_bar_front;
 	SDL_Rect life_bar_front;
 	SDL_Rect research_bar_front;
+	SDL_Rect unit_life_bar_back;
+	SDL_Rect unit_life_bar_empty;
+	SDL_Rect unit_life_bar_front;
 
 	std::unordered_map<UnitType, std::unordered_map<AnimationType, std::unordered_map<Direction, Animation_char>>> animations;
 

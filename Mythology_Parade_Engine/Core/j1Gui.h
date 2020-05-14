@@ -296,6 +296,8 @@ public:
 
 	void ActivateButtons();
 
+	SDL_Texture* GetTexture();
+
 private:
 
 	std::list <UI*> UIs;

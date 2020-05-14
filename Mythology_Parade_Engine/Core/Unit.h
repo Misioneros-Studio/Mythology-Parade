@@ -35,9 +35,6 @@ private:
 	//Move Speed
 	int moveSpeed;
 
-	//Conditions
-	bool _isSelected;
-
 	//Description / Effect
 	std::string description;
 
@@ -61,8 +58,6 @@ public:
 
 	void SetMoveSpeed(int);
 
-	bool isSelected();
-	void SetSelected(bool value);
 
 	virtual bool Draw(float dt);
 	virtual void Action(Entity*);
@@ -74,6 +69,8 @@ public:
 
 	void StateMachineActions(float dt);
 	void Kill(iPoint);
+
+	void Draw_Life_Bar();
 
 protected:
 	//Animation
@@ -92,6 +89,7 @@ protected:
 	//void SetTarget();
 	//void CheckState();
 	
+	bool combat_unit;
 };
 
 #endif // !__UNIT_H__
