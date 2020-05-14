@@ -443,17 +443,32 @@ Entity* EntityManager::CreateUnitEntity(UnitType type, iPoint pos, CivilizationT
 
 void EntityManager::DrawEverything() 
 {
-	float dt = App->GetDT();
-	Entity* ent = nullptr;
 
-	for (unsigned i = 1; i < entities.size(); i++)
+	j1PerfTimer timer;
+	double ot = timer.ReadMs();
+
+	float dt = App->GetDT();
+
+	for (unsigned i = (int)EntityType::UNIT; i < entities.size(); i++)
 	{
 		for (std::list<Entity*>::iterator it = entities[(EntityType)i].begin(); it != entities[(EntityType)i].end(); it++)
 		{
-			ent = it._Ptr->_Myval;
-			ent->Draw(dt);
+			orderedSprites.insert({(*it)->position.y, (*it)});
 		}
 	}
+
+	auto range = orderedSprites.equal_range(0);
+	for (auto i = orderedSprites.begin(); i != orderedSprites.end(); i = range.second)
+	{
+		// Get the range of the current key
+		range = orderedSprites.equal_range(i->first);
+
+		// Now print out that whole range
+		for (auto d = range.first; d != range.second; ++d)
+			(*d).second->Draw(dt);
+	}
+
+	orderedSprites.clear();
 }
 
 Entity* EntityManager::CreateBuildingEntity(iPoint pos, BuildingType type, BuildingInfo info, CivilizationType civilization)
