@@ -453,6 +453,7 @@ void j1Scene::OnClick(UI* element, float argument)
 		{
 			hud->confirmation_option = "SAVE";
 			hud->ActivateConfirmationMenu("SAVE THE GAME");
+			App->SaveGame("info.xml");
 		}
 		else if (element->name == "LOAD")
 		{
