@@ -18,6 +18,7 @@
 #include "j1FadeToBlack.h"
 #include "HUD.h"
 #include "ResearchMenu.h"
+#include "j1ParticleManager.h"
 
 #include"QuadTree.h"
 
@@ -115,6 +116,8 @@ bool j1Scene::Start()
 
 	research_menu = new ResearchMenu(player);
 	hud = new HUD(research_menu);
+
+	App->particleManager->CreateParticle({ 2400,2400 }, { 0,0 }, 10, ParticleAnimation::Explosion);
 	return true;
 }
 
@@ -176,6 +179,10 @@ void j1Scene::ClickToPath()
 		LOG("Origin: %i, %i", origin.x, origin.y);
 		LOG("Ending: %i, %i", ending.x, ending.y);
 
+		iPoint PointToArrow = App->map->MapToWorld(ending.x, ending.y);
+		//PointToArrow = App->render->WorldToScreen(PointToArrow.x, PointToArrow.y);
+		App->particleManager->CreateParticle({ PointToArrow.x,PointToArrow.y}, { 0,0 }, 10, ParticleAnimation::Arrows_Cursor);
+
 		int posX, posY;
 		App->input->GetMousePosition(posX, posY);
 		iPoint p = App->render->ScreenToWorld(posX, posY);
@@ -201,6 +208,7 @@ void j1Scene::ClickToPath()
 
 		if (!attacking)
 		{
+
 			Unit* unt = nullptr;
 			for (std::list<Entity*>::iterator sel = list.begin(); sel != list.end(); sel++)
 			{

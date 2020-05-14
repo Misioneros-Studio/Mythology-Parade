@@ -9,6 +9,8 @@
 
 enum class ParticleAnimation {
 	Explosion,
+	Arrows_Cursor,
+	Skull
 };
 
 class j1ParticleManager : public j1Module
@@ -22,6 +24,8 @@ public:
 	void UpdateParticleAnimation(ParticleAnimation animation);
 
 	bool Start() override;
+	void CreateSkullAnimation();
+	void CreateArrowsCursorAnimation();
 	bool Update(float dt) override;
 	bool CleanUp() override;
 
@@ -31,6 +35,9 @@ private:
 	std::list<j1Particle*> particleList;
 	SDL_Texture* texture;
 	ClassicAnimation explosion_animation;
+	ClassicAnimation arrows_animation;
+	ClassicAnimation skull_animation;
+
 	ClassicAnimation current_animation;
 
 };

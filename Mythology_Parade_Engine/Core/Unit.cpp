@@ -3,6 +3,7 @@
 #include "j1Textures.h"
 #include "j1Input.h"
 #include"CombatUnit.h"
+#include"j1ParticleManager.h"
 
 Unit::Unit(UnitType type, iPoint pos): unitType(type), state(AnimationType::IDLE), _isSelected(false), moveSpeed(60)
 {
@@ -281,6 +282,8 @@ void Unit::SetPath(const std::vector<iPoint> s_path)
 void Unit::Kill(iPoint direction)
 {
 	ChangeState(direction, AnimationType::DIE);
+	direction = App->render->ScreenToWorld(direction.x, direction.y);
+	App->particleManager->CreateParticle({ direction.x,direction.y }, { 0,-1 }, 10, ParticleAnimation::Skull);
 }
 void Unit::StateMachineActions(float dt)
 {

@@ -22,6 +22,9 @@ bool j1ParticleManager::Start()
 
 	texture = App->tex->Load("assets/particles.png");
 	CreateExplosionAnimation();
+	CreateArrowsCursorAnimation();
+	CreateSkullAnimation();
+
 
 	return true;
 }
@@ -44,7 +47,6 @@ bool j1ParticleManager::Update(float dt)
 			if (!particle->IsActive()) {
 				particleList.remove(particle);
 				delete particle;
-				if (particleList.empty())
 					break;
 			}
 		}
@@ -79,6 +81,12 @@ void j1ParticleManager::UpdateParticleAnimation(ParticleAnimation animation)
 	case ParticleAnimation::Explosion:
 		current_animation = explosion_animation;
 		break;
+	case ParticleAnimation::Arrows_Cursor:
+		current_animation = arrows_animation;
+		break;
+	case ParticleAnimation::Skull:
+		current_animation = skull_animation;
+		break;
 	}
 }
 
@@ -97,4 +105,34 @@ void j1ParticleManager::CreateExplosionAnimation()
 }
 
 
+void j1ParticleManager::CreateArrowsCursorAnimation()
+{
+	arrows_animation.PushBack(SDL_Rect{ 0, 256, 64, 32 }, 1, 0, 0);
+	arrows_animation.PushBack(SDL_Rect{ 64, 256, 64, 32 }, 1, 0, 0);
+	arrows_animation.PushBack(SDL_Rect{ 128, 256, 64, 32 }, 1, 0, 0);
+	arrows_animation.PushBack(SDL_Rect{ 192, 256, 64, 32 }, 1, 0, 0);
+	arrows_animation.PushBack(SDL_Rect{ 256, 256, 64, 32 }, 1, 0, 0);
+	arrows_animation.PushBack(SDL_Rect{ 320, 256, 64, 32 }, 1, 0, 0);
+	arrows_animation.PushBack(SDL_Rect{ 384, 256, 64, 32 }, 1, 0, 0);
+	arrows_animation.PushBack(SDL_Rect{ 0, 288, 64, 32 }, 1, 0, 0);
+	arrows_animation.PushBack(SDL_Rect{ 64, 288, 64, 32 }, 1, 0, 0);
+	arrows_animation.PushBack(SDL_Rect{ 128, 288, 64, 32 }, 1, 0, 0);
+	arrows_animation.PushBack(SDL_Rect{ 192, 288, 64, 32 }, 1, 0, 0);
+	arrows_animation.PushBack(SDL_Rect{ 256, 288, 64, 32 }, 1, 0, 0);
+	arrows_animation.PushBack(SDL_Rect{ 320, 288, 64, 32 }, 1, 0, 0);
+	arrows_animation.PushBack(SDL_Rect{ 384, 288, 64, 32 }, 1, 0, 0);
+	arrows_animation.speed = 300.f;
+	arrows_animation.loop = false;
+}
 
+void j1ParticleManager::CreateSkullAnimation()
+{
+	skull_animation.PushBack(SDL_Rect{ 0, 320, 32, 29 }, 1, 0, 0);
+	skull_animation.PushBack(SDL_Rect{ 32, 320, 32, 29 }, 1, 0, 0);
+	skull_animation.PushBack(SDL_Rect{ 64, 320, 32, 29 }, 1, 0, 0);
+	skull_animation.PushBack(SDL_Rect{ 96, 320, 32, 29 }, 1, 0, 0);
+	skull_animation.PushBack(SDL_Rect{ 128, 320, 32, 29 }, 1, 0, 0);
+	skull_animation.PushBack(SDL_Rect{ 160, 320, 32, 29 }, 1, 0, 0);
+	skull_animation.speed = 20.f;
+	skull_animation.loop = false;
+}
