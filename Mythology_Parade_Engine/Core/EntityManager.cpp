@@ -444,9 +444,6 @@ Entity* EntityManager::CreateUnitEntity(UnitType type, iPoint pos, CivilizationT
 void EntityManager::DrawEverything() 
 {
 
-	j1PerfTimer timer;
-	double ot = timer.ReadMs();
-
 	float dt = App->GetDT();
 
 	for (unsigned i = (int)EntityType::UNIT; i < entities.size(); i++)
@@ -469,6 +466,7 @@ void EntityManager::DrawEverything()
 	}
 
 	orderedSprites.clear();
+
 }
 
 Entity* EntityManager::CreateBuildingEntity(iPoint pos, BuildingType type, BuildingInfo info, CivilizationType civilization)
