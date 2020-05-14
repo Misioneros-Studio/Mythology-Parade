@@ -32,6 +32,7 @@ CombatUnit::CombatUnit(UnitType type, iPoint pos) : Unit(type, pos), range(0), d
 		break;
 	}
 	combat_unit = true;
+	show_bar_for_damage = false;
 }
 
 CombatUnit::~CombatUnit()

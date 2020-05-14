@@ -6,6 +6,7 @@
 #include "HealthSystem.h"
 #include"EntityManager.h"
 #include "Animation.h"
+#include "j1Timer.h"
 
 enum class ReligiousType
 {
@@ -70,7 +71,7 @@ public:
 	void StateMachineActions(float dt);
 	void Kill(iPoint);
 
-	void Draw_Life_Bar();
+	void Draw_Life_Bar(bool enemy = false);
 
 protected:
 	//Animation
@@ -88,7 +89,8 @@ protected:
 	float timeToDespawn;
 	//void SetTarget();
 	//void CheckState();
-	
+	j1Timer damage_timer;
+	bool show_bar_for_damage;
 	bool combat_unit;
 };
 

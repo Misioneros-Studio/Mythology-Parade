@@ -104,6 +104,7 @@ Building::Building(BuildingType type, iPoint pos, BuildingInfo info)
 		blitRect = App->entityManager->CalculateBuildingSize(blitWidth, spriteRect.w, spriteRect.h);
 		break;
 	}
+	show_bar_for_damage = false;
 
 	SetSelected(false);
 
@@ -159,7 +160,20 @@ bool Building::Update(float dt)
 		timer_construction.Pause();
 	else if (App->scene->paused_game == false && timer_construction.isPaused() == true)
 		timer_construction.Resume();
+	if (App->scene->paused_game && show_bar_for_damage == true && damage_timer.isPaused() == false)
+		damage_timer.Pause();
+	else if (damage_timer.isPaused() == true && App->scene->paused_game == false)
+		damage_timer.Resume();
+	if (show_bar_for_damage == true && damage_timer.ReadSec() > 2)
+		show_bar_for_damage = false;
 	percentage_life = (float)defenses / (float)max_defenses;
+	if (percentage_life < 0)
+		percentage_life = 0;
+	if (damaged_now == true) {
+		damage_timer.Start();
+		damaged_now = false;
+		show_bar_for_damage = true;
+	}
 	if (first_time_constructing == true && buildingStatus == BuildingStatus::CONSTRUCTING)
 	{
 		int actual_construction_time = timer_construction.ReadSec();
@@ -241,8 +255,17 @@ bool Building::Update(float dt)
 		Draw_Building_Bar(blitWidth, 2);
 		active_building = true;
 	}
-	if (isSelected())
-		Draw_Building_Bar(blitWidth, 1, active_building);
+	int x, y;
+	App->input->GetMousePosition(x, y);
+	iPoint point = App->render->ScreenToWorld(x, y);
+	if (isSelected() || (point.x >= collisionRect.x && point.x <= collisionRect.x + collisionRect.w && point.y <= collisionRect.y && point.y >= collisionRect.y + collisionRect.h) ||
+		show_bar_for_damage == true) {
+		bool enemy = false;
+		if (civilization != App->entityManager->getPlayer()->civilization)
+			enemy = true;
+		Draw_Building_Bar(blitWidth, 1, active_building, enemy);
+
+	}
 	//IF MONASTERY DETECTS NEARBY MONKS,INCREASE FAITH
 	if (buildingType == BuildingType::MONASTERY) 
 	{
@@ -279,7 +302,7 @@ bool Building::Draw(float dt)
 	return true;
 }
 
-void Building::Draw_Building_Bar(int blitWidth, int bar_used, bool building_active)
+void Building::Draw_Building_Bar(int blitWidth, int bar_used, bool building_active, bool enemy)
 {
 	SDL_Rect construction_spriteRect = App->entityManager->construction_bar_back;
 	iPoint pos;
@@ -302,8 +325,12 @@ void Building::Draw_Building_Bar(int blitWidth, int bar_used, bool building_acti
 	App->render->Blit(texture, pos.x, pos.y, &construction_spriteRect);
 	if (bar_used == 0)
 		construction_spriteRect = App->entityManager->construction_bar_front;
-	else if(bar_used==1)
-		construction_spriteRect = App->entityManager->life_bar_front;
+	else if (bar_used == 1) {
+		if(enemy==true)
+			construction_spriteRect = App->entityManager->life_bar_front_enemy;
+		else
+			construction_spriteRect = App->entityManager->life_bar_front;
+	}
 	else if(bar_used==2)
 		construction_spriteRect = App->entityManager->research_bar_front;
 	int sprite_rect_width;
@@ -315,7 +342,6 @@ void Building::Draw_Building_Bar(int blitWidth, int bar_used, bool building_acti
 		&construction_spriteRect);
 	construction_spriteRect = App->entityManager->construction_bar_empty;
 	App->render->Blit(texture, pos.x,pos.y, &construction_spriteRect);
-
 }
 
 

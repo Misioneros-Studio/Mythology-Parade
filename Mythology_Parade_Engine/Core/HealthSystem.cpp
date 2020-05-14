@@ -6,6 +6,7 @@ void HealthSystem::Init()
 {
 	isDeath = false;
 	health = maxHealth;
+	damaged_now = false;
 }
 
 bool HealthSystem::RecieveDamage(int value)
@@ -18,6 +19,7 @@ bool HealthSystem::RecieveDamage(int value)
 		if (health <= 0)
 			isDeath = true;
 	}
+	damaged_now = true;
 	return isDeath;
 }
 int HealthSystem::GetHealth()

@@ -57,8 +57,10 @@ bool Unit::Start()
 	//position_rect.h = 112;
 	//LOG("%s", image_source.c_str());
 	combat_unit = false;
+	show_bar_for_damage = false;
 	return ret;
 }
+
 
 bool Unit::Update(float dt)
 {
@@ -69,8 +71,27 @@ bool Unit::Update(float dt)
 	//ret = Draw(dt);
 
 	//Return
-	if (isSelected())
-		Draw_Life_Bar();
+	int x, y;
+	App->input->GetMousePosition(x, y);
+	iPoint point = App->render->ScreenToWorld(x, y);
+	if (App->scene->paused_game && show_bar_for_damage == true && damage_timer.isPaused() == false)
+		damage_timer.Pause();
+	else if (damage_timer.isPaused() == true && App->scene->paused_game == false)
+		damage_timer.Resume();
+	if (damaged_now == true) {
+		damage_timer.Start();
+		damaged_now = false;
+		show_bar_for_damage = true;
+	}
+	if (show_bar_for_damage == true && damage_timer.ReadSec() > 2)
+		show_bar_for_damage = false;
+	if (isSelected() || (point.x >= collisionRect.x && point.x <= collisionRect.x + collisionRect.w && point.y <= collisionRect.y && point.y >= collisionRect.y + collisionRect.h) ||
+		show_bar_for_damage == true) {
+		if (civilization != App->entityManager->getPlayer()->civilization)
+			Draw_Life_Bar(true);
+		else
+			Draw_Life_Bar();
+	}
 	return ret;
 }
 
@@ -276,7 +297,7 @@ void Unit::Kill(iPoint direction)
 {
 	ChangeState(direction, AnimationType::DIE);
 }
-void Unit::Draw_Life_Bar()
+void Unit::Draw_Life_Bar(bool enemy)
 {
 	SDL_Rect life_spriteRect = App->entityManager->unit_life_bar_back;
 	iPoint pos;
@@ -288,11 +309,16 @@ void Unit::Draw_Life_Bar()
 			pos = { (int)position.x - 38, (int)position.y - 65 };
 	}
 	else 
-		pos = { (int)position.x - 38, (int)position.y - 60 };
+		pos = { (int)position.x - 38, (int)position.y - 60 }; ////// IT WILL HAVE TO BE CHANGED WHEN NEW CREATURES ADDED
 
 	App->render->Blit(App->gui->GetTexture(), pos.x, pos.y, &life_spriteRect);
-	life_spriteRect = App->entityManager->unit_life_bar_front;
+	if (enemy == true)
+		life_spriteRect = App->entityManager->unit_life_bar_front_enemy;
+	else
+		life_spriteRect = App->entityManager->unit_life_bar_front;
 	float percentage_life = (float)GetHealth() / (float)GetMaxHealth();
+	if (percentage_life < 0)
+		percentage_life = 0;
 	int sprite_rect_width = percentage_life * life_spriteRect.w;
 	App->render->Blit(App->gui->GetTexture(), pos.x + 7, pos.y + 2, { sprite_rect_width, life_spriteRect.h },
 		& life_spriteRect);

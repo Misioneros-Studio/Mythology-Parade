@@ -10,6 +10,9 @@ private:
 
 	bool isDeath;
 
+protected:
+	bool damaged_now;
+
 public:
 
 	//Initilization
