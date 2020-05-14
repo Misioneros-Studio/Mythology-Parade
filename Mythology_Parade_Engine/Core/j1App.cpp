@@ -370,26 +370,6 @@ void j1App::LoadGame(const char* file)
 // ---------------------------------------
 void j1App::SaveGame(const char* file) const
 {
-	// we should be checking if that file actually exist
-	// from the "GetSaveGames" list ... should we overwrite ?
-
-	bool ret = true;
-
-	// xml object were we will store all data
-	pugi::xml_document data;
-	pugi::xml_node root;
-
-	root = data;
-
-	std::list<j1Module*>::const_iterator it = modules.begin();
-
-	for (it; it != modules.end() && ret == true; it++)
-	{
-		if (it._Ptr->_Myval != nullptr)
-			ret = it._Ptr->_Myval->CleanUp();
-	}
-
-
 	want_to_save = true;
 	save_game.append(file);
 }
@@ -447,29 +427,15 @@ bool j1App::SavegameNow()
 
 	// xml object were we will store all data
 	pugi::xml_document data;
+	data.load_file("info.xml");
 	pugi::xml_node root;
 	
-	root = data.append_child("game_state");
-
-	j1Module* item = NULL;
+	root = data.append_child("info");
 
 	for (std::list<j1Module*>::iterator it = modules.begin(); it != modules.end() && ret == true; it++)
 	{
-		ret = it._Ptr->_Myval->Save(root.append_child(it._Ptr->_Myval->name.c_str()));
-		item = it._Ptr->_Myval;
+		ret = it._Ptr->_Myval->Save(root);
 	}
-
-	if(ret == true)
-	{
-		std::stringstream stream;
-		data.save(stream);
-
-		// we are done, so write data to disk
-		//fs->Save(save_game.GetString(), stream.str().c_str(), stream.str().length());
-		LOG("... finished saving", save_game.c_str());
-	}
-	else
-		LOG("Save process halted from an error in module %s", (item != NULL) ? item->name.c_str() : "unknown");
 
 	data.reset();
 	want_to_save = false;
