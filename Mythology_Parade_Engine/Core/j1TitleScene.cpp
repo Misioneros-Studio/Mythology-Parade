@@ -577,12 +577,10 @@ void j1TitleScene::OnClick(UI* element, float argument)
 		else if (element->name == "GREEK")
 		{
 			App->fade_to_black->FadeToBlack(which_fade::title_to_scene, 2, "greek");
-			destroy = true;
 		}
 		else if (element->name == "VIKING")
 		{
 			App->fade_to_black->FadeToBlack(which_fade::title_to_scene, 2, "viking");
-			destroy = true;
 		}
 		else if (element->name == "FULLSCREEN") {
 			App->win->ToggleFullscreen();
