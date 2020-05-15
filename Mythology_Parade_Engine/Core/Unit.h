@@ -6,6 +6,7 @@
 #include "HealthSystem.h"
 #include"EntityManager.h"
 #include "Animation.h"
+#include "j1Timer.h"
 
 enum class ReligiousType
 {
@@ -35,9 +36,6 @@ private:
 	//Move Speed
 	int moveSpeed;
 
-	//Conditions
-	bool _isSelected;
-
 	//Description / Effect
 	std::string description;
 
@@ -61,8 +59,6 @@ public:
 
 	void SetMoveSpeed(int);
 
-	bool isSelected();
-	void SetSelected(bool value);
 
 	virtual bool Draw(float dt);
 	virtual void Action(Entity*);
@@ -74,6 +70,8 @@ public:
 
 	void StateMachineActions(float dt);
 	void Kill(iPoint);
+
+	void Draw_Life_Bar(bool enemy = false);
 
 protected:
 	//Animation
@@ -91,7 +89,9 @@ protected:
 	float timeToDespawn;
 	//void SetTarget();
 	//void CheckState();
-	
+	j1Timer damage_timer;
+	bool show_bar_for_damage;
+	bool combat_unit;
 };
 
 #endif // !__UNIT_H__

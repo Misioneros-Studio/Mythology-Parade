@@ -10,6 +10,9 @@ private:
 
 	bool isDeath;
 
+protected:
+	bool damaged_now;
+
 public:
 
 	//Initilization
@@ -23,6 +26,7 @@ public:
 
 	//Setters
 	void SetMaxHealth(int value);
+	int GetMaxHealth();
 	void IncreaseHealth(int value);
 };
 

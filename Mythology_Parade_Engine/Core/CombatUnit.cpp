@@ -31,6 +31,8 @@ CombatUnit::CombatUnit(UnitType type, iPoint pos) : Unit(type, pos), range(0), d
 	case UnitType::FOOTMAN:
 		break;
 	}
+	combat_unit = true;
+	show_bar_for_damage = false;
 }
 
 CombatUnit::~CombatUnit()
@@ -105,16 +107,16 @@ bool CombatUnit::Update(float dt)
 		switch (GetLevel())
 		{
 		case (1):
-			App->render->Blit(level_tex, (position.x - 6), (position.y - 65), &level_rect, 1, 0, 0, 0, 1);
+			App->render->Blit(level_tex, (position.x - 6), (position.y - 63), &level_rect, 1, 0, 0, 0, 1);
 			break;
 		case (2):
-			App->render->Blit(level_tex, (position.x - 2), (position.y - 65), &level_rect, 1, 0, 0, 0, 1);
-			App->render->Blit(level_tex, (position.x - 10), (position.y - 65), &level_rect, 1, 0, 0, 0, 1);
+			App->render->Blit(level_tex, (position.x - 2), (position.y - 63), &level_rect, 1, 0, 0, 0, 1);
+			App->render->Blit(level_tex, (position.x - 10), (position.y - 63), &level_rect, 1, 0, 0, 0, 1);
 			break;
 		case (3):
-			App->render->Blit(level_tex, (position.x - 6), (position.y - 65), &level_rect, 1, 0, 0, 0, 1);
-			App->render->Blit(level_tex, (position.x - 14), (position.y - 65), &level_rect, 1, 0, 0, 0, 1);
-			App->render->Blit(level_tex, (position.x + 2), (position.y - 65), &level_rect, 1, 0, 0, 0, 1);
+			App->render->Blit(level_tex, (position.x - 6), (position.y - 63), &level_rect, 1, 0, 0, 0, 1);
+			App->render->Blit(level_tex, (position.x - 14), (position.y - 63), &level_rect, 1, 0, 0, 0, 1);
+			App->render->Blit(level_tex, (position.x + 2), (position.y - 63), &level_rect, 1, 0, 0, 0, 1);
 			break;
 		}
 	}

@@ -24,11 +24,16 @@ bool EntityManager::Awake(pugi::xml_node& a)
 	pugi::xml_document buildings;
 	buildings.load_file(a.child("buildings").attribute("file").as_string());
 	LoadBuildingsData(buildings.child("map").child("objectgroup"));
-	life_bar_front = { 1310,523,115,10 };
+	life_bar_front = { 1310,503,115,10 };
+	life_bar_front_enemy = { 1310,483,115,10 };
 	research_bar_front = { 1310,543,115,10 };
 	construction_bar_back = { 1299,560,125,17 };
-	construction_bar_front = { 1310,503,115,10 };
+	construction_bar_front = { 1310, 523, 115, 10 };
 	construction_bar_empty = { 1299,582,125,17 };
+	unit_life_bar_back = { 1406,481,75,10 };
+	unit_life_bar_empty = { 1406,494,75,10 };
+	unit_life_bar_front = { 1413,470,63,6 };
+	unit_life_bar_front_enemy = { 1327,470,63,6 };
 
 
 	//Not working because renderer is not created yet ;-;
