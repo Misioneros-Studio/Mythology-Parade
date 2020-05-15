@@ -440,6 +440,7 @@ bool j1App::SavegameNow()
 	pugi::xml_node root;
 	
 	root = doc.append_child("info");
+	root.append_attribute("hola");
 	for (std::list<j1Module*>::iterator it = modules.begin(); it != modules.end() && ret == true; it++)
 	{
 		ret = it._Ptr->_Myval->Save(root);
