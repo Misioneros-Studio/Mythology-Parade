@@ -81,6 +81,7 @@
     <ClCompile Include="CombatUnit.cpp" />
     <ClCompile Include="Console.cpp" />
     <ClCompile Include="EntityManager.cpp" />
+    <ClCompile Include="FoWManager.cpp" />
     <ClCompile Include="HealthSystem.cpp" />
     <ClCompile Include="CurrencySystem.cpp" />
     <ClCompile Include="HUD.cpp" />
@@ -121,6 +122,8 @@
     <ClInclude Include="Console.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="EntityManager.h" />
+    <ClInclude Include="FoWBitDefs.h" />
+    <ClInclude Include="FoWManager.h" />
     <ClInclude Include="HealthSystem.h" />
     <ClInclude Include="CurrencySystem.h" />
     <ClInclude Include="HUD.h" />

@@ -109,6 +109,9 @@
     <ClCompile Include="j1ParticleManager.cpp">
       <Filter>Core\Modules</Filter>
     </ClCompile>
+    <ClCompile Include="FoWManager.cpp">
+      <Filter>Core\Modules</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1Window.h">
@@ -235,6 +238,12 @@
       <Filter>Core\Particles</Filter>
     </ClInclude>
     <ClInclude Include="j1ParticleManager.h">
+      <Filter>Core\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="FoWBitDefs.h">
+      <Filter>Core\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="FoWManager.h">
       <Filter>Core\Modules</Filter>
     </ClInclude>
   </ItemGroup>

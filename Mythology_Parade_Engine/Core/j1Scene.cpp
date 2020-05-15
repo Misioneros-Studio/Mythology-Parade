@@ -57,6 +57,8 @@ bool j1Scene::Start()
 		if (App->map->CreateWalkabilityMap(w, h, &data))
 			App->pathfinding->SetMap(w, h, data);
 
+		App->fowManager->CreateFoWMap(App->map->data.width, App->map->data.height);
+
 		mapLimitsRect = App->map->GetMapRect();
 		App->pathfinding->maxPathLenght = App->map->GetMapMaxLenght();
 		App->entityManager->LoadBuildingsBlitRect();

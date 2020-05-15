@@ -239,6 +239,45 @@ fPoint j1Map::MapToWorld(float x, float y) const
 	return ret;
 }
 
+void j1Map::MapToWorld(int mapX, int mapY, int& worldX, int& worldY) const
+{
+	if (data.type == MAPTYPE_ORTHOGONAL)
+	{
+		worldX = mapX * data.tile_width;
+		worldY = mapY * data.tile_height;
+	}
+	else if (data.type == MAPTYPE_ISOMETRIC)
+	{
+		worldX = (mapX - mapY) * (data.tile_width * 0.5f);
+		worldY = (mapX + mapY) * (data.tile_height * 0.5f);
+	}
+	else
+	{
+		LOG("Unknown map type");
+		worldX = mapX; worldY = mapY;
+	}
+}
+void j1Map::WorldToMap(int worldX, int worldY, int& mapX, int& mapY) const
+{
+	if (data.type == MAPTYPE_ORTHOGONAL)
+	{
+		mapX = worldX / data.tile_width;
+		mapY = worldY / data.tile_height;
+	}
+	else if (data.type == MAPTYPE_ISOMETRIC)
+	{
+
+		float half_width = data.tile_width * 0.5f;
+		float half_height = data.tile_height * 0.5f;
+		mapX = int((worldX / half_width + worldY / half_height) / 2) - 1;
+		mapY = int((worldY / half_height - (worldX / half_width)) / 2);
+	}
+	else
+	{
+		LOG("Unknown map type");
+	}
+}
+
 iPoint j1Map::WorldToMap(int x, int y) const
 {
 	iPoint ret(0, 0);

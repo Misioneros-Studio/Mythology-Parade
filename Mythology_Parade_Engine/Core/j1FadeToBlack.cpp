@@ -66,6 +66,7 @@ bool j1FadeToBlack::PostUpdate()
 				App->pathfinding->Enable();
 				App->scene->Enable();
 				App->minimap->Enable();
+				App->fowManager->Enable();
 
 				break;
 
@@ -73,6 +74,7 @@ bool j1FadeToBlack::PostUpdate()
 				App->entityManager->Disable();
 				App->pathfinding->Disable();
 				App->scene->Disable();
+				App->fowManager->Disable();
 				App->minimap->Disable();
 				App->title_scene->Enable();
 				break;

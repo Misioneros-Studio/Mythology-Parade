@@ -19,6 +19,7 @@
 #include "j1Gui.h"
 #include "Console.h"
 #include "EntityManager.h"
+#include "FoWManager.h"
 #include "j1FadeToBlack.h"
 #include "j1ParticleManager.h"
 #include "j1App.h"
@@ -44,6 +45,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	gui = new j1Gui();
 	console = new Console();
 	entityManager = new EntityManager();
+	fowManager = new FoWManager();
 	fade_to_black = new j1FadeToBlack();
 	particleManager = new j1ParticleManager();
 
@@ -54,6 +56,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(tex);
 
 	AddModule(map);
+	AddModule(fowManager);
 	AddModule(pathfinding);
 	AddModule(font);
 

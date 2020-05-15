@@ -24,6 +24,7 @@ class j1Fonts;
 class j1Gui;
 class Console;
 class EntityManager;
+class FoWManager;
 class j1FadeToBlack;
 class j1ParticleManager;
 
@@ -110,6 +111,7 @@ public:
 	j1Gui*				gui = NULL;
 	Console*			console = NULL;
 	EntityManager*		entityManager = NULL;
+	FoWManager*			fowManager = NULL;
 	j1FadeToBlack*		fade_to_black = NULL;
 	j1ParticleManager*	particleManager = NULL;
  

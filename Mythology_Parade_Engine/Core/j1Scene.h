@@ -4,7 +4,8 @@
 #include "j1Module.h"
 #include "j1Timer.h"
 #include "SDL/include/SDL.h"
-#include"p2Point.h"
+#include "p2Point.h"
+#include "FoWManager.h"
 
 struct SDL_Rect;
 

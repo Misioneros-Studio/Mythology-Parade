@@ -126,6 +126,9 @@ public:
 	fPoint MapToWorld(float x, float y) const;
 	iPoint WorldToMap(int x, int y) const;
 
+	void MapToWorld(int mapX, int mapY, int& worldX, int& worldY) const;
+	void WorldToMap(int worldX, int worldY, int& mapX, int& mapY) const;
+
 	iPoint GetMousePositionOnMap();
 	iPoint TileCenterPoint(iPoint);
 
