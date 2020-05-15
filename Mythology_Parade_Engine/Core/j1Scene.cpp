@@ -433,12 +433,17 @@ void j1Scene::BackToTitleMenu() {
 
 // Called when restarting the game
 void j1Scene::RestartGame() {
+	CivilizationType civ = App->entityManager->getPlayer()->civilization;
 	App->restart_scene = true;
 	destroy = true;
 	App->map->destroy = true;
 	App->pathfinding->destroy = true;
 	App->entityManager->destroy = true;
 	App->minimap->destroy = true;
+	if(civ==CivilizationType::GREEK)
+		App->fade_to_black->FadeToBlack(which_fade::scene_to_scene, 2, "greek");
+	else if (civ==CivilizationType::VIKING)
+		App->fade_to_black->FadeToBlack(which_fade::scene_to_scene, 2, "viking");
 }
 
 void j1Scene::OnClick(UI* element, float argument)
