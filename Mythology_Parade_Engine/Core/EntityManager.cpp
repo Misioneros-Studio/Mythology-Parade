@@ -24,11 +24,16 @@ bool EntityManager::Awake(pugi::xml_node& a)
 	pugi::xml_document buildings;
 	buildings.load_file(a.child("buildings").attribute("file").as_string());
 	LoadBuildingsData(buildings.child("map").child("objectgroup"));
-	life_bar_front = { 1310,523,115,10 };
+	life_bar_front = { 1310,503,115,10 };
+	life_bar_front_enemy = { 1310,483,115,10 };
 	research_bar_front = { 1310,543,115,10 };
 	construction_bar_back = { 1299,560,125,17 };
-	construction_bar_front = { 1310,503,115,10 };
+	construction_bar_front = { 1310, 523, 115, 10 };
 	construction_bar_empty = { 1299,582,125,17 };
+	unit_life_bar_back = { 1406,481,75,10 };
+	unit_life_bar_empty = { 1406,494,75,10 };
+	unit_life_bar_front = { 1413,470,63,6 };
+	unit_life_bar_front_enemy = { 1327,470,63,6 };
 
 
 	//Not working because renderer is not created yet ;-;
@@ -202,29 +207,37 @@ bool EntityManager::Update(float dt)
 		iPoint mouse = App->map->GetMousePositionOnMap();
 		iPoint spawnPos = App->map->MapToWorld(mouse.x, mouse.y);
 		spawnPos.y += App->map->data.tile_height / 2;
-		bool viking = false;
 		switch (buildingTestIndex) 
 		{
 		case 0:
-			viking = true;
+			CreateBuildingEntity(spawnPos, BuildingType::FORTRESS, buildingsData[buildingTestIndex], CivilizationType::VIKING);
+			break;
 		case 4:
-			CreateBuildingEntity(spawnPos, BuildingType::FORTRESS, buildingsData[buildingTestIndex],CivilizationType::VIKING);
+			CreateBuildingEntity(spawnPos, BuildingType::FORTRESS, buildingsData[buildingTestIndex],CivilizationType::GREEK);
 			break;
 		case 1:
-			viking = true;
+			CreateBuildingEntity(spawnPos, BuildingType::MONASTERY, buildingsData[buildingTestIndex], CivilizationType::VIKING);
+			faithToDescrease = 200;
+			break;
 		case 5:
-			CreateBuildingEntity(spawnPos, BuildingType::MONASTERY , buildingsData[buildingTestIndex],CivilizationType::VIKING);
+			CreateBuildingEntity(spawnPos, BuildingType::MONASTERY , buildingsData[buildingTestIndex],CivilizationType::GREEK);
 			faithToDescrease = 200;
 			break;
 		case 2:
-			viking = true;
-		case 6:
 			CreateBuildingEntity(spawnPos, BuildingType::TEMPLE, buildingsData[buildingTestIndex], CivilizationType::VIKING);
+			faithToDescrease = 200;
+			break;
+		case 6:
+			CreateBuildingEntity(spawnPos, BuildingType::TEMPLE, buildingsData[buildingTestIndex], CivilizationType::GREEK);
+			faithToDescrease = 200;
 			break;
 		case 3:
-			viking = true;
-		case 7:
 			CreateBuildingEntity(spawnPos, BuildingType::ENCAMPMENT, buildingsData[buildingTestIndex], CivilizationType::VIKING);
+			faithToDescrease = 200;
+			break;
+
+		case 7:
+			CreateBuildingEntity(spawnPos, BuildingType::ENCAMPMENT, buildingsData[buildingTestIndex], CivilizationType::GREEK);
 			faithToDescrease = 200;
 			break;
 		}

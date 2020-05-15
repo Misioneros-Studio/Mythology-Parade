@@ -93,8 +93,8 @@ private:
 	ButtonUI* ui_tutorial_options;
 	TextUI* ui_text_tutorial[2];
 	WindowUI* ui_credits_window;
-	ButtonUI* ui_button_credits;
-	TextUI* ui_text_credits[2];
+	ButtonUI* ui_button_credits[9];
+	TextUI* ui_text_credits[18];
 	WindowUI* ui_confirmation_window;
 	ButtonUI* ui_button_confirmation[2];
 	TextUI* ui_text_confirmation[4];

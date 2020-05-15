@@ -51,13 +51,14 @@ private:
 	bool Awake(pugi::xml_node&);
 	bool Update(float dt) override;
 
-	void Draw_Construction_Bar(int blitWidth, int bar_used = 0);
+	void Draw_Building_Bar(int blitWidth, int bar_used = 0, bool building_active = false, bool enemy = false);
 	bool Draw(float dt);
 
 	void FinishProduction(std::string thing_produced);
 
 	//Stats
 	int defenses;
+	int max_defenses;
 	int influence;
 	int damage;
 	int maxCap;
@@ -76,6 +77,10 @@ private:
 	bool first_time_constructing;
 	std::string element_producing;
 	
+	//Used to show life
+	float percentage_life;
+	bool show_bar_for_damage;
+	j1Timer damage_timer;
 
 	//Settigns
 	BuildingType buildingType;
