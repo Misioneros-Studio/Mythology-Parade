@@ -314,6 +314,8 @@ public:
 	//Audio
 	int sfx_UI[9];
 	bool lockClick;
+	bool cursor_attack;
+	bool cursor_move;
 
 };
 

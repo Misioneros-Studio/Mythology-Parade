@@ -105,7 +105,7 @@ private:
 		Assassin,
 		Pikeman,
 		Monk,
-		Priest,
+		Cleric,
 		Fortress,
 		Temple,
 		Encampment,
@@ -131,8 +131,8 @@ private:
 	ImageUI* hud_selected_troop;
 	TextUI* hud_stats_selected_troop[13];
 	Type_Selected type_thing_selected;
-	ButtonUI* hud_button_actions[5];
-	ImageUI* hud_button_actions_unclickable[5];
+	ButtonUI* hud_button_actions[9];
+	ImageUI* hud_button_actions_unclickable[9];
 	ImageUI* ui_pause_black_screen[2];
 	TextUI* ui_text_volume_sliders[2];
 	ResearchMenu* research_menu;

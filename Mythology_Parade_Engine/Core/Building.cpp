@@ -54,7 +54,7 @@ Building::Building(BuildingType type, iPoint pos, BuildingInfo info)
 	case MONASTERY:
 		this->buildingType = BuildingType::MONASTERY;
 		time_research = 60;
-		time_construction = 20;
+		time_construction = 180;
 		damage = 15;
 		SetMaxHealth(250);
 		defenses = max_defenses = 250;
@@ -80,7 +80,7 @@ Building::Building(BuildingType type, iPoint pos, BuildingInfo info)
 	case ENCAMPMENT:
 		this->buildingType = BuildingType::ENCAMPMENT;
 		time_research = 90;
-		time_construction = 20;
+		time_construction = 180;
 		damage = 20;
 		SetMaxHealth(350);
 		defenses = max_defenses = 350;

@@ -132,6 +132,11 @@ bool j1Scene::PreUpdate()
 		ClickToPath();
 		clickToPath = false;
 		App->entityManager->getPlayer()->dontSelect = true;
+		App->gui->cursor_move = false;
+	}
+	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN && App->gui->cursor_attack==true)
+	{
+		App->gui->cursor_attack = false;
 	}
 
 
@@ -644,6 +649,32 @@ void j1Scene::OnClick(UI* element, float argument)
 		else if (element->name == "Move")
 		{
 			clickToPath = true;
+			App->gui->cursor_move = true;
+		}
+		else if (element->name == "Attack")
+		{
+			App->gui->cursor_attack = true;
+			//BERNAT & JORDI
+		}
+		else if (element->name == "Produce_Cleric")
+		{
+			//BERNAT
+		}
+		else if (element->name == "Produce_Chaotic_Beast")
+		{
+			//BERNAT
+		}
+		else if (element->name == "Produce_Lawful_Beast")
+		{
+			//BERNAT
+		}
+		else if (element->name == "Produce_Lawful_Miracle")
+		{
+			//BERNAT
+		}
+		else if (element->name == "Produce_Chaotic_Miracle")
+		{
+			//BERNAT
 		}
 		break;
 
