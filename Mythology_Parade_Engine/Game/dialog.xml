@@ -1,0 +1,22 @@
+<!-- Config file for the game -->
+
+<dialog>
+  <temple>
+    <title>Temple</title>
+    <Line1>blablabla</Line1>
+    <Line2>blablabla</Line2>
+  </temple>
+
+  <encampment>
+    <title>Encampment</title>
+    <Line1>blablabla</Line1>
+    <Line2>blablabla</Line2>
+  </encampment>
+
+ <clerk>
+    <title>Clerk</title>
+    <Line1>blablabla</Line1>
+    <Line2>blablabla</Line2>
+  </clerk>
+
+</dialog>
