@@ -258,8 +258,8 @@ bool Building::Update(float dt)
 	int x, y;
 	App->input->GetMousePosition(x, y);
 	iPoint point = App->render->ScreenToWorld(x, y);
-	if (isSelected() || (point.x >= collisionRect.x && point.x <= collisionRect.x + collisionRect.w && point.y <= collisionRect.y && point.y >= collisionRect.y + collisionRect.h) ||
-		show_bar_for_damage == true) {
+	if ((isSelected() || (point.x >= collisionRect.x && point.x <= collisionRect.x + collisionRect.w && point.y <= collisionRect.y && point.y >= collisionRect.y + collisionRect.h) ||
+		show_bar_for_damage == true) && buildingStatus != BuildingStatus::CONSTRUCTING) {
 		bool enemy = false;
 		if (civilization != App->entityManager->getPlayer()->civilization)
 			enemy = true;
@@ -306,22 +306,19 @@ void Building::Draw_Building_Bar(int blitWidth, int bar_used, bool building_acti
 {
 	SDL_Rect construction_spriteRect = App->entityManager->construction_bar_back;
 	iPoint pos;
-	if (building_active == false) {
-		if (blitWidth == 128)
-			pos = { (int)position.x + 1, (int)position.y + (int)(((32 / 2) * tileLenght) - 1.25 * blitRect.y) };
-		else if (blitWidth == 192)
-			pos = { (int)position.x + 33, (int)position.y + (int)(((32 / 2) * tileLenght) - 1.25 * blitRect.y) };
-		else
-			pos = { (int)position.x, (int)position.y + (int)(((32 / 2) * tileLenght) - 1.25 * blitRect.y) };
-	}
-	else {
-		if (blitWidth == 128)
-			pos = { (int)position.x + 1, ((int)position.y + (int)(((32 / 2) * tileLenght) - 1.25 * blitRect.y) - 22) };
-		else if (blitWidth == 192)
-			pos = { (int)position.x + 33, ((int)position.y + (int)(((32 / 2) * tileLenght) - 1.25 * blitRect.y) - 22) };
-		else
-			pos = { (int)position.x, ((int)position.y + (int)(((32 / 2) * tileLenght) - 1.25 * blitRect.y) - 22) };
-	}
+	if (blitWidth == 128)
+		pos.x = (int)position.x + 1;
+	else if (blitWidth == 192)
+		pos.x = (int)position.x + 33;
+	else
+		pos.x = (int)position.x;
+	if (buildingStatus == BuildingStatus::CONSTRUCTING)
+		pos.y = (int)position.y + (int)(((32 / 2) * tileLenght) - 1.25 * blitRect.y);
+	else if (building_active == false)
+		pos.y = (int)collisionRect.y + (int)collisionRect.h - 27;
+	else
+		pos.y = (int)collisionRect.y + (int)collisionRect.h - 54;
+	
 	App->render->Blit(texture, pos.x, pos.y, &construction_spriteRect);
 	if (bar_used == 0)
 		construction_spriteRect = App->entityManager->construction_bar_front;
