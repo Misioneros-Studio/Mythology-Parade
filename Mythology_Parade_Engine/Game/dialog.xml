@@ -76,17 +76,33 @@
   </assassin>
 
   <cyclop>
-    <title>Cyclop</title>
-    <Line1>This is a one-eyed giant created by the</Line1>
-    <Line2>gods to protect the Olympus and their</Line2>
-    <Line3>people.This creature will protect your</Line3>
-    <Line4>city from the attacks raising its defense</Line4>
-    <Line5>by 50 in a determined area.</Line5>
-    <Line6>Cost -200 faith-	Prod. Time -2'00 min-</Line6>
-    <Line7>Health 150</Line7>
+    <locked>
+      <title>Cyclop</title>
+      <Line1>This is a one-eyed giant created by the</Line1>
+      <Line2>gods to protect the Olympus and their</Line2>
+      <Line3>people.This creature will protect your</Line3>
+      <Line4>city from the attacks raising its defense</Line4>
+      <Line5>by 50 in a determined area.</Line5>
+      <Line6>For the time your religion is not strong </Line5>
+      <Line7>enough, you need at least 20 lawful</Line6>
+      <Line8>points(prayers) to unlock this unit.</Line7>
+      <Line9>Cost -200 faith-	Prod. Time -2'00 min-</Line6>
+      <Line10>Health 150</Line7>
+    </locked>
+    <unlocked>
+      <title>Cyclop</title>
+      <Line1>This is a one-eyed giant created by the</Line1>
+      <Line2>gods to protect the Olympus and their</Line2>
+      <Line3>people.This creature will protect your</Line3>
+      <Line4>city from the attacks raising its defense</Line4>
+      <Line5>by 50 in a determined area.</Line5>
+      <Line6>Cost -200 faith-	Prod. Time -2'00 min-</Line6>
+      <Line7>Health 150</Line7>
+    </unlocked>
   </cyclop>
 
   <jotnar>
+    <locked>
     <title>Jotnar</title>
     <Line1>This giants are protectors of their own</Line1>
     <Line2>kingdom, this time they will help you</Line2>
@@ -94,9 +110,24 @@
     <Line4>habitants of Midgard.This creature will</Line4>
     <Line5>protect your city from the attacks</Line5>
     <Line6>raising its defense by 50 in a certain</Line6>
-    <Line7>area.</Line7>
-    <Line8>Cost -200 faith-	Prod. Time -2'00 min-</Line8>
-    <Line9>Health 150</Line9>
+    <Line7>For the time your religion is not strong </Line5>
+    <Line8>enough, you need at least 20 lawful</Line6>
+    <Line9>points(prayers) to unlock this unit.</Line7><Line7>area.</Line7>
+    <Line10>Cost -200 faith-	Prod. Time -2'00 min-</Line8>
+    <Line11>Health 150</Line9>
+    </locked>
+    <unlocked>
+      <title>Jotnar</title>
+      <Line1>This giants are protectors of their own</Line1>
+      <Line2>kingdom, this time they will help you</Line2>
+      <Line3>against who dares to attack the norse</Line3>
+      <Line4>habitants of Midgard.This creature will</Line4>
+      <Line5>protect your city from the attacks</Line5>
+      <Line6>raising its defense by 50 in a certain</Line6>
+      <Line7>area.</Line7>
+      <Line8>Cost -200 faith-	Prod. Time -2'00 min-</Line8>
+      <Line9>Health 150</Line9>
+    </unlocked>
   </jotnar>
 
   <minotaur>
@@ -127,7 +158,7 @@
        <Line3>destroying an entire building from </Line3>
        <Line4>your opponent.</Line4>
        <Line5>For the time your religion is not strong </Line5>
-       <Line6>enough, you need at least 60 chaotic</Line6>
+       <Line6>enough, you need at least 30 chaotic</Line6>
        <Line7>points(sacrifices) to unlock this unit.</Line7>
        <Line8>+3 sacrifices</Line8>
        <Line9>-3 prayers</Line9>
@@ -151,7 +182,7 @@
        <Line3>cause, they started a riot and now</Line3>
        <Line4>you domain an enemy's entire encampment.</Line4>
        <Line5>For the time your religion is not strong </Line5>
-       <Line6>enough, you need at least 60 lawful</Line6>
+       <Line6>enough, you need at least 30 lawful</Line6>
        <Line7>points(prayers) to unlock this unit.</Line7>
        <Line8>+3 prayers</Line8>
        <Line9>-3 sacrifices</Line9>
@@ -168,18 +199,46 @@
   </miracle>
 
   <victory1>
-    <title>Lawful Victory</title>
-    <Line1>Your religion is strong enough to create </Line1>
-    <Line2>influence around all the territory, you</Line2>
-    <Line3>just have to claim your reward for</Line3>
-    <Line4>all the effort.</Line4>
+    <locked>
+      <title>Lawful Victory</title>
+      <Line1>Your religion is strong enough to create </Line1>
+      <Line2>influence around all the territory, you</Line2>
+      <Line3>just have to claim your reward for</Line3>
+      <Line4>all the effort.</Line4>
+      <Line5>For the time your religion is not strong </Line5>
+      <Line6>enough, you need at least 50 lawful</Line6>
+      <Line7>points(prayers) to unlock this.</Line7>
+      <Line8>Cost -600 faith-</Line8>
+    </locked>
+    <unlocked>
+      <title>Lawful Victory</title>
+      <Line1>Your religion is strong enough to create </Line1>
+      <Line2>influence around all the territory, you</Line2>
+      <Line3>just have to claim your reward for</Line3>
+      <Line4>all the effort.</Line4>
+      <Line5>Cost -600 faith-</Line5>
+    </unlocked>
   </victory1>
 
   <victory2>
-    <title>Chaotic Victory</title>
-    <Line1>Your religion is strong enough to domain</Line1>
-    <Line2>around all the remaining territory, you</Line2>
-    <Line3>just have to claim your reward for</Line3>
-    <Line4>all the effort.</Line4>
+    <locked>
+      <title>Chaotic Victory</title>
+      <Line1>Your religion is strong enough to domain</Line1>
+      <Line2>around all the remaining territory, you</Line2>
+      <Line3>just have to claim your reward for</Line3>
+      <Line4>all the effort.</Line4>
+      <Line5>For the time your religion is not strong </Line5>
+      <Line6>enough, you need at least 50 chaotic</Line6>
+      <Line7>points(sacrifices) to unlock this.</Line7>
+      <Line8>Cost -600 faith-</Line8>
+    </locked>
+    <unlocked>
+      <title>Chaotic Victory</title>
+      <Line1>Your religion is strong enough to domain</Line1>
+      <Line2>around all the remaining territory, you</Line2>
+      <Line3>just have to claim your reward for</Line3>
+      <Line4>all the effort.</Line4>
+      <Line5>Cost -600 faith-</Line5>
+    </unlocked>
   </victory2>
 </dialog>
