@@ -241,4 +241,70 @@
       <Line5>Cost -600 faith-</Line5>
     </unlocked>
   </victory2>
+  
+  <currencymoduletip>
+     <Line1>These are your total amount of currency,</Line1>
+     <Line2>you can generate them using buildings</Line2>
+     <Line3>and conducting certains actions:</Line3>
+     <Line4>- faith</Line4>
+     <Line5>- sacrifices(cps)</Line5>
+     <Line6>- prayers(lps)</Line6>
+  </currencymoduletip>
+
+  <researchbutton>
+     <Line1>Open your research tree and star researching</Line1>
+     <Line2>for new buildings, units and abilities.</Line2>
+  </researchbutton>
+
+  <movebutton>
+     <Line1>Use this button to target a position where</Line1>
+     <Line2>you want your units to move.</Line2>
+  </movebutton>
+
+  <actionbutton>
+     <Line1>Use this button when you want tour units to</Line1>
+     <Line2>conduct a certain action(you must be positioned</Line2>
+     <Line3>correctly to be able to conduct the action).</Line3>
+  </actionbutton>
+
+  <levelupbutton>
+     <assassin>
+     <Line1>Use this button to level up the unit selected.</Line1>
+     <Line2>You can do this action more than one time.</Line2>
+     <Line3>- Level 1 unit 3500xp</Line3>
+     <Line4>- Level 2 unit 6500xp</Line4>
+     <Line5>- Level 3 unit 9500xp</Line5>
+     </assassin>
+     <clerk>
+     <Line1>Use this button to level up the unit selected.</Line1>
+     <Line2>You can do this action more than one time.</Line2>
+     <Line3>- Level 1 unit 3000xp</Line3>
+     <Line4>- Level 2 unit 6000xp</Line4>
+     </clerk>
+  </levelupbutton>
+
+  <unitcreationbutton>
+     <Line1>Create one unit of this type.</Line1>
+  </unitcreationbutton>
+
+  <producecurrencybutton>
+     <Line1>Generate currency of this type.</Line1>
+  </producecurrencybutton>
+
+  <buildingconstructionlocked>
+     <Line1>unlock this building in the research tree to produce it.</Line1>
+  </buildingconstructionlocked>
+
+  <unitproductionlocked>
+     <Line1>unlock this unit in the research tree to produce it.</Line1>
+  </unitproductionlocked>
+
+  <miraclelocked>
+     <Line1>unlock this ability in the research tree to claim it.</Line1>
+  </miraclelocked>
+
+  <disasterlocked>
+     <Line1>unlock this ability in the research tree to claim it.</Line1>
+  </disasterlocked>
+  
 </dialog>
