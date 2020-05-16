@@ -22,6 +22,7 @@
 #include "j1FadeToBlack.h"
 #include "j1ParticleManager.h"
 #include "j1App.h"
+#include "TooltipData.h"
 
 
 // Constructor
@@ -134,8 +135,10 @@ bool j1App::Awake()
 		}
 	}
 
-	PERF_PEEK(ptimer);
+	tooltipdata = new TooltipData;
 
+	PERF_PEEK(ptimer);
+	
 	return ret;
 }
 

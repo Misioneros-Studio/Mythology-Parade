@@ -26,6 +26,7 @@ class Console;
 class EntityManager;
 class j1FadeToBlack;
 class j1ParticleManager;
+class TooltipData;
 
 class j1App
 {
@@ -137,6 +138,7 @@ private:
 public:
 	std::list<std::string>	logs;
 	int						num_logs = 0;
+	TooltipData*				tooltipdata;
 };
 
 extern j1App* App; // No student is asking me about that ... odd :-S
