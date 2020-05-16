@@ -325,11 +325,32 @@ bool EntityManager::Save(pugi::xml_node& s) const
 			building.append_attribute("civilization").set_value("greek");
 		else
 			building.append_attribute("civilization").set_value("viking");
-		if(var2->GetResearched())
-			building.append_attribute("researched").set_value("yes");
-		else
-			building.append_attribute("researched").set_value("no");
 	}
+
+	pugi::xml_node node3 = s.append_child("players");
+	std::list<Entity*> list3 = App->entityManager->entities[EntityType::PLAYER];
+	for each (Player * var3 in list3)
+	{
+		pugi::xml_node player = node3.append_child(var3->name.c_str());
+
+		pugi::xml_node economy = player.append_child("economy");
+		economy.append_attribute("faith").set_value(var3->GetFaith());
+		economy.append_attribute("prayers").set_value(var3->GetPrayers());
+		economy.append_attribute("sacrifices").set_value(var3->GetSacrifices());
+
+		pugi::xml_node research = player.append_child("research");
+		research.append_child("temple").append_attribute("research").set_value(var3->research_temple);
+		research.append_child("encampment").append_attribute("research").set_value(var3->research_encampment);
+		research.append_child("cleric").append_attribute("research").set_value(var3->research_cleric);
+		research.append_child("tassassinemple").append_attribute("research").set_value(var3->research_assassin);
+		research.append_child("lawful beast").append_attribute("research").set_value(var3->research_lawful_beast);
+		research.append_child("chaotic beast").append_attribute("research").set_value(var3->research_chaotic_beast);
+		research.append_child("lawful miracle").append_attribute("research").set_value(var3->research_lawful_miracle);
+		research.append_child("chaotic miracle").append_attribute("research").set_value(var3->research_chaotic_miracle);
+		research.append_child("lawful victory").append_attribute("research").set_value(var3->research_lawful_victory);
+		research.append_child("chaotic victory").append_attribute("research").set_value(var3->research_chaotic_victory);
+	}
+
 	return true;
 }
 

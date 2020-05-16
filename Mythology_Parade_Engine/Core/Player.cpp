@@ -39,6 +39,11 @@ bool Player::Start()
 	displayDebug = false;
 	oneTime = true;
 
+	if (civilization == CivilizationType::GREEK)
+		name = "greek";
+	else
+		name = "viking";
+
 	research_assassin = research_chaotic_beast = research_chaotic_miracle = research_cleric = research_encampment = research_lawful_beast = research_lawful_miracle = research_lawful_victory =
 		research_temple = research_chaotic_victory = false;
 
