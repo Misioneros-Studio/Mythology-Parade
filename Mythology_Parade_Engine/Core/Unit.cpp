@@ -31,6 +31,7 @@ Unit::Unit(UnitType type, iPoint pos): unitType(type), state(AnimationType::IDLE
 		time_production = 90;
 		time_research = 0;
 		researched = true;
+		name = "monk";
 		Init(1);
 		break;
 	}

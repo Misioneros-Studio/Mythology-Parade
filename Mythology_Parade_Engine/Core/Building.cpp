@@ -49,6 +49,7 @@ Building::Building(BuildingType type, iPoint pos, BuildingInfo info)
 		maxCap = 1;
 		description = "I'm a fortress";
 		researched = true;
+		name = "fortress";
 		break;
 	case MONASTERY:
 		this->buildingType = BuildingType::MONASTERY;
@@ -62,6 +63,7 @@ Building::Building(BuildingType type, iPoint pos, BuildingInfo info)
 		description = "I'm a monastery";
 		App->entityManager->getPlayer()->num_monastery++;
 		researched = false;
+		name = "monastery";
 		break;
 	case TEMPLE:
 		this->buildingType = BuildingType::TEMPLE;
@@ -75,6 +77,7 @@ Building::Building(BuildingType type, iPoint pos, BuildingInfo info)
 		description = "I'm a temple";
 		App->entityManager->getPlayer()->num_temple++;
 		researched = false;
+		name = "temple";
 		break;
 	case ENCAMPMENT:
 		this->buildingType = BuildingType::ENCAMPMENT;
@@ -88,6 +91,7 @@ Building::Building(BuildingType type, iPoint pos, BuildingInfo info)
 		description = "I'm an encampment";
 		App->entityManager->getPlayer()->num_encampment++;
 		researched = false;
+		name = "encampment";
 		break;
 	default:
 		break;
@@ -141,6 +145,11 @@ void Building::CreateUnit()
 
 		break;
 	}
+}
+
+bool Building::GetResearched()
+{
+	return researched;
 }
 
 bool Building::Awake(pugi::xml_node& a)

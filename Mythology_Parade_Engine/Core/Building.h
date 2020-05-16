@@ -46,6 +46,8 @@ public:
 
 	void CreateUnit();
 
+	bool GetResearched();
+
 private:
 
 	bool Awake(pugi::xml_node&);

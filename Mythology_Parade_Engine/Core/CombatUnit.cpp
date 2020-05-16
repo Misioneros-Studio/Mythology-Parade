@@ -10,6 +10,7 @@ CombatUnit::CombatUnit(UnitType type, iPoint pos) : Unit(type, pos), range(0), d
 	{
 	case UnitType::ASSASSIN:
 		time_production = 90;
+		name = "assasin";
 		time_research = 0;
 		researched = true;
 		//Change texture
@@ -20,15 +21,19 @@ CombatUnit::CombatUnit(UnitType type, iPoint pos) : Unit(type, pos), range(0), d
 		time_production = 90;
 		time_research = 70;
 		researched = false;
+		name = "pikeman";
 		//Change Texture
 		LevelSystem::Init(3000, 6000, 9500);
 		CombatUnit::Init(110, 25, 1, 40);
 		break;
 	case UnitType::EXPLORER:
+		name = "explorer";
 		break;
 	case UnitType::PRIEST:
+		name = "explorer";
 		break;
 	case UnitType::FOOTMAN:
+		name = "footman";
 		break;
 	}
 }
