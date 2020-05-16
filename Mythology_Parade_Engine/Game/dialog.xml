@@ -25,84 +25,80 @@
     <Line7>Damage 20</Line7>
   </encampment>
 
- <clerk>
-    <locked>
-       <title>Clerk</title>
-       <Line1>A high class religion figure that will preach</Line1>
-       <Line2>around the walls of a city decreasing the</Line2>
-       <Line3>influence of the city’s religion by 5% each</Line3>
-       <Line4>second.</Line4>
-       <Line5>For the time your religion is not strong </Line5>
-       <Line6>enough, you need at least 10 lawful</Line6>
-       <Line7>points(prayers) to unlock this unit.</Line7>
-       <Line8>Cost -150 faith-	Prod. Time -1'30 min-</Line8>
-       <Line9>Health 100</Line9>
-    <locked>
-    <unlocked>
-       <title>Clerk</title>
-       <Line1>A high class religion figure that will preach</Line1>
-       <Line2>around the walls of a city decreasing the</Line2>
-       <Line3>influence of the city’s religion by 5% each</Line3>
-       <Line4>second.</Line4>
-       <Line5>Cost -150 faith-	Prod. Time -1'30 min-</Line5>
-       <Line6>Health 100</Line6>
-    <unlocked>
-  </clerk>
+  <clerk_locked>
+    <title>Clerk</title>
+    <Line1>A high class religion figure that will preach</Line1>
+    <Line2>around the walls of a city decreasing the</Line2>
+    <Line3>influence of the city’s religion by 5% each</Line3>
+    <Line4>second.</Line4>
+    <Line5>For the time your religion is not strong </Line5>
+    <Line6>enough, you need at least 10 lawful</Line6>
+    <Line7>points(prayers) to unlock this unit.</Line7>
+    <Line8>Cost -150 faith-	Prod. Time -1'30 min-</Line8>
+    <Line9>Health 100</Line9>
+  </clerk_locked>
 
- <assassin>
-    <locked>
-       <title>Assassin</title>
-       <Line1>A quick and tricky unit specialized in</Line1>
-       <Line2>assassination of weak troops.</Line2>
-       <Line3>For the time your religion is not strong </Line3>
-       <Line4>enough, you need at least 10 chaotic</Line4>
-       <Line5>points(sacrifices) to unlock this unit.</Line5>
-       <Line6>Cost -100 faith-	Prod. Time -1'30 min-</Line6>
-       <Line7>Health 100</Line7>
-       <Line8>Damage 15</Line8>
-       <Line9>Range 1</Line9>
-       <Line10>Speed 4</Line10>
-    </locked>
-    <unlocked>
-       <title>Assassin</title>
-       <Line1>A quick and tricky unit specialized in</Line1>
-       <Line2>assassination of weak troops.</Line2>
-       <Line3>Cost -100 faith-	Prod. Time -1'30 min-</Line3>
-       <Line4>Health 100</Line4>
-       <Line5>Damage 15</Line5>
-       <Line6>Range 1</Line6>
-       <Line7>Speed 4</Line7>
-    </unlocked>
-  </assassin>
+  <clerk_unlocked>
+    <title>Clerk</title>
+    <Line1>A high class religion figure that will preach</Line1>
+    <Line2>around the walls of a city decreasing the</Line2>
+    <Line3>influence of the city’s religion by 5% each</Line3>
+    <Line4>second.</Line4>
+    <Line5>Cost -150 faith-	Prod. Time -1'30 min-</Line5>
+    <Line6>Health 100</Line6>
+  </clerk_unlocked>
 
-  <cyclop>
-    <locked>
-      <title>Cyclop</title>
-      <Line1>This is a one-eyed giant created by the</Line1>
-      <Line2>gods to protect the Olympus and their</Line2>
-      <Line3>people.This creature will protect your</Line3>
-      <Line4>city from the attacks raising its defense</Line4>
-      <Line5>by 50 in a determined area.</Line5>
-      <Line6>For the time your religion is not strong </Line5>
-      <Line7>enough, you need at least 20 lawful</Line6>
-      <Line8>points(prayers) to unlock this unit.</Line7>
-      <Line9>Cost -200 faith-	Prod. Time -2'00 min-</Line6>
-      <Line10>Health 150</Line7>
-    </locked>
-    <unlocked>
-      <title>Cyclop</title>
-      <Line1>This is a one-eyed giant created by the</Line1>
-      <Line2>gods to protect the Olympus and their</Line2>
-      <Line3>people.This creature will protect your</Line3>
-      <Line4>city from the attacks raising its defense</Line4>
-      <Line5>by 50 in a determined area.</Line5>
-      <Line6>Cost -200 faith-	Prod. Time -2'00 min-</Line6>
-      <Line7>Health 150</Line7>
-    </unlocked>
-  </cyclop>
+  <assassin_locked>
+    <title>Assassin</title>
+    <Line1>A quick and tricky unit specialized in</Line1>
+    <Line2>assassination of weak troops.</Line2>
+    <Line3>For the time your religion is not strong </Line3>
+    <Line4>enough, you need at least 10 chaotic</Line4>
+    <Line5>points(sacrifices) to unlock this unit.</Line5>
+    <Line6>Cost -100 faith-	Prod. Time -1'30 min-</Line6>
+    <Line7>Health 100</Line7>
+    <Line8>Damage 15</Line8>
+    <Line9>Range 1</Line9>
+    <Line10>Speed 4</Line10>
+  </assassin_locked>
 
-  <jotnar>
-    <locked>
+  <assassin_unlocked>
+    <title>Assassin</title>
+    <Line1>A quick and tricky unit specialized in</Line1>
+    <Line2>assassination of weak troops.</Line2>
+    <Line3>Cost -100 faith-	Prod. Time -1'30 min-</Line3>
+    <Line4>Health 100</Line4>
+    <Line5>Damage 15</Line5>
+    <Line6>Range 1</Line6>
+    <Line7>Speed 4</Line7>
+  </assassin_unlocked>
+
+  <cyclop_locked>
+   <title>Cyclop</title>
+   <Line1>This is a one-eyed giant created by the</Line1>
+   <Line2>gods to protect the Olympus and their</Line2>
+   <Line3>people.This creature will protect your</Line3>
+   <Line4>city from the attacks raising its defense</Line4>
+   <Line5>by 50 in a determined area.</Line5>
+   <Line6>For the time your religion is not strong </Line5>
+   <Line7>enough, you need at least 20 lawful</Line6>
+   <Line8>points(prayers) to unlock this unit.</Line7>
+   <Line9>Cost -200 faith-	Prod. Time -2'00 min-</Line6>
+   <Line10>Health 150</Line7>
+  </cyclop_locked>
+
+  <cyclop_unlocked>
+   <title>Cyclop</title>
+   <Line1>This is a one-eyed giant created by the</Line1>
+   <Line2>gods to protect the Olympus and their</Line2>
+   <Line3>people.This creature will protect your</Line3>
+   <Line4>city from the attacks raising its defense</Line4>
+   <Line5>by 50 in a determined area.</Line5>
+   <Line6>Cost -200 faith-	Prod. Time -2'00 min-</Line6>
+   <Line7>Health 150</Line7>
+  </cyclop_unlocked>
+
+  <jotnar_locked>
     <title>Jotnar</title>
     <Line1>This giants are protectors of their own</Line1>
     <Line2>kingdom, this time they will help you</Line2>
@@ -115,20 +111,20 @@
     <Line9>points(prayers) to unlock this unit.</Line7><Line7>area.</Line7>
     <Line10>Cost -200 faith-	Prod. Time -2'00 min-</Line8>
     <Line11>Health 150</Line9>
-    </locked>
-    <unlocked>
-      <title>Jotnar</title>
-      <Line1>This giants are protectors of their own</Line1>
-      <Line2>kingdom, this time they will help you</Line2>
-      <Line3>against who dares to attack the norse</Line3>
-      <Line4>habitants of Midgard.This creature will</Line4>
-      <Line5>protect your city from the attacks</Line5>
-      <Line6>raising its defense by 50 in a certain</Line6>
-      <Line7>area.</Line7>
-      <Line8>Cost -200 faith-	Prod. Time -2'00 min-</Line8>
-      <Line9>Health 150</Line9>
-    </unlocked>
-  </jotnar>
+  </jotnar_locked>
+
+  <jotnar_unlocked>
+     <title>Jotnar</title>
+     <Line1>This giants are protectors of their own</Line1>
+     <Line2>kingdom, this time they will help you</Line2>
+     <Line3>against who dares to attack the norse</Line3>
+     <Line4>habitants of Midgard.This creature will</Line4>
+     <Line5>protect your city from the attacks</Line5>
+     <Line6>raising its defense by 50 in a certain</Line6>
+     <Line7>area.</Line7>
+     <Line8>Cost -200 faith-	Prod. Time -2'00 min-</Line8>
+     <Line9>Health 150</Line9>
+  </jotnar_unlocked>
 
   <minotaur>
     <title>Minotaur</title>
@@ -150,97 +146,93 @@
     <Line6>Health 40</Line6>
   </draugar>
 
- <disaster>
-    <locked>
-       <title>Holy Meteor</title>
-       <Line1>The gods have recognised your efforts,</Line1>
-       <Line2>they will send a a help from the sky</Line2>
-       <Line3>destroying an entire building from </Line3>
-       <Line4>your opponent.</Line4>
-       <Line5>For the time your religion is not strong </Line5>
-       <Line6>enough, you need at least 30 chaotic</Line6>
-       <Line7>points(sacrifices) to unlock this unit.</Line7>
-       <Line8>+3 sacrifices</Line8>
-       <Line9>-3 prayers</Line9>
-    </locked>
-    <unlocked>
-       <title>Holy Meteor</title>
-       <Line1>The gods have recognised your efforts,</Line1>
-       <Line2>they will send a a help from the sky</Line2>
-       <Line3>destroying an entire building from </Line3>
-       <Line4>your opponent.</Line4>
-       <Line5>+3 sacrifices</Line5>
-       <Line6>-3 prayers</Line6>
-    </unlocked>
-  </disaster>
+ <disaster_locked>
+     <title>Holy Meteor</title>
+     <Line1>The gods have recognised your efforts,</Line1>
+     <Line2>they will send a a help from the sky</Line2>
+     <Line3>destroying an entire building from </Line3>
+     <Line4>your opponent.</Line4>
+     <Line5>For the time your religion is not strong </Line5>
+     <Line6>enough, you need at least 30 chaotic</Line6>
+     <Line7>points(sacrifices) to unlock this unit.</Line7>
+     <Line8>+3 sacrifices</Line8>
+     <Line9>-3 prayers</Line9>
+  </disaster_locked>
 
- <miracle>
-    <locked>
-       <title>Call to Arms</title>
-       <Line1>Some units of the enemy have seen</Line1>
-       <Line2>the truth and they have joined your</Line2>
-       <Line3>cause, they started a riot and now</Line3>
-       <Line4>you domain an enemy's entire encampment.</Line4>
-       <Line5>For the time your religion is not strong </Line5>
-       <Line6>enough, you need at least 30 lawful</Line6>
-       <Line7>points(prayers) to unlock this unit.</Line7>
-       <Line8>+3 prayers</Line8>
-       <Line9>-3 sacrifices</Line9>
-    </locked>
-    <unlocked>
-       <title>Call to Arms</title>
-       <Line1>Some units of the enemy have seen</Line1>
-       <Line2>the truth and they have joined your</Line2>
-       <Line3>cause, they started a riot and now</Line3>
-       <Line4>you domain an enemy's entire encampment.</Line4>
-       <Line5>+3 sacrifices</Line5>
-       <Line6>-3 prayers</Line6>
-    </unlocked>
-  </miracle>
+  <disaster_unlocked>
+     <title>Holy Meteor</title>
+     <Line1>The gods have recognised your efforts,</Line1>
+     <Line2>they will send a a help from the sky</Line2>
+     <Line3>destroying an entire building from </Line3>
+     <Line4>your opponent.</Line4>
+     <Line5>+3 sacrifices</Line5>
+     <Line6>-3 prayers</Line6>
+  </disaster_unlocked>
 
-  <victory1>
-    <locked>
-      <title>Lawful Victory</title>
-      <Line1>Your religion is strong enough to create </Line1>
-      <Line2>influence around all the territory, you</Line2>
-      <Line3>just have to claim your reward for</Line3>
-      <Line4>all the effort.</Line4>
-      <Line5>For the time your religion is not strong </Line5>
-      <Line6>enough, you need at least 50 lawful</Line6>
-      <Line7>points(prayers) to unlock this.</Line7>
-      <Line8>Cost -600 faith-</Line8>
-    </locked>
-    <unlocked>
-      <title>Lawful Victory</title>
-      <Line1>Your religion is strong enough to create </Line1>
-      <Line2>influence around all the territory, you</Line2>
-      <Line3>just have to claim your reward for</Line3>
-      <Line4>all the effort.</Line4>
-      <Line5>Cost -600 faith-</Line5>
-    </unlocked>
-  </victory1>
+ <miracle_locked>
+     <title>Call to Arms</title>
+     <Line1>Some units of the enemy have seen</Line1>
+     <Line2>the truth and they have joined your</Line2>
+     <Line3>cause, they started a riot and now</Line3>
+     <Line4>you domain an enemy's entire encampment.</Line4>
+     <Line5>For the time your religion is not strong </Line5>
+     <Line6>enough, you need at least 30 lawful</Line6>
+     <Line7>points(prayers) to unlock this unit.</Line7>
+     <Line8>+3 prayers</Line8>
+     <Line9>-3 sacrifices</Line9>
+  </miracle_locked>
+  
+  <miracle_unlocked>
+     <title>Call to Arms</title>
+     <Line1>Some units of the enemy have seen</Line1>
+     <Line2>the truth and they have joined your</Line2>
+     <Line3>cause, they started a riot and now</Line3>
+     <Line4>you domain an enemy's entire encampment.</Line4>
+     <Line5>+3 sacrifices</Line5>
+     <Line6>-3 prayers</Line6>
+  </miracle_unlocked>
 
-  <victory2>
-    <locked>
-      <title>Chaotic Victory</title>
-      <Line1>Your religion is strong enough to domain</Line1>
-      <Line2>around all the remaining territory, you</Line2>
-      <Line3>just have to claim your reward for</Line3>
-      <Line4>all the effort.</Line4>
-      <Line5>For the time your religion is not strong </Line5>
-      <Line6>enough, you need at least 50 chaotic</Line6>
-      <Line7>points(sacrifices) to unlock this.</Line7>
-      <Line8>Cost -600 faith-</Line8>
-    </locked>
-    <unlocked>
-      <title>Chaotic Victory</title>
-      <Line1>Your religion is strong enough to domain</Line1>
-      <Line2>around all the remaining territory, you</Line2>
-      <Line3>just have to claim your reward for</Line3>
-      <Line4>all the effort.</Line4>
-      <Line5>Cost -600 faith-</Line5>
-    </unlocked>
-  </victory2>
+  <victory1_locked>
+    <title>Lawful Victory</title>
+    <Line1>Your religion is strong enough to create </Line1>
+    <Line2>influence around all the territory, you</Line2>
+    <Line3>just have to claim your reward for</Line3>
+    <Line4>all the effort.</Line4>
+    <Line5>For the time your religion is not strong </Line5>
+    <Line6>enough, you need at least 50 lawful</Line6>
+    <Line7>points(prayers) to unlock this.</Line7>
+    <Line8>Cost -600 faith-</Line8>
+  </victory1_locked>
+
+  <victory1_unlocked>
+    <title>Lawful Victory</title>
+    <Line1>Your religion is strong enough to create </Line1>
+    <Line2>influence around all the territory, you</Line2>
+    <Line3>just have to claim your reward for</Line3>
+    <Line4>all the effort.</Line4>
+    <Line5>Cost -600 faith-</Line5>
+  </victory1_unlocked>
+
+  <victory2_locked>
+    <title>Chaotic Victory</title>
+    <Line1>Your religion is strong enough to domain</Line1>
+    <Line2>around all the remaining territory, you</Line2>
+    <Line3>just have to claim your reward for</Line3>
+    <Line4>all the effort.</Line4>
+    <Line5>For the time your religion is not strong </Line5>
+    <Line6>enough, you need at least 50 chaotic</Line6>
+    <Line7>points(sacrifices) to unlock this.</Line7>
+    <Line8>Cost -600 faith-</Line8>
+  </victory2_locked>
+
+  <victory2_unlocked>
+    <title>Chaotic Victory</title>
+    <Line1>Your religion is strong enough to domain</Line1>
+    <Line2>around all the remaining territory, you</Line2>
+    <Line3>just have to claim your reward for</Line3>
+    <Line4>all the effort.</Line4>
+    <Line5>Cost -600 faith-</Line5>
+  </victory2_unlocked>
   
   <currencymoduletip>
      <Line1>These are your total amount of currency,</Line1>
@@ -267,21 +259,20 @@
      <Line3>correctly to be able to conduct the action).</Line3>
   </actionbutton>
 
-  <levelupbutton>
-     <assassin>
-     <Line1>Use this button to level up the unit selected.</Line1>
-     <Line2>You can do this action more than one time.</Line2>
-     <Line3>- Level 1 unit 3500xp</Line3>
-     <Line4>- Level 2 unit 6500xp</Line4>
-     <Line5>- Level 3 unit 9500xp</Line5>
-     </assassin>
-     <clerk>
-     <Line1>Use this button to level up the unit selected.</Line1>
-     <Line2>You can do this action more than one time.</Line2>
-     <Line3>- Level 1 unit 3000xp</Line3>
-     <Line4>- Level 2 unit 6000xp</Line4>
-     </clerk>
-  </levelupbutton>
+  <levelupbutton_assassin>
+    <Line1>Use this button to level up the unit selected.</Line1>
+    <Line2>You can do this action more than one time.</Line2>
+    <Line3>- Level 1 unit 3500xp</Line3>
+    <Line4>- Level 2 unit 6500xp</Line4>
+    <Line5>- Level 3 unit 9500xp</Line5>
+  </levelupbutton_assassin>
+
+  <levelupbutton_clerk>
+    <Line1>Use this button to level up the unit selected.</Line1>
+    <Line2>You can do this action more than one time.</Line2>
+    <Line3>- Level 1 unit 3000xp</Line3>
+    <Line4>- Level 2 unit 6000xp</Line4>
+  </levelupbutton_clerk>
 
   <unitcreationbutton>
      <Line1>Create one unit of this type.</Line1>
