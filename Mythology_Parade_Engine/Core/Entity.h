@@ -102,6 +102,9 @@ public:
 		return collisionRect;
 	}
 
+	bool isCombat;
+
+
 protected:
 	SDL_RendererFlip flipState;
 	SDL_Rect collisionRect;

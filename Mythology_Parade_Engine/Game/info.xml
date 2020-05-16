@@ -1,28 +1,18 @@
 <?xml version="1.0"?>
 <info>
 	<entities>
-		<monk position_x="2272" position_y="2096" civilization="greek" />
-		<monk position_x="2464" position_y="2160" civilization="greek" />
-		<monk position_x="2304" position_y="2240" civilization="greek" />
-		<monk position_x="2496" position_y="2240" civilization="greek" />
-		<monk position_x="2976" position_y="2320" civilization="viking" />
-		<monk position_x="2144" position_y="2320" civilization="greek" />
-		<monk position_x="2400" position_y="2320" civilization="greek" />
-		<assasin position_x="2304" position_y="2336" civilization="greek" />
-		<monk position_x="2560" position_y="2368" civilization="greek" />
-		<assasin position_x="2976" position_y="2384" civilization="viking" />
-		<monk position_x="2272" position_y="2384" civilization="greek" />
-		<monk position_x="2208" position_y="2448" civilization="greek" />
-		<monk position_x="2464" position_y="2480" civilization="greek" />
-		<monk position_x="2240" position_y="2528" civilization="greek" />
+		<monk position_x="2304" position_y="2240" civilization="greek" health="1" />
+		<monk position_x="2976" position_y="2320" civilization="viking" health="1" />
+		<assasin position_x="2304" position_y="2336" civilization="greek" health="100" level="0" />
+		<assasin position_x="2976" position_y="2384" civilization="viking" health="100" level="0" />
 	</entities>
 	<buildings>
-		<fortress position_x="3200" position_y="2288" civilization="viking" />
-		<fortress position_x="1920" position_y="2288" civilization="greek" />
+		<fortress position_x="3200" position_y="2288" civilization="viking" health="500" status="finished" action="nothing" />
+		<fortress position_x="1920" position_y="2288" civilization="greek" health="500" status="finished" action="nothing" />
 	</buildings>
 	<players>
 		<viking>
-			<economy faith="504" prayers="0" sacrifices="0" />
+			<economy faith="500" prayers="0" sacrifices="0" />
 			<research>
 				<temple research="false" />
 				<encampment research="false" />

@@ -303,16 +303,26 @@ bool EntityManager::Save(pugi::xml_node& s) const
 {
 	pugi::xml_node node = s.append_child("entities");
 	std::list<Entity*> list = App->entityManager->entities[EntityType::UNIT];
-	for each (Unit* var in list)
+	for each (Unit * var in list)
 	{
 		pugi::xml_node entity = node.append_child(var->name.c_str());
 		entity.append_attribute("position_x").set_value(var->position.x);
 		entity.append_attribute("position_y").set_value(var->position.y);
+
+
 		if (var->civilization == CivilizationType::GREEK)
 			entity.append_attribute("civilization").set_value("greek");
 		else
 			entity.append_attribute("civilization").set_value("viking");
+
+
 		entity.append_attribute("health").set_value(var->GetHealth());
+
+		if (var->isCombat)
+		{
+			CombatUnit* combatVar = (CombatUnit*)var;
+			entity.append_attribute("level").set_value(combatVar->GetLevel());
+		}
 	}
 
 	pugi::xml_node node2 = s.append_child("buildings");
@@ -342,6 +352,14 @@ bool EntityManager::Save(pugi::xml_node& s) const
 			building.append_attribute("status").set_value("destroyed");
 		else
 			building.append_attribute("status").set_value("finished");
+
+
+		if(var2->buildingAction == BuildingAction::NOTHING)
+			building.append_attribute("action").set_value("nothing");
+		else if(var2->buildingAction == BuildingAction::PRODUCING)
+			building.append_attribute("action").set_value("producing");
+		else
+			building.append_attribute("action").set_value("researching");
 
 	}
 
