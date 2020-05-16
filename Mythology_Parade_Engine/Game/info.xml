@@ -1,4 +1,42 @@
 <?xml version="1.0"?>
 <info>
-	
+	<entities>
+		<monk position_x="2272" position_y="2096" civilization="greek" />
+		<monk position_x="2464" position_y="2160" civilization="greek" />
+		<monk position_x="2304" position_y="2240" civilization="greek" />
+		<monk position_x="2496" position_y="2240" civilization="greek" />
+		<monk position_x="2976" position_y="2320" civilization="viking" />
+		<monk position_x="2144" position_y="2320" civilization="greek" />
+		<monk position_x="2400" position_y="2320" civilization="greek" />
+		<assasin position_x="2304" position_y="2336" civilization="greek" />
+		<monk position_x="2560" position_y="2368" civilization="greek" />
+		<assasin position_x="2976" position_y="2384" civilization="viking" />
+		<monk position_x="2272" position_y="2384" civilization="greek" />
+		<monk position_x="2208" position_y="2448" civilization="greek" />
+		<monk position_x="2464" position_y="2480" civilization="greek" />
+		<monk position_x="2240" position_y="2528" civilization="greek" />
+	</entities>
+	<buildings>
+		<fortress position_x="3200" position_y="2288" civilization="viking" />
+		<fortress position_x="1920" position_y="2288" civilization="greek" />
+	</buildings>
+	<players>
+		<viking>
+			<economy faith="504" prayers="0" sacrifices="0" />
+			<research>
+				<temple research="false" />
+				<encampment research="false" />
+				<cleric research="false" />
+				<tassassinemple research="false" />
+				<lawful beast research="false" />
+				<chaotic beast research="false" />
+				<lawful miracle research="false" />
+				<chaotic miracle research="false" />
+				<lawful victory research="false" />
+				<chaotic victory research="false" />
+			</research>
+		</viking>
+	</players>
+	<volume music="50" fx="128" />
+	<camera x="-1683" y="-2000" />
 </info>

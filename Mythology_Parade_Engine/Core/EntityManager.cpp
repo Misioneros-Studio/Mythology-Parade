@@ -312,31 +312,53 @@ bool EntityManager::Save(pugi::xml_node& s) const
 			entity.append_attribute("civilization").set_value("greek");
 		else
 			entity.append_attribute("civilization").set_value("viking");
+		entity.append_attribute("health").set_value(var->GetHealth());
 	}
 
 	pugi::xml_node node2 = s.append_child("buildings");
 	std::list<Entity*> list2 = App->entityManager->entities[EntityType::BUILDING];
+
+
 	for each (Building * var2 in list2)
 	{
 		pugi::xml_node building = node2.append_child(var2->name.c_str());
+
 		building.append_attribute("position_x").set_value(var2->position.x);
 		building.append_attribute("position_y").set_value(var2->position.y);
+
+
 		if (var2->civilization == CivilizationType::GREEK)
 			building.append_attribute("civilization").set_value("greek");
 		else
 			building.append_attribute("civilization").set_value("viking");
+
+
+		building.append_attribute("health").set_value(var2->GetHealth());
+
+
+		if(var2->buildingStatus==BuildingStatus::CONSTRUCTING)
+			building.append_attribute("status").set_value("constructing");
+		else if(var2->buildingStatus == BuildingStatus::DESTROYED)
+			building.append_attribute("status").set_value("destroyed");
+		else
+			building.append_attribute("status").set_value("finished");
+
 	}
 
 	pugi::xml_node node3 = s.append_child("players");
 	std::list<Entity*> list3 = App->entityManager->entities[EntityType::PLAYER];
+
+
 	for each (Player * var3 in list3)
 	{
 		pugi::xml_node player = node3.append_child(var3->name.c_str());
+
 
 		pugi::xml_node economy = player.append_child("economy");
 		economy.append_attribute("faith").set_value(var3->GetFaith());
 		economy.append_attribute("prayers").set_value(var3->GetPrayers());
 		economy.append_attribute("sacrifices").set_value(var3->GetSacrifices());
+
 
 		pugi::xml_node research = player.append_child("research");
 		research.append_child("temple").append_attribute("research").set_value(var3->research_temple);

@@ -289,3 +289,12 @@ void j1Audio::OnClick(UI* element, float volume)
 	}
 
 }
+
+bool j1Audio::Save(pugi::xml_node& s) const
+{
+	pugi::xml_node node4 = s.append_child("volume");
+	node4.append_attribute("music").set_value(App->audio->GetVolumeMusic());
+	node4.append_attribute("fx").set_value(App->audio->GetVolumeFx());
+
+	return true;
+}

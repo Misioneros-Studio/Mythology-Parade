@@ -107,6 +107,8 @@ bool j1App::Awake()
 	pugi::xml_node		app_config;
 
 	bool ret = false;
+
+	save_game.append("info.xml");
 		
 	config = LoadConfig(config_file);
 
@@ -371,7 +373,6 @@ void j1App::LoadGame(const char* file)
 void j1App::SaveGame(const char* file) const
 {
 	want_to_save = true;
-	save_game.append(file);
 }
 
 // ---------------------------------------
@@ -426,27 +427,22 @@ bool j1App::SavegameNow()
 	LOG("Saving Game State to %s...", save_game.c_str());
 
 	// xml object were we will store all data
-	pugi::xml_document doc;
-
-	pugi::xml_parse_result result = doc.load_file(save_game.c_str());
-
-	if (result){  
-		LOG("%s %s","succes loading document info",result.description());
-	}
-	else {
-		LOG("%s %s", "fail loading document info", result.description());
-	}
-
+	pugi::xml_document data;
 	pugi::xml_node root;
-	
-	root = doc.child("info");
+
+	root = data.append_child("info");
+
+
 	for (std::list<j1Module*>::iterator it = modules.begin(); it != modules.end() && ret == true; it++)
 	{
 		ret = it._Ptr->_Myval->Save(root);
 	}
-	doc.save_file(save_game.c_str());
 
-	doc.reset();
+	data.save_file("info.xml");
+
+	data.reset();
+
+
 	want_to_save = false;
 	return ret;
 }
