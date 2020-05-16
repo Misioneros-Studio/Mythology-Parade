@@ -25,8 +25,8 @@
     <Line7>Damage 20</Line7>
   </encampment>
 
-  <clerk_locked>
-    <title>Clerk</title>
+  <cleric_locked>
+    <title>Cleric</title>
     <Line1>A high class religion figure that will preach</Line1>
     <Line2>around the walls of a city decreasing the</Line2>
     <Line3>influence of the city’s religion by 5% each</Line3>
@@ -36,17 +36,17 @@
     <Line7>points(prayers) to unlock this unit.</Line7>
     <Line8>Cost -150 faith-	Prod. Time -1'30 min-</Line8>
     <Line9>Health 100</Line9>
-  </clerk_locked>
+  </cleric_locked>
 
-  <clerk_unlocked>
-    <title>Clerk</title>
+  <cleric_unlocked>
+    <title>Cleric</title>
     <Line1>A high class religion figure that will preach</Line1>
     <Line2>around the walls of a city decreasing the</Line2>
     <Line3>influence of the city’s religion by 5% each</Line3>
     <Line4>second.</Line4>
     <Line5>Cost -150 faith-	Prod. Time -1'30 min-</Line5>
     <Line6>Health 100</Line6>
-  </clerk_unlocked>
+  </cleric_unlocked>
 
   <assassin_locked>
     <title>Assassin</title>
@@ -267,12 +267,12 @@
     <Line5>- Level 3 unit 9500xp</Line5>
   </levelupbutton_assassin>
 
-  <levelupbutton_clerk>
+  <levelupbutton_cleric>
     <Line1>Use this button to level up the unit selected.</Line1>
     <Line2>You can do this action more than one time.</Line2>
     <Line3>- Level 1 unit 3000xp</Line3>
     <Line4>- Level 2 unit 6000xp</Line4>
-  </levelupbutton_clerk>
+  </levelupbutton_cleric>
 
   <unitcreationbutton>
      <Line1>Create one unit of this type.</Line1>
