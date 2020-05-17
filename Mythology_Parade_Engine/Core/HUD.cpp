@@ -9,6 +9,7 @@
 #include "CombatUnit.h"
 #include "HUD.h"
 #include "ResearchMenu.h"
+#include "TooltipData.h"
 
 
 //Constructor
@@ -659,10 +660,11 @@ void HUD::ManageActionButtons(bool create_buttons, bool viking) {
 				}
 				if (building->buildingAction == BuildingAction::NOTHING) {
 					hud_button_actions[4] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 584,626,36,36 }, { 16,227,36,36 }, "Research", { 98,227,36,36 },
-						{ 57,227,36,36 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::MAIN_MENU));
+						{ 57,227,36,36 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::MAIN_MENU, false, -1.0f, 0, (int)TooltipsAvailable::researchbutton));
 				}
 				else {
-					hud_button_actions_unclickable[4] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, ui_ingame, { 584,626,36,36 }, { 98,484,36,36 }));
+					hud_button_actions_unclickable[4] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, ui_ingame, { 584,626,36,36 }, { 98,484,36,36 }, "", { 0,0,0,0 },
+						{ 0,0,0,0 }, false, { 0,0,0,0 }, nullptr, 0, false, -1.0f, 0, (int)TooltipsAvailable::researchbutton));
 				}
 			}
 			break;
@@ -948,14 +950,15 @@ void HUD::ManageActionButtons(bool create_buttons, bool viking) {
 						hud_button_actions_unclickable[4] = nullptr;
 					}
 					hud_button_actions[4] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 584,626,36,36 }, { 16,227,36,36 }, "Research", { 98,227,36,36 },
-						{ 57,227,36,36 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::MAIN_MENU));
+						{ 57,227,36,36 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::MAIN_MENU, false, -1.0f, 0, (int)TooltipsAvailable::researchbutton));
 				}
 				else if (hud_button_actions_unclickable[4] == nullptr && building->buildingAction != BuildingAction::NOTHING) {
 					if (hud_button_actions[4] != nullptr) {
 						App->gui->DeleteUIElement(hud_button_actions[4]);
 						hud_button_actions[4] = nullptr;
 					}
-					hud_button_actions_unclickable[4] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, ui_ingame, { 584,626,36,36 }, { 98,484,36,36 }));
+					hud_button_actions_unclickable[4] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, ui_ingame, { 584,626,36,36 }, { 98,484,36,36 }, "", { 0,0,0,0 },
+						{ 0,0,0,0 }, false, { 0,0,0,0 },nullptr,0, false, -1.0f, 0, (int)TooltipsAvailable::researchbutton));
 				}
 				if (hud_button_actions[5] == nullptr && player->GetFaith() >= 300 && building->buildingAction == BuildingAction::NOTHING && player->research_lawful_miracle == true) {
 					if (hud_button_actions_unclickable[5] != nullptr) {

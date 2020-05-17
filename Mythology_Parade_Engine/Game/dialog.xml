@@ -276,27 +276,31 @@
   </levelupbutton_cleric>
 
   <unitcreationbutton>
-     <line1>Create one unit of this type.</line1>
+    <line1>Create one unit of this type.</line1>
   </unitcreationbutton>
 
   <producecurrencybutton>
-     <line1>Generate currency of this type.</line1>
+    <line1>Generate currency of this type.</line1>
   </producecurrencybutton>
 
   <buildingconstructionlocked>
-     <line1>unlock this building in the research tree to produce it.</line1>
+    <line1>unlock this building in the research tree to</line1>
+    <line2>produce it.</line2>
   </buildingconstructionlocked>
 
   <unitproductionlocked>
-     <line1>unlock this unit in the research tree to produce it.</line1>
+    <line1>unlock this unit in the research tree to</line1>
+    <line2>produce it.</line2>
   </unitproductionlocked>
 
   <miraclelocked>
-     <line1>unlock this ability in the research tree to claim it.</line1>
+    <line1>unlock this ability in the research tree to</line1>
+    <line2>claim it.</line2>
   </miraclelocked>
 
   <disasterlocked>
-     <line1>unlock this ability in the research tree to claim it.</line1>
+     <line1>unlock this ability in the research tree to</line1>
+     <line2>claim it.</line2>
   </disasterlocked>
   
 </dialog>

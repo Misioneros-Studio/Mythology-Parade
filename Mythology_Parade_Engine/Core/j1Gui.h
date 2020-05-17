@@ -7,6 +7,10 @@
 
 #define CURSOR_WIDTH 2
 
+class ListTextsUI;
+class WindowUI;
+class j1Timer;
+
 enum class Type
 {
 	NONE,
@@ -39,7 +43,7 @@ struct SDL_Texture;
 class UI :public j1Module
 {
 public:
-	UI(Type s_type, SDL_Rect r, UI* p, bool d, bool f, SDL_Rect d_area, bool consol = false);
+	UI(Type s_type, SDL_Rect r, UI* p, bool d, bool f, SDL_Rect d_area, bool consol = false, int num_toooltip = -1);
 
 	// Destructor
 	virtual ~UI() {}
@@ -57,13 +61,19 @@ public:
 	virtual bool PostUpdate();
 
 	// Called before quitting
-	virtual bool CleanUp() { return true; }
+	virtual bool CleanUp();
+
+	// Called to destroy tooltip
+	void DestroyTooltip();
 
 	bool Move();
 
 	void SetPriority(int prior);
 
 	int GetPriority() { return priority; };
+	
+	// Called to show tooltip
+	void ShowTooltip(int, int, uint, uint);
 
 	SDL_Rect GetScreenRect();
 	SDL_Rect GetParentScreenRect();
@@ -90,6 +100,7 @@ public:
 	j1Module* listener;
 	Type type;
 	int num_atlas;
+	j1Timer timer_tooltip;
 
 private:
 	SDL_Rect screen_rect;
@@ -101,11 +112,17 @@ private:
 	SDL_Rect drag_area;
 	bool console;
 	int priority;
+	bool has_tooltip;
+	int tooltip_num;
+	WindowUI* tooltip_window;
+	ListTextsUI* tooltip_texts;
+	bool has_timer_tooltip_started;
+
 };
 class ImageUI :public UI
 {
 public:
-	ImageUI(Type type, UI* p, SDL_Rect r, SDL_Rect sprite, bool d, bool f, SDL_Rect d_area, float drag_position_scroll_bar);
+	ImageUI(Type type, UI* p, SDL_Rect r, SDL_Rect sprite, bool d, bool f, SDL_Rect d_area, float drag_position_scroll_bar, int num_tooltip);
 	ImageUI(Type type, UI* p, SDL_Rect r, int re, int g, int b, int a, bool d, bool f, SDL_Rect d_area);
 
 	// Destructor
@@ -144,7 +161,7 @@ class TextUI :public UI
 {
 
 public:
-	TextUI(Type type, UI* p, SDL_Rect r, std::string str, bool d, bool f, SDL_Rect d_area, bool console, SDL_Color coulor, bool title);
+	TextUI(Type type, UI* p, SDL_Rect r, std::string str, bool d, bool f, SDL_Rect d_area, bool console, SDL_Color coulor, bool title, int num_tooltip);
 
 	// Destructor
 	virtual ~TextUI() {}
@@ -187,7 +204,7 @@ class ButtonUI :public UI
 {
 public:
 
-	ButtonUI(Type type, UI* p, SDL_Rect r, SDL_Rect sprite, SDL_Rect spriten2, SDL_Rect spriten3, bool d, bool f, SDL_Rect d_area, int audio);
+	ButtonUI(Type type, UI* p, SDL_Rect r, SDL_Rect sprite, SDL_Rect spriten2, SDL_Rect spriten3, bool d, bool f, SDL_Rect d_area, int audio, int num_tooltip);
 
 	// Destructor
 	virtual ~ButtonUI() {}
@@ -203,9 +220,6 @@ public:
 
 	// Called after all Updates
 	bool PostUpdate();
-
-	// Called before quitting
-	bool CleanUp() { return true; };
 
 public:
 	SDL_Rect sprite2;
@@ -274,7 +288,8 @@ public:
 
 	// Gui creation functions
 	UI* CreateUIElement(Type type, UI* p, SDL_Rect r, SDL_Rect sprite = { 0,0,0,0 }, std::string str = "", SDL_Rect sprite2 = { 0,0,0,0 }, SDL_Rect sprite3 = { 0,0,0,0 }, bool drageable = false,
-		SDL_Rect drag_area = { 0,0,0,0 }, j1Module* s_listener = nullptr, int audio=0, bool console = false, float drag_position_scroll_bar = -1, int number_atlas = 0);
+		SDL_Rect drag_area = { 0,0,0,0 }, j1Module* s_listener = nullptr, int audio = 0, bool console = false, float drag_position_scroll_bar = -1, int number_atlas = 0,
+		int num_tooltip = -1);
 	UI* CreateUIElement(Type type, UI* p, SDL_Rect r, std::string str, int re, int g, int b, int a, bool drageable = false, SDL_Rect drag_area = { 0,0,0,0 }, j1Module* s_listener = nullptr);
 	bool DeleteUIElement(UI*);
 
@@ -316,6 +331,7 @@ public:
 	bool lockClick;
 	bool cursor_attack;
 	bool cursor_move;
+	iPoint cursor_size;
 
 };
 

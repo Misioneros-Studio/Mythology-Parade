@@ -11,6 +11,7 @@
 #include "Console.h"
 #include "j1Scene.h"
 #include "j1Audio.h"
+#include "TooltipData.h"
 
 j1Gui::j1Gui() : j1Module()
 {
@@ -24,6 +25,7 @@ j1Gui::j1Gui() : j1Module()
 	atlas_num_2 = nullptr;
 	cursor_tex = nullptr;
 	lockClick = cursor_attack = cursor_move = false;
+	cursor_size = { 0,0 };
 	LOG("%s", atlas_file_name_num_0.c_str());
 }
 
@@ -125,13 +127,13 @@ bool j1Gui::PostUpdate()
 	int x, y;
 	App->input->GetMousePosition(x, y);
 	iPoint p = App->render->ScreenToWorld(x, y);
-	SDL_Rect sec = { 0, 0, 54, 45 };
+	SDL_Rect sec = { 0, 0, 22, 32 };
 	if (cursor_move == true && App->scene->active == true && App->scene->paused_game == false)
 		sec = { 162,0,36,36 };
 	if (cursor_attack == true && App->scene->active == true && App->scene->paused_game == false)
 		sec = { 216,0,35,33 };
 
-
+	cursor_size = { sec.w,sec.h };
 	p = App->render->ScreenToWorld(x, y);
 
 	App->render->Blit(cursor_tex, p.x, p.y, &sec);
@@ -179,7 +181,7 @@ const SDL_Texture* j1Gui::GetAtlas(int number_atlas) const
 // class Gui ---------------------------------------------------
 
 UI* j1Gui::CreateUIElement(Type type, UI* p, SDL_Rect r, SDL_Rect sprite, std::string str, SDL_Rect sprite2, SDL_Rect sprite3, bool drageable, SDL_Rect drag_area, j1Module* s_listener, int audio,
-	bool console, float drag_position_scroll_bar, int number_atlas)
+	bool console, float drag_position_scroll_bar, int number_atlas, int num_tooltip)
 {
 	UI* ui = nullptr;
 	SDL_Color colour;
@@ -187,10 +189,10 @@ UI* j1Gui::CreateUIElement(Type type, UI* p, SDL_Rect r, SDL_Rect sprite, std::s
 	switch (type)
 	{
 	case Type::BUTTON:
-		ui = new ButtonUI(Type::BUTTON, p, r, sprite, sprite2, sprite3, true, true, drag_area, audio);
+		ui = new ButtonUI(Type::BUTTON, p, r, sprite, sprite2, sprite3, true, true, drag_area, audio, num_tooltip);
 		break;
 	case Type::IMAGE:
-		ui = new ImageUI(Type::IMAGE, p, r, sprite, drageable, drageable, drag_area, drag_position_scroll_bar);
+		ui = new ImageUI(Type::IMAGE, p, r, sprite, drageable, drageable, drag_area, drag_position_scroll_bar, num_tooltip);
 		break;
 	case Type::WINDOW:
 		ui = new WindowUI(Type::WINDOW, p, r, sprite, drageable, drageable, drag_area);
@@ -201,7 +203,7 @@ UI* j1Gui::CreateUIElement(Type type, UI* p, SDL_Rect r, SDL_Rect sprite, std::s
 			title = false;
 		else
 			title = true;
-		ui = new TextUI(Type::TEXT, p, r, str, drageable, drageable, drag_area, console, colour, title);
+		ui = new TextUI(Type::TEXT, p, r, str, drageable, drageable, drag_area, console, colour, title, num_tooltip);
 		break;
 	case Type::LISTTEXTS:
 		ui = new ListTextsUI(Type::LISTTEXTS, p, r, str, drageable, drageable, drag_area, console);
@@ -375,7 +377,7 @@ void j1Gui::WorkWithTextInput(std::string text) {
 	}
 }
 
-UI::UI(Type s_type, SDL_Rect r, UI* p, bool d, bool f, SDL_Rect d_area, bool consol)
+UI::UI(Type s_type, SDL_Rect r, UI* p, bool d, bool f, SDL_Rect d_area, bool consol, int num_tooltip)
 {
 	name.append("UI");
 	type = s_type;
@@ -396,6 +398,17 @@ UI::UI(Type s_type, SDL_Rect r, UI* p, bool d, bool f, SDL_Rect d_area, bool con
 	console = consol;
 	priority = 1;
 	num_atlas = 0;
+	if (num_tooltip != -1) {
+		has_tooltip = true;
+		tooltip_num = num_tooltip;
+	}
+	else {
+		has_tooltip = false;
+		tooltip_num = -1;
+	}
+	tooltip_texts = nullptr;
+	tooltip_window = nullptr;
+	has_timer_tooltip_started = false;
 }
 
 bool UI::PreUpdate() {
@@ -445,6 +458,27 @@ bool UI::PreUpdate() {
 			mask_rect.h -= mask_rect.y + mask_rect.h - win_y;
 		}
 	}
+
+	if (has_tooltip == true) {
+		int x, y, x_motion, y_motion;
+		App->input->GetMouseMotion(x_motion, y_motion);
+		if (x_motion == 0 && y_motion == 0) {
+			App->input->GetMousePosition(x, y);
+			if (x >= screen_rect.x && x <= screen_rect.x + screen_rect.w && y >= screen_rect.y && y <= screen_rect.y + screen_rect.h) {
+				if (has_timer_tooltip_started == false) {
+					timer_tooltip.Start();
+					has_timer_tooltip_started = true;
+				}
+				else if (timer_tooltip.ReadSec() >= 2 && tooltip_window == nullptr) {
+					ShowTooltip(x, y, win_x, win_y);
+				}
+			}
+		}
+		else if (tooltip_window != nullptr) {
+			DestroyTooltip();
+			has_timer_tooltip_started = false;
+		}
+	}
 	return true;
 }
 
@@ -453,6 +487,38 @@ bool UI::PostUpdate() {
 		App->render->DrawQuad(screen_rect, 255, 0, 0, 255, false, false);
 	}
 	return true;
+}
+
+void UI::ShowTooltip(int mouse_x, int mouse_y, uint win_x, uint win_y)
+{
+	Tooltip tooltip = App->tooltipdata->GetTooltip(tooltip_num);
+	int x, y;
+	//App->render->ScreenToWorld(mouse_x, mouse_y);
+	if (mouse_x + 305 + App->gui->cursor_size.x <= win_x) {
+		x = mouse_x +App->gui->cursor_size.x;
+	}
+	else {
+		x = mouse_x - 305;
+	}
+	if (mouse_y + (tooltip.lines*15) <= win_y) {
+		y = mouse_y;
+	}
+	else {
+		y = mouse_y - (tooltip.lines * 15);
+	}
+	tooltip_window = static_cast<WindowUI*>(App->gui->CreateUIElement(Type::WINDOW, nullptr, { x,y,305,(tooltip.lines * 15) }, { 1285,11,305,(tooltip.lines * 15)} ));
+	int lines_tooltip = tooltip.lines;
+	if (tooltip.has_title) {
+		tooltip_texts = static_cast<ListTextsUI*>(App->gui->CreateUIElement(Type::LISTTEXTS, tooltip_window, { x,y,305,15 }, { 0,0,0,0 }, tooltip.title));
+		lines_tooltip--;
+	}
+	else
+		int j = 0;
+		tooltip_texts = static_cast<ListTextsUI*>(App->gui->CreateUIElement(Type::LISTTEXTS, tooltip_window, { x,y,305,15 }, { 0,0,0,0 },tooltip.line1));
+	for (int i = 1; i < lines_tooltip; i++) {
+		App->tooltipdata->GetLineTooltip(i, tooltip);
+	}
+	
 }
 
 SDL_Rect UI::GetScreenRect()
@@ -526,6 +592,24 @@ bool UI::CheckMouse()
 	return false;
 }
 
+bool UI::CleanUp()
+{
+	DestroyTooltip();
+	return true;
+}
+
+void UI::DestroyTooltip()
+{
+	if (tooltip_window != nullptr) {
+		App->gui->DeleteUIElement(tooltip_window);
+		tooltip_window = nullptr;
+	}
+	if (tooltip_texts != nullptr) {
+		App->gui->DeleteUIElement(tooltip_texts);
+		tooltip_texts = nullptr;
+	}
+}
+
 bool UI::Move() {
 	int x, y;
 	App->input->GetMouseMotion(x, y);
@@ -587,7 +671,8 @@ SDL_Rect UI::Check_Printable_Rect(SDL_Rect sprite, iPoint& dif_sprite, SDL_Rect 
 	return sprite;
 }
 
-ImageUI::ImageUI(Type type, UI* p, SDL_Rect r, SDL_Rect sprite, bool d, bool f, SDL_Rect d_area, float drag_position_scroll_bar) :UI(type, r, p, d, f, d_area) {
+ImageUI::ImageUI(Type type, UI* p, SDL_Rect r, SDL_Rect sprite, bool d, bool f, SDL_Rect d_area, float drag_position_scroll_bar, int num_tooltip) :UI(type, r, p, d, f, d_area, false,
+	num_tooltip) {
 	name.append("ImageUI");
 	sprite1 = sprite;
 	quad = r;
@@ -687,7 +772,8 @@ bool WindowUI::PostUpdate() {
 }
 
 
-TextUI::TextUI(Type type, UI* p, SDL_Rect r, std::string str, bool d, bool f, SDL_Rect d_area, bool console, SDL_Color coulor, bool title) :UI(type, r, p, d, f, d_area, console) 
+TextUI::TextUI(Type type, UI* p, SDL_Rect r, std::string str, bool d, bool f, SDL_Rect d_area, bool console, SDL_Color coulor, bool title, int num_tooltip) :UI(type, r, p, d, f, d_area,
+	console, num_tooltip)
 {
 	name.append("TextUI");
 	stri = str.c_str();
@@ -780,7 +866,8 @@ void ListTextsUI::SetListOfStrings(std::string string, int position)
 	}
 }
 
-ButtonUI::ButtonUI(Type type, UI* p, SDL_Rect r, SDL_Rect sprite, SDL_Rect spriten2, SDL_Rect spriten3, bool d, bool f, SDL_Rect d_area, int audio) :UI(type, r, p, d, f, d_area) {
+ButtonUI::ButtonUI(Type type, UI* p, SDL_Rect r, SDL_Rect sprite, SDL_Rect spriten2, SDL_Rect spriten3, bool d, bool f, SDL_Rect d_area, int audio, int num_tooltip) :UI(type, r, p, d, f,
+	d_area, false, num_tooltip) {
 	name.append("ButtonUI");
 	sprite1 = sprite;
 	sprite2 = spriten2;

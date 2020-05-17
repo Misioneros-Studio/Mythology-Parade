@@ -5,7 +5,7 @@
 #include "PugiXml\src\pugixml.hpp"
 #include"p2Point.h"
 
-#define TOTAL_TOOLTIPS 30
+#define TOTAL_TOOLTIPS 32
 
 enum class TooltipsAvailable {
 	temple,
@@ -34,6 +34,8 @@ enum class TooltipsAvailable {
 	actionbutton,
 	levelupbutton_assassin,
 	levelupbutton_cleric,
+	unitcreationbutton,
+	producecurrencybutton,
 	buildingconstructionlocked,
 	unitproductionlocked,
 	miraclelocked,
@@ -75,8 +77,11 @@ public:
 	// Called to get a tooltip
 	Tooltip GetTooltip(int);
 
+	//Called to get a line of a tooltip
+	std::string GetLineTooltip(int, Tooltip);
+
 private:
-	Tooltip tooltips[30];
+	Tooltip tooltips[TOTAL_TOOLTIPS];
 };
 
 #endif // !__TOOLTIPDATA_H__
