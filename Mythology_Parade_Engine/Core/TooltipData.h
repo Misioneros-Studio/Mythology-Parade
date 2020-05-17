@@ -5,41 +5,58 @@
 #include "PugiXml\src\pugixml.hpp"
 #include"p2Point.h"
 
-#define TOTAL_TOOLTIPS 32
+#define TOTAL_TOOLTIPS 49
 
 enum class TooltipsAvailable {
+	monastery,
+	monk,
+	temple_unresearched,
 	temple,
+	encampment_unresearched,
 	encampment,
 	cleric_locked,
+	cleric_unresearched,
 	cleric_unlocked,
 	assassin_locked,
+	assassin_unresearched,
 	assassin_unlocked,
 	cyclop_locked,
+	cyclop_unresearched,
 	cyclop_unlocked,
 	jotnar_locked,
+	jotnar_unresearched,
 	jotnar_unlocked,
-	minotaur,
-	draugar,
-	miracle_locked,
-	miracle_unlocked,
+	minotaur_locked,
+	minotaur_unresearched,
+	minotaur_unlocked,
+	draugar_locked,
+	draugar_unresearched,
+	draugar_unlocked,
 	disaster_locked,
+	disaster_unresearched,
 	disaster_unlocked,
+	miracle_locked,
+	miracle_unresearched,
+	miracle_unlocked,
 	victory1_locked,
+	victory1_unresearched,
 	victory1_unlocked,
 	victory2_locked,
+	victory2_unresearched,
 	victory2_unlocked,
 	currencymoduletip,
 	researchbutton,
 	movebutton,
-	actionbutton,
+	attackbutton,
+	healbutton,
 	levelupbutton_assassin,
 	levelupbutton_cleric,
-	unitcreationbutton,
 	producecurrencybutton,
 	buildingconstructionlocked,
 	unitproductionlocked,
 	miraclelocked,
-	disasterlocked
+	disasterlocked,
+	victorylocked
 };
 
 struct Tooltip {

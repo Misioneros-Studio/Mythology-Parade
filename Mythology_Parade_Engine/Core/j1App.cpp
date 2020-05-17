@@ -318,6 +318,7 @@ bool j1App::CleanUp()
 		if(it._Ptr->_Myval != nullptr)
 			ret = it._Ptr->_Myval->CleanUp();
 	}
+	delete tooltipdata;
 
 	PERF_PEEK(ptimer);
 	return ret;

@@ -157,7 +157,7 @@
    <line10>Research time -3'30 min-</line10>
   </cyclop_locked>
 
-  <cyclop_unlocked>
+  <cyclop_unresearched>
    <title>Cyclop</title>
    <line1>This is a one-eyed giant created by the</line1>
    <line2>gods to protect the Olympus and their</line2>
@@ -167,7 +167,7 @@
    <line6>Cost -200 faith-	Prod. Time -2'00 min-</line6>
    <line7>Health 150</line7>
    <line8>Research time -3'30 min-</line8>
-  </cyclop_unlocked>
+  </cyclop_unresearched>
 
   <cyclop_unlocked>
    <title>Cyclop</title>
@@ -492,5 +492,10 @@
      <line1>unlock this ability in the research tree to</line1>
      <line2>claim it.</line2>
   </disasterlocked>
+
+  <victorylocked>
+     <line1>unlock the possibility to win in the</line1>
+     <line2>research tree to claim it.</line2>
+  </victorylocked>
   
 </dialog>
