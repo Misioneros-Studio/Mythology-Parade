@@ -61,7 +61,7 @@ void HUD::StartHUD(ResearchMenu* r) {
 							ui_text_confirmation[i] = nullptr;
 							if (i < 3) {
 								ui_button_confirmation[i] = nullptr;
-								ui_text_ingame[i] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 104,610 + (i * 33),237,38 }, { 0,0,100,100 }, "9999", { 255,255,255,255 }
+								ui_text_ingame[i] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 104,610 + (i * 33),57,38 }, { 0,0,100,100 }, "9999", { 255,255,255,255 }
 								, { 1,0,0,0 }, false, { 0,0,0,0 },nullptr,0,false,-1.0f,0, (int)TooltipsAvailable::currencymoduletip));
 								ui_text_options[i] = nullptr;
 								if (i < 2) {
@@ -543,6 +543,8 @@ void HUD::ManageActionButtons(bool create_buttons, bool viking) {
 			break;
 		}
 		case Type_Selected::Monk:
+			hud_button_actions[1] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 241,613,36,36 }, { 16,529,36,36 }, "Heal", { 98,529,36,36 }, { 57,529,36,36 },
+				false, { 0,0,0,0 }, App->scene, (int)UI_Audio::MAIN_MENU, false, -1.0f, 0));
 		case Type_Selected::Cleric:
 			hud_button_actions[0] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 200,613,36,36 }, { 16,185,36,36 }, "Move", { 98,185,36,36 }, { 57,185,36,36 },
 				false, { 0,0,0,0 }, App->scene, (int)UI_Audio::MAIN_MENU, false, -1.0f, 0, (int)TooltipsAvailable::movebutton));
