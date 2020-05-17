@@ -406,7 +406,9 @@ UI::UI(Type s_type, SDL_Rect r, UI* p, bool d, bool f, SDL_Rect d_area, bool con
 		has_tooltip = false;
 		tooltip_num = -1;
 	}
-	tooltip_texts = nullptr;
+	for (int i = 0; i < 13; i++) {
+		tooltip_texts[i] = nullptr;
+	}
 	tooltip_window = nullptr;
 	has_timer_tooltip_started = false;
 }
@@ -493,12 +495,11 @@ void UI::ShowTooltip(int mouse_x, int mouse_y, uint win_x, uint win_y)
 {
 	Tooltip tooltip = App->tooltipdata->GetTooltip(tooltip_num);
 	int x, y;
-	//App->render->ScreenToWorld(mouse_x, mouse_y);
-	if (mouse_x + 305 + App->gui->cursor_size.x <= win_x) {
-		x = mouse_x +App->gui->cursor_size.x;
+	if (mouse_x + 322 + App->gui->cursor_size.x <= win_x) {
+		x = mouse_x + 5 + App->gui->cursor_size.x;
 	}
 	else {
-		x = mouse_x - 305;
+		x = mouse_x - 322;
 	}
 	if (mouse_y + (tooltip.lines*15) <= win_y) {
 		y = mouse_y;
@@ -506,19 +507,18 @@ void UI::ShowTooltip(int mouse_x, int mouse_y, uint win_x, uint win_y)
 	else {
 		y = mouse_y - (tooltip.lines * 15);
 	}
-	tooltip_window = static_cast<WindowUI*>(App->gui->CreateUIElement(Type::WINDOW, nullptr, { x,y,305,(tooltip.lines * 15) }, { 1285,11,305,(tooltip.lines * 15)} ));
-	int lines_tooltip = tooltip.lines;
-	if (tooltip.has_title) {
-		tooltip_texts = static_cast<ListTextsUI*>(App->gui->CreateUIElement(Type::LISTTEXTS, tooltip_window, { x,y,305,15 }, { 0,0,0,0 }, tooltip.title));
-		lines_tooltip--;
-	}
-	else
-		int j = 0;
-		tooltip_texts = static_cast<ListTextsUI*>(App->gui->CreateUIElement(Type::LISTTEXTS, tooltip_window, { x,y,305,15 }, { 0,0,0,0 },tooltip.line1));
-	for (int i = 1; i < lines_tooltip; i++) {
-		App->tooltipdata->GetLineTooltip(i, tooltip);
-	}
-	
+	tooltip_window = static_cast<WindowUI*>(App->gui->CreateUIElement(Type::WINDOW, nullptr, { x,y,317,(tooltip.lines * 15) }, { 1285,11,305,(tooltip.lines * 15)} ));
+	int j = 0;
+	for (int i = 1; i <= tooltip.lines; i++) {
+		if (tooltip.has_title&& i == 1) {
+			tooltip_texts[i - 1] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, tooltip_window, { x,y + (15 * (i - 1)),317,15 }, { 0,0,0,0 }, tooltip.title, { 255,255,255,255 }));
+			j--;
+		}
+		else {
+			tooltip_texts[i - 1] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, tooltip_window, { x,y + (15 * (i - 1)),317,15 }, { 0,0,0,0 },
+				App->tooltipdata->GetLineTooltip(i + j, tooltip), { 255,255,255,255 }));
+		}
+	}	
 }
 
 SDL_Rect UI::GetScreenRect()
@@ -604,9 +604,11 @@ void UI::DestroyTooltip()
 		App->gui->DeleteUIElement(tooltip_window);
 		tooltip_window = nullptr;
 	}
-	if (tooltip_texts != nullptr) {
-		App->gui->DeleteUIElement(tooltip_texts);
-		tooltip_texts = nullptr;
+	for (int i = 12; i >= 0; i--) {
+		if (tooltip_texts[i] != nullptr) {
+			App->gui->DeleteUIElement(tooltip_texts[i]);
+			tooltip_texts[i] = nullptr;
+		}
 	}
 }
 
@@ -841,7 +843,7 @@ bool ListTextsUI::PostUpdate()
 
 
 			SDL_Rect sprite = UI::Check_Printable_Rect(rect, dif_sprite, { quad.x,quad.y + (quad.h * i),quad.w,quad.h });
-			if (this->active && this->GetConsole() == false)App->render->Blit(text, GetScreenToWorldPos().x + dif_sprite.x, GetScreenToWorldPos().y + dif_sprite.y, &sprite, 0.0F);
+			if (this->active && this->GetConsole() == false) App->render->Blit(text, quad.x + dif_sprite.x, quad.y + dif_sprite.y + (i * quad.h), &sprite, 0.0F);
 			else if (this->active) App->render->Blit(text, quad.x + dif_sprite.x, quad.y + dif_sprite.y + (i * quad.h), &sprite, 0.0F);
 
 			App->tex->UnLoad(text);

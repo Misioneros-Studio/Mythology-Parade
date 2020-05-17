@@ -7,7 +7,7 @@
 
 #define CURSOR_WIDTH 2
 
-class ListTextsUI;
+class TextUI;
 class WindowUI;
 class j1Timer;
 
@@ -115,7 +115,7 @@ private:
 	bool has_tooltip;
 	int tooltip_num;
 	WindowUI* tooltip_window;
-	ListTextsUI* tooltip_texts;
+	TextUI* tooltip_texts[13];
 	bool has_timer_tooltip_started;
 
 };

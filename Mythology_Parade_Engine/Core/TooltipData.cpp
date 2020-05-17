@@ -34,11 +34,9 @@ void TooltipData::GetTooltipData()
 
 	pugi::xml_document	tooltip_file;
 	pugi::xml_node		tooltip;
-	LOG("FIRST PHASE CORRECT");
 
 	pugi::xml_parse_result result = tooltip_file.load_file("dialog.xml");
 
-	LOG("SECOND PHASE CORRECT");
 
 	if (result == NULL)
 		LOG("Could not load xml file dialog.xml. pugi error: %s", result.description());
