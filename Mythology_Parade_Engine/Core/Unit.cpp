@@ -35,7 +35,7 @@ Unit::Unit(UnitType type, iPoint pos): unitType(type), state(AnimationType::IDLE
 		Init(1);
 		break;
 	}
-	isCombat = false;
+	canLevel = false;
 }
 
 Unit::~Unit()

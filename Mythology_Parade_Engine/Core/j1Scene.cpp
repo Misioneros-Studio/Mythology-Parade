@@ -496,7 +496,7 @@ void j1Scene::OnClick(UI* element, float argument)
 			}
 			else if (hud->confirmation_option.compare("LOAD") == 0)
 			{
-				App->LoadGame("save_game.xml");
+				App->LoadGame("info.xml");
 			}
 			else if (hud->confirmation_option.compare("RESTART") == 0)
 			{

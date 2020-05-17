@@ -109,6 +109,13 @@ bool j1App::Awake()
 	bool ret = false;
 
 	save_game.append("info.xml");
+	load_game.append("info.xml");
+
+	pugi::xml_document result;
+	if (result.load_file(load_game.c_str()))
+	{
+		existSaveFile = true;
+	}
 		
 	config = LoadConfig(config_file);
 
@@ -394,7 +401,7 @@ bool j1App::LoadGameNow()
 	{
 		LOG("Loading new Game State from %s...", load_game.c_str());
 
-		root = data.child("game_state");
+		root = data.child("info");
 
 		ret = true;
 		j1Module* item = NULL;
@@ -402,7 +409,7 @@ bool j1App::LoadGameNow()
 
 		for (std::list<j1Module*>::iterator it = modules.begin(); it != modules.end() && ret == true; it++)
 		{
-			ret = it._Ptr->_Myval->Load(root.child(it._Ptr->_Myval->name.c_str()));
+			ret = it._Ptr->_Myval->Load(root);
 			item = it._Ptr->_Myval;
 		}
 

@@ -282,21 +282,14 @@ bool EntityManager::CleanUp()
 }
 
 ////Called when loading the game
-//bool EntityManager::Load(pugi::xml_node& n)
-//{
-//	pugi::xml_node n2 = n;
-//	for (unsigned int i = 0; i < entities.count(); i++)
-//	{
-//		n2 = n.child(entities.At(i)->data->name.GetString());
-//		while (n2.attribute("id").as_int() != i) {
-//			n2 = n2.next_sibling(entities.At(i)->data->name.GetString());
-//			assert(n2.attribute("id").as_int() != 0, "Load could not function properly");
-//		};
-//		entities.At(i)->data->Load(n2);
-//	}
-//	return true;
-//}
-//
+bool EntityManager::Load(pugi::xml_node& n)
+{
+	
+	entities.clear();
+
+	return true;
+}
+
 ////Called when saving the game
 
 bool EntityManager::Save(pugi::xml_node& s) const
@@ -318,7 +311,7 @@ bool EntityManager::Save(pugi::xml_node& s) const
 
 		entity.append_attribute("health").set_value(var->GetHealth());
 
-		if (var->isCombat)
+		if (var->canLevel)
 		{
 			CombatUnit* combatVar = (CombatUnit*)var;
 			entity.append_attribute("level").set_value(combatVar->GetLevel());

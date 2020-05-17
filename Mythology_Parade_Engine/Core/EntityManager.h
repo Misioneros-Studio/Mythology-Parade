@@ -98,7 +98,7 @@ public:
 	bool CleanUp();
 
 	////Called when loading the game
-	//bool Load(pugi::xml_node&);
+	bool Load(pugi::xml_node&);
 
 	////Called when saving the game
 	bool Save(pugi::xml_node&) const;

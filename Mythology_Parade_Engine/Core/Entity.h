@@ -102,7 +102,7 @@ public:
 		return collisionRect;
 	}
 
-	bool isCombat;
+	bool canLevel;
 
 
 protected:
