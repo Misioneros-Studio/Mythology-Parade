@@ -5,6 +5,7 @@
 
 #include "j1Module.h"
 #include <unordered_map>
+#include <map>
 #include "Entity.h"
 #include"j1Input.h"
 #include"j1Map.h"
@@ -153,6 +154,7 @@ public:
 	SDL_Rect unit_life_bar_front_enemy;
 
 	std::unordered_map<UnitType, std::unordered_map<AnimationType, std::unordered_map<Direction, Animation_char>>> animations;
+	std::multimap<int, Entity*> orderedSprites;
 
 	int Building_destruction;
 	int Building_placed;
