@@ -83,7 +83,7 @@ void CombatUnit::LevelUp()
 		break;
 
 	}
-	App->particleManager->CreateParticle({ (int)position.x-20,(int)position.y-50 }, { 0,-1 }, 10, ParticleAnimation::Level_Up);
+	App->particleManager->CreateParticle({ (int)position.x-20,(int)position.y-60 }, { 0,-1 }, 10, ParticleAnimation::Level_Up);
 }
 
 void CombatUnit::Init(int maxHealth, int damage, int range, int speed)
