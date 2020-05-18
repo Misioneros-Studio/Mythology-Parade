@@ -68,12 +68,12 @@ bool Player::PreUpdate()
 	sacrifice = std::to_string(CurrencySystem::sacrifices);
 	prayer = std::to_string(CurrencySystem::prayers);
 
-	if (oneTime)
-	{
-		InitVikings();
-		InitGreek();
-		oneTime = false;
-	}
+	//if (oneTime)
+	//{
+	//	InitVikings();
+	//	InitGreek();
+	//	oneTime = false;
+	//}
 
 	return true;
 }

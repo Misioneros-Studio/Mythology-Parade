@@ -298,3 +298,11 @@ bool j1Audio::Save(pugi::xml_node& s) const
 
 	return true;
 }
+
+bool j1Audio::Load(pugi::xml_node& s)
+{
+	ChangeVolumeFx(s.child("volume").attribute("fx").as_float());
+	ChangeVolumeMusic(s.child("volume").attribute("music").as_float());
+
+	return true;
+}

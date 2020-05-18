@@ -638,6 +638,7 @@ Entity* EntityManager::CreatePlayerEntity(std::string civilization_string)
 	if (civilization_string == "viking") {
 		ret->civilization = CivilizationType::VIKING;
 		p->player_type = CivilizationType::VIKING;
+		
 	}
 	else if (civilization_string == "greek") {
 		ret->civilization = CivilizationType::GREEK;

@@ -62,6 +62,9 @@ public:
 
 	bool Save(pugi::xml_node& s) const;
 
+	bool Load(pugi::xml_node&);
+
+
 private:
 
 	_Mix_Music*			music = NULL;
