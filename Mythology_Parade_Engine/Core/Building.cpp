@@ -152,6 +152,21 @@ bool Building::GetResearched()
 	return researched;
 }
 
+int Building::GetTimeResearch()
+{
+	return time_research;
+}
+
+int Building::GetTimeProducing()
+{
+	return time_producing;
+}
+
+std::string Building::GetElementProducing()
+{
+	return element_producing;
+}
+
 bool Building::Awake(pugi::xml_node& a)
 {
 
@@ -306,10 +321,14 @@ void Building::Draw_Construction_Bar(int blitWidth, int bar_used)
 }
 
 
-void Building::StartProducing(int time, std::string thing_producing) {
+void Building::StartProducing(std::string thing_producing) {
 	buildingAction = BuildingAction::PRODUCING;
 	percentage_constructing = 0;
-	time_producing = time;
+	if (thing_producing == "Prayers") time_producing = App->entityManager->getPlayer()->time_prayers;
+	else if (thing_producing == "Sacrifices") time_producing = App->entityManager->getPlayer()->time_sacrifices;
+	else if (thing_producing == "Victory") time_producing = App->entityManager->getPlayer()->time_production_victory;
+	else if (thing_producing == "Monk") time_producing = 10;
+	else if (thing_producing == "Assasin") time_producing = 10;
 	element_producing = thing_producing;
 	timer_construction.Start();
 	
@@ -342,10 +361,21 @@ void Building::FinishProduction(std::string thing_produced)
 	}
 }
 
-void Building::StartResearching(int time, std::string thing_producing) {
+void Building::StartResearching(std::string thing_producing) {
 	buildingAction = BuildingAction::RESEARCHING;
 	percentage_constructing = 0;
-	time_producing = time;
+
+	if (thing_producing == "Chaotic Miracle") time_producing = 240;
+	else if (thing_producing == "Lawful Miracle") time_producing = 240;
+	else if (thing_producing == "Chaotic Victory") time_producing = 420;
+	else if (thing_producing == "Lawful Victory") time_producing = 420;
+	else if (thing_producing == "Assassin") time_producing = 70;
+	else if (thing_producing == "Cleric") time_producing = 70;
+	else if (thing_producing == "Encampment") time_producing = 90;
+	else if (thing_producing == "Temple") time_producing = 90;
+	else if (thing_producing == "Chaotic Beast") time_producing = 210;
+	else if (thing_producing == "Lawful Beast") time_producing = 210;
+
 	element_producing = thing_producing;
 	timer_construction.Start();
 }

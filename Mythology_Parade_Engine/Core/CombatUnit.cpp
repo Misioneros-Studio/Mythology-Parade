@@ -11,7 +11,7 @@ CombatUnit::CombatUnit(UnitType type, iPoint pos) : Unit(type, pos), range(0), d
 	{
 	case UnitType::ASSASSIN:
 		time_production = 90;
-		name = "assasin";
+		name = "assassin";
 		time_research = 0;
 		researched = true;
 		//Change texture
@@ -31,7 +31,7 @@ CombatUnit::CombatUnit(UnitType type, iPoint pos) : Unit(type, pos), range(0), d
 		name = "explorer";
 		break;
 	case UnitType::PRIEST:
-		name = "explorer";
+		name = "priest";
 		break;
 	case UnitType::FOOTMAN:
 		name = "footman";
@@ -156,5 +156,18 @@ void CombatUnit::IncreaseSpeed(int value)
 void CombatUnit::IncreaseDamage(int value)
 {
 	damage += value;
+}
+
+void CombatUnit::SetLevel(int i)
+{
+	for (int j = 0; j < i; j++)
+	{
+		LevelUp();
+	}
+}
+
+void CombatUnit::SetHealth(int value)
+{
+	HealthSystem::SetHealth(value);
 }
 

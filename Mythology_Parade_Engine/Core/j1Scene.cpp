@@ -536,52 +536,52 @@ void j1Scene::OnClick(UI* element, float argument)
 		}
 		else if (element->name == "RESEARCH TEMPLE") {
 			Building* building = (Building*)hud->thing_selected;
-			building->StartResearching(90, "Temple");
+			building->StartResearching("Temple");
 			hud->close_menus = CloseSceneMenus::Research;
 		}
 		else if (element->name == "RESEARCH ENCAMPMENT") {
 			Building* building = (Building*)hud->thing_selected;
-			building->StartResearching(90, "Encampment");
+			building->StartResearching("Encampment");
 			hud->close_menus = CloseSceneMenus::Research;
 		}
 		else if (element->name == "RESEARCH CLERIC") {
 			Building* building = (Building*)hud->thing_selected;
-			building->StartResearching(70, "Cleric");
+			building->StartResearching("Cleric");
 			hud->close_menus = CloseSceneMenus::Research;
 		}
 		else if (element->name == "RESEARCH ASSASSIN") {
 			Building* building = (Building*)hud->thing_selected;
-			building->StartResearching(70, "Assassin");
+			building->StartResearching("Assassin");
 			hud->close_menus = CloseSceneMenus::Research;
 		}
 		else if (element->name == "RESEARCH LAWFUL BEAST") {
 			Building* building = (Building*)hud->thing_selected;
-			building->StartResearching(210, "Lawful Beast");
+			building->StartResearching("Lawful Beast");
 			hud->close_menus = CloseSceneMenus::Research;
 		}
 		else if (element->name == "RESEARCH CHAOTIC BEAST") {
 			Building* building = (Building*)hud->thing_selected;
-			building->StartResearching(210, "Chaotic Beast");
+			building->StartResearching("Chaotic Beast");
 			hud->close_menus = CloseSceneMenus::Research;
 		}
 		else if (element->name == "RESEARCH LAWFUL MIRACLE") {
 			Building* building = (Building*)hud->thing_selected;
-			building->StartResearching(240, "Lawful Miracle");
+			building->StartResearching("Lawful Miracle");
 			hud->close_menus = CloseSceneMenus::Research;
 		}
 		else if (element->name == "RESEARCH CHAOTIC MIRACLE") {
 			Building* building = (Building*)hud->thing_selected;
-			building->StartResearching(240, "Chaotic Miracle");
+			building->StartResearching("Chaotic Miracle");
 			hud->close_menus = CloseSceneMenus::Research;
 		}
 		else if (element->name == "RESEARCH LAWFUL VICTORY") {
 			Building* building = (Building*)hud->thing_selected;
-			building->StartResearching(420, "Lawful Victory");
+			building->StartResearching("Lawful Victory");
 			hud->close_menus = CloseSceneMenus::Research;
 		}
 		else if (element->name == "RESEARCH CHAOTIC VICTORY") {
 			Building* building = (Building*)hud->thing_selected;
-			building->StartResearching(420, "Chaotic Victory");
+			building->StartResearching("Chaotic Victory");
 			hud->close_menus = CloseSceneMenus::Research;
 		}
 		else if (element->name == "Produce_Temple")
@@ -616,31 +616,31 @@ void j1Scene::OnClick(UI* element, float argument)
 		{
 			Building* building = (Building*)hud->thing_selected;
 			App->entityManager->getPlayer()->DecreaseFaith(100);
-			building->StartProducing(10, "Assassin");
+			building->StartProducing("Assassin");
 		}
 		else if (element->name == "Produce_Monk")
 		{
 			Building* building = (Building*)hud->thing_selected;
 			App->entityManager->getPlayer()->DecreaseFaith(50);
-			building->StartProducing(10, "Monk");
+			building->StartProducing("Monk");
 		}
 		else if (element->name == "Produce_Victory")
 		{
 			Building* building = (Building*)hud->thing_selected;
 			App->entityManager->getPlayer()->DecreaseFaith(600);  
-			building->StartProducing(App->entityManager->getPlayer()->time_production_victory, "Victory");
+			building->StartProducing("Victory");
 		}
 		else if (element->name == "Produce_Sacrifices")
 		{
 			Building* building = (Building*)hud->thing_selected;
 			App->entityManager->getPlayer()->DecreaseFaith(40);
-			building->StartProducing(App->entityManager->getPlayer()->time_sacrifices, "Sacrifices");
+			building->StartProducing("Sacrifices");
 		}
 		else if (element->name == "Produce_Prayers")
 		{
 			Building* building = (Building*)hud->thing_selected;
 			App->entityManager->getPlayer()->DecreaseFaith(100);
-			building->StartProducing(App->entityManager->getPlayer()->time_prayers, "Prayers");
+			building->StartProducing("Prayers");
 		}
 		else if (element->name == "Upgrade") {
 			//Upgrade level

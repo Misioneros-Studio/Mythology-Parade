@@ -284,8 +284,103 @@ bool EntityManager::CleanUp()
 ////Called when loading the game
 bool EntityManager::Load(pugi::xml_node& n)
 {
-	
+	CivilizationType civ;
 	entities.clear();
+
+	//PLAYER LOADING
+	pugi::xml_node player = n.child("players").first_child();
+	if (player.name() == "viking") civ = CivilizationType::VIKING;
+	else civ = CivilizationType::GREEK;
+	CreatePlayerEntity(player.name());
+
+
+	//UNITS LOADING
+	pugi::xml_node it = n.child("entities").child("unit");
+	for (it; it; it = it.next_sibling("unit"))
+	{
+		iPoint pos;
+		pos.x = it.attribute("position_x").as_int();
+		pos.y = it.attribute("position_y").as_int();
+		
+
+		if (!strcmp(it.attribute("type").as_string(), "monk")) {
+			Unit* monk = static_cast<Unit*>(CreateUnitEntity(UnitType::MONK, pos, civ));
+			monk->SetHealth(it.attribute("health").as_int());
+		}
+		else if (!strcmp(it.attribute("type").as_string(), "assassin")) {
+			CombatUnit* assassin = static_cast<CombatUnit*>(CreateUnitEntity(UnitType::ASSASSIN, pos, civ));
+			assassin->SetLevel(it.attribute("level").as_int());
+			assassin->SetHealth(it.attribute("health").as_int());
+		}
+		else if (!strcmp(it.attribute("type").as_string(), "pikeman")) {
+			CombatUnit* pikeman = static_cast<CombatUnit*>(CreateUnitEntity(UnitType::PIKEMAN, pos, civ));
+			pikeman->SetLevel(it.attribute("level").as_int());
+			pikeman->SetHealth(it.attribute("health").as_int());
+		}
+		else if (!strcmp(it.attribute("type").as_string(), "explorer")) {
+			CombatUnit* explorer = static_cast<CombatUnit*>(CreateUnitEntity(UnitType::EXPLORER, pos, civ));
+			explorer->SetLevel(it.attribute("level").as_int());
+			explorer->SetHealth(it.attribute("health").as_int());
+		}
+		else if (!strcmp(it.attribute("type").as_string(), "priest")) {
+			CombatUnit* priest = static_cast<CombatUnit*>(CreateUnitEntity(UnitType::PRIEST, pos, civ));
+			priest->SetLevel(it.attribute("level").as_int());
+			priest->SetHealth(it.attribute("health").as_int());
+		}
+		else if (!strcmp(it.attribute("type").as_string(), "footman")) {
+			CombatUnit* footman = static_cast<CombatUnit*>(CreateUnitEntity(UnitType::FOOTMAN, pos, civ));
+			footman->SetLevel(it.attribute("level").as_int());
+			footman->SetHealth(it.attribute("health").as_int());
+		}
+
+		//OTRAS UNIDADES PARA EL SIGUIENTE COMMIT
+		//else if (!strcmp(it.attribute("type").as_string(), "cyclop"))
+		//	CreateUnitEntity(UnitType::CYCLOP, pos, civ);
+		//else if (!strcmp(it.attribute("type").as_string(), "minotaur"))
+		//	CreateUnitEntity(UnitType::MINOTAUR, pos, civ);
+		//else if (!strcmp(it.attribute("type").as_string(), "jotnar"))
+		//	CreateUnitEntity(UnitType::JOTNAR, pos, civ);
+		//else if (!strcmp(it.attribute("type").as_string(), "draugar"))
+		//	CreateUnitEntity(UnitType::DRAUGAR, pos, civ);
+	}
+
+
+	it = n.child("buildings").child("build");
+	for (it; it; it = it.next_sibling("build"))
+	{
+		BuildingStatus status;
+		BuildingAction action;
+		CivilizationType build_civ;
+		iPoint pos;
+
+		pos.x = it.attribute("position_x").as_int();
+		pos.y = it.attribute("position_y").as_int();
+
+		if (!strcmp(it.attribute("civilization").as_string(), "viking")) build_civ = CivilizationType::VIKING;
+		else build_civ = CivilizationType::GREEK;
+
+		if (!strcmp(it.attribute("status").as_string(), "constructing")) status = BuildingStatus::CONSTRUCTING;
+		else if (!strcmp(it.attribute("status").as_string(), "finished")) status = BuildingStatus::FINISHED;
+		else status = BuildingStatus::DESTROYED;
+
+		if (!strcmp(it.attribute("action").as_string(), "nothing")) action = BuildingAction::NOTHING;
+		else if (!strcmp(it.attribute("action").as_string(), "producing")) action = BuildingAction::PRODUCING;
+		else action = BuildingAction::RESEARCHING;
+
+
+		if (!strcmp(it.attribute("type").as_string(), "fortress")) {
+			Building* fortress = static_cast<Building*>(CreateBuildingEntity(pos, BuildingType::FORTRESS, buildingsData[0],build_civ));
+			fortress->SetHealth(it.attribute("health").as_int());
+			if (status == BuildingStatus::CONSTRUCTING) { fortress->timer_construction.StartAt(it.attribute("time").as_float()); }
+			fortress->buildingStatus = status;
+			fortress->buildingAction = action;
+			if (action != BuildingAction::PRODUCING) { fortress->StartProducing(it.attribute("element").as_string()); fortress->timer_construction.StartAt(it.attribute("time").as_int());  }
+			else if (action != BuildingAction::RESEARCHING) { fortress->StartResearching(it.attribute("element").as_string()); fortress->timer_construction.StartAt(it.attribute("time").as_int());  }
+			
+		}
+	}
+	
+
 
 	return true;
 }
@@ -298,7 +393,8 @@ bool EntityManager::Save(pugi::xml_node& s) const
 	std::list<Entity*> list = App->entityManager->entities[EntityType::UNIT];
 	for each (Unit * var in list)
 	{
-		pugi::xml_node entity = node.append_child(var->name.c_str());
+		pugi::xml_node entity = node.append_child("unit");
+		entity.append_attribute("type").set_value(var->name.c_str());
 		entity.append_attribute("position_x").set_value(var->position.x);
 		entity.append_attribute("position_y").set_value(var->position.y);
 
@@ -324,8 +420,9 @@ bool EntityManager::Save(pugi::xml_node& s) const
 
 	for each (Building * var2 in list2)
 	{
-		pugi::xml_node building = node2.append_child(var2->name.c_str());
+		pugi::xml_node building = node2.append_child("build");
 
+		building.append_attribute("type").set_value(var2->name.c_str());
 		building.append_attribute("position_x").set_value(var2->position.x);
 		building.append_attribute("position_y").set_value(var2->position.y);
 
@@ -339,8 +436,10 @@ bool EntityManager::Save(pugi::xml_node& s) const
 		building.append_attribute("health").set_value(var2->GetHealth());
 
 
-		if(var2->buildingStatus==BuildingStatus::CONSTRUCTING)
+		if (var2->buildingStatus == BuildingStatus::CONSTRUCTING) {
 			building.append_attribute("status").set_value("constructing");
+			building.append_attribute("time").set_value(var2->timer_construction.ReadSec());
+		}
 		else if(var2->buildingStatus == BuildingStatus::DESTROYED)
 			building.append_attribute("status").set_value("destroyed");
 		else
@@ -349,11 +448,16 @@ bool EntityManager::Save(pugi::xml_node& s) const
 
 		if(var2->buildingAction == BuildingAction::NOTHING)
 			building.append_attribute("action").set_value("nothing");
-		else if(var2->buildingAction == BuildingAction::PRODUCING)
+		else if (var2->buildingAction == BuildingAction::PRODUCING) {
 			building.append_attribute("action").set_value("producing");
-		else
+			building.append_attribute("time").set_value(var2->GetTimeProducing());
+			building.append_attribute("element").set_value(var2->GetElementProducing().c_str());
+		}
+		else {
 			building.append_attribute("action").set_value("researching");
-
+			building.append_attribute("time").set_value(var2->GetTimeProducing());
+			building.append_attribute("element").set_value(var2->GetElementProducing().c_str());
+		}
 	}
 
 	pugi::xml_node node3 = s.append_child("players");
@@ -376,12 +480,12 @@ bool EntityManager::Save(pugi::xml_node& s) const
 		research.append_child("encampment").append_attribute("research").set_value(var3->research_encampment);
 		research.append_child("cleric").append_attribute("research").set_value(var3->research_cleric);
 		research.append_child("tassassinemple").append_attribute("research").set_value(var3->research_assassin);
-		research.append_child("lawful beast").append_attribute("research").set_value(var3->research_lawful_beast);
-		research.append_child("chaotic beast").append_attribute("research").set_value(var3->research_chaotic_beast);
-		research.append_child("lawful miracle").append_attribute("research").set_value(var3->research_lawful_miracle);
-		research.append_child("chaotic miracle").append_attribute("research").set_value(var3->research_chaotic_miracle);
-		research.append_child("lawful victory").append_attribute("research").set_value(var3->research_lawful_victory);
-		research.append_child("chaotic victory").append_attribute("research").set_value(var3->research_chaotic_victory);
+		research.append_child("lawful_beast").append_attribute("research").set_value(var3->research_lawful_beast);
+		research.append_child("chaotic_beast").append_attribute("research").set_value(var3->research_chaotic_beast);
+		research.append_child("lawful_miracle").append_attribute("research").set_value(var3->research_lawful_miracle);
+		research.append_child("chaotic_miracle").append_attribute("research").set_value(var3->research_chaotic_miracle);
+		research.append_child("lawful_victory").append_attribute("research").set_value(var3->research_lawful_victory);
+		research.append_child("chaotic_victory").append_attribute("research").set_value(var3->research_chaotic_victory);
 	}
 
 	return true;

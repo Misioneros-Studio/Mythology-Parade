@@ -1,29 +1,30 @@
 <?xml version="1.0"?>
 <info>
 	<entities>
-		<monk position_x="2304" position_y="2240" civilization="greek" health="1" />
-		<monk position_x="2976" position_y="2320" civilization="viking" health="1" />
-		<assasin position_x="2304" position_y="2336" civilization="greek" health="100" level="0" />
-		<assasin position_x="2976" position_y="2384" civilization="viking" health="100" level="0" />
+		<unit type="monk" position_x="2304" position_y="2240" civilization="greek" health="1" />
+		<unit type="monk" position_x="2976" position_y="2320" civilization="viking" health="1" />
+		<unit type="assassin" position_x="2304" position_y="2336" civilization="greek" health="100" level="0" />
+		<unit type="assassin" position_x="2976" position_y="2384" civilization="viking" health="100" level="0" />
 	</entities>
 	<buildings>
-		<fortress position_x="3200" position_y="2288" civilization="viking" health="500" status="finished" action="nothing" />
-		<fortress position_x="1920" position_y="2288" civilization="greek" health="500" status="finished" action="nothing" />
+		<build type="fortress" position_x="3200" position_y="2288" civilization="viking" health="500" status="finished" action="nothing" />
+		<build type="fortress" position_x="1920" position_y="2288" civilization="greek" health="500" status="finished" action="nothing" />
+		<build type="monastery" position_x="2112" position_y="2416" civilization="viking" health="250" status="constructing" time="4.34700012" action="nothing" />
 	</buildings>
 	<players>
 		<viking>
-			<economy faith="500" prayers="0" sacrifices="0" />
+			<economy faith="306" prayers="0" sacrifices="0" />
 			<research>
 				<temple research="false" />
 				<encampment research="false" />
 				<cleric research="false" />
 				<tassassinemple research="false" />
-				<lawful beast research="false" />
-				<chaotic beast research="false" />
-				<lawful miracle research="false" />
-				<chaotic miracle research="false" />
-				<lawful victory research="false" />
-				<chaotic victory research="false" />
+				<lawful_beast research="false" />
+				<chaotic_beast research="false" />
+				<lawful_miracle research="false" />
+				<chaotic_miracle research="false" />
+				<lawful_victory research="false" />
+				<chaotic_victory research="false" />
 			</research>
 		</viking>
 	</players>

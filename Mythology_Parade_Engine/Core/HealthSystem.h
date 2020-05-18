@@ -24,6 +24,7 @@ public:
 	//Setters
 	void SetMaxHealth(int value);
 	void IncreaseHealth(int value);
+	void SetHealth(int value);
 };
 
 #endif // !__HEALTHSYSTEM_H__
