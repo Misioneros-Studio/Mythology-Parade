@@ -180,7 +180,6 @@ void j1Scene::ClickToPath()
 		LOG("Ending: %i, %i", ending.x, ending.y);
 
 		iPoint PointToArrow = App->map->MapToWorld(ending.x, ending.y);
-		//PointToArrow = App->render->WorldToScreen(PointToArrow.x, PointToArrow.y);
 		App->particleManager->CreateParticle({ PointToArrow.x,PointToArrow.y}, { 0,0 }, 10, ParticleAnimation::Arrows_Cursor);
 
 		int posX, posY;

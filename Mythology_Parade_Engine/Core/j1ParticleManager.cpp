@@ -15,7 +15,6 @@ j1ParticleManager::~j1ParticleManager()
 }
 
 
-
 bool j1ParticleManager::Start()
 {
 	LOG("j1ParticleManager Started");
@@ -24,12 +23,10 @@ bool j1ParticleManager::Start()
 	CreateExplosionAnimation();
 	CreateArrowsCursorAnimation();
 	CreateSkullAnimation();
-
+	CreateLevelUpAnimation();
 
 	return true;
 }
-
-
 
 bool j1ParticleManager::Update(float dt)
 {
@@ -87,6 +84,9 @@ void j1ParticleManager::UpdateParticleAnimation(ParticleAnimation animation)
 	case ParticleAnimation::Skull:
 		current_animation = skull_animation;
 		break;
+	case ParticleAnimation::Level_Up:
+		current_animation = levelup_animation;
+		break;
 	}
 }
 
@@ -135,4 +135,16 @@ void j1ParticleManager::CreateSkullAnimation()
 	skull_animation.PushBack(SDL_Rect{ 160, 320, 32, 29 }, 1, 0, 0);
 	skull_animation.speed = 20.f;
 	skull_animation.loop = false;
+}
+
+void j1ParticleManager::CreateLevelUpAnimation()
+{
+	levelup_animation.PushBack(SDL_Rect{ 0, 349, 32, 22 }, 1, 0, 0);
+	levelup_animation.PushBack(SDL_Rect{ 32, 349, 32, 22 }, 1, 0, 0);
+	levelup_animation.PushBack(SDL_Rect{ 64, 349, 32, 22 }, 1, 0, 0);
+	levelup_animation.PushBack(SDL_Rect{ 96, 349, 32, 22 }, 1, 0, 0);
+	levelup_animation.PushBack(SDL_Rect{ 128, 349, 32, 22 }, 1, 0, 0);
+	levelup_animation.PushBack(SDL_Rect{ 160, 349, 32, 22 }, 1, 0, 0);
+	levelup_animation.speed = 20.f;
+	levelup_animation.loop = false;
 }

@@ -1,4 +1,5 @@
 #include "CombatUnit.h"
+#include "j1ParticleManager.h"
 #include "p2Log.h"
 
 CombatUnit::CombatUnit(UnitType type, iPoint pos) : Unit(type, pos), range(0), damage(0)
@@ -82,6 +83,7 @@ void CombatUnit::LevelUp()
 		break;
 
 	}
+	App->particleManager->CreateParticle({ (int)position.x-20,(int)position.y-50 }, { 0,-1 }, 10, ParticleAnimation::Level_Up);
 }
 
 void CombatUnit::Init(int maxHealth, int damage, int range, int speed)
