@@ -65,6 +65,7 @@ public:
 	bool research_chaotic_miracle;
 	bool research_lawful_victory;
 	bool research_chaotic_victory;
+	bool notLoad;
 
 };
 

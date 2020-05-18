@@ -352,12 +352,10 @@ bool EntityManager::Load(pugi::xml_node& n)
 		BuildingAction action;
 		CivilizationType build_civ;
 		iPoint pos;
+		int databuild;
 
 		pos.x = it.attribute("position_x").as_int();
 		pos.y = it.attribute("position_y").as_int();
-
-		if (!strcmp(it.attribute("civilization").as_string(), "viking")) build_civ = CivilizationType::VIKING;
-		else build_civ = CivilizationType::GREEK;
 
 		if (!strcmp(it.attribute("status").as_string(), "constructing")) status = BuildingStatus::CONSTRUCTING;
 		else if (!strcmp(it.attribute("status").as_string(), "finished")) status = BuildingStatus::FINISHED;
@@ -368,15 +366,71 @@ bool EntityManager::Load(pugi::xml_node& n)
 		else action = BuildingAction::RESEARCHING;
 
 
-		if (!strcmp(it.attribute("type").as_string(), "fortress")) {
-			Building* fortress = static_cast<Building*>(CreateBuildingEntity(pos, BuildingType::FORTRESS, buildingsData[0],build_civ));
-			fortress->SetHealth(it.attribute("health").as_int());
-			if (status == BuildingStatus::CONSTRUCTING) { fortress->timer_construction.StartAt(it.attribute("time").as_float()); }
-			fortress->buildingStatus = status;
-			fortress->buildingAction = action;
-			if (action != BuildingAction::PRODUCING) { fortress->StartProducing(it.attribute("element").as_string()); fortress->timer_construction.StartAt(it.attribute("time").as_int());  }
-			else if (action != BuildingAction::RESEARCHING) { fortress->StartResearching(it.attribute("element").as_string()); fortress->timer_construction.StartAt(it.attribute("time").as_int());  }
+		if (!strcmp(it.attribute("type").as_string(), "monastery")) {
+			if (!strcmp(it.attribute("civilization").as_string(), "viking")) { build_civ = CivilizationType::VIKING; databuild = 5; }
+			else { build_civ = CivilizationType::GREEK; databuild = 1; }
+			Building* monastery = static_cast<Building*>(CreateBuildingEntity(pos, BuildingType::MONASTERY, buildingsData[databuild],build_civ));
+			monastery->SetHealth(it.attribute("health").as_int());
+			if (status == BuildingStatus::CONSTRUCTING) { monastery->timer_construction.StartAt(it.attribute("time").as_float()); }
+			monastery->buildingStatus = status;
+			monastery->buildingAction = action;
+			if (action != BuildingAction::PRODUCING) { monastery->StartProducing(it.attribute("element").as_string()); monastery->timer_construction.StartAt(it.attribute("time").as_int());  }
+			else if (action != BuildingAction::RESEARCHING) { monastery->StartResearching(it.attribute("element").as_string()); monastery->timer_construction.StartAt(it.attribute("time").as_int());  }
 			
+		}
+
+		else if (!strcmp(it.attribute("type").as_string(), "temple")) {
+			if (!strcmp(it.attribute("civilization").as_string(), "viking")) { build_civ = CivilizationType::VIKING; databuild = 6; }
+			else { build_civ = CivilizationType::GREEK; databuild = 2; }
+			Building* temple = static_cast<Building*>(CreateBuildingEntity(pos, BuildingType::TEMPLE, buildingsData[databuild], build_civ));
+			temple->SetHealth(it.attribute("health").as_int());
+			if (status == BuildingStatus::CONSTRUCTING) { temple->timer_construction.StartAt(it.attribute("time").as_float()); }
+			temple->buildingStatus = status;
+			temple->buildingAction = action;
+			if (action != BuildingAction::PRODUCING) { temple->StartProducing(it.attribute("element").as_string()); temple->timer_construction.StartAt(it.attribute("time").as_int()); }
+			else if (action != BuildingAction::RESEARCHING) { temple->StartResearching(it.attribute("element").as_string()); temple->timer_construction.StartAt(it.attribute("time").as_int()); }
+
+		}
+
+		else if (!strcmp(it.attribute("type").as_string(), "encampment")) {
+			if (!strcmp(it.attribute("civilization").as_string(), "viking")) { build_civ = CivilizationType::VIKING; databuild = 7; }
+			else { build_civ = CivilizationType::GREEK; databuild = 3; }
+			Building* encampment = static_cast<Building*>(CreateBuildingEntity(pos, BuildingType::ENCAMPMENT, buildingsData[databuild], build_civ));
+			encampment->SetHealth(it.attribute("health").as_int());
+			if (status == BuildingStatus::CONSTRUCTING) { encampment->timer_construction.StartAt(it.attribute("time").as_float()); }
+			encampment->buildingStatus = status;
+			encampment->buildingAction = action;
+			if (action != BuildingAction::PRODUCING) { encampment->StartProducing(it.attribute("element").as_string()); encampment->timer_construction.StartAt(it.attribute("time").as_int()); }
+			else if (action != BuildingAction::RESEARCHING) { encampment->StartResearching(it.attribute("element").as_string()); encampment->timer_construction.StartAt(it.attribute("time").as_int()); }
+
+		}
+
+ 		else if (!strcmp(it.attribute("type").as_string(), "fortress")) {
+			if (!strcmp(it.attribute("civilization").as_string(), "viking")) { build_civ = CivilizationType::VIKING; }
+			else { build_civ = CivilizationType::GREEK; }
+			std::list<Entity*> list = App->entityManager->entities[EntityType::BUILDING];
+			for each (Building* var in list)
+			{
+				if (var->GetBuildingType() == BuildingType::FORTRESS)
+				{
+					if (var->civilization == CivilizationType::VIKING && build_civ == CivilizationType::VIKING)
+					{
+						var->SetHealth(it.attribute("health").as_int());
+						var->buildingStatus = status;
+						var->buildingAction = action;
+						if (action != BuildingAction::PRODUCING) { var->StartProducing(it.attribute("element").as_string()); var->timer_construction.StartAt(it.attribute("time").as_int()); }
+						else if (action != BuildingAction::RESEARCHING) { var->StartResearching(it.attribute("element").as_string()); var->timer_construction.StartAt(it.attribute("time").as_int()); }
+					}
+					else
+					{
+						var->SetHealth(it.attribute("health").as_int());
+						var->buildingStatus = status;
+						var->buildingAction = action;
+						if (action != BuildingAction::PRODUCING) { var->StartProducing(it.attribute("element").as_string()); var->timer_construction.StartAt(it.attribute("time").as_int()); }
+						else if (action != BuildingAction::RESEARCHING) { var->StartResearching(it.attribute("element").as_string()); var->timer_construction.StartAt(it.attribute("time").as_int()); }
+					}
+				}
+			}
 		}
 	}
 	

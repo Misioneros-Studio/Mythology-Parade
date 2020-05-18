@@ -35,6 +35,7 @@ bool Player::Start()
 	num_encampment = num_monastery = num_temple = 0;
 	time_production_victory = 10;
 
+
 	player_type = CivilizationType::VIKING;
 	displayDebug = false;
 	oneTime = true;

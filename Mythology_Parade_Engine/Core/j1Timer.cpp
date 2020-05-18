@@ -64,7 +64,7 @@ bool j1Timer::isPaused()
 
 bool j1Timer::StartAt(int var)
 {
-	started_at = var;
+	started_at = started_at - var;
 	Resume();
 	return true;
 }

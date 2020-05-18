@@ -8,12 +8,11 @@
 	</entities>
 	<buildings>
 		<build type="fortress" position_x="3200" position_y="2288" civilization="viking" health="500" status="finished" action="nothing" />
-		<build type="fortress" position_x="1920" position_y="2288" civilization="greek" health="500" status="finished" action="nothing" />
-		<build type="monastery" position_x="2112" position_y="2416" civilization="viking" health="250" status="constructing" time="4.34700012" action="nothing" />
+		<build type="fortress" position_x="1920" position_y="2288" civilization="greek" health="500" status="finished" action="researching" time="90" element="Encampment" />
 	</buildings>
 	<players>
 		<viking>
-			<economy faith="306" prayers="0" sacrifices="0" />
+			<economy faith="504" prayers="0" sacrifices="0" />
 			<research>
 				<temple research="false" />
 				<encampment research="false" />
