@@ -46,6 +46,8 @@ public:
 
 	void CreateUnit();
 
+	void CreateUnitQueue(int time, std::string thing_producing);
+
 private:
 
 	bool Awake(pugi::xml_node&);
@@ -67,6 +69,8 @@ private:
 	int time_research;
 	int time_producing;
 	bool researched;
+
+	int unitsToCreate;
 
 	int nearbyMonks;
 	std::string description;

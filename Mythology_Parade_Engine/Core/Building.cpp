@@ -15,6 +15,8 @@ Building::Building(BuildingType type, iPoint pos, BuildingInfo info)
 	percentage_constructing = 0;
 	time_producing = 0;
 	first_time_constructing = true;
+	unitsToCreate = 0;
+	percentage_life = 0.f;
 	/*---------------*/
 
 	//inits with some values
@@ -146,6 +148,13 @@ void Building::CreateUnit()
 	}
 }
 
+void Building::CreateUnitQueue(int time, std::string thing_producing)
+{
+	unitsToCreate++;
+	time_producing = time;
+	element_producing = thing_producing;
+}
+
 bool Building::Awake(pugi::xml_node& a)
 {
 
@@ -156,6 +165,11 @@ bool Building::Awake(pugi::xml_node& a)
 bool Building::Update(float dt)
 {
 	bool ret = true;
+	if (unitsToCreate > 0 && buildingAction == BuildingAction::NOTHING) {
+		StartProducing(time_producing, element_producing);
+		unitsToCreate--;
+	}
+
 	if (App->scene->paused_game == true && timer_construction.isPaused() == false)
 		timer_construction.Pause();
 	else if (App->scene->paused_game == false && timer_construction.isPaused() == true)
