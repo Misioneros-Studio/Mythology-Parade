@@ -117,7 +117,6 @@ bool j1Scene::Start()
 	research_menu = new ResearchMenu(player);
 	hud = new HUD(research_menu);
 
-	App->particleManager->CreateParticle({ 2400,2400 }, { 0,0 }, 10, ParticleAnimation::Explosion);
 	return true;
 }
 
