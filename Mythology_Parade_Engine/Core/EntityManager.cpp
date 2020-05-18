@@ -288,10 +288,24 @@ bool EntityManager::Load(pugi::xml_node& n)
 	entities.clear();
 
 	//PLAYER LOADING
-	pugi::xml_node player = n.child("players").first_child();
-	if (player.name() == "viking") civ = CivilizationType::VIKING;
+	pugi::xml_node p = n.child("players").first_child();
+	if (p.name() == "viking") civ = CivilizationType::VIKING;
 	else civ = CivilizationType::GREEK;
-	CreatePlayerEntity(player.name());
+	Player* player = static_cast<Player*>(CreatePlayerEntity(p.name()));
+	player->research_assassin = p.child("research").child("assassin").attribute("research");
+	player->research_chaotic_beast = p.child("research").child("chaotic_beast").attribute("research");
+	player->research_chaotic_miracle = p.child("research").child("chaotic_miracle").attribute("research");
+	player->research_chaotic_victory = p.child("research").child("chaotic_victory").attribute("research");
+	player->research_cleric = p.child("research").child("cleric").attribute("research");
+	player->research_encampment = p.child("research").child("encampment").attribute("research");
+	player->research_lawful_beast =  p.child("research").child("lawful_beast").attribute("research");
+	player->research_lawful_miracle = p.child("research").child("lawful_miracle").attribute("research");
+	player->research_lawful_victory = p.child("research").child("lawful_victory").attribute("research");
+	player->research_temple = p.child("research").child("temple").attribute("research");
+
+	player->SetFaith(p.child("economy").attribute("faith").as_int());
+	player->SetSacrifices(p.child("economy").attribute("sacrifices").as_int());
+	player->SetPrayers(p.child("economy").attribute("prayers").as_int());
 
 
 	//UNITS LOADING
@@ -533,7 +547,7 @@ bool EntityManager::Save(pugi::xml_node& s) const
 		research.append_child("temple").append_attribute("research").set_value(var3->research_temple);
 		research.append_child("encampment").append_attribute("research").set_value(var3->research_encampment);
 		research.append_child("cleric").append_attribute("research").set_value(var3->research_cleric);
-		research.append_child("tassassinemple").append_attribute("research").set_value(var3->research_assassin);
+		research.append_child("assassin").append_attribute("research").set_value(var3->research_assassin);
 		research.append_child("lawful_beast").append_attribute("research").set_value(var3->research_lawful_beast);
 		research.append_child("chaotic_beast").append_attribute("research").set_value(var3->research_chaotic_beast);
 		research.append_child("lawful_miracle").append_attribute("research").set_value(var3->research_lawful_miracle);

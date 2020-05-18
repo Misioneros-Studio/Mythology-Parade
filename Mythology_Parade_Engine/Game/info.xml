@@ -8,16 +8,16 @@
 	</entities>
 	<buildings>
 		<build type="fortress" position_x="3200" position_y="2288" civilization="viking" health="500" status="finished" action="nothing" />
-		<build type="fortress" position_x="1920" position_y="2288" civilization="greek" health="500" status="finished" action="researching" time="90" element="Encampment" />
+		<build type="fortress" position_x="1920" position_y="2288" civilization="greek" health="500" status="finished" action="nothing" />
 	</buildings>
 	<players>
 		<viking>
-			<economy faith="504" prayers="0" sacrifices="0" />
+			<economy faith="584" prayers="0" sacrifices="0" />
 			<research>
-				<temple research="false" />
+				<temple research="true" />
 				<encampment research="false" />
 				<cleric research="false" />
-				<tassassinemple research="false" />
+				<assassin research="false" />
 				<lawful_beast research="false" />
 				<chaotic_beast research="false" />
 				<lawful_miracle research="false" />

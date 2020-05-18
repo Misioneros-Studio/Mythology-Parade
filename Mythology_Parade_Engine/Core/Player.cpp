@@ -35,7 +35,6 @@ bool Player::Start()
 	num_encampment = num_monastery = num_temple = 0;
 	time_production_victory = 10;
 
-
 	player_type = CivilizationType::VIKING;
 	displayDebug = false;
 	oneTime = true;
@@ -68,12 +67,12 @@ bool Player::PreUpdate()
 	sacrifice = std::to_string(CurrencySystem::sacrifices);
 	prayer = std::to_string(CurrencySystem::prayers);
 
-	//if (oneTime)
-	//{
-	//	InitVikings();
-	//	InitGreek();
-	//	oneTime = false;
-	//}
+	if (oneTime)
+	{
+		InitVikings();
+		InitGreek();
+		oneTime = false;
+	}
 
 	return true;
 }
@@ -317,6 +316,21 @@ int Player::GetPrayers()
 int Player::GetSacrifices() 
 {
 	return CurrencySystem::sacrifices;
+}
+
+void Player::SetFaith(int var)
+{
+	CurrencySystem::faith = var;
+}
+
+void Player::SetPrayers(int var)
+{
+	CurrencySystem::prayers = var;
+}
+
+void Player::SetSacrifices(int var)
+{
+	CurrencySystem::sacrifices = var;
 }
 
 
