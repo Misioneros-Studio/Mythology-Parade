@@ -835,8 +835,8 @@ void HUD::ManageActionButtons(bool create_buttons, bool viking) {
 					App->gui->DeleteUIElement(hud_button_actions_unclickable[2]);
 					hud_button_actions_unclickable[2] = nullptr;
 				}
-				hud_button_actions[2] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 282,613,36,36 }, { 16,102,36,36 }, "Upgrade", { 98,102,36,36 }, 
-					{ 57,102,36,36 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::MAIN_MENU, (int)TooltipsAvailable::levelupbutton_assassin));
+				hud_button_actions[2] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 282,613,36,36 }, { 16,102,36,36 }, "Upgrade", { 98,102,36,36 },
+					{ 57,102,36,36 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::MAIN_MENU, false, -1.0f, 0, (int)TooltipsAvailable::levelupbutton_assassin));
 			}
 			else if (hud_button_actions_unclickable[2] == nullptr && exp_needed > cunit->GetExperience()) {
 				if (hud_button_actions[2] != nullptr) {
