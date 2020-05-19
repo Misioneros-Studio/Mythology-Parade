@@ -37,6 +37,8 @@ Unit::Unit(UnitType type, iPoint pos): unitType(type), state(AnimationType::IDLE
 	}
 	SetSelected(false);
 
+	circle_unit_rect = { 0,0,64,32 };
+	circle_unit_tex = App->tex->Load("assets/units/CercleUnitats.png");
 }
 
 Unit::~Unit()
@@ -92,6 +94,7 @@ bool Unit::Update(float dt)
 		else
 			Draw_Life_Bar();
 	}
+
 	return ret;
 }
 
@@ -182,6 +185,10 @@ void Unit::ChangeState(iPoint isoLookPosition, AnimationType newState)
 
 bool Unit::Draw(float dt)
 {
+	if (isSelected()) {
+		App->render->Blit(circle_unit_tex, position.x - 32, position.y - 18, &circle_unit_rect);
+	}
+
 	if (entPath.size() > 0 && targetPosition == iPoint(-1, -1))
 	{
 		targetPosition.x = entPath[0].x;
