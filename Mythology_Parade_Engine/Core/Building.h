@@ -52,6 +52,9 @@ public:
 	int GetTimeResearch();
 	int GetTimeProducing();
 
+	float GetPercentage();
+	void SetPercentage(float var);
+
 	std::string GetElementProducing();
 
 private:

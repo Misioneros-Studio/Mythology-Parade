@@ -39,6 +39,7 @@ bool Player::Start()
 	displayDebug = false;
 	oneTime = true;
 
+
 	if (civilization == CivilizationType::GREEK)
 		name = "greek";
 	else
@@ -47,6 +48,12 @@ bool Player::Start()
 	research_assassin = research_chaotic_beast = research_chaotic_miracle = research_cleric = research_encampment = research_lawful_beast = research_lawful_miracle = research_lawful_victory =
 		research_temple = research_chaotic_victory = false;
 
+	if (App->entityManager->initCivilizations)
+	{
+		InitVikings();
+		InitGreek();
+		App->entityManager->initCivilizations = false;
+	}
 	return true;
 }
 
@@ -67,12 +74,12 @@ bool Player::PreUpdate()
 	sacrifice = std::to_string(CurrencySystem::sacrifices);
 	prayer = std::to_string(CurrencySystem::prayers);
 
-	if (oneTime)
-	{
-		InitVikings();
-		InitGreek();
-		oneTime = false;
-	}
+	//if (oneTime)
+	//{
+	//	InitVikings();
+	//	InitGreek();
+	//	oneTime = false;
+	//}
 
 	return true;
 }

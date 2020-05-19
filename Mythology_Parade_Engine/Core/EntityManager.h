@@ -162,5 +162,7 @@ public:
 	int CreateAssasin_sound;
 	int Research_sound;
 
+	bool initCivilizations;
+
 };
 #endif // !_ENTITYMANAGER_H

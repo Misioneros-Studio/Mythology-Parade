@@ -162,6 +162,16 @@ int Building::GetTimeProducing()
 	return time_producing;
 }
 
+float Building::GetPercentage()
+{
+	return percentage_constructing;
+}
+
+void Building::SetPercentage(float var)
+{
+	percentage_constructing = var;
+}
+
 std::string Building::GetElementProducing()
 {
 	return element_producing;
