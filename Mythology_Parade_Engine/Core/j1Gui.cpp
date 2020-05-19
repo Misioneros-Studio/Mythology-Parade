@@ -94,6 +94,17 @@ bool j1Gui::PreUpdate()
 }
 
 // Called after all Updates
+bool j1Gui::Update(float dt)
+{
+	for (std::list<UI*>::iterator it = UIs.begin(); it != UIs.end(); it++)
+	{
+		it._Ptr->_Myval->Update(dt);
+	}
+
+	return true;
+}
+
+// Called after all Updates
 bool j1Gui::PostUpdate()
 {
 	if (App->console->console_active == true) {
@@ -178,7 +189,7 @@ const SDL_Texture* j1Gui::GetAtlas(int number_atlas) const
 
 // class Gui ---------------------------------------------------
 
-UI* j1Gui::CreateUIElement(Type type, UI* p, SDL_Rect r, SDL_Rect sprite, std::string str, SDL_Rect sprite2, SDL_Rect sprite3, bool drageable, SDL_Rect drag_area, j1Module* s_listener, int audio,
+UI* j1Gui::CreateUIElement(Type type, UI* p, SDL_Rect r, SDL_Rect sprite, std::string str, Panel_Fade p_fade, SDL_Rect sprite2, SDL_Rect sprite3, bool drageable, SDL_Rect drag_area, j1Module* s_listener, int audio,
 	bool console, float drag_position_scroll_bar, int number_atlas)
 {
 	UI* ui = nullptr;
@@ -187,13 +198,13 @@ UI* j1Gui::CreateUIElement(Type type, UI* p, SDL_Rect r, SDL_Rect sprite, std::s
 	switch (type)
 	{
 	case Type::BUTTON:
-		ui = new ButtonUI(Type::BUTTON, p, r, sprite, sprite2, sprite3, true, true, drag_area, audio);
+		ui = new ButtonUI(Type::BUTTON, p, r, sprite, sprite2, sprite3, true, true, drag_area, audio, p_fade);
 		break;
 	case Type::IMAGE:
-		ui = new ImageUI(Type::IMAGE, p, r, sprite, drageable, drageable, drag_area, drag_position_scroll_bar);
+		ui = new ImageUI(Type::IMAGE, p, r, sprite, drageable, drageable, drag_area, drag_position_scroll_bar, p_fade);
 		break;
 	case Type::WINDOW:
-		ui = new WindowUI(Type::WINDOW, p, r, sprite, drageable, drageable, drag_area);
+		ui = new WindowUI(Type::WINDOW, p, r, sprite, drageable, drageable, drag_area, p_fade);
 		break;
 	case Type::TEXT:
 		colour = { (Uint8)sprite2.x,(Uint8)sprite2.y,(Uint8)sprite2.w,(Uint8)sprite2.h };
@@ -201,10 +212,10 @@ UI* j1Gui::CreateUIElement(Type type, UI* p, SDL_Rect r, SDL_Rect sprite, std::s
 			title = false;
 		else
 			title = true;
-		ui = new TextUI(Type::TEXT, p, r, str, drageable, drageable, drag_area, console, colour, title);
+		ui = new TextUI(Type::TEXT, p, r, str, drageable, drageable, drag_area, console, colour, title, p_fade);
 		break;
 	case Type::LISTTEXTS:
-		ui = new ListTextsUI(Type::LISTTEXTS, p, r, str, drageable, drageable, drag_area, console);
+		ui = new ListTextsUI(Type::LISTTEXTS, p, r, str, drageable, drageable, drag_area, console, p_fade);
 		break;
 	}
 
@@ -234,10 +245,10 @@ UI* j1Gui::CreateUIElement(Type type, UI* p, SDL_Rect r, std::string str, int re
 	switch (type)
 	{
 	case Type::IMAGE:
-		ui = new ImageUI(Type::IMAGE, p, r, re, g, b, a, drageable, drageable, drag_area);
+		ui = new ImageUI(Type::IMAGE, p, r, re, g, b, a, drageable, drageable, drag_area,Panel_Fade::no_one_fade);
 		break;
 	case Type::INPUT:
-		ui = new TextInputUI(Type::INPUT, p, r, re, g, b, a, "", drageable, true, drag_area);
+		ui = new TextInputUI(Type::INPUT, p, r, re, g, b, a, "", drageable, true, drag_area, Panel_Fade::no_one_fade);
 		break;
 	}
 
@@ -259,8 +270,6 @@ UI* j1Gui::CreateUIElement(Type type, UI* p, SDL_Rect r, std::string str, int re
 	UIs.push_back(ui);
 	return ui;
 }
-
-
 
 bool j1Gui::DeleteUIElement(UI* ui) 
 {
@@ -395,11 +404,15 @@ UI::UI(Type s_type, SDL_Rect r, UI* p, bool d, bool f, SDL_Rect d_area, bool con
 	drag_area = d_area;
 	console = consol;
 	priority = 1;
-	num_atlas = 0;
+	//alpha = 255;
+	fade_panel_timer.Start();
+	fade_panel_time = 2;
 }
 
 bool UI::PreUpdate() {
 	UI* ui = this;
+
+
 
 	screen_rect.x = local_rect.x;
 	screen_rect.y = local_rect.y;
@@ -445,6 +458,30 @@ bool UI::PreUpdate() {
 			mask_rect.h -= mask_rect.y + mask_rect.h - win_y;
 		}
 	}
+	return true;
+}
+
+//This Update changes alpha if FADE is active/true
+bool UI::Update(float dt) {
+
+	if (fade_panel == Panel_Fade::panel_fade_in) {
+		float normalized = MIN(1.0f, (float)fade_panel_timer.ReadSec() / (float)fade_panel_time);
+		alpha = normalized * 255;
+		if (fade_panel_timer.ReadSec() >= fade_panel_time) {
+			alpha = 255;
+			fade_panel = Panel_Fade::no_one_fade;
+		}
+	}
+
+	else if (fade_panel == Panel_Fade::panel_fade_out) {
+		float normalized = MIN(1.0f, (float)fade_panel_timer.ReadSec() / (float)fade_panel_time);
+		alpha = 255 - (normalized * 255);
+		if (fade_panel_timer.ReadSec() >= fade_panel_time) {
+			alpha = 255;
+			fade_panel = Panel_Fade::no_one_fade;
+		}
+	}
+
 	return true;
 }
 
@@ -587,7 +624,7 @@ SDL_Rect UI::Check_Printable_Rect(SDL_Rect sprite, iPoint& dif_sprite, SDL_Rect 
 	return sprite;
 }
 
-ImageUI::ImageUI(Type type, UI* p, SDL_Rect r, SDL_Rect sprite, bool d, bool f, SDL_Rect d_area, float drag_position_scroll_bar) :UI(type, r, p, d, f, d_area) {
+ImageUI::ImageUI(Type type, UI* p, SDL_Rect r, SDL_Rect sprite, bool d, bool f, SDL_Rect d_area, float drag_position_scroll_bar, Panel_Fade p_fade) :UI(type, r, p, d, f, d_area) {
 	name.append("ImageUI");
 	sprite1 = sprite;
 	quad = r;
@@ -597,14 +634,22 @@ ImageUI::ImageUI(Type type, UI* p, SDL_Rect r, SDL_Rect sprite, bool d, bool f, 
 	square = false;
 	red = green = blue = alpha = 0;
 	unclicked = false;
+	fade_panel = p_fade;
 	if (drag_position_scroll_bar != -1) {
 		quad.x = drag_position_0.x + (drag_position_scroll_bar * (drag_position_1.x - drag_position_0.x));
 		SetScreenRect(quad);
 		UpdateLocalRect();
 	}
+	fade_panel = p_fade;
+	if (fade_panel == Panel_Fade::panel_fade_in) {
+		alpha = 0;
+	}
+	if (fade_panel == Panel_Fade::no_one_fade) {
+		alpha = 255;
+	}
 }
 
-ImageUI::ImageUI(Type type, UI* p, SDL_Rect r, int re, int g, int b, int a, bool d, bool f, SDL_Rect d_area) :UI(type, r, p, d, f, d_area, true) {
+ImageUI::ImageUI(Type type, UI* p, SDL_Rect r, int re, int g, int b, int a, bool d, bool f, SDL_Rect d_area, Panel_Fade p_fade) :UI(type, r, p, d, f, d_area, true) {
 	name.append("ImageUI");
 	sprite1 = { 0,0,0,0 };
 	quad = r;
@@ -615,6 +660,7 @@ ImageUI::ImageUI(Type type, UI* p, SDL_Rect r, int re, int g, int b, int a, bool
 	red = re;
 	green = g;
 	blue = b;
+	fade_panel = p_fade;
 	alpha = a;
 }
 
@@ -669,10 +715,11 @@ fPoint ImageUI::GetDragPositionNormalized() {
 	return position_normalized;
 }
 
-WindowUI::WindowUI(Type type, UI* p, SDL_Rect r, SDL_Rect sprite, bool d, bool f, SDL_Rect d_area) :UI(type, r, p, d, f, d_area) {
+WindowUI::WindowUI(Type type, UI* p, SDL_Rect r, SDL_Rect sprite, bool d, bool f, SDL_Rect d_area, Panel_Fade p_fade) :UI(type, r, p, d, f, d_area) {
 	name.append("WindowUI");
 	sprite1 = sprite;
 	quad = r;
+	fade_panel = p_fade;
 }
 
 bool WindowUI::PostUpdate() {
@@ -687,13 +734,14 @@ bool WindowUI::PostUpdate() {
 }
 
 
-TextUI::TextUI(Type type, UI* p, SDL_Rect r, std::string str, bool d, bool f, SDL_Rect d_area, bool console, SDL_Color coulor, bool title) :UI(type, r, p, d, f, d_area, console) 
+TextUI::TextUI(Type type, UI* p, SDL_Rect r, std::string str, bool d, bool f, SDL_Rect d_area, bool console, SDL_Color coulor, bool title, Panel_Fade p_fade) :UI(type, r, p, d, f, d_area, console)
 {
 	name.append("TextUI");
 	stri = str.c_str();
 	quad = r;
 	color = coulor;
 	title_default = title;
+	fade_panel = p_fade;
 }
 
 bool TextUI::PostUpdate() {
@@ -725,11 +773,11 @@ void TextUI::SetString(std::string new_string)
 	stri = new_string;
 }
 
-ListTextsUI::ListTextsUI(Type type, UI* p, SDL_Rect r, std::string str, bool d, bool f, SDL_Rect d_area, bool console) :UI(type, r, p, d, f, d_area, console) {
+ListTextsUI::ListTextsUI(Type type, UI* p, SDL_Rect r, std::string str, bool d, bool f, SDL_Rect d_area, bool console, Panel_Fade p_fade) :UI(type, r, p, d, f, d_area, console) {
 	name.append("ListTextsUI");
 	stri.push_back(str);
 	number_of_stri = stri.size();
-	quad = r;
+	fade_panel = p_fade;
 }
 
 
@@ -780,7 +828,7 @@ void ListTextsUI::SetListOfStrings(std::string string, int position)
 	}
 }
 
-ButtonUI::ButtonUI(Type type, UI* p, SDL_Rect r, SDL_Rect sprite, SDL_Rect spriten2, SDL_Rect spriten3, bool d, bool f, SDL_Rect d_area, int audio) :UI(type, r, p, d, f, d_area) {
+ButtonUI::ButtonUI(Type type, UI* p, SDL_Rect r, SDL_Rect sprite, SDL_Rect spriten2, SDL_Rect spriten3, bool d, bool f, SDL_Rect d_area, int audio, Panel_Fade p_fade) :UI(type, r, p, d, f, d_area) {
 	name.append("ButtonUI");
 	sprite1 = sprite;
 	sprite2 = spriten2;
@@ -791,6 +839,7 @@ ButtonUI::ButtonUI(Type type, UI* p, SDL_Rect r, SDL_Rect sprite, SDL_Rect sprit
 	isLocked = false;
 	front = true;
 	click_sfx = App->gui->sfx_UI[audio];
+	fade_panel = p_fade;
 }
 
 bool ButtonUI::PostUpdate() {
@@ -852,7 +901,7 @@ bool ButtonUI::PreUpdate() {
 }
 
 
-TextInputUI::TextInputUI(Type type, UI* p, SDL_Rect r, int re, int g, int b, int a, std::string str, bool d, bool f, SDL_Rect d_area) :UI(type, r, p, d, f, d_area, true) {
+TextInputUI::TextInputUI(Type type, UI* p, SDL_Rect r, int re, int g, int b, int a, std::string str, bool d, bool f, SDL_Rect d_area, Panel_Fade p_fade) :UI(type, r, p, d, f, d_area, true) {
 	name.append("TextInputUI");
 	sprite1 = { 0,0,0,0 };
 	quad = r;
@@ -864,6 +913,7 @@ TextInputUI::TextInputUI(Type type, UI* p, SDL_Rect r, int re, int g, int b, int
 	green = g;
 	blue = b;
 	alpha = a;
+	fade_panel = p_fade;
 }
 
 bool TextInputUI::PreUpdate() {

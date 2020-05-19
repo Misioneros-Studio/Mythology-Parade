@@ -54,24 +54,24 @@ bool j1TitleScene::Start()
 	App->gui->sfx_UI[(int)UI_Audio::LOAD] = App->audio->LoadFx("audio/ui/load.wav");
 
 
-	ui_button[0] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, nullptr, { 1535,145,237,38 }, { 787,240,237,38 }, "NEW", { 787,342,237,38 }, { 787,291,237,38 }, false,
+	ui_button[0] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, nullptr, { 1535,145,237,38 }, { 787,240,237,38 }, "NEW", Panel_Fade::no_one_fade, { 787,342,237,38 }, { 787,291,237,38 }, false,
 		{ 0,0,0,0 }, this, (int)UI_Audio::MAIN_MENU));
-	ui_text[0] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 1622,158,237,38 }, { 0,0,100,100 }, "New Game", { 0,0,0,255 }));
-	ui_button[1] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, nullptr, { 1535,220,237,38 }, { 787,240,237,38 }, "LOAD", { 787,342,237,38 }, { 787,291,237,38 }, false, 
+	ui_text[0] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 1622,158,237,38 }, { 0,0,100,100 }, "New Game", Panel_Fade::no_one_fade, { 0,0,0,255 }));
+	ui_button[1] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, nullptr, { 1535,220,237,38 }, { 787,240,237,38 }, "LOAD", Panel_Fade::no_one_fade, { 787,342,237,38 }, { 787,291,237,38 }, false,
 		{ 0,0,0,0 }, this, (int)UI_Audio::MAIN_MENU));
-	ui_text[1] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 1619,232,237,38 }, { 0,0,100,100 }, "Load Game", { 0,0,0,255 }));
-	ui_button[2] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, nullptr, { 1535,295,237,38 }, { 787,240,237,38 }, "TUTORIAL", { 787,342,237,38 }, { 787,291,237,38 }, false,
+	ui_text[1] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 1619,232,237,38 }, { 0,0,100,100 }, "Load Game", Panel_Fade::no_one_fade, { 0,0,0,255 }));
+	ui_button[2] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, nullptr, { 1535,295,237,38 }, { 787,240,237,38 }, "TUTORIAL", Panel_Fade::no_one_fade, { 787,342,237,38 }, { 787,291,237,38 }, false,
 		{ 0,0,0,0 }, this, (int)UI_Audio::MAIN_MENU));
-	ui_text[2] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 1628,307,237,38 }, { 0,0,100,100 }, "Tutorial", { 0,0,0,255 }));
-	ui_button[3] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, nullptr, { 1535,370,237,38 }, { 787,240,237,38 }, "OPTIONS", { 787,342,237,38 }, { 787,291,237,38 }, false, 
+	ui_text[2] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 1628,307,237,38 }, { 0,0,100,100 }, "Tutorial", Panel_Fade::no_one_fade, { 0,0,0,255 }));
+	ui_button[3] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, nullptr, { 1535,370,237,38 }, { 787,240,237,38 }, "OPTIONS", Panel_Fade::no_one_fade, { 787,342,237,38 }, { 787,291,237,38 }, false,
 		{ 0,0,0,0 }, this, (int)UI_Audio::MAIN_MENU));
-	ui_text[3] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 1629,382,237,38 }, { 0,0,100,100 }, "Options", { 0,0,0,255 }));
-	ui_button[4] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, nullptr, { 1535,445,237,38 }, { 787,240,237,38 }, "CREDITS", { 787,342,237,38 }, { 787,291,237,38 }, false,
+	ui_text[3] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 1629,382,237,38 }, { 0,0,100,100 }, "Options", Panel_Fade::no_one_fade, { 0,0,0,255 }));
+	ui_button[4] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, nullptr, { 1535,445,237,38 }, { 787,240,237,38 }, "CREDITS", Panel_Fade::no_one_fade, { 787,342,237,38 }, { 787,291,237,38 }, false,
 		{ 0,0,0,0 }, this, (int)UI_Audio::MAIN_MENU));
-	ui_text[4] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 1627,457,237,38 }, { 0,0,100,100 }, "Credits"));
-	ui_button[5] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, nullptr, { 1535,520,237,38 }, { 787,240,237,38 }, "EXIT", { 787,342,237,38 }, { 787,291,237,38 }, false, 
+	ui_text[4] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 1627,457,237,38 }, { 0,0,100,100 }, "Credits", Panel_Fade::no_one_fade));
+	ui_button[5] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, nullptr, { 1535,520,237,38 }, { 787,240,237,38 }, "EXIT", Panel_Fade::no_one_fade, { 787,342,237,38 }, { 787,291,237,38 }, false,
 		{ 0,0,0,0 }, this, (int)UI_Audio::MAIN_MENU));
-	ui_text[5] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 1640,532,237,38 }, { 0,0,100,100 }, "Exit", { 0,0,0,255 }));
+	ui_text[5] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 1640,532,237,38 }, { 0,0,100,100 }, "Exit", Panel_Fade::no_one_fade, { 0,0,0,255 }));
 	
 
 	close_menus = CloseTitleSceneMenus::None;
@@ -231,27 +231,27 @@ void j1TitleScene::ActivateOptionsMenu() {
 		App->win->GetWindowSize(w, h);
 		ui_pause_black_screen = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, nullptr, { 0,0,(int)w,(int)h }, "", 0, 0, 0, 150));
 		ui_options_window = static_cast<WindowUI*>(App->gui->CreateUIElement(Type::WINDOW, nullptr, { 410,200,459,321 }, { 1278,4,459,321 }));
-		ui_button_options[0] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_options_window, { 520,453,237,38 }, { 787,240,237,38 }, "CLOSE OPTIONS", { 787,342,237,38 },
+		ui_button_options[0] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_options_window, { 520,453,237,38 }, { 787,240,237,38 }, "CLOSE OPTIONS", Panel_Fade::no_one_fade, { 787,342,237,38 },
 			{ 787,291,237,38 }, false, { 0,0,0,0 }, this, (int)UI_Audio::CLOSE));
-		ui_button_options[1] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_options_window, { 570,260,36,36 }, { 16,21,36,36 }, "FULLSCREEN", { 98,21,36,36 },
+		ui_button_options[1] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_options_window, { 570,260,36,36 }, { 16,21,36,36 }, "FULLSCREEN", Panel_Fade::no_one_fade, { 98,21,36,36 },
 			{ 57,21,36,36 }, false, { 0,0,0,0 }, this, (int)UI_Audio::MAIN_MENU));
 		if (App->win->isFullscreen() == true) {
 			ui_button_options[1]->sprite1.y = ui_button_options[1]->sprite2.y = ui_button_options[1]->sprite3.y = 61;
 		}
-		ui_text_options[0] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, ui_options_window, { 619,465,237,38 }, { 0,0,100,100 }, "Close", { 0,0,0,255 }));
-		ui_text_options[1] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, ui_options_window, { 583,212,237,38 }, { 0,0,100,100 }, "OPTIONS", { 255,255,255,255 }, { 1,0,0,0 }));
-		ui_text_options[2] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, ui_options_window, { 620,270,237,38 }, { 0,0,100,100 }, "FULLSCREEN", { 255,255,255,255 }));
-		ui_text_volume_sliders[0] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, ui_options_window, { 590,314,237,38 }, { 0,0,100,100 }, "MUSIC'S VOLUME", { 255,255,255,255 }));
+		ui_text_options[0] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, ui_options_window, { 619,465,237,38 }, { 0,0,100,100 }, "Close", Panel_Fade::no_one_fade, { 0,0,0,255 }));
+		ui_text_options[1] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, ui_options_window, { 583,212,237,38 }, { 0,0,100,100 }, "OPTIONS", Panel_Fade::no_one_fade, { 255,255,255,255 }, { 1,0,0,0 }));
+		ui_text_options[2] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, ui_options_window, { 620,270,237,38 }, { 0,0,100,100 }, "FULLSCREEN", Panel_Fade::no_one_fade, { 255,255,255,255 }));
+		ui_text_volume_sliders[0] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, ui_options_window, { 590,314,237,38 }, { 0,0,100,100 }, "MUSIC'S VOLUME", Panel_Fade::no_one_fade, { 255,255,255,255 }));
 		ui_volume_sliders[0] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, ui_options_window, { 548,340,(int)(181* ((float)App->audio->GetVolumeMusic() / (float)128)),17 },
 			{ 1072,250,181,17 }));
 		ui_volume_sliders[1]=static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, ui_options_window, { 531,334,215,30 }, { 1053,350,215,30 }));
-		ui_volume_sliders[2]=static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, ui_options_window, { 548,337,36,24 }, { 1072,180,36,24 }, "VOLUME_CONTROL", { 0,0,0,0 }, { 0,0,0,0 },
+		ui_volume_sliders[2]=static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, ui_options_window, { 548,337,36,24 }, { 1072,180,36,24 }, "VOLUME_CONTROL", Panel_Fade::no_one_fade, { 0,0,0,0 }, { 0,0,0,0 },
 			true, { 548,337,181,0 }, App->audio, 0, false, ((float)App->audio->GetVolumeMusic() / (float)128)));
-		ui_text_volume_sliders[1] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, ui_options_window, { 598,379,237,38 }, { 0,0,100,100 }, "FX'S VOLUME", { 255,255,255,255 }));
+		ui_text_volume_sliders[1] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, ui_options_window, { 598,379,237,38 }, { 0,0,100,100 }, "FX'S VOLUME", Panel_Fade::no_one_fade, { 255,255,255,255 }));
 		ui_volume_sliders[3] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, ui_options_window, { 548,405,(int)(181 * ((float)App->audio->GetVolumeFx() / (float)128)),17 },
 			{ 1072,250,181,17 }));
 		ui_volume_sliders[4] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, ui_options_window, { 531,399,215,30 }, { 1053,350,215,30 }));
-		ui_volume_sliders[5] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, ui_options_window, { 548,402,36,24 }, { 1072,180,36,24 }, "FX_CONTROL", { 0,0,0,0 }, { 0,0,0,0 },
+		ui_volume_sliders[5] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, ui_options_window, { 548,402,36,24 }, { 1072,180,36,24 }, "FX_CONTROL", Panel_Fade::no_one_fade, { 0,0,0,0 }, { 0,0,0,0 },
 			true, { 548,402,181,0 }, App->audio, 0, false, ((float)App->audio->GetVolumeFx() / (float)128)));
 
 	}
@@ -310,17 +310,17 @@ void j1TitleScene::ActivatCivilizationMenu() {
 		App->win->GetWindowSize(w, h);
 		ui_pause_black_screen = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, nullptr, { 0,0,(int)w,(int)h }, "", 0, 0, 0, 150));
 		ui_civilization_window = static_cast<WindowUI*>(App->gui->CreateUIElement(Type::WINDOW, nullptr, { 410,200,459,168 }, { 790,408,459,168 }));
-		ui_button_civilization[0] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_civilization_window, { 520,300,237,38 }, { 787,240,237,38 }, "CLOSE CIVILIZATION", 
+		ui_button_civilization[0] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_civilization_window, { 520,300,237,38 }, { 787,240,237,38 }, "CLOSE CIVILIZATION", Panel_Fade::no_one_fade,
 			{ 787,342,237,38 }, { 787,291,237,38 },	false, { 0,0,0,0 }, this, (int)UI_Audio::CLOSE));
-		ui_button_civilization[1] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_civilization_window, { 450,250,117,38 }, { 834,125,117,24 }, "GREEK", { 834,149,117,24 },
+		ui_button_civilization[1] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_civilization_window, { 450,250,117,38 }, { 834,125,117,24 }, "GREEK", Panel_Fade::no_one_fade, { 834,149,117,24 },
 			{ 834,101,117,24 }, false, { 0,0,0,0 }, this, (int)UI_Audio::MAIN_MENU));
-		ui_button_civilization[2] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_civilization_window, { 710,250,117,38 }, { 834,125,117,24 }, "VIKING", { 834,149,117,24 },
+		ui_button_civilization[2] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_civilization_window, { 710,250,117,38 }, { 834,125,117,24 }, "VIKING", Panel_Fade::no_one_fade, { 834,149,117,24 },
 			{ 834,101,117,24 }, false, { 0,0,0,0 }, this, (int)UI_Audio::MAIN_MENU));
-		ui_text_civilization[0] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 619,312,237,38 }, { 0,0,100,100 }, "Close", { 0,0,0,255 }));
-		ui_text_civilization[1] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 463,212,237,38 }, { 0,0,100,100 }, "CHOOSE YOUR CIVILIZATION", { 255,255,255,255 },
+		ui_text_civilization[0] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 619,312,237,38 }, { 0,0,100,100 }, "Close", Panel_Fade::no_one_fade, { 0,0,0,255 }));
+		ui_text_civilization[1] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 463,212,237,38 }, { 0,0,100,100 }, "CHOOSE YOUR CIVILIZATION", Panel_Fade::no_one_fade, { 255,255,255,255 },
 			{ 1,0,0,0 }));
-		ui_text_civilization[2] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 470,256,237,38 }, { 0,0,100,100 }, "Greek", { 0,0,0,255 }, { 1,0,0,0 }));
-		ui_text_civilization[3] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 725,256,237,38 }, { 0,0,100,100 }, "Viking", { 0,0,0,255 }, { 1,0,0,0 }));
+		ui_text_civilization[2] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 470,256,237,38 }, { 0,0,100,100 }, "Greek", Panel_Fade::no_one_fade, { 0,0,0,255 }, { 1,0,0,0 }));
+		ui_text_civilization[3] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 725,256,237,38 }, { 0,0,100,100 }, "Viking", Panel_Fade::no_one_fade, { 0,0,0,255 }, { 1,0,0,0 }));
 	}
 	for (int i = 0; i < 6; i++) {
 		if (ui_button[i] != nullptr) {
@@ -367,10 +367,10 @@ void j1TitleScene::ActivateTutorial() {
 		App->win->GetWindowSize(w, h);
 		ui_pause_black_screen = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, nullptr, { 0,0,(int)w,(int)h }, "", 0, 0, 0, 150));
 		ui_tutorial_window = static_cast<WindowUI*>(App->gui->CreateUIElement(Type::WINDOW, nullptr, { 410,200,459,168 }, { 790,408,459,168 }));
-		ui_tutorial_options = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_tutorial_window, { 520,300,237,38 }, { 787,240,237,38 }, "CLOSE TUTORIAL", { 787,342,237,38 },
+		ui_tutorial_options = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_tutorial_window, { 520,300,237,38 }, { 787,240,237,38 }, "CLOSE TUTORIAL", Panel_Fade::no_one_fade, { 787,342,237,38 },
 			{ 787,291,237,38 }, false, { 0,0,0,0 }, this, (int)UI_Audio::CLOSE));
-		ui_text_tutorial[0] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 619,312,237,38 }, { 0,0,100,100 }, "Close", { 0,0,0,255 }));
-		ui_text_tutorial[1] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 583,212,237,38 }, { 0,0,100,100 }, "TUTORIAL", { 255,255,255,255 }, { 1,0,0,0 }));
+		ui_text_tutorial[0] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 619,312,237,38 }, { 0,0,100,100 }, "Close", Panel_Fade::no_one_fade, { 0,0,0,255 }));
+		ui_text_tutorial[1] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 583,212,237,38 }, { 0,0,100,100 }, "TUTORIAL", Panel_Fade::no_one_fade, { 255,255,255,255 }, { 1,0,0,0 }));
 	}
 	for (int i = 0; i < 6; i++) {
 		if (ui_button[i] != nullptr) {
@@ -415,42 +415,42 @@ void j1TitleScene::ActivateCredits() {
 		App->win->GetWindowSize(w, h);
 		ui_pause_black_screen = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, nullptr, { 0,0,(int)w,(int)h }, "", 0, 0, 0, 150));
 		ui_credits_window = static_cast<WindowUI*>(App->gui->CreateUIElement(Type::WINDOW, nullptr, { 410,200,459,321 }, { 1278,4,459,321 }));
-		ui_button_credits[0] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_credits_window, { 520,453,237,38 }, { 787,240,237,38 }, "CLOSE CREDITS", { 787,342,237,38 },
+		ui_button_credits[0] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_credits_window, { 520,453,237,38 }, { 787,240,237,38 }, "CLOSE CREDITS", Panel_Fade::no_one_fade, { 787,342,237,38 },
 			{ 787,291,237,38 }, false, { 0,0,0,0 }, this, (int)UI_Audio::CLOSE));
-		ui_text_credits[0] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 619,465,237,38 }, { 0,0,100,100 }, "Close", { 0,0,0,255 }));
-		ui_text_credits[17] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 587,212,237,38 }, { 0,0,100,100 }, "CREDITS", { 255,255,255,255 }, { 1,0,0,0 }));
-		ui_text_credits[9] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 435,256,237,38 }, { 0,0,100,100 }, "Leader", { 255,255,255,255 }, { 1,0,0,0, }));
-		ui_button_credits[1] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_credits_window, { 420,288,117,24 }, { 834,125,117,24 }, "BERNAT'S GITHUB", { 834,149,117,24 },
+		ui_text_credits[0] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 619,465,237,38 }, { 0,0,100,100 }, "Close", Panel_Fade::no_one_fade, { 0,0,0,255 }));
+		ui_text_credits[17] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 587,212,237,38 }, { 0,0,100,100 }, "CREDITS", Panel_Fade::no_one_fade, { 255,255,255,255 }, { 1,0,0,0 }));
+		ui_text_credits[9] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 435,256,237,38 }, { 0,0,100,100 }, "Leader", Panel_Fade::no_one_fade, { 255,255,255,255 }, { 1,0,0,0, }));
+		ui_button_credits[1] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_credits_window, { 420,288,117,24 }, { 834,125,117,24 }, "BERNAT'S GITHUB", Panel_Fade::no_one_fade, { 834,149,117,24 },
 			{ 834,101,117,24 }, false, { 0,0,0,0 }, this, (int)UI_Audio::CONFIRMATION));
-		ui_text_credits[1] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 457,294,237,38 }, { 0,0,100,100 }, "Bernat", { 0,0,0,255 }));
-		ui_text_credits[10] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 602,256,237,38 }, { 0,0,100,100 }, "Mngt.", { 255,255,255,255 }, { 1,0,0,0, }));
-		ui_button_credits[2] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_credits_window, { 581,288,117,24 }, { 834,125,117,24 }, "JORDI'S GITHUB", { 834,149,117,24 },
+		ui_text_credits[1] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 457,294,237,38 }, { 0,0,100,100 }, "Bernat", Panel_Fade::no_one_fade, { 0,0,0,255 }));
+		ui_text_credits[10] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 602,256,237,38 }, { 0,0,100,100 }, "Mngt.", Panel_Fade::no_one_fade, { 255,255,255,255 }, { 1,0,0,0, }));
+		ui_button_credits[2] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_credits_window, { 581,288,117,24 }, { 834,125,117,24 }, "JORDI'S GITHUB", Panel_Fade::no_one_fade, { 834,149,117,24 },
 			{ 834,101,117,24 }, false, { 0,0,0,0 }, this, (int)UI_Audio::CONFIRMATION));
-		ui_text_credits[2] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 622,294,237,38 }, { 0,0,100,100 }, "Jordi", { 0,0,0,255 }));
-		ui_text_credits[11] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 757,256,237,38 }, { 0,0,100,100 }, "Design", { 255,255,255,255 }, { 1,0,0,0, }));
-		ui_button_credits[3] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_credits_window, { 742,288,117,24 }, { 834,125,117,24 }, "EUDALD'S GITHUB", { 834,149,117,24 },
+		ui_text_credits[2] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 622,294,237,38 }, { 0,0,100,100 }, "Jordi", Panel_Fade::no_one_fade, { 0,0,0,255 }));
+		ui_text_credits[11] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 757,256,237,38 }, { 0,0,100,100 }, "Design", Panel_Fade::no_one_fade, { 255,255,255,255 }, { 1,0,0,0, }));
+		ui_button_credits[3] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_credits_window, { 742,288,117,24 }, { 834,125,117,24 }, "EUDALD'S GITHUB", Panel_Fade::no_one_fade, { 834,149,117,24 },
 			{ 834,101,117,24 }, false, { 0,0,0,0 }, this, (int)UI_Audio::CONFIRMATION));
-		ui_text_credits[3] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 779,294,237,38 }, { 0,0,100,100 }, "Eudald", { 0,0,0,255 }));
-		ui_text_credits[12] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 445,323,237,38 }, { 0,0,100,100 }, "Code", { 255,255,255,255 }, { 1,0,0,0, }));
-		ui_button_credits[4] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_credits_window, { 420,355,117,24 }, { 834,125,117,24 }, "MIQUEL'S GITHUB", { 834,149,117,24 },
+		ui_text_credits[3] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 779,294,237,38 }, { 0,0,100,100 }, "Eudald", Panel_Fade::no_one_fade, { 0,0,0,255 }));
+		ui_text_credits[12] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 445,323,237,38 }, { 0,0,100,100 }, "Code", Panel_Fade::no_one_fade, { 255,255,255,255 }, { 1,0,0,0, }));
+		ui_button_credits[4] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_credits_window, { 420,355,117,24 }, { 834,125,117,24 }, "MIQUEL'S GITHUB", Panel_Fade::no_one_fade, { 834,149,117,24 },
 			{ 834,101,117,24 }, false, { 0,0,0,0 }, this, (int)UI_Audio::CONFIRMATION));
-		ui_text_credits[4] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 457,361,237,38 }, { 0,0,100,100 }, "Miquel", { 0,0,0,255 }));
-		ui_text_credits[13] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 618,323,237,38 }, { 0,0,100,100 }, "Art", { 255,255,255,255 }, { 1,0,0,0, }));
-		ui_button_credits[5] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_credits_window, { 581,355,117,24 }, { 834,125,117,24 }, "JOSEP'S GITHUB", { 834,149,117,24 },
+		ui_text_credits[4] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 457,361,237,38 }, { 0,0,100,100 }, "Miquel", Panel_Fade::no_one_fade, { 0,0,0,255 }));
+		ui_text_credits[13] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 618,323,237,38 }, { 0,0,100,100 }, "Art", Panel_Fade::no_one_fade, { 255,255,255,255 }, { 1,0,0,0, }));
+		ui_button_credits[5] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_credits_window, { 581,355,117,24 }, { 834,125,117,24 }, "JOSEP'S GITHUB", Panel_Fade::no_one_fade, { 834,149,117,24 },
 			{ 834,101,117,24 }, false, { 0,0,0,0 }, this, (int)UI_Audio::CONFIRMATION));
-		ui_text_credits[5] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 622,361,237,38 }, { 0,0,100,100 }, "Josep", { 0,0,0,255 }));
-		ui_text_credits[14] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 787,323,237,38 }, { 0,0,100,100 }, "UI", { 255,255,255,255 }, { 1,0,0,0, }));
-		ui_button_credits[6] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_credits_window, { 742,355,117,24 }, { 834,125,117,24 }, "ARNAU'S GITHUB", { 834,149,117,24 },
+		ui_text_credits[5] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 622,361,237,38 }, { 0,0,100,100 }, "Josep", Panel_Fade::no_one_fade, { 0,0,0,255 }));
+		ui_text_credits[14] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 787,323,237,38 }, { 0,0,100,100 }, "UI", Panel_Fade::no_one_fade, { 255,255,255,255 }, { 1,0,0,0, }));
+		ui_button_credits[6] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_credits_window, { 742,355,117,24 }, { 834,125,117,24 }, "ARNAU'S GITHUB", Panel_Fade::no_one_fade, { 834,149,117,24 },
 			{ 834,101,117,24 }, false, { 0,0,0,0 }, this, (int)UI_Audio::CONFIRMATION));
-		ui_text_credits[6] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 781,361,237,38 }, { 0,0,100,100 }, "Arnau", { 0,0,0,255 }));
-		ui_text_credits[15] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 441,390,237,38 }, { 0,0,100,100 }, "Audio", { 255,255,255,255 }, { 1,0,0,0, }));
-		ui_button_credits[7] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_credits_window, { 420,422,117,24 }, { 834,125,117,24 }, "MARC'S GITHUB", { 834,149,117,24 },
+		ui_text_credits[6] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 781,361,237,38 }, { 0,0,100,100 }, "Arnau", Panel_Fade::no_one_fade, { 0,0,0,255 }));
+		ui_text_credits[15] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 441,390,237,38 }, { 0,0,100,100 }, "Audio", Panel_Fade::no_one_fade, { 255,255,255,255 }, { 1,0,0,0, }));
+		ui_button_credits[7] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_credits_window, { 420,422,117,24 }, { 834,125,117,24 }, "MARC'S GITHUB", Panel_Fade::no_one_fade, { 834,149,117,24 },
 			{ 834,101,117,24 }, false, { 0,0,0,0 }, this, (int)UI_Audio::CONFIRMATION));
-		ui_text_credits[7] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 461,428,237,38 }, { 0,0,100,100 }, "Marc", { 0,0,0,255 }));
-		ui_text_credits[16] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 783,390,237,38 }, { 0,0,100,100 }, "QA", { 255,255,255,255 }, { 1,0,0,0, }));
-		ui_button_credits[8] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_credits_window, { 742,422,117,24 }, { 834,125,117,24 }, "ROGER'S GITHUB", { 834,149,117,24 },
+		ui_text_credits[7] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 461,428,237,38 }, { 0,0,100,100 }, "Marc", Panel_Fade::no_one_fade, { 0,0,0,255 }));
+		ui_text_credits[16] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 783,390,237,38 }, { 0,0,100,100 }, "QA", Panel_Fade::no_one_fade, { 255,255,255,255 }, { 1,0,0,0, }));
+		ui_button_credits[8] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_credits_window, { 742,422,117,24 }, { 834,125,117,24 }, "ROGER'S GITHUB", Panel_Fade::no_one_fade, { 834,149,117,24 },
 			{ 834,101,117,24 }, false, { 0,0,0,0 }, this, (int)UI_Audio::CONFIRMATION));
-		ui_text_credits[8] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 781,428,237,38 }, { 0,0,100,100 }, "Roger", { 0,0,0,255 }));
+		ui_text_credits[8] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 781,428,237,38 }, { 0,0,100,100 }, "Roger", Panel_Fade::no_one_fade, { 0,0,0,255 }));
 	}
 	for (int i = 0; i < 6; i++) {
 		if (ui_button[i] != nullptr) {
@@ -496,17 +496,17 @@ void j1TitleScene::ActivateConfirmationMenu(std::string str) {
 		App->win->GetWindowSize(w, h);
 		ui_pause_black_screen = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, nullptr, { 0,0,(int)w,(int)h }, "", 0, 0, 0, 150));
 		ui_confirmation_window = static_cast<WindowUI*>(App->gui->CreateUIElement(Type::WINDOW, nullptr, { 410,200,459,168 }, { 790,408,459,168 }));
-		ui_button_confirmation[0] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_confirmation_window, { 470,300,117,38 }, { 834,125,117,24 }, "YES", { 834,149,117,24 },
+		ui_button_confirmation[0] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_confirmation_window, { 470,300,117,38 }, { 834,125,117,24 }, "YES", Panel_Fade::no_one_fade, { 834,149,117,24 },
 			{ 834,101,117,24 }, false, { 0,0,0,0 }, this, (int)UI_Audio::CONFIRMATION));
-		ui_text_confirmation[0] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 509,306,237,38 }, { 0,0,100,100 }, "Yes", { 0,0,0,255 }, { 1,0,0,0 }));
-		ui_button_confirmation[1] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_confirmation_window, { 690,300,117,38 }, { 834,125,117,24 }, "NO", { 834,149,117,24 },
+		ui_text_confirmation[0] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 509,306,237,38 }, { 0,0,100,100 }, "Yes", Panel_Fade::no_one_fade, { 0,0,0,255 }, { 1,0,0,0 }));
+		ui_button_confirmation[1] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_confirmation_window, { 690,300,117,38 }, { 834,125,117,24 }, "NO", Panel_Fade::no_one_fade, { 834,149,117,24 },
 			{ 834,101,117,24 }, false, { 0,0,0,0 }, this, (int)UI_Audio::CONFIRMATION));
-		ui_text_confirmation[1] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 731,306,237,38 }, { 0,0,100,100 }, "No", { 0,0,0,255 }, { 1,0,0,0 }));
+		ui_text_confirmation[1] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 731,306,237,38 }, { 0,0,100,100 }, "No", Panel_Fade::no_one_fade, { 0,0,0,255 }, { 1,0,0,0 }));
 		std::string text = str + " ?";
-		ui_text_confirmation[2] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 463,212,237,38 }, { 0,0,100,100 }, "ARE YOU SURE YOU WANT TO", { 255,255,255,255 }, 
+		ui_text_confirmation[2] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 463,212,237,38 }, { 0,0,100,100 }, "ARE YOU SURE YOU WANT TO", Panel_Fade::no_one_fade, { 255,255,255,255 },
 			{ 1,0,0,0 }));
 		int size = text.length();
-		ui_text_confirmation[3] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 640 - (6 * size),247,237,38 }, { 0,0,100,100 }, text, { 255,255,255,255 }, { 1,0,0,0 }));
+		ui_text_confirmation[3] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 640 - (6 * size),247,237,38 }, { 0,0,100,100 }, text, Panel_Fade::no_one_fade, { 255,255,255,255 }, { 1,0,0,0 }));
 
 	}
 	for (int i = 0; i < 6; i++) {

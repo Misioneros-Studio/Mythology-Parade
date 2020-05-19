@@ -7,6 +7,12 @@
 
 #define CURSOR_WIDTH 2
 
+enum Panel_Fade {
+	no_one_fade,
+	panel_fade_in,
+	panel_fade_out
+};
+
 enum class Type
 {
 	NONE,
@@ -52,6 +58,9 @@ public:
 
 	// Called before all Updates
 	virtual bool PreUpdate();
+
+	// Update
+	virtual bool Update(float dt);
 
 	// Called after all Updates
 	virtual bool PostUpdate();
@@ -101,12 +110,18 @@ private:
 	SDL_Rect drag_area;
 	bool console;
 	int priority;
+	j1Timer fade_panel_timer;
+	int fade_panel_time;
+
+protected:
+	Panel_Fade fade_panel;
+	int alpha;
 };
 class ImageUI :public UI
 {
 public:
-	ImageUI(Type type, UI* p, SDL_Rect r, SDL_Rect sprite, bool d, bool f, SDL_Rect d_area, float drag_position_scroll_bar);
-	ImageUI(Type type, UI* p, SDL_Rect r, int re, int g, int b, int a, bool d, bool f, SDL_Rect d_area);
+	ImageUI(Type type, UI* p, SDL_Rect r, SDL_Rect sprite, bool d, bool f, SDL_Rect d_area, float drag_position_scroll_bar, Panel_Fade p_fade);
+	ImageUI(Type type, UI* p, SDL_Rect r, int re, int g, int b, int a, bool d, bool f, SDL_Rect d_area, Panel_Fade p_fade);
 
 	// Destructor
 	virtual ~ImageUI() {}
@@ -126,13 +141,12 @@ public:
 	int red;
 	int green;
 	int blue;
-	int alpha;
 	bool unclicked;
 };
 class WindowUI :public UI
 {
 public:
-	WindowUI(Type type, UI* p, SDL_Rect r, SDL_Rect sprite, bool d, bool f, SDL_Rect d_area);
+	WindowUI(Type type, UI* p, SDL_Rect r, SDL_Rect sprite, bool d, bool f, SDL_Rect d_area, Panel_Fade p_fade);
 
 	// Destructor
 	virtual ~WindowUI() {}
@@ -144,7 +158,7 @@ class TextUI :public UI
 {
 
 public:
-	TextUI(Type type, UI* p, SDL_Rect r, std::string str, bool d, bool f, SDL_Rect d_area, bool console, SDL_Color coulor, bool title);
+	TextUI(Type type, UI* p, SDL_Rect r, std::string str, bool d, bool f, SDL_Rect d_area, bool console, SDL_Color coulor, bool title, Panel_Fade p_fade);
 
 	// Destructor
 	virtual ~TextUI() {}
@@ -165,7 +179,7 @@ private:
 class ListTextsUI :public UI
 {
 public:
-	ListTextsUI(Type type, UI* p, SDL_Rect r, std::string str, bool d, bool f, SDL_Rect d_area, bool console);
+	ListTextsUI(Type type, UI* p, SDL_Rect r, std::string str, bool d, bool f, SDL_Rect d_area, bool console, Panel_Fade p_fade);
 
 	// Destructor
 	virtual ~ListTextsUI() {}
@@ -187,7 +201,7 @@ class ButtonUI :public UI
 {
 public:
 
-	ButtonUI(Type type, UI* p, SDL_Rect r, SDL_Rect sprite, SDL_Rect spriten2, SDL_Rect spriten3, bool d, bool f, SDL_Rect d_area, int audio);
+	ButtonUI(Type type, UI* p, SDL_Rect r, SDL_Rect sprite, SDL_Rect spriten2, SDL_Rect spriten3, bool d, bool f, SDL_Rect d_area, int audio, Panel_Fade p_fade);
 
 	// Destructor
 	virtual ~ButtonUI() {}
@@ -220,7 +234,7 @@ public:
 class TextInputUI :public UI
 {
 public:
-	TextInputUI(Type type, UI* p, SDL_Rect r, int re, int g, int b, int a, std::string str, bool d, bool f, SDL_Rect d_area);
+	TextInputUI(Type type, UI* p, SDL_Rect r, int re, int g, int b, int a, std::string str, bool d, bool f, SDL_Rect d_area, Panel_Fade p_fade);
 
 	// Destructor
 	virtual ~TextInputUI() {}
@@ -266,6 +280,9 @@ public:
 	// Called before all Updates
 	bool PreUpdate();
 
+	// Called before all Updates
+	bool Update(float dt);
+
 	// Called after all Updates
 	bool PostUpdate();
 
@@ -273,7 +290,7 @@ public:
 	bool CleanUp();
 
 	// Gui creation functions
-	UI* CreateUIElement(Type type, UI* p, SDL_Rect r, SDL_Rect sprite = { 0,0,0,0 }, std::string str = "", SDL_Rect sprite2 = { 0,0,0,0 }, SDL_Rect sprite3 = { 0,0,0,0 }, bool drageable = false,
+	UI* CreateUIElement(Type type, UI* p, SDL_Rect r, SDL_Rect sprite = { 0,0,0,0 }, std::string str = "", Panel_Fade p_fade = Panel_Fade::no_one_fade, SDL_Rect sprite2 = { 0,0,0,0 }, SDL_Rect sprite3 = { 0,0,0,0 }, bool drageable = false,
 		SDL_Rect drag_area = { 0,0,0,0 }, j1Module* s_listener = nullptr, int audio=0, bool console = false, float drag_position_scroll_bar = -1, int number_atlas = 0);
 	UI* CreateUIElement(Type type, UI* p, SDL_Rect r, std::string str, int re, int g, int b, int a, bool drageable = false, SDL_Rect drag_area = { 0,0,0,0 }, j1Module* s_listener = nullptr);
 	bool DeleteUIElement(UI*);
