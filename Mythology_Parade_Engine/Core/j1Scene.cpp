@@ -510,6 +510,7 @@ void j1Scene::OnClick(UI* element, float argument)
 			}
 			else if (hud->confirmation_option.compare("EXIT") == 0)
 			{
+				App->entityManager->initCivilizations = true;
 				BackToTitleMenu();
 			}
 		}
