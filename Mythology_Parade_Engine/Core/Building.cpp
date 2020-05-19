@@ -28,15 +28,6 @@ Building::Building(BuildingType type, iPoint pos, BuildingInfo info)
 	tileLenght = info.tileLenght;
 	int blitWidth = tileLenght * App->map->data.tile_width;
 
-	if (App->entityManager->getPlayer()) 
-	{
-		displayDebug = App->entityManager->getPlayer()->displayDebug;
-	}
-	else
-	{
-		displayDebug = false;
-	}
-
 	switch (buildingType)
 	{
 	case FORTRESS:
@@ -187,6 +178,16 @@ bool Building::Awake(pugi::xml_node& a)
 bool Building::Update(float dt)
 {
 	bool ret = true;
+
+	if (App->entityManager->getPlayer())
+	{
+		displayDebug = App->entityManager->getPlayer()->displayDebug;
+	}
+	else
+	{
+		displayDebug = false;
+	}
+
 	if (App->scene->paused_game == true && timer_construction.isPaused() == false)
 		timer_construction.Pause();
 	else if (App->scene->paused_game == false && timer_construction.isPaused() == true)

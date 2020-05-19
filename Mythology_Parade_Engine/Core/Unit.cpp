@@ -7,14 +7,6 @@
 Unit::Unit(UnitType type, iPoint pos): unitType(type), state(AnimationType::IDLE), _isSelected(false), moveSpeed(60)
 {
 	
-	if (App->entityManager->getPlayer())
-	{
-		displayDebug = App->entityManager->getPlayer()->displayDebug;
-	}
-	else
-	{
-		displayDebug = false;
-	}
 	collisionRect = { 0, 0, 30, -55 };
 	unitType = type;
 	position = {(float)pos.x, (float)pos.y};
@@ -61,6 +53,15 @@ bool Unit::Start()
 bool Unit::Update(float dt)
 {
 	bool ret = true;
+
+	if (App->entityManager->getPlayer())
+	{
+		displayDebug = App->entityManager->getPlayer()->displayDebug;
+	}
+	else
+	{
+		displayDebug = false;
+	}
 
 	//Allawys blit the sprite at the end
 	StateMachineActions(dt);
