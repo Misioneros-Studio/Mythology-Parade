@@ -292,16 +292,16 @@ bool EntityManager::Load(pugi::xml_node& n)
 	if (p.name() == "viking") civ = CivilizationType::VIKING;
 	else civ = CivilizationType::GREEK;
 	Player* player = static_cast<Player*>(CreatePlayerEntity(p.name()));
-	player->research_assassin = p.child("research").child("assassin").attribute("research");
-	player->research_chaotic_beast = p.child("research").child("chaotic_beast").attribute("research");
-	player->research_chaotic_miracle = p.child("research").child("chaotic_miracle").attribute("research");
-	player->research_chaotic_victory = p.child("research").child("chaotic_victory").attribute("research");
-	player->research_cleric = p.child("research").child("cleric").attribute("research");
-	player->research_encampment = p.child("research").child("encampment").attribute("research");
-	player->research_lawful_beast =  p.child("research").child("lawful_beast").attribute("research");
-	player->research_lawful_miracle = p.child("research").child("lawful_miracle").attribute("research");
-	player->research_lawful_victory = p.child("research").child("lawful_victory").attribute("research");
-	player->research_temple = p.child("research").child("temple").attribute("research");
+	player->research_assassin = p.child("research").child("assassin").attribute("research").as_bool();
+	player->research_chaotic_beast = p.child("research").child("chaotic_beast").attribute("research").as_bool();
+	player->research_chaotic_miracle = p.child("research").child("chaotic_miracle").attribute("research").as_bool();
+	player->research_chaotic_victory = p.child("research").child("chaotic_victory").attribute("research").as_bool();
+	player->research_cleric = p.child("research").child("cleric").attribute("research").as_bool();
+	player->research_encampment = p.child("research").child("encampment").attribute("research").as_bool();
+	player->research_lawful_beast =  p.child("research").child("lawful_beast").attribute("research").as_bool();
+	player->research_lawful_miracle = p.child("research").child("lawful_miracle").attribute("research").as_bool();
+	player->research_lawful_victory = p.child("research").child("lawful_victory").attribute("research").as_bool();
+	player->research_temple = p.child("research").child("temple").attribute("research").as_bool();
 
 	player->SetFaith(p.child("economy").attribute("faith").as_int());
 	player->SetSacrifices(p.child("economy").attribute("sacrifices").as_int());
@@ -534,8 +534,11 @@ bool EntityManager::Save(pugi::xml_node& s) const
 
 	for each (Player * var3 in list3)
 	{
-		pugi::xml_node player = node3.append_child(var3->name.c_str());
-
+		pugi::xml_node player;
+		if(var3->civilization == CivilizationType::VIKING)
+			 player = node3.append_child("viking");
+		else if(var3->civilization == CivilizationType::GREEK) 
+			player = node3.append_child("greek");
 
 		pugi::xml_node economy = player.append_child("economy");
 		economy.append_attribute("faith").set_value(var3->GetFaith());

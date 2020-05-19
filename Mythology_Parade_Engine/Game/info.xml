@@ -11,10 +11,10 @@
 		<build type="fortress" position_x="1920" position_y="2288" civilization="greek" health="500" status="finished" action="nothing" />
 	</buildings>
 	<players>
-		<viking>
-			<economy faith="584" prayers="0" sacrifices="0" />
+		<greek>
+			<economy faith="500" prayers="0" sacrifices="0" />
 			<research>
-				<temple research="true" />
+				<temple research="false" />
 				<encampment research="false" />
 				<cleric research="false" />
 				<assassin research="false" />
@@ -25,8 +25,8 @@
 				<lawful_victory research="false" />
 				<chaotic_victory research="false" />
 			</research>
-		</viking>
+		</greek>
 	</players>
-	<volume music="50" fx="128" />
+	<volume music="100" fx="45" />
 	<camera x="-1683" y="-2000" />
 </info>
