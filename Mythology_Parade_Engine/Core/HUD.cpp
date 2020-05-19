@@ -60,7 +60,7 @@ void HUD::StartHUD(ResearchMenu* r) {
 							ui_text_confirmation[i] = nullptr;
 							if (i < 3) {
 								ui_button_confirmation[i] = nullptr;
-								ui_text_ingame[i] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 104,610 + (i * 33),237,38 }, { 0,0,100,100 }, "9999", Panel_Fade::no_one_fade, { 255,255,255,255 }
+								ui_text_ingame[i] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 104,610 + (i * 33),237,38 }, { 0,0,100,100 }, "9999", Panel_Fade::panel_fade_in, { 255,255,255,255 }
 								, { 1,0,0,0 }));
 								ui_text_options[i] = nullptr;
 								if (i < 2) {
@@ -95,7 +95,7 @@ void HUD::ActivatePauseMenu() {
 		uint w, h;
 		App->win->GetWindowSize(w, h);
 		ui_pause_black_screen[0] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, nullptr, { 0,0,(int)w,(int)h }, "", 0, 0, 0, 150, Panel_Fade::panel_fade_in));
-		ui_pause_window = static_cast<WindowUI*>(App->gui->CreateUIElement(Type::WINDOW, nullptr, { 410,50,459,531 }, { 216,21,459,531 }));
+		ui_pause_window = static_cast<WindowUI*>(App->gui->CreateUIElement(Type::WINDOW, nullptr, { 410,50,459,531 }, { 216,21,459,531 },"", Panel_Fade::panel_fade_in));
 		ui_button[0] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_pause_window, { 520,110,237,38 }, { 787,240,237,38 }, "SAVE", Panel_Fade::panel_fade_in, { 787,342,237,38 },
 			{ 787,291,237,38 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::SAVE));
 		ui_text[0] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 607,122,237,38 }, { 0,0,100,100 }, "Save Game", Panel_Fade::panel_fade_in, { 0,0,0,255 }));
@@ -147,14 +147,13 @@ void HUD::DeactivatePauseMenu() {
 
 }
 
-
 // Called when clicking options button in pause menu
 void HUD::ActivateOptionsMenu() {
 	if (ui_options_window == nullptr) {
 		uint w, h;
 		App->win->GetWindowSize(w, h);
-		ui_pause_black_screen[1] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, nullptr, { 0,0,(int)w,(int)h }, "", 0, 0, 0, 150));
-		ui_options_window = static_cast<WindowUI*>(App->gui->CreateUIElement(Type::WINDOW, nullptr, { 410,200,459,321 }, { 1278,4,459,321 }));
+		ui_pause_black_screen[1] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, nullptr, { 0,0,(int)w,(int)h }, "", 0, 0, 0, 150, Panel_Fade::panel_fade_in));
+		ui_options_window = static_cast<WindowUI*>(App->gui->CreateUIElement(Type::WINDOW, nullptr, { 410,200,459,321 }, { 1278,4,459,321 },"",Panel_Fade::panel_fade_in));
 		ui_button_options[0] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_options_window, { 520,453,237,38 }, { 787,240,237,38 }, "CLOSE OPTIONS", Panel_Fade::panel_fade_in, { 787,342,237,38 },
 			{ 787,291,237,38 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::CLOSE));
 		ui_button_options[1] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_options_window, { 570,260,36,36 }, { 16,21,36,36 }, "FULLSCREEN", Panel_Fade::panel_fade_in, { 98,21,36,36 },
@@ -167,13 +166,13 @@ void HUD::ActivateOptionsMenu() {
 		ui_text_options[2] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, ui_options_window, { 620,270,237,38 }, { 0,0,100,100 }, "FULLSCREEN", Panel_Fade::panel_fade_in, { 255,255,255,255 }));
 		ui_text_volume_sliders[0] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, ui_options_window, { 590,314,237,38 }, { 0,0,100,100 }, "MUSIC'S VOLUME", Panel_Fade::panel_fade_in,{ 255,255,255,255 }));
 		ui_volume_sliders[0] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, ui_options_window, { 548,340,(int)(181 * ((float)App->audio->GetVolumeMusic() / (float)128)),17 },
-			{ 1072,250,181,17 }, "",Panel_Fade::no_one_fade));
+			{ 1072,250,181,17 }, "",Panel_Fade::panel_fade_in));
 		ui_volume_sliders[1] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, ui_options_window, { 531,334,215,30 }, { 1053,350,215,30 },"", Panel_Fade::panel_fade_in));
 		ui_volume_sliders[2] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, ui_options_window, { 548,337,36,24 }, { 1072,180,36,24 }, "VOLUME_CONTROL", Panel_Fade::panel_fade_in, { 0,0,0,0 },
 			{ 0,0,0,0 }, true, { 548,337,181,0 }, App->audio, 0, false, ((float)App->audio->GetVolumeMusic() / (float)128)));
 		ui_text_volume_sliders[1] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, ui_options_window, { 598,379,237,38 }, { 0,0,100,100 }, "FX'S VOLUME", Panel_Fade::panel_fade_in, { 255,255,255,255 }));
 		ui_volume_sliders[3] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, ui_options_window, { 548,405,(int)(181 * ((float)App->audio->GetVolumeFx() / (float)128)),17 },
-			{ 1072,250,181,17 }));
+			{ 1072,250,181,17 }, "", Panel_Fade::panel_fade_in));
 		ui_volume_sliders[4] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, ui_options_window, { 531,399,215,30 }, { 1053,350,215,30 },"", Panel_Fade::panel_fade_in));
 		ui_volume_sliders[5] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, ui_options_window, { 548,402,36,24 }, { 1072,180,36,24 }, "FX_CONTROL", Panel_Fade::panel_fade_in, { 0,0,0,0 }, { 0,0,0,0 },
 			true, { 548,402,181,0 }, App->audio, 0, false, ((float)App->audio->GetVolumeFx() / (float)128)));
@@ -281,7 +280,6 @@ void HUD::DeactivateConfirmationMenu() {
 		}
 	}
 }
-
 
 // Called when selecting troops or buildings
 void HUD::HUDUpdateSelection(std::list<Entity*> listEntities, Building* building_selected) {

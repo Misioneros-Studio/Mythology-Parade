@@ -239,16 +239,16 @@ UI* j1Gui::CreateUIElement(Type type, UI* p, SDL_Rect r, SDL_Rect sprite, std::s
 	return ui;
 }
 
-UI* j1Gui::CreateUIElement(Type type, UI* p, SDL_Rect r, std::string str, int re, int g, int b, int a, bool drageable, SDL_Rect drag_area, j1Module* s_listener)
+UI* j1Gui::CreateUIElement(Type type, UI* p, SDL_Rect r, std::string str, int re, int g, int b, int a, bool drageable, SDL_Rect drag_area, j1Module* s_listener, Panel_Fade p_fade)
 {
 	UI* ui = nullptr;
 	switch (type)
 	{
 	case Type::IMAGE:
-		ui = new ImageUI(Type::IMAGE, p, r, re, g, b, a, drageable, drageable, drag_area,Panel_Fade::no_one_fade);
+		ui = new ImageUI(Type::IMAGE, p, r, re, g, b, a, drageable, drageable, drag_area, p_fade);
 		break;
 	case Type::INPUT:
-		ui = new TextInputUI(Type::INPUT, p, r, re, g, b, a, "", drageable, true, drag_area, Panel_Fade::no_one_fade);
+		ui = new TextInputUI(Type::INPUT, p, r, re, g, b, a, "", drageable, true, drag_area, p_fade);
 		break;
 	}
 
@@ -404,9 +404,6 @@ UI::UI(Type s_type, SDL_Rect r, UI* p, bool d, bool f, SDL_Rect d_area, bool con
 	drag_area = d_area;
 	console = consol;
 	priority = 1;
-	//alpha = 255;
-	fade_panel_timer.Start();
-	fade_panel_time = 2;
 }
 
 bool UI::PreUpdate() {
@@ -624,6 +621,8 @@ SDL_Rect UI::Check_Printable_Rect(SDL_Rect sprite, iPoint& dif_sprite, SDL_Rect 
 	return sprite;
 }
 
+///////////// IMAGE //////////////
+
 ImageUI::ImageUI(Type type, UI* p, SDL_Rect r, SDL_Rect sprite, bool d, bool f, SDL_Rect d_area, float drag_position_scroll_bar, Panel_Fade p_fade) :UI(type, r, p, d, f, d_area) {
 	name.append("ImageUI");
 	sprite1 = sprite;
@@ -641,11 +640,14 @@ ImageUI::ImageUI(Type type, UI* p, SDL_Rect r, SDL_Rect sprite, bool d, bool f, 
 		UpdateLocalRect();
 	}
 	fade_panel = p_fade;
-	if (fade_panel == Panel_Fade::panel_fade_in) {
-		alpha = 0;
-	}
+
 	if (fade_panel == Panel_Fade::no_one_fade) {
 		alpha = 255;
+	}
+	if (fade_panel == Panel_Fade::panel_fade_in) {
+		alpha = 0;
+		fade_panel_timer.Start();
+		fade_panel_time = 1;
 	}
 }
 
@@ -661,7 +663,15 @@ ImageUI::ImageUI(Type type, UI* p, SDL_Rect r, int re, int g, int b, int a, bool
 	green = g;
 	blue = b;
 	fade_panel = p_fade;
-	alpha = a;
+
+	if (fade_panel == Panel_Fade::no_one_fade) {
+		alpha = a;
+	}
+	if (fade_panel == Panel_Fade::panel_fade_in) {
+		alpha = 0;
+		fade_panel_timer.Start();
+		fade_panel_time = 1;
+	}
 }
 
 bool ImageUI::PreUpdate() {
@@ -691,12 +701,19 @@ bool ImageUI::PreUpdate() {
 	return true;
 }
 
+bool ImageUI::Update(float dt) {
+	UI::Update(dt);
+
+	return true;
+}
+
 bool ImageUI::PostUpdate() {
 	iPoint dif_sprite = { 0,0 };
 	if (square == false) {
 		SDL_Rect sprite = UI::Check_Printable_Rect(sprite1, dif_sprite);
 		quad.x = GetScreenPos().x + dif_sprite.x;
 		quad.y = GetScreenPos().y + dif_sprite.y;
+		SDL_SetTextureAlphaMod((SDL_Texture*)App->gui->GetAtlas(num_atlas), alpha);
 		if (this->active) App->render->BlitInsideQuad((SDL_Texture*)App->gui->GetAtlas(num_atlas), sprite, quad);
 	}
 	else if (this->active) {
@@ -715,11 +732,28 @@ fPoint ImageUI::GetDragPositionNormalized() {
 	return position_normalized;
 }
 
+///////////// WINDOW //////////////
+
 WindowUI::WindowUI(Type type, UI* p, SDL_Rect r, SDL_Rect sprite, bool d, bool f, SDL_Rect d_area, Panel_Fade p_fade) :UI(type, r, p, d, f, d_area) {
 	name.append("WindowUI");
 	sprite1 = sprite;
 	quad = r;
 	fade_panel = p_fade;
+
+	if (fade_panel == Panel_Fade::no_one_fade) {
+		alpha = 255;
+	}
+	if (fade_panel == Panel_Fade::panel_fade_in) {
+		alpha = 0;
+		fade_panel_timer.Start();
+		fade_panel_time = 1;
+	}
+}
+
+bool WindowUI::Update(float dt) {
+	UI::Update(dt);
+
+	return true;
 }
 
 bool WindowUI::PostUpdate() {
@@ -727,12 +761,14 @@ bool WindowUI::PostUpdate() {
 	SDL_Rect sprite = UI::Check_Printable_Rect(sprite1, dif_sprite);
 	quad.x = GetScreenPos().x + dif_sprite.x;
 	quad.y = GetScreenPos().y + dif_sprite.y;
+	SDL_SetTextureAlphaMod((SDL_Texture*)App->gui->GetAtlas(num_atlas), alpha);
 	if (this->active)App->render->BlitInsideQuad((SDL_Texture*)App->gui->GetAtlas(num_atlas), sprite, quad);
 
 	UI::PostUpdate();
 	return true;
 }
 
+///////////// TEXT //////////////
 
 TextUI::TextUI(Type type, UI* p, SDL_Rect r, std::string str, bool d, bool f, SDL_Rect d_area, bool console, SDL_Color coulor, bool title, Panel_Fade p_fade) :UI(type, r, p, d, f, d_area, console)
 {
@@ -742,6 +778,21 @@ TextUI::TextUI(Type type, UI* p, SDL_Rect r, std::string str, bool d, bool f, SD
 	color = coulor;
 	title_default = title;
 	fade_panel = p_fade;
+
+	if (fade_panel == Panel_Fade::no_one_fade) {
+		alpha = 255;
+	}
+	if (fade_panel == Panel_Fade::panel_fade_in) {
+		alpha = 0;
+		fade_panel_timer.Start();
+		fade_panel_time = 1;
+	}
+}
+
+bool TextUI::Update(float dt) {
+	UI::Update(dt);
+
+	return true;
 }
 
 bool TextUI::PostUpdate() {
@@ -757,7 +808,7 @@ bool TextUI::PostUpdate() {
 
 	SDL_QueryTexture(text, NULL, NULL, &rect.w, &rect.h);
 
-
+	SDL_SetTextureAlphaMod(text, alpha);
 	SDL_Rect sprite = UI::Check_Printable_Rect(rect, dif_sprite);
 	if (this->active && this->GetConsole() == false)App->render->Blit(text, GetScreenToWorldPos().x + dif_sprite.x, GetScreenToWorldPos().y + dif_sprite.y, &sprite, 0.0F);
 	else if (this->active) App->render->Blit(text, quad.x + dif_sprite.x, quad.y + dif_sprite.y, &sprite, 0.0F);
@@ -773,14 +824,31 @@ void TextUI::SetString(std::string new_string)
 	stri = new_string;
 }
 
+///////////// TEXT LIST //////////////
+
 ListTextsUI::ListTextsUI(Type type, UI* p, SDL_Rect r, std::string str, bool d, bool f, SDL_Rect d_area, bool console, Panel_Fade p_fade) :UI(type, r, p, d, f, d_area, console) {
 	name.append("ListTextsUI");
 	stri.push_back(str);
 	number_of_stri = stri.size();
+	quad = r;
+
 	fade_panel = p_fade;
+
+	if (fade_panel == Panel_Fade::no_one_fade) {
+		alpha = 255;
+	}
+	if (fade_panel == Panel_Fade::panel_fade_in) {
+		alpha = 0;
+		fade_panel_timer.Start();
+		fade_panel_time = 1;
+	}
 }
 
+bool ListTextsUI::Update(float dt) {
+	UI::Update(dt);
 
+	return true;
+}
 
 bool ListTextsUI::PostUpdate() 
 {
@@ -801,6 +869,7 @@ bool ListTextsUI::PostUpdate()
 
 			SDL_QueryTexture(text, NULL, NULL, &rect.w, &rect.h);
 
+			SDL_SetTextureAlphaMod((SDL_Texture*)App->gui->GetAtlas(num_atlas), alpha);
 
 			SDL_Rect sprite = UI::Check_Printable_Rect(rect, dif_sprite, { quad.x,quad.y + (quad.h * i),quad.w,quad.h });
 			if (this->active && this->GetConsole() == false)App->render->Blit(text, GetScreenToWorldPos().x + dif_sprite.x, GetScreenToWorldPos().y + dif_sprite.y, &sprite, 0.0F);
@@ -828,6 +897,8 @@ void ListTextsUI::SetListOfStrings(std::string string, int position)
 	}
 }
 
+///////////// BUTTON //////////////
+
 ButtonUI::ButtonUI(Type type, UI* p, SDL_Rect r, SDL_Rect sprite, SDL_Rect spriten2, SDL_Rect spriten3, bool d, bool f, SDL_Rect d_area, int audio, Panel_Fade p_fade) :UI(type, r, p, d, f, d_area) {
 	name.append("ButtonUI");
 	sprite1 = sprite;
@@ -840,6 +911,21 @@ ButtonUI::ButtonUI(Type type, UI* p, SDL_Rect r, SDL_Rect sprite, SDL_Rect sprit
 	front = true;
 	click_sfx = App->gui->sfx_UI[audio];
 	fade_panel = p_fade;
+
+	if (fade_panel == Panel_Fade::no_one_fade) {
+		alpha = 255;
+	}
+	if (fade_panel == Panel_Fade::panel_fade_in) {
+		alpha = 0;
+		fade_panel_timer.Start();
+		fade_panel_time = 1;
+	}
+}
+
+bool ButtonUI::Update(float dt) {
+	UI::Update(dt);
+
+	return true;
 }
 
 bool ButtonUI::PostUpdate() {
@@ -858,6 +944,7 @@ bool ButtonUI::PostUpdate() {
 
 	quad.x = GetScreenPos().x + dif_sprite.x;
 	quad.y = GetScreenPos().y + dif_sprite.y;
+	SDL_SetTextureAlphaMod((SDL_Texture*)App->gui->GetAtlas(num_atlas), alpha);
 	if (this->active)App->render->BlitInsideQuad((SDL_Texture*)App->gui->GetAtlas(num_atlas), sprite, quad);
 
 	UI::PostUpdate();
@@ -900,6 +987,7 @@ bool ButtonUI::PreUpdate() {
 	return true;
 }
 
+///////////// TEXT INPUT //////////////
 
 TextInputUI::TextInputUI(Type type, UI* p, SDL_Rect r, int re, int g, int b, int a, std::string str, bool d, bool f, SDL_Rect d_area, Panel_Fade p_fade) :UI(type, r, p, d, f, d_area, true) {
 	name.append("TextInputUI");
@@ -914,6 +1002,21 @@ TextInputUI::TextInputUI(Type type, UI* p, SDL_Rect r, int re, int g, int b, int
 	blue = b;
 	alpha = a;
 	fade_panel = p_fade;
+
+	if (fade_panel == Panel_Fade::no_one_fade) {
+		alpha = 255;
+	}
+	if (fade_panel == Panel_Fade::panel_fade_in) {
+		alpha = 0;
+		fade_panel_timer.Start();
+		fade_panel_time = 1;
+	}
+}
+
+bool TextInputUI::Update(float dt) {
+	UI::Update(dt);
+
+	return true;
 }
 
 bool TextInputUI::PreUpdate() {
@@ -972,6 +1075,7 @@ bool TextInputUI::PreUpdate() {
 
 bool TextInputUI::PostUpdate() {
 	iPoint dif_sprite = { 0,0 };
+	SDL_SetTextureAlphaMod((SDL_Texture*)App->gui->GetAtlas(num_atlas), alpha);
 	if (this->active) {
 		App->render->DrawQuad(quad, red, green, blue, alpha, true, false);
 	}
@@ -991,7 +1095,7 @@ bool TextInputUI::PostUpdate() {
 		label_from_position.erase(label_from_position.begin() + position, label_from_position.end());
 		int w, h;
 		App->font->CalcSize(label_from_position.c_str(), w, h);
-		App->render->DrawLine(quad.x + w, quad.y, quad.x + w, quad.y + quad.h, 0, 255, 255, 255, false);
+		App->render->DrawLine(quad.x + w, quad.y, quad.x + w, quad.y + quad.h, 0, 255, 255,alpha, false);
 	}
 	UI::PostUpdate();
 

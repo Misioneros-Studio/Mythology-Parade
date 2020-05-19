@@ -110,12 +110,13 @@ private:
 	SDL_Rect drag_area;
 	bool console;
 	int priority;
-	j1Timer fade_panel_timer;
-	int fade_panel_time;
 
 protected:
 	Panel_Fade fade_panel;
 	int alpha;
+	j1Timer fade_panel_timer;
+	int fade_panel_time;
+	int max_alpha;
 };
 class ImageUI :public UI
 {
@@ -127,6 +128,7 @@ public:
 	virtual ~ImageUI() {}
 
 	// Called before all Updates
+	bool Update(float dt);
 	bool PreUpdate();
 
 	// Called after all Updates
@@ -152,6 +154,7 @@ public:
 	virtual ~WindowUI() {}
 
 	// Called after all Updates
+	bool Update(float dt);
 	bool PostUpdate();
 };
 class TextUI :public UI
@@ -164,6 +167,7 @@ public:
 	virtual ~TextUI() {}
 
 	// Called after all Updates
+	bool Update(float dt);
 	bool PostUpdate();
 
 	void SetString(std::string);
@@ -185,6 +189,7 @@ public:
 	virtual ~ListTextsUI() {}
 
 	// Called after all Updates
+	bool Update(float dt);
 	bool PostUpdate();
 
 	void SetListOfStrings(std::string string, int position);
@@ -214,7 +219,7 @@ public:
 
 	// Called before all Updates
 	bool PreUpdate();
-
+	bool Update(float dt);
 	// Called after all Updates
 	bool PostUpdate();
 
@@ -241,6 +246,7 @@ public:
 
 	// Called after all Updates
 	bool PreUpdate();
+	bool Update(float dt);
 	bool PostUpdate();
 
 	void ChangeLabel(std::string text);
@@ -292,7 +298,7 @@ public:
 	// Gui creation functions
 	UI* CreateUIElement(Type type, UI* p, SDL_Rect r, SDL_Rect sprite = { 0,0,0,0 }, std::string str = "", Panel_Fade p_fade = Panel_Fade::no_one_fade, SDL_Rect sprite2 = { 0,0,0,0 }, SDL_Rect sprite3 = { 0,0,0,0 }, bool drageable = false,
 		SDL_Rect drag_area = { 0,0,0,0 }, j1Module* s_listener = nullptr, int audio=0, bool console = false, float drag_position_scroll_bar = -1, int number_atlas = 0);
-	UI* CreateUIElement(Type type, UI* p, SDL_Rect r, std::string str, int re, int g, int b, int a, bool drageable = false, SDL_Rect drag_area = { 0,0,0,0 }, j1Module* s_listener = nullptr);
+	UI* CreateUIElement(Type type, UI* p, SDL_Rect r, std::string str, int re, int g, int b, int a, bool drageable = false, SDL_Rect drag_area = { 0,0,0,0 }, j1Module* s_listener = nullptr, Panel_Fade p_fade = Panel_Fade::no_one_fade);
 	bool DeleteUIElement(UI*);
 
 	void ChangeDebug();
