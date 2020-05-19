@@ -476,9 +476,13 @@ bool UI::PreUpdate() {
 				}
 			}
 		}
+
 		else if (tooltip_window != nullptr) {
-			DestroyTooltip();
-			has_timer_tooltip_started = false;
+			App->input->GetMousePosition(x, y);
+			if (x < screen_rect.x || x > screen_rect.x + screen_rect.w || y < screen_rect.y || y > screen_rect.y + screen_rect.h) {
+				DestroyTooltip();
+				has_timer_tooltip_started = false;
+			}
 		}
 	}
 	return true;
