@@ -17,6 +17,7 @@ class j1Audio;
 class j1LogoScene;
 class j1TitleScene;
 class j1Scene;
+class j1TutorialScene;
 class j1Minimap;
 class j1Map;
 class j1PathFinding;
@@ -99,6 +100,7 @@ public:
 	j1LogoScene*		logo_scene = NULL;
 	j1TitleScene*		title_scene = NULL;
 	j1Scene*			scene = NULL;
+	j1TutorialScene*	tutorialscene = NULL;
 	j1Minimap*			minimap = NULL;
 	j1Map*				map = NULL;
 	j1PathFinding*		pathfinding = NULL;

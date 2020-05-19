@@ -12,6 +12,7 @@
 #include "j1LogoScene.h"
 #include "j1TitleScene.h"
 #include "j1Scene.h"
+#include "j1TutorialScene.h"
 #include "j1Minimap.h"
 #include "j1Map.h"
 #include "j1Pathfinding.h"
@@ -37,6 +38,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	logo_scene = new j1LogoScene();
 	title_scene = new j1TitleScene();
 	scene = new j1Scene();
+	tutorialscene = new j1TutorialScene();
 	minimap = new j1Minimap();
 	map = new j1Map();
 	pathfinding = new j1PathFinding();
@@ -62,6 +64,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(logo_scene);
 	AddModule(title_scene);
 	AddModule(scene);
+	AddModule(tutorialscene);
 	AddModule(particleManager);
 	AddModule(minimap);
 	AddModule(gui);

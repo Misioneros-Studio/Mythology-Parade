@@ -9,7 +9,8 @@ enum which_fade {
 	logo_to_title,
 	title_to_scene,
 	scene_to_title,
-	scene_to_scene
+	scene_to_scene,
+	tutorial_to_title
 };
 
 class j1FadeToBlack : public j1Module

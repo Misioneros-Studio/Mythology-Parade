@@ -6,6 +6,7 @@
 #include "j1Input.h"
 #include "j1Render.h"
 #include "j1LogoScene.h"
+#include "j1TutorialScene.h"
 #include"j1Audio.h"
 #include"j1FadeToBlack.h"
 
@@ -27,6 +28,9 @@ bool j1LogoScene::Start()
 	debug_tex = App->tex->Load("gui/Logo.png");
 	sfx_logo= App->audio->LoadFx("audio/titlescene/introscene2.wav");
 	App->audio->PlayFx(1,sfx_logo);
+
+	App->tutorialscene->active = false;
+	App->tutorialscene->CleanUp();
 	return true;
 }
 
