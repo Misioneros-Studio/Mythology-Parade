@@ -18,6 +18,7 @@
 #include "j1FadeToBlack.h"
 #include "HUD.h"
 #include "ResearchMenu.h"
+#include "j1TitleScene.h"
 
 #include"QuadTree.h"
 
@@ -134,6 +135,11 @@ bool j1Scene::PreUpdate()
 		App->entityManager->getPlayer()->dontSelect = true;
 	}
 
+	if (App->title_scene->wantToLoad)
+	{
+		App->LoadGame("info.xml");
+		App->title_scene->wantToLoad = false;
+	}
 
 	// Move Camera if click on the minimap
 	int mouse_x, mouse_y;
