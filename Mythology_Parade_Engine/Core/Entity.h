@@ -23,6 +23,7 @@ class Entity :public j1Module
 public:
 	Entity(/*EntityTypes type*/) : fowRadius(10)
 	{
+		_isSelected = false;
 	}
 
 	// Destructor
@@ -105,9 +106,23 @@ public:
 		return collisionRect;
 	}
 
+	bool isSelected() 
+	{
+		return _isSelected;
+	}
+
+	void SetSelected(bool value)
+	{
+		_isSelected = value;
+	}
+
 protected:
 	SDL_RendererFlip flipState;
 	SDL_Rect collisionRect;
+
 	int fowRadius;
+	//Conditions
+	bool _isSelected;
+
 };
 #endif // !ENTITY_H

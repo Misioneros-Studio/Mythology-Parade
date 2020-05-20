@@ -61,7 +61,6 @@ bool j1FadeToBlack::PostUpdate()
 				
 			case(which_fade::title_to_scene):
 				App->title_scene->Disable();
-				App->title_scene->destroy = false;
 				App->entityManager->Enable();
 				App->pathfinding->Enable();
 				App->scene->Enable();
@@ -77,6 +76,16 @@ bool j1FadeToBlack::PostUpdate()
 				App->fowManager->Disable();
 				App->minimap->Disable();
 				App->title_scene->Enable();
+				break;
+			case(which_fade::scene_to_scene):
+				App->entityManager->Disable();
+				App->pathfinding->Disable();
+				App->scene->Disable();
+				App->minimap->Disable();
+				App->entityManager->Enable();
+				App->pathfinding->Enable();
+				App->scene->Enable();
+				App->minimap->Enable();
 				break;
 			}
 

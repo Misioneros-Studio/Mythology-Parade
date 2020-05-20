@@ -33,7 +33,6 @@ bool j1Map::Awake(pugi::xml_node& config)
 void j1Map::Draw()
 {
 	//j1PerfTimer timer;
-
 	//double startTime = timer.ReadMs();
 
 	if (map_loaded == false)

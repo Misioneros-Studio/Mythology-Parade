@@ -24,11 +24,16 @@ bool EntityManager::Awake(pugi::xml_node& a)
 	pugi::xml_document buildings;
 	buildings.load_file(a.child("buildings").attribute("file").as_string());
 	LoadBuildingsData(buildings.child("map").child("objectgroup"));
-	life_bar_front = { 1310,523,115,10 };
+	life_bar_front = { 1310,503,115,10 };
+	life_bar_front_enemy = { 1310,483,115,10 };
 	research_bar_front = { 1310,543,115,10 };
 	construction_bar_back = { 1299,560,125,17 };
-	construction_bar_front = { 1310,503,115,10 };
+	construction_bar_front = { 1310, 523, 115, 10 };
 	construction_bar_empty = { 1299,582,125,17 };
+	unit_life_bar_back = { 1406,481,75,10 };
+	unit_life_bar_empty = { 1406,494,75,10 };
+	unit_life_bar_front = { 1413,470,63,6 };
+	unit_life_bar_front_enemy = { 1327,470,63,6 };
 
 
 	//Not working because renderer is not created yet ;-;
@@ -202,29 +207,37 @@ bool EntityManager::Update(float dt)
 		iPoint mouse = App->map->GetMousePositionOnMap();
 		iPoint spawnPos = App->map->MapToWorld(mouse.x, mouse.y);
 		spawnPos.y += App->map->data.tile_height / 2;
-		bool viking = false;
 		switch (buildingTestIndex) 
 		{
 		case 0:
-			viking = true;
+			CreateBuildingEntity(spawnPos, BuildingType::FORTRESS, buildingsData[buildingTestIndex], CivilizationType::VIKING);
+			break;
 		case 4:
-			CreateBuildingEntity(spawnPos, BuildingType::FORTRESS, buildingsData[buildingTestIndex],CivilizationType::VIKING);
+			CreateBuildingEntity(spawnPos, BuildingType::FORTRESS, buildingsData[buildingTestIndex],CivilizationType::GREEK);
 			break;
 		case 1:
-			viking = true;
+			CreateBuildingEntity(spawnPos, BuildingType::MONASTERY, buildingsData[buildingTestIndex], CivilizationType::VIKING);
+			faithToDescrease = 200;
+			break;
 		case 5:
-			CreateBuildingEntity(spawnPos, BuildingType::MONASTERY , buildingsData[buildingTestIndex],CivilizationType::VIKING);
+			CreateBuildingEntity(spawnPos, BuildingType::MONASTERY , buildingsData[buildingTestIndex],CivilizationType::GREEK);
 			faithToDescrease = 200;
 			break;
 		case 2:
-			viking = true;
-		case 6:
 			CreateBuildingEntity(spawnPos, BuildingType::TEMPLE, buildingsData[buildingTestIndex], CivilizationType::VIKING);
+			faithToDescrease = 200;
+			break;
+		case 6:
+			CreateBuildingEntity(spawnPos, BuildingType::TEMPLE, buildingsData[buildingTestIndex], CivilizationType::GREEK);
+			faithToDescrease = 200;
 			break;
 		case 3:
-			viking = true;
-		case 7:
 			CreateBuildingEntity(spawnPos, BuildingType::ENCAMPMENT, buildingsData[buildingTestIndex], CivilizationType::VIKING);
+			faithToDescrease = 200;
+			break;
+
+		case 7:
+			CreateBuildingEntity(spawnPos, BuildingType::ENCAMPMENT, buildingsData[buildingTestIndex], CivilizationType::GREEK);
 			faithToDescrease = 200;
 			break;
 		}
@@ -450,17 +463,30 @@ Entity* EntityManager::CreateUnitEntity(UnitType type, iPoint pos, CivilizationT
 
 void EntityManager::DrawEverything() 
 {
-	float dt = App->GetDT();
-	Entity* ent = nullptr;
 
-	for (unsigned i = 1; i < entities.size(); i++)
+	float dt = App->GetDT();
+
+	for (unsigned i = (int)EntityType::UNIT; i < entities.size(); i++)
 	{
 		for (std::list<Entity*>::iterator it = entities[(EntityType)i].begin(); it != entities[(EntityType)i].end(); it++)
 		{
-			ent = it._Ptr->_Myval;
-			ent->Draw(dt);
+			orderedSprites.insert({(*it)->position.y, (*it)});
 		}
 	}
+
+	auto range = orderedSprites.equal_range(0);
+	for (auto i = orderedSprites.begin(); i != orderedSprites.end(); i = range.second)
+	{
+		// Get the range of the current key
+		range = orderedSprites.equal_range(i->first);
+
+		// Now print out that whole range
+		for (auto d = range.first; d != range.second; ++d)
+			(*d).second->Draw(dt);
+	}
+
+	orderedSprites.clear();
+
 }
 
 Entity* EntityManager::CreateBuildingEntity(iPoint pos, BuildingType type, BuildingInfo info, CivilizationType civilization)

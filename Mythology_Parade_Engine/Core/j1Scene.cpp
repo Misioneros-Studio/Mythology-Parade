@@ -134,6 +134,11 @@ bool j1Scene::PreUpdate()
 		ClickToPath();
 		clickToPath = false;
 		App->entityManager->getPlayer()->dontSelect = true;
+		App->gui->cursor_move = false;
+	}
+	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN && App->gui->cursor_attack==true)
+	{
+		App->gui->cursor_attack = false;
 	}
 
 
@@ -256,14 +261,14 @@ bool j1Scene::Update(float dt)
 	if (App->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN) {
 		hud->ActivatePauseMenu();
 		App->audio->FadeAudio(which_audio_fade::change_volume, 2, 50);
-
+	}
     if (paused_game == true) {
       if (hud->ui_volume_sliders[0] != nullptr)
         hud->UpdateSlider(0);
       if (hud->ui_volume_sliders[3] != nullptr)
         hud->UpdateSlider(3);
     }
-	}
+	
 
 	SDL_Rect correctedCamera = App->render->camera;
 	correctedCamera.x = -correctedCamera.x;
@@ -423,11 +428,6 @@ bool j1Scene::CleanUp()
 
 // Called when returning to main menu (either winning/losing or by menu options like exit)
 void j1Scene::BackToTitleMenu() {
-	destroy = true;
-	App->map->destroy = true;
-	App->pathfinding->destroy = true;
-	App->entityManager->destroy = true;
-	App->minimap->destroy = true;
 	App->fade_to_black->FadeToBlack(which_fade::scene_to_title, 2);
 
 	//App->change_scene = true;
@@ -435,12 +435,11 @@ void j1Scene::BackToTitleMenu() {
 
 // Called when restarting the game
 void j1Scene::RestartGame() {
-	App->restart_scene = true;
-	destroy = true;
-	App->map->destroy = true;
-	App->pathfinding->destroy = true;
-	App->entityManager->destroy = true;
-	App->minimap->destroy = true;
+	CivilizationType civ = App->entityManager->getPlayer()->civilization;
+	if(civ==CivilizationType::GREEK)
+		App->fade_to_black->FadeToBlack(which_fade::scene_to_scene, 2, "greek");
+	else if (civ==CivilizationType::VIKING)
+		App->fade_to_black->FadeToBlack(which_fade::scene_to_scene, 2, "viking");
 }
 
 void j1Scene::OnClick(UI* element, float argument)
@@ -618,13 +617,14 @@ void j1Scene::OnClick(UI* element, float argument)
 		{
 			Building* building = (Building*)hud->thing_selected;
 			App->entityManager->getPlayer()->DecreaseFaith(100);
-			building->StartProducing(10, "Assassin");
+			building->CreateUnitQueue(10, "Assassin");
 		}
 		else if (element->name == "Produce_Monk")
 		{
 			Building* building = (Building*)hud->thing_selected;
 			App->entityManager->getPlayer()->DecreaseFaith(50);
-			building->StartProducing(10, "Monk");
+			building->CreateUnitQueue(10, "Monk");
+
 		}
 		else if (element->name == "Produce_Victory")
 		{
@@ -652,6 +652,32 @@ void j1Scene::OnClick(UI* element, float argument)
 		else if (element->name == "Move")
 		{
 			clickToPath = true;
+			App->gui->cursor_move = true;
+		}
+		else if (element->name == "Attack")
+		{
+			App->gui->cursor_attack = true;
+			//BERNAT & JORDI
+		}
+		else if (element->name == "Produce_Cleric")
+		{
+			//BERNAT
+		}
+		else if (element->name == "Produce_Chaotic_Beast")
+		{
+			//BERNAT
+		}
+		else if (element->name == "Produce_Lawful_Beast")
+		{
+			//BERNAT
+		}
+		else if (element->name == "Produce_Lawful_Miracle")
+		{
+			//BERNAT
+		}
+		else if (element->name == "Produce_Chaotic_Miracle")
+		{
+			//BERNAT
 		}
 		break;
 
