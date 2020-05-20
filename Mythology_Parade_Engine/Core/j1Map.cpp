@@ -101,22 +101,24 @@ void j1Map::Draw()
 				int x = (a + b) / 2;
 				int y = (a - b) / 2;
 
-				if (x >= 0 && y >= 0 && x < data.width && y < data.height)
-				{
-					int tile_id = layer->Get(x, y);
-					if (tile_id > 0)
+				//if (App->fowManager->CheckTileVisibility({ x, y })) 
+				//{
+					if (x >= 0 && y >= 0 && x < data.width && y < data.height)
 					{
-						TileSet* tileset = GetTilesetFromTileId(tile_id);
+						int tile_id = layer->Get(x, y);
+						if (tile_id > 0)
+						{
+							TileSet* tileset = GetTilesetFromTileId(tile_id);
 
-						SDL_Rect r = tileset->GetTileRect(tile_id);
-						iPoint pos = MapToWorld(x, y);
+							SDL_Rect r = tileset->GetTileRect(tile_id);
+							iPoint pos = MapToWorld(x, y);
 
-						App->render->Blit(tileset->texture, pos.x, pos.y, &r);
+							App->render->Blit(tileset->texture, pos.x, pos.y, &r);
 
-						//blits++;
+							//blits++;
+						}
 					}
-				}
-
+				//}
 			}
 		}
 	}

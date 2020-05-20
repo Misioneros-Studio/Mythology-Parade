@@ -65,6 +65,10 @@ bool Unit::Update(float dt)
 	StateMachineActions(dt);
 	//ret = Draw(dt);
 
+	std::vector<iPoint> tiles;
+	App->fowManager->GetTilesInsideRadius(fowRadius, position, { collisionRect.w / 2, -collisionRect.w / 2 }, tiles);
+	App->fowManager->ApplyMaskToTiles(fowRadius, tiles);
+
 	//Return
 	return ret;
 }
@@ -321,5 +325,3 @@ void Unit::StateMachineActions(float dt)
 		break;
 	}
 }
-
-

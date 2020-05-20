@@ -4,6 +4,7 @@
 #include <vector>
 #include <list>
 #include <map>
+#include <unordered_map>
 #include "p2Point.h"
 #include "FoWBitDefs.h"
 #include "j1Module.h"
@@ -15,6 +16,12 @@ struct FoWDataStruct
 {
 	unsigned short tileFogBits; //saves information about which type of fog are we in (useful for smooth edges)
 	unsigned short tileShroudBits; //same as above but for shroud
+};
+
+struct MaskData
+{
+	int numberOfUsers = 0;
+	unsigned short* mask = nullptr;
 };
 
 
@@ -54,52 +61,22 @@ public:
 	//Returns true if the tile is visible (there's no FOG in it) otherwise returns false
 	bool CheckTileVisibility(iPoint mapPos)const;
 
-	//VARIABLES
-public:
-	//A number of precomputed circle masks for you to use ranging between a radius of 2 to a radius of 5
-	unsigned short circleMasks[4][fow_MAX_CIRCLE_LENGTH * fow_MAX_CIRCLE_LENGTH] =
-	{
-		{//R2
-		fow_ALL, fow_CNW, fow_NNN, fow_CNE, fow_ALL,
-		fow_CNW, fow_JNW, fow_NON, fow_JNE, fow_CNE,
-		fow_WWW, fow_NON, fow_NON, fow_NON, fow_EEE,
-		fow_CSW, fow_JSW, fow_NON, fow_JSE, fow_CSE,
-		fow_ALL, fow_CSW, fow_SSS, fow_CSE, fow_ALL,
-		},
-		{//R3
-		fow_ALL, fow_ALL, fow_CNW, fow_NNN, fow_CNE, fow_ALL, fow_ALL,
-		fow_ALL, fow_CNW, fow_JNW, fow_NON, fow_JNE, fow_CNE, fow_ALL,
-		fow_CNW, fow_JNW, fow_NON, fow_NON, fow_NON, fow_JNE, fow_CNE,
-		fow_WWW, fow_NON, fow_NON, fow_NON, fow_NON, fow_NON, fow_EEE,
-		fow_CSW, fow_JSW, fow_NON, fow_NON, fow_NON, fow_JSE, fow_CSE,
-		fow_ALL, fow_CSW, fow_JSW, fow_NON, fow_JSE, fow_CSE, fow_ALL,
-		fow_ALL, fow_ALL, fow_CSW, fow_SSS, fow_CSE, fow_ALL, fow_ALL,
-		},
-		{//R4
-		fow_ALL, fow_ALL, fow_CNW, fow_NNN, fow_NNN, fow_NNN, fow_CNE, fow_ALL, fow_ALL,
-		fow_ALL, fow_CNW, fow_JNW, fow_NON, fow_NON, fow_NON, fow_JNE, fow_CNE, fow_ALL,
-		fow_CNW, fow_JNW, fow_NON, fow_NON, fow_NON, fow_NON, fow_NON, fow_JNE, fow_CNE,
-		fow_WWW, fow_NON, fow_NON, fow_NON, fow_NON, fow_NON, fow_NON, fow_NON, fow_EEE,
-		fow_WWW, fow_NON, fow_NON, fow_NON, fow_NON, fow_NON, fow_NON, fow_NON, fow_EEE,
-		fow_WWW, fow_NON, fow_NON, fow_NON, fow_NON, fow_NON, fow_NON, fow_NON, fow_EEE,
-		fow_CSW, fow_JSW, fow_NON, fow_NON, fow_NON, fow_NON, fow_NON, fow_JSE, fow_CSE,
-		fow_ALL, fow_CSW, fow_JSW, fow_NON, fow_NON, fow_NON, fow_JSE, fow_CSE, fow_ALL,
-		fow_ALL, fow_ALL, fow_CSW, fow_SSS, fow_SSS, fow_SSS, fow_CSE, fow_ALL, fow_ALL,
-		},
-		{//R5
-		fow_ALL, fow_ALL, fow_ALL, fow_ALL, fow_CNW, fow_NNN, fow_CNE, fow_ALL, fow_ALL, fow_ALL, fow_ALL,
-		fow_ALL, fow_ALL, fow_CNW, fow_NNN, fow_JNW, fow_NON, fow_JNE, fow_NNN, fow_CNE, fow_ALL, fow_ALL,
-		fow_ALL, fow_CNW, fow_JNW, fow_NON, fow_NON, fow_NON, fow_NON, fow_NON, fow_JNE, fow_CNE, fow_ALL,
-		fow_ALL, fow_WWW, fow_NON, fow_NON, fow_NON, fow_NON, fow_NON, fow_NON, fow_NON, fow_EEE, fow_ALL,
-		fow_CNW, fow_JNW, fow_NON, fow_NON, fow_NON, fow_NON, fow_NON, fow_NON, fow_NON, fow_JNE, fow_CNE,
-		fow_WWW, fow_NON, fow_NON, fow_NON, fow_NON, fow_NON, fow_NON, fow_NON, fow_NON, fow_NON, fow_EEE,
-		fow_CSW, fow_JSW, fow_NON, fow_NON, fow_NON, fow_NON, fow_NON, fow_NON, fow_NON, fow_JSE, fow_CSE,
-		fow_ALL, fow_WWW, fow_NON, fow_NON, fow_NON, fow_NON, fow_NON, fow_NON, fow_NON, fow_EEE, fow_ALL,
-		fow_ALL, fow_CSW, fow_JSW, fow_NON, fow_NON, fow_NON, fow_NON, fow_NON, fow_JSE, fow_CSE, fow_ALL,
-		fow_ALL, fow_ALL, fow_CSW, fow_SSS, fow_JSW, fow_NON, fow_JSE, fow_SSS, fow_CSE, fow_ALL, fow_ALL,
-		fow_ALL, fow_ALL, fow_ALL, fow_ALL, fow_CSW, fow_SSS, fow_CSE, fow_ALL, fow_ALL, fow_ALL, fow_ALL,
-		},
-	};
+	unsigned short* GetMaskFromRadius(int radius);
+	void RequestMaskGeneration(int radius);
+	void RequestMaskDeletion(int radius);
+
+	bool InsideCircle(iPoint center, iPoint tile, float radius);
+
+
+	void GetTilesInsideRadius(int fowRadius, fPoint position, iPoint offSet, std::vector<iPoint>& ret)const;
+	void ApplyMaskToTiles(int fowRadius, std::vector<iPoint>& tilesAffected);
+
+private:
+	unsigned short* GenerateCircle(int radius);
+	unsigned short* GenerateCircleBorders(int radius, unsigned short* mask);
+	unsigned short* GenerateCircleJoints(int radius, unsigned short* mask);
+	unsigned short CheckCornersFromNeighbours(iPoint pos, int diameter, unsigned short* mask);
+	unsigned short CheckJointsFromNeighbours(iPoint pos, int diameter, unsigned short* mask);
 
 
 private:
@@ -107,6 +84,7 @@ private:
 	//std::vector<FoWEntity*> fowEntities;
 	//This is where we store our FoW information
 	FoWDataStruct* fowMap = nullptr;
+	std::map<uint, MaskData> maskMap;
 
 	SDL_Texture* smoothFoWtexture = nullptr;
 	SDL_Texture* debugFoWtexture = nullptr;

@@ -146,7 +146,6 @@ void Building::CreateUnit()
 bool Building::Awake(pugi::xml_node& a)
 {
 
-
 	return true;
 }
 
@@ -254,6 +253,10 @@ bool Building::Update(float dt)
 			App->entityManager->getPlayer()->IncreaseFaithRatio(nearbyMonks);			
 		}
 	}
+
+	std::vector<iPoint> tiles;
+	App->fowManager->GetTilesInsideRadius(fowRadius, position, { collisionRect.w / 2, collisionRect.h / 4}, tiles);
+	App->fowManager->ApplyMaskToTiles(fowRadius, tiles);
   
 	return ret;
 }

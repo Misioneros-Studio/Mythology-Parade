@@ -1,12 +1,7 @@
 #ifndef __FOW_BIT_DEFS__
 #define __FOW_BIT_DEFS__
 
-//TODO 3.1: You don't have to do anything in here! If you are interested in how we store each tile fog state read below, otherwise feel free to go to the next TODO
 
-//Imagine that we divide the tile into 9 subtiles (like in TIC TAC TOE). These first 9 defines store a value for each one of the subtiles
-//If we want a certain shape we just add the numbers of the subtiles involved
-//Example: If we want to store a diagonal line we can get the subtile on the top left corner, the one on the center and the one on the bottom right and add their values to get a unique value "ID" for that combination
-//That is what we do below, we define every shape we want
 
 #define FOW_BIT_NW  (1 << 0)//this is equal to 1* 2^0 
 #define FOW_BIT_N   (1 << 1)//this is equal to 1* 2^1
@@ -45,6 +40,25 @@
 #define fow_MIN_CIRCLE_RADIUS 2
 #define fow_MAX_CIRCLE_RADIUS 5
 #define fow_MAX_CIRCLE_LENGTH ((fow_MAX_CIRCLE_RADIUS*2)+1)
+
+//Procedural mask generation defines (neighbour selection)
+#define fow_neighbour_W (1 << 0) //defines if the neighbour we are looking for is fow_all
+#define fow_neighbour_N (1 << 1)
+#define fow_neighbour_E (1 << 2)
+#define fow_neighbour_S (1 << 3)
+
+#define fow_neighbour_CNW (fow_neighbour_N|fow_neighbour_W)
+#define fow_neighbour_CNE (fow_neighbour_N|fow_neighbour_E)
+#define fow_neighbour_CSW (fow_neighbour_S|fow_neighbour_W)
+#define fow_neighbour_CSE (fow_neighbour_S|fow_neighbour_E)
+
+#define fow_neighbour_HN (fow_neighbour_S|fow_neighbour_E|fow_neighbour_W) //hole on the north
+#define fow_neighbour_HW (fow_neighbour_S|fow_neighbour_E|fow_neighbour_N)
+#define fow_neighbour_HE (fow_neighbour_S|fow_neighbour_N|fow_neighbour_W) 
+#define fow_neighbour_HS (fow_neighbour_N|fow_neighbour_E|fow_neighbour_W) 
+
+#define fow_neighbour_
+
 
 #endif // !__FOW_BIT_DEFS__
 
