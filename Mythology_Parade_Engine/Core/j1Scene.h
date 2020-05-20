@@ -70,11 +70,12 @@ public:
 private:
 	
 	fPoint global_pos;
-	SDL_Rect mapLimitsRect;
+
 	SDL_Texture* winlose_tex;
 
 
 public:
+	SDL_Rect mapLimitsRect;
 	SDL_Texture* debugBlue_tex;
 	SDL_Texture* debugRed_tex;
 	bool paused_game;

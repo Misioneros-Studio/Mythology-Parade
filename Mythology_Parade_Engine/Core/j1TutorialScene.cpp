@@ -32,8 +32,8 @@ bool j1TutorialScene::Awake(pugi::xml_node& config)
 // Called before the first frame
 bool j1TutorialScene::Start()
 {
-	App->render->camera.x = -2683;
-	App->render->camera.y = -2000;
+	App->render->camera.x = 578;
+	App->render->camera.y = -1865;
 
 	return true;
 }

@@ -55,12 +55,6 @@ public:
 	// Called when clicking close button in options menu
 	void DeactivateOptionsMenu();
 
-	// Called when clicking tutorial button in menu
-	void ActivateTutorial();
-
-	// Called when clicking close button in tutorial
-	void DeactivateTutorial();
-
 	// Called when clicking credits button in menu
 	void ActivateCredits();
 
