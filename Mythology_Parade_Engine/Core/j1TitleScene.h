@@ -6,7 +6,6 @@
 enum class CloseTitleSceneMenus{
 	None,
 	Credits,
-	Tutorial,
 	Options,
 	Confirmation,
 	Civilization,
@@ -83,9 +82,6 @@ private:
 	WindowUI* ui_options_window;
 	ButtonUI* ui_button_options[2];
 	TextUI* ui_text_options[3];
-	WindowUI* ui_tutorial_window;
-	ButtonUI* ui_tutorial_options;
-	TextUI* ui_text_tutorial[2];
 	WindowUI* ui_credits_window;
 	ButtonUI* ui_button_credits[9];
 	TextUI* ui_text_credits[18];

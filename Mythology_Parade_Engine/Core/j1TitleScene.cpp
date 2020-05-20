@@ -87,7 +87,6 @@ bool j1TitleScene::Start()
 					if (i < 3) {
 						if (i < 2) {
 							ui_button_options[i] = nullptr;
-							ui_text_tutorial[i] = nullptr;
 							ui_button_confirmation[i] = nullptr;
 							ui_text_volume_sliders[i] = nullptr;
 						}
@@ -100,13 +99,11 @@ bool j1TitleScene::Start()
 			}
 		}
 	}
-	ui_tutorial_options = nullptr;
 	ui_pause_black_screen = nullptr;
 
 
 	ui_civilization_window = nullptr;
 	ui_confirmation_window = nullptr;
-	ui_tutorial_window = nullptr;
 	ui_options_window = nullptr;
 	ui_credits_window = nullptr;
 
@@ -517,7 +514,7 @@ void j1TitleScene::OnClick(UI* element, float argument)
 		else if (element->name == "TUTORIAL")
 		{
 			confirmation_option = "TUTORIAL";
-			ActivateConfirmationMenu("GO TO TUTORIAL");
+			ActivateConfirmationMenu("GO TO THE TUTORIAL");
 		}
 		else if (element->name == "OPTIONS")
 		{
