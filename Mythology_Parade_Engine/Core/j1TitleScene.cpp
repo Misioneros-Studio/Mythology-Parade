@@ -569,12 +569,15 @@ void j1TitleScene::OnClick(UI* element, float argument)
 		}
 		else if (element->name == "TUTORIAL")
 		{
-			ActivateTutorial();
+			confirmation_option = "TUTORIAL";
+			ActivateConfirmationMenu("GO TO TUTORIAL");
 		}
+		/*
 		else if (element->name == "CLOSE TUTORIAL")
 		{
 			close_menus = CloseTitleSceneMenus::Tutorial;
 		}
+		*/
 		else if (element->name == "OPTIONS")
 		{
 			ActivateOptionsMenu();
@@ -605,6 +608,10 @@ void j1TitleScene::OnClick(UI* element, float argument)
 			if (confirmation_option.compare("LOAD") == 0)
 			{
 				App->LoadGame("save_game.xml");
+			}
+			else if (confirmation_option.compare("TUTORIAL") == 0)
+			{
+				App->fade_to_black->FadeToBlack(which_fade::title_to_tutorial, 2.0f);
 			}
 			else if (confirmation_option.compare("EXIT") == 0)
 			{

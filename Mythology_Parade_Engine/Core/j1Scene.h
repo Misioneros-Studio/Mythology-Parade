@@ -88,6 +88,8 @@ public:
 	uint WinViking_sound;
 	uint WinGreek_sound;
 	uint Lose_sound;
+
+	bool isInTutorial;
 };
 
 #endif // __j1SCENE_H__

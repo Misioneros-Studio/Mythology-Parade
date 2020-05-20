@@ -42,8 +42,6 @@ public:
 	// Called before all Updates
 	bool PreUpdate();
 
-	void ClickToPath();
-
 	// Called each loop iteration
 	bool Update(float dt);
 
@@ -53,28 +51,10 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
-	// Called when restarting the game
-	void RestartGame();
-
-	void OnClick(UI* element, float argument = 0);
-
-	void FinishResearching(std::string);
-
-private:
-
-	fPoint global_pos;
-	SDL_Rect mapLimitsRect;
-
-
 public:
-	SDL_Texture* debugBlue_tex;
-	SDL_Texture* debugRed_tex;
-	bool paused_game;
-	bool godMode;
-	bool clickToPath;
 
-	HUD* hud;
-	ResearchMenu* research_menu;
+	SDL_Texture* tutorial_tex;
+
 };
 
 #endif // __j1TUTORIALSCENE_H__

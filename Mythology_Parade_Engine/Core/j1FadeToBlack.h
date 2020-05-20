@@ -10,6 +10,8 @@ enum which_fade {
 	title_to_scene,
 	scene_to_title,
 	scene_to_scene,
+	tutorial_to_tutorial,
+	title_to_tutorial,
 	tutorial_to_title
 };
 

@@ -14,6 +14,7 @@
 #include "j1LogoScene.h"
 #include "j1TitleScene.h"
 #include "j1Scene.h"
+#include "j1TutorialScene.h"
 #include "j1Minimap.h"
 #include "j1Map.h"
 #include "j1Fonts.h"
@@ -64,10 +65,9 @@ bool j1FadeToBlack::PostUpdate()
 				App->entityManager->Enable();
 				App->pathfinding->Enable();
 				App->scene->Enable();
+				App->scene->isInTutorial = false;
 				App->minimap->Enable();
-
 				break;
-
 			case(which_fade::scene_to_title):
 				App->entityManager->Disable();
 				App->pathfinding->Disable();
@@ -83,6 +83,35 @@ bool j1FadeToBlack::PostUpdate()
 				App->entityManager->Enable();
 				App->pathfinding->Enable();
 				App->scene->Enable();
+				App->minimap->Enable();
+				break;
+			case(which_fade::title_to_tutorial):
+				App->title_scene->Disable();
+				App->entityManager->Enable();
+				App->pathfinding->Enable();
+				App->scene->Enable();
+				App->scene->isInTutorial = true;
+				App->tutorialscene->Enable();
+				App->minimap->Enable();
+				break;
+			case(which_fade::tutorial_to_title):
+				App->entityManager->Disable();
+				App->pathfinding->Disable();
+				App->scene->Disable();
+				App->tutorialscene->Disable();
+				App->minimap->Disable();
+				App->title_scene->Enable();
+				break;
+			case(which_fade::tutorial_to_tutorial):
+				App->entityManager->Disable();
+				App->pathfinding->Disable();
+				App->scene->Disable();
+				App->tutorialscene->Disable();
+				App->minimap->Disable();
+				App->entityManager->Enable();
+				App->pathfinding->Enable();
+				App->scene->Enable();
+				App->tutorialscene->Enable();
 				App->minimap->Enable();
 				break;
 			}
