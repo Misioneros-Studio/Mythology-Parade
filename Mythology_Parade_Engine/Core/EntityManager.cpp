@@ -330,33 +330,36 @@ bool EntityManager::Load(pugi::xml_node& n)
 		pos.x = it.attribute("position_x").as_int();
 		pos.y = it.attribute("position_y").as_int();
 
+		CivilizationType unit_civ;
+		if (!strcmp(it.attribute("civilization").as_string(), "viking")) unit_civ = CivilizationType::VIKING;
+		else unit_civ = CivilizationType::GREEK;
 
 		if (!strcmp(it.attribute("type").as_string(), "monk")) {
-			Unit* monk = static_cast<Unit*>(CreateUnitEntity(UnitType::MONK, pos, civ));
+			Unit* monk = static_cast<Unit*>(CreateUnitEntity(UnitType::MONK, pos, unit_civ));
 			monk->SetHealth(it.attribute("health").as_int());
 		}
 		else if (!strcmp(it.attribute("type").as_string(), "assassin")) {
-			CombatUnit* assassin = static_cast<CombatUnit*>(CreateUnitEntity(UnitType::ASSASSIN, pos, civ));
+			CombatUnit* assassin = static_cast<CombatUnit*>(CreateUnitEntity(UnitType::ASSASSIN, pos, unit_civ));
 			assassin->SetLevel(it.attribute("level").as_int());
 			assassin->SetHealth(it.attribute("health").as_int());
 		}
 		else if (!strcmp(it.attribute("type").as_string(), "pikeman")) {
-			CombatUnit* pikeman = static_cast<CombatUnit*>(CreateUnitEntity(UnitType::PIKEMAN, pos, civ));
+			CombatUnit* pikeman = static_cast<CombatUnit*>(CreateUnitEntity(UnitType::PIKEMAN, pos, unit_civ));
 			pikeman->SetLevel(it.attribute("level").as_int());
 			pikeman->SetHealth(it.attribute("health").as_int());
 		}
 		else if (!strcmp(it.attribute("type").as_string(), "explorer")) {
-			CombatUnit* explorer = static_cast<CombatUnit*>(CreateUnitEntity(UnitType::EXPLORER, pos, civ));
+			CombatUnit* explorer = static_cast<CombatUnit*>(CreateUnitEntity(UnitType::EXPLORER, pos, unit_civ));
 			explorer->SetLevel(it.attribute("level").as_int());
 			explorer->SetHealth(it.attribute("health").as_int());
 		}
 		else if (!strcmp(it.attribute("type").as_string(), "priest")) {
-			CombatUnit* priest = static_cast<CombatUnit*>(CreateUnitEntity(UnitType::PRIEST, pos, civ));
+			CombatUnit* priest = static_cast<CombatUnit*>(CreateUnitEntity(UnitType::PRIEST, pos, unit_civ));
 			priest->SetLevel(it.attribute("level").as_int());
 			priest->SetHealth(it.attribute("health").as_int());
 		}
 		else if (!strcmp(it.attribute("type").as_string(), "footman")) {
-			CombatUnit* footman = static_cast<CombatUnit*>(CreateUnitEntity(UnitType::FOOTMAN, pos, civ));
+			CombatUnit* footman = static_cast<CombatUnit*>(CreateUnitEntity(UnitType::FOOTMAN, pos, unit_civ));
 			footman->SetLevel(it.attribute("level").as_int());
 			footman->SetHealth(it.attribute("health").as_int());
 		}
@@ -373,8 +376,6 @@ bool EntityManager::Load(pugi::xml_node& n)
 	}
 
 	//BUILDINGS LOADING
-	//GUARDAR LA BARRA DE PROGRES 
-	//ARREGLAR RESEARCH
 	it = n.child("buildings").child("build");
 	for (it; it; it = it.next_sibling("build"))
 	{
@@ -397,8 +398,8 @@ bool EntityManager::Load(pugi::xml_node& n)
 
 
 		if (!strcmp(it.attribute("type").as_string(), "monastery")) {
-			if (!strcmp(it.attribute("civilization").as_string(), "viking")) { build_civ = CivilizationType::VIKING; databuild = 5; }
-			else { build_civ = CivilizationType::GREEK; databuild = 1; }
+			if (!strcmp(it.attribute("civilization").as_string(), "viking")) { build_civ = CivilizationType::VIKING; databuild = 1; }
+			else { build_civ = CivilizationType::GREEK; databuild = 5; }
 			Building* monastery = static_cast<Building*>(CreateBuildingEntity(pos, BuildingType::MONASTERY, buildingsData[databuild], build_civ));
 			monastery->SetHealth(it.attribute("health").as_int());
 			if (status == BuildingStatus::CONSTRUCTING) {
@@ -413,8 +414,8 @@ bool EntityManager::Load(pugi::xml_node& n)
 		}
 
 		else if (!strcmp(it.attribute("type").as_string(), "temple")) {
-			if (!strcmp(it.attribute("civilization").as_string(), "viking")) { build_civ = CivilizationType::VIKING; databuild = 6; }
-			else { build_civ = CivilizationType::GREEK; databuild = 2; }
+			if (!strcmp(it.attribute("civilization").as_string(), "viking")) { build_civ = CivilizationType::VIKING; databuild = 2; }
+			else { build_civ = CivilizationType::GREEK; databuild = 6; }
 			Building* temple = static_cast<Building*>(CreateBuildingEntity(pos, BuildingType::TEMPLE, buildingsData[databuild], build_civ));
 			temple->SetHealth(it.attribute("health").as_int());
 			if (status == BuildingStatus::CONSTRUCTING) {
@@ -429,8 +430,8 @@ bool EntityManager::Load(pugi::xml_node& n)
 		}
 
 		else if (!strcmp(it.attribute("type").as_string(), "encampment")) {
-			if (!strcmp(it.attribute("civilization").as_string(), "viking")) { build_civ = CivilizationType::VIKING; databuild = 7; }
-			else { build_civ = CivilizationType::GREEK; databuild = 3; }
+			if (!strcmp(it.attribute("civilization").as_string(), "viking")) { build_civ = CivilizationType::VIKING; databuild = 3; }
+			else { build_civ = CivilizationType::GREEK; databuild = 7; }
 			Building* encampment = static_cast<Building*>(CreateBuildingEntity(pos, BuildingType::ENCAMPMENT, buildingsData[databuild], build_civ));
 			encampment->SetHealth(it.attribute("health").as_int());
 			if (status == BuildingStatus::CONSTRUCTING) {
@@ -458,33 +459,6 @@ bool EntityManager::Load(pugi::xml_node& n)
 			fortress->buildingAction = action;
 			if (action == BuildingAction::PRODUCING) { fortress->StartProducing(it.attribute("element").as_string()); fortress->timer_construction.StartAt(it.attribute("time").as_int()); }
 			else if (action == BuildingAction::RESEARCHING) { fortress->StartResearching(it.attribute("element").as_string()); fortress->timer_construction.StartAt(it.attribute("time").as_int()); }
-
-
-			/*if (!strcmp(it.attribute("civilization").as_string(), "viking")) { build_civ = CivilizationType::VIKING; }
-			else { build_civ = CivilizationType::GREEK; }
-			std::list<Entity*> list = App->entityManager->entities[EntityType::BUILDING];
-			for each (Building * var in list)
-			{
-				if (var->GetBuildingType() == BuildingType::FORTRESS)
-				{
-					if (var->civilization == CivilizationType::VIKING && build_civ == CivilizationType::VIKING)
-					{
-						var->SetHealth(it.attribute("health").as_int());
-						var->buildingStatus = status;
-						var->buildingAction = action;
-						if (action != BuildingAction::PRODUCING) { var->StartProducing(it.attribute("element").as_string()); var->timer_construction.StartAt(it.attribute("time").as_int()); }
-						else if (action != BuildingAction::RESEARCHING) { var->StartResearching(it.attribute("element").as_string()); var->timer_construction.StartAt(it.attribute("time").as_int()); }
-					}
-					else
-					{
-						var->SetHealth(it.attribute("health").as_int());
-						var->buildingStatus = status;
-						var->buildingAction = action;
-						if (action != BuildingAction::PRODUCING) { var->StartProducing(it.attribute("element").as_string()); var->timer_construction.StartAt(it.attribute("time").as_int()); }
-						else if (action != BuildingAction::RESEARCHING) { var->StartResearching(it.attribute("element").as_string()); var->timer_construction.StartAt(it.attribute("time").as_int()); }
-					}
-				}
-			}*/
 		}
 	}
 	return true;
