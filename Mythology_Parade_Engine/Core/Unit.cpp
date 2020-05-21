@@ -8,6 +8,14 @@
 Unit::Unit(UnitType type, iPoint pos): unitType(type), state(AnimationType::IDLE),  moveSpeed(60)
 {
 	
+	if (App->entityManager->getPlayer())
+	{
+		displayDebug = App->entityManager->getPlayer()->displayDebug;
+	}
+	else
+	{
+		displayDebug = false;
+	}
 	collisionRect = { 0, 0, 30, -55 };
 	unitType = type;
 	position = {(float)pos.x, (float)pos.y};
@@ -24,13 +32,9 @@ Unit::Unit(UnitType type, iPoint pos): unitType(type), state(AnimationType::IDLE
 		time_production = 90;
 		time_research = 0;
 		researched = true;
-		name = "monk";
 		Init(1);
 		break;
 	}
-
-	canLevel = false;
-
 	SetSelected(false);
 
 }
@@ -61,15 +65,6 @@ bool Unit::Start()
 bool Unit::Update(float dt)
 {
 	bool ret = true;
-
-	if (App->entityManager->getPlayer())
-	{
-		displayDebug = App->entityManager->getPlayer()->displayDebug;
-	}
-	else
-	{
-		displayDebug = false;
-	}
 
 	//Allawys blit the sprite at the end
 	StateMachineActions(dt);

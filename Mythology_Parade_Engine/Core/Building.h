@@ -25,7 +25,6 @@ enum class BuildingAction
 	PRODUCING,
 	NOTHING
 };
-
 struct BuildingInfo;
 
 class Building: public Entity, public HealthSystem
@@ -40,23 +39,12 @@ public:
 	int GetDamage() { return damage; }
 	int GetMaxCap() { return maxCap; }
 
-	void StartProducing(std::string thing_producing);
-	void StartResearching(std::string thing_producing);
+	void StartProducing(int time, std::string thing_producing);
+	void StartResearching(int time, std::string thing_producing);
 
 	void SetTimeProducing(int time);
 
 	void CreateUnit();
-
-
-	bool GetResearched();
-
-	int GetTimeResearch();
-	int GetTimeProducing();
-
-	float GetPercentage();
-	void SetPercentage(float var);
-
-	std::string GetElementProducing();
 
 	void CreateUnitQueue(int time, std::string thing_producing);
 
@@ -89,6 +77,7 @@ private:
 
 	//Used when constructing/producing
 	float percentage_constructing;
+	j1Timer timer_construction;
 	bool first_time_constructing;
 	std::string element_producing;
 	
@@ -103,7 +92,6 @@ private:
 	SDL_Rect original_spriteRect;
 
 public:
-	j1Timer timer_construction;
 	BuildingStatus buildingStatus;
 	BuildingAction buildingAction;
 

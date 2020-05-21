@@ -102,10 +102,6 @@ public:
 		return collisionRect;
 	}
 
-
-	bool canLevel;
-
-
 	bool isSelected() 
 	{
 		return _isSelected;
@@ -115,7 +111,6 @@ public:
 	{
 		_isSelected = value;
 	}
-
 
 protected:
 	SDL_RendererFlip flipState;

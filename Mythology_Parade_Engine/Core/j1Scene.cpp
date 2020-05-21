@@ -18,7 +18,6 @@
 #include "j1FadeToBlack.h"
 #include "HUD.h"
 #include "ResearchMenu.h"
-#include "j1TitleScene.h"
 
 #include"QuadTree.h"
 
@@ -140,11 +139,6 @@ bool j1Scene::PreUpdate()
 		App->gui->cursor_attack = false;
 	}
 
-	if (App->title_scene->wantToLoad)
-	{
-		App->LoadGame("info.xml");
-		App->title_scene->wantToLoad = false;
-	}
 
 	// Move Camera if click on the minimap
 	int mouse_x, mouse_y;
@@ -497,11 +491,11 @@ void j1Scene::OnClick(UI* element, float argument)
 			hud->close_menus = CloseSceneMenus::Confirmation;
 			if (hud->confirmation_option.compare("SAVE") == 0)
 			{
-				App->SaveGame("info.xml");
+				App->SaveGame("save_game.xml");
 			}
 			else if (hud->confirmation_option.compare("LOAD") == 0)
 			{
-				App->LoadGame("info.xml");
+				App->LoadGame("save_game.xml");
 			}
 			else if (hud->confirmation_option.compare("RESTART") == 0)
 			{
@@ -515,7 +509,6 @@ void j1Scene::OnClick(UI* element, float argument)
 			}
 			else if (hud->confirmation_option.compare("EXIT") == 0)
 			{
-				App->entityManager->initCivilizations = true;
 				BackToTitleMenu();
 			}
 		}
@@ -542,52 +535,52 @@ void j1Scene::OnClick(UI* element, float argument)
 		}
 		else if (element->name == "RESEARCH TEMPLE") {
 			Building* building = (Building*)hud->thing_selected;
-			building->StartResearching("Temple");
+			building->StartResearching(90, "Temple");
 			hud->close_menus = CloseSceneMenus::Research;
 		}
 		else if (element->name == "RESEARCH ENCAMPMENT") {
 			Building* building = (Building*)hud->thing_selected;
-			building->StartResearching("Encampment");
+			building->StartResearching(90, "Encampment");
 			hud->close_menus = CloseSceneMenus::Research;
 		}
 		else if (element->name == "RESEARCH CLERIC") {
 			Building* building = (Building*)hud->thing_selected;
-			building->StartResearching("Cleric");
+			building->StartResearching(70, "Cleric");
 			hud->close_menus = CloseSceneMenus::Research;
 		}
 		else if (element->name == "RESEARCH ASSASSIN") {
 			Building* building = (Building*)hud->thing_selected;
-			building->StartResearching("Assassin");
+			building->StartResearching(70, "Assassin");
 			hud->close_menus = CloseSceneMenus::Research;
 		}
 		else if (element->name == "RESEARCH LAWFUL BEAST") {
 			Building* building = (Building*)hud->thing_selected;
-			building->StartResearching("Lawful Beast");
+			building->StartResearching(210, "Lawful Beast");
 			hud->close_menus = CloseSceneMenus::Research;
 		}
 		else if (element->name == "RESEARCH CHAOTIC BEAST") {
 			Building* building = (Building*)hud->thing_selected;
-			building->StartResearching("Chaotic Beast");
+			building->StartResearching(210, "Chaotic Beast");
 			hud->close_menus = CloseSceneMenus::Research;
 		}
 		else if (element->name == "RESEARCH LAWFUL MIRACLE") {
 			Building* building = (Building*)hud->thing_selected;
-			building->StartResearching("Lawful Miracle");
+			building->StartResearching(240, "Lawful Miracle");
 			hud->close_menus = CloseSceneMenus::Research;
 		}
 		else if (element->name == "RESEARCH CHAOTIC MIRACLE") {
 			Building* building = (Building*)hud->thing_selected;
-			building->StartResearching("Chaotic Miracle");
+			building->StartResearching(240, "Chaotic Miracle");
 			hud->close_menus = CloseSceneMenus::Research;
 		}
 		else if (element->name == "RESEARCH LAWFUL VICTORY") {
 			Building* building = (Building*)hud->thing_selected;
-			building->StartResearching("Lawful Victory");
+			building->StartResearching(420, "Lawful Victory");
 			hud->close_menus = CloseSceneMenus::Research;
 		}
 		else if (element->name == "RESEARCH CHAOTIC VICTORY") {
 			Building* building = (Building*)hud->thing_selected;
-			building->StartResearching("Chaotic Victory");
+			building->StartResearching(420, "Chaotic Victory");
 			hud->close_menus = CloseSceneMenus::Research;
 		}
 		else if (element->name == "Produce_Temple")
@@ -622,37 +615,32 @@ void j1Scene::OnClick(UI* element, float argument)
 		{
 			Building* building = (Building*)hud->thing_selected;
 			App->entityManager->getPlayer()->DecreaseFaith(100);
-
-			building->StartProducing("Assassin");
-
-			//building->CreateUnitQueue(10, "Assassin");
+			building->CreateUnitQueue(10, "Assassin");
 		}
 		else if (element->name == "Produce_Monk")
 		{
 			Building* building = (Building*)hud->thing_selected;
 			App->entityManager->getPlayer()->DecreaseFaith(50);
-			building->StartProducing("Monk");
-			//building->CreateUnitQueue(10, "Monk");
-
+			building->CreateUnitQueue(10, "Monk");
 
 		}
 		else if (element->name == "Produce_Victory")
 		{
 			Building* building = (Building*)hud->thing_selected;
 			App->entityManager->getPlayer()->DecreaseFaith(600);  
-			building->StartProducing("Victory");
+			building->StartProducing(App->entityManager->getPlayer()->time_production_victory, "Victory");
 		}
 		else if (element->name == "Produce_Sacrifices")
 		{
 			Building* building = (Building*)hud->thing_selected;
 			App->entityManager->getPlayer()->DecreaseFaith(40);
-			building->StartProducing("Sacrifices");
+			building->StartProducing(App->entityManager->getPlayer()->time_sacrifices, "Sacrifices");
 		}
 		else if (element->name == "Produce_Prayers")
 		{
 			Building* building = (Building*)hud->thing_selected;
 			App->entityManager->getPlayer()->DecreaseFaith(100);
-			building->StartProducing("Prayers");
+			building->StartProducing(App->entityManager->getPlayer()->time_prayers, "Prayers");
 		}
 		else if (element->name == "Upgrade") {
 			//Upgrade level

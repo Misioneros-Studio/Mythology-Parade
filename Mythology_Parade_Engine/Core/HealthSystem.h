@@ -28,7 +28,6 @@ public:
 	void SetMaxHealth(int value);
 	int GetMaxHealth();
 	void IncreaseHealth(int value);
-	void SetHealth(int value);
 };
 
 #endif // !__HEALTHSYSTEM_H__

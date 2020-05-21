@@ -43,8 +43,3 @@ void HealthSystem::IncreaseHealth(int value)
 	maxHealth += value;
 }
 
-void HealthSystem::SetHealth(int value)
-{
-	health = value;
-}
-
