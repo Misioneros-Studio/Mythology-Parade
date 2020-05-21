@@ -28,15 +28,9 @@ public:
 	void ClickLogic();
 	std::list<Entity*> GetEntitiesSelected();
 	Building* GetSelectedBuild();
-
 	int GetFaith();
 	int GetPrayers();
 	int GetSacrifices();
-
-	void SetFaith(int var);
-	void SetPrayers(int var);
-	void SetSacrifices(int var);
-
 	void InitVikings();
 	void InitGreek();
 

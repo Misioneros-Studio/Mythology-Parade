@@ -6,12 +6,10 @@ CombatUnit::CombatUnit(UnitType type, iPoint pos) : Unit(type, pos), range(0), d
 	//TODO 10: Change textures
 	unitType = type;
 	position = {(float)pos.x, (float)pos.y};
-	canLevel = true;
 	switch (unitType)
 	{
 	case UnitType::ASSASSIN:
 		time_production = 90;
-		name = "assassin";
 		time_research = 0;
 		researched = true;
 		//Change texture
@@ -22,19 +20,15 @@ CombatUnit::CombatUnit(UnitType type, iPoint pos) : Unit(type, pos), range(0), d
 		time_production = 90;
 		time_research = 70;
 		researched = false;
-		name = "pikeman";
 		//Change Texture
 		LevelSystem::Init(3000, 6000, 9500);
 		CombatUnit::Init(110, 25, 1, 40);
 		break;
 	case UnitType::EXPLORER:
-		name = "explorer";
 		break;
 	case UnitType::PRIEST:
-		name = "priest";
 		break;
 	case UnitType::FOOTMAN:
-		name = "footman";
 		break;
 	}
 	combat_unit = true;
@@ -158,18 +152,5 @@ void CombatUnit::IncreaseSpeed(int value)
 void CombatUnit::IncreaseDamage(int value)
 {
 	damage += value;
-}
-
-void CombatUnit::SetLevel(int i)
-{
-	for (int j = 0; j < i; j++)
-	{
-		LevelUp();
-	}
-}
-
-void CombatUnit::SetHealth(int value)
-{
-	HealthSystem::SetHealth(value);
 }
 

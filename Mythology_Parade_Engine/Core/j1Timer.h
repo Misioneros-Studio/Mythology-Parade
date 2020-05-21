@@ -16,7 +16,6 @@ public:
 	void Pause();
 	void Resume();
 	bool isPaused();
-	bool StartAt(int);
 
 private:
 	uint32	started_at;

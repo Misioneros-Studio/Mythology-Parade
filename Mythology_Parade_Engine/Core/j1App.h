@@ -134,8 +134,6 @@ private:
 	float				dt = 0.0f;
 	int					capped_ms = -1;
 
-	bool				existSaveFile;
-
 public:
 	std::list<std::string>	logs;
 	int						num_logs = 0;

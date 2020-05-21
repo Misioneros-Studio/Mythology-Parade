@@ -107,7 +107,10 @@ private:
 	ImageUI* ui_pause_black_screen;
 public:
 	CloseTitleSceneMenus close_menus;
+<<<<<<< Updated upstream
 	bool wantToLoad;
+=======
+>>>>>>> Stashed changes
 };
 
 #endif // __j1TITLESCENE_H__

@@ -61,10 +61,3 @@ bool j1Timer::isPaused()
 {
 	return paused;
 }
-
-bool j1Timer::StartAt(int var)
-{
-	started_at = started_at - var;
-	Resume();
-	return true;
-}
