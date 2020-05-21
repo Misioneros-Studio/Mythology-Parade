@@ -31,15 +31,6 @@ Building::Building(BuildingType type, iPoint pos, BuildingInfo info)
 	tileLenght = info.tileLenght;
 	int blitWidth = tileLenght * App->map->data.tile_width;
 
-	if (App->entityManager->getPlayer()) 
-	{
-		displayDebug = App->entityManager->getPlayer()->displayDebug;
-	}
-	else
-	{
-		displayDebug = false;
-	}
-
 	switch (buildingType)
 	{
 	case FORTRESS:
@@ -52,6 +43,7 @@ Building::Building(BuildingType type, iPoint pos, BuildingInfo info)
 		maxCap = 1;
 		description = "I'm a fortress";
 		researched = true;
+		name = "fortress";
 		break;
 	case MONASTERY:
 		this->buildingType = BuildingType::MONASTERY;
@@ -65,6 +57,7 @@ Building::Building(BuildingType type, iPoint pos, BuildingInfo info)
 		description = "I'm a monastery";
 		App->entityManager->getPlayer()->num_monastery++;
 		researched = false;
+		name = "monastery";
 		break;
 	case TEMPLE:
 		this->buildingType = BuildingType::TEMPLE;
@@ -78,6 +71,7 @@ Building::Building(BuildingType type, iPoint pos, BuildingInfo info)
 		description = "I'm a temple";
 		App->entityManager->getPlayer()->num_temple++;
 		researched = false;
+		name = "temple";
 		break;
 	case ENCAMPMENT:
 		this->buildingType = BuildingType::ENCAMPMENT;
@@ -91,6 +85,7 @@ Building::Building(BuildingType type, iPoint pos, BuildingInfo info)
 		description = "I'm an encampment";
 		App->entityManager->getPlayer()->num_encampment++;
 		researched = false;
+		name = "encampment";
 		break;
 	default:
 		break;
@@ -148,11 +143,42 @@ void Building::CreateUnit()
 	}
 }
 
+
+bool Building::GetResearched()
+{
+	return researched;
+}
+
+int Building::GetTimeResearch()
+{
+	return time_research;
+}
+
+int Building::GetTimeProducing()
+{
+	return time_producing;
+}
+
+float Building::GetPercentage()
+{
+	return percentage_constructing;
+}
+
+void Building::SetPercentage(float var)
+{
+	percentage_constructing = var;
+}
+
+std::string Building::GetElementProducing()
+{
+	return element_producing;
+}
 void Building::CreateUnitQueue(int time, std::string thing_producing)
 {
 	unitsToCreate++;
 	time_producing = time;
 	element_producing = thing_producing;
+
 }
 
 bool Building::Awake(pugi::xml_node& a)
@@ -165,6 +191,15 @@ bool Building::Awake(pugi::xml_node& a)
 bool Building::Update(float dt)
 {
 	bool ret = true;
+
+	if (App->entityManager->getPlayer())
+	{
+		displayDebug = App->entityManager->getPlayer()->displayDebug;
+	}
+	else
+	{
+		displayDebug = false;
+  }
 	if (unitsToCreate > 0 && buildingAction == BuildingAction::NOTHING) {
 		StartProducing(element_producing);
 		unitsToCreate--;
@@ -356,10 +391,14 @@ void Building::Draw_Building_Bar(int blitWidth, int bar_used, bool building_acti
 }
 
 
-void Building::StartProducing(int time, std::string thing_producing) {
+void Building::StartProducing(std::string thing_producing) {
 	buildingAction = BuildingAction::PRODUCING;
 	percentage_constructing = 0;
-	time_producing = time;
+	if (thing_producing == "Prayers") time_producing = App->entityManager->getPlayer()->time_prayers;
+	else if (thing_producing == "Sacrifices") time_producing = App->entityManager->getPlayer()->time_sacrifices;
+	else if (thing_producing == "Victory") time_producing = App->entityManager->getPlayer()->time_production_victory;
+	else if (thing_producing == "Monk") time_producing = 10;
+	else if (thing_producing == "Assasin") time_producing = 10;
 	element_producing = thing_producing;
 	timer_construction.Start();
 	
@@ -392,10 +431,21 @@ void Building::FinishProduction(std::string thing_produced)
 	}
 }
 
-void Building::StartResearching(int time, std::string thing_producing) {
+void Building::StartResearching(std::string thing_producing) {
 	buildingAction = BuildingAction::RESEARCHING;
 	percentage_constructing = 0;
-	time_producing = time;
+
+	if (thing_producing == "Chaotic Miracle") time_producing = 240;
+	else if (thing_producing == "Lawful Miracle") time_producing = 240;
+	else if (thing_producing == "Chaotic Victory") time_producing = 420;
+	else if (thing_producing == "Lawful Victory") time_producing = 420;
+	else if (thing_producing == "Assassin") time_producing = 70;
+	else if (thing_producing == "Cleric") time_producing = 70;
+	else if (thing_producing == "Encampment") time_producing = 90;
+	else if (thing_producing == "Temple") time_producing = 90;
+	else if (thing_producing == "Chaotic Beast") time_producing = 210;
+	else if (thing_producing == "Lawful Beast") time_producing = 210;
+
 	element_producing = thing_producing;
 	timer_construction.Start();
 }

@@ -32,6 +32,8 @@ public:
 	void IncreaseHealth(int);
 	void IncreaseSpeed(int);
 	void IncreaseDamage(int);
+	void SetLevel(int);
+	void SetHealth(int);
 
 };
 
