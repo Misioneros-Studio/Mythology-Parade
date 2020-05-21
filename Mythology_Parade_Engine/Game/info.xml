@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<info>
+	<entities>
+		<unit type="monk" position_x="2304" position_y="2240" civilization="greek" health="1" />
+		<unit type="monk" position_x="2976" position_y="2320" civilization="greek" health="1" />
+		<unit type="assassin" position_x="2304" position_y="2336" civilization="greek" health="100" level="0" />
+		<unit type="assassin" position_x="2976" position_y="2384" civilization="greek" health="100" level="0" />
+	</entities>
+	<buildings>
+		<build type="fortress" position_x="3200" position_y="2288" civilization="viking" health="500" status="finished" action="nothing" />
+		<build type="fortress" position_x="1920" position_y="2288" civilization="greek" health="500" status="finished" action="nothing" />
+		<build type="monastery" position_x="3328" position_y="2448" civilization="viking" health="250" status="constructing" time="0.432999998" progress="0" action="nothing" />
+	</buildings>
+	<players>
+		<viking>
+			<economy faith="304" prayers="0" sacrifices="0" />
+			<research>
+				<temple research="false" />
+				<encampment research="false" />
+				<cleric research="false" />
+				<assassin research="false" />
+				<lawful_beast research="false" />
+				<chaotic_beast research="false" />
+				<lawful_miracle research="false" />
+				<chaotic_miracle research="false" />
+				<lawful_victory research="false" />
+				<chaotic_victory research="false" />
+			</research>
+		</viking>
+	</players>
+	<volume music="50" fx="128" />
+	<camera x="-2683" y="-2000" />
+</info>

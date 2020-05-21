@@ -10,6 +10,7 @@ EntityManager::EntityManager()
 	name.append("entity_manager");
 	buildingsData.reserve(MAX_BUILDING_TYPES);
 	buildingTestIndex = 0;
+	initCivilizations = true;
 }
 
 //Destructor
@@ -295,33 +296,309 @@ bool EntityManager::CleanUp()
 }
 
 ////Called when loading the game
-//bool EntityManager::Load(pugi::xml_node& n)
-//{
-//	pugi::xml_node n2 = n;
-//	for (unsigned int i = 0; i < entities.count(); i++)
-//	{
-//		n2 = n.child(entities.At(i)->data->name.GetString());
-//		while (n2.attribute("id").as_int() != i) {
-//			n2 = n2.next_sibling(entities.At(i)->data->name.GetString());
-//			assert(n2.attribute("id").as_int() != 0, "Load could not function properly");
-//		};
-//		entities.At(i)->data->Load(n2);
-//	}
-//	return true;
-//}
-//
+bool EntityManager::Load(pugi::xml_node& n)
+{
+	CivilizationType civ;
+	entities.clear();
+
+	//PLAYER LOADING
+	pugi::xml_node p = n.child("players").first_child();
+	if (p.name() == "viking") civ = CivilizationType::VIKING;
+	else civ = CivilizationType::GREEK;
+	Player* player = static_cast<Player*>(CreatePlayerEntity(p.name()));
+	player->research_assassin = p.child("research").child("assassin").attribute("research").as_bool();
+	player->research_chaotic_beast = p.child("research").child("chaotic_beast").attribute("research").as_bool();
+	player->research_chaotic_miracle = p.child("research").child("chaotic_miracle").attribute("research").as_bool();
+	player->research_chaotic_victory = p.child("research").child("chaotic_victory").attribute("research").as_bool();
+	player->research_cleric = p.child("research").child("cleric").attribute("research").as_bool();
+	player->research_encampment = p.child("research").child("encampment").attribute("research").as_bool();
+	player->research_lawful_beast = p.child("research").child("lawful_beast").attribute("research").as_bool();
+	player->research_lawful_miracle = p.child("research").child("lawful_miracle").attribute("research").as_bool();
+	player->research_lawful_victory = p.child("research").child("lawful_victory").attribute("research").as_bool();
+	player->research_temple = p.child("research").child("temple").attribute("research").as_bool();
+
+	player->SetFaith(p.child("economy").attribute("faith").as_int());
+	player->SetSacrifices(p.child("economy").attribute("sacrifices").as_int());
+	player->SetPrayers(p.child("economy").attribute("prayers").as_int());
+
+
+	//UNITS LOADING
+	pugi::xml_node it = n.child("entities").child("unit");
+	for (it; it; it = it.next_sibling("unit"))
+	{
+		iPoint pos;
+		pos.x = it.attribute("position_x").as_int();
+		pos.y = it.attribute("position_y").as_int();
+
+
+		if (!strcmp(it.attribute("type").as_string(), "monk")) {
+			Unit* monk = static_cast<Unit*>(CreateUnitEntity(UnitType::MONK, pos, civ));
+			monk->SetHealth(it.attribute("health").as_int());
+		}
+		else if (!strcmp(it.attribute("type").as_string(), "assassin")) {
+			CombatUnit* assassin = static_cast<CombatUnit*>(CreateUnitEntity(UnitType::ASSASSIN, pos, civ));
+			assassin->SetLevel(it.attribute("level").as_int());
+			assassin->SetHealth(it.attribute("health").as_int());
+		}
+		else if (!strcmp(it.attribute("type").as_string(), "pikeman")) {
+			CombatUnit* pikeman = static_cast<CombatUnit*>(CreateUnitEntity(UnitType::PIKEMAN, pos, civ));
+			pikeman->SetLevel(it.attribute("level").as_int());
+			pikeman->SetHealth(it.attribute("health").as_int());
+		}
+		else if (!strcmp(it.attribute("type").as_string(), "explorer")) {
+			CombatUnit* explorer = static_cast<CombatUnit*>(CreateUnitEntity(UnitType::EXPLORER, pos, civ));
+			explorer->SetLevel(it.attribute("level").as_int());
+			explorer->SetHealth(it.attribute("health").as_int());
+		}
+		else if (!strcmp(it.attribute("type").as_string(), "priest")) {
+			CombatUnit* priest = static_cast<CombatUnit*>(CreateUnitEntity(UnitType::PRIEST, pos, civ));
+			priest->SetLevel(it.attribute("level").as_int());
+			priest->SetHealth(it.attribute("health").as_int());
+		}
+		else if (!strcmp(it.attribute("type").as_string(), "footman")) {
+			CombatUnit* footman = static_cast<CombatUnit*>(CreateUnitEntity(UnitType::FOOTMAN, pos, civ));
+			footman->SetLevel(it.attribute("level").as_int());
+			footman->SetHealth(it.attribute("health").as_int());
+		}
+
+		//OTRAS UNIDADES PARA EL SIGUIENTE COMMIT
+		//else if (!strcmp(it.attribute("type").as_string(), "cyclop"))
+		//	CreateUnitEntity(UnitType::CYCLOP, pos, civ);
+		//else if (!strcmp(it.attribute("type").as_string(), "minotaur"))
+		//	CreateUnitEntity(UnitType::MINOTAUR, pos, civ);
+		//else if (!strcmp(it.attribute("type").as_string(), "jotnar"))
+		//	CreateUnitEntity(UnitType::JOTNAR, pos, civ);
+		//else if (!strcmp(it.attribute("type").as_string(), "draugar"))
+		//	CreateUnitEntity(UnitType::DRAUGAR, pos, civ);
+	}
+
+	//BUILDINGS LOADING
+	//GUARDAR LA BARRA DE PROGRES 
+	//ARREGLAR RESEARCH
+	it = n.child("buildings").child("build");
+	for (it; it; it = it.next_sibling("build"))
+	{
+		BuildingStatus status;
+		BuildingAction action;
+		CivilizationType build_civ;
+		iPoint pos;
+		int databuild;
+
+		pos.x = it.attribute("position_x").as_int();
+		pos.y = it.attribute("position_y").as_int();
+
+		if (!strcmp(it.attribute("status").as_string(), "constructing")) status = BuildingStatus::CONSTRUCTING;
+		else if (!strcmp(it.attribute("status").as_string(), "finished")) status = BuildingStatus::FINISHED;
+		else status = BuildingStatus::DESTROYED;
+
+		if (!strcmp(it.attribute("action").as_string(), "nothing")) action = BuildingAction::NOTHING;
+		else if (!strcmp(it.attribute("action").as_string(), "producing")) action = BuildingAction::PRODUCING;
+		else action = BuildingAction::RESEARCHING;
+
+
+		if (!strcmp(it.attribute("type").as_string(), "monastery")) {
+			if (!strcmp(it.attribute("civilization").as_string(), "viking")) { build_civ = CivilizationType::VIKING; databuild = 5; }
+			else { build_civ = CivilizationType::GREEK; databuild = 1; }
+			Building* monastery = static_cast<Building*>(CreateBuildingEntity(pos, BuildingType::MONASTERY, buildingsData[databuild], build_civ));
+			monastery->SetHealth(it.attribute("health").as_int());
+			if (status == BuildingStatus::CONSTRUCTING) {
+				monastery->timer_construction.StartAt(it.attribute("time").as_float());
+				monastery->SetPercentage(it.attribute("percentage").as_float());
+			} //CARGAR PERCENTAGE CONSTRUCTING
+			monastery->buildingStatus = status;
+			monastery->buildingAction = action;
+			if (action == BuildingAction::PRODUCING) { monastery->StartProducing(it.attribute("element").as_string()); monastery->timer_construction.StartAt(it.attribute("time").as_int()); }
+			else if (action == BuildingAction::RESEARCHING) { monastery->StartResearching(it.attribute("element").as_string()); monastery->timer_construction.StartAt(it.attribute("time").as_int()); }
+
+		}
+
+		else if (!strcmp(it.attribute("type").as_string(), "temple")) {
+			if (!strcmp(it.attribute("civilization").as_string(), "viking")) { build_civ = CivilizationType::VIKING; databuild = 6; }
+			else { build_civ = CivilizationType::GREEK; databuild = 2; }
+			Building* temple = static_cast<Building*>(CreateBuildingEntity(pos, BuildingType::TEMPLE, buildingsData[databuild], build_civ));
+			temple->SetHealth(it.attribute("health").as_int());
+			if (status == BuildingStatus::CONSTRUCTING) {
+				temple->timer_construction.StartAt(it.attribute("time").as_float());
+				temple->SetPercentage(it.attribute("percentage").as_float());
+			}
+			temple->buildingStatus = status;
+			temple->buildingAction = action;
+			if (action == BuildingAction::PRODUCING) { temple->StartProducing(it.attribute("element").as_string()); temple->timer_construction.StartAt(it.attribute("time").as_int()); }
+			else if (action == BuildingAction::RESEARCHING) { temple->StartResearching(it.attribute("element").as_string()); temple->timer_construction.StartAt(it.attribute("time").as_int()); }
+
+		}
+
+		else if (!strcmp(it.attribute("type").as_string(), "encampment")) {
+			if (!strcmp(it.attribute("civilization").as_string(), "viking")) { build_civ = CivilizationType::VIKING; databuild = 7; }
+			else { build_civ = CivilizationType::GREEK; databuild = 3; }
+			Building* encampment = static_cast<Building*>(CreateBuildingEntity(pos, BuildingType::ENCAMPMENT, buildingsData[databuild], build_civ));
+			encampment->SetHealth(it.attribute("health").as_int());
+			if (status == BuildingStatus::CONSTRUCTING) {
+				encampment->timer_construction.StartAt(it.attribute("time").as_float());
+				encampment->SetPercentage(it.attribute("percentage").as_float());
+			}
+			encampment->buildingStatus = status;
+			encampment->buildingAction = action;
+			if (action == BuildingAction::PRODUCING) { encampment->StartProducing(it.attribute("element").as_string()); encampment->timer_construction.StartAt(it.attribute("time").as_int()); }
+			else if (action == BuildingAction::RESEARCHING) { encampment->StartResearching(it.attribute("element").as_string()); encampment->timer_construction.StartAt(it.attribute("time").as_int()); }
+
+		}
+
+		else if (!strcmp(it.attribute("type").as_string(), "fortress")) {
+
+			if (!strcmp(it.attribute("civilization").as_string(), "viking")) { build_civ = CivilizationType::VIKING; databuild = 0; }
+			else { build_civ = CivilizationType::GREEK; databuild = 4; }
+			Building* fortress = static_cast<Building*>(CreateBuildingEntity(pos, BuildingType::FORTRESS, buildingsData[databuild], build_civ));
+			fortress->SetHealth(it.attribute("health").as_int());
+			if (status == BuildingStatus::CONSTRUCTING) {
+				fortress->timer_construction.StartAt(it.attribute("time").as_float());
+				fortress->SetPercentage(it.attribute("percentage").as_float());
+			}
+			fortress->buildingStatus = status;
+			fortress->buildingAction = action;
+			if (action == BuildingAction::PRODUCING) { fortress->StartProducing(it.attribute("element").as_string()); fortress->timer_construction.StartAt(it.attribute("time").as_int()); }
+			else if (action == BuildingAction::RESEARCHING) { fortress->StartResearching(it.attribute("element").as_string()); fortress->timer_construction.StartAt(it.attribute("time").as_int()); }
+
+
+			/*if (!strcmp(it.attribute("civilization").as_string(), "viking")) { build_civ = CivilizationType::VIKING; }
+			else { build_civ = CivilizationType::GREEK; }
+			std::list<Entity*> list = App->entityManager->entities[EntityType::BUILDING];
+			for each (Building * var in list)
+			{
+				if (var->GetBuildingType() == BuildingType::FORTRESS)
+				{
+					if (var->civilization == CivilizationType::VIKING && build_civ == CivilizationType::VIKING)
+					{
+						var->SetHealth(it.attribute("health").as_int());
+						var->buildingStatus = status;
+						var->buildingAction = action;
+						if (action != BuildingAction::PRODUCING) { var->StartProducing(it.attribute("element").as_string()); var->timer_construction.StartAt(it.attribute("time").as_int()); }
+						else if (action != BuildingAction::RESEARCHING) { var->StartResearching(it.attribute("element").as_string()); var->timer_construction.StartAt(it.attribute("time").as_int()); }
+					}
+					else
+					{
+						var->SetHealth(it.attribute("health").as_int());
+						var->buildingStatus = status;
+						var->buildingAction = action;
+						if (action != BuildingAction::PRODUCING) { var->StartProducing(it.attribute("element").as_string()); var->timer_construction.StartAt(it.attribute("time").as_int()); }
+						else if (action != BuildingAction::RESEARCHING) { var->StartResearching(it.attribute("element").as_string()); var->timer_construction.StartAt(it.attribute("time").as_int()); }
+					}
+				}
+			}*/
+		}
+	}
+	return true;
+}
+
 ////Called when saving the game
-//bool EntityManager::Save(pugi::xml_node& s) const
-//{
-//	pugi::xml_node s2 = s;
-//	for (unsigned int i = 0; i < entities.count(); i++)
-//	{
-//		s2 = s.append_child(entities.At(i)->data->name.GetString());
-//		entities.At(i)->data->Save(s2);
-//		s2.append_attribute("id") = i;
-//	}
-//	return true;
-//}
+
+bool EntityManager::Save(pugi::xml_node& s) const
+{
+	pugi::xml_node node = s.append_child("entities");
+	std::list<Entity*> list = App->entityManager->entities[EntityType::UNIT];
+	for each (Unit * var in list)
+	{
+		pugi::xml_node entity = node.append_child("unit");
+		entity.append_attribute("type").set_value(var->name.c_str());
+		entity.append_attribute("position_x").set_value(var->position.x);
+		entity.append_attribute("position_y").set_value(var->position.y);
+
+
+		if (var->civilization == CivilizationType::GREEK)
+			entity.append_attribute("civilization").set_value("greek");
+		else
+			entity.append_attribute("civilization").set_value("viking");
+
+
+		entity.append_attribute("health").set_value(var->GetHealth());
+
+		if (var->canLevel)
+		{
+			CombatUnit* combatVar = (CombatUnit*)var;
+			entity.append_attribute("level").set_value(combatVar->GetLevel());
+		}
+	}
+
+	pugi::xml_node node2 = s.append_child("buildings");
+	std::list<Entity*> list2 = App->entityManager->entities[EntityType::BUILDING];
+
+
+	for each (Building * var2 in list2)
+	{
+		pugi::xml_node building = node2.append_child("build");
+
+		building.append_attribute("type").set_value(var2->name.c_str());
+		building.append_attribute("position_x").set_value(var2->position.x);
+		building.append_attribute("position_y").set_value(var2->position.y);
+
+
+		if (var2->civilization == CivilizationType::GREEK)
+			building.append_attribute("civilization").set_value("greek");
+		else
+			building.append_attribute("civilization").set_value("viking");
+
+
+		building.append_attribute("health").set_value(var2->GetHealth());
+
+
+		if (var2->buildingStatus == BuildingStatus::CONSTRUCTING) {
+			building.append_attribute("status").set_value("constructing");
+			building.append_attribute("time").set_value(var2->timer_construction.ReadSec());
+			building.append_attribute("progress").set_value(var2->GetPercentage());
+		}
+		else if(var2->buildingStatus == BuildingStatus::DESTROYED)
+			building.append_attribute("status").set_value("destroyed");
+		else
+			building.append_attribute("status").set_value("finished");
+
+
+		if(var2->buildingAction == BuildingAction::NOTHING)
+			building.append_attribute("action").set_value("nothing");
+		else if (var2->buildingAction == BuildingAction::PRODUCING) {
+			building.append_attribute("action").set_value("producing");
+			building.append_attribute("time").set_value(var2->GetTimeProducing());
+			building.append_attribute("element").set_value(var2->GetElementProducing().c_str());
+		}
+		else {
+			building.append_attribute("action").set_value("researching");
+			building.append_attribute("time").set_value(var2->GetTimeProducing());
+			building.append_attribute("element").set_value(var2->GetElementProducing().c_str());
+		}
+	}
+
+	pugi::xml_node node3 = s.append_child("players");
+	std::list<Entity*> list3 = App->entityManager->entities[EntityType::PLAYER];
+
+
+	for each (Player * var3 in list3)
+	{
+		pugi::xml_node player;
+		if(var3->civilization == CivilizationType::VIKING)
+			 player = node3.append_child("viking");
+		else if(var3->civilization == CivilizationType::GREEK) 
+			player = node3.append_child("greek");
+
+		pugi::xml_node economy = player.append_child("economy");
+		economy.append_attribute("faith").set_value(var3->GetFaith());
+		economy.append_attribute("prayers").set_value(var3->GetPrayers());
+		economy.append_attribute("sacrifices").set_value(var3->GetSacrifices());
+
+
+		pugi::xml_node research = player.append_child("research");
+		research.append_child("temple").append_attribute("research").set_value(var3->research_temple);
+		research.append_child("encampment").append_attribute("research").set_value(var3->research_encampment);
+		research.append_child("cleric").append_attribute("research").set_value(var3->research_cleric);
+		research.append_child("assassin").append_attribute("research").set_value(var3->research_assassin);
+		research.append_child("lawful_beast").append_attribute("research").set_value(var3->research_lawful_beast);
+		research.append_child("chaotic_beast").append_attribute("research").set_value(var3->research_chaotic_beast);
+		research.append_child("lawful_miracle").append_attribute("research").set_value(var3->research_lawful_miracle);
+		research.append_child("chaotic_miracle").append_attribute("research").set_value(var3->research_chaotic_miracle);
+		research.append_child("lawful_victory").append_attribute("research").set_value(var3->research_lawful_victory);
+		research.append_child("chaotic_victory").append_attribute("research").set_value(var3->research_chaotic_victory);
+	}
+
+	return true;
+}
 
 //Called when creating a new Entity
 //Entity* EntityManager::CreateEntity(EntityType type, UnitType unitType)
@@ -416,6 +693,7 @@ Entity* EntityManager::CreatePlayerEntity(std::string civilization_string)
 	if (civilization_string == "viking") {
 		ret->civilization = CivilizationType::VIKING;
 		p->player_type = CivilizationType::VIKING;
+		
 	}
 	else if (civilization_string == "greek") {
 		ret->civilization = CivilizationType::GREEK;

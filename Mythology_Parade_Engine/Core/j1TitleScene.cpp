@@ -604,7 +604,9 @@ void j1TitleScene::OnClick(UI* element, float argument)
 		{
 			if (confirmation_option.compare("LOAD") == 0)
 			{
-				App->LoadGame("save_game.xml");
+				App->fade_to_black->FadeToBlack(which_fade::title_to_scene, 2, "viking");
+				destroy = true;
+				wantToLoad = true;
 			}
 			else if (confirmation_option.compare("EXIT") == 0)
 			{
@@ -615,10 +617,16 @@ void j1TitleScene::OnClick(UI* element, float argument)
 		else if (element->name == "GREEK")
 		{
 			App->fade_to_black->FadeToBlack(which_fade::title_to_scene, 2, "greek");
+
+			destroy = true;
+			wantToLoad = false;
 		}
 		else if (element->name == "VIKING")
 		{
 			App->fade_to_black->FadeToBlack(which_fade::title_to_scene, 2, "viking");
+
+			destroy = true;
+			wantToLoad = false;
 		}
 		else if (element->name == "FULLSCREEN") {
 			App->win->ToggleFullscreen();

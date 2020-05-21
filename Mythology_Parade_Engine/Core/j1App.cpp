@@ -107,6 +107,15 @@ bool j1App::Awake()
 	pugi::xml_node		app_config;
 
 	bool ret = false;
+
+	save_game.append("info.xml");
+	load_game.append("info.xml");
+
+	pugi::xml_document result;
+	if (result.load_file(load_game.c_str()))
+	{
+		existSaveFile = true;
+	}
 		
 	config = LoadConfig(config_file);
 
@@ -365,11 +374,7 @@ void j1App::LoadGame(const char* file)
 // ---------------------------------------
 void j1App::SaveGame(const char* file) const
 {
-	// we should be checking if that file actually exist
-	// from the "GetSaveGames" list ... should we overwrite ?
-
 	want_to_save = true;
-	save_game.append(file);
 }
 
 // ---------------------------------------
@@ -391,7 +396,7 @@ bool j1App::LoadGameNow()
 	{
 		LOG("Loading new Game State from %s...", load_game.c_str());
 
-		root = data.child("game_state");
+		root = data.child("info");
 
 		ret = true;
 		j1Module* item = NULL;
@@ -399,7 +404,7 @@ bool j1App::LoadGameNow()
 
 		for (std::list<j1Module*>::iterator it = modules.begin(); it != modules.end() && ret == true; it++)
 		{
-			ret = it._Ptr->_Myval->Load(root.child(it._Ptr->_Myval->name.c_str()));
+			ret = it._Ptr->_Myval->Load(root);
 			item = it._Ptr->_Myval;
 		}
 
@@ -426,30 +431,20 @@ bool j1App::SavegameNow()
 	// xml object were we will store all data
 	pugi::xml_document data;
 	pugi::xml_node root;
-	
-	root = data.append_child("game_state");
 
-	j1Module* item = NULL;
+	root = data.append_child("info");
+
 
 	for (std::list<j1Module*>::iterator it = modules.begin(); it != modules.end() && ret == true; it++)
 	{
-		ret = it._Ptr->_Myval->Save(root.append_child(it._Ptr->_Myval->name.c_str()));
-		item = it._Ptr->_Myval;
+		ret = it._Ptr->_Myval->Save(root);
 	}
 
-	if(ret == true)
-	{
-		std::stringstream stream;
-		data.save(stream);
-
-		// we are done, so write data to disk
-		//fs->Save(save_game.GetString(), stream.str().c_str(), stream.str().length());
-		LOG("... finished saving", save_game.c_str());
-	}
-	else
-		LOG("Save process halted from an error in module %s", (item != NULL) ? item->name.c_str() : "unknown");
+	data.save_file("info.xml");
 
 	data.reset();
+
+
 	want_to_save = false;
 	return ret;
 }
