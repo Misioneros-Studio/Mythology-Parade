@@ -201,7 +201,7 @@ bool Building::Update(float dt)
 		displayDebug = false;
   }
 	if (unitsToCreate > 0 && buildingAction == BuildingAction::NOTHING) {
-		StartProducing(time_producing, element_producing);
+		StartProducing(element_producing);
 		unitsToCreate--;
 	}
 

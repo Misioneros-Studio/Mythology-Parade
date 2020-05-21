@@ -2,21 +2,25 @@
 <info>
 	<entities>
 		<unit type="monk" position_x="2304" position_y="2240" civilization="greek" health="1" />
-		<unit type="monk" position_x="2976" position_y="2320" civilization="greek" health="1" />
+		<unit type="assassin" position_x="3008" position_y="2240" civilization="viking" health="100" level="0" />
+		<unit type="monk" position_x="2976" position_y="2320" civilization="viking" health="1" />
 		<unit type="assassin" position_x="2304" position_y="2336" civilization="greek" health="100" level="0" />
-		<unit type="assassin" position_x="2976" position_y="2384" civilization="greek" health="100" level="0" />
+		<unit type="assassin" position_x="2976" position_y="2384" civilization="viking" health="100" level="0" />
+		<unit type="monk" position_x="2976" position_y="2448" civilization="viking" health="1" />
+		<unit type="monk" position_x="3106" position_y="2480" civilization="viking" health="1" />
 	</entities>
 	<buildings>
 		<build type="fortress" position_x="3200" position_y="2288" civilization="viking" health="500" status="finished" action="nothing" />
 		<build type="fortress" position_x="1920" position_y="2288" civilization="greek" health="500" status="finished" action="nothing" />
-		<build type="monastery" position_x="3328" position_y="2448" civilization="viking" health="250" status="constructing" time="0.432999998" progress="0" action="nothing" />
+		<build type="encampment" position_x="3040" position_y="2336" civilization="viking" health="350" status="finished" action="nothing" />
+		<build type="monastery" position_x="3136" position_y="2480" civilization="viking" health="250" status="finished" action="nothing" />
 	</buildings>
 	<players>
 		<viking>
-			<economy faith="304" prayers="0" sacrifices="0" />
+			<economy faith="15" prayers="40" sacrifices="40" />
 			<research>
 				<temple research="false" />
-				<encampment research="false" />
+				<encampment research="true" />
 				<cleric research="false" />
 				<assassin research="false" />
 				<lawful_beast research="false" />

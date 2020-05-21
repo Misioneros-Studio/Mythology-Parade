@@ -108,6 +108,7 @@ private:
 public:
 	CloseTitleSceneMenus close_menus;
 	bool wantToLoad;
+	bool destroy;
 };
 
 #endif // __j1TITLESCENE_H__
