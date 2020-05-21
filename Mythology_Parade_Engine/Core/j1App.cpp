@@ -255,11 +255,6 @@ bool j1App::PreUpdate()
 {
 	bool ret = true;
 
-	if (restart_scene == true) {
-		restart_scene = false;
-		RestartScene();
-	}
-
 	j1Module* pModule = NULL;
 
 	for (std::list<j1Module*>::iterator it = modules.begin(); it != modules.end() && ret == true; it++)
@@ -453,7 +448,7 @@ bool j1App::SavegameNow()
 	want_to_save = false;
 	return ret;
 }
-
+/*
 bool j1App::RestartScene() {
 	bool ret = true;
 
@@ -471,4 +466,4 @@ bool j1App::RestartScene() {
 		}
 	}
 	return ret;
-}
+}*/

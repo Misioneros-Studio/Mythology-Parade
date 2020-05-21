@@ -77,26 +77,30 @@ bool j1TitleScene::Start()
 	close_menus = CloseTitleSceneMenus::None;
 
 
-	for (int i = 0; i < 6; i++) {
-		ui_volume_sliders[i] = nullptr;
-		if (i < 4) {
-			if (i < 3) {
-				if (i < 2) {
-					ui_button_options[i] = nullptr;
-					ui_text_tutorial[i] = nullptr;
-					ui_text_credits[i] = nullptr;
-					ui_button_confirmation[i] = nullptr;
-					ui_text_volume_sliders[i] = nullptr;
+	for (int i = 0; i < 18; i++) {
+		ui_text_credits[i] = nullptr;
+		if (i < 9) {
+			ui_button_credits[i] = nullptr;
+			if (i < 6) {
+				ui_volume_sliders[i] = nullptr;
+				if (i < 4) {
+					if (i < 3) {
+						if (i < 2) {
+							ui_button_options[i] = nullptr;
+							ui_text_tutorial[i] = nullptr;
+							ui_button_confirmation[i] = nullptr;
+							ui_text_volume_sliders[i] = nullptr;
+						}
+						ui_button_civilization[i] = nullptr;
+						ui_text_options[i] = nullptr;
+					}
+					ui_text_civilization[i] = nullptr;
+					ui_text_confirmation[i] = nullptr;
 				}
-				ui_button_civilization[i] = nullptr;
-				ui_text_options[i] = nullptr;
 			}
-			ui_text_civilization[i] = nullptr;
-			ui_text_confirmation[i] = nullptr;
 		}
 	}
 	ui_tutorial_options = nullptr;
-	ui_button_credits = nullptr;
 	ui_pause_black_screen = nullptr;
 
 
@@ -410,11 +414,43 @@ void j1TitleScene::ActivateCredits() {
 		uint w, h;
 		App->win->GetWindowSize(w, h);
 		ui_pause_black_screen = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, nullptr, { 0,0,(int)w,(int)h }, "", 0, 0, 0, 150));
-		ui_credits_window = static_cast<WindowUI*>(App->gui->CreateUIElement(Type::WINDOW, nullptr, { 410,200,459,168 }, { 790,408,459,168 }));
-		ui_button_credits = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_credits_window, { 520,300,237,38 }, { 787,240,237,38 }, "CLOSE CREDITS", { 787,342,237,38 }, 
+		ui_credits_window = static_cast<WindowUI*>(App->gui->CreateUIElement(Type::WINDOW, nullptr, { 410,200,459,321 }, { 1278,4,459,321 }));
+		ui_button_credits[0] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_credits_window, { 520,453,237,38 }, { 787,240,237,38 }, "CLOSE CREDITS", { 787,342,237,38 },
 			{ 787,291,237,38 }, false, { 0,0,0,0 }, this, (int)UI_Audio::CLOSE));
-		ui_text_credits[0] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 619,312,237,38 }, { 0,0,100,100 }, "Close", { 0,0,0,255 }));
-		ui_text_credits[1] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 583,212,237,38 }, { 0,0,100,100 }, "CREDITS", { 255,255,255,255 }, { 1,0,0,0 }));
+		ui_text_credits[0] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 619,465,237,38 }, { 0,0,100,100 }, "Close", { 0,0,0,255 }));
+		ui_text_credits[17] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 587,212,237,38 }, { 0,0,100,100 }, "CREDITS", { 255,255,255,255 }, { 1,0,0,0 }));
+		ui_text_credits[9] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 435,256,237,38 }, { 0,0,100,100 }, "Leader", { 255,255,255,255 }, { 1,0,0,0, }));
+		ui_button_credits[1] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_credits_window, { 420,288,117,24 }, { 834,125,117,24 }, "BERNAT'S GITHUB", { 834,149,117,24 },
+			{ 834,101,117,24 }, false, { 0,0,0,0 }, this, (int)UI_Audio::CONFIRMATION));
+		ui_text_credits[1] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 457,294,237,38 }, { 0,0,100,100 }, "Bernat", { 0,0,0,255 }));
+		ui_text_credits[10] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 602,256,237,38 }, { 0,0,100,100 }, "Mngt.", { 255,255,255,255 }, { 1,0,0,0, }));
+		ui_button_credits[2] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_credits_window, { 581,288,117,24 }, { 834,125,117,24 }, "JORDI'S GITHUB", { 834,149,117,24 },
+			{ 834,101,117,24 }, false, { 0,0,0,0 }, this, (int)UI_Audio::CONFIRMATION));
+		ui_text_credits[2] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 622,294,237,38 }, { 0,0,100,100 }, "Jordi", { 0,0,0,255 }));
+		ui_text_credits[11] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 757,256,237,38 }, { 0,0,100,100 }, "Design", { 255,255,255,255 }, { 1,0,0,0, }));
+		ui_button_credits[3] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_credits_window, { 742,288,117,24 }, { 834,125,117,24 }, "EUDALD'S GITHUB", { 834,149,117,24 },
+			{ 834,101,117,24 }, false, { 0,0,0,0 }, this, (int)UI_Audio::CONFIRMATION));
+		ui_text_credits[3] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 779,294,237,38 }, { 0,0,100,100 }, "Eudald", { 0,0,0,255 }));
+		ui_text_credits[12] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 445,323,237,38 }, { 0,0,100,100 }, "Code", { 255,255,255,255 }, { 1,0,0,0, }));
+		ui_button_credits[4] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_credits_window, { 420,355,117,24 }, { 834,125,117,24 }, "MIQUEL'S GITHUB", { 834,149,117,24 },
+			{ 834,101,117,24 }, false, { 0,0,0,0 }, this, (int)UI_Audio::CONFIRMATION));
+		ui_text_credits[4] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 457,361,237,38 }, { 0,0,100,100 }, "Miquel", { 0,0,0,255 }));
+		ui_text_credits[13] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 618,323,237,38 }, { 0,0,100,100 }, "Art", { 255,255,255,255 }, { 1,0,0,0, }));
+		ui_button_credits[5] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_credits_window, { 581,355,117,24 }, { 834,125,117,24 }, "JOSEP'S GITHUB", { 834,149,117,24 },
+			{ 834,101,117,24 }, false, { 0,0,0,0 }, this, (int)UI_Audio::CONFIRMATION));
+		ui_text_credits[5] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 622,361,237,38 }, { 0,0,100,100 }, "Josep", { 0,0,0,255 }));
+		ui_text_credits[14] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 787,323,237,38 }, { 0,0,100,100 }, "UI", { 255,255,255,255 }, { 1,0,0,0, }));
+		ui_button_credits[6] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_credits_window, { 742,355,117,24 }, { 834,125,117,24 }, "ARNAU'S GITHUB", { 834,149,117,24 },
+			{ 834,101,117,24 }, false, { 0,0,0,0 }, this, (int)UI_Audio::CONFIRMATION));
+		ui_text_credits[6] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 781,361,237,38 }, { 0,0,100,100 }, "Arnau", { 0,0,0,255 }));
+		ui_text_credits[15] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 441,390,237,38 }, { 0,0,100,100 }, "Audio", { 255,255,255,255 }, { 1,0,0,0, }));
+		ui_button_credits[7] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_credits_window, { 420,422,117,24 }, { 834,125,117,24 }, "MARC'S GITHUB", { 834,149,117,24 },
+			{ 834,101,117,24 }, false, { 0,0,0,0 }, this, (int)UI_Audio::CONFIRMATION));
+		ui_text_credits[7] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 461,428,237,38 }, { 0,0,100,100 }, "Marc", { 0,0,0,255 }));
+		ui_text_credits[16] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 783,390,237,38 }, { 0,0,100,100 }, "QA", { 255,255,255,255 }, { 1,0,0,0, }));
+		ui_button_credits[8] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_credits_window, { 742,422,117,24 }, { 834,125,117,24 }, "ROGER'S GITHUB", { 834,149,117,24 },
+			{ 834,101,117,24 }, false, { 0,0,0,0 }, this, (int)UI_Audio::CONFIRMATION));
+		ui_text_credits[8] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 781,428,237,38 }, { 0,0,100,100 }, "Roger", { 0,0,0,255 }));
 	}
 	for (int i = 0; i < 6; i++) {
 		if (ui_button[i] != nullptr) {
@@ -432,11 +468,13 @@ void j1TitleScene::DeactivateCredits() {
 			App->gui->DeleteUIElement(ui_pause_black_screen);
 			ui_pause_black_screen = nullptr;
 		}
-		if (ui_button_credits != nullptr) {
-			App->gui->DeleteUIElement(ui_button_credits);
-			ui_button_credits = nullptr;
-		}
-		for (int i = 1; i >= 0; i--) {
+		for (int i = 17; i >= 0; i--) {
+			if (i < 9) {
+				if (ui_button_credits[i] != nullptr) {
+					App->gui->DeleteUIElement(ui_button_credits[i]);
+					ui_button_credits[i] = nullptr;
+				}
+			}
 			if (ui_text_credits[i] != nullptr) {
 				App->gui->DeleteUIElement(ui_text_credits[i]);
 				ui_text_credits[i] = nullptr;
@@ -579,12 +617,14 @@ void j1TitleScene::OnClick(UI* element, float argument)
 		else if (element->name == "GREEK")
 		{
 			App->fade_to_black->FadeToBlack(which_fade::title_to_scene, 2, "greek");
+
 			destroy = true;
 			wantToLoad = false;
 		}
 		else if (element->name == "VIKING")
 		{
 			App->fade_to_black->FadeToBlack(which_fade::title_to_scene, 2, "viking");
+
 			destroy = true;
 			wantToLoad = false;
 		}
@@ -596,6 +636,30 @@ void j1TitleScene::OnClick(UI* element, float argument)
 			else if (ui_button_options[1]->sprite1.y == 61) {
 				ui_button_options[1]->sprite1.y = ui_button_options[1]->sprite2.y = ui_button_options[1]->sprite3.y = 21;
 			}
+		}
+		else if (element->name == "BERNAT'S GITHUB") {
+			ShellExecuteA(NULL, "open", "https://github.com/BernatCasanas", NULL, NULL, SW_SHOWNORMAL);
+		}
+		else if (element->name == "JORDI'S GITHUB") {
+			ShellExecuteA(NULL, "open", "https://github.com/Jordi-Pardo", NULL, NULL, SW_SHOWNORMAL);
+		}
+		else if (element->name == "EUDALD'S GITHUB") {
+			ShellExecuteA(NULL, "open", "https://github.com/Hevne", NULL, NULL, SW_SHOWNORMAL);
+		}
+		else if (element->name == "MIQUEL'S GITHUB") {
+			ShellExecuteA(NULL, "open", "https://github.com/MayKoder", NULL, NULL, SW_SHOWNORMAL);
+		}
+		else if (element->name == "JOSEP'S GITHUB") {
+			ShellExecuteA(NULL, "open", "https://github.com/daskza19", NULL, NULL, SW_SHOWNORMAL);
+		}
+		else if (element->name == "ARNAU'S GITHUB") {
+			ShellExecuteA(NULL, "open", "https://github.com/Arnau77", NULL, NULL, SW_SHOWNORMAL);
+		}
+		else if (element->name == "MARC'S GITHUB") {
+			ShellExecuteA(NULL, "open", "https://github.com/Ramsubito", NULL, NULL, SW_SHOWNORMAL);
+		}
+		else if (element->name == "ROGER'S GITHUB") {
+			ShellExecuteA(NULL, "open", "https://github.com/Rugiacreed", NULL, NULL, SW_SHOWNORMAL);
 		}
 		break;
 

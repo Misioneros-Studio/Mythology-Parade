@@ -47,6 +47,7 @@ bool Player::Start()
 
 	research_assassin = research_chaotic_beast = research_chaotic_miracle = research_cleric = research_encampment = research_lawful_beast = research_lawful_miracle = research_lawful_victory =
 		research_temple = research_chaotic_victory = false;
+	buildingSelect = nullptr;
 
 	if (App->entityManager->initCivilizations)
 	{
@@ -157,7 +158,8 @@ void Player::SelectionDraw_Logic()
 			{
 				unit->SetSelected(false);
 			}
-
+			if(buildingSelect!=nullptr)
+				buildingSelect->SetSelected(false);
 			listEntities.clear();
 			buildingSelect = nullptr;
 			ClickLogic();
@@ -189,8 +191,7 @@ void Player::SeeEntitiesInside()
 			{
 				if (it._Ptr->_Myval->civilization == player_type)
 				{
-					Unit* unit = static_cast<Unit*>(it._Ptr->_Myval);
-					unit->SetSelected(true);
+					it._Ptr->_Myval->SetSelected(true);
 					listEntities.push_back(it._Ptr->_Myval);
 				}
 			}
@@ -283,6 +284,7 @@ void Player::ClickLogic()
 			{
 				if (it._Ptr->_Myval->civilization == civilization) {
 					buildingSelect = it._Ptr->_Myval;
+					it._Ptr->_Myval->SetSelected(true);
 				}
 			}
 		}
@@ -298,8 +300,7 @@ void Player::ClickLogic()
 				{
 					if (it._Ptr->_Myval->civilization == civilization) 
 					{
-						Unit* unit = static_cast<Unit*>(it._Ptr->_Myval);
-						unit->SetSelected(true);
+						it._Ptr->_Myval->SetSelected(true);
 						listEntities.push_back(it._Ptr->_Myval);
 						if (preClicked == postClicked)
 							return;

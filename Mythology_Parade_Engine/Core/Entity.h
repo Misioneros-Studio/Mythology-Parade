@@ -20,7 +20,7 @@ class Entity :public j1Module
 public:
 	Entity(/*EntityTypes type*/) 
 	{
-
+		_isSelected = false;
 	}
 
 	// Destructor
@@ -102,11 +102,27 @@ public:
 		return collisionRect;
 	}
 
+
 	bool canLevel;
+
+
+	bool isSelected() 
+	{
+		return _isSelected;
+	}
+
+	void SetSelected(bool value)
+	{
+		_isSelected = value;
+	}
 
 
 protected:
 	SDL_RendererFlip flipState;
 	SDL_Rect collisionRect;
+
+private:
+	//Conditions
+	bool _isSelected;
 };
 #endif // !ENTITY_H
