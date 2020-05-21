@@ -45,7 +45,8 @@ bool j1TitleScene::Start()
 		ui_button[i] = nullptr;
 		ui_text[i] = nullptr;
 	}
-
+	destroy = false;
+	wantToLoad = false;
 	App->audio->CleanFxs();
 
 	App->gui->sfx_UI[(int)UI_Audio::MAIN_MENU] = App->audio->LoadFx("audio/ui/Click_Main_Menu.wav");
