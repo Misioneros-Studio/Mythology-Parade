@@ -552,12 +552,12 @@ void UI::ShowTooltip(int mouse_x, int mouse_y, uint win_x, uint win_y)
 	int j = 0;
 	for (int i = 1; i <= tooltip.lines; i++) {
 		if (tooltip.has_title&& i == 1) {
-			tooltip_texts[i - 1] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, tooltip_window, { x,y + (15 * (i - 1)),317,15 }, { 0,0,0,0 }, tooltip.title, { 255,255,255,255 }));
+			tooltip_texts[i - 1] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, tooltip_window, { x,y + (15 * (i - 1)),317,15 }, { 0,0,0,0 }, tooltip.title, Panel_Fade::no_one_fade, { 255,255,255,255 }));
 			j--;
 		}
 		else {
 			tooltip_texts[i - 1] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, tooltip_window, { x,y + (15 * (i - 1)),317,15 }, { 0,0,0,0 },
-				App->tooltipdata->GetLineTooltip(i + j, tooltip), { 255,255,255,255 }));
+				App->tooltipdata->GetLineTooltip(i + j, tooltip), Panel_Fade::no_one_fade, { 255,255,255,255 }));
 		}
 	}	
 }

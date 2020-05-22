@@ -351,53 +351,6 @@ void j1TitleScene::DeactivateCivilizationMenu() {
 	}
 }
 
-// Called when clicking options button in pause menu
-
-void j1TitleScene::ActivateTutorial() {
-	if (ui_tutorial_window == nullptr) {
-		uint w, h;
-		App->win->GetWindowSize(w, h);
-		ui_pause_black_screen = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, nullptr, { 0,0,(int)w,(int)h }, "", 0, 0, 0, 150, Panel_Fade::panel_fade_in));
-		ui_tutorial_window = static_cast<WindowUI*>(App->gui->CreateUIElement(Type::WINDOW, nullptr, { 410,200,459,168 }, { 790,408,459,168 }, "", Panel_Fade::panel_fade_in));
-		ui_tutorial_options = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_tutorial_window, { 520,300,237,38 }, { 787,240,237,38 }, "CLOSE TUTORIAL", Panel_Fade::panel_fade_in, { 787,342,237,38 },
-			{ 787,291,237,38 }, false, { 0,0,0,0 }, this, (int)UI_Audio::CLOSE));
-		ui_text_tutorial[0] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 619,312,237,38 }, { 0,0,100,100 }, "Close", Panel_Fade::panel_fade_in, { 0,0,0,255 }));
-		ui_text_tutorial[1] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 583,212,237,38 }, { 0,0,100,100 }, "TUTORIAL", Panel_Fade::panel_fade_in, { 255,255,255,255 }, { 1,0,0,0 }));
-	}
-	for (int i = 0; i < 6; i++) {
-		if (ui_button[i] != nullptr) {
-			ui_button[i]->front = false;
-		}
-	}
-}
-
-// Called when clicking close button in options menu
-void j1TitleScene::DeactivateTutorial() {
-	if (ui_tutorial_window != nullptr) {
-		App->gui->DeleteUIElement(ui_tutorial_window);
-		ui_tutorial_window = nullptr;
-		if (ui_pause_black_screen != nullptr) {
-			App->gui->DeleteUIElement(ui_pause_black_screen);
-			ui_pause_black_screen = nullptr;
-		}
-		if (ui_tutorial_options != nullptr) {
-			App->gui->DeleteUIElement(ui_tutorial_options);
-			ui_tutorial_options = nullptr;
-		}
-		for (int i = 1; i >= 0; i--) {
-			if (ui_text_tutorial[i] != nullptr) {
-				App->gui->DeleteUIElement(ui_text_tutorial[i]);
-				ui_text_tutorial[i] = nullptr;
-			}
-		}
-	}
-	for (int i = 0; i < 6; i++) {
-		if (ui_button[i] != nullptr) {
-			ui_button[i]->front = true;
-		}
-	}
-
-}
 
 // Called when clicking options button in pause menu
 void j1TitleScene::ActivateCredits() {

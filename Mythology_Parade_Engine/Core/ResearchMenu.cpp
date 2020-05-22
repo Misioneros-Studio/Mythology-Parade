@@ -128,7 +128,7 @@ void ResearchMenu::CreateEncampmentButton() {
 		}
 		else {
 			ui_image_research[1] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, ui_research_window, { 898,63,157,82 }, { 174, 961, 157, 82 }, "", Panel_Fade::panel_fade_in, { 0,0,0,0 }, { 0,0,0,0 },
-				false, { 0,0,0,0 }, nullptr, 0, false, -1.0f, 2, (int)TooltipsAvailable::encampment))
+				false, { 0,0,0,0 }, nullptr, 0, false, -1.0f, 2, (int)TooltipsAvailable::encampment));
 		}
 		break;
 	case CivilizationType::GREEK:

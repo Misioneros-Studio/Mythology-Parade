@@ -337,7 +337,7 @@ bool j1Map::CleanUp()
 	data.downLayers.clear();
 
 	// Clean up the pugui tree
-	map_file.reset();
+
 
 	return true;
 }
@@ -346,6 +346,7 @@ bool j1Map::CleanUp()
 bool j1Map::Load(const char* file_name)
 {
 	bool ret = true;
+	pugi::xml_document map_file;
 	std::string tmp;
 	tmp.append(folder.c_str());
 	tmp.append(file_name);
@@ -361,7 +362,7 @@ bool j1Map::Load(const char* file_name)
 	// Load general info ----------------------------------------------
 	if (ret == true)
 	{
-		ret = LoadMap();
+		ret = LoadMap(map_file);
 	}
 
 	// Load all tilesets info ----------------------------------------------
@@ -430,12 +431,13 @@ bool j1Map::Load(const char* file_name)
 	}
 
 	map_loaded = ret;
+	map_file.reset();
 
 	return ret;
 }
 
 // Load map general properties
-bool j1Map::LoadMap()
+bool j1Map::LoadMap(pugi::xml_document&	map_file)
 {
 	bool ret = true;
 	pugi::xml_node map = map_file.child("map");

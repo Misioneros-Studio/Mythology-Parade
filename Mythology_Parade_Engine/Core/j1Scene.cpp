@@ -411,7 +411,6 @@ bool j1Scene::CleanUp()
 {
 	LOG("Freeing scene");
 
-
 	App->tex->UnLoad(debugBlue_tex);
 	App->tex->UnLoad(debugRed_tex);
 	App->tex->UnLoad(winlose_tex);

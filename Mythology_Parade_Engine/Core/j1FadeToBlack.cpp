@@ -62,6 +62,7 @@ bool j1FadeToBlack::PostUpdate()
 
 			case(which_fade::title_to_scene):
 				App->title_scene->Disable();
+				App->map->Enable();
 				App->entityManager->Enable();
 				App->pathfinding->Enable();
 				App->scene->Enable();
@@ -76,6 +77,7 @@ bool j1FadeToBlack::PostUpdate()
 				App->scene->Disable();
 				App->fowManager->Disable();
 				App->minimap->Disable();
+				App->map->Disable();
 				App->title_scene->Enable();
 				break;
 			case(which_fade::scene_to_scene):
@@ -83,6 +85,8 @@ bool j1FadeToBlack::PostUpdate()
 				App->pathfinding->Disable();
 				App->scene->Disable();
 				App->minimap->Disable();
+				App->map->Disable();
+				App->map->Enable();
 				App->entityManager->Enable();
 				App->pathfinding->Enable();
 				App->scene->Enable();
@@ -90,6 +94,7 @@ bool j1FadeToBlack::PostUpdate()
 				break;
 			case(which_fade::title_to_tutorial):
 				App->title_scene->Disable();
+				App->map->Enable();
 				App->entityManager->Enable();
 				App->pathfinding->Enable();
 				App->scene->Enable();
@@ -103,6 +108,7 @@ bool j1FadeToBlack::PostUpdate()
 				App->scene->Disable();
 				App->tutorialscene->Disable();
 				App->minimap->Disable();
+				App->map->Disable();
 				App->title_scene->Enable();
 				break;
 			case(which_fade::tutorial_to_tutorial):
@@ -111,6 +117,8 @@ bool j1FadeToBlack::PostUpdate()
 				App->scene->Disable();
 				App->tutorialscene->Disable();
 				App->minimap->Disable();
+				App->map->Disable();
+				App->map->Enable();
 				App->entityManager->Enable();
 				App->pathfinding->Enable();
 				App->scene->Enable();
