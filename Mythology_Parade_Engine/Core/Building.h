@@ -86,6 +86,7 @@ private:
 
 	int nearbyMonks;
 	std::string description;
+	int mainDef;
 
 	//Used when constructing/producing
 	float percentage_constructing;

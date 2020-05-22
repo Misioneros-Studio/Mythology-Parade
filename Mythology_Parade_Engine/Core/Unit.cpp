@@ -7,8 +7,19 @@
 
 Unit::Unit(UnitType type, iPoint pos): unitType(type), state(AnimationType::IDLE),  moveSpeed(60)
 {
-	
+
+
+	if (App->entityManager->getPlayer())
+	{
+		displayDebug = App->entityManager->getPlayer()->displayDebug;
+	}
+	else
+	{
+		displayDebug = false;
+	}
+
 	collisionRect = { 0, 0, 30, -55 };
+
 	unitType = type;
 	position = {(float)pos.x, (float)pos.y};
 	state = AnimationType::IDLE;
@@ -16,6 +27,8 @@ Unit::Unit(UnitType type, iPoint pos): unitType(type), state(AnimationType::IDLE
 	directionToTarget = {0, 0};
 	normalizedDirection = { 0, 0 };
 	timeToDespawn = 1.f;
+	insideMinotaur = false;
+	insideDraugar = false;
 	currentDirection = Direction::UP;
 	//Init Units
 	switch (type)
@@ -26,6 +39,35 @@ Unit::Unit(UnitType type, iPoint pos): unitType(type), state(AnimationType::IDLE
 		researched = true;
 		name = "monk";
 		Init(1);
+		collisionRect = { 0, 0, 30, -55 };
+		break;
+	case UnitType::JOTNAR:
+		time_production = 7;
+		time_research = 210;
+		researched = true;
+		Init(150);
+		collisionRect = { 0, 0, 123, -175 };
+		break;
+	case UnitType::DRAUGAR:
+		time_production = 7;
+		time_research = 210;
+		researched = true;
+		Init(40);
+		collisionRect = { 0, 0, 40, -60 };
+		break;
+	case UnitType::CYCLOP:
+		time_production = 7;
+		time_research = 210;
+		researched = true;
+		Init(150);
+		collisionRect = { 0, 0, 118, -130 };
+		break;
+	case UnitType::MINOTAUR:
+		time_production = 7;
+		time_research = 210;
+		researched = true;
+		Init(40);
+		collisionRect = { 0, 0, 60, -67 };
 		break;
 	}
 
@@ -75,6 +117,65 @@ bool Unit::Update(float dt)
 	StateMachineActions(dt);
 	//ret = Draw(dt);
 
+	//MINOTAUR PASSIVE EFFECT
+	if (civilization == CivilizationType::VIKING)
+	{
+		std::list<Entity*> list = App->entityManager->entities[EntityType::UNIT];
+		for each (Unit * var in list)
+		{
+			if (var->unitType == UnitType::MINOTAUR)
+			{
+				if (position.DistanceManhattan(var->position) < 300)
+				{
+					if (!insideMinotaur)
+					{
+						IncreaseHealth(-20);
+						insideMinotaur = true;
+					}
+				}
+				else
+				{
+					if (insideMinotaur)
+					{
+						SetDefaultHealth();
+						insideMinotaur = false;
+					}
+				}
+			}
+		}
+	}
+
+	//DRAUGAR PASSIVE EFFECT
+	if (civilization == CivilizationType::GREEK)
+	{
+		std::list<Entity*> list = App->entityManager->entities[EntityType::UNIT];
+		for each (Unit * var in list)
+		{
+			if (var->unitType == UnitType::DRAUGAR)
+			{
+				if (position.DistanceManhattan(var->position) < 300)
+				{
+					if (!insideDraugar)
+					{
+						IncreaseHealth(-20);
+						insideDraugar = true;
+					}
+					LOG("%i", GetHealth());
+				}
+				else
+				{
+					if (insideDraugar)
+					{
+						SetDefaultHealth();
+						insideDraugar = false;
+					}
+				}
+			}
+		}
+	}
+
+
+
 	//Return
 	int x, y;
 	App->input->GetMousePosition(x, y);
@@ -113,14 +214,14 @@ void Unit::MoveToTarget()
 	float speed = moveSpeed * App->GetDT();
 
 	//Fast fix for ft increasing bug
-	if (App->GetDT() >= 0.5f) 
+	if (App->GetDT() >= 0.5f)
 	{
 		speed = 0.f;
 	}
 
-  
+
 	state = AnimationType::WALK;
-	if (Mix_Playing(3) == 0) 
+	if (Mix_Playing(3) == 0)
 	{
 		App->entityManager->FxUnits(3, App->entityManager->Walking_troops, position.x, position.y);
 	}
@@ -146,7 +247,7 @@ void Unit::MoveToTarget()
 		targetPosition.ResetAsPosition();
 		if (entPath.size() <= 0)
 		{
-			if (enemyTarget != nullptr && unitType != UnitType::MONK) 
+			if (enemyTarget != nullptr && unitType != UnitType::MONK)
 			{
 				ChangeState(App->map->WorldToMap(enemyTarget->position.x, enemyTarget->position.y), AnimationType::ATTACK);
 			}
@@ -158,7 +259,7 @@ void Unit::MoveToTarget()
 
 		}
 	}
-	
+
 }
 
 void Unit::Init(int maxHealth)
@@ -219,7 +320,7 @@ bool Unit::Draw(float dt)
 
 	//App->render->DrawQuad({(int)position.x, (int)position.y, 2, 2}, 0, 255, 0);
 
-	if (displayDebug) 
+	if (displayDebug)
 	{
 		if (entPath.size() > 0)
 		{
@@ -313,7 +414,7 @@ void Unit::Draw_Life_Bar(bool enemy)
 		else
 			pos = { (int)position.x - 38, (int)position.y - 65 };
 	}
-	else 
+	else
 		pos = { (int)position.x - 38, (int)position.y - 60 }; ////// IT WILL HAVE TO BE CHANGED WHEN NEW CREATURES ADDED
 
 	App->render->Blit(App->gui->GetTexture(), pos.x, pos.y, &life_spriteRect);
@@ -352,7 +453,7 @@ void Unit::StateMachineActions(float dt)
 
 		timeToDespawn -= dt;
 
-		if (timeToDespawn <= 0) 
+		if (timeToDespawn <= 0)
 		{
 			//App->entityManager->DeleteEntity(this);
 			toDelete = true;
@@ -369,5 +470,3 @@ void Unit::StateMachineActions(float dt)
 		break;
 	}
 }
-
-

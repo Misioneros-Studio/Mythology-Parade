@@ -17,6 +17,7 @@ CombatUnit::CombatUnit(UnitType type, iPoint pos) : Unit(type, pos), range(0), d
 		//Change texture
 		LevelSystem::Init(3500, 6500, 9500);
 		CombatUnit::Init(100, 15, 1, 80);
+		collisionRect = { 0, 0, 30, -55 };
 		break;
 	case UnitType::PIKEMAN:
 		time_production = 90;
@@ -26,6 +27,7 @@ CombatUnit::CombatUnit(UnitType type, iPoint pos) : Unit(type, pos), range(0), d
 		//Change Texture
 		LevelSystem::Init(3000, 6000, 9500);
 		CombatUnit::Init(110, 25, 1, 40);
+		collisionRect = { 0, 0, 30, -55 };
 		break;
 	case UnitType::EXPLORER:
 		name = "explorer";
@@ -37,8 +39,12 @@ CombatUnit::CombatUnit(UnitType type, iPoint pos) : Unit(type, pos), range(0), d
 		name = "footman";
 		break;
 	}
+
+	realDamage = damage;
+
 	combat_unit = true;
 	show_bar_for_damage = false;
+
 }
 
 CombatUnit::~CombatUnit()
@@ -55,7 +61,7 @@ void CombatUnit::Action(Entity* entity)
 	case UnitType::PIKEMAN:
 	LOG("I'm a pikeman unit!");
 		break;
-	
+
 	}
 	//Attack enemy
 	Unit* target = (Unit*)entity;
@@ -92,6 +98,13 @@ void CombatUnit::LevelUp()
 	}
 }
 
+void CombatUnit::SetDamage(int d)
+{
+	damage = realDamage + d;
+}
+
+
+
 void CombatUnit::Init(int maxHealth, int damage, int range, int speed)
 {
 	Unit::Init(maxHealth);
@@ -105,7 +118,7 @@ void CombatUnit::Init(int maxHealth, int damage, int range, int speed)
 	ChangeState(targetPosition, state);
 }
 
-bool CombatUnit::Update(float dt) 
+bool CombatUnit::Update(float dt)
 {
 	Unit::Update(dt);
 
@@ -160,6 +173,11 @@ void CombatUnit::IncreaseDamage(int value)
 	damage += value;
 }
 
+
+void CombatUnit::SetDefaultHealth()
+{
+	HealthSystem::SetDefaultHealth();
+}
 void CombatUnit::SetLevel(int i)
 {
 	for (int j = 0; j < i; j++)
@@ -172,4 +190,3 @@ void CombatUnit::SetHealth(int value)
 {
 	HealthSystem::SetHealth(value);
 }
-

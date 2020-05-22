@@ -15,7 +15,7 @@ enum class ReligiousType
 	MISSIONARY
 };
 
-enum class UnitType 
+enum class UnitType
 {
 	NONE=-1,
 	PIKEMAN,
@@ -26,9 +26,13 @@ enum class UnitType
 	MONK,
 	CLERIC,
 	MISSIONARY,
+	DRAUGAR,
+	JOTNAR,
+	CYCLOP,
+	MINOTAUR,
 	UNKNOWN
-};
 
+};
 class Unit : public Entity, public HealthSystem
 {
 private:
@@ -39,7 +43,7 @@ private:
 	//Description / Effect
 	std::string description;
 
-public: 
+public:
 	//Unit Type
 	UnitType unitType;
 	int time_production;
@@ -47,6 +51,9 @@ public:
 	bool researched;
 	Unit* enemyTarget;
 	bool toDelete = false;
+
+	bool insideMinotaur;
+	bool insideDraugar;
 
 public:
 	Unit(UnitType, iPoint);

@@ -79,6 +79,11 @@ bool EntityManager::Start()
 	animations[UnitType::ASSASSIN] = animationManager.Load("assets/units/Assassin.tmx", UnitType::ASSASSIN);
 	animations[UnitType::MONK] = animationManager.Load("assets/units/Monk.tmx", UnitType::MONK);
 	animations[UnitType::PRIEST] = animationManager.Load("assets/units/Priest.tmx", UnitType::PRIEST);
+	animations[UnitType::DRAUGAR] = animationManager.Load("assets/units/Draugar.tmx", UnitType::DRAUGAR);
+	animations[UnitType::JOTNAR] = animationManager.Load("assets/units/Jotnar.tmx", UnitType::JOTNAR);
+	animations[UnitType::CYCLOP] = animationManager.Load("assets/units/Cyclop.tmx", UnitType::CYCLOP);
+	animations[UnitType::MINOTAUR] = animationManager.Load("assets/units/Minotaur.tmx", UnitType::MINOTAUR);
+
 
 	for (unsigned i = 0; i < entities.size(); i++)
 	{
@@ -696,6 +701,18 @@ Entity* EntityManager::CreateUnitEntity(UnitType type, iPoint pos, CivilizationT
 		break;
 	case UnitType::PIKEMAN:
 		ret = new CombatUnit(UnitType::PIKEMAN, pos);
+		break;
+	case UnitType::JOTNAR:
+		ret = new CombatUnit(UnitType::JOTNAR, pos);
+		break;
+	case UnitType::DRAUGAR:
+		ret = new CombatUnit(UnitType::DRAUGAR, pos);
+		break;
+	case UnitType::CYCLOP:
+		ret = new CombatUnit(UnitType::CYCLOP, pos);
+		break;
+	case UnitType::MINOTAUR:
+		ret = new CombatUnit(UnitType::MINOTAUR, pos);
 		break;
 	}
 	ret->civilization = civilization;

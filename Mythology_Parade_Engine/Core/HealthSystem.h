@@ -7,6 +7,7 @@ private:
 
 	int health;
 	int maxHealth;
+	int defaultHealth;
 
 	bool isDeath;
 
@@ -28,7 +29,11 @@ public:
 	void SetMaxHealth(int value);
 	int GetMaxHealth();
 	void IncreaseHealth(int value);
+
+	void SetDefaultHealth();
+
 	void SetHealth(int value);
+
 };
 
 #endif // !__HEALTHSYSTEM_H__

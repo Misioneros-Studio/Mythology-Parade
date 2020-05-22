@@ -103,7 +103,15 @@ Building::Building(BuildingType type, iPoint pos, BuildingInfo info)
 	}
 	show_bar_for_damage = false;
 
-	SetSelected(false);
+	mainDef = defenses;
+	original_spriteRect = spriteRect = info.spriteRect;
+	blitRect = info.blitSize;
+
+
+	//buildingType = info.buildingType;
+	tileLenght = info.tileLenght;
+
+	collisionRect = { (int)position.x, (int)position.y + ((App->map->data.tile_height / 2) * tileLenght), blitRect.x, -blitRect.y};
 
 	timer_construction.Start();
 }
@@ -125,7 +133,7 @@ void Building::CreateUnit()
 		break;
 	case MONASTERY:
 		App->entityManager->CreateUnitEntity(UnitType::MONK, { (int)position.x - 30, (int)position.y },civilization);
-		if (Mix_Playing(4) == 0) 
+		if (Mix_Playing(4) == 0)
     {
 			App->entityManager->FxUnits(6, App->entityManager->CreateMonk_sound, position.x, position.y);
 		}
@@ -316,7 +324,7 @@ bool Building::Update(float dt)
 
 	}
 	//IF MONASTERY DETECTS NEARBY MONKS,INCREASE FAITH
-	if (buildingType == BuildingType::MONASTERY) 
+	if (buildingType == BuildingType::MONASTERY)
 	{
 		std::list<Entity*> list =  App->entityManager->entities[EntityType::UNIT];
 		int count = 0;
@@ -327,13 +335,47 @@ bool Building::Update(float dt)
 				count++;
 			}
 		}
-		if (nearbyMonks != count) 
+		if (nearbyMonks != count)
 		{
 			nearbyMonks = count;
-			App->entityManager->getPlayer()->IncreaseFaithRatio(nearbyMonks);			
+			App->entityManager->getPlayer()->IncreaseFaithRatio(nearbyMonks);
 		}
 	}
-  
+
+	//IF BUILDING DETECTS CYCLOP
+	if (civilization == CivilizationType::GREEK)
+	{
+		std::list<Entity*> list = App->entityManager->entities[EntityType::UNIT];
+		int count = 0;
+		for each (Unit * var in list)
+		{
+			if (var->unitType == UnitType::CYCLOP) {
+				if (position.DistanceManhattan(var->position) < 100)
+					count++;
+			}
+		}
+		defenses = mainDef;
+		defenses += 50 * count;
+	}
+
+	//IF BUILDING DETECTS JOTNAR
+	if (civilization == CivilizationType::VIKING)
+	{
+		std::list<Entity*> list = App->entityManager->entities[EntityType::UNIT];
+		int count = 0;
+		for each (Unit * var in list)
+		{
+			if (var->unitType == UnitType::JOTNAR) {
+				if (position.DistanceManhattan(var->position) < 100)
+					count++;
+			}
+		}
+		defenses = mainDef;
+		defenses += 50 * count;
+	}
+
+
+
 	return ret;
 }
 
@@ -342,8 +384,8 @@ bool Building::Draw(float dt)
 	//lengh = 4, lenght is the number of tiles this building uses
 	//App->render->DrawQuad({position.x, position.y + (tileHeight /2) * (height + 1), texturewidth, -textureHeight}, 255, 250, 20);
 	App->render->Blit(texture, position.x, position.y + ((App->map->data.tile_height / 2) * tileLenght) - blitRect.y, {blitRect.x, blitRect.y}, &spriteRect);
-	
-	if (displayDebug) 
+
+	if (displayDebug)
 	{
 		App->render->DrawQuad(collisionRect, 255, 0, 0, 50);
 	}
@@ -367,7 +409,7 @@ void Building::Draw_Building_Bar(int blitWidth, int bar_used, bool building_acti
 		pos.y = (int)collisionRect.y + (int)collisionRect.h - 27;
 	else
 		pos.y = (int)collisionRect.y + (int)collisionRect.h - 54;
-	
+
 	App->render->Blit(texture, pos.x, pos.y, &construction_spriteRect);
 	if (bar_used == 0)
 		construction_spriteRect = App->entityManager->construction_bar_front;
@@ -401,12 +443,12 @@ void Building::StartProducing(std::string thing_producing) {
 	else if (thing_producing == "Assasin") time_producing = 10;
 	element_producing = thing_producing;
 	timer_construction.Start();
-	
+
 }
 
 void Building::FinishProduction(std::string thing_produced)
 {
-	if (thing_produced == "Victory") 
+	if (thing_produced == "Victory")
 	{
 		if (civilization == CivilizationType::VIKING)
 		{
