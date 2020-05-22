@@ -471,7 +471,7 @@ bool UI::PreUpdate() {
 					timer_tooltip.Start();
 					has_timer_tooltip_started = true;
 				}
-				else if (timer_tooltip.ReadSec() >= 2 && tooltip_window == nullptr && has_timer_tooltip_started == true) {
+				else if (timer_tooltip.ReadSec() >= 1.2 && tooltip_window == nullptr && has_timer_tooltip_started == true) {
 					ShowTooltip(x, y, win_x, win_y);
 				}
 			}
@@ -484,6 +484,8 @@ bool UI::PreUpdate() {
 				has_timer_tooltip_started = false;
 			}
 		}
+		else
+			has_timer_tooltip_started = false;
 	}
 	return true;
 }
