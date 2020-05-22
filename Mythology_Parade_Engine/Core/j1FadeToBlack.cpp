@@ -26,6 +26,7 @@ j1FadeToBlack::j1FadeToBlack()
 {
 	screen = { 0, 0, 1280,720 };
 	actual_civilization = "";
+	temp = false;
 }
 
 j1FadeToBlack::~j1FadeToBlack()
@@ -61,10 +62,13 @@ bool j1FadeToBlack::PostUpdate()
 				break;
 
 			case(which_fade::title_to_scene):
+				if (!temp) {
+					temp = true;
+				}
+					App->pathfinding->Enable();
 				App->title_scene->Disable();
 				App->map->Enable();
 				App->entityManager->Enable();
-				App->pathfinding->Enable();
 				App->scene->Enable();
 				App->scene->isInTutorial = false;
 				App->minimap->Enable();

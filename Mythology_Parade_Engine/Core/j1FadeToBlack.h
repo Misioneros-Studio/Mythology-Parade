@@ -51,6 +51,8 @@ private:
 	Uint32 start_time = 0;
 	Uint32 total_time = 0;
 	SDL_Rect screen;
+
+	bool temp;
 };
 
 #endif //__MODULEFADETOBLACK_H__
