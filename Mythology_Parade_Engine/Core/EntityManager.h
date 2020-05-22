@@ -103,7 +103,7 @@ public:
 	////Called when saving the game
 	//bool Save(pugi::xml_node&) const;
 
-	void DeleteEntity(Entity*);
+	bool DeleteEntity(Entity*);
 
 	Entity* CreatePlayerEntity(std::string civilization_string = "");
 	Entity* CreateUnitEntity(UnitType, iPoint, CivilizationType);
