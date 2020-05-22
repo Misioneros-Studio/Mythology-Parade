@@ -97,6 +97,7 @@ public:
 
 	std::string	name;
 	bool		active;
+	bool		destroy = false;
 
 };
 
