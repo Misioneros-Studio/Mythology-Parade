@@ -4,6 +4,7 @@
 #include "j1Scene.h"
 #include "j1Input.h"
 #include "j1Gui.h"
+#include "HUD.h"
 #include "EntityManager.h"
 
 Player::Player()
@@ -38,6 +39,22 @@ bool Player::Start()
 	displayDebug = false;
 	oneTime = true;
 
+
+	if (civilization == CivilizationType::GREEK)
+		name = "greek";
+	else
+		name = "viking";
+
+	research_assassin = research_chaotic_beast = research_chaotic_miracle = research_cleric = research_encampment = research_lawful_beast = research_lawful_miracle = research_lawful_victory =
+		research_temple = research_chaotic_victory = false;
+	buildingSelect = nullptr;
+
+	if (App->entityManager->initCivilizations)
+	{
+		InitVikings();
+		InitGreek();
+		App->entityManager->initCivilizations = false;
+	}
 	return true;
 }
 
@@ -58,21 +75,21 @@ bool Player::PreUpdate()
 	sacrifice = std::to_string(CurrencySystem::sacrifices);
 	prayer = std::to_string(CurrencySystem::prayers);
 
-	if (oneTime)
-	{
-		InitVikings();
-		InitGreek();
-		oneTime = false;
-	}
+	//if (oneTime)
+	//{
+	//	InitVikings();
+	//	InitGreek();
+	//	oneTime = false;
+	//}
 
 	return true;
 }
 
 bool Player::Update(float dt)
 {
-	App->scene->ui_text_ingame[0]->SetString(faith);
-	App->scene->ui_text_ingame[1]->SetString(sacrifice);
-	App->scene->ui_text_ingame[2]->SetString(prayer);
+	App->scene->hud->ui_text_ingame[0]->SetString(faith);
+	App->scene->hud->ui_text_ingame[1]->SetString(sacrifice);
+	App->scene->hud->ui_text_ingame[2]->SetString(prayer);
 	
 	//if (App->input->GetKey(SDL_SCANCODE_5) == KEY_DOWN && !App->entityManager->crPreview.active) 
 	//{
@@ -90,8 +107,6 @@ bool Player::Update(float dt)
 		SelectionDraw_Logic(); 
 		PlayerInputs();
 	}
-
-
 
 	return true;
 }
@@ -139,11 +154,17 @@ void Player::SelectionDraw_Logic()
 
 		if (App->input->GetMouseButtonDown(1) == KEY_UP)
 		{
+			for each (Unit* unit in listEntities)
+			{
+				unit->SetSelected(false);
+			}
+			if(buildingSelect!=nullptr)
+				buildingSelect->SetSelected(false);
 			listEntities.clear();
 			buildingSelect = nullptr;
 			ClickLogic();
 			SeeEntitiesInside();
-			App->scene->HUDUpdateSelection(listEntities, (Building*)buildingSelect);
+			App->scene->hud->HUDUpdateSelection(listEntities, (Building*)buildingSelect);
 		}
 	}
 }
@@ -170,6 +191,7 @@ void Player::SeeEntitiesInside()
 			{
 				if (it._Ptr->_Myval->civilization == player_type)
 				{
+					it._Ptr->_Myval->SetSelected(true);
 					listEntities.push_back(it._Ptr->_Myval);
 				}
 			}
@@ -216,7 +238,7 @@ void Player::PlayerInputs()
 				App->entityManager->DeleteEntity(it._Ptr->_Myval);
 			}
 			listEntities.clear();
-			App->scene->HUDUpdateSelection(listEntities, nullptr);
+			App->scene->hud->HUDUpdateSelection(listEntities, nullptr);
 		}
 	}
 
@@ -260,7 +282,10 @@ void Player::ClickLogic()
 		{
 			if (click.y <= it._Ptr->_Myval->getCollisionRect().y && click.y >= it._Ptr->_Myval->getCollisionRect().y + it._Ptr->_Myval->getCollisionRect().h)
 			{
-				buildingSelect = it._Ptr->_Myval;
+				if (it._Ptr->_Myval->civilization == civilization) {
+					buildingSelect = it._Ptr->_Myval;
+					it._Ptr->_Myval->SetSelected(true);
+				}
 			}
 		}
 	}
@@ -275,6 +300,7 @@ void Player::ClickLogic()
 				{
 					if (it._Ptr->_Myval->civilization == civilization) 
 					{
+						it._Ptr->_Myval->SetSelected(true);
 						listEntities.push_back(it._Ptr->_Myval);
 						if (preClicked == postClicked)
 							return;
@@ -298,6 +324,21 @@ int Player::GetPrayers()
 int Player::GetSacrifices() 
 {
 	return CurrencySystem::sacrifices;
+}
+
+void Player::SetFaith(int var)
+{
+	CurrencySystem::faith = var;
+}
+
+void Player::SetPrayers(int var)
+{
+	CurrencySystem::prayers = var;
+}
+
+void Player::SetSacrifices(int var)
+{
+	CurrencySystem::sacrifices = var;
 }
 
 

@@ -61,7 +61,6 @@ bool j1FadeToBlack::PostUpdate()
 				
 			case(which_fade::title_to_scene):
 				App->title_scene->Disable();
-				App->title_scene->destroy = false;
 				App->entityManager->Enable();
 				App->pathfinding->Enable();
 				App->scene->Enable();
@@ -76,16 +75,28 @@ bool j1FadeToBlack::PostUpdate()
 				App->minimap->Disable();
 				App->title_scene->Enable();
 				break;
+			case(which_fade::scene_to_scene):
+				App->entityManager->Disable();
+				App->pathfinding->Disable();
+				App->scene->Disable();
+				App->minimap->Disable();
+				App->entityManager->Enable();
+				App->pathfinding->Enable();
+				App->scene->Enable();
+				App->minimap->Enable();
+				break;
 			}
 
 			total_time += total_time;
 			start_time = SDL_GetTicks();
 			current_step = fade_step::fade_from_black;
+			App->audio->FadeAudio(which_audio_fade::fade_in, 2);
 		}
 	} break;
 
 	case fade_step::fade_from_black:
 	{
+
 		normalized = 1.0f - normalized;
 
 		if (now >= total_time)
@@ -109,7 +120,7 @@ bool j1FadeToBlack::FadeToBlack(which_fade fade2, float time, std::string civili
 	if (current_step == fade_step::none)
 	{
 		actual_civilization = "";
-
+		App->audio->FadeAudio(which_audio_fade::fade_out, 2);
 		actual_change = fade2;
 		current_step = fade_step::fade_to_black;
 		start_time = SDL_GetTicks();

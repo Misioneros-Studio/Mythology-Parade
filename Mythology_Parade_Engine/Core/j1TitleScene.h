@@ -83,7 +83,6 @@ public:
 	void OnClick(UI* element, float argument = 0);
 
 private:
-	SDL_Texture* debug_tex;
 	SDL_Texture* title_assets_tex;
 	ButtonUI* ui_button[6];
 	TextUI* ui_text[6];
@@ -94,8 +93,8 @@ private:
 	ButtonUI* ui_tutorial_options;
 	TextUI* ui_text_tutorial[2];
 	WindowUI* ui_credits_window;
-	ButtonUI* ui_button_credits;
-	TextUI* ui_text_credits[2];
+	ButtonUI* ui_button_credits[9];
+	TextUI* ui_text_credits[18];
 	WindowUI* ui_confirmation_window;
 	ButtonUI* ui_button_confirmation[2];
 	TextUI* ui_text_confirmation[4];
@@ -103,8 +102,13 @@ private:
 	WindowUI* ui_civilization_window;
 	ButtonUI* ui_button_civilization[3];
 	TextUI* ui_text_civilization[4];
+	ImageUI* ui_volume_sliders[6];
+	TextUI* ui_text_volume_sliders[2];
+	ImageUI* ui_pause_black_screen;
 public:
 	CloseTitleSceneMenus close_menus;
+	bool wantToLoad;
+	bool destroy;
 };
 
 #endif // __j1TITLESCENE_H__

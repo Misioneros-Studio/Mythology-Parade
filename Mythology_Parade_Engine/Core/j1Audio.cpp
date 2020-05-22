@@ -2,7 +2,9 @@
 #include "p2Log.h"
 #include "j1App.h"
 #include "j1Audio.h"
+#include "j1Gui.h"
 
+#include "SDL/include/SDL_timer.h"
 #include "SDL/include/SDL.h"
 #include "SDL_mixer\include\SDL_mixer.h"
 #pragma comment( lib, "SDL_mixer/libx86/SDL2_mixer.lib" )
@@ -11,6 +13,7 @@ j1Audio::j1Audio() : j1Module()
 {
 	music = NULL;
 	name.append("audio");
+	MusicVolume = 200;
 }
 
 // Destructor
@@ -54,6 +57,27 @@ bool j1Audio::Awake(pugi::xml_node& config)
 	return ret;
 }
 
+
+bool j1Audio::PostUpdate()
+{
+	if (a_actual_change == which_audio_fade::none)
+		return true;
+
+	float now = a_timer.ReadSec();
+
+	if (a_actual_change == which_audio_fade::fade_out) {
+
+		Mix_FadeOutMusic((int)(a_total_time * 1000.0f));
+
+		if (a_timer.ReadSec() >= a_total_time)
+		{
+			a_actual_change = which_audio_fade::none;
+		}
+	}
+
+	return true;
+}
+
 // Called before quitting
 bool j1Audio::CleanUp()
 {
@@ -82,14 +106,11 @@ bool j1Audio::CleanUp()
 }
 
 // Play a music file
-bool j1Audio::PlayMusic(const char* path, float fade_time, int volume)
+bool j1Audio::PlayMusic(const char* path, float fade_time)
 {
 	bool ret = true;
-	
-	if (volume < 0) {
-		volume = 0;
-	}
-	Mix_VolumeMusic(volume);
+
+	int volume = GetVolumeMusic();
 
 	if (volume > 200)
 	{
@@ -208,4 +229,80 @@ bool j1Audio::CleanFxs() {
 	fx.clear();
 
 	return ret;
+}
+
+
+void j1Audio::FadeAudio(which_audio_fade w_fade, float time, int volume) {
+
+	a_actual_change = w_fade;
+	a_timer.Start();
+	a_total_time = time;
+	volume_fade = volume;
+
+	if (a_actual_change == which_audio_fade::change_volume) {
+		Mix_VolumeMusic(volume_fade);
+	}
+}
+// Change volume music
+void j1Audio::ChangeVolumeMusic(float volume) {
+	int volume_int = volume * 128;
+	Mix_VolumeMusic(volume_int);
+}
+
+// Change volume fxs
+void j1Audio::ChangeVolumeFx(float volume) {
+	int volume_int = volume * 128;
+	Mix_Volume(-1, volume_int);
+}
+
+// Get volume music
+int j1Audio::GetVolumeMusic() {
+	return Mix_VolumeMusic(-1);
+}
+
+// Get volume fxs
+int j1Audio::GetVolumeFx() {
+	return Mix_Volume(-1, -1);
+}
+
+void j1Audio::OnClick(UI* element, float volume)
+{
+
+	switch (element->type)
+	{
+
+	case Type::IMAGE:
+
+		if (element->name.compare("VOLUME_CONTROL") == 0)
+		{
+			ChangeVolumeMusic(volume);
+		}
+		else if (element->name.compare("FX_CONTROL")==0)
+		{
+			ChangeVolumeFx(volume);
+		}
+		break;
+
+
+	default:
+		break;
+	}
+
+}
+
+bool j1Audio::Save(pugi::xml_node& s) const
+{
+	pugi::xml_node node4 = s.append_child("volume");
+	node4.append_attribute("music").set_value(App->audio->GetVolumeMusic());
+	node4.append_attribute("fx").set_value(App->audio->GetVolumeFx());
+
+	return true;
+}
+
+bool j1Audio::Load(pugi::xml_node& s)
+{
+	ChangeVolumeFx(s.child("volume").attribute("fx").as_float() / 128);
+	ChangeVolumeMusic(s.child("volume").attribute("music").as_float() / 128);
+
+	return true;
 }

@@ -97,6 +97,18 @@
     <ClCompile Include="j1FadeToBlack.cpp">
       <Filter>Core\Modules</Filter>
     </ClCompile>
+    <ClCompile Include="HUD.cpp">
+      <Filter>Core\HUD</Filter>
+    </ClCompile>
+    <ClCompile Include="ResearchMenu.cpp">
+      <Filter>Core\Scenes\Research Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="j1Particle.cpp">
+      <Filter>Core\Particles</Filter>
+    </ClCompile>
+    <ClCompile Include="j1ParticleManager.cpp">
+      <Filter>Core\Modules</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1Window.h">
@@ -210,6 +222,21 @@
     <ClInclude Include="MemLeaks.h">
       <Filter>Core\Tools</Filter>
     </ClInclude>
+    <ClInclude Include="HUD.h">
+      <Filter>Core\HUD</Filter>
+    </ClInclude>
+    <ClInclude Include="ResearchMenu.h">
+      <Filter>Core\Scenes\Research Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="j1Particle.h">
+      <Filter>Core\Particles</Filter>
+    </ClInclude>
+    <ClInclude Include="ClassicAnimation.h">
+      <Filter>Core\Particles</Filter>
+    </ClInclude>
+    <ClInclude Include="j1ParticleManager.h">
+      <Filter>Core\Modules</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Tools">
@@ -226,9 +253,6 @@
     </Filter>
     <Filter Include="Core\Scenes">
       <UniqueIdentifier>{e07660eb-d36f-4cc9-af59-324d31c2f2f6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Core\Modules">
-      <UniqueIdentifier>{244722d1-90ce-423d-8e7a-556211865a32}</UniqueIdentifier>
     </Filter>
     <Filter Include="Core\Tools\Trees">
       <UniqueIdentifier>{c47eb193-3016-4949-8f56-a6fb90788276}</UniqueIdentifier>
@@ -250,6 +274,18 @@
     </Filter>
     <Filter Include="Core\Entities\Player">
       <UniqueIdentifier>{3dcd2ce1-3295-4ae1-87f2-feb1ee4efadf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\HUD">
+      <UniqueIdentifier>{da84361d-6a45-4d6b-bcab-93f5aaf4d801}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Scenes\Research Menu">
+      <UniqueIdentifier>{52f59738-0827-4e4d-82e8-5555aabdb47c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Modules">
+      <UniqueIdentifier>{244722d1-90ce-423d-8e7a-556211865a32}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Particles">
+      <UniqueIdentifier>{e4eb74c7-d5c5-4cd7-9dea-485c75783fc5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

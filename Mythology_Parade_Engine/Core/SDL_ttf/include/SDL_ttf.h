@@ -74,7 +74,7 @@ extern DECLSPEC const SDL_version * SDLCALL TTF_Linked_Version(void);
 extern DECLSPEC void SDLCALL TTF_ByteSwappedUNICODE(int swapped);
 
 /* The internal structure containing font information */
-typedef struct _TTF_Font TTF_Font;
+typedef struct TTF_Font TTF_Font;
 
 /* Initialize the TTF engine - returns 0 if successful, -1 on error */
 extern DECLSPEC int SDLCALL TTF_Init(void);

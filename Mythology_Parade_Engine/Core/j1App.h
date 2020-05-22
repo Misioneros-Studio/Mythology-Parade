@@ -25,6 +25,7 @@ class j1Gui;
 class Console;
 class EntityManager;
 class j1FadeToBlack;
+class j1ParticleManager;
 
 class j1App
 {
@@ -87,10 +88,6 @@ private:
 	bool LoadGameNow();
 	bool SavegameNow();
 
-
-	//Called when restarting a scene (restart button)
-	bool RestartScene();
-
 public:
 
 	// Modules
@@ -110,8 +107,8 @@ public:
 	Console*			console = NULL;
 	EntityManager*		entityManager = NULL;
 	j1FadeToBlack*		fade_to_black = NULL;
+	j1ParticleManager*	particleManager = NULL;
  
-	bool				restart_scene = false;
 
 private:
 	std::list<j1Module*>	modules;
@@ -136,6 +133,8 @@ private:
 	uint32				prev_last_sec_frame_count = 0;
 	float				dt = 0.0f;
 	int					capped_ms = -1;
+
+	bool				existSaveFile;
 
 public:
 	std::list<std::string>	logs;

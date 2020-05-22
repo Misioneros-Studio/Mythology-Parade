@@ -5,6 +5,7 @@
 
 #include "j1Module.h"
 #include <unordered_map>
+#include <map>
 #include "Entity.h"
 #include"j1Input.h"
 #include"j1Map.h"
@@ -98,10 +99,10 @@ public:
 	bool CleanUp();
 
 	////Called when loading the game
-	//bool Load(pugi::xml_node&);
+	bool Load(pugi::xml_node&);
 
 	////Called when saving the game
-	//bool Save(pugi::xml_node&) const;
+	bool Save(pugi::xml_node&) const;
 
 	bool DeleteEntity(Entity*);
 
@@ -145,9 +146,15 @@ public:
 	SDL_Rect construction_bar_empty;
 	SDL_Rect construction_bar_front;
 	SDL_Rect life_bar_front;
+	SDL_Rect life_bar_front_enemy;
 	SDL_Rect research_bar_front;
+	SDL_Rect unit_life_bar_back;
+	SDL_Rect unit_life_bar_empty;
+	SDL_Rect unit_life_bar_front;
+	SDL_Rect unit_life_bar_front_enemy;
 
 	std::unordered_map<UnitType, std::unordered_map<AnimationType, std::unordered_map<Direction, Animation_char>>> animations;
+	std::multimap<int, Entity*> orderedSprites;
 
 	int Building_destruction;
 	int Building_placed;
@@ -162,6 +169,7 @@ public:
 	int CreateAssasin_sound;
 	int Research_sound;
 
+	bool initCivilizations;
 
 };
 #endif // !_ENTITYMANAGER_H

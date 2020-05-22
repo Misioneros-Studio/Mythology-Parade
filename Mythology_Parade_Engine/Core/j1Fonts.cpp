@@ -11,6 +11,8 @@
 j1Fonts::j1Fonts() : j1Module()
 {
 	name.append("fonts");
+	default = nullptr;
+	default_title = nullptr;
 }
 
 // Destructor
@@ -44,7 +46,7 @@ bool j1Fonts::Awake(pugi::xml_node& conf)
 bool j1Fonts::CleanUp()
 {
 	LOG("Freeing True Type fonts and library");
-	for (std::list<_TTF_Font*>::iterator it = fonts.begin(); it != fonts.end(); it++)
+	for (std::list<TTF_Font*>::iterator it = fonts.begin(); it != fonts.end(); it++)
 	{
 		TTF_CloseFont(it._Ptr->_Myval);
 	}
@@ -92,7 +94,7 @@ SDL_Texture* j1Fonts::Print(const char* text, SDL_Color color, TTF_Font* font)
 }
 
 // calculate size of a text
-bool j1Fonts::CalcSize(const char* text, int& width, int& height, _TTF_Font* font) const
+bool j1Fonts::CalcSize(const char* text, int& width, int& height, TTF_Font* font) const
 {
 	bool ret = false;
 

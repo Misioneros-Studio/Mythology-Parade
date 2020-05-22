@@ -3,10 +3,12 @@
 #include "j1Textures.h"
 #include "j1Input.h"
 #include"CombatUnit.h"
+#include "j1Gui.h"
 
-Unit::Unit(UnitType type, iPoint pos): unitType(type), state(AnimationType::IDLE), _isSelected(false), moveSpeed(60)
+Unit::Unit(UnitType type, iPoint pos): unitType(type), state(AnimationType::IDLE),  moveSpeed(60)
 {
-	
+
+
 	if (App->entityManager->getPlayer())
 	{
 		displayDebug = App->entityManager->getPlayer()->displayDebug;
@@ -15,6 +17,8 @@ Unit::Unit(UnitType type, iPoint pos): unitType(type), state(AnimationType::IDLE
 	{
 		displayDebug = false;
 	}
+
+	collisionRect = { 0, 0, 30, -55 };
 
 	unitType = type;
 	position = {(float)pos.x, (float)pos.y};
@@ -33,6 +37,7 @@ Unit::Unit(UnitType type, iPoint pos): unitType(type), state(AnimationType::IDLE
 		time_production = 90;
 		time_research = 0;
 		researched = true;
+		name = "monk";
 		Init(1);
 		collisionRect = { 0, 0, 30, -55 };
 		break;
@@ -66,6 +71,10 @@ Unit::Unit(UnitType type, iPoint pos): unitType(type), state(AnimationType::IDLE
 		break;
 	}
 
+	canLevel = false;
+
+	SetSelected(false);
+
 }
 
 Unit::~Unit()
@@ -85,12 +94,24 @@ bool Unit::Start()
 	//position_rect.w = 125;
 	//position_rect.h = 112;
 	//LOG("%s", image_source.c_str());
+	combat_unit = false;
+	show_bar_for_damage = false;
 	return ret;
 }
+
 
 bool Unit::Update(float dt)
 {
 	bool ret = true;
+
+	if (App->entityManager->getPlayer())
+	{
+		displayDebug = App->entityManager->getPlayer()->displayDebug;
+	}
+	else
+	{
+		displayDebug = false;
+	}
 
 	//Allawys blit the sprite at the end
 	StateMachineActions(dt);
@@ -156,6 +177,27 @@ bool Unit::Update(float dt)
 
 
 	//Return
+	int x, y;
+	App->input->GetMousePosition(x, y);
+	iPoint point = App->render->ScreenToWorld(x, y);
+	if (App->scene->paused_game && show_bar_for_damage == true && damage_timer.isPaused() == false)
+		damage_timer.Pause();
+	else if (damage_timer.isPaused() == true && App->scene->paused_game == false)
+		damage_timer.Resume();
+	if (damaged_now == true) {
+		damage_timer.Start();
+		damaged_now = false;
+		show_bar_for_damage = true;
+	}
+	if (show_bar_for_damage == true && damage_timer.ReadSec() > 2)
+		show_bar_for_damage = false;
+	if (isSelected() || (point.x >= collisionRect.x && point.x <= collisionRect.x + collisionRect.w && point.y <= collisionRect.y && point.y >= collisionRect.y + collisionRect.h) ||
+		show_bar_for_damage == true) {
+		if (civilization != App->entityManager->getPlayer()->civilization)
+			Draw_Life_Bar(true);
+		else
+			Draw_Life_Bar();
+	}
 	return ret;
 }
 
@@ -164,10 +206,6 @@ void Unit::SetMoveSpeed(int value)
 	moveSpeed = value;
 }
 
-bool Unit::isSelected()
-{
-	return _isSelected;
-}
 
 void Unit::MoveToTarget()
 {
@@ -176,14 +214,14 @@ void Unit::MoveToTarget()
 	float speed = moveSpeed * App->GetDT();
 
 	//Fast fix for ft increasing bug
-	if (App->GetDT() >= 0.5f) 
+	if (App->GetDT() >= 0.5f)
 	{
 		speed = 0.f;
 	}
 
-  
+
 	state = AnimationType::WALK;
-	if (Mix_Playing(3) == 0) 
+	if (Mix_Playing(3) == 0)
 	{
 		App->entityManager->FxUnits(3, App->entityManager->Walking_troops, position.x, position.y);
 	}
@@ -209,7 +247,7 @@ void Unit::MoveToTarget()
 		targetPosition.ResetAsPosition();
 		if (entPath.size() <= 0)
 		{
-			if (enemyTarget != nullptr && unitType != UnitType::MONK) 
+			if (enemyTarget != nullptr && unitType != UnitType::MONK)
 			{
 				ChangeState(App->map->WorldToMap(enemyTarget->position.x, enemyTarget->position.y), AnimationType::ATTACK);
 			}
@@ -221,7 +259,7 @@ void Unit::MoveToTarget()
 
 		}
 	}
-	
+
 }
 
 void Unit::Init(int maxHealth)
@@ -282,7 +320,7 @@ bool Unit::Draw(float dt)
 
 	//App->render->DrawQuad({(int)position.x, (int)position.y, 2, 2}, 0, 255, 0);
 
-	if (displayDebug) 
+	if (displayDebug)
 	{
 		if (entPath.size() > 0)
 		{
@@ -365,6 +403,34 @@ void Unit::Kill(iPoint direction)
 {
 	ChangeState(direction, AnimationType::DIE);
 }
+void Unit::Draw_Life_Bar(bool enemy)
+{
+	SDL_Rect life_spriteRect = App->entityManager->unit_life_bar_back;
+	iPoint pos;
+	if (combat_unit == true) {
+		CombatUnit* comb_unit = static_cast<CombatUnit*>(this);
+		if (comb_unit->GetLevel() > 0)
+			pos = { (int)position.x - 38, (int)position.y - 75 };
+		else
+			pos = { (int)position.x - 38, (int)position.y - 65 };
+	}
+	else
+		pos = { (int)position.x - 38, (int)position.y - 60 }; ////// IT WILL HAVE TO BE CHANGED WHEN NEW CREATURES ADDED
+
+	App->render->Blit(App->gui->GetTexture(), pos.x, pos.y, &life_spriteRect);
+	if (enemy == true)
+		life_spriteRect = App->entityManager->unit_life_bar_front_enemy;
+	else
+		life_spriteRect = App->entityManager->unit_life_bar_front;
+	float percentage_life = (float)GetHealth() / (float)GetMaxHealth();
+	if (percentage_life < 0)
+		percentage_life = 0;
+	int sprite_rect_width = percentage_life * life_spriteRect.w;
+	App->render->Blit(App->gui->GetTexture(), pos.x + 7, pos.y + 2, { sprite_rect_width, life_spriteRect.h },
+		& life_spriteRect);
+	life_spriteRect = App->entityManager->unit_life_bar_empty;
+	App->render->Blit(App->gui->GetTexture(), pos.x, pos.y, &life_spriteRect);
+}
 void Unit::StateMachineActions(float dt)
 {
 	//LOG("%i", state);
@@ -387,7 +453,7 @@ void Unit::StateMachineActions(float dt)
 
 		timeToDespawn -= dt;
 
-		if (timeToDespawn <= 0) 
+		if (timeToDespawn <= 0)
 		{
 			//App->entityManager->DeleteEntity(this);
 			toDelete = true;
@@ -404,5 +470,3 @@ void Unit::StateMachineActions(float dt)
 		break;
 	}
 }
-
-

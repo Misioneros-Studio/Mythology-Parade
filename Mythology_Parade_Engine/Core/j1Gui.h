@@ -127,6 +127,7 @@ public:
 	int green;
 	int blue;
 	int alpha;
+	bool unclicked;
 };
 class WindowUI :public UI
 {
@@ -291,13 +292,21 @@ public:
 
 	void WorkWithTextInput(std::string text);
 
+	void DeactivateButtons();
+
+	void ActivateButtons();
+
+	SDL_Texture* GetTexture();
+
 private:
 
 	std::list <UI*> UIs;
 	SDL_Texture* atlas_num_0;
 	SDL_Texture* atlas_num_1;
+	SDL_Texture* atlas_num_2;
 	std::string atlas_file_name_num_0;
 	std::string atlas_file_name_num_1;
+	std::string atlas_file_name_num_2;
 	SDL_Texture* cursor_tex;
 
 public:
@@ -305,6 +314,8 @@ public:
 	//Audio
 	int sfx_UI[9];
 	bool lockClick;
+	bool cursor_attack;
+	bool cursor_move;
 
 };
 
