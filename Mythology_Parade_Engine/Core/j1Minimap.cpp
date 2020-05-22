@@ -7,6 +7,7 @@
 #include "j1Map.h"
 #include "p2Log.h"
 #include "EntityManager.h"
+#include "FoWManager.h"
 
 j1Minimap::j1Minimap() : j1Module() {
 	name.append("minimap");
@@ -86,7 +87,6 @@ bool j1Minimap::Start() {
 }
 
 bool j1Minimap::PostUpdate() {
-
 	App->render->Blit(texture, position.x, position.y, NULL, 0.0, 0);
 	for (unsigned i = 0; i < App->entityManager->entities.size(); i++)
 	{
@@ -95,39 +95,42 @@ bool j1Minimap::PostUpdate() {
 			Entity* ent = it._Ptr->_Myval;
 			if (ent->type == EntityType::UNIT || ent->type == EntityType::BUILDING) {
 				fPoint pos_map = ent->position;
-				iPoint pos_minimap = WorldToMinimap((int)pos_map.x, (int)pos_map.y);
-				int x = pos_minimap.x;
-				int y = pos_minimap.y;
-				int red = 255;
-				int blue = 255;
-				int green = 255;
-				int w = 4;
-				int h = 4;
-				if (ent->type == EntityType::UNIT) {
-					green = 0;
-					w = h = 2;
-					if (ent->civilization == App->entityManager->getPlayer()->civilization) {
-						red = 0;
+				fPoint fow_pos = App->map->WorldToMap((int)ent->position.x, (int)ent->position.y);
+				if (App->fowManager->CheckTileVisibility({ (int)fow_pos.x,(int)fow_pos.y })) {
+					iPoint pos_minimap = WorldToMinimap((int)pos_map.x, (int)pos_map.y);
+					int x = pos_minimap.x;
+					int y = pos_minimap.y;
+					int red = 255;
+					int blue = 255;
+					int green = 255;
+					int w = 4;
+					int h = 4;
+					if (ent->type == EntityType::UNIT) {
+						green = 0;
+						w = h = 2;
+						if (ent->civilization == App->entityManager->getPlayer()->civilization) {
+							red = 0;
+						}
+						else {
+							blue = 0;
+						}
 					}
 					else {
-						blue = 0;
+						if (ent->civilization == App->entityManager->getPlayer()->civilization) {
+							red = 0;
+						}
+						else {
+							blue = 0;
+							green = 100;
+						}
 					}
-				}
-				else {
-					if (ent->civilization == App->entityManager->getPlayer()->civilization) {
-						red = 0;
-					}
-					else {
-						blue = 0;
-						green = 100;
-					}
-				}
 
-				App->render->DrawQuad({ x,y,w,h }, red, green, blue, 255, true, false);
+					App->render->DrawQuad({ x,y,w,h }, red, green, blue, 255, true, false);
+				}
 			}
 		}
 	}
-
+	
 	return true;
 }
 
