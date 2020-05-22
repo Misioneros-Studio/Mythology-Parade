@@ -203,11 +203,7 @@ void Player::PlayerInputs()
 	{
 		iPoint mouse = App->map->GetMousePositionOnMap();
 		iPoint spawnPos = App->map->TileCenterPoint(mouse);
-<<<<<<< Updated upstream
 		App->entityManager->CreateUnitEntity(UnitType::DRAUGAR , spawnPos, civilization);
-=======
-		App->entityManager->CreateUnitEntity(UnitType::CYCLOP , spawnPos, civilization);
->>>>>>> Stashed changes
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_F4) == KEY_DOWN && App->scene->godMode)
