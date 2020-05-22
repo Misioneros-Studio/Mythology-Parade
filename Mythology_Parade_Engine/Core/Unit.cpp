@@ -8,15 +8,7 @@
 Unit::Unit(UnitType type, iPoint pos): unitType(type), state(AnimationType::IDLE),  moveSpeed(60)
 {
 
-
-	if (App->entityManager->getPlayer())
-	{
-		displayDebug = App->entityManager->getPlayer()->displayDebug;
-	}
-	else
-	{
-		displayDebug = false;
-	}
+	displayDebug = false;
 
 	collisionRect = { 0, 0, 30, -55 };
 
