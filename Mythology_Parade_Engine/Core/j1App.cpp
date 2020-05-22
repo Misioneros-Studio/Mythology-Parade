@@ -12,6 +12,7 @@
 #include "j1LogoScene.h"
 #include "j1TitleScene.h"
 #include "j1Scene.h"
+#include "j1TutorialScene.h"
 #include "j1Minimap.h"
 #include "j1Map.h"
 #include "j1Pathfinding.h"
@@ -19,6 +20,7 @@
 #include "j1Gui.h"
 #include "Console.h"
 #include "EntityManager.h"
+#include "FoWManager.h"
 #include "j1FadeToBlack.h"
 #include "j1ParticleManager.h"
 #include "j1App.h"
@@ -38,6 +40,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	logo_scene = new j1LogoScene();
 	title_scene = new j1TitleScene();
 	scene = new j1Scene();
+	tutorialscene = new j1TutorialScene();
 	minimap = new j1Minimap();
 	map = new j1Map();
 	pathfinding = new j1PathFinding();
@@ -45,6 +48,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	gui = new j1Gui();
 	console = new Console();
 	entityManager = new EntityManager();
+	fowManager = new FoWManager();
 	fade_to_black = new j1FadeToBlack();
 	particleManager = new j1ParticleManager();
 
@@ -55,6 +59,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(tex);
 
 	AddModule(map);
+	AddModule(fowManager);
 	AddModule(pathfinding);
 	AddModule(font);
 
@@ -63,6 +68,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(logo_scene);
 	AddModule(title_scene);
 	AddModule(scene);
+	AddModule(tutorialscene);
 	AddModule(particleManager);
 	AddModule(minimap);
 	AddModule(gui);

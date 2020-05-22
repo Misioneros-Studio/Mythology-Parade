@@ -20,7 +20,7 @@ EntityManager::~EntityManager()
 //Called before render is available
 bool EntityManager::Awake(pugi::xml_node& a)
 {
-
+	App->fowManager->RequestMaskGeneration(10);
 	//Load buildings info
 	pugi::xml_document buildings;
 	buildings.load_file(a.child("buildings").attribute("file").as_string());
@@ -252,6 +252,9 @@ bool EntityManager::Update(float dt)
 		App->entityManager->getPlayer()->DecreaseFaith(faithToDescrease);
 		crPreview.active = false;
 	}
+
+	//Update FOW
+	App->fowManager->MapNeedsUpdate();
 
 	return true;
 }

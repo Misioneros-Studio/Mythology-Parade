@@ -88,7 +88,6 @@ bool j1TitleScene::Start()
 					if (i < 3) {
 						if (i < 2) {
 							ui_button_options[i] = nullptr;
-							ui_text_tutorial[i] = nullptr;
 							ui_button_confirmation[i] = nullptr;
 							ui_text_volume_sliders[i] = nullptr;
 						}
@@ -101,13 +100,11 @@ bool j1TitleScene::Start()
 			}
 		}
 	}
-	ui_tutorial_options = nullptr;
 	ui_pause_black_screen = nullptr;
 
 
 	ui_civilization_window = nullptr;
 	ui_confirmation_window = nullptr;
-	ui_tutorial_window = nullptr;
 	ui_options_window = nullptr;
 	ui_credits_window = nullptr;
 
@@ -134,10 +131,6 @@ bool j1TitleScene::Update(float dt)
 	{
 	case CloseTitleSceneMenus::Credits:
 		DeactivateCredits();
-		close_menus = CloseTitleSceneMenus::None;
-		break;
-	case CloseTitleSceneMenus::Tutorial:
-		DeactivateTutorial();
 		close_menus = CloseTitleSceneMenus::None;
 		break;
 	case CloseTitleSceneMenus::Options:
@@ -184,7 +177,6 @@ bool j1TitleScene::CleanUp()
 	DeactivateCivilizationMenu();
 	DeactivateCredits();
 	DeactivateOptionsMenu();
-	DeactivateTutorial();
 	DeactivateConfirmationMenu();
 	for (int i = 5; i >= 0; i--) {
 		if (ui_button[i] != nullptr) {
@@ -362,54 +354,6 @@ void j1TitleScene::DeactivateCivilizationMenu() {
 }
 
 // Called when clicking options button in pause menu
-void j1TitleScene::ActivateTutorial() {
-	if (ui_tutorial_window == nullptr) {
-		uint w, h;
-		App->win->GetWindowSize(w, h);
-		ui_pause_black_screen = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, nullptr, { 0,0,(int)w,(int)h }, "", 0, 0, 0, 150));
-		ui_tutorial_window = static_cast<WindowUI*>(App->gui->CreateUIElement(Type::WINDOW, nullptr, { 410,200,459,168 }, { 790,408,459,168 }));
-		ui_tutorial_options = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_tutorial_window, { 520,300,237,38 }, { 787,240,237,38 }, "CLOSE TUTORIAL", { 787,342,237,38 },
-			{ 787,291,237,38 }, false, { 0,0,0,0 }, this, (int)UI_Audio::CLOSE));
-		ui_text_tutorial[0] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 619,312,237,38 }, { 0,0,100,100 }, "Close", { 0,0,0,255 }));
-		ui_text_tutorial[1] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 583,212,237,38 }, { 0,0,100,100 }, "TUTORIAL", { 255,255,255,255 }, { 1,0,0,0 }));
-	}
-	for (int i = 0; i < 6; i++) {
-		if (ui_button[i] != nullptr) {
-			ui_button[i]->front = false;
-		}
-	}
-}
-
-// Called when clicking close button in options menu
-void j1TitleScene::DeactivateTutorial() {
-	if (ui_tutorial_window != nullptr) {
-		App->gui->DeleteUIElement(ui_tutorial_window);
-		ui_tutorial_window = nullptr;
-		if (ui_pause_black_screen != nullptr) {
-			App->gui->DeleteUIElement(ui_pause_black_screen);
-			ui_pause_black_screen = nullptr;
-		}
-		if (ui_tutorial_options != nullptr) {
-			App->gui->DeleteUIElement(ui_tutorial_options);
-			ui_tutorial_options = nullptr;
-		}
-		for (int i = 1; i >= 0; i--) {
-			if (ui_text_tutorial[i] != nullptr) {
-				App->gui->DeleteUIElement(ui_text_tutorial[i]);
-				ui_text_tutorial[i] = nullptr;
-			}
-		}
-	}
-	for (int i = 0; i < 6; i++) {
-		if (ui_button[i] != nullptr) {
-			ui_button[i]->front = true;
-		}
-	}
-
-}
-
-
-// Called when clicking options button in pause menu
 void j1TitleScene::ActivateCredits() {
 	if (ui_credits_window == nullptr) {
 		uint w, h;
@@ -570,11 +514,8 @@ void j1TitleScene::OnClick(UI* element, float argument)
 		}
 		else if (element->name == "TUTORIAL")
 		{
-			ActivateTutorial();
-		}
-		else if (element->name == "CLOSE TUTORIAL")
-		{
-			close_menus = CloseTitleSceneMenus::Tutorial;
+			confirmation_option = "TUTORIAL";
+			ActivateConfirmationMenu("GO TO THE TUTORIAL");
 		}
 		else if (element->name == "OPTIONS")
 		{
@@ -608,6 +549,10 @@ void j1TitleScene::OnClick(UI* element, float argument)
 				App->fade_to_black->FadeToBlack(which_fade::title_to_scene, 2, "viking");
 				destroy = true;
 				wantToLoad = true;
+			}
+			else if (confirmation_option.compare("TUTORIAL") == 0)
+			{
+				App->fade_to_black->FadeToBlack(which_fade::title_to_tutorial, 2.0f);
 			}
 			else if (confirmation_option.compare("EXIT") == 0)
 			{

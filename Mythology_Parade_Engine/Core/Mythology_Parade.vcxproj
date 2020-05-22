@@ -21,7 +21,7 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -82,6 +82,7 @@
     <ClCompile Include="CombatUnit.cpp" />
     <ClCompile Include="Console.cpp" />
     <ClCompile Include="EntityManager.cpp" />
+    <ClCompile Include="FoWManager.cpp" />
     <ClCompile Include="HealthSystem.cpp" />
     <ClCompile Include="CurrencySystem.cpp" />
     <ClCompile Include="HUD.cpp" />
@@ -99,6 +100,7 @@
     <ClCompile Include="j1ParticleManager.cpp" />
     <ClCompile Include="j1Pathfinding.cpp" />
     <ClCompile Include="j1PerfTimer.cpp" />
+    <ClCompile Include="j1TutorialScene.cpp" />
     <ClCompile Include="LevelSystem.cpp" />
     <ClCompile Include="PathFinder.cpp" />
     <ClCompile Include="Player.cpp" />
@@ -123,6 +125,8 @@
     <ClInclude Include="Console.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="EntityManager.h" />
+    <ClInclude Include="FoWBitDefs.h" />
+    <ClInclude Include="FoWManager.h" />
     <ClInclude Include="HealthSystem.h" />
     <ClInclude Include="CurrencySystem.h" />
     <ClInclude Include="HUD.h" />
@@ -136,6 +140,7 @@
     <ClInclude Include="j1ParticleManager.h" />
     <ClInclude Include="j1Pathfinding.h" />
     <ClInclude Include="j1PerfTimer.h" />
+    <ClInclude Include="j1TutorialScene.h" />
     <ClInclude Include="LevelSystem.h" />
     <ClInclude Include="MemLeaks.h" />
     <ClInclude Include="PathFinder.h" />

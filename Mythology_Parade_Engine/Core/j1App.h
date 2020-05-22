@@ -17,6 +17,7 @@ class j1Audio;
 class j1LogoScene;
 class j1TitleScene;
 class j1Scene;
+class j1TutorialScene;
 class j1Minimap;
 class j1Map;
 class j1PathFinding;
@@ -24,6 +25,7 @@ class j1Fonts;
 class j1Gui;
 class Console;
 class EntityManager;
+class FoWManager;
 class j1FadeToBlack;
 class j1ParticleManager;
 class TooltipData;
@@ -101,6 +103,7 @@ public:
 	j1LogoScene*		logo_scene = NULL;
 	j1TitleScene*		title_scene = NULL;
 	j1Scene*			scene = NULL;
+	j1TutorialScene*	tutorialscene = NULL;
 	j1Minimap*			minimap = NULL;
 	j1Map*				map = NULL;
 	j1PathFinding*		pathfinding = NULL;
@@ -108,6 +111,7 @@ public:
 	j1Gui*				gui = NULL;
 	Console*			console = NULL;
 	EntityManager*		entityManager = NULL;
+	FoWManager*			fowManager = NULL;
 	j1FadeToBlack*		fade_to_black = NULL;
 	j1ParticleManager*	particleManager = NULL;
  

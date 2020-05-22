@@ -8,6 +8,8 @@
 #include "Animation.h"
 #include "j1Timer.h"
 
+struct SDL_Texture;
+
 enum class ReligiousType
 {
 	MONK,
@@ -62,6 +64,7 @@ public:
 	void Init(int maxHealth);
 
 	bool Start() override;
+
 	bool Update(float dt);
 
 	void SetMoveSpeed(int);
@@ -99,6 +102,10 @@ protected:
 	j1Timer damage_timer;
 	bool show_bar_for_damage;
 	bool combat_unit;
+
+
+	SDL_Texture* circle_unit_tex;
+	SDL_Rect circle_unit_rect;
 };
 
 #endif // !__UNIT_H__

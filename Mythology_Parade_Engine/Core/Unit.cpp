@@ -4,6 +4,8 @@
 #include "j1Input.h"
 #include"CombatUnit.h"
 #include "j1Gui.h"
+#include"j1ParticleManager.h"
+
 
 Unit::Unit(UnitType type, iPoint pos): unitType(type), state(AnimationType::IDLE),  moveSpeed(60)
 {
@@ -67,6 +69,8 @@ Unit::Unit(UnitType type, iPoint pos): unitType(type), state(AnimationType::IDLE
 
 	SetSelected(false);
 
+	circle_unit_rect = { 0,0,64,32 };
+	circle_unit_tex = App->tex->Load("assets/units/CercleUnitats.png");
 }
 
 Unit::~Unit()
@@ -167,6 +171,10 @@ bool Unit::Update(float dt)
 	}
 
 
+	std::vector<iPoint> tiles;
+	App->fowManager->GetTilesInsideRadius(fowRadius, position, { collisionRect.w / 2, -collisionRect.w / 2 }, tiles);
+	App->fowManager->ApplyMaskToTiles(fowRadius, tiles);
+
 
 	//Return
 	int x, y;
@@ -190,6 +198,7 @@ bool Unit::Update(float dt)
 		else
 			Draw_Life_Bar();
 	}
+
 	return ret;
 }
 
@@ -280,6 +289,10 @@ void Unit::ChangeState(iPoint isoLookPosition, AnimationType newState)
 
 bool Unit::Draw(float dt)
 {
+	if (isSelected()) {
+		App->render->Blit(circle_unit_tex, position.x - 32, position.y - 18, &circle_unit_rect);
+	}
+
 	if (entPath.size() > 0 && targetPosition == iPoint(-1, -1))
 	{
 		targetPosition.x = entPath[0].x;
@@ -394,6 +407,7 @@ void Unit::SetPath(const std::vector<iPoint> s_path)
 void Unit::Kill(iPoint direction)
 {
 	ChangeState(direction, AnimationType::DIE);
+	App->particleManager->CreateParticle({ (int)position.x-20,(int)position.y-50 }, { 0,-1 }, 10, ParticleAnimation::Skull);
 }
 void Unit::Draw_Life_Bar(bool enemy)
 {

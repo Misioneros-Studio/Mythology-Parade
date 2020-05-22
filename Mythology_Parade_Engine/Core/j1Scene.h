@@ -4,7 +4,8 @@
 #include "j1Module.h"
 #include "j1Timer.h"
 #include "SDL/include/SDL.h"
-#include"p2Point.h"
+#include "p2Point.h"
+#include "FoWManager.h"
 
 struct SDL_Rect;
 
@@ -70,11 +71,12 @@ public:
 private:
 	
 	fPoint global_pos;
-	SDL_Rect mapLimitsRect;
+
 	SDL_Texture* winlose_tex;
 
 
 public:
+	SDL_Rect mapLimitsRect;
 	SDL_Texture* debugBlue_tex;
 	SDL_Texture* debugRed_tex;
 	bool paused_game;
@@ -88,6 +90,8 @@ public:
 	uint WinViking_sound;
 	uint WinGreek_sound;
 	uint Lose_sound;
+
+	bool isInTutorial;
 };
 
 #endif // __j1SCENE_H__
