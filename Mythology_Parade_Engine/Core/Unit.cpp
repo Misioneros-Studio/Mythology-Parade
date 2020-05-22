@@ -4,6 +4,8 @@
 #include "j1Input.h"
 #include"CombatUnit.h"
 #include "j1Gui.h"
+#include"j1ParticleManager.h"
+
 
 Unit::Unit(UnitType type, iPoint pos): unitType(type), state(AnimationType::IDLE),  moveSpeed(60)
 {
@@ -394,6 +396,7 @@ void Unit::SetPath(const std::vector<iPoint> s_path)
 void Unit::Kill(iPoint direction)
 {
 	ChangeState(direction, AnimationType::DIE);
+	App->particleManager->CreateParticle({ (int)position.x-20,(int)position.y-50 }, { 0,-1 }, 10, ParticleAnimation::Skull);
 }
 void Unit::Draw_Life_Bar(bool enemy)
 {

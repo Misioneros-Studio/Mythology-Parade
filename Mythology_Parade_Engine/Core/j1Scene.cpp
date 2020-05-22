@@ -18,7 +18,11 @@
 #include "j1FadeToBlack.h"
 #include "HUD.h"
 #include "ResearchMenu.h"
+
 #include "j1TitleScene.h"
+
+#include "j1ParticleManager.h"
+
 
 #include"QuadTree.h"
 
@@ -43,7 +47,7 @@ bool j1Scene::Awake(pugi::xml_node& config)
 	SDL_ShowCursor(0);
 	hud = nullptr;
 	research_menu = nullptr;
-  
+
 	return ret;
 }
 
@@ -70,7 +74,7 @@ bool j1Scene::Start()
 	App->render->camera.x = -2683;
 	App->render->camera.y = -2000;
 
-	
+
 
   //Load building debug textures
 	debugBlue_tex = App->tex->Load("maps/path2.png");
@@ -90,7 +94,7 @@ bool j1Scene::Start()
 	WinViking_sound = App->audio->LoadFx("audio/fx/WinVikings.wav");
 	WinGreek_sound = App->audio->LoadFx("audio/fx/win_greeks.wav");
 	Lose_sound = App->audio->LoadFx("audio/fx/lose_sound.wav");
-	
+
 
 	paused_game = false;
 	godMode = false;
@@ -103,7 +107,7 @@ bool j1Scene::Start()
 	//size = iPoint(App->map->data.width * App->map->data.tile_width, App->map->data.height * App->map->data.tile_height);
 	//quadTree = new QuadTree(TreeType::ISOMETRIC, position.x + (App->map->data.tile_width / 2), position.y, size.x, size.y);
 	//quadTree->baseNode->SubDivide(quadTree->baseNode, 5);
-  
+
 	App->audio->PlayMusic("audio/music/Ambient1.ogg", 2.0F);
 
 	//Creating players
@@ -116,6 +120,7 @@ bool j1Scene::Start()
 
 	research_menu = new ResearchMenu(player);
 	hud = new HUD(research_menu);
+
 	return true;
 }
 
@@ -127,7 +132,7 @@ bool j1Scene::PreUpdate()
 	if (App->input->GetMouseButtonDown(SDL_BUTTON_RIGHT) == KEY_DOWN)
 	{
 		ClickToPath();
-	}	
+	}
 	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN && clickToPath)
 	{
 		ClickToPath();
@@ -187,6 +192,9 @@ void j1Scene::ClickToPath()
 		LOG("Origin: %i, %i", origin.x, origin.y);
 		LOG("Ending: %i, %i", ending.x, ending.y);
 
+		iPoint PointToArrow = App->map->MapToWorld(ending.x, ending.y);
+		App->particleManager->CreateParticle({ PointToArrow.x,PointToArrow.y}, { 0,0 }, 10, ParticleAnimation::Arrows_Cursor);
+
 		int posX, posY;
 		App->input->GetMousePosition(posX, posY);
 		iPoint p = App->render->ScreenToWorld(posX, posY);
@@ -212,6 +220,7 @@ void j1Scene::ClickToPath()
 
 		if (!attacking)
 		{
+
 			Unit* unt = nullptr;
 			for (std::list<Entity*>::iterator sel = list.begin(); sel != list.end(); sel++)
 			{
@@ -272,7 +281,7 @@ bool j1Scene::Update(float dt)
       if (hud->ui_volume_sliders[3] != nullptr)
         hud->UpdateSlider(3);
     }
-	
+
 
 	SDL_Rect correctedCamera = App->render->camera;
 	correctedCamera.x = -correctedCamera.x;
@@ -290,31 +299,31 @@ bool j1Scene::Update(float dt)
 		}
 	}
 
-	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT) 
+	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
 	{
-		if (correctedCamera.y + App->render->camera.h + floor(1000.0f * dt) <= mapLimitsRect.h) 
+		if (correctedCamera.y + App->render->camera.h + floor(1000.0f * dt) <= mapLimitsRect.h)
 		{
 			App->render->camera.y -= floor(1000.0f * dt);
 		}
-		else 
+		else
 		{
 			App->render->camera.y = -mapLimitsRect.h + App->render->camera.h;
 		}
 	}
 
-	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT) 
+	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
 	{
 		if (correctedCamera.x - floor(1000.0f * dt) >= mapLimitsRect.x)
 		{
 			App->render->camera.x += floor(1000.0f * dt);
 		}
-		else 
+		else
 		{
 			App->render->camera.x = -mapLimitsRect.x;
 		}
 	}
 
-	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT) 
+	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
 	{
 		if (correctedCamera.x + App->render->camera.w + floor(1000.0f * dt) <= mapLimitsRect.x + mapLimitsRect.w)
 		{
@@ -536,7 +545,7 @@ void j1Scene::OnClick(UI* element, float argument)
 		{
 			hud->close_menus = CloseSceneMenus::Pause;
 		}
-		else if (element->name == "Research") 
+		else if (element->name == "Research")
 		{
 			hud->ActivateResearchMenu();
 		}
@@ -639,7 +648,7 @@ void j1Scene::OnClick(UI* element, float argument)
 		else if (element->name == "Produce_Victory")
 		{
 			Building* building = (Building*)hud->thing_selected;
-			App->entityManager->getPlayer()->DecreaseFaith(600);  
+			App->entityManager->getPlayer()->DecreaseFaith(600);
 			building->StartProducing("Victory");
 		}
 		else if (element->name == "Produce_Sacrifices")
@@ -729,7 +738,7 @@ void j1Scene::DoWinOrLoseWindow(int type, bool win) {
 		if (win == true) {
 			App->render->Blit(winlose_tex, global_pos.x, global_pos.y, &sec_viking, NULL, 0.0F);
 			App->render->Blit(winlose_tex, global_pos.x, global_pos.y, &sec_win, NULL, 0.0F);
-			if (Mix_Playing(3) == 0) 
+			if (Mix_Playing(3) == 0)
 			{
 				App->audio->PlayFx(3, WinViking_sound);
 			}
