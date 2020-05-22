@@ -669,6 +669,10 @@ void j1Scene::OnClick(UI* element, float argument)
 			App->gui->cursor_attack = true;
 			//BERNAT & JORDI
 		}
+		else if (element->name == "Heal")
+		{
+		//BERNAT
+		}
 		else if (element->name == "Produce_Cleric")
 		{
 			//BERNAT

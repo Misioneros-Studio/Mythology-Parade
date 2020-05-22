@@ -109,6 +109,9 @@
     <ClCompile Include="j1ParticleManager.cpp">
       <Filter>Core\Modules</Filter>
     </ClCompile>
+    <ClCompile Include="TooltipData.cpp">
+      <Filter>Core\Only Data</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1Window.h">
@@ -237,6 +240,9 @@
     <ClInclude Include="j1ParticleManager.h">
       <Filter>Core\Modules</Filter>
     </ClInclude>
+    <ClInclude Include="TooltipData.h">
+      <Filter>Core\Only Data</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Tools">
@@ -286,6 +292,9 @@
     </Filter>
     <Filter Include="Core\Particles">
       <UniqueIdentifier>{e4eb74c7-d5c5-4cd7-9dea-485c75783fc5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Only Data">
+      <UniqueIdentifier>{7a5f63fb-b271-446c-a760-8b199ea3a0e3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
