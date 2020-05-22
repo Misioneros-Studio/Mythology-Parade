@@ -10,6 +10,11 @@
 class TextUI;
 class WindowUI;
 class j1Timer;
+enum Panel_Fade {
+	no_one_fade,
+	panel_fade_in,
+	panel_fade_out
+};
 
 enum class Type
 {
@@ -56,6 +61,9 @@ public:
 
 	// Called before all Updates
 	virtual bool PreUpdate();
+
+	// Update
+	virtual bool Update(float dt);
 
 	// Called after all Updates
 	virtual bool PostUpdate();
@@ -118,17 +126,24 @@ private:
 	TextUI* tooltip_texts[13];
 	bool has_timer_tooltip_started;
 
+protected:
+	Panel_Fade fade_panel;
+	int alpha;
+	j1Timer fade_panel_timer;
+	int fade_panel_time;
+	int max_alpha;
 };
 class ImageUI :public UI
 {
 public:
-	ImageUI(Type type, UI* p, SDL_Rect r, SDL_Rect sprite, bool d, bool f, SDL_Rect d_area, float drag_position_scroll_bar, int num_tooltip);
-	ImageUI(Type type, UI* p, SDL_Rect r, int re, int g, int b, int a, bool d, bool f, SDL_Rect d_area);
+	ImageUI(Type type, UI* p, SDL_Rect r, SDL_Rect sprite, bool d, bool f, SDL_Rect d_area, float drag_position_scroll_bar, Panel_Fade p_fade, int num_tooltip);
+	ImageUI(Type type, UI* p, SDL_Rect r, int re, int g, int b, int a, bool d, bool f, SDL_Rect d_area, Panel_Fade p_fade);
 
 	// Destructor
 	virtual ~ImageUI() {}
 
 	// Called before all Updates
+	bool Update(float dt);
 	bool PreUpdate();
 
 	// Called after all Updates
@@ -143,30 +158,31 @@ public:
 	int red;
 	int green;
 	int blue;
-	int alpha;
 	bool unclicked;
 };
 class WindowUI :public UI
 {
 public:
-	WindowUI(Type type, UI* p, SDL_Rect r, SDL_Rect sprite, bool d, bool f, SDL_Rect d_area);
+	WindowUI(Type type, UI* p, SDL_Rect r, SDL_Rect sprite, bool d, bool f, SDL_Rect d_area, Panel_Fade p_fade);
 
 	// Destructor
 	virtual ~WindowUI() {}
 
 	// Called after all Updates
+	bool Update(float dt);
 	bool PostUpdate();
 };
 class TextUI :public UI
 {
 
 public:
-	TextUI(Type type, UI* p, SDL_Rect r, std::string str, bool d, bool f, SDL_Rect d_area, bool console, SDL_Color coulor, bool title, int num_tooltip);
+	TextUI(Type type, UI* p, SDL_Rect r, std::string str, bool d, bool f, SDL_Rect d_area, bool console, SDL_Color coulor, bool title, Panel_Fade p_fade, int num_tooltip);
 
 	// Destructor
 	virtual ~TextUI() {}
 
 	// Called after all Updates
+	bool Update(float dt);
 	bool PostUpdate();
 
 	void SetString(std::string);
@@ -182,12 +198,13 @@ private:
 class ListTextsUI :public UI
 {
 public:
-	ListTextsUI(Type type, UI* p, SDL_Rect r, std::string str, bool d, bool f, SDL_Rect d_area, bool console);
+	ListTextsUI(Type type, UI* p, SDL_Rect r, std::string str, bool d, bool f, SDL_Rect d_area, bool console, Panel_Fade p_fade);
 
 	// Destructor
 	virtual ~ListTextsUI() {}
 
 	// Called after all Updates
+	bool Update(float dt);
 	bool PostUpdate();
 
 	void SetListOfStrings(std::string string, int position);
@@ -204,7 +221,7 @@ class ButtonUI :public UI
 {
 public:
 
-	ButtonUI(Type type, UI* p, SDL_Rect r, SDL_Rect sprite, SDL_Rect spriten2, SDL_Rect spriten3, bool d, bool f, SDL_Rect d_area, int audio, int num_tooltip);
+	ButtonUI(Type type, UI* p, SDL_Rect r, SDL_Rect sprite, SDL_Rect spriten2, SDL_Rect spriten3, bool d, bool f, SDL_Rect d_area, int audio, Panel_Fade p_fade, int num_tooltip);
 
 	// Destructor
 	virtual ~ButtonUI() {}
@@ -217,7 +234,7 @@ public:
 
 	// Called before all Updates
 	bool PreUpdate();
-
+	bool Update(float dt);
 	// Called after all Updates
 	bool PostUpdate();
 
@@ -234,13 +251,14 @@ public:
 class TextInputUI :public UI
 {
 public:
-	TextInputUI(Type type, UI* p, SDL_Rect r, int re, int g, int b, int a, std::string str, bool d, bool f, SDL_Rect d_area);
+	TextInputUI(Type type, UI* p, SDL_Rect r, int re, int g, int b, int a, std::string str, bool d, bool f, SDL_Rect d_area, Panel_Fade p_fade);
 
 	// Destructor
 	virtual ~TextInputUI() {}
 
 	// Called after all Updates
 	bool PreUpdate();
+	bool Update(float dt);
 	bool PostUpdate();
 
 	void ChangeLabel(std::string text);
@@ -280,6 +298,9 @@ public:
 	// Called before all Updates
 	bool PreUpdate();
 
+	// Called before all Updates
+	bool Update(float dt);
+
 	// Called after all Updates
 	bool PostUpdate();
 
@@ -287,10 +308,11 @@ public:
 	bool CleanUp();
 
 	// Gui creation functions
-	UI* CreateUIElement(Type type, UI* p, SDL_Rect r, SDL_Rect sprite = { 0,0,0,0 }, std::string str = "", SDL_Rect sprite2 = { 0,0,0,0 }, SDL_Rect sprite3 = { 0,0,0,0 }, bool drageable = false,
+	UI* CreateUIElement(Type type, UI* p, SDL_Rect r, SDL_Rect sprite = { 0,0,0,0 }, std::string str = "", Panel_Fade p_fade = Panel_Fade::no_one_fade, SDL_Rect sprite2 = { 0,0,0,0 }, SDL_Rect sprite3 = { 0,0,0,0 }, bool drageable = false,
 		SDL_Rect drag_area = { 0,0,0,0 }, j1Module* s_listener = nullptr, int audio = 0, bool console = false, float drag_position_scroll_bar = -1, int number_atlas = 0,
 		int num_tooltip = -1);
-	UI* CreateUIElement(Type type, UI* p, SDL_Rect r, std::string str, int re, int g, int b, int a, bool drageable = false, SDL_Rect drag_area = { 0,0,0,0 }, j1Module* s_listener = nullptr);
+	UI* CreateUIElement(Type type, UI* p, SDL_Rect r, std::string str, int re, int g, int b, int a, bool drageable = false, SDL_Rect drag_area = { 0,0,0,0 }, j1Module* s_listener = nullptr, Panel_Fade p_fade = Panel_Fade::no_one_fade);
+
 	bool DeleteUIElement(UI*);
 
 	void ChangeDebug();

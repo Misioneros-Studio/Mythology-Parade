@@ -76,8 +76,8 @@ void Console::ActivateConsole()
 {
 	console_background = (ImageUI*)App->gui->CreateUIElement(Type::IMAGE, nullptr, background_pos, "", background_red, background_green, background_blue, background_alpha);
 	console_background->SetPriority(2);
-	console_log = (ListTextsUI*)App->gui->CreateUIElement(Type::LISTTEXTS, console_background, output_pos, { 0,0,0,0 }, App->logs.begin()->c_str(), { 0,0,0,0 }, { 0,0,0,0 }, true,
-		output_drag_area, nullptr, 0, true);
+	console_log = (ListTextsUI*)App->gui->CreateUIElement(Type::LISTTEXTS, console_background, output_pos, { 0,0,0,0 }, App->logs.begin()->c_str(), Panel_Fade::no_one_fade, { 0,0,0,0 }, { 0,0,0,0 }, true,
+		output_drag_area, nullptr, Panel_Fade::no_one_fade, 0, true);
 	console_log->SetPriority(2);
 	console_input = (TextInputUI*)App->gui->CreateUIElement(Type::INPUT, nullptr, input_pos, "", input_red, input_green, input_blue, input_alpha);
 	console_input->SetPriority(2);
