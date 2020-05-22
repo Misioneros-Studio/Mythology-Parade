@@ -111,6 +111,8 @@
     </ClCompile>
     <ClCompile Include="TooltipData.cpp">
       <Filter>Core\Only Data</Filter>
+    <ClCompile Include="j1TutorialScene.cpp">
+      <Filter>Core\Scenes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -242,6 +244,8 @@
     </ClInclude>
     <ClInclude Include="TooltipData.h">
       <Filter>Core\Only Data</Filter>
+    <ClInclude Include="j1TutorialScene.h">
+      <Filter>Core\Scenes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
