@@ -100,22 +100,24 @@ void j1Map::Draw()
 				int x = (a + b) / 2;
 				int y = (a - b) / 2;
 
-				if (x >= 0 && y >= 0 && x < data.width && y < data.height)
-				{
-					int tile_id = layer->Get(x, y);
-					if (tile_id > 0)
+				//if (App->fowManager->CheckTileVisibility({ x, y })) 
+				//{
+					if (x >= 0 && y >= 0 && x < data.width && y < data.height)
 					{
-						TileSet* tileset = GetTilesetFromTileId(tile_id);
+						int tile_id = layer->Get(x, y);
+						if (tile_id > 0)
+						{
+							TileSet* tileset = GetTilesetFromTileId(tile_id);
 
-						SDL_Rect r = tileset->GetTileRect(tile_id);
-						iPoint pos = MapToWorld(x, y);
+							SDL_Rect r = tileset->GetTileRect(tile_id);
+							iPoint pos = MapToWorld(x, y);
 
-						App->render->Blit(tileset->texture, pos.x, pos.y, &r);
+							App->render->Blit(tileset->texture, pos.x, pos.y, &r);
 
-						//blits++;
+							//blits++;
+						}
 					}
-				}
-
+				//}
 			}
 		}
 	}
@@ -236,6 +238,45 @@ fPoint j1Map::MapToWorld(float x, float y) const
 	}
 
 	return ret;
+}
+
+void j1Map::MapToWorld(int mapX, int mapY, int& worldX, int& worldY) const
+{
+	if (data.type == MAPTYPE_ORTHOGONAL)
+	{
+		worldX = mapX * data.tile_width;
+		worldY = mapY * data.tile_height;
+	}
+	else if (data.type == MAPTYPE_ISOMETRIC)
+	{
+		worldX = (mapX - mapY) * (data.tile_width * 0.5f);
+		worldY = (mapX + mapY) * (data.tile_height * 0.5f);
+	}
+	else
+	{
+		LOG("Unknown map type");
+		worldX = mapX; worldY = mapY;
+	}
+}
+void j1Map::WorldToMap(int worldX, int worldY, int& mapX, int& mapY) const
+{
+	if (data.type == MAPTYPE_ORTHOGONAL)
+	{
+		mapX = worldX / data.tile_width;
+		mapY = worldY / data.tile_height;
+	}
+	else if (data.type == MAPTYPE_ISOMETRIC)
+	{
+
+		float half_width = data.tile_width * 0.5f;
+		float half_height = data.tile_height * 0.5f;
+		mapX = int((worldX / half_width + worldY / half_height) / 2) - 1;
+		mapY = int((worldY / half_height - (worldX / half_width)) / 2);
+	}
+	else
+	{
+		LOG("Unknown map type");
+	}
 }
 
 iPoint j1Map::WorldToMap(int x, int y) const

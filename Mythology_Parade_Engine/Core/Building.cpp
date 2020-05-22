@@ -192,7 +192,6 @@ void Building::CreateUnitQueue(int time, std::string thing_producing)
 bool Building::Awake(pugi::xml_node& a)
 {
 
-
 	return true;
 }
 
@@ -374,7 +373,9 @@ bool Building::Update(float dt)
 		defenses += 50 * count;
 	}
 
-
+	std::vector<iPoint> tiles;
+	App->fowManager->GetTilesInsideRadius(fowRadius, position, { collisionRect.w / 2, collisionRect.h / 4}, tiles);
+	App->fowManager->ApplyMaskToTiles(fowRadius, tiles);
 
 	return ret;
 }

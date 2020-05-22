@@ -5,6 +5,9 @@
 #include "SDL/include/SDL_rect.h"
 #include "j1App.h"
 #include "j1Render.h"
+
+#include "FoWBitDefs.h"
+
 struct SDL_Texture;
 enum CivilizationType;
 
@@ -18,7 +21,7 @@ enum class EntityType
 class Entity :public j1Module
 {
 public:
-	Entity(/*EntityTypes type*/) 
+	Entity(/*EntityTypes type*/) : fowRadius(10)
 	{
 		_isSelected = false;
 	}
@@ -76,6 +79,7 @@ public:
 		return true;
 	}
 
+
 public:
 
 	EntityType type;
@@ -121,8 +125,9 @@ protected:
 	SDL_RendererFlip flipState;
 	SDL_Rect collisionRect;
 
-private:
+	int fowRadius;
 	//Conditions
 	bool _isSelected;
+
 };
 #endif // !ENTITY_H

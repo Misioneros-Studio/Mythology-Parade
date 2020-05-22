@@ -21,14 +21,14 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -82,6 +82,7 @@
     <ClCompile Include="CombatUnit.cpp" />
     <ClCompile Include="Console.cpp" />
     <ClCompile Include="EntityManager.cpp" />
+    <ClCompile Include="FoWManager.cpp" />
     <ClCompile Include="HealthSystem.cpp" />
     <ClCompile Include="CurrencySystem.cpp" />
     <ClCompile Include="HUD.cpp" />
@@ -124,6 +125,8 @@
     <ClInclude Include="Console.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="EntityManager.h" />
+    <ClInclude Include="FoWBitDefs.h" />
+    <ClInclude Include="FoWManager.h" />
     <ClInclude Include="HealthSystem.h" />
     <ClInclude Include="CurrencySystem.h" />
     <ClInclude Include="HUD.h" />

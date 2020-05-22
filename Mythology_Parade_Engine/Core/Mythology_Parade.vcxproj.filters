@@ -113,6 +113,8 @@
       <Filter>Core\Only Data</Filter>
     <ClCompile Include="j1TutorialScene.cpp">
       <Filter>Core\Scenes</Filter>
+    <ClCompile Include="FoWManager.cpp">
+      <Filter>Core\Modules</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -246,6 +248,11 @@
       <Filter>Core\Only Data</Filter>
     <ClInclude Include="j1TutorialScene.h">
       <Filter>Core\Scenes</Filter>
+    <ClInclude Include="FoWBitDefs.h">
+      <Filter>Core\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="FoWManager.h">
+      <Filter>Core\Modules</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

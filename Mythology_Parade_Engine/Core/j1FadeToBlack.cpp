@@ -59,7 +59,7 @@ bool j1FadeToBlack::PostUpdate()
 				App->logo_scene->Disable();
 				App->title_scene->Enable();
 				break;
-				
+
 			case(which_fade::title_to_scene):
 				App->title_scene->Disable();
 				App->entityManager->Enable();
@@ -67,11 +67,14 @@ bool j1FadeToBlack::PostUpdate()
 				App->scene->Enable();
 				App->scene->isInTutorial = false;
 				App->minimap->Enable();
+				App->fowManager->Enable();
+
 				break;
 			case(which_fade::scene_to_title):
 				App->entityManager->Disable();
 				App->pathfinding->Disable();
 				App->scene->Disable();
+				App->fowManager->Disable();
 				App->minimap->Disable();
 				App->title_scene->Enable();
 				break;
