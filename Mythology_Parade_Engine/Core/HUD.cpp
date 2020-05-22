@@ -531,7 +531,7 @@ void HUD::ManageActionButtons(bool create_buttons, bool viking) {
 			hud_button_actions[0] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 200,613,36,36 }, { 16,185,36,36 }, "Move", { 98,185,36,36 }, { 57,185,36,36 },
 				false, { 0,0,0,0 }, App->scene, (int)UI_Audio::MAIN_MENU, false, -1.0f, 0, (int)TooltipsAvailable::movebutton));
 			hud_button_actions[1] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 241,613,36,36 }, { 16,143,36,36 }, "Attack", { 98,143,36,36 }, { 57,143,36,36 },
-				false, { 0,0,0,0 },	App->scene, (int)UI_Audio::MAIN_MENU, false, -1.0f, 0, (int)TooltipsAvailable::attackbutton));
+				false, { 0,0,0,0 }, App->scene, (int)UI_Audio::MAIN_MENU, false, -1.0f, 0, (int)TooltipsAvailable::attackbutton));
 			if (exp_needed > cunit->GetExperience()) {
 				hud_button_actions[2] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 282,613,36,36 }, { 16,102,36,36 }, "Upgrade", { 98,102,36,36 },
 					{ 57,102,36,36 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::MAIN_MENU, false, -1.0f, 0, (int)TooltipsAvailable::levelupbutton_assassin));
@@ -654,7 +654,7 @@ void HUD::ManageActionButtons(bool create_buttons, bool viking) {
 					}
 					else {
 						hud_button_actions_unclickable[2] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, ui_ingame, { 408,612,99,52 }, { 532,256,99,52 }, "", { 0,0,0,0 },
-							{ 0,0,0,0 }, false,	{ 0,0,0,0 }, nullptr, 0, false, -1.0F, 1, (int)TooltipsAvailable::monastery));
+							{ 0,0,0,0 }, false, { 0,0,0,0 }, nullptr, 0, false, -1.0F, 1, (int)TooltipsAvailable::monastery));
 					}
 					if (player->GetFaith() >= 200 && building->buildingAction == BuildingAction::NOTHING && player->research_lawful_beast == true) {
 						hud_button_actions[7] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 200,672,67,41 }, { 363,540,67,41 }, "Produce_Lawful_Beast",
@@ -700,7 +700,7 @@ void HUD::ManageActionButtons(bool create_buttons, bool viking) {
 						hud_button_actions_unclickable[3] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, ui_ingame, { 512,621,67,41 }, { 75,678,67,41 }, "", { 0,0,0,0 },
 							{ 0,0,0,0 }, false, { 0,0,0,0 }, nullptr, 0, false, -1.0F, 1, (int)TooltipsAvailable::victorylocked));
 					}
-					else if(player->research_chaotic_victory==true){
+					else if (player->research_chaotic_victory == true) {
 						hud_button_actions_unclickable[3] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, ui_ingame, { 512,621,67,41 }, { 75,678,67,41 }, "", { 0,0,0,0 },
 							{ 0,0,0,0 }, false, { 0,0,0,0 }, nullptr, 0, false, -1.0F, 1, (int)TooltipsAvailable::victory2_unlocked));
 					}
@@ -756,8 +756,9 @@ void HUD::ManageActionButtons(bool create_buttons, bool viking) {
 			if (building->buildingStatus == BuildingStatus::FINISHED) {
 				hud_button_actions_unclickable[0] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, ui_ingame, { 200,613,67,41 }, { 337,382,67,41 }, "", { 0,0,0,0 }, { 0,0,0,0 },
 					false, { 0,0,0,0 }, nullptr, 0, false, -1.0F, 1));
+			}
 
-				/*if (building->buildingStatus == BuildingStatus::FINISHED) {
+			if (building->buildingStatus == BuildingStatus::FINISHED) {
 				if (player->GetFaith() >= 150 && building->buildingAction == BuildingAction::NOTHING && player->research_cleric == true) {
 					hud_button_actions[0] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 200,613,67,41 }, { 574,540,67,41 }, "Produce_Cleric", { 574,634,67,41 },
 						{ 574,587,67,41 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::MAIN_MENU, false, -1.0F, 1, (int)TooltipsAvailable::cleric_unlocked));
@@ -864,7 +865,7 @@ void HUD::ManageActionButtons(bool create_buttons, bool viking) {
 							hud_button_actions_unclickable[0] = nullptr;
 						}
 						hud_button_actions[0] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 200,604,99,60 }, { 2,2,99,60 }, "Produce_Temple", { 2,124,99,60 },
-							{ 2,63,99,60 },	false, { 0,0,0,0 }, App->scene, (int)UI_Audio::MAIN_MENU, false, -1.0F, 1, (int)TooltipsAvailable::temple));
+							{ 2,63,99,60 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::MAIN_MENU, false, -1.0F, 1, (int)TooltipsAvailable::temple));
 					}
 					else if (hud_button_actions_unclickable[0] == nullptr && (player->GetFaith() < 200 || player->num_temple >= 8 || player->research_temple == false)) {
 						if (hud_button_actions[0] != nullptr) {
@@ -916,7 +917,7 @@ void HUD::ManageActionButtons(bool create_buttons, bool viking) {
 							hud_button_actions[2] = nullptr;
 						}
 						hud_button_actions_unclickable[2] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, ui_ingame, { 408,612,99,52 }, { 532,321,99,52 }, "", { 0,0,0,0 },
-							{ 0,0,0,0 }, false,	{ 0,0,0,0 }, nullptr, 0, false, -1.0F, 1, (int)TooltipsAvailable::monastery));
+							{ 0,0,0,0 }, false, { 0,0,0,0 }, nullptr, 0, false, -1.0F, 1, (int)TooltipsAvailable::monastery));
 					}
 					if (hud_button_actions[7] == nullptr && player->GetFaith() >= 200 && building->buildingAction == BuildingAction::NOTHING && player->research_lawful_beast == true) {
 						if (hud_button_actions_unclickable[7] != nullptr) {
@@ -1097,7 +1098,7 @@ void HUD::ManageActionButtons(bool create_buttons, bool viking) {
 						hud_button_actions_unclickable[3] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, ui_ingame, { 512,621,67,41 }, { 75,678,67,41 }, "", { 0,0,0,0 },
 							{ 0,0,0,0 }, false, { 0,0,0,0 }, nullptr, 0, false, -1.0F, 1, (int)TooltipsAvailable::victorylocked));
 					}
-					else if(player->research_chaotic_victory==true) {
+					else if (player->research_chaotic_victory == true) {
 						hud_button_actions_unclickable[3] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, ui_ingame, { 512,621,67,41 }, { 75,678,67,41 }, "", { 0,0,0,0 },
 							{ 0,0,0,0 }, false, { 0,0,0,0 }, nullptr, 0, false, -1.0F, 1, (int)TooltipsAvailable::victory2_unlocked));
 					}
@@ -1120,7 +1121,7 @@ void HUD::ManageActionButtons(bool create_buttons, bool viking) {
 						hud_button_actions[4] = nullptr;
 					}
 					hud_button_actions_unclickable[4] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, ui_ingame, { 584,626,36,36 }, { 98,484,36,36 }, "", { 0,0,0,0 },
-						{ 0,0,0,0 }, false, { 0,0,0,0 },nullptr,0, false, -1.0f, 0, (int)TooltipsAvailable::researchbutton));
+						{ 0,0,0,0 }, false, { 0,0,0,0 }, nullptr, 0, false, -1.0f, 0, (int)TooltipsAvailable::researchbutton));
 				}
 				if (hud_button_actions[5] == nullptr && player->GetFaith() >= 300 && building->buildingAction == BuildingAction::NOTHING && player->research_lawful_miracle == true) {
 					if (hud_button_actions_unclickable[5] != nullptr) {
@@ -1251,7 +1252,7 @@ void HUD::ManageActionButtons(bool create_buttons, bool viking) {
 						App->gui->DeleteUIElement(hud_button_actions[2]);
 						hud_button_actions[2] = nullptr;
 					}
-					hud_button_actions_unclickable[2] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, ui_ingame, { 344,613,67,41 }, { 146,678,67,41 }, "", { 0,0,0,0 }, 
+					hud_button_actions_unclickable[2] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, ui_ingame, { 344,613,67,41 }, { 146,678,67,41 }, "", { 0,0,0,0 },
 						{ 0,0,0,0 }, false, { 0,0,0,0 }, nullptr, 0, false, -1.0F, 1, (int)TooltipsAvailable::producecurrencybutton));
 				}
 			}
@@ -1288,6 +1289,7 @@ void HUD::ManageActionButtons(bool create_buttons, bool viking) {
 			break;
 		}
 		}
+
 	}
 }
 
@@ -1373,60 +1375,17 @@ void HUD::ActivateResearchMenu() {
 		App->win->GetWindowSize(w, h);
 		ui_pause_black_screen[1] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, nullptr, { 0,0,(int)w,(int)h }, "", 0, 0, 0, 150));
 		research_menu->ActivateResearchMenu();
-		/*
-		ui_research_window = static_cast<WindowUI*>(App->gui->CreateUIElement(Type::WINDOW, nullptr, { 410,200,459,268 }, { 790,408,459,168 }));
-		ui_button_research[0] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_research_window, { 520,400,237,38 }, { 787,240,237,38 }, "CLOSE RESEARCH", { 787,342,237,38 },
-			{ 787,291,237,38 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::CLOSE));
-		ui_text_research[0] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 619,412,237,38 }, { 0,0,100,100 }, "Close", { 0,0,0,255 }));
-		ui_text_research[1] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 583,212,237,38 }, { 0,0,100,100 }, "RESEARCH", { 255,255,255,255 }, { 1,0,0,0 }));
-		if (research_monastery == false) {
-			ui_button_research[1] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_research_window, { 580,340,117,24 }, { 834, 125, 117, 24 }, "RESEARCH MONASTERY",
-				{ 834,149,117,24 }, { 834,101,117,24 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::CLOSE));
-			ui_text_research[2] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 609,345,237,38 }, { 0,0,100,100 }, "Research", { 0,0,0,255 }));
-			ui_text_research[3] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 600,272,237,38 }, { 0,0,100,100 }, "MONASTERY", { 255,255,255,255 }));
-			ui_text_research[4] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 513,307,237,38 }, { 0,0,100,100 }, "Produces monks, sacrifices and prayers",
-				{ 255,255,255,255 }));
-		}
-		else if (research_encampment == false || research_temple == false) {
-			if (research_encampment == false && research_temple == false) {
-				ui_button_research[1] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_research_window, { 450,340,117,24 }, { 834, 125, 117, 24 }, "RESEARCH ENCAMPMENT",
-					{ 834,149,117,24 }, { 834,101,117,24 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::CLOSE));
-				ui_text_research[2] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 479,345,237,38 }, { 0,0,100,100 }, "Research", { 0,0,0,255 }));
-				ui_text_research[3] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 465,272,237,38 }, { 0,0,100,100 }, "ENCAMPMENT", { 255,255,255,255 }));
-				ui_text_research[4] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 446,307,237,38 }, { 0,0,100,100 }, "Produces assassins", { 255,255,255,255 }));
-				ui_button_research[2] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_research_window, { 710,340,117,24 }, { 834, 125, 117, 24 }, "RESEARCH TEMPLE",
-					{ 834,149,117,24 }, { 834,101,117,24 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::CLOSE));
-				ui_text_research[5] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 739,345,237,38 }, { 0,0,100,100 }, "Research", { 0,0,0,255 }));
-				ui_text_research[6] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 745,272,237,38 }, { 0,0,100,100 }, "TEMPLE", { 255,255,255,255 }));
-				ui_text_research[7] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 673,307,237,38 }, { 0,0,100,100 }, "Useless in the vertical slice",
-					{ 255,255,255,255 }));
-			}
-			else if (research_encampment == false) {
-				ui_button_research[1] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_research_window, { 580,340,117,24 }, { 834, 125, 117, 24 }, "RESEARCH ENCAMPMENT",
-					{ 834,149,117,24 }, { 834,101,117,24 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::CLOSE));
-				ui_text_research[2] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 609,345,237,38 }, { 0,0,100,100 }, "Research", { 0,0,0,255 }));
-				ui_text_research[3] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 595,272,237,38 }, { 0,0,100,100 }, "ENCAMPMENT", { 255,255,255,255 }));
-				ui_text_research[4] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 576,307,237,38 }, { 0,0,100,100 }, "Produces assassins", { 255,255,255,255 }));
-			}
-			else {
-				ui_button_research[1] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_research_window, { 580,340,117,24 }, { 834, 125, 117, 24 }, "RESEARCH TEMPLE",
-					{ 834,149,117,24 }, { 834,101,117,24 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::CLOSE));
-				ui_text_research[2] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 609,345,237,38 }, { 0,0,100,100 }, "Research", { 0,0,0,255 }));
-				ui_text_research[3] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 615,272,237,38 }, { 0,0,100,100 }, "TEMPLE", { 255,255,255,255 }));
-				ui_text_research[4] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 553,307,237,38 }, { 0,0,100,100 }, "Useless in the vertical slice",
-					{ 255,255,255,255 }));
-			}
-		}
-		*/
-
 	}
 }
 
 //Called when clicking close button in the research menu
-void HUD::DeactivateResearchMenu() {
-	if (research_menu->CheckReasearchWindow() == true) {
+void HUD::DeactivateResearchMenu() 
+{
+	if (research_menu->CheckReasearchWindow() == true) 
+	{
 		research_menu->DeactivateResearchMenu();
-		if (ui_pause_black_screen[1] != nullptr) {
+		if (ui_pause_black_screen[1] != nullptr) 
+		{
 			App->gui->DeleteUIElement(ui_pause_black_screen[1]);
 			ui_pause_black_screen[1] = nullptr;
 		}
