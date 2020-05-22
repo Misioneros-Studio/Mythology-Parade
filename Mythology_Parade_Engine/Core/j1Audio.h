@@ -70,7 +70,6 @@ private:
 	_Mix_Music*			music = NULL;
 	int sfxList[MAX_SFX];
 	std::list<Mix_Chunk*>	fx;
-	float MusicVolume;
 
 	j1Timer a_timer;
 	float a_total_time;
