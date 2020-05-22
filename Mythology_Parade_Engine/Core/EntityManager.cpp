@@ -532,15 +532,14 @@ void EntityManager::SetBuildIndex(int index)
 }
 
 //Called when deleting a new Entity
-bool EntityManager::DeleteEntity(Entity* e)
+void EntityManager::DeleteEntity(Entity* e)
 {
 	if (e != nullptr) 
 	{
 		entities[e->type].remove(e);
 		delete e;
-		return true;
+		e = nullptr;
 	}
-	return false;
 }
 
 void EntityManager::UpdateBuildPreview(int index) 
