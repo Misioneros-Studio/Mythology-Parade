@@ -7,7 +7,7 @@
     <line2>a lot of resources and productivity, use</line2>
     <line3>them to produce units, prayers or</line3>
     <line4>sacrifices.</line4>
-    <line5>Cost -200 faith-	Prod. Time -3’00 min-</line5>
+    <line5>Cost -200 faith-	Prod. Time -3:00 min-</line5>
     <line6>Defense 250</line6>
     <line7>Influence +10/5s</line7>
     <line8>Damage 15</line8>
@@ -20,7 +20,7 @@
     <line3>suicide. If wandering in a certain</line3>
     <line4>radius od a monastery it increase the</line4>
     <line5>total faith/s generation by 0'5.</line5>
-    <line6>Cost -20 faith-	Prod. Time -1’30 min-</line6>
+    <line6>Cost -20 faith-	Prod. Time -1:30 min-</line6>
     <line7>Health 1</line7>
   </monk>
 
@@ -34,7 +34,7 @@
     <line6>Defense 200</line6>
     <line7>Influence +10/5s</line7>
     <line8>Damage 15</line8>
-    <line9>Research time -1'30 min-</line9>
+    <line9>Research time -1:30 min-</line9>
   </temple_unresearched>
 
   <temple>
@@ -44,7 +44,7 @@
     <line3>attacks. The temple will also apply pressure</line3>
     <line4>in others religions buildings in a certain</line4>
     <line5>radio making it decrease a 10% each second.</line5>
-    <line6>Cost -200 faith-	Prod. Time -2’30 min-</line6>
+    <line6>Cost -200 faith-	Prod. Time -2:30 min-</line6>
     <line7>Defense 200</line7>
     <line8>Influence +10/5s</line8>
     <line9>Damage 15</line9>
@@ -58,7 +58,7 @@
     <line4>Defense 350</line4>
     <line5>Influence +10/5s</line5>
     <line6>Damage 20</line6>
-    <line7>Research time -1'30 min-</line7>
+    <line7>Research time -1:30 min-</line7>
   </encampment_unresearched>
 
   <encampment>
@@ -66,7 +66,7 @@
     <line1>Build an encampment to create combat units. It</line1>
     <line2>will return a certain damage when receiving</line2>
     <line3>attacks.</line3>
-    <line4>Cost -200 faith-	Prod. Time -3'00 min-</line4>
+    <line4>Cost -200 faith-	Prod. Time -3:00 min-</line4>
     <line5>Defense 350</line5>
     <line6>Influence +10/5s</line6>
     <line7>Damage 20</line7>
@@ -82,7 +82,7 @@
     <line6>enough, you need at least 10 lawful</line6>
     <line7>points(prayers) to unlock this unit.</line7>
     <line8>Health 100</line8>
-    <line9>Research time -1'10 min-</line9>
+    <line9>Research time -1:10 min-</line9>
   </cleric_locked>
 
   <cleric_unresearched>
@@ -91,9 +91,9 @@
     <line2>around the walls of a city decreasing the</line2>
     <line3>influence of the city’s religion by 5% each</line3>
     <line4>second.</line4>
-    <line5>Cost -150 faith-	Prod. Time -1'30 min-</line5>
+    <line5>Cost -150 faith-	Prod. Time -1:30 min-</line5>
     <line6>Health 100</line6>
-    <line7>Research time -1'10 min-</line7>
+    <line7>Research time -1:10 min-</line7>
   </cleric_unresearched>
 
   <cleric_unlocked>
@@ -102,7 +102,7 @@
     <line2>around the walls of a city decreasing the</line2>
     <line3>influence of the city’s religion by 5% each</line3>
     <line4>second.</line4>
-    <line5>Cost -150 faith-	Prod. Time -1'30 min-</line5>
+    <line5>Cost -150 faith-	Prod. Time -1:30 min-</line5>
     <line6>Health 100</line6>
   </cleric_unlocked>
 
@@ -117,7 +117,7 @@
     <line7>Damage 15</line7>
     <line8>Range 1</line8>
     <line9>Speed 4</line9>
-    <line10>Research time -1'10 min-</line10>
+    <line10>Research time -1:10 min-</line10>
   </assassin_locked>
 
   <assassin_unresearched>
@@ -129,14 +129,14 @@
     <line5>Damage 15</line5>
     <line6>Range 1</line6>
     <line7>Speed 4</line7>
-    <line8>Research time -1'10 min-</line8>
+    <line8>Research time -1:10 min-</line8>
   </assassin_unresearched>
 
   <assassin_unlocked>
     <title>Assassin</title>
     <line1>A quick and tricky unit specialized in</line1>
     <line2>assassination of weak troops.</line2>
-    <line3>Cost -100 faith-	Prod. Time -1'30 min-</line3>
+    <line3>Cost -100 faith-	Prod. Time -1:30 min-</line3>
     <line4>Health 100</line4>
     <line5>Damage 15</line5>
     <line6>Range 1</line6>
@@ -154,7 +154,7 @@
    <line7>enough, you need at least 20 lawful</line7>
    <line8>points(prayers) to unlock this unit.</line8>
    <line9>Health 150</line9>
-   <line10>Research time -3'30 min-</line10>
+   <line10>Research time -3:30 min-</line10>
   </cyclop_locked>
 
   <cyclop_unresearched>
@@ -164,9 +164,9 @@
    <line3>people.This creature will protect your</line3>
    <line4>city from the attacks raising its defense</line4>
    <line5>by 50 in a determined area.</line5>
-   <line6>Cost -200 faith-	Prod. Time -2'00 min-</line6>
+   <line6>Cost -200 faith-	Prod. Time -2:00 min-</line6>
    <line7>Health 150</line7>
-   <line8>Research time -3'30 min-</line8>
+   <line8>Research time -3:30 min-</line8>
   </cyclop_unresearched>
 
   <cyclop_unlocked>
@@ -176,7 +176,7 @@
    <line3>people.This creature will protect your</line3>
    <line4>city from the attacks raising its defense</line4>
    <line5>by 50 in a determined area.</line5>
-   <line6>Cost -200 faith-	Prod. Time -2'00 min-</line6>
+   <line6>Cost -200 faith-	Prod. Time -2:00 min-</line6>
    <line7>Health 150</line7>
   </cyclop_unlocked>
 
@@ -193,7 +193,7 @@
     <line9>enough, you need at least 20 lawful</line9>
     <line10>points(prayers) to unlock this unit.</line10>
     <line11>Health 150</line11>
-    <line12>Research time -3'30 min-</line12>
+    <line12>Research time -3:30 min-</line12>
   </jotnar_locked>
 
   <jotnar_unresearched>
@@ -205,9 +205,9 @@
      <line5>protect your city from the attacks</line5>
      <line6>raising its defense by 50 in a certain</line6>
      <line7>area.</line7>
-     <line8>Cost -200 faith-	Prod. Time -2'00 min-</line8>
+     <line8>Cost -200 faith-	Prod. Time -2:00 min-</line8>
      <line9>Health 150</line9>
-     <line10>Research time -3'30 min-</line10>
+     <line10>Research time -3:30 min-</line10>
   </jotnar_unresearched>
 
   <jotnar_unlocked>
@@ -219,7 +219,7 @@
      <line5>protect your city from the attacks</line5>
      <line6>raising its defense by 50 in a certain</line6>
      <line7>area.</line7>
-     <line8>Cost -200 faith-	Prod. Time -2'00 min-</line8>
+     <line8>Cost -200 faith-	Prod. Time -2:00 min-</line8>
      <line9>Health 150</line9>
   </jotnar_unlocked>
 
@@ -233,7 +233,7 @@
     <line6>enough, you need at least 20 chaotic</line6>
     <line7>points(sacrifices) to unlock this unit.</line7>
     <line8>Health 40</line8>
-    <line9>Research time -3'30 min-</line9>
+    <line9>Research time -3:30 min-</line9>
   </minotaur_locked>
 
   <minotaur_unresearched>
@@ -242,9 +242,9 @@
     <line2>is a violent monster that will attack the</line2>
     <line3>enemy troops decreasing all enemy</line3>
     <line4>units health by 20 in a certain area.</line4>
-    <line5>Cost -200 faith-	Prod. Time -2'00 min-</line5>
+    <line5>Cost -200 faith-	Prod. Time -2:00 min-</line5>
     <line6>Health 40</line6>
-    <line7>Research time -3'30 min-</line7>
+    <line7>Research time -3:30 min-</line7>
   </minotaur_unresearched>
 
   <minotaur_unlocked>
@@ -253,7 +253,7 @@
     <line2>is a violent monster that will attack the</line2>
     <line3>enemy troops decreasing all enemy</line3>
     <line4>units health by 20 in a certain area.</line4>
-    <line5>Cost -200 faith-	Prod. Time -2'00 min-</line5>
+    <line5>Cost -200 faith-	Prod. Time -2:00 min-</line5>
     <line6>Health 40</line6>
   </minotaur_unlocked>
 
@@ -267,7 +267,7 @@
     <line6>enough, you need at least 20 chaotic</line6>
     <line7>points(sacrifices) to unlock this unit.</line7>
     <line8>Health 40</line8>
-    <line9>Research time -3'30 min-</line9>
+    <line9>Research time -3:30 min-</line9>
   </draugar_locked>
 
   <draugar_unresearched>
@@ -276,9 +276,9 @@
     <line2>vengeance and will kill without meaning</line2>
     <line3>use them to decrease all enemy units</line3>
     <line4>health by 20 in a certain area.</line4>
-    <line5>Cost -200 faith-	Prod. Time -2'00 min-</line5>
+    <line5>Cost -200 faith-	Prod. Time -2:00 min-</line5>
     <line6>Health 40</line6>
-    <line9>Research time -3'30 min-</line9>
+    <line9>Research time -3:30 min-</line9>
   </draugar_unresearched>
 
   <draugar_unlocked>
@@ -287,7 +287,7 @@
     <line2>vengeance and will kill without meaning</line2>
     <line3>use them to decrease all enemy units</line3>
     <line4>health by 20 in a certain area.</line4>
-    <line5>Cost -200 faith-	Prod. Time -2'00 min-</line5>
+    <line5>Cost -200 faith-	Prod. Time -2:00 min-</line5>
     <line6>Health 40</line6>
   </draugar_unlocked>
 
@@ -302,7 +302,7 @@
      <line7>points(sacrifices) to unlock this unit.</line7>
      <line8>+3 sacrifices</line8>
      <line9>-3 prayers</line9>
-     <line10>Research time -5'00 min-</line10>
+     <line10>Research time -5:00 min-</line10>
   </disaster_locked>
 
   <disaster_unresearched>
@@ -313,7 +313,7 @@
      <line4>your opponent.</line4>
      <line5>+3 sacrifices</line5>
      <line6>-3 prayers</line6>
-     <line7>Research time -5'00 min-</line7>
+     <line7>Research time -5:00 min-</line7>
   </disaster_unresearched>
 
   <disaster_unlocked>
@@ -337,7 +337,7 @@
      <line7>points(prayers) to unlock this unit.</line7>
      <line8>+3 prayers</line8>
      <line9>-3 sacrifices</line9>
-     <line10>Research time -5'00 min-</line10>
+     <line10>Research time -5:00 min-</line10>
   </miracle_locked>
 
   <miracle_unresearched>
@@ -348,7 +348,7 @@
      <line4>you domain an enemy's entire encampment.</line4>
      <line5>+3 sacrifices</line5>
      <line6>-3 prayers</line6>
-     <line7>Research time -5'00 min-</line7>
+     <line7>Research time -5:00 min-</line7>
   </miracle_unresearched>
   
   <miracle_unlocked>
@@ -371,7 +371,7 @@
     <line6>enough, you need at least 50 lawful</line6>
     <line7>points(prayers) to unlock this.</line7>
     <line8>Cost -600 faith-</line8>
-    <line9>Research time -7'00 min-</line9>
+    <line9>Research time -7:00 min-</line9>
   </victory1_locked>
 
   <victory1_unresearched>
@@ -381,7 +381,7 @@
     <line3>just have to claim your reward for</line3>
     <line4>all the effort.</line4>
     <line5>Cost -600 faith-</line5>
-    <line6>Research time -7'00 min-</line6>
+    <line6>Research time -7:00 min-</line6>
   </victory1_unresearched>
 
   <victory1_unlocked>
@@ -403,7 +403,7 @@
     <line6>enough, you need at least 50 chaotic</line6>
     <line7>points(sacrifices) to unlock this.</line7>
     <line8>Cost -600 faith-</line8>
-    <line9>Research time -7'00 min-</line9>
+    <line9>Research time -7:00 min-</line9>
   </victory2_locked>
 
   <victory2_unresearched>
@@ -413,7 +413,7 @@
     <line3>just have to claim your reward for</line3>
     <line4>all the effort.</line4>
     <line5>Cost -600 faith-</line5>
-    <line6>Research time -7'00 min-</line6>
+    <line6>Research time -7:00 min-</line6>
   </victory2_unresearched>
 
   <victory2_unlocked>
