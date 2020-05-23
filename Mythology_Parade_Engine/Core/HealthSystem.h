@@ -34,6 +34,10 @@ public:
 
 	void SetHealth(int value);
 
+	void SetMaxUnitHealth();
+
+	void DivideHealth();
+
 };
 
 #endif // !__HEALTHSYSTEM_H__

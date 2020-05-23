@@ -92,6 +92,10 @@ public:
 	uint Lose_sound;
 
 	bool isInTutorial;
+
+public:
+	bool nextUnit_selected;
+
 };
 
 #endif // __j1SCENE_H__

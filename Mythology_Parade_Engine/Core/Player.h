@@ -28,6 +28,7 @@ public:
 	void ClickLogic();
 	std::list<Entity*> GetEntitiesSelected();
 	Building* GetSelectedBuild();
+	void ActionToUnit();
 
 	int GetFaith();
 	int GetPrayers();

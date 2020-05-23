@@ -31,6 +31,7 @@ j1Scene::j1Scene() : j1Module()
 	name.append("scene");
 	winlose_tex = nullptr;
 	clickToPath = false;
+	nextUnit_selected = false;
 }
 
 // Destructor
@@ -681,7 +682,8 @@ void j1Scene::OnClick(UI* element, float argument)
 		}
 		else if (element->name == "Heal")
 		{
-		//BERNAT
+			App->entityManager->DeleteEntity(hud->thing_selected);
+			nextUnit_selected = true;
 		}
 		else if (element->name == "Produce_Cleric")
 		{

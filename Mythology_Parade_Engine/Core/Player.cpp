@@ -164,6 +164,7 @@ void Player::SelectionDraw_Logic()
 			buildingSelect = nullptr;
 			ClickLogic();
 			SeeEntitiesInside();
+			ActionToUnit();
 			App->scene->hud->HUDUpdateSelection(listEntities, (Building*)buildingSelect);
 		}
 	}
@@ -177,6 +178,16 @@ std::list<Entity*> Player::GetEntitiesSelected()
 Building* Player::GetSelectedBuild()
 {
 	return (Building*) buildingSelect;
+}
+
+void Player::ActionToUnit()
+{
+	if (listEntities.size() == 1 && App->scene->nextUnit_selected)
+	{
+		Unit* unit = static_cast<Unit*>(listEntities.begin()._Ptr->_Myval);
+		unit->SetMaxUnitHealth();
+		App->scene->nextUnit_selected = false;
+	}
 }
 
 void Player::SeeEntitiesInside()
@@ -267,6 +278,20 @@ void Player::PlayerInputs()
 				ent = it._Ptr->_Myval;
 				ent->displayDebug = displayDebug;
 			}
+		}
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_Y) == KEY_DOWN && App->scene->godMode)
+	{
+		if (!listEntities.empty())
+		{
+			std::list<Entity*>::iterator it = listEntities.begin();
+			for (it; it != listEntities.end(); ++it)
+			{
+				Unit* unit = static_cast<Unit*>(it._Ptr->_Myval);
+				unit->DivideHealth();
+			}
+			listEntities.clear();
 		}
 	}
 }
