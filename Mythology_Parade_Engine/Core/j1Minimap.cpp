@@ -131,6 +131,15 @@ bool j1Minimap::PostUpdate() {
 		}
 	}
 	
+	for (int x = 0; x < App->map->data.width; x++) {
+		for (int y = 0; y < App->map->data.height; y++) {
+			if ((!App->fowManager->CheckTileVisibility({ x,y }))) {
+				fPoint world_pos = App->map->MapToWorld(x, y);
+				iPoint minimap_pos = WorldToMinimap((int)world_pos.x, (int)world_pos.y);
+				App->render->DrawQuad({ minimap_pos.x,minimap_pos.y,1,1 }, 0, 0, 0, 255, true, false);
+			}
+		}
+	}
 	return true;
 }
 
