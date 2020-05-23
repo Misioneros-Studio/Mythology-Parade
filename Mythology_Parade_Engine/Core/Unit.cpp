@@ -5,6 +5,7 @@
 #include"CombatUnit.h"
 #include "j1Gui.h"
 #include"j1ParticleManager.h"
+#include "j1Minimap.h"
 
 
 Unit::Unit(UnitType type, iPoint pos): unitType(type), state(AnimationType::IDLE),  moveSpeed(60)
@@ -185,6 +186,7 @@ bool Unit::Update(float dt)
 	else if (damage_timer.isPaused() == true && App->scene->paused_game == false)
 		damage_timer.Resume();
 	if (damaged_now == true) {
+		App->minimap->EntityAttacked(this);
 		damage_timer.Start();
 		damaged_now = false;
 		show_bar_for_damage = true;

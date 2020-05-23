@@ -13,6 +13,7 @@ enum class Corner {
 };
 
 
+class Entity;
 class j1Minimap : public j1Module {
 public:
 	j1Minimap();
@@ -26,6 +27,7 @@ public:
 	bool CreateMinimap();
 	iPoint WorldToMinimap(int x, int y);
 	iPoint ScreenToMinimapToWorld(int x, int y);
+	void EntityAttacked(Entity*);
 
 public:
 	iPoint position;
@@ -33,6 +35,8 @@ public:
 	int height;
 	float scale;
 	SDL_Texture* texture;
+	bool show_damage_area;
+	iPoint damage_area;
 private:
 	int map_width;
 	int map_height;
@@ -43,6 +47,7 @@ private:
 	bool reset_timer_fow;
 	bool update_minimap_fow;
 	SDL_Texture* texture_fow;
+
 };
 
 #endif // !_j1MINIMAP_H

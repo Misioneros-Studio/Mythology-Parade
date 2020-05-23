@@ -132,6 +132,12 @@ bool j1Gui::PostUpdate()
 	if(App->minimap->active==true)
 		App->render->DrawQuad({ rect_position.x, rect_position.y, (int)(App->render->camera.w * App->minimap->scale),(int)(App->render->camera.h * App->minimap->scale) }, 255, 255, 255, 255, 
 			false, false);
+	if (App->minimap->show_damage_area == true) {
+		App->minimap->show_damage_area = false;
+		minimap_feedback_timer.Start();
+	}
+	if(minimap_feedback_timer.ReadSec()<=1)
+		App->render->DrawQuad({ App->minimap->damage_area.x - 5,App->minimap->damage_area.y - 5,10,10 }, 255, 255, 0, 255, false, false);
 
 
 	//Show cursor ------------------------------

@@ -1,5 +1,6 @@
 #include "Building.h"
 #include "p2Log.h"
+#include "j1Minimap.h"
 Building::Building(BuildingType type, iPoint pos, BuildingInfo info)
 {
 	//default inits with none value
@@ -226,6 +227,7 @@ bool Building::Update(float dt)
 	if (percentage_life < 0)
 		percentage_life = 0;
 	if (damaged_now == true) {
+		App->minimap->EntityAttacked(this);
 		damage_timer.Start();
 		damaged_now = false;
 		show_bar_for_damage = true;

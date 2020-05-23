@@ -16,6 +16,7 @@ j1Minimap::j1Minimap() : j1Module() {
 	minimap_test_rect = { 0,0,4,4 };
 	update_minimap_fow = true;
 	reset_timer_fow = true;
+	show_damage_area = false;
 }
 
 j1Minimap::~j1Minimap() {
@@ -256,4 +257,19 @@ iPoint j1Minimap::ScreenToMinimapToWorld(int x, int y) {
 	minimap_position.y = (y - position.y) / scale;
 
 	return minimap_position;
+}
+
+void j1Minimap::EntityAttacked(Entity* entity)
+{
+	if (show_damage_area == false) {
+		//if (entity->civilization == App->entityManager->getPlayer()->civilization) {
+			fPoint pos = entity->position;
+			SDL_Rect cam = App->render->camera;
+			iPoint screen_pos=App->render->WorldToScreen((int)pos.x, (int)pos.y);
+			if (screen_pos.x<0 || screen_pos.x>cam.w || screen_pos.y<0 || screen_pos.y>cam.h) {
+				show_damage_area = true;
+				damage_area = WorldToMinimap( (int)pos.x,(int)pos.y);
+			}
+		//}
+	}
 }
