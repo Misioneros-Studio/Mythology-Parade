@@ -1,26 +1,35 @@
 <?xml version="1.0"?>
 <info>
 	<entities>
-		<unit type="monk" position_x="2304" position_y="2240" civilization="greek" health="1" />
+		<unit type="cyclop" position_x="2432" position_y="2144" civilization="greek" health="150" level="0" />
+		<unit type="draugar" position_x="2176" position_y="2144" civilization="greek" health="40" level="0" />
+		<unit type="draugar" position_x="2368" position_y="2176" civilization="greek" health="40" level="369098752" />
+		<unit type="cyclop" position_x="2240" position_y="2176" civilization="greek" health="130" level="369098752" />
+		<unit type="cyclop" position_x="2400" position_y="2192" civilization="greek" health="150" level="369098752" />
+		<unit type="draugar" position_x="2464" position_y="2224" civilization="greek" health="40" level="0" />
+		<unit type="monk" position_x="2304" position_y="2240" civilization="greek" health="-19" />
+		<unit type="draugar" position_x="2624" position_y="2240" civilization="greek" health="40" level="0" />
+		<unit type="draugar" position_x="2208" position_y="2256" civilization="greek" health="20" level="0" />
+		<unit type="cyclop" position_x="2432" position_y="2304" civilization="greek" health="150" level="0" />
+		<unit type="cyclop" position_x="2624" position_y="2304" civilization="greek" health="150" level="0" />
 		<unit type="monk" position_x="2976" position_y="2320" civilization="viking" health="1" />
-		<unit type="assassin" position_x="2304" position_y="2336" civilization="greek" health="100" level="0" />
+		<unit type="draugar" position_x="2400" position_y="2320" civilization="greek" health="40" level="0" />
+		<unit type="assassin" position_x="2304" position_y="2336" civilization="greek" health="80" level="0" />
+		<unit type="cyclop" position_x="2048" position_y="2336" civilization="greek" health="150" level="0" />
 		<unit type="assassin" position_x="2976" position_y="2384" civilization="viking" health="100" level="0" />
-		<unit type="monk" position_x="2496" position_y="2400" civilization="greek" health="1" />
-		<unit type="monk" position_x="2368" position_y="2432" civilization="greek" health="1" />
-		<unit type="monk" position_x="2272" position_y="2448" civilization="greek" health="1" />
-		<unit type="monk" position_x="2048" position_y="2464" civilization="greek" health="1" />
-		<unit type="monk" position_x="2112" position_y="2464" civilization="greek" health="1" />
-		<unit type="monk" position_x="2176" position_y="2464" civilization="greek" health="1" />
+		<unit type="cyclop" position_x="2208" position_y="2384" civilization="greek" health="130" level="0" />
+		<unit type="draugar" position_x="2048" position_y="2400" civilization="greek" health="20" level="-2147476224" />
+		<unit type="draugar" position_x="2496" position_y="2432" civilization="greek" health="20" level="0" />
+		<unit type="draugar" position_x="2240" position_y="2464" civilization="greek" health="20" level="0" />
+		<unit type="cyclop" position_x="2400" position_y="2480" civilization="greek" health="130" level="0" />
 	</entities>
 	<buildings>
 		<build type="fortress" position_x="3200" position_y="2288" civilization="viking" health="500" status="finished" action="nothing" />
 		<build type="fortress" position_x="1920" position_y="2288" civilization="greek" health="500" status="finished" action="nothing" />
-		<build type="monastery" position_x="1696" position_y="2336" civilization="greek" health="250" status="finished" action="nothing" />
-		<build type="monastery" position_x="1920" position_y="2448" civilization="greek" health="250" status="finished" action="nothing" />
 	</buildings>
 	<players>
 		<greek>
-			<economy faith="691" prayers="460" sacrifices="460" />
+			<economy faith="504" prayers="0" sacrifices="0" />
 			<research>
 				<temple research="false" />
 				<encampment research="false" />
@@ -36,5 +45,5 @@
 		</greek>
 	</players>
 	<volume music="50" fx="128" />
-	<camera x="-1258" y="-2000" />
+	<camera x="-1683" y="-2000" />
 </info>
