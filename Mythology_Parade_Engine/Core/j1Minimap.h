@@ -42,6 +42,7 @@ private:
 	j1Timer timer_fow;
 	bool reset_timer_fow;
 	bool update_minimap_fow;
+	SDL_Texture* texture_fow;
 };
 
 #endif // !_j1MINIMAP_H

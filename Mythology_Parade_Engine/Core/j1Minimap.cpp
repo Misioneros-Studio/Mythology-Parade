@@ -142,24 +142,37 @@ bool j1Minimap::PostUpdate() {
 	}
 	
 	if (update_minimap_fow == true) {
+		SDL_DestroyTexture(texture_fow);
+		uint win_w, win_h;
+		App->win->GetWindowSize(win_w, win_h);
+		texture_fow = SDL_CreateTexture(App->render->renderer, SDL_GetWindowPixelFormat(App->win->window), SDL_TEXTUREACCESS_TARGET, 1.05f * width, 1.05f * height);
+		SDL_SetTextureBlendMode(texture_fow, SDL_BLENDMODE_BLEND);
+		SDL_SetRenderTarget(App->render->renderer, texture_fow);
+		SDL_SetRenderDrawColor(App->render->renderer, 0, 0, 0, 0);
+		SDL_RenderFillRect(App->render->renderer, NULL);
 		for (int x = 0; x < App->map->data.width; x++) {
 			for (int y = 0; y < App->map->data.height; y++) {
 				if ((!App->fowManager->CheckTileVisibility({ x,y }))) {
-					fPoint world_pos = App->map->MapToWorld(x, y);
-					iPoint minimap_pos = WorldToMinimap((int)world_pos.x, (int)world_pos.y);
+					int mid_width = width / 2;
+					float width_calculated = (float)mid_width / (float)(App->map->data.width);
+					float height_calculated = (float)height / (float)(App->map->data.height*2);
+					int x2 = mid_width + ((x - y) * width_calculated);
+					int y2 = (x + y)*height_calculated;
+					
 					if ((!App->fowManager->CheckTileVisibilityWithoutCountingShroud({ x,y }))) {
-						App->render->DrawQuad({ minimap_pos.x,minimap_pos.y,1,1 }, 0, 0, 0, 255, true, false);
+						App->render->DrawQuad({ x2,y2,1,1 }, 0, 0, 0, 255, true, false);
 					}
 					else {
-						App->render->DrawQuad({ minimap_pos.x,minimap_pos.y,1,1 }, 0, 0, 0, 50, true, false);
+						App->render->DrawQuad({ x2,y2,1,1 }, 0, 0, 0, 50, true, false);
 					}
 				}
 			}
 		}
+		SDL_SetRenderTarget(App->render->renderer, NULL);
 		update_minimap_fow = false;
 	}
 
-
+	App->render->Blit(texture_fow, position.x, position.y, NULL, 0.0, 0);
 
 	return true;
 }
@@ -225,6 +238,7 @@ bool j1Minimap::CreateMinimap() {
 bool j1Minimap::CleanUp() 
 {
 	SDL_DestroyTexture(texture);
+	SDL_DestroyTexture(texture_fow);
 	return true;
 }
 
