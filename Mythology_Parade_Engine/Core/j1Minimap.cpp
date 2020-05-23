@@ -262,7 +262,7 @@ iPoint j1Minimap::ScreenToMinimapToWorld(int x, int y) {
 void j1Minimap::EntityAttacked(Entity* entity)
 {
 	if (show_damage_area == false) {
-		//if (entity->civilization == App->entityManager->getPlayer()->civilization) {
+		if (entity->civilization == App->entityManager->getPlayer()->civilization) {
 			fPoint pos = entity->position;
 			SDL_Rect cam = App->render->camera;
 			iPoint screen_pos=App->render->WorldToScreen((int)pos.x, (int)pos.y);
@@ -270,6 +270,6 @@ void j1Minimap::EntityAttacked(Entity* entity)
 				show_damage_area = true;
 				damage_area = WorldToMinimap( (int)pos.x,(int)pos.y);
 			}
-		//}
+		}
 	}
 }
