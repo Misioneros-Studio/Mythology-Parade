@@ -136,7 +136,12 @@ bool j1Minimap::PostUpdate() {
 			if ((!App->fowManager->CheckTileVisibility({ x,y }))) {
 				fPoint world_pos = App->map->MapToWorld(x, y);
 				iPoint minimap_pos = WorldToMinimap((int)world_pos.x, (int)world_pos.y);
-				App->render->DrawQuad({ minimap_pos.x,minimap_pos.y,1,1 }, 0, 0, 0, 255, true, false);
+				if ((!App->fowManager->CheckTileVisibilityWithoutCountingShroud({ x,y }))) {
+					App->render->DrawQuad({ minimap_pos.x,minimap_pos.y,1,1 }, 0, 0, 0, 255, true, false);
+				}
+				else {
+					App->render->DrawQuad({ minimap_pos.x,minimap_pos.y,1,1 }, 0, 0, 0, 50, true, false);
+				}
 			}
 		}
 	}
