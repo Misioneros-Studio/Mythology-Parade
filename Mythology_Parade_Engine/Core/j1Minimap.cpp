@@ -14,6 +14,8 @@ j1Minimap::j1Minimap() : j1Module() {
 
 	texture = nullptr;
 	minimap_test_rect = { 0,0,4,4 };
+	update_minimap_fow = true;
+	reset_timer_fow = true;
 }
 
 j1Minimap::~j1Minimap() {
@@ -87,6 +89,14 @@ bool j1Minimap::Start() {
 }
 
 bool j1Minimap::PostUpdate() {
+	if (reset_timer_fow == true) {
+		reset_timer_fow = false;
+		timer_fow.Start();
+	}
+	else if (timer_fow.ReadSec() >= 1) {
+		update_minimap_fow = true;
+		reset_timer_fow = true;
+	}
 	App->render->Blit(texture, position.x, position.y, NULL, 0.0, 0);
 	for (unsigned i = 0; i < App->entityManager->entities.size(); i++)
 	{
@@ -131,20 +141,26 @@ bool j1Minimap::PostUpdate() {
 		}
 	}
 	
-	for (int x = 0; x < App->map->data.width; x++) {
-		for (int y = 0; y < App->map->data.height; y++) {
-			if ((!App->fowManager->CheckTileVisibility({ x,y }))) {
-				fPoint world_pos = App->map->MapToWorld(x, y);
-				iPoint minimap_pos = WorldToMinimap((int)world_pos.x, (int)world_pos.y);
-				if ((!App->fowManager->CheckTileVisibilityWithoutCountingShroud({ x,y }))) {
-					App->render->DrawQuad({ minimap_pos.x,minimap_pos.y,1,1 }, 0, 0, 0, 255, true, false);
-				}
-				else {
-					App->render->DrawQuad({ minimap_pos.x,minimap_pos.y,1,1 }, 0, 0, 0, 50, true, false);
+	if (update_minimap_fow == true) {
+		for (int x = 0; x < App->map->data.width; x++) {
+			for (int y = 0; y < App->map->data.height; y++) {
+				if ((!App->fowManager->CheckTileVisibility({ x,y }))) {
+					fPoint world_pos = App->map->MapToWorld(x, y);
+					iPoint minimap_pos = WorldToMinimap((int)world_pos.x, (int)world_pos.y);
+					if ((!App->fowManager->CheckTileVisibilityWithoutCountingShroud({ x,y }))) {
+						App->render->DrawQuad({ minimap_pos.x,minimap_pos.y,1,1 }, 0, 0, 0, 255, true, false);
+					}
+					else {
+						App->render->DrawQuad({ minimap_pos.x,minimap_pos.y,1,1 }, 0, 0, 0, 50, true, false);
+					}
 				}
 			}
 		}
+		update_minimap_fow = false;
 	}
+
+
+
 	return true;
 }
 

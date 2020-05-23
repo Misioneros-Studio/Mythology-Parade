@@ -2,6 +2,7 @@
 #define _j1MINIMAP_H
 #include "j1Module.h"
 #include "p2Point.h"
+#include "j1Timer.h"
 #include "SDL/include/SDL.h"
 
 enum class Corner {
@@ -38,6 +39,9 @@ private:
 	int margin;
 	Corner corner;
 	SDL_Rect minimap_test_rect;
+	j1Timer timer_fow;
+	bool reset_timer_fow;
+	bool update_minimap_fow;
 };
 
 #endif // !_j1MINIMAP_H
