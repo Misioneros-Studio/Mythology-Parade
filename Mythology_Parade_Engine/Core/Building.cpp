@@ -130,8 +130,16 @@ void Building::CreateUnit()
 	switch (buildingType)
 	{
 	case FORTRESS:
-		if(this->civilization==CivilizationType::GREEK)	App->entityManager->CreateUnitEntity(UnitType::CYCLOP, { (int)position.x - 30, (int)position.y }, civilization);
-		else App->entityManager->CreateUnitEntity(UnitType::JOTNAR, { (int)position.x - 30, (int)position.y }, civilization);
+		if (element_producing == "Lawful_Beast")
+		{
+			if (this->civilization == CivilizationType::GREEK)	App->entityManager->CreateUnitEntity(UnitType::MINOTAUR, { (int)position.x - 30, (int)position.y }, civilization);
+			else App->entityManager->CreateUnitEntity(UnitType::DRAUGAR, { (int)position.x - 30, (int)position.y }, civilization);
+		}
+		else
+		{
+			if (this->civilization == CivilizationType::GREEK)	App->entityManager->CreateUnitEntity(UnitType::CYCLOP, { (int)position.x - 30, (int)position.y }, civilization);
+			else App->entityManager->CreateUnitEntity(UnitType::JOTNAR, { (int)position.x - 30, (int)position.y }, civilization);
+		}
 		break;
 	case MONASTERY:
 		App->entityManager->CreateUnitEntity(UnitType::MONK, { (int)position.x - 30, (int)position.y },civilization);
@@ -448,6 +456,7 @@ void Building::StartProducing(std::string thing_producing) {
 	else if (thing_producing == "Assasin") time_producing = 90;
 	else if (thing_producing == "Cleric") time_producing = 90;
 	else if (thing_producing == "Chaotic_Beast") time_producing = 120;
+	else if (thing_producing == "Lawful_Beast") time_producing = 120;
 	element_producing = thing_producing;
 	timer_construction.Start();
 

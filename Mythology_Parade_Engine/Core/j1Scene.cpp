@@ -693,13 +693,15 @@ void j1Scene::OnClick(UI* element, float argument)
 		}
 		else if (element->name == "Produce_Chaotic_Beast")
 		{
-		Building* building = (Building*)hud->thing_selected;
-		App->entityManager->getPlayer()->DecreaseFaith(200);
-		building->StartProducing("Chaotic_Beast");
+			Building* building = (Building*)hud->thing_selected;
+			App->entityManager->getPlayer()->DecreaseFaith(200);
+			building->StartProducing("Chaotic_Beast");
 		}
 		else if (element->name == "Produce_Lawful_Beast")
 		{
-			//BERNAT
+			Building* building = (Building*)hud->thing_selected;
+			App->entityManager->getPlayer()->DecreaseFaith(200);
+			building->StartProducing("Chaotic_Beast");
 		}
 		else if (element->name == "Produce_Lawful_Miracle")
 		{
