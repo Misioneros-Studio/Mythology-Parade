@@ -82,7 +82,7 @@ void TutorialMessageData::GetTutorialMessageData()
 	}
 }
 
-Tutorial_Message TutorialMessageData::GetTutorialMessage(int i)
+TutorialMessage TutorialMessageData::GetTutorialMessage(int i)
 {
 	if (i >= 0 && i < TOTAL_TUTORIAL_MESSAGES)
 		return tutorial_messages[i];
@@ -90,7 +90,7 @@ Tutorial_Message TutorialMessageData::GetTutorialMessage(int i)
 		return tutorial_messages[0];
 }
 
-std::string TutorialMessageData::GetLineTutorialMessage(int i, Tutorial_Message tutorial_message)
+std::string TutorialMessageData::GetLineTutorialMessage(int i, TutorialMessage tutorial_message)
 {
 	switch (i) {
 	case 1:

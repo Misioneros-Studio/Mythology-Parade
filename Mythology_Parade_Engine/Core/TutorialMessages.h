@@ -23,7 +23,7 @@ enum class TutorialMessagesAvailable {
 	levelupaunit
 };
 
-struct Tutorial_Message {
+struct TutorialMessage {
 	int lines;
 	bool has_title;
 	std::string title;
@@ -52,13 +52,13 @@ public:
 	void GetTutorialMessageData();
 
 	// Called to get a tooltip
-	Tutorial_Message GetTutorialMessage(int);
+	TutorialMessage GetTutorialMessage(int);
 
 	//Called to get a line of a tooltip
-	std::string GetLineTutorialMessage(int, Tutorial_Message);
+	std::string GetLineTutorialMessage(int, TutorialMessage);
 
 private:
-	Tutorial_Message tutorial_messages[TOTAL_TUTORIAL_MESSAGES];
+	TutorialMessage tutorial_messages[TOTAL_TUTORIAL_MESSAGES];
 };
 
 #endif // !__TUTORIALMESSAGES_H__

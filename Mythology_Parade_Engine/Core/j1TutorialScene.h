@@ -5,6 +5,7 @@
 #include "j1Timer.h"
 #include "SDL/include/SDL.h"
 #include"p2Point.h"
+#include "j1Timer.h"
 
 struct SDL_Rect;
 
@@ -24,6 +25,7 @@ enum CivilizationType;
 class HUD;
 class ResearchMenu;
 class TutorialMessageData;
+
 
 class j1TutorialScene : public j1Module
 {
@@ -52,11 +54,25 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
+	// Called when creating a tutorial message
+	void CreateTutorialMessage(int);
+
+	// Called when deleting a tutorial message
+	void DeleteTutorialMessage(bool, bool, bool);
+
 public:
 
 	SDL_Texture* tutorial_tex;
 	TutorialMessageData* tutorial_message_data;
-
+	WindowUI* window_tutorial_message[3];
+	TextUI* text_tutorial_message[30];
+	ButtonUI* button_tutorial_message[3];
+	bool first_message_shown;
+	bool second_message_shown;
+	int first_message_height;
+	int second_message_height;
+	j1Timer tutorial_message_timer;
+	int message_number;///TEMPORAL
 };
 
 #endif // __j1TUTORIALSCENE_H__
