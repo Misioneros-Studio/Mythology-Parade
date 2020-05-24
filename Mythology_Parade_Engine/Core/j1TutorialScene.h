@@ -23,6 +23,7 @@ enum BuildingType;
 enum CivilizationType;
 class HUD;
 class ResearchMenu;
+class TutorialMessageData;
 
 class j1TutorialScene : public j1Module
 {
@@ -54,6 +55,7 @@ public:
 public:
 
 	SDL_Texture* tutorial_tex;
+	TutorialMessageData* tutorial_message_data;
 
 };
 

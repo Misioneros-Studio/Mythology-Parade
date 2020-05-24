@@ -8,12 +8,14 @@
 #include "j1Scene.h"
 #include "j1TutorialScene.h"
 #include "j1FadeToBlack.h"
+#include "TutorialMessages.h"
 
 #include"QuadTree.h"
 
 j1TutorialScene::j1TutorialScene() : j1Module()
 {
 	name.append("tutorialscene");
+	tutorial_message_data = nullptr;
 }
 
 // Destructor
@@ -34,6 +36,7 @@ bool j1TutorialScene::Start()
 {
 	App->render->camera.x = 578;
 	App->render->camera.y = -1865;
+	tutorial_message_data = new TutorialMessageData;
 
 	return true;
 }
@@ -65,6 +68,11 @@ bool j1TutorialScene::CleanUp()
 	LOG("Freeing scene");
 
 	App->tex->UnLoad(tutorial_tex);
+
+	if (tutorial_message_data != nullptr) {
+		delete tutorial_message_data;
+		tutorial_message_data = nullptr;
+	}
 
 	return true;
 }
