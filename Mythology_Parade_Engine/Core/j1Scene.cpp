@@ -31,7 +31,7 @@ j1Scene::j1Scene() : j1Module()
 	name.append("scene");
 	winlose_tex = nullptr;
 	clickToPath = false;
-	nextUnit_selected = false;
+	nextUnit_selected = nextBuilding_selected = false;
 }
 
 // Destructor
@@ -695,7 +695,7 @@ void j1Scene::OnClick(UI* element, float argument)
 		{
 			Building* building = (Building*)hud->thing_selected;
 			App->entityManager->getPlayer()->DecreaseFaith(200);
-			building->StartProducing("Chaotic_Beast");
+			building->StartProducing("Lawful_Beast"); 
 		}
 		else if (element->name == "Produce_Lawful_Beast")
 		{
@@ -705,7 +705,7 @@ void j1Scene::OnClick(UI* element, float argument)
 		}
 		else if (element->name == "Produce_Lawful_Miracle")
 		{
-			//BERNAT
+			nextBuilding_selected = true;
 		}
 		else if (element->name == "Produce_Chaotic_Miracle")
 		{

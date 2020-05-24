@@ -7,21 +7,21 @@
 		<unit type="assassin" position_x="2976" position_y="2384" civilization="viking" health="100" level="0" />
 	</entities>
 	<buildings>
+		<build type="encampment" position_x="108" position_y="48" civilization="viking" health="350" status="finished" action="nothing" />
 		<build type="fortress" position_x="3200" position_y="2288" civilization="viking" health="500" status="finished" action="nothing" />
 		<build type="fortress" position_x="1920" position_y="2288" civilization="greek" health="500" status="finished" action="nothing" />
-		<build type="temple" position_x="2080" position_y="2432" civilization="greek" health="200" status="finished" action="nothing" />
 	</buildings>
 	<players>
 		<greek>
-			<economy faith="630" prayers="0" sacrifices="0" />
+			<economy faith="1444" prayers="880" sacrifices="880" />
 			<research>
 				<temple research="true" />
-				<encampment research="false" />
-				<cleric research="false" />
+				<encampment research="true" />
+				<cleric research="true" />
 				<assassin research="false" />
-				<lawful_beast research="false" />
+				<lawful_beast research="true" />
 				<chaotic_beast research="false" />
-				<lawful_miracle research="false" />
+				<lawful_miracle research="true" />
 				<chaotic_miracle research="false" />
 				<lawful_victory research="false" />
 				<chaotic_victory research="false" />

@@ -167,6 +167,7 @@ void Player::SelectionDraw_Logic()
 			ClickLogic();
 			SeeEntitiesInside();
 			ActionToUnit();
+			ActionToBuilding();
 			App->scene->hud->HUDUpdateSelection(listEntities, (Building*)buildingSelect);
 		}
 	}
@@ -182,6 +183,11 @@ Building* Player::GetSelectedBuild()
 	return (Building*) buildingSelect;
 }
 
+Building* Player::GetEnemySelectedBuild()
+{
+	return (Building*)enemyBuildingSelect;
+}
+
 void Player::ActionToUnit()
 {
 	if (listEntities.size() == 1 && App->scene->nextUnit_selected)
@@ -189,6 +195,29 @@ void Player::ActionToUnit()
 		Unit* unit = static_cast<Unit*>(listEntities.begin()._Ptr->_Myval);
 		unit->SetMaxUnitHealth();
 		App->scene->nextUnit_selected = false;
+	}
+}
+
+void Player::ActionToBuilding()
+{
+	if (App->scene->nextBuilding_selected && GetEnemySelectedBuild()->name == "encampment" && civilization != GetEnemySelectedBuild()->civilization)
+	{
+		CivilizationType civ;
+		int info;
+		if (GetEnemySelectedBuild()->civilization == CivilizationType::GREEK)
+		{
+			civ = CivilizationType::VIKING; info = 3;
+		}
+		else
+		{
+			civ = CivilizationType::GREEK; info = 7;
+		}
+
+		iPoint pos = { (int)GetEnemySelectedBuild()->position.x, (int)GetEnemySelectedBuild()->position.y };
+		Building* building = static_cast<Building*>(App->entityManager->CreateBuildingEntity(pos, BuildingType::ENCAMPMENT, App->entityManager->buildingsData[info], civ));
+		building->SetTimeProducing(0);
+		App->entityManager->DeleteEntity(GetEnemySelectedBuild());
+		App->scene->nextBuilding_selected = false;
 	}
 }
 
@@ -312,6 +341,9 @@ void Player::ClickLogic()
 				if (it._Ptr->_Myval->civilization == civilization) {
 					buildingSelect = it._Ptr->_Myval;
 					it._Ptr->_Myval->SetSelected(true);
+				}
+				else {
+					enemyBuildingSelect = it._Ptr->_Myval;
 				}
 			}
 		}

@@ -692,7 +692,7 @@ Entity* EntityManager::CreatePlayerEntity(std::string civilization_string)
 	return ret;
 }
 
-Entity* EntityManager::CreateUnitEntity(UnitType type, iPoint pos, CivilizationType civilization)
+Entity* EntityManager::CreateUnitEntity(UnitType type, iPoint pos, CivilizationType civ)
 {
 	Entity* ret = nullptr;
 
@@ -720,8 +720,11 @@ Entity* EntityManager::CreateUnitEntity(UnitType type, iPoint pos, CivilizationT
 	case UnitType::MINOTAUR:
 		ret = new CombatUnit(UnitType::MINOTAUR, pos);
 		break;
+	case UnitType::CLERIC:
+		ret = new Unit(UnitType::CLERIC, pos);
+		break;
 	}
-	ret->civilization = civilization;
+	ret->civilization = civ;
 	ret->type = EntityType::UNIT;
 	ret->texture = animationManager.charData[type].texture;
 
