@@ -1,0 +1,113 @@
+<!-- Config file for the game -->
+
+<tutorialdialog>
+  <presentationdialog>
+    <line1>Welcome to Mythology Parade tutorial,</line1>
+    <line2>with a few steps you will learn how to</line2>
+    <line3>manage your units and move around this</line3>
+    <line4>territory. Let’s begin!!!</line4>
+  </presentationdialog>
+
+  <cameramovements>
+    <title>Camera Movements:</title>
+    <line1>This is your initial fortress, be</line1>
+    <line2>careful with it, if its destroyed you</line2>
+    <line3>will lose. You can move the camera</line3>
+    <line4>around the territory holding the</line4>
+    <line5> right-click and dragging around your</line5>
+    <line6> screen. You can use the minimap too,</line6>
+    <line7> click just on the part of the map you</line7>
+    <line8> want to situate the camera.</line8>
+  </cameramovements>
+
+  <fogofwar>
+    <title>Fog of war:</title>
+    <line1>Careful! You cannot see zones of the</line1>
+    <line2> map where your religions doesn’t</line2>
+    <line3>reach. Build buildings or move units</line3>
+    <line4>to see more map zones.</line4>
+  </fogofwar>
+
+  <fortressandproduction>
+    <line1>now that you know how to move around</line1>
+    <line2>the map let’s begin to rule your</line2>
+    <line3>religion. This fortress is the back-line</line3>
+    <line4> of it, from here you will be</line4>
+    <line5>researching new paths for your religion</line5>
+    <line6>on the Research Tree and producing</line6>
+    <line7>buildings to expand your influence</line7>
+    <line8> or your military-hand.</line8>
+  </fortressandproduction>
+
+  <selectionsystem>
+    <line1>use the left-click to select a building</line1>
+    <line2>or unit, you can drag to select an amount</line2>
+    <line3>of them. You will see their properties</line3>
+    <line4>and possible actions below in the HUD.</line4>
+  </selectionsystem>
+
+  <buildabuildingandproduceaunit>
+    <title>Build a building and produce a unit:</title>
+    <line1>use the fortress to build a monastery,</line1>
+    <line2>the monastery will allow you to produce</line2>
+    <line3>monks and generate currency.</line3>
+  </buildabuildingandproduceaunit>
+
+  <researchtreeintroduction>
+    <line1>To increase the influence of your religion</line1>
+    <line2>will have to improve your buildings and</line2>
+    <line3>your units. You can use the Research Tree</line3>
+    <line4>to unlock new resources on your fortress.</line4>
+  </researchtreeintroduction>
+
+  <researchanewbuildingandanewunit>
+    <title>Research a new building and a new unit:</title>
+    <line1>to be able to research you will have to</line1>
+    <line2>unlock the certain module and have</line2>
+    <line3>enough resources(lps/cps).</line3>
+  </researchanewbuildingandanewunit>
+
+  <sacrificesandprayers>
+    <title>Sacrifices and Prayers:</title>
+    <line1>you will obtain sacrifices(cps) or</line1>
+    <line2>prayers(lps) doing certain actions,</line2>
+    <line3>careful with it, your religion will take</line3>
+    <line4>differents paths to get influence around</line4>
+    <line5>the territory, and if you generate a lot</line5>
+    <line6>of prayers the amount of sacrifices will</line6>
+    <line7>decrease and vice versa.</line7>
+  </sacrificesandprayers>
+
+  <createanewbuildingandanewunit>
+    <title>Create a new building and a new unit:</title>
+    <line1>once you have completed a research the</line1>
+    <line2>module will appear as researched in the</line2>
+    <line3>fortress, there you can produce them with</line3>
+    <line4>a cost and producing time.</line4>
+  </createanewbuildingandanewunit>
+
+  <moveunits>
+    <line1>When you have a certain unit/s selected</line1>
+    <line2>you can indicate the destination of the </line2>
+    <line3>unit/s by clicking in a certain point/</line3>
+    <line4>building/unit of the map after putting</line4>
+    <line5>the cursor on top of it.</line5>
+  </moveunits>
+
+  <attackorconvertanenemyunit>
+    <title>Attack or convert an enemy unit:</title>
+    <line1>when you have selected a unit the HUD</line1>
+    <line2>will show you the differents actions</line2>
+    <line3>the unit can perform, use the attack/</line3>
+    <line4>convert button and then select the enemy</line4>
+    <line5>unit you want to attack/convert.</line5>
+  </attackorconvertanenemyunit>
+
+  <levelupaunit>
+    <title>Level-Up a unit:</title>
+    <line1>performing differents actions with your</line1>
+    <line2>units will give them experience, use it</line2>
+    <line3>to level them up. Not all units have this</line3>
+    <line4>option.</line4>
+  </levelupaunit>
+</tutorialdialog>
