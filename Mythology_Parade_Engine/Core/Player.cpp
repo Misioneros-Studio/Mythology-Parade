@@ -9,7 +9,10 @@
 
 Player::Player()
 {
+	research_assassin = research_chaotic_beast = research_chaotic_miracle = research_cleric = research_encampment = research_lawful_beast = research_lawful_miracle = research_lawful_victory =
+		research_temple = research_chaotic_victory = false;
 	Start();
+	marc = 69;
 }
 
 Player::~Player()
@@ -45,8 +48,7 @@ bool Player::Start()
 	else
 		name = "viking";
 
-	research_assassin = research_chaotic_beast = research_chaotic_miracle = research_cleric = research_encampment = research_lawful_beast = research_lawful_miracle = research_lawful_victory =
-		research_temple = research_chaotic_victory = false;
+
 	buildingSelect = nullptr;
 
 	if (App->entityManager->initCivilizations)
@@ -100,7 +102,7 @@ bool Player::Update(float dt)
 	//	//Todo change assassin for the type of unit
 	//	App->entityManager->CreateUnitEntity(UnitType::MONK, spawnPos);
 	//}
-  
+	
 	//Selection logics and drawing
 	if (!App->scene->paused_game)
 	{

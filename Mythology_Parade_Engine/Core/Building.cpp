@@ -139,6 +139,7 @@ void Building::CreateUnit()
 		}
 		break;
 	case TEMPLE:
+		App->entityManager->CreateUnitEntity(UnitType::CLERIC, { (int)position.x - 30, (int)position.y }, civilization);
 		break;
 	case ENCAMPMENT:
 		App->entityManager->CreateUnitEntity(UnitType::ASSASSIN, { (int)position.x - 20, (int)position.y },civilization);
@@ -440,8 +441,9 @@ void Building::StartProducing(std::string thing_producing) {
 	if (thing_producing == "Prayers") time_producing = App->entityManager->getPlayer()->time_prayers;
 	else if (thing_producing == "Sacrifices") time_producing = App->entityManager->getPlayer()->time_sacrifices;
 	else if (thing_producing == "Victory") time_producing = App->entityManager->getPlayer()->time_production_victory;
-	else if (thing_producing == "Monk") time_producing = 10;
-	else if (thing_producing == "Assasin") time_producing = 10;
+	else if (thing_producing == "Monk") time_producing = 90;
+	else if (thing_producing == "Assasin") time_producing = 90;
+	else if (thing_producing == "Cleric") time_producing = 90;
 	element_producing = thing_producing;
 	timer_construction.Start();
 

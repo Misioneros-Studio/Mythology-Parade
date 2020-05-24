@@ -13,7 +13,7 @@
 	</buildings>
 	<players>
 		<greek>
-			<economy faith="330" prayers="0" sacrifices="0" />
+			<economy faith="630" prayers="0" sacrifices="0" />
 			<research>
 				<temple research="true" />
 				<encampment research="false" />

@@ -53,7 +53,9 @@ private:
 	bool oneTime;
 	iPoint click;
 
+
 public:
+	int marc;
 	bool dontSelect;
 	bool player_win = false;
 	bool player_lose = false;

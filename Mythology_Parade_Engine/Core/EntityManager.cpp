@@ -314,6 +314,7 @@ bool EntityManager::Load(pugi::xml_node& n)
 	if (p.name() == "viking") civ = CivilizationType::VIKING;
 	else civ = CivilizationType::GREEK;
 	Player* player = static_cast<Player*>(CreatePlayerEntity(p.name()));
+	LOG("%i", player->research_temple);
 	player->research_assassin = p.child("research").child("assassin").attribute("research").as_bool();
 	player->research_chaotic_beast = p.child("research").child("chaotic_beast").attribute("research").as_bool();
 	player->research_chaotic_miracle = p.child("research").child("chaotic_miracle").attribute("research").as_bool();
@@ -324,6 +325,8 @@ bool EntityManager::Load(pugi::xml_node& n)
 	player->research_lawful_miracle = p.child("research").child("lawful_miracle").attribute("research").as_bool();
 	player->research_lawful_victory = p.child("research").child("lawful_victory").attribute("research").as_bool();
 	player->research_temple = p.child("research").child("temple").attribute("research").as_bool();
+	player->marc = 123;
+	LOG("%i, %i", player->research_temple, 328);
 
 	player->SetFaith(p.child("economy").attribute("faith").as_int());
 	player->SetSacrifices(p.child("economy").attribute("sacrifices").as_int());
@@ -382,6 +385,7 @@ bool EntityManager::Load(pugi::xml_node& n)
 		//else if (!strcmp(it.attribute("type").as_string(), "draugar"))
 		//	CreateUnitEntity(UnitType::DRAUGAR, pos, civ);
 	}
+	LOG("%i, %i", player->research_temple, 387);
 
 	//BUILDINGS LOADING
 	it = n.child("buildings").child("build");
@@ -469,6 +473,9 @@ bool EntityManager::Load(pugi::xml_node& n)
 			else if (action == BuildingAction::RESEARCHING) { fortress->StartResearching(it.attribute("element").as_string()); fortress->timer_construction.StartAt(it.attribute("time").as_int()); }
 		}
 	}
+	LOG("%i, %i", player->research_temple, 474);
+
+
 	return true;
 }
 

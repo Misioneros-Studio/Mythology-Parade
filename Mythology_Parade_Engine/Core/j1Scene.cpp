@@ -687,7 +687,9 @@ void j1Scene::OnClick(UI* element, float argument)
 		}
 		else if (element->name == "Produce_Cleric")
 		{
-			//BERNAT
+			Building* building = (Building*)hud->thing_selected;
+			App->entityManager->getPlayer()->DecreaseFaith(150);
+			building->StartProducing("Cleric");
 		}
 		else if (element->name == "Produce_Chaotic_Beast")
 		{
