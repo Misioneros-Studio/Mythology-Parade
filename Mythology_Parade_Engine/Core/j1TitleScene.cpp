@@ -36,8 +36,10 @@ bool j1TitleScene::Awake(pugi::xml_node& config)
 // Called before the first frame
 bool j1TitleScene::Start()
 {
-	App->gui->active = true;
-	App->gui->Start();
+	if (App->gui->active == false) {
+		App->gui->active = true;
+		App->gui->Start();
+	}
 
 	for (int i = 0; i < 6; i++)
 	{
