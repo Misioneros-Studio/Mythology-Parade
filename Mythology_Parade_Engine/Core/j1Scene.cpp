@@ -367,11 +367,16 @@ bool j1Scene::Update(float dt)
 
 	if (App->entityManager->getPlayer() != nullptr) {
 		if (App->entityManager->getPlayer()->player_win == true) {
-			if (App->entityManager->getPlayer()->player_type == CivilizationType::VIKING) {
-				DoWinOrLoseWindow(1, true);
+			if (isInTutorial == true) {
+				DoWinOrLoseWindow(3, true);
 			}
 			else {
-				DoWinOrLoseWindow(2, true);
+				if (App->entityManager->getPlayer()->player_type == CivilizationType::VIKING) {
+					DoWinOrLoseWindow(1, true);
+				}
+				else {
+					DoWinOrLoseWindow(2, true);
+				}
 			}
 		}
 
@@ -732,6 +737,9 @@ void j1Scene::DoWinOrLoseWindow(int type, bool win) {
 	SDL_Rect sec_win = { 807, 0,807, 345 };
 	SDL_Rect sec_lose = { 807, 345,807, 345 };
 
+	SDL_Rect sec_tutorial = { 0, 690,807, 345 };
+	SDL_Rect sec_completed = { 807, 690,807, 345 };
+
 	if (hud->start_timer == false) {
 		hud->timer_win_lose.Start();
 		animation_win_lose_timer.Start();
@@ -779,6 +787,15 @@ void j1Scene::DoWinOrLoseWindow(int type, bool win) {
 			if (Mix_Playing(3) == 0) {
 				App->audio->PlayFx(3, Lose_sound);
 			}
+		}
+	}
+
+	if (type == 3) {
+		App->render->Blit(winlose_tex, global_pos.x, global_pos.y, &sec_tutorial, NULL, 0.0F);
+		App->render->Blit(winlose_tex, global_pos.x, global_pos.y, &sec_completed, NULL, 0.0F);
+		if (Mix_Playing(3) == 0)
+		{
+			App->audio->PlayFx(3, WinViking_sound);
 		}
 	}
 	if (hud->timer_win_lose.ReadSec() >= 5) {
