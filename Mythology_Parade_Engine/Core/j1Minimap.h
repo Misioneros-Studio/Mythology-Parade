@@ -47,7 +47,7 @@ private:
 	bool reset_timer_fow;
 	bool update_minimap_fow;
 	SDL_Texture* texture_fow;
-
+	int count;
 };
 
 #endif // !_j1MINIMAP_H

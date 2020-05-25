@@ -5,6 +5,7 @@
 
 j1ParticleManager::j1ParticleManager()
 {
+	name.append("ParticleManager");
 	current_animation = explosion_animation;
 	texture = nullptr;
 }
