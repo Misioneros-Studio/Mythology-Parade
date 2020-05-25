@@ -20,6 +20,7 @@
 #include"j1Textures.h"
 #include "Player.h"
 #include"Animation.h"
+#include"MaykMath.h"
 
 
 
@@ -120,6 +121,7 @@ public:
 	void LoadBuildingsBlitRect();
 
 	Player* getPlayer() const;
+	void FxUnits(int channel, int fx, int posx, int posy);
 
 	static bool IsPointInsideQuad(SDL_Rect rect, int x, int y);
 
@@ -132,7 +134,10 @@ public:
 	//The way to store the spritesheets
 	std::unordered_map<SpriteSheetType, SDL_Texture*> entitySpriteSheets;
 	std::vector<BuildingInfo> buildingsData;
-	void FxUnits(int channel, int fx, int posx, int posy);
+
+	QuadTree quadTree;
+	AABBTree aabbTree;
+
 	int volume;
 
 private:

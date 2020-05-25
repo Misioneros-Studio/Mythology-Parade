@@ -58,6 +58,7 @@ bool j1FadeToBlack::PostUpdate()
 			switch (actual_change) {
 			case(which_fade::logo_to_title):
 				App->logo_scene->Disable();
+
 				App->title_scene->Enable();
 				break;
 
@@ -65,8 +66,9 @@ bool j1FadeToBlack::PostUpdate()
 				if (!temp) {
 					temp = true;
 				}
-					App->pathfinding->Enable();
+				App->pathfinding->Enable();
 				App->title_scene->Disable();
+
 				App->map->Enable();
 				App->entityManager->Enable();
 				App->scene->Enable();

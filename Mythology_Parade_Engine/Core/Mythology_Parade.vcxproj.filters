@@ -28,7 +28,6 @@
     <ClCompile Include="LevelSystem.cpp" />
     <ClCompile Include="PathFinder.cpp" />
     <ClCompile Include="Player.cpp" />
-    <ClCompile Include="QuadTree.cpp" />
     <ClCompile Include="j1Scene.cpp" />
     <ClCompile Include="j1Timer.cpp" />
     <ClCompile Include="p2Log.cpp" />
@@ -40,6 +39,15 @@
     <ClCompile Include="ResearchMenu.cpp" />
     <ClCompile Include="TooltipData.cpp" />
     <ClCompile Include="Unit.cpp" />
+    <ClCompile Include="QuadTree.cpp">
+      <Filter>Trees</Filter>
+    </ClCompile>
+    <ClCompile Include="MaykMath.cpp">
+      <Filter>Trees\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="AABBTree.cpp">
+      <Filter>Trees</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h" />
@@ -69,7 +77,6 @@
     <ClInclude Include="MemLeaks.h" />
     <ClInclude Include="PathFinder.h" />
     <ClInclude Include="Player.h" />
-    <ClInclude Include="QuadTree.h" />
     <ClInclude Include="j1Scene.h" />
     <ClInclude Include="j1Timer.h" />
     <ClInclude Include="j1Audio.h" />
@@ -88,8 +95,25 @@
     <ClInclude Include="ResearchMenu.h" />
     <ClInclude Include="TooltipData.h" />
     <ClInclude Include="Unit.h" />
+    <ClInclude Include="QuadTree.h">
+      <Filter>Trees</Filter>
+    </ClInclude>
+    <ClInclude Include="MaykMath.h">
+      <Filter>Trees\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="AABBTree.h">
+      <Filter>Trees</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="TODOS.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Trees">
+      <UniqueIdentifier>{d2abf66a-1287-42b5-93ec-19c3f1f6cf69}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Trees\Math">
+      <UniqueIdentifier>{f54e8cb9-d77a-4f56-903c-207668c50797}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>

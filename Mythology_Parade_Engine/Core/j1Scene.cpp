@@ -20,11 +20,8 @@
 #include "ResearchMenu.h"
 
 #include "j1TitleScene.h"
-
 #include "j1ParticleManager.h"
 
-
-#include"QuadTree.h"
 
 j1Scene::j1Scene() : j1Module()
 {
@@ -67,6 +64,13 @@ bool j1Scene::Start()
 		mapLimitsRect = App->map->GetMapRect();
 		App->pathfinding->maxPathLenght = App->map->GetMapMaxLenght();
 		App->entityManager->LoadBuildingsBlitRect();
+
+		//Init quadTree
+		iPoint position;
+		iPoint size;
+		position = App->map->WorldToMap(0, 0);
+		size = iPoint(App->map->data.width * App->map->data.tile_width, App->map->data.height * App->map->data.tile_height);
+		App->entityManager->quadTree.Init(TreeType::ISOMETRIC, position.x + (App->map->data.tile_width / 2), position.y, size.x, size.y);
 
 		SDL_ShowCursor(0);
 
@@ -394,6 +398,13 @@ bool j1Scene::Update(float dt)
 // Called each loop iteration
 bool j1Scene::PostUpdate()
 {
+
+	if (App->entityManager->quadTree.displayTree)
+		App->render->DrawQuadTree(App->entityManager->quadTree.type, App->entityManager->quadTree.baseNode);
+
+	if (App->entityManager->aabbTree.displayTree)
+		App->render->DrawAABBTree(App->entityManager->aabbTree.baseNode);
+
 	if (hud->thing_selected != nullptr) {
 		hud->UpdateSelectedThing();
 		if (App->entityManager->getPlayer()->player_type == CivilizationType::VIKING)

@@ -84,7 +84,6 @@ bool EntityManager::Start()
 	animations[UnitType::CYCLOP] = animationManager.Load("assets/units/Cyclop.tmx", UnitType::CYCLOP);
 	animations[UnitType::MINOTAUR] = animationManager.Load("assets/units/Minotaur.tmx", UnitType::MINOTAUR);
 
-
 	for (unsigned i = 0; i < entities.size(); i++)
 	{
 		for (std::list<Entity*>::iterator it = entities[(EntityType)i].begin(); it != entities[(EntityType)i].end(); it++)
@@ -691,6 +690,16 @@ Entity* EntityManager::CreatePlayerEntity(std::string civilization_string)
 
 Entity* EntityManager::CreateUnitEntity(UnitType type, iPoint pos, CivilizationType civilization)
 {
+	pos.x += 20;
+	AABBNode* node = aabbTree.FindLowestNodeInPoint(&aabbTree.baseNode, (Point)pos);
+	for (std::list<Entity*>::iterator it = node->data.begin(); it != node->data.end(); it++)
+	{
+		if (App->map->WorldToMap(pos.x, pos.y) == App->map->WorldToMap((*it)->position.x, (*it)->position.y))
+		{
+			return nullptr;
+		}
+	}
+
 	Entity* ret = nullptr;
 
 	switch (type)
@@ -726,6 +735,8 @@ Entity* EntityManager::CreateUnitEntity(UnitType type, iPoint pos, CivilizationT
 
 	//DELETE: THIS
 	entities[EntityType::UNIT].sort(entity_Sort());
+
+	aabbTree.AddUnitToTree(*ret);
 
 	return ret;
 }
