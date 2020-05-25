@@ -150,6 +150,7 @@ bool j1Minimap::PostUpdate() {
 		SDL_SetTextureBlendMode(texture_fow, SDL_BLENDMODE_BLEND);
 		SDL_SetRenderTarget(App->render->renderer, texture_fow);
 		SDL_SetRenderDrawColor(App->render->renderer, 0, 0, 0, 0);
+		SDL_RenderClear(App->render->renderer);
 		SDL_RenderFillRect(App->render->renderer, NULL);
 		for (int x = 0; x < App->map->data.width; x++) {
 			for (int y = 0; y < App->map->data.height; y++) {
