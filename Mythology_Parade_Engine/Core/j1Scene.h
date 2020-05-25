@@ -96,6 +96,9 @@ public:
 public:
 	bool nextUnit_selected;
 	bool nextBuilding_selected;
+	bool building_meteor;
+
+	bool oneTime;
 };
 
 #endif // __j1SCENE_H__

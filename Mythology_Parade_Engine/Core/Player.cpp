@@ -219,6 +219,11 @@ void Player::ActionToBuilding()
 		App->entityManager->DeleteEntity(GetEnemySelectedBuild());
 		App->scene->nextBuilding_selected = false;
 	}
+	else if (App->scene->building_meteor && GetEnemySelectedBuild()->name == "encampment")
+	{
+		App->scene->building_meteor = false;
+		App->entityManager->DeleteEntity(GetEnemySelectedBuild());
+	}
 }
 
 void Player::SeeEntitiesInside()
