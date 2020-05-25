@@ -7,6 +7,8 @@
 
 FoWManager::FoWManager()
 {
+	height = 0;
+	width = 0;
 }
 
 
