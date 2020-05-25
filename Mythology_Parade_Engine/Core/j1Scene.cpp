@@ -693,19 +693,19 @@ void j1Scene::OnClick(UI* element, float argument)
 		{
 			Building* building = (Building*)hud->thing_selected;
 			App->entityManager->getPlayer()->DecreaseFaith(150);
-			building->StartProducing("Cleric");
+			building->ProduceQueue("Cleric");
 		}
 		else if (element->name == "Produce_Chaotic_Beast")
 		{
 			Building* building = (Building*)hud->thing_selected;
 			App->entityManager->getPlayer()->DecreaseFaith(200);
-			building->StartProducing("Lawful_Beast"); 
+			building->ProduceQueue("Lawful_Beast");
 		}
 		else if (element->name == "Produce_Lawful_Beast")
 		{
 			Building* building = (Building*)hud->thing_selected;
 			App->entityManager->getPlayer()->DecreaseFaith(200);
-			building->StartProducing("Chaotic_Beast");
+			building->ProduceQueue("Chaotic_Beast");
 		}
 		else if (element->name == "Produce_Lawful_Miracle")
 		{
