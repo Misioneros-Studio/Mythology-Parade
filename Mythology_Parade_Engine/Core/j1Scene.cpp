@@ -633,36 +633,31 @@ void j1Scene::OnClick(UI* element, float argument)
 			Building* building = (Building*)hud->thing_selected;
 			App->entityManager->getPlayer()->DecreaseFaith(100);
 
-			building->StartProducing("Assassin");
-
-			//building->CreateUnitQueue(10, "Assassin");
+			building->CreateUnitQueue("Assassin");
 		}
 		else if (element->name == "Produce_Monk")
 		{
 			Building* building = (Building*)hud->thing_selected;
 			App->entityManager->getPlayer()->DecreaseFaith(50);
-			building->StartProducing("Monk");
-			//building->CreateUnitQueue(10, "Monk");
-
-
+			building->CreateUnitQueue("Monk");
 		}
 		else if (element->name == "Produce_Victory")
 		{
 			Building* building = (Building*)hud->thing_selected;
 			App->entityManager->getPlayer()->DecreaseFaith(600);
-			building->StartProducing("Victory");
+			building->CreateUnitQueue("Victory");
 		}
 		else if (element->name == "Produce_Sacrifices")
 		{
 			Building* building = (Building*)hud->thing_selected;
 			App->entityManager->getPlayer()->DecreaseFaith(40);
-			building->StartProducing("Sacrifices");
+			building->CreateUnitQueue("Sacrifices");
 		}
 		else if (element->name == "Produce_Prayers")
 		{
 			Building* building = (Building*)hud->thing_selected;
 			App->entityManager->getPlayer()->DecreaseFaith(100);
-			building->StartProducing("Prayers");
+			building->CreateUnitQueue("Prayers");
 		}
 		else if (element->name == "Upgrade") {
 			//Upgrade level

@@ -3,8 +3,9 @@
 
 #include "Entity.h"
 #include "HealthSystem.h"
-#include"EntityManager.h"
+#include "EntityManager.h"
 #include "j1Timer.h"
+#include <queue>
 
 enum BuildingType 
 {
@@ -58,7 +59,7 @@ public:
 
 	std::string GetElementProducing();
 
-	void CreateUnitQueue(int time, std::string thing_producing);
+	void CreateUnitQueue(std::string thing_producing);
 
 private:
 
@@ -82,7 +83,7 @@ private:
 	int time_producing;
 	bool researched;
 
-	int unitsToCreate;
+	std::queue<std::string> queuedResearch;
 
 	int nearbyMonks;
 	std::string description;

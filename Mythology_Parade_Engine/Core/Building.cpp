@@ -16,7 +16,6 @@ Building::Building(BuildingType type, iPoint pos, BuildingInfo info)
 	percentage_constructing = 0;
 	time_producing = 0;
 	first_time_constructing = true;
-	unitsToCreate = 0;
 	percentage_life = 0.f;
 	/*---------------*/
 
@@ -182,12 +181,9 @@ std::string Building::GetElementProducing()
 {
 	return element_producing;
 }
-void Building::CreateUnitQueue(int time, std::string thing_producing)
+void Building::CreateUnitQueue(std::string thing_producing)
 {
-	unitsToCreate++;
-	time_producing = time;
-	element_producing = thing_producing;
-
+	queuedResearch.push(thing_producing);
 }
 
 bool Building::Awake(pugi::xml_node& a)
@@ -207,10 +203,12 @@ bool Building::Update(float dt)
 	else
 	{
 		displayDebug = false;
-  }
-	if (unitsToCreate > 0 && buildingAction == BuildingAction::NOTHING) {
-		StartProducing(element_producing);
-		unitsToCreate--;
+	}
+
+	if (queuedResearch.size() > 0 && buildingAction == BuildingAction::NOTHING) {
+		std::string elementToProduce = queuedResearch.front();
+		queuedResearch.pop();
+		StartProducing(elementToProduce);
 	}
 
 	if (App->scene->paused_game == true && timer_construction.isPaused() == false)
