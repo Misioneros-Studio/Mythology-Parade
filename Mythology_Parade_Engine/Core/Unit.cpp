@@ -37,6 +37,7 @@ Unit::Unit(UnitType type, iPoint pos): unitType(type), state(AnimationType::IDLE
 		break;
 	case UnitType::JOTNAR:
 		time_production = 7;
+		name = "jotnar";
 		time_research = 210;
 		researched = true;
 		Init(150);
@@ -45,6 +46,7 @@ Unit::Unit(UnitType type, iPoint pos): unitType(type), state(AnimationType::IDLE
 	case UnitType::DRAUGAR:
 		time_production = 7;
 		time_research = 210;
+		name = "draugar";
 		researched = true;
 		Init(40);
 		collisionRect = { 0, 0, 40, -60 };
@@ -53,6 +55,7 @@ Unit::Unit(UnitType type, iPoint pos): unitType(type), state(AnimationType::IDLE
 		time_production = 7;
 		time_research = 210;
 		researched = true;
+		name = "cyclop";
 		Init(150);
 		collisionRect = { 0, 0, 118, -130 };
 		break;
@@ -60,6 +63,7 @@ Unit::Unit(UnitType type, iPoint pos): unitType(type), state(AnimationType::IDLE
 		time_production = 7;
 		time_research = 210;
 		researched = true;
+		name = "minotaur";
 		Init(40);
 		collisionRect = { 0, 0, 60, -67 };
 		break;

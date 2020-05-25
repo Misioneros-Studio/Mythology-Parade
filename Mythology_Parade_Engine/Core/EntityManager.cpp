@@ -371,16 +371,22 @@ bool EntityManager::Load(pugi::xml_node& n)
 			footman->SetLevel(it.attribute("level").as_int());
 			footman->SetHealth(it.attribute("health").as_int());
 		}
-
-		//OTRAS UNIDADES PARA EL SIGUIENTE COMMIT
-		//else if (!strcmp(it.attribute("type").as_string(), "cyclop"))
-		//	CreateUnitEntity(UnitType::CYCLOP, pos, civ);
-		//else if (!strcmp(it.attribute("type").as_string(), "minotaur"))
-		//	CreateUnitEntity(UnitType::MINOTAUR, pos, civ);
-		//else if (!strcmp(it.attribute("type").as_string(), "jotnar"))
-		//	CreateUnitEntity(UnitType::JOTNAR, pos, civ);
-		//else if (!strcmp(it.attribute("type").as_string(), "draugar"))
-		//	CreateUnitEntity(UnitType::DRAUGAR, pos, civ);
+		else if (!strcmp(it.attribute("type").as_string(), "cyclop")) {
+			Unit* cyclop = static_cast<Unit*>(CreateUnitEntity(UnitType::CYCLOP, pos, unit_civ));
+			cyclop->SetHealth(it.attribute("health").as_int());
+		}
+		else if (!strcmp(it.attribute("type").as_string(), "minotaur")) {
+			Unit* minotaur = static_cast<Unit*>(CreateUnitEntity(UnitType::MINOTAUR, pos, unit_civ));
+			minotaur->SetHealth(it.attribute("health").as_int());
+		}
+		else if (!strcmp(it.attribute("type").as_string(), "jotnar")) {
+			Unit* jotnar = static_cast<Unit*>(CreateUnitEntity(UnitType::JOTNAR, pos, unit_civ));
+			jotnar->SetHealth(it.attribute("health").as_int());
+		}
+		else if (!strcmp(it.attribute("type").as_string(), "draugar")) {
+			Unit* draugar = static_cast<Unit*>(CreateUnitEntity(UnitType::DRAUGAR, pos, unit_civ));
+			draugar->SetHealth(it.attribute("health").as_int());
+		}
 	}
 
 	//BUILDINGS LOADING
