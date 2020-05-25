@@ -442,7 +442,10 @@ bool j1Scene::CleanUp()
 
 // Called when returning to main menu (either winning/losing or by menu options like exit)
 void j1Scene::BackToTitleMenu() {
-	App->fade_to_black->FadeToBlack(which_fade::scene_to_title, 2);
+	if(isInTutorial==true)
+		App->fade_to_black->FadeToBlack(which_fade::tutorial_to_title, 2);
+	else
+		App->fade_to_black->FadeToBlack(which_fade::scene_to_title, 2);
 
 	//App->change_scene = true;
 }
@@ -451,9 +454,15 @@ void j1Scene::BackToTitleMenu() {
 void j1Scene::RestartGame() {
 	CivilizationType civ = App->entityManager->getPlayer()->civilization;
 	if(civ==CivilizationType::GREEK)
-		App->fade_to_black->FadeToBlack(which_fade::scene_to_scene, 2, "greek");
+		if(isInTutorial==true)
+			App->fade_to_black->FadeToBlack(which_fade::tutorial_to_tutorial, 2, "greek");
+		else
+			App->fade_to_black->FadeToBlack(which_fade::scene_to_scene, 2, "greek");
 	else if (civ==CivilizationType::VIKING)
-		App->fade_to_black->FadeToBlack(which_fade::scene_to_scene, 2, "viking");
+		if (isInTutorial == true)
+			App->fade_to_black->FadeToBlack(which_fade::tutorial_to_tutorial, 2, "viking");
+		else
+			App->fade_to_black->FadeToBlack(which_fade::scene_to_scene, 2, "viking");
 }
 
 void j1Scene::OnClick(UI* element, float argument)

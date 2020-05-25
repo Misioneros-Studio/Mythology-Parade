@@ -65,6 +65,9 @@ public:
 	SDL_Texture* tutorial_tex;
 	bool fortress_selected;
 	bool monk_created;
+	bool unit_created;
+	bool convert_or_kill;
+	bool level_up;
 
 private:
 	TutorialMessageData* tutorial_message_data;

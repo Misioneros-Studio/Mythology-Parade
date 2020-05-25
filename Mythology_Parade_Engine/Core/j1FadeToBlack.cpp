@@ -68,9 +68,9 @@ bool j1FadeToBlack::PostUpdate()
 					App->pathfinding->Enable();
 				App->title_scene->Disable();
 				App->map->Enable();
+				App->scene->isInTutorial = false;
 				App->entityManager->Enable();
 				App->scene->Enable();
-				App->scene->isInTutorial = false;
 				App->minimap->Enable();
 				App->fowManager->Enable();
 
@@ -99,10 +99,10 @@ bool j1FadeToBlack::PostUpdate()
 			case(which_fade::title_to_tutorial):
 				App->title_scene->Disable();
 				App->map->Enable();
+				App->scene->isInTutorial = true;
 				App->entityManager->Enable();
 				App->pathfinding->Enable();
 				App->scene->Enable();
-				App->scene->isInTutorial = true;
 				App->tutorialscene->Enable();
 				App->minimap->Enable();
 				break;

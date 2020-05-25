@@ -142,6 +142,8 @@ void Building::CreateUnit()
 			App->tutorialscene->monk_created = true;
 		break;
 	case TEMPLE:
+		if (App->scene->isInTutorial == true)
+			App->tutorialscene->unit_created = true;
 		break;
 	case ENCAMPMENT:
 		App->entityManager->CreateUnitEntity(UnitType::ASSASSIN, { (int)position.x - 20, (int)position.y },civilization);
@@ -149,7 +151,8 @@ void Building::CreateUnit()
     {
 			App->entityManager->FxUnits(7, App->entityManager->CreateAssasin_sound, position.x, position.y);
 		}
-
+		if (App->scene->isInTutorial == true)
+			App->tutorialscene->unit_created = true;
 		break;
 	}
 }

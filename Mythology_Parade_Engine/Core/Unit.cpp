@@ -5,6 +5,7 @@
 #include"CombatUnit.h"
 #include "j1Gui.h"
 #include"j1ParticleManager.h"
+#include "j1TutorialScene.h"
 
 
 Unit::Unit(UnitType type, iPoint pos): unitType(type), state(AnimationType::IDLE),  moveSpeed(60)
@@ -463,6 +464,9 @@ void Unit::StateMachineActions(float dt)
 		{
 			//App->entityManager->DeleteEntity(this);
 			toDelete = true;
+			if (App->scene->isInTutorial == true) {
+				App->tutorialscene->convert_or_kill = true;
+			}
 		}
 
 		break;

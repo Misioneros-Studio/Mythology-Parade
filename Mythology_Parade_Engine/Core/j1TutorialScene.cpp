@@ -11,14 +11,15 @@
 #include "j1FadeToBlack.h"
 #include "j1Gui.h"
 #include "j1Window.h"
-
+#include "EntityManager.h"
+#include "Player.h"
 #include"QuadTree.h"
 
 j1TutorialScene::j1TutorialScene() : j1Module()
 {
 	name.append("tutorialscene");
 	tutorial_message_data = nullptr;
-	first_message_shown = second_message_shown = third_message_shown = quest_done = fortress_selected = monk_created = false;
+	first_message_shown = second_message_shown = third_message_shown = quest_done = fortress_selected = monk_created = unit_created = convert_or_kill = level_up = false;
 	first_message_height = second_message_height = third_message_height = 0;
 	camera_first_position = { 0,0 };
 	for (int i = 0; i < 36; i++) {
@@ -76,7 +77,7 @@ bool j1TutorialScene::Update(float dt)
 			quest_done = true;
 			tutorial_message_timer.Start();
 		}
-		if ((quest_done == false && tutorial_message_timer.ReadSec() >= 10)|| (quest_done == true && tutorial_message_timer.ReadSec() >= 5)) {
+		if ((quest_done == false && tutorial_message_timer.ReadSec() >= 40)|| (quest_done == true && tutorial_message_timer.ReadSec() >= 20)) {
 			DeleteTutorialMessage();
 			CreateTutorialMessage(message_number);
 			message_number++;
@@ -86,18 +87,13 @@ bool j1TutorialScene::Update(float dt)
 		}
 	}
 	else if (message_number == 5) {
-		if (fortress_selected == true)
-			quest_done = true;
-		if (quest_done == true) {
+		if (fortress_selected == true){
 			CreateTutorialMessage(message_number);
 			message_number++;
-			quest_done = false;
 		}
 	}
 	else if (message_number == 6) {
-		if (monk_created == true)
-			quest_done = true;
-		if (quest_done == true) {
+		if (monk_created == true){
 			DeleteTutorialMessage();
 			CreateTutorialMessage(message_number);
 			message_number++;
@@ -105,10 +101,38 @@ bool j1TutorialScene::Update(float dt)
 			message_number++;
 			CreateTutorialMessage(message_number);
 			message_number++;
-			quest_done = false;
+		}
+	}
+	else if (message_number == 9) {
+		if (App->entityManager->getPlayer()->research_assassin == true || App->entityManager->getPlayer()->research_cleric == true) {
+			CreateTutorialMessage(message_number);
+			message_number++;
+		}
+	}
+	else if (message_number == 10) {
+		if (unit_created == true) {
+			DeleteTutorialMessage();
+			CreateTutorialMessage(message_number);
+			message_number++;
+			CreateTutorialMessage(message_number);
+			message_number++;
+		}
+	}
+	else if (message_number == 12) {
+		if (convert_or_kill == true) {
+			CreateTutorialMessage(message_number);
+			message_number++;
+		}
+	}
+	else if (message_number == 13) {
+		if (level_up == true) {
+			App->entityManager->getPlayer()->player_win = true;
 		}
 	}
 	monk_created = false;
+	unit_created = false;
+	convert_or_kill = false;
+	level_up = false;
 	return true;
 }
 
