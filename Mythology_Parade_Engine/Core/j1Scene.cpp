@@ -31,6 +31,8 @@ j1Scene::j1Scene() : j1Module()
 	name.append("scene");
 	winlose_tex = nullptr;
 	clickToPath = false;
+	nextUnit_selected = nextBuilding_selected = building_meteor = false;
+	oneTime = true;
 }
 
 // Destructor
@@ -129,6 +131,14 @@ bool j1Scene::Start()
 // Called each loop iteration
 bool j1Scene::PreUpdate()
 {
+	//DELETE THIS
+	if (oneTime)
+	{
+		App->entityManager->CreateBuildingEntity({ 100,100 }, BuildingType::ENCAMPMENT, App->entityManager->buildingsData[3], CivilizationType::VIKING);
+		oneTime = false;
+	}
+	//
+
 
 	// debug pathfing ------------------
 	if (App->input->GetMouseButtonDown(SDL_BUTTON_RIGHT) == KEY_DOWN)
@@ -676,27 +686,34 @@ void j1Scene::OnClick(UI* element, float argument)
 		}
 		else if (element->name == "Heal")
 		{
-		//BERNAT
+			App->entityManager->DeleteEntity(hud->thing_selected);
+			nextUnit_selected = true;
 		}
 		else if (element->name == "Produce_Cleric")
 		{
-			//BERNAT
+			Building* building = (Building*)hud->thing_selected;
+			App->entityManager->getPlayer()->DecreaseFaith(150);
+			building->StartProducing("Cleric");
 		}
 		else if (element->name == "Produce_Chaotic_Beast")
 		{
-			//BERNAT
+			Building* building = (Building*)hud->thing_selected;
+			App->entityManager->getPlayer()->DecreaseFaith(200);
+			building->StartProducing("Lawful_Beast"); 
 		}
 		else if (element->name == "Produce_Lawful_Beast")
 		{
-			//BERNAT
+			Building* building = (Building*)hud->thing_selected;
+			App->entityManager->getPlayer()->DecreaseFaith(200);
+			building->StartProducing("Chaotic_Beast");
 		}
 		else if (element->name == "Produce_Lawful_Miracle")
 		{
-			//BERNAT
+			nextBuilding_selected = true;
 		}
 		else if (element->name == "Produce_Chaotic_Miracle")
 		{
-			//BERNAT
+			building_meteor = true;
 		}
 		break;
 

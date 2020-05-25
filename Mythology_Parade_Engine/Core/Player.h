@@ -28,6 +28,9 @@ public:
 	void ClickLogic();
 	std::list<Entity*> GetEntitiesSelected();
 	Building* GetSelectedBuild();
+	Building* GetEnemySelectedBuild();
+	void ActionToUnit();
+	void ActionToBuilding();
 
 	int GetFaith();
 	int GetPrayers();
@@ -48,11 +51,14 @@ private:
 	iPoint postClicked;
 	std::list<Entity*> listEntities;
 	Entity* buildingSelect;
+	Entity* enemyBuildingSelect;
 
 	bool oneTime;
 	iPoint click;
 
+
 public:
+	int marc;
 	bool dontSelect;
 	bool player_win = false;
 	bool player_lose = false;

@@ -147,6 +147,8 @@ public:
 	j1Timer timer_win_lose;
 	bool start_timer;
 	ImageUI* ui_volume_sliders[6];
+
+
 };
 
 #endif // !__HUD__H_

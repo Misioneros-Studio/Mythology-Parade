@@ -325,6 +325,7 @@ bool EntityManager::Load(pugi::xml_node& n)
 	player->research_lawful_victory = p.child("research").child("lawful_victory").attribute("research").as_bool();
 	player->research_temple = p.child("research").child("temple").attribute("research").as_bool();
 
+
 	player->SetFaith(p.child("economy").attribute("faith").as_int());
 	player->SetSacrifices(p.child("economy").attribute("sacrifices").as_int());
 	player->SetPrayers(p.child("economy").attribute("prayers").as_int());
@@ -475,6 +476,8 @@ bool EntityManager::Load(pugi::xml_node& n)
 			else if (action == BuildingAction::RESEARCHING) { fortress->StartResearching(it.attribute("element").as_string()); fortress->timer_construction.StartAt(it.attribute("time").as_int()); }
 		}
 	}
+
+
 	return true;
 }
 
@@ -695,7 +698,7 @@ Entity* EntityManager::CreatePlayerEntity(std::string civilization_string)
 	return ret;
 }
 
-Entity* EntityManager::CreateUnitEntity(UnitType type, iPoint pos, CivilizationType civilization)
+Entity* EntityManager::CreateUnitEntity(UnitType type, iPoint pos, CivilizationType civ)
 {
 	Entity* ret = nullptr;
 
@@ -723,8 +726,11 @@ Entity* EntityManager::CreateUnitEntity(UnitType type, iPoint pos, CivilizationT
 	case UnitType::MINOTAUR:
 		ret = new CombatUnit(UnitType::MINOTAUR, pos);
 		break;
+	case UnitType::CLERIC:
+		ret = new Unit(UnitType::CLERIC, pos);
+		break;
 	}
-	ret->civilization = civilization;
+	ret->civilization = civ;
 	ret->type = EntityType::UNIT;
 	ret->texture = animationManager.charData[type].texture;
 

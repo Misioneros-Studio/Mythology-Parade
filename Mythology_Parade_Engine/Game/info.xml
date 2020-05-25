@@ -24,6 +24,7 @@
 		<unit type="cyclop" position_x="2400" position_y="2480" civilization="greek" health="130" level="0" />
 	</entities>
 	<buildings>
+		<build type="encampment" position_x="108" position_y="48" civilization="viking" health="350" status="finished" action="nothing" />
 		<build type="fortress" position_x="3200" position_y="2288" civilization="viking" health="500" status="finished" action="nothing" />
 		<build type="fortress" position_x="1920" position_y="2288" civilization="greek" health="500" status="finished" action="nothing" />
 	</buildings>
@@ -31,13 +32,13 @@
 		<greek>
 			<economy faith="504" prayers="0" sacrifices="0" />
 			<research>
-				<temple research="false" />
-				<encampment research="false" />
-				<cleric research="false" />
+				<temple research="true" />
+				<encampment research="true" />
+				<cleric research="true" />
 				<assassin research="false" />
-				<lawful_beast research="false" />
+				<lawful_beast research="true" />
 				<chaotic_beast research="false" />
-				<lawful_miracle research="false" />
+				<lawful_miracle research="true" />
 				<chaotic_miracle research="false" />
 				<lawful_victory research="false" />
 				<chaotic_victory research="false" />
