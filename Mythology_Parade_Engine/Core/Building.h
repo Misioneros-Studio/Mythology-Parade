@@ -59,7 +59,7 @@ public:
 
 	std::string GetElementProducing();
 
-	void CreateUnitQueue(std::string thing_producing);
+	void ProduceQueue(std::string thing_producing);
 
 private:
 

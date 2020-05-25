@@ -181,7 +181,7 @@ std::string Building::GetElementProducing()
 {
 	return element_producing;
 }
-void Building::CreateUnitQueue(std::string thing_producing)
+void Building::ProduceQueue(std::string thing_producing)
 {
 	queuedResearch.push(thing_producing);
 }
