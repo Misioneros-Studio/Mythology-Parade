@@ -326,9 +326,16 @@ void HUD::HUDUpdateSelection(std::list<Entity*> listEntities, Building* building
 		}
 		hud_list_troops[j] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, static_cast<UI*>(ui_ingame), r, GetSpritePortrait(0, type_of_troops[j]), "Troop", Panel_Fade::no_one_fade, { 0,0,0,0 },
 			{ 0,0,0,0 }, false, { 0,0,0,0 }, nullptr, 0, false, -1.0F, 1));
-		if (number_of_troops[j] > 1)
+		if (number_of_troops[j] > 1) {
+			if (number_of_troops[j] < 10) {
+				r2.x += 5;
+			}
 			hud_number_troops[j] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), r2, { 0,0,100,100 }, std::to_string(number_of_troops[j]), Panel_Fade::no_one_fade,
 				{ 255,255,255,255 }));
+			if (number_of_troops[j] < 10) {
+				r2.x -= 5;
+			}
+		}
 		r.x += 34;
 		r2.x += 34;
 	}
@@ -349,9 +356,10 @@ void HUD::HUDUpdateSelection(std::list<Entity*> listEntities, Building* building
 				position_name.x += 18;
 				hud_stats_selected_troop[0]->SetRect(position_name);
 				break;
-			case UnitType::PRIEST:
+			case UnitType::CLERIC:
 				hud_stats_selected_troop[0]->SetString("Cleric");
 				type_thing_selected = Type_Selected::Cleric;
+				hud_stats_selected_troop[0]->SetRect(position_name);
 				break;
 			case UnitType::ASSASSIN:
 				hud_stats_selected_troop[0]->SetString("Assassin");
@@ -364,6 +372,30 @@ void HUD::HUDUpdateSelection(std::list<Entity*> listEntities, Building* building
 				hud_stats_selected_troop[0]->SetString("Pikeman");
 				type_thing_selected = Type_Selected::Pikeman;
 				combat_unit = true;
+				break;
+			case UnitType::MINOTAUR:
+				hud_stats_selected_troop[0]->SetString("Minotaur");
+				type_thing_selected = Type_Selected::Minotaur;
+				position_name.x += 6;
+				hud_stats_selected_troop[0]->SetRect(position_name);
+				break;
+			case UnitType::CYCLOP:
+				hud_stats_selected_troop[0]->SetString("Cyclop");
+				type_thing_selected = Type_Selected::Cyclop;
+				position_name.x += 14;
+				hud_stats_selected_troop[0]->SetRect(position_name);
+				break;
+			case UnitType::DRAUGAR:
+				hud_stats_selected_troop[0]->SetString("Draugar");
+				type_thing_selected = Type_Selected::Draugar;
+				position_name.x += 12;
+				hud_stats_selected_troop[0]->SetRect(position_name);
+				break;
+			case UnitType::JOTNAR:
+				hud_stats_selected_troop[0]->SetString("Jotnar");
+				type_thing_selected = Type_Selected::Jotnar;
+				position_name.x += 14;
+				hud_stats_selected_troop[0]->SetRect(position_name);
 				break;
 			}
 			if (combat_unit == true) {
@@ -398,6 +430,36 @@ void HUD::HUDUpdateSelection(std::list<Entity*> listEntities, Building* building
 					{ 0,0,0,255 }));
 				hud_stats_selected_troop[2] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 773,703,30,10 }, { 0,0,100,100 }, 
 					std::to_string(unit->GetHealth()), Panel_Fade::no_one_fade, { 0,0,0,255 }));
+				if (unit->unitType == UnitType::CLERIC) {
+					hud_stats_selected_troop[3] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 720,622,30,10 }, { 0,0,100,100 }, "Influence % every 5 s:", Panel_Fade::no_one_fade,
+						{ 0,0,0,255 }));
+					hud_stats_selected_troop[4] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 890,622,30,10 }, { 0,0,100,100 },
+						std::to_string(5), Panel_Fade::no_one_fade, { 0,0,0,255 }));
+				}
+				else if(unit->unitType == UnitType::MINOTAUR||unit->unitType==UnitType::DRAUGAR) {
+					hud_stats_selected_troop[3] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 720,622,30,10 }, { 0,0,100,100 }, "Health", Panel_Fade::no_one_fade,
+						{ 0,0,0,255 }));
+					hud_stats_selected_troop[4] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 720,636,30,10 }, { 0,0,100,100 }, "decreased:", Panel_Fade::no_one_fade,
+						{ 0,0,0,255 }));
+					hud_stats_selected_troop[5] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 791,636,30,10 }, { 0,0,100,100 },
+						std::to_string(20), Panel_Fade::no_one_fade, { 0,0,0,255 }));
+					hud_stats_selected_troop[6] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 720,664,30,30 }, { 0,0,100,100 }, "Range:", Panel_Fade::no_one_fade,
+						{ 0,0,0,255 }));
+					hud_stats_selected_troop[7] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 768,664,30,30 }, { 0,0,100,100 },
+						std::to_string(3), Panel_Fade::no_one_fade, { 0,0,0,255 }));
+				}
+				else if (unit->unitType == UnitType::JOTNAR || unit->unitType == UnitType::CYCLOP) {
+					hud_stats_selected_troop[3] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 720,622,30,10 }, { 0,0,100,100 }, "Health", Panel_Fade::no_one_fade,
+						{ 0,0,0,255 }));
+					hud_stats_selected_troop[4] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 720,636,30,10 }, { 0,0,100,100 }, "raised:", Panel_Fade::no_one_fade,
+						{ 0,0,0,255 }));
+					hud_stats_selected_troop[5] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 767,636,30,10 }, { 0,0,100,100 },
+						std::to_string(50), Panel_Fade::no_one_fade, { 0,0,0,255 }));
+					hud_stats_selected_troop[6] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 720,664,30,30 }, { 0,0,100,100 }, "Range:", Panel_Fade::no_one_fade,
+						{ 0,0,0,255 }));
+					hud_stats_selected_troop[7] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 768,664,30,30 }, { 0,0,100,100 },
+						std::to_string(1), Panel_Fade::no_one_fade, { 0,0,0,255 }));
+				}
 			}
 		}
 	}
@@ -494,7 +556,7 @@ void HUD::HUDDeleteActionButtons() {
 // Called to update every frame the information of the selected thing
 void HUD::UpdateSelectedThing() {
 	if (thing_selected->type == EntityType::UNIT) {
-		if (hud_stats_selected_troop[5] != nullptr) {
+		if (hud_stats_selected_troop[9] != nullptr) {
 			CombatUnit* cunit = static_cast<CombatUnit*>(thing_selected);
 			hud_stats_selected_troop[2]->SetString(std::to_string(cunit->GetDamageValue()));
 			hud_stats_selected_troop[4]->SetString(std::to_string(cunit->GetRangeValue()));
@@ -544,6 +606,10 @@ void HUD::ManageActionButtons(bool create_buttons, bool viking) {
 			hud_button_actions[1] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 241,613,36,36 }, { 16,529,36,36 }, "Heal", Panel_Fade::no_one_fade, { 98,529,36,36 }, { 57,529,36,36 },
 				false, { 0,0,0,0 }, App->scene, (int)UI_Audio::MAIN_MENU, false, -1.0f, 0, (int)TooltipsAvailable::healbutton));
 		case Type_Selected::Cleric:
+		case Type_Selected::Jotnar:
+		case Type_Selected::Minotaur:
+		case Type_Selected::Cyclop:
+		case Type_Selected::Draugar:
 			hud_button_actions[0] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 200,613,36,36 }, { 16,185,36,36 }, "Move", Panel_Fade::no_one_fade, { 98,185,36,36 }, { 57,185,36,36 },
 				false, { 0,0,0,0 }, App->scene, (int)UI_Audio::MAIN_MENU, false, -1.0f, 0, (int)TooltipsAvailable::movebutton));
 			break;
@@ -1308,6 +1374,21 @@ SDL_Rect HUD::GetSpritePortrait(int type_of_portrait, UnitType unit_type) {
 		case UnitType::PRIEST:
 			sprite = { 393,194,30,41 };
 			break;
+		case UnitType::MINOTAUR:
+			sprite = { 424,194,30,41 };
+			break;
+		case UnitType::CYCLOP:
+			sprite = { 455,194,30,41 };
+			break;
+		case UnitType::JOTNAR:
+			sprite = { 487,194,30,41 };
+			break;
+		case UnitType::DRAUGAR:
+			sprite = { 518,194,30,41 };
+			break;
+		case UnitType::CLERIC:
+			sprite = { 549,194,30,41 };
+			break;
 		}
 	}
 	else if (type_of_portrait == 1) {
@@ -1323,6 +1404,21 @@ SDL_Rect HUD::GetSpritePortrait(int type_of_portrait, UnitType unit_type) {
 			break;
 		case UnitType::PRIEST:
 			sprite = { 242,321,76,105 };
+			break;
+		case UnitType::MINOTAUR:
+			sprite = { 324,726,76,105 };
+			break;
+		case UnitType::CYCLOP:
+			sprite = { 242,726,76,105 };
+			break;
+		case UnitType::JOTNAR:
+			sprite = { 162,726,76,105 };
+			break;
+		case UnitType::DRAUGAR:
+			sprite = { 82,726,76,105 };
+			break;
+		case UnitType::CLERIC:
+			sprite = { 2,726,76,105 };
 			break;
 		}
 	}

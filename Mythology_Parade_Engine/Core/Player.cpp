@@ -265,14 +265,20 @@ void Player::PlayerInputs()
 	{
 		iPoint mouse = App->map->GetMousePositionOnMap();
 		iPoint spawnPos = App->map->TileCenterPoint(mouse);
-		App->entityManager->CreateUnitEntity(UnitType::CYCLOP, spawnPos,civilization);
+		if(civilization==CivilizationType::GREEK)
+			App->entityManager->CreateUnitEntity(UnitType::CYCLOP, spawnPos,civilization);
+		else if(civilization == CivilizationType::VIKING)
+			App->entityManager->CreateUnitEntity(UnitType::JOTNAR, spawnPos, civilization);
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN && App->scene->godMode)
 	{
 		iPoint mouse = App->map->GetMousePositionOnMap();
 		iPoint spawnPos = App->map->TileCenterPoint(mouse);
-		App->entityManager->CreateUnitEntity(UnitType::DRAUGAR , spawnPos, civilization);
+		if (civilization == CivilizationType::GREEK)
+			App->entityManager->CreateUnitEntity(UnitType::MINOTAUR, spawnPos, civilization);
+		else if (civilization == CivilizationType::VIKING)
+			App->entityManager->CreateUnitEntity(UnitType::DRAUGAR, spawnPos, civilization);
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_F4) == KEY_DOWN && App->scene->godMode)
