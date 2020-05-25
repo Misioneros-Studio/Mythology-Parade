@@ -58,21 +58,28 @@ public:
 	void CreateTutorialMessage(int);
 
 	// Called when deleting a tutorial message
-	void DeleteTutorialMessage(bool, bool, bool);
+	void DeleteTutorialMessage();
 
 public:
 
 	SDL_Texture* tutorial_tex;
+	bool fortress_selected;
+	bool monk_created;
+
+private:
 	TutorialMessageData* tutorial_message_data;
-	WindowUI* window_tutorial_message[3];
-	TextUI* text_tutorial_message[30];
-	ButtonUI* button_tutorial_message[3];
+	WindowUI* window_tutorial_message[4];
+	TextUI* text_tutorial_message[36];
 	bool first_message_shown;
 	bool second_message_shown;
+	bool third_message_shown;
 	int first_message_height;
 	int second_message_height;
+	int third_message_height;
 	j1Timer tutorial_message_timer;
-	int message_number;///TEMPORAL
+	int message_number;
+	iPoint camera_first_position;
+	bool quest_done;
 };
 
 #endif // __j1TUTORIALSCENE_H__

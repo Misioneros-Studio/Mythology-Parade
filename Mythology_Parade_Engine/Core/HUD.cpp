@@ -10,6 +10,7 @@
 #include "HUD.h"
 #include "ResearchMenu.h"
 #include "TooltipData.h"
+#include "j1TutorialScene.h"
 
 
 //Constructor
@@ -286,6 +287,8 @@ void HUD::DeactivateConfirmationMenu() {
 void HUD::HUDUpdateSelection(std::list<Entity*> listEntities, Building* building_selected) {
 	int i = 0;
 	bool viking = true;
+	if (App->scene->isInTutorial == true)
+		App->tutorialscene->fortress_selected = false;
 	HUDDeleteListTroops();
 	HUDDeleteSelectedTroop();
 	HUDDeleteActionButtons();
@@ -408,6 +411,8 @@ void HUD::HUDUpdateSelection(std::list<Entity*> listEntities, Building* building
 		hud_stats_selected_troop[0] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), position_name, { 0,0,100,100 }, "Building", Panel_Fade::no_one_fade, { 0,0,0,255 }));
 		switch (building_selected->GetBuildingType()) {
 		case BuildingType::FORTRESS:
+			if (App->scene->isInTutorial == true)
+				App->tutorialscene->fortress_selected = true;
 			hud_stats_selected_troop[0]->SetString("Fortress");
 			//position_name.x += 18;
 			hud_stats_selected_troop[0]->SetRect(position_name);

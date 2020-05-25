@@ -18,11 +18,11 @@ j1TutorialScene::j1TutorialScene() : j1Module()
 {
 	name.append("tutorialscene");
 	tutorial_message_data = nullptr;
-	first_message_shown = second_message_shown = false;
-	first_message_height = second_message_height = 0;
-	for (int i = 0; i < 30; i++) {
-		if (i < 3) {
-			button_tutorial_message[i] = nullptr;
+	first_message_shown = second_message_shown = third_message_shown = quest_done = fortress_selected = monk_created = false;
+	first_message_height = second_message_height = third_message_height = 0;
+	camera_first_position = { 0,0 };
+	for (int i = 0; i < 36; i++) {
+		if (i < 4) {
 			window_tutorial_message[i] = nullptr;
 		}
 		text_tutorial_message[i] = nullptr;
@@ -48,10 +48,7 @@ bool j1TutorialScene::Start()
 	App->render->camera.y = -1865;
 	tutorial_message_data = new TutorialMessageData;
 	tutorial_message_timer.Start();
-	CreateTutorialMessage(0);
-	CreateTutorialMessage(1);
-	CreateTutorialMessage(2);
-	message_number = 3;
+	message_number = 0;
 	return true;
 }
 
@@ -66,20 +63,52 @@ bool j1TutorialScene::PreUpdate()
 bool j1TutorialScene::Update(float dt)
 {
 	
-	if (tutorial_message_timer.ReadSec() >= 5) {
-		DeleteTutorialMessage(true, true, true);
+	if (message_number<3&&tutorial_message_timer.ReadSec() >= 3) {
 		CreateTutorialMessage(message_number);
-		LOG("%d", message_number);
-		if (message_number < 12)
-			message_number++;
-		CreateTutorialMessage(message_number);
-		if (message_number < 12)
-			message_number++;
-		CreateTutorialMessage(message_number);
-		if (message_number < 12)
-			message_number++;
+		message_number++;
+		if (message_number == 3) {
+			camera_first_position = { App->render->camera.x,App->render->camera.y };
+		}
 		tutorial_message_timer.Start();
 	}
+	else if (message_number == 3){
+		if ((camera_first_position.x != App->render->camera.x || camera_first_position.y != App->render->camera.y) && quest_done == false) {
+			quest_done = true;
+			tutorial_message_timer.Start();
+		}
+		if ((quest_done == false && tutorial_message_timer.ReadSec() >= 10)|| (quest_done == true && tutorial_message_timer.ReadSec() >= 5)) {
+			DeleteTutorialMessage();
+			CreateTutorialMessage(message_number);
+			message_number++;
+			CreateTutorialMessage(message_number);
+			message_number++;
+			quest_done = false;
+		}
+	}
+	else if (message_number == 5) {
+		if (fortress_selected == true)
+			quest_done = true;
+		if (quest_done == true) {
+			CreateTutorialMessage(message_number);
+			message_number++;
+			quest_done = false;
+		}
+	}
+	else if (message_number == 6) {
+		if (monk_created == true)
+			quest_done = true;
+		if (quest_done == true) {
+			DeleteTutorialMessage();
+			CreateTutorialMessage(message_number);
+			message_number++;
+			CreateTutorialMessage(message_number);
+			message_number++;
+			CreateTutorialMessage(message_number);
+			message_number++;
+			quest_done = false;
+		}
+	}
+	monk_created = false;
 	return true;
 }
 
@@ -96,7 +125,7 @@ bool j1TutorialScene::CleanUp()
 	LOG("Freeing scene");
 
 	App->tex->UnLoad(tutorial_tex);
-	DeleteTutorialMessage(true, true, true);
+	DeleteTutorialMessage();
 
 	if (tutorial_message_data != nullptr) {
 		delete tutorial_message_data;
@@ -111,9 +140,13 @@ void j1TutorialScene::CreateTutorialMessage(int index)
 {
 	SDL_Rect color = { 255,255,255,255 };
 	if (index == 5 || index == 7 || index == 9 || index == 11 || index == 12)
-		color.y = color.w = 150;
-	int number_message = 2;
+		color.y = color.w = 100;
+	int number_message = 3;
 	int y = 0;
+	if (third_message_shown == false)
+		number_message = 2;
+	else
+		y += third_message_height;
 	if (second_message_shown == false)
 		number_message = 1;
 	else
@@ -130,7 +163,7 @@ void j1TutorialScene::CreateTutorialMessage(int index)
 		{ 1285,11,305,(tutorial_message.lines * 18) }));
 	int j = 0;
 	for (int i = 1; i <= tutorial_message.lines; i++) {
-		int k = i + (number_message * 10);
+		int k = i + (number_message * 9);
 		if (tutorial_message.has_title && i == 1) {
 			text_tutorial_message[k - 1] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, window_tutorial_message[number_message], { (int)w - 295,y + (18 * (i - 1)),290,18 }, { 0,0,0,0 },
 				tutorial_message.title, Panel_Fade::no_one_fade, color));
@@ -138,7 +171,7 @@ void j1TutorialScene::CreateTutorialMessage(int index)
 		}
 		else {
 			text_tutorial_message[k - 1] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, window_tutorial_message[number_message], { (int)w - 295,y + (18 * (i - 1)),290,18 }, { 0,0,0,0 },
-				tutorial_message_data->GetLineTutorialMessage(i + j, tutorial_message), Panel_Fade::no_one_fade, color));
+				tutorial_message_data->GetLineTutorialMessage(i + j, tutorial_message), Panel_Fade::no_one_fade, { 255,255,255,255 }));
 		}
 	}
 	if (number_message == 0) {
@@ -149,59 +182,26 @@ void j1TutorialScene::CreateTutorialMessage(int index)
 		second_message_shown = true;
 		second_message_height = (tutorial_message.lines * 18)+5;
 	}
+	else if (number_message == 2) {
+		third_message_shown = true;
+		third_message_height = (tutorial_message.lines * 18) + 5;
+	}
 }
 
 // Called when deleting a tutorial message
-void j1TutorialScene::DeleteTutorialMessage(bool first_message, bool second_message, bool third_message)
+void j1TutorialScene::DeleteTutorialMessage()
 {
-	if (third_message == true) {
-		for (int i = 29; i >= 20; i--) {
-			if (text_tutorial_message[i] != nullptr) {
-				App->gui->DeleteUIElement(text_tutorial_message[i]);
-				text_tutorial_message[i] = nullptr;
+	for (int i = 35; i >= 0; i--) {
+		if (i < 4) {
+			if (window_tutorial_message[i] != nullptr) {
+				App->gui->DeleteUIElement(window_tutorial_message[i]);
+				window_tutorial_message[i] = nullptr;
 			}
 		}
-		if (button_tutorial_message[2] != nullptr) {
-			App->gui->DeleteUIElement(button_tutorial_message[2]);
-			button_tutorial_message[2] = nullptr;
-		}
-		if (window_tutorial_message[2] != nullptr) {
-			App->gui->DeleteUIElement(window_tutorial_message[2]);
-			window_tutorial_message[2] = nullptr;
+		if (text_tutorial_message[i] != nullptr) {
+			App->gui->DeleteUIElement(text_tutorial_message[i]);
+			text_tutorial_message[i] = nullptr;
 		}
 	}
-	if(second_message==true){
-		for (int i = 19; i >= 10; i--) {
-			if (text_tutorial_message[i] != nullptr) {
-				App->gui->DeleteUIElement(text_tutorial_message[i]);
-				text_tutorial_message[i] = nullptr;
-			}
-		}
-		if (button_tutorial_message[1] != nullptr) {
-			App->gui->DeleteUIElement(button_tutorial_message[1]);
-			button_tutorial_message[1] = nullptr;
-		}
-		if (window_tutorial_message[1] != nullptr) {
-			App->gui->DeleteUIElement(window_tutorial_message[1]);
-			window_tutorial_message[1] = nullptr;
-		}
-		second_message_shown = false;
-	}
-	if (first_message == true) {
-		for (int i = 9; i >= 0; i--) {
-			if (text_tutorial_message[i] != nullptr) {
-				App->gui->DeleteUIElement(text_tutorial_message[i]);
-				text_tutorial_message[i] = nullptr;
-			}
-		}
-		if (button_tutorial_message[0] != nullptr) {
-			App->gui->DeleteUIElement(button_tutorial_message[0]);
-			button_tutorial_message[0] = nullptr;
-		}
-		if (window_tutorial_message[0] != nullptr) {
-			App->gui->DeleteUIElement(window_tutorial_message[0]);
-			window_tutorial_message[0] = nullptr;
-		}
-		first_message_shown = false;
-	}
+	third_message_shown = second_message_shown = first_message_shown = false;
 }

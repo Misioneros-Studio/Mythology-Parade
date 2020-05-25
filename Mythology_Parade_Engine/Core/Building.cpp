@@ -1,5 +1,6 @@
 #include "Building.h"
 #include "p2Log.h"
+#include  "j1TutorialScene.h"
 Building::Building(BuildingType type, iPoint pos, BuildingInfo info)
 {
 	//default inits with none value
@@ -137,6 +138,8 @@ void Building::CreateUnit()
     {
 			App->entityManager->FxUnits(6, App->entityManager->CreateMonk_sound, position.x, position.y);
 		}
+		if (App->scene->isInTutorial == true)
+			App->tutorialscene->monk_created = true;
 		break;
 	case TEMPLE:
 		break;
