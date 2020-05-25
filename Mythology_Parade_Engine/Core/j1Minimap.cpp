@@ -24,7 +24,7 @@ j1Minimap::j1Minimap() : j1Module() {
 	update_minimap_fow = true;
 	reset_timer_fow = true;
 	show_damage_area = false;
-	count = 0;
+
 }
 
 j1Minimap::~j1Minimap() {
@@ -162,29 +162,25 @@ bool j1Minimap::PostUpdate() {
 		SDL_RenderClear(App->render->renderer);
 		SDL_RenderFillRect(App->render->renderer, NULL);
 		App->render->DrawQuad({ 0,0,(int)win_w,(int)win_h }, 0, 0, 0, 255, false, false);
-		if (count > 100) count = 100;
 		for (int x = 0; x < App->map->data.width; x++) {
 			for (int y = 0; y < App->map->data.height; y++) {
 				if ((!App->fowManager->CheckTileVisibility({ x,y }))) {
 					int mid_width = width / 2;
 					float width_calculated = (float)mid_width / (float)(App->map->data.width);
-					float height_calculated = (float)height / (float)(App->map->data.height*2);
+					float height_calculated = (float)height / (float)(App->map->data.height * 2);
 					int x2 = mid_width + ((x - y) * width_calculated);
-					int y2 = (x + y)*height_calculated;
-					if (count < 10) {
-						if ((!App->fowManager->CheckTileVisibilityWithoutCountingShroud({ x,y }))) {
-							App->render->DrawQuad({ x2,y2,1,1 }, 0, 0, 0, 255, true, false);
-						}
-						else {
-							App->render->DrawQuad({ x2,y2,1,1 }, 0, 0, 0, 50, true, false);
-						}
+					int y2 = (x + y) * height_calculated;
+					if ((!App->fowManager->CheckTileVisibilityWithoutCountingShroud({ x,y }))) {
+						App->render->DrawQuad({ x2,y2,1,1 }, 0, 0, 0, 255, true, false);
+					}
+					else {
+						App->render->DrawQuad({ x2,y2,1,1 }, 0, 0, 0, 50, true, false);
 					}
 				}
 			}
 		}
 		SDL_SetRenderTarget(App->render->renderer, NULL);
 		update_minimap_fow = false;
-		count++;
 	}
 
 	App->render->Blit(texture_fow, position.x, position.y, NULL, 0.0, 0);
