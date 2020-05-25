@@ -3,9 +3,9 @@
 	<entities>
 		<unit type="cyclop" position_x="2432" position_y="2144" civilization="greek" health="150" level="0" />
 		<unit type="draugar" position_x="2176" position_y="2144" civilization="greek" health="40" level="0" />
-		<unit type="draugar" position_x="2368" position_y="2176" civilization="greek" health="40" level="369098752" />
-		<unit type="cyclop" position_x="2240" position_y="2176" civilization="greek" health="130" level="369098752" />
-		<unit type="cyclop" position_x="2400" position_y="2192" civilization="greek" health="150" level="369098752" />
+		<unit type="draugar" position_x="2368" position_y="2176" civilization="greek" health="40" level="0" />
+		<unit type="cyclop" position_x="2240" position_y="2176" civilization="greek" health="130" level="0" />
+		<unit type="cyclop" position_x="2400" position_y="2192" civilization="greek" health="150" level="0" />
 		<unit type="draugar" position_x="2464" position_y="2224" civilization="greek" health="40" level="0" />
 		<unit type="monk" position_x="2304" position_y="2240" civilization="greek" health="-19" />
 		<unit type="draugar" position_x="2624" position_y="2240" civilization="greek" health="40" level="0" />
@@ -18,7 +18,7 @@
 		<unit type="cyclop" position_x="2048" position_y="2336" civilization="greek" health="150" level="0" />
 		<unit type="assassin" position_x="2976" position_y="2384" civilization="viking" health="100" level="0" />
 		<unit type="cyclop" position_x="2208" position_y="2384" civilization="greek" health="130" level="0" />
-		<unit type="draugar" position_x="2048" position_y="2400" civilization="greek" health="20" level="-2147476224" />
+		<unit type="draugar" position_x="2048" position_y="2400" civilization="greek" health="20" level="0" />
 		<unit type="draugar" position_x="2496" position_y="2432" civilization="greek" health="20" level="0" />
 		<unit type="draugar" position_x="2240" position_y="2464" civilization="greek" health="20" level="0" />
 		<unit type="cyclop" position_x="2400" position_y="2480" civilization="greek" health="130" level="0" />
@@ -29,15 +29,15 @@
 	</buildings>
 	<players>
 		<greek>
-			<economy faith="504" prayers="0" sacrifices="0" />
+			<economy faith="500" prayers="0" sacrifices="0" />
 			<research>
-				<temple research="true" />
-				<encampment research="true" />
-				<cleric research="true" />
+				<temple research="false" />
+				<encampment research="false" />
+				<cleric research="false" />
 				<assassin research="false" />
-				<lawful_beast research="true" />
+				<lawful_beast research="false" />
 				<chaotic_beast research="false" />
-				<lawful_miracle research="true" />
+				<lawful_miracle research="false" />
 				<chaotic_miracle research="false" />
 				<lawful_victory research="false" />
 				<chaotic_victory research="false" />
