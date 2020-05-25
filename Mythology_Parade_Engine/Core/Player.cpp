@@ -345,12 +345,12 @@ void Player::SetSacrifices(int var)
 void Player::InitVikings() 
 {
 	if (App->scene->isInTutorial == false) {
-		iPoint fortress = { 122,21 };
+		iPoint fortress = { 21,23 };
 		fortress = App->map->MapToWorld(fortress.x, fortress.y);
 		fortress.x -= App->map->GetTilesHalfSize().x;
 
-		iPoint monkPos = { 119,26 };
-		iPoint assassinPos = { 121,28 };
+		iPoint monkPos = {26,24 };
+		iPoint assassinPos = { 25,24 };
 		monkPos = App->map->MapToWorld(monkPos.x, monkPos.y);
 		assassinPos = App->map->MapToWorld(assassinPos.x, assassinPos.y);
 
@@ -377,12 +377,12 @@ void Player::InitVikings()
 void Player::InitGreek()
 {
 	if (App->scene->isInTutorial == false) {
-		iPoint fortress = { 102,41 };
+		iPoint fortress = { 129,137 };
 		fortress = App->map->MapToWorld(fortress.x, fortress.y);
 		fortress.x -= App->map->GetTilesHalfSize().x;
 
-		iPoint monkPos = { 106,34 };
-		iPoint assassinPos = { 109,37 };
+		iPoint monkPos = { 130,139 };
+		iPoint assassinPos = { 129,139 };
 		monkPos = App->map->MapToWorld(monkPos.x, monkPos.y);
 		assassinPos = App->map->MapToWorld(assassinPos.x, assassinPos.y);
 
