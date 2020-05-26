@@ -83,6 +83,7 @@ bool EntityManager::Start()
 	animations[UnitType::JOTNAR] = animationManager.Load("assets/units/Jotnar.tmx", UnitType::JOTNAR);
 	animations[UnitType::CYCLOP] = animationManager.Load("assets/units/Cyclop.tmx", UnitType::CYCLOP);
 	animations[UnitType::MINOTAUR] = animationManager.Load("assets/units/Minotaur.tmx", UnitType::MINOTAUR);
+	animations[UnitType::CLERIC] = animationManager.Load("assets/units/Cleric.tmx", UnitType::CLERIC);
 
 
 	for (unsigned i = 0; i < entities.size(); i++)
@@ -387,6 +388,10 @@ bool EntityManager::Load(pugi::xml_node& n)
 		else if (!strcmp(it.attribute("type").as_string(), "draugar")) {
 			Unit* draugar = static_cast<Unit*>(CreateUnitEntity(UnitType::DRAUGAR, pos, unit_civ));
 			draugar->SetHealth(it.attribute("health").as_int());
+		}
+		else if (!strcmp(it.attribute("type").as_string(), "cleric")) {
+			Unit* cleric = static_cast<Unit*>(CreateUnitEntity(UnitType::CLERIC, pos, unit_civ));
+			cleric->SetHealth(it.attribute("health").as_int());
 		}
 	}
 
