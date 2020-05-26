@@ -313,6 +313,7 @@ void HUD::HUDUpdateSelection(std::list<Entity*> listEntities, Building* building
 			}
 		}
 	}
+	listEntities=OrderSelectedList(listEntities, i);
 	SDL_Rect r = { 825,618,30,41 };
 	SDL_Rect r2 = { 828,645,17,9 };
 
@@ -507,6 +508,30 @@ void HUD::HUDUpdateSelection(std::list<Entity*> listEntities, Building* building
 	}
 	ManageActionButtons(true, viking);
 }
+
+std::list<Entity*> HUD::OrderSelectedList(std::list<Entity*> list_selected, int different_types_of_units)
+{
+	if (different_types_of_units < 2)
+		return list_selected;
+	std::list<Entity*> list_to_return;
+	int total_list_items = list_selected.size();
+	for (int i = 0; i < different_types_of_units; i++) {
+		int number_of_units_of_one_type = 0;
+		int j = 0;
+		for (std::list<Entity*>::iterator it = list_selected.begin(); it!=list_selected.end() && number_of_units_of_one_type < number_of_troops[i]; it++) {
+			if (j < i)
+				j++;
+			else if (it._Ptr->_Myval->type == EntityType::UNIT) {
+				Unit* unit = static_cast<Unit*>(it._Ptr->_Myval);
+				if (unit->unitType == type_of_troops[i])
+					list_to_return.push_back(it._Ptr->_Myval);
+			}
+		}
+	}
+	return list_to_return;
+}
+
+
 
 // Called when deleting the list of troops in the HUD
 void HUD::HUDDeleteListTroops() {
