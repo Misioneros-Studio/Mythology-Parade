@@ -77,7 +77,7 @@ uchar j1PathFinding::GetTileAt(const iPoint& pos) const
 void j1PathFinding::RequestPath(const iPoint& origin, const iPoint& destination, std::list<Entity*> requestUnit)
 {
 	LOG("Requesting a path...");
-	if (!IsWalkable(origin) || !IsWalkable(destination))
+	if (/*!IsWalkable(origin) || */!IsWalkable(destination))
 	{
 		LOG("Invalid Path");
 		return;

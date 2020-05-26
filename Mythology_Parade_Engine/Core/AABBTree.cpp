@@ -67,7 +67,7 @@ void AABBNode::UpdateNode()
 		Entity* temp = nullptr;
 
 		minPos = { (int)(*data.begin())->position.x, (int)(*data.begin())->position.y - (int)(*data.begin())->blitRect.y };
-		maxPos = { (int)(*data.begin())->position.x + (*data.begin())->blitRect.x, (int)(*data.begin())->position.y };
+		maxPos = { (int)(*data.begin())->position.x + ((*data.begin())->blitRect.x * 0), (int)(*data.begin())->position.y };
 
 		for (std::list<Entity*>::iterator it = data.begin(); it != data.end(); it++)
 		{
@@ -85,9 +85,9 @@ void AABBNode::UpdateNode()
 			{
 				maxPos.y = temp->position.y;
 			}
-			if (temp->position.x + temp->blitRect.x > maxPos.x)
+			if (temp->position.x + (temp->blitRect.x * 0) > maxPos.x)
 			{
-				maxPos.x = temp->position.x + temp->blitRect.x;
+				maxPos.x = temp->position.x + (temp->blitRect.x * 0);
 			}
 		}
 	}

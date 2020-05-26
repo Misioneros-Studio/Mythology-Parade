@@ -7,6 +7,7 @@
 #include "j1Render.h"
 
 #include "FoWBitDefs.h"
+#include"MaykMath.h"
 
 struct SDL_Texture;
 enum CivilizationType;
@@ -104,6 +105,21 @@ public:
 	SDL_Rect getCollisionRect()
 	{
 		return collisionRect;
+	}
+
+	Rect getCollisionAsrect()
+	{
+		return { collisionRect.x, collisionRect.y + (collisionRect.h * 2) + 16, collisionRect.w, -collisionRect.h };
+	}
+
+	Rect getCollisionMathRect()
+	{
+		return { collisionRect.x, collisionRect.y + collisionRect.h, collisionRect.w, -collisionRect.h };
+	}
+
+	iPoint getMiddlePoint()
+	{
+		return { collisionRect.x + (collisionRect.w / 2), collisionRect.y + (collisionRect.h / 2) };
 	}
 
 

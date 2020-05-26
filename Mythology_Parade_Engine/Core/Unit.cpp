@@ -199,6 +199,8 @@ bool Unit::Update(float dt)
 			Draw_Life_Bar();
 	}
 
+	App->render->DrawQuad(collisionRect, 255, 0, 0, 50);
+
 	return ret;
 }
 
@@ -233,6 +235,10 @@ void Unit::MoveToTarget()
 	//App->render->DrawLine(position.x, position.y, targetIso.x, targetIso.y, 255, 0, 0);
 
 	fPoint cast = { (float)targetIso.x, (float)targetIso.y };
+
+	iPoint rest = { (int)position.x, (int)position.y };
+	directionToTarget = targetIso - rest;
+	normalizedDirection = fPoint::Normalize((fPoint)directionToTarget);
 
 	fPoint increment = { normalizedDirection.x * speed,  normalizedDirection.y * speed };
 
