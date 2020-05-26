@@ -529,11 +529,12 @@ std::list<Entity*> HUD::OrderSelectedList(std::list<Entity*> list_selected, int 
 			}
 		}
 	}
+	App->entityManager->getPlayer()->SetEntitiesSelected(list_to_return);
 	return list_to_return;
 }
 
 //Called when scrolling down
-void HUD::HUDScrollDown()
+bool HUD::HUDScrollDown()
 {
 	std::list <Entity*> list_entities = App->entityManager->getPlayer()->GetEntitiesSelected();
 	int number_of_units = number_of_troops[0];
@@ -553,6 +554,36 @@ void HUD::HUDScrollDown()
 			App->entityManager->getPlayer()->SetEntitiesSelected(list_entities);
 		}
 	}
+	if (number_of_units == 0)
+		return false;
+	else
+		return true;
+}
+
+bool HUD::HUDScrollUp()
+{
+	std::list <Entity*> list_entities = App->entityManager->getPlayer()->GetEntitiesSelected();
+	int number_of_units = number_of_troops[0];
+	if (number_of_units > 1) {
+		Entity* entity = list_entities.begin()._Ptr->_Myval;
+		Entity* entity2;
+		if (entity->type == EntityType::UNIT) {
+			std::list<Entity*>::iterator it = list_entities.begin();
+			for (int i = 1; i < number_of_units; i++) {
+				it++;
+				entity2 = it._Ptr->_Myval;
+				it._Ptr->_Myval = entity;
+				entity = entity2;
+			}
+			list_entities.begin()._Ptr->_Myval = entity;
+			thing_selected = list_entities.begin()._Ptr->_Myval;
+			App->entityManager->getPlayer()->SetEntitiesSelected(list_entities);
+		}
+	}
+	if (number_of_units == 0)
+		return false;
+	else
+		return true;
 }
 
 // Called when deleting the list of troops in the HUD

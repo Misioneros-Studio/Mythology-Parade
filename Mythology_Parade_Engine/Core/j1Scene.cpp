@@ -404,10 +404,14 @@ bool j1Scene::Update(float dt)
 	}*/
 
 	if (App->input->GetMouseWheel() > 0) {
-		LOG("SCROLL UP");
+		hud->HUDScrollUp();
+		App->render->camera.x = -(hud->thing_selected->position.x - App->render->camera.w * 0.5f);
+		App->render->camera.y = -(hud->thing_selected->position.y - App->render->camera.h * 0.5f);
 	}
 	else if (App->input->GetMouseWheel() < 0) {
 		hud->HUDScrollDown();
+		App->render->camera.x = -(hud->thing_selected->position.x - App->render->camera.w * 0.5f);
+		App->render->camera.y = -(hud->thing_selected->position.y - App->render->camera.h * 0.5f);
 	}
 
 	return true;

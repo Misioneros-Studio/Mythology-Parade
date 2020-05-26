@@ -67,10 +67,10 @@ public:
 	std::list<Entity*> OrderSelectedList(std::list<Entity*>, int);
 
 	//Called when scrolling down
-	void HUDScrollDown();
+	bool HUDScrollDown();
 
 	//Called when scrolling up
-	void HUDScrollUp();
+	bool HUDScrollUp();
 
 	// Called when deleting the list of troops in the HUD
 	void HUDDeleteListTroops();
