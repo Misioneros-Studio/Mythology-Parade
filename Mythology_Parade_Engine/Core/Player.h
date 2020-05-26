@@ -23,7 +23,7 @@ public:
 	bool CleanUp();
 
 	void SelectionDraw_Logic();
-	void SeeEntitiesInside();
+	void SeeEntitiesInside(bool shift = false, bool alt = false);
 	void PlayerInputs();
 	void ClickLogic();
 	std::list<Entity*> GetEntitiesSelected();
@@ -57,6 +57,8 @@ private:
 
 	bool oneTime;
 	iPoint click;
+	bool shift;
+	bool alt;
 
 
 public:
