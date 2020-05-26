@@ -543,7 +543,6 @@ std::list<Entity*> HUD::OrderSelectedList(std::list<Entity*> list_selected, int 
 	if (different_types_of_units < 2)
 		return list_selected;
 	std::list<Entity*> list_to_return;
-	int total_list_items = list_selected.size();
 	for (int i = 0; i < different_types_of_units; i++) {
 		int number_of_units_of_one_type = 0;
 		int j = 0;
@@ -786,13 +785,12 @@ void HUD::ClickOnSelectionButton(SDL_Rect sprite)
 void HUD::ChangeTypeOfUnitFirstSelected(int index, int number_of_troops_before)
 {
 	std::list<Entity*> entity_list = App->entityManager->getPlayer()->GetEntitiesSelected();
-	Entity* entity;
 	for (int i = 0; i < number_of_troops[index]; i++) {
 		std::list<Entity*>::iterator it = entity_list.begin();
 		for (int j = 1; j < number_of_troops_before+ number_of_troops[index]; j++) {
 			it++;
 		}
-		entity = it._Ptr->_Myval;
+		Entity* entity = it._Ptr->_Myval;
 		entity_list.erase(it);
 		entity_list.push_front(entity);
 	}
@@ -1722,37 +1720,6 @@ SDL_Rect HUD::GetSpritePortrait(int type_of_portrait, UnitType unit_type) {
 			break;
 		}
 	}
-	else if (type_of_portrait == 3) {
-		switch (unit_type) {
-		case UnitType::ASSASSIN:
-			sprite = { 3,881,30,41 };
-			break;
-		case UnitType::PIKEMAN:
-			sprite = { 34,881,30,41 };
-			break;
-		case UnitType::MONK:
-			sprite = { 66,881,30,41 };
-			break;
-		case UnitType::PRIEST:
-			sprite = { 97,881,30,41 };
-			break;
-		case UnitType::MINOTAUR:
-			sprite = { 128,881,30,41 };
-			break;
-		case UnitType::CYCLOP:
-			sprite = { 159,881,30,41 };
-			break;
-		case UnitType::JOTNAR:
-			sprite = { 191,881,30,41 };
-			break;
-		case UnitType::DRAUGAR:
-			sprite = { 222,881,30,41 };
-			break;
-		case UnitType::CLERIC:
-			sprite = { 253,881,30,41 };
-			break;
-		}
-	}
 	return sprite;
 
 }
@@ -1820,7 +1787,7 @@ SDL_Rect HUD::GetSpritePortraitBuilding(int type_of_portrait, BuildingType build
 }
 
 // Called to get the rect of the sprite of the portrait of the thing produced
-SDL_Rect HUD::GetSpritePortraitProduction(int type_of_portrait, std::string produced_type, CivilizationType civilization)
+SDL_Rect HUD::GetSpritePortraitProduction(int type_of_portrait, const std::string &produced_type, CivilizationType civilization)
 {
 	SDL_Rect sprite = { 0,0,0,0 };
 	if (type_of_portrait == 0) {

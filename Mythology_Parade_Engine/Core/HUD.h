@@ -109,7 +109,7 @@ public:
 	SDL_Rect GetSpritePortraitBuilding(int type_of_portrait, BuildingType building_type, CivilizationType civilization);
 
 	// Called to get the rect of the sprite of the portrait of the thing produced
-	SDL_Rect GetSpritePortraitProduction(int type_of_portrait, std::string produced_type, CivilizationType civilization);
+	SDL_Rect GetSpritePortraitProduction(int type_of_portrait, const std::string &produced_type, CivilizationType civilization);
 
 	//Called when clicking the research button
 	void ActivateResearchMenu();

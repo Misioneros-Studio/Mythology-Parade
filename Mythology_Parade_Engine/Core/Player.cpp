@@ -207,7 +207,7 @@ std::list<Entity*> Player::GetEntitiesSelected()
 	return listEntities;
 }
 
-void Player::SetEntitiesSelected(std::list<Entity*> entities_list)
+void Player::SetEntitiesSelected( const std::list<Entity*> &entities_list)
 {
 	listEntities = entities_list;
 }

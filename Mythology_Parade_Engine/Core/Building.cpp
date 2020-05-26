@@ -447,7 +447,7 @@ void Building::Draw_Building_Bar(int blitWidth, int bar_used, bool building_acti
 }
 
 
-void Building::StartProducing(std::string thing_to_produce) {
+void Building::StartProducing(const std::string &thing_to_produce) {
 	App->scene->update_production_list = true;
 	buildingAction = BuildingAction::PRODUCING;
 	percentage_constructing = 0;
@@ -489,7 +489,7 @@ void Building::CancelProduction(int index)
 	}
 }
 
-void Building::FinishProduction(std::string thing_produced, bool cancelled)
+void Building::FinishProduction(const std::string &thing_produced, bool cancelled)
 {
 	element_producing = "";
 	App->scene->update_production_list = true;
@@ -520,7 +520,7 @@ void Building::FinishProduction(std::string thing_produced, bool cancelled)
 	}
 }
 
-void Building::StartResearching(std::string thing_producing) {
+void Building::StartResearching(const std::string &thing_producing) {
 	buildingAction = BuildingAction::RESEARCHING;
 	percentage_constructing = 0;
 
