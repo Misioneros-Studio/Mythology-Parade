@@ -290,7 +290,7 @@ void HUD::HUDUpdateSelection(std::list<Entity*> listEntities, Building* building
 	HUDDeleteListTroops(update_list);
 	HUDDeleteSelectedTroop();
 	HUDDeleteActionButtons();
-	for (std::list<Entity*>::iterator it = listEntities.begin(); it != listEntities.end(); it++) {
+	for (std::list<Entity*>::iterator it = listEntities.begin(); it != listEntities.end(); ++it) {
 		if (it._Ptr->_Myval->type == EntityType::UNIT) {
 			Unit* unit = static_cast<Unit*>(it._Ptr->_Myval);
 			if (i == 0) {
@@ -546,7 +546,7 @@ std::list<Entity*> HUD::OrderSelectedList(std::list<Entity*> list_selected, int 
 	for (int i = 0; i < different_types_of_units; i++) {
 		int number_of_units_of_one_type = 0;
 		int j = 0;
-		for (std::list<Entity*>::iterator it = list_selected.begin(); it!=list_selected.end() && number_of_units_of_one_type < number_of_troops[i]; it++) {
+		for (std::list<Entity*>::iterator it = list_selected.begin(); it!=list_selected.end() && number_of_units_of_one_type < number_of_troops[i]; ++it) {
 			if (j < i)
 				j++;
 			else if (it._Ptr->_Myval->type == EntityType::UNIT) {
@@ -571,10 +571,10 @@ bool HUD::HUDScrollDown()
 			std::list<Entity*>::iterator it = list_entities.begin();
 			std::list<Entity*>::iterator it2 = list_entities.begin();
 			for (int i = 0; i < number_of_units; i++) {
-				it2++;
+				++it2;
 				it._Ptr->_Myval = it2._Ptr->_Myval;
 				if (i + 1 < number_of_units)
-					it++;
+					++it;
 			}
 			it._Ptr->_Myval = entity;
 			thing_selected = list_entities.begin()._Ptr->_Myval;
@@ -598,7 +598,7 @@ bool HUD::HUDScrollUp()
 		if (entity->type == EntityType::UNIT) {
 			std::list<Entity*>::iterator it = list_entities.begin();
 			for (int i = 1; i < number_of_units; i++) {
-				it++;
+				++it;
 				entity2 = it._Ptr->_Myval;
 				it._Ptr->_Myval = entity;
 				entity = entity2;
@@ -788,7 +788,7 @@ void HUD::ChangeTypeOfUnitFirstSelected(int index, int number_of_troops_before)
 	for (int i = 0; i < number_of_troops[index]; i++) {
 		std::list<Entity*>::iterator it = entity_list.begin();
 		for (int j = 1; j < number_of_troops_before+ number_of_troops[index]; j++) {
-			it++;
+			++it;
 		}
 		Entity* entity = it._Ptr->_Myval;
 		entity_list.erase(it);
@@ -806,7 +806,7 @@ void HUD::DeleteTroopsInSelectedList(int index, int number_of_troops_before)
 	for (int i = 0; i < number_of_troops[index]; i++) {
 		std::list<Entity*>::iterator it = entity_list.begin();
 		for (int i = 0; i < number_of_troops_before; i++) {
-			it++;
+			++it;
 		}
 		it._Ptr->_Myval->SetSelected(false);
 		entity_list.erase(it);
