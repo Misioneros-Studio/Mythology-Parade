@@ -3,18 +3,18 @@
 	<entities>
 		<unit type="assassin" position_x="32" position_y="784" civilization="viking" health="100" level="0" />
 		<unit type="monk" position_x="64" position_y="800" civilization="viking" health="1" />
-		<unit type="assassin" position_x="-320" position_y="4352" civilization="greek" health="100" level="0" />
-		<unit type="monk" position_x="-416" position_y="4304" civilization="greek" health="1" />
+		<unit type="assassin" position_x="-320" position_y="4288" civilization="greek" health="100" level="0" />
+		<unit type="monk" position_x="-288" position_y="4304" civilization="greek" health="1" />
 	</entities>
 	<buildings>
 		<build type="encampment" position_x="100" position_y="100" civilization="viking" health="350" status="finished" action="nothing" />
 		<build type="fortress" position_x="-96" position_y="704" civilization="viking" health="500" status="finished" action="nothing" />
-		<build type="temple" position_x="-512" position_y="4208" civilization="greek" health="200" status="finished" action="producing" time="10" element="Cleric" />
 		<build type="fortress" position_x="-288" position_y="4256" civilization="greek" health="500" status="finished" action="nothing" />
+		<build type="temple" position_x="-480" position_y="4384" civilization="greek" health="200" status="finished" action="producing" time="10" element="Cleric" />
 	</buildings>
 	<players>
 		<greek>
-			<economy faith="874" prayers="650" sacrifices="650" />
+			<economy faith="986" prayers="730" sacrifices="730" />
 			<research>
 				<temple research="true" />
 				<encampment research="true" />
@@ -30,5 +30,5 @@
 		</greek>
 	</players>
 	<volume music="50" fx="128" />
-	<camera x="947" y="-3909" />
+	<camera x="880" y="-3934" />
 </info>
