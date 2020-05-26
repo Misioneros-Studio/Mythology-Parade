@@ -464,6 +464,8 @@ void j1Scene::RestartGame() {
 		App->fade_to_black->FadeToBlack(which_fade::scene_to_scene, 2, "greek");
 	else if (civ==CivilizationType::VIKING)
 		App->fade_to_black->FadeToBlack(which_fade::scene_to_scene, 2, "viking");
+	destroy = true;
+	App->entityManager->initCivilizations = true;
 }
 
 void j1Scene::OnClick(UI* element, float argument)
