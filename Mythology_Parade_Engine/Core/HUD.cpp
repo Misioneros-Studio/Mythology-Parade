@@ -509,6 +509,7 @@ void HUD::HUDUpdateSelection(std::list<Entity*> listEntities, Building* building
 	ManageActionButtons(true, viking);
 }
 
+
 std::list<Entity*> HUD::OrderSelectedList(std::list<Entity*> list_selected, int different_types_of_units)
 {
 	if (different_types_of_units < 2)
@@ -531,7 +532,28 @@ std::list<Entity*> HUD::OrderSelectedList(std::list<Entity*> list_selected, int 
 	return list_to_return;
 }
 
-
+//Called when scrolling down
+void HUD::HUDScrollDown()
+{
+	std::list <Entity*> list_entities = App->entityManager->getPlayer()->GetEntitiesSelected();
+	int number_of_units = number_of_troops[0];
+	if (number_of_units > 1) {
+		Entity* entity = list_entities.begin()._Ptr->_Myval;
+		if (entity->type == EntityType::UNIT) {
+			std::list<Entity*>::iterator it = list_entities.begin();
+			std::list<Entity*>::iterator it2 = list_entities.begin();
+			for (int i = 0; i < number_of_units; i++) {
+				it2++;
+				it._Ptr->_Myval = it2._Ptr->_Myval;
+				if (i + 1 < number_of_units)
+					it++;
+			}
+			it._Ptr->_Myval = entity;
+			thing_selected = list_entities.begin()._Ptr->_Myval;
+			App->entityManager->getPlayer()->SetEntitiesSelected(list_entities);
+		}
+	}
+}
 
 // Called when deleting the list of troops in the HUD
 void HUD::HUDDeleteListTroops() {
@@ -869,7 +891,7 @@ void HUD::ManageActionButtons(bool create_buttons, bool viking) {
 		{
 			Building* building = static_cast<Building*>(thing_selected);
 			if (building->buildingStatus == BuildingStatus::FINISHED) {
-				if (player->GetFaith() >= 100 && player->GetSacrifices() >= 10 && building->buildingAction == BuildingAction::NOTHING) {
+				if (player->GetFaith() >= 100 && player->research_assassin == true && building->buildingAction == BuildingAction::NOTHING) {
 					hud_button_actions[0] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 200,613,67,41 }, { 215,185,67,41 }, "Produce_Assassin", Panel_Fade::no_one_fade,
 						{ 215,275,67,41 }, { 215,230,67,41 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::MAIN_MENU, false, -1.0F, 1, (int)TooltipsAvailable::assassin_unlocked));
 				}
@@ -1265,7 +1287,7 @@ void HUD::ManageActionButtons(bool create_buttons, bool viking) {
 		{
 			Building* building = static_cast<Building*>(thing_selected);
 			if (building->buildingStatus == BuildingStatus::FINISHED) {
-				if (hud_button_actions[0] == nullptr && player->GetFaith() >= 100 && player->GetSacrifices() >= 10 &&
+				if (hud_button_actions[0] == nullptr && player->GetFaith() >= 100 && player->research_assassin == true &&
 					building->buildingAction == BuildingAction::NOTHING) {
 					if (hud_button_actions_unclickable[0] != nullptr) {
 						App->gui->DeleteUIElement(hud_button_actions_unclickable[0]);
@@ -1274,7 +1296,7 @@ void HUD::ManageActionButtons(bool create_buttons, bool viking) {
 					hud_button_actions[0] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 200,613,67,41 }, { 215,185,67,41 }, "Produce_Assassin", Panel_Fade::no_one_fade,
 						{ 215,275,67,41 }, { 215,230,67,41 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::MAIN_MENU, false, -1.0F, 1, (int)TooltipsAvailable::assassin_unlocked));
 				}
-				else if (hud_button_actions_unclickable[0] == nullptr && (player->GetFaith() < 100 || player->GetSacrifices() < 10 ||
+				else if (hud_button_actions_unclickable[0] == nullptr && (player->GetFaith() < 100 || player->research_assassin == false ||
 					building->buildingAction != BuildingAction::NOTHING)) {
 					if (hud_button_actions[0] != nullptr) {
 						App->gui->DeleteUIElement(hud_button_actions[0]);

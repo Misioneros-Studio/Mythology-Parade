@@ -27,6 +27,7 @@ public:
 	void PlayerInputs();
 	void ClickLogic();
 	std::list<Entity*> GetEntitiesSelected();
+	void SetEntitiesSelected(std::list<Entity*>);
 	Building* GetSelectedBuild();
 	Building* GetEnemySelectedBuild();
 	void ActionToUnit();
@@ -42,6 +43,7 @@ public:
 
 	void InitVikings();
 	void InitGreek();
+
 
 private:
 	std::string faith, sacrifice, prayer;

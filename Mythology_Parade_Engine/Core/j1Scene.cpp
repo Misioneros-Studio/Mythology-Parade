@@ -403,6 +403,13 @@ bool j1Scene::Update(float dt)
 		App->audio->PlayFx(3, WinGreek_sound, 1);
 	}*/
 
+	if (App->input->GetMouseWheel() > 0) {
+		LOG("SCROLL UP");
+	}
+	else if (App->input->GetMouseWheel() < 0) {
+		hud->HUDScrollDown();
+	}
+
 	return true;
 }
 

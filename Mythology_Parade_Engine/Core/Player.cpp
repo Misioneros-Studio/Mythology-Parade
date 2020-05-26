@@ -178,6 +178,11 @@ std::list<Entity*> Player::GetEntitiesSelected()
 	return listEntities;
 }
 
+void Player::SetEntitiesSelected(std::list<Entity*> entities_list)
+{
+	listEntities = entities_list;
+}
+
 Building* Player::GetSelectedBuild()
 {
 	return (Building*) buildingSelect;

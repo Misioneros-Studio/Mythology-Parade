@@ -63,7 +63,14 @@ public:
 	// Called when selecting troops or buildings
 	void HUDUpdateSelection(std::list<Entity*>, Building*);
 
+	// Called to order the list of selected
 	std::list<Entity*> OrderSelectedList(std::list<Entity*>, int);
+
+	//Called when scrolling down
+	void HUDScrollDown();
+
+	//Called when scrolling up
+	void HUDScrollUp();
 
 	// Called when deleting the list of troops in the HUD
 	void HUDDeleteListTroops();
