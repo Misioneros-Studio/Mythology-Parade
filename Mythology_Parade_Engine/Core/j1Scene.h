@@ -60,6 +60,9 @@ public:
 	// Called when returning to main menu (either winning/losing or by menu options like exit)
 	void BackToTitleMenu();
 
+	// Called to return faith after canceling a production
+	void ReturnFaith(std::string);
+
 	void OnClick(UI* element, float argument = 0);
 
 	void FinishResearching(std::string);
@@ -93,6 +96,7 @@ public:
 	uint Lose_sound;
 	bool update_selection;
 	bool dont_update_types_of_troops;
+	bool update_production_list;
 
 	bool isInTutorial;
 

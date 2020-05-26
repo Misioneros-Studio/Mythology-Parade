@@ -40,8 +40,10 @@ public:
 	int GetInfluence() { return influence; }
 	int GetDamage() { return damage; }
 	int GetMaxCap() { return maxCap; }
+	std::queue<std::string> GetProduction() { return queuedResearch; }
 
 	void StartProducing(std::string thing_producing);
+	void CancelProduction(int);
 	void StartResearching(std::string thing_producing);
 
 	void SetTimeProducing(int time);
@@ -69,7 +71,7 @@ private:
 	void Draw_Building_Bar(int blitWidth, int bar_used = 0, bool building_active = false, bool enemy = false);
 	bool Draw(float dt);
 
-	void FinishProduction(std::string thing_produced);
+	void FinishProduction(std::string thing_produced, bool cancelled = false);
 
 	//Stats
 	int defenses;
@@ -108,7 +110,6 @@ public:
 	j1Timer timer_construction;
 	BuildingStatus buildingStatus;
 	BuildingAction buildingAction;
-
 
 
 };

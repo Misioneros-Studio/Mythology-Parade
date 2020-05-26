@@ -84,6 +84,9 @@ public:
 	// Called to update every frame the information of the selected thing
 	void UpdateSelectedThing();
 
+	// Called when clicking a thing in the production queue of a building
+	void CancelProduction(iPoint);
+
 	// Called when clicked on one of the buttons of the right after selecting troops
 	void ClickOnSelectionButton(SDL_Rect);
 
@@ -104,6 +107,9 @@ public:
 
 	// Called to get the rect of the sprite of the portrait of the building
 	SDL_Rect GetSpritePortraitBuilding(int type_of_portrait, BuildingType building_type, CivilizationType civilization);
+
+	// Called to get the rect of the sprite of the portrait of the thing produced
+	SDL_Rect GetSpritePortraitProduction(int type_of_portrait, std::string produced_type, CivilizationType civilization);
 
 	//Called when clicking the research button
 	void ActivateResearchMenu();
@@ -149,10 +155,11 @@ private:
 	WindowUI* ui_confirmation_window;
 	ButtonUI* ui_button_confirmation[2];
 	TextUI* ui_text_confirmation[4];
-	ButtonUI* hud_list_troops[13];
-	TextUI* hud_number_troops[13];
-	int number_of_troops[13];
-	UnitType type_of_troops[13];
+	ImageUI* hud_bar_producing[2];
+	ButtonUI* hud_list_troops[12];
+	TextUI* hud_number_troops[12];
+	int number_of_troops[12];
+	UnitType type_of_troops[12];
 	ImageUI* hud_selected_troop;
 	TextUI* hud_stats_selected_troop[13];
 	Type_Selected type_thing_selected;

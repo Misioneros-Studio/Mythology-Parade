@@ -35,6 +35,7 @@ j1Scene::j1Scene() : j1Module()
 	oneTime = true;
 	update_selection = false;
 	dont_update_types_of_troops = true;
+	update_production_list = false;
 }
 
 // Destructor
@@ -493,6 +494,35 @@ void j1Scene::RestartGame() {
 		App->fade_to_black->FadeToBlack(which_fade::scene_to_scene, 2, "viking");
 }
 
+// Called to return faith after canceling a production
+void j1Scene::ReturnFaith(std::string thing_canceled)
+{
+	if (thing_canceled == "Assassin") {
+		App->entityManager->getPlayer()->IncreaseFaith(100);
+	}
+	else if (thing_canceled == "Monk") {
+		App->entityManager->getPlayer()->IncreaseFaith(50);
+	}
+	else if (thing_canceled == "Victory") {
+		App->entityManager->getPlayer()->IncreaseFaith(600);
+	}
+	else if (thing_canceled == "Sacrifices") {
+		App->entityManager->getPlayer()->IncreaseFaith(40);
+	}
+	else if (thing_canceled == "Prayers") {
+		App->entityManager->getPlayer()->IncreaseFaith(40);
+	}
+	else if (thing_canceled == "Cleric") {
+		App->entityManager->getPlayer()->IncreaseFaith(150);
+	}
+	else if (thing_canceled == "Lawful_Beast") {
+		App->entityManager->getPlayer()->IncreaseFaith(200);
+	}
+	else if (thing_canceled == "Chaotic_Beast") {
+		App->entityManager->getPlayer()->IncreaseFaith(200);
+	}
+}
+
 void j1Scene::OnClick(UI* element, float argument)
 {
 
@@ -693,7 +723,7 @@ void j1Scene::OnClick(UI* element, float argument)
 		else if (element->name == "Produce_Prayers")
 		{
 			Building* building = (Building*)hud->thing_selected;
-			App->entityManager->getPlayer()->DecreaseFaith(100);
+			App->entityManager->getPlayer()->DecreaseFaith(40);
 			building->ProduceQueue("Prayers");
 		}
 		else if (element->name == "Upgrade") {
@@ -744,6 +774,9 @@ void j1Scene::OnClick(UI* element, float argument)
 		}
 		else if (element->name == "Troop") {
 			hud->ClickOnSelectionButton(element->sprite1);
+		}
+		else if (element->name == "Thing_Produced") {
+			hud->CancelProduction(element->GetScreenPos());
 		}
 		break;
 
