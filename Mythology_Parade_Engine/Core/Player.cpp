@@ -7,6 +7,9 @@
 #include "HUD.h"
 #include "EntityManager.h"
 
+#include "j1Audio.h"
+
+#include "SDL_mixer/include/SDL_mixer.h"
 Player::Player()
 {
 	Start();
@@ -219,6 +222,7 @@ void Player::PlayerInputs()
 		iPoint mouse = App->map->GetMousePositionOnMap();
 		iPoint spawnPos = App->map->TileCenterPoint(mouse);
 		App->entityManager->CreateUnitEntity(UnitType::CYCLOP, spawnPos,civilization);
+		
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN && App->scene->godMode)
@@ -226,6 +230,7 @@ void Player::PlayerInputs()
 		iPoint mouse = App->map->GetMousePositionOnMap();
 		iPoint spawnPos = App->map->TileCenterPoint(mouse);
 		App->entityManager->CreateUnitEntity(UnitType::DRAUGAR , spawnPos, civilization);
+	
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_F4) == KEY_DOWN && App->scene->godMode)

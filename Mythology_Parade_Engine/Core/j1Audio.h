@@ -78,6 +78,14 @@ public:
 	int CreateMonk_sound;
 	int CreateAssasin_sound;
 	int Research_sound;
+	int OpenPauseMenu_sfx;
+	int Monster1;
+	int Monster2;
+	int giant3;
+	int giant5;
+	int ogre4;
+	int ogre5;
+	int shade12;
 private:
 
 	_Mix_Music*			music = NULL;
