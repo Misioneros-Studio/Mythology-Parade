@@ -75,6 +75,7 @@ private:
 	SDL_Texture* winlose_tex;
 
 
+
 public:
 	SDL_Rect mapLimitsRect;
 	SDL_Texture* debugBlue_tex;
@@ -90,6 +91,8 @@ public:
 	uint WinViking_sound;
 	uint WinGreek_sound;
 	uint Lose_sound;
+	bool update_selection;
+	bool dont_update_types_of_troops;
 
 	bool isInTutorial;
 

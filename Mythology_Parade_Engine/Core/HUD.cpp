@@ -283,10 +283,10 @@ void HUD::DeactivateConfirmationMenu() {
 }
 
 // Called when selecting troops or buildings
-void HUD::HUDUpdateSelection(std::list<Entity*> listEntities, Building* building_selected) {
+void HUD::HUDUpdateSelection(std::list<Entity*> listEntities, Building* building_selected, bool update_list) {
 	int i = 0;
 	bool viking = true;
-	HUDDeleteListTroops();
+	HUDDeleteListTroops(update_list);
 	HUDDeleteSelectedTroop();
 	HUDDeleteActionButtons();
 	for (std::list<Entity*>::iterator it = listEntities.begin(); it != listEntities.end(); it++) {
@@ -316,37 +316,37 @@ void HUD::HUDUpdateSelection(std::list<Entity*> listEntities, Building* building
 	listEntities=OrderSelectedList(listEntities, i);
 	SDL_Rect r = { 825,618,30,41 };
 	SDL_Rect r2 = { 828,645,17,9 };
+	if (update_list == true) {
+		for (int j = 0; j < i; j++) {
 
-	for (int j = 0; j < i; j++) {
-
-		if (j == 6) {
-			r.y += 50;
-			r2.y += 50;
-			r.x = 825;
-			r2.x = 828;
-		}
-		hud_list_troops[j] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, static_cast<UI*>(ui_ingame), r, GetSpritePortrait(0, type_of_troops[j]), "Troop", Panel_Fade::no_one_fade, { 0,0,0,0 },
-			{ 0,0,0,0 }, false, { 0,0,0,0 }, nullptr, 0, false, -1.0F, 1));
-		if (number_of_troops[j] > 1) {
-			if (number_of_troops[j] < 10) {
-				r2.x += 5;
+			if (j == 6) {
+				r.y += 50;
+				r2.y += 50;
+				r.x = 825;
+				r2.x = 828;
 			}
-			hud_number_troops[j] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), r2, { 0,0,100,100 }, std::to_string(number_of_troops[j]), Panel_Fade::no_one_fade,
-				{ 255,255,255,255 }));
-			if (number_of_troops[j] < 10) {
-				r2.x -= 5;
+			hud_list_troops[j] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, static_cast<UI*>(ui_ingame), r, GetSpritePortrait(1, type_of_troops[j]), "Troop",
+				Panel_Fade::no_one_fade, GetSpritePortrait(3, type_of_troops[j]), GetSpritePortrait(2, type_of_troops[j]), false, { 0,0,0,0 }, App->scene, 0, false, -1.0F, 1));
+			if (number_of_troops[j] > 1) {
+				if (number_of_troops[j] < 10) {
+					r2.x += 5;
+				}
+				hud_number_troops[j] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), r2, { 0,0,100,100 }, std::to_string(number_of_troops[j]), Panel_Fade::no_one_fade,
+					{ 255,255,255,255 }));
+				if (number_of_troops[j] < 10) {
+					r2.x -= 5;
+				}
 			}
+			r.x += 34;
+			r2.x += 34;
 		}
-		r.x += 34;
-		r2.x += 34;
 	}
-
 	SDL_Rect position_name = { 725,603,30,30 };
 	if (!listEntities.empty()) {
 		if (listEntities.begin()._Ptr->_Myval->type == EntityType::UNIT) {
 			thing_selected = listEntities.begin()._Ptr->_Myval;
 			Unit* unit = static_cast<Unit*>(listEntities.begin()._Ptr->_Myval);
-			hud_selected_troop = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, static_cast<UI*>(ui_ingame), { 640,613,76,105 }, GetSpritePortrait(1, unit->unitType), "Troop", Panel_Fade::no_one_fade,
+			hud_selected_troop = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, static_cast<UI*>(ui_ingame), { 640,613,76,105 }, GetSpritePortrait(0, unit->unitType), "Troop", Panel_Fade::no_one_fade,
 				{ 0,0,0,0 }, { 0,0,0,0 }, false, { 0,0,0,0 }, nullptr, 0, false, -1.0F, 1));
 			hud_stats_selected_troop[0] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), position_name, { 0,0,100,100 }, "Unit", Panel_Fade::no_one_fade, { 0,0,0,255 }));
 			bool combat_unit = false;
@@ -560,6 +560,7 @@ bool HUD::HUDScrollDown()
 		return true;
 }
 
+//Called when scrolling up
 bool HUD::HUDScrollUp()
 {
 	std::list <Entity*> list_entities = App->entityManager->getPlayer()->GetEntitiesSelected();
@@ -587,16 +588,18 @@ bool HUD::HUDScrollUp()
 }
 
 // Called when deleting the list of troops in the HUD
-void HUD::HUDDeleteListTroops() {
+void HUD::HUDDeleteListTroops(bool delete_everything) {
 	for (int i = 12; i >= 0; i--) {
 		number_of_troops[i] = 0;
-		if (hud_list_troops[i] != nullptr) {
-			App->gui->DeleteUIElement(hud_list_troops[i]);
-			hud_list_troops[i] = nullptr;
-		}
-		if (hud_number_troops[i] != nullptr) {
-			App->gui->DeleteUIElement(hud_number_troops[i]);
-			hud_number_troops[i] = nullptr;
+		if (delete_everything) {
+			if (hud_list_troops[i] != nullptr) {
+				App->gui->DeleteUIElement(hud_list_troops[i]);
+				hud_list_troops[i] = nullptr;
+			}
+			if (hud_number_troops[i] != nullptr) {
+				App->gui->DeleteUIElement(hud_number_troops[i]);
+				hud_number_troops[i] = nullptr;
+			}
 		}
 	}
 }
@@ -655,6 +658,62 @@ void HUD::UpdateSelectedThing() {
 		hud_stats_selected_troop[6]->SetString(std::to_string(building->GetMaxCap()));
 		hud_stats_selected_troop[8]->SetString(std::to_string(building->GetHealth()));
 	}
+}
+
+// Called when clicked on one of the buttons of the right after selecting troops
+void HUD::ClickOnSelectionButton(SDL_Rect sprite)
+{
+	UnitType unit_type = GetUnitTypeFromSpritePortrait(sprite);
+	if (thing_selected->type == EntityType::UNIT) {
+		Unit* unit = static_cast<Unit*>(thing_selected);
+		int index = 0;
+		int total = 0;
+		for (int i = 0; i < 13 && type_of_troops[i] != unit_type; i++) {
+			total += number_of_troops[i];
+			index++;
+		}
+		if (index < 13) {
+			if (unit_type == unit->unitType)
+				DeleteTroopsInSelectedList(index, total);
+			else
+				ChangeTypeOfUnitFirstSelected(index, total);
+		}
+	}
+}
+
+// Called when changing the type of unit appearing in the central part of the HUD
+void HUD::ChangeTypeOfUnitFirstSelected(int index, int number_of_troops_before)
+{
+	std::list<Entity*> entity_list = App->entityManager->getPlayer()->GetEntitiesSelected();
+	Entity* entity;
+	for (int i = 0; i < number_of_troops[index]; i++) {
+		std::list<Entity*>::iterator it = entity_list.begin();
+		for (int j = 1; j < number_of_troops_before+ number_of_troops[index]; j++) {
+			it++;
+		}
+		entity = it._Ptr->_Myval;
+		entity_list.erase(it);
+		entity_list.push_front(entity);
+	}
+	App->entityManager->getPlayer()->SetEntitiesSelected(entity_list);
+	App->scene->update_selection = true;
+	App->scene->dont_update_types_of_troops = false;
+}
+
+// Called when deleting a type of troop in the selected list
+void HUD::DeleteTroopsInSelectedList(int index, int number_of_troops_before)
+{
+	std::list<Entity*> entity_list = App->entityManager->getPlayer()->GetEntitiesSelected();
+	for (int i = 0; i < number_of_troops[index]; i++) {
+		std::list<Entity*>::iterator it = entity_list.begin();
+		for (int i = 0; i < number_of_troops_before; i++) {
+			it++;
+		}
+		it._Ptr->_Myval->SetSelected(false);
+		entity_list.erase(it);
+	}
+	App->entityManager->getPlayer()->SetEntitiesSelected(entity_list);
+	App->scene->update_selection = true;
 }
 
 //Called when creating or updating the action buttons
@@ -1441,37 +1500,6 @@ SDL_Rect HUD::GetSpritePortrait(int type_of_portrait, UnitType unit_type) {
 	if (type_of_portrait == 0) {
 		switch (unit_type) {
 		case UnitType::ASSASSIN:
-			sprite = { 299,194,30,41 };
-			break;
-		case UnitType::PIKEMAN:
-			sprite = { 331,194,30,41 };
-			break;
-		case UnitType::MONK:
-			sprite = { 362,194,30,41 };
-			break;
-		case UnitType::PRIEST:
-			sprite = { 393,194,30,41 };
-			break;
-		case UnitType::MINOTAUR:
-			sprite = { 424,194,30,41 };
-			break;
-		case UnitType::CYCLOP:
-			sprite = { 455,194,30,41 };
-			break;
-		case UnitType::JOTNAR:
-			sprite = { 487,194,30,41 };
-			break;
-		case UnitType::DRAUGAR:
-			sprite = { 518,194,30,41 };
-			break;
-		case UnitType::CLERIC:
-			sprite = { 549,194,30,41 };
-			break;
-		}
-	}
-	else if (type_of_portrait == 1) {
-		switch (unit_type) {
-		case UnitType::ASSASSIN:
 			sprite = { 2,321,76,105 };
 			break;
 		case UnitType::PIKEMAN:
@@ -1500,8 +1528,129 @@ SDL_Rect HUD::GetSpritePortrait(int type_of_portrait, UnitType unit_type) {
 			break;
 		}
 	}
+	else if (type_of_portrait == 1) {
+		switch (unit_type) {
+		case UnitType::ASSASSIN:
+			sprite = { 299,194,30,41 };
+			break;
+		case UnitType::PIKEMAN:
+			sprite = { 331,194,30,41 };
+			break;
+		case UnitType::MONK:
+			sprite = { 362,194,30,41 };
+			break;
+		case UnitType::PRIEST:
+			sprite = { 393,194,30,41 };
+			break;
+		case UnitType::MINOTAUR:
+			sprite = { 424,194,30,41 };
+			break;
+		case UnitType::CYCLOP:
+			sprite = { 455,194,30,41 };
+			break;
+		case UnitType::JOTNAR:
+			sprite = { 487,194,30,41 };
+			break;
+		case UnitType::DRAUGAR:
+			sprite = { 518,194,30,41 };
+			break;
+		case UnitType::CLERIC:
+			sprite = { 549,194,30,41 };
+			break;
+		}
+	}
+	else if (type_of_portrait == 2) {
+		switch (unit_type) {
+		case UnitType::ASSASSIN:
+			sprite = { 3,836,30,41 };
+			break;
+		case UnitType::PIKEMAN:
+			sprite = { 34,836,30,41 };
+			break;
+		case UnitType::MONK:
+			sprite = { 66,836,30,41 };
+			break;
+		case UnitType::PRIEST:
+			sprite = { 97,836,30,41 };
+			break;
+		case UnitType::MINOTAUR:
+			sprite = { 128,836,30,41 };
+			break;
+		case UnitType::CYCLOP:
+			sprite = { 159,836,30,41 };
+			break;
+		case UnitType::JOTNAR:
+			sprite = { 191,836,30,41 };
+			break;
+		case UnitType::DRAUGAR:
+			sprite = { 222,836,30,41 };
+			break;
+		case UnitType::CLERIC:
+			sprite = { 253,836,30,41 };
+			break;
+		}
+	}
+	else if (type_of_portrait == 3) {
+		switch (unit_type) {
+		case UnitType::ASSASSIN:
+			sprite = { 3,881,30,41 };
+			break;
+		case UnitType::PIKEMAN:
+			sprite = { 34,881,30,41 };
+			break;
+		case UnitType::MONK:
+			sprite = { 66,881,30,41 };
+			break;
+		case UnitType::PRIEST:
+			sprite = { 97,881,30,41 };
+			break;
+		case UnitType::MINOTAUR:
+			sprite = { 128,881,30,41 };
+			break;
+		case UnitType::CYCLOP:
+			sprite = { 159,881,30,41 };
+			break;
+		case UnitType::JOTNAR:
+			sprite = { 191,881,30,41 };
+			break;
+		case UnitType::DRAUGAR:
+			sprite = { 222,881,30,41 };
+			break;
+		case UnitType::CLERIC:
+			sprite = { 253,881,30,41 };
+			break;
+		}
+	}
 	return sprite;
 
+}
+
+// Called to get the unit type from a sprite portrait
+UnitType HUD::GetUnitTypeFromSpritePortrait(SDL_Rect sprite)
+{
+	if (sprite.w == 30 && sprite.h == 41) {
+		if (sprite.y == 194) {
+			if (sprite.x == 299)
+				return UnitType::ASSASSIN;
+			else if (sprite.x == 331)
+				return UnitType::PIKEMAN;
+			else if (sprite.x == 362)
+				return UnitType::MONK;
+			else if (sprite.x == 393)
+				return UnitType::PRIEST;
+			else if (sprite.x == 424)
+				return UnitType::MINOTAUR;
+			else if (sprite.x == 455)
+				return UnitType::CYCLOP;
+			else if (sprite.x == 487)
+				return UnitType::JOTNAR;
+			else if (sprite.x == 518)
+				return UnitType::DRAUGAR;
+			else if (sprite.x == 549)
+				return UnitType::CLERIC;
+		}
+	}
+	return UnitType::NONE;
 }
 
 // Called to get the rect of the sprite of the portrait of the building

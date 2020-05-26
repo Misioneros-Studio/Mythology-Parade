@@ -33,6 +33,8 @@ j1Scene::j1Scene() : j1Module()
 	clickToPath = false;
 	nextUnit_selected = nextBuilding_selected = building_meteor = false;
 	oneTime = true;
+	update_selection = false;
+	dont_update_types_of_troops = true;
 }
 
 // Destructor
@@ -250,6 +252,13 @@ void j1Scene::ClickToPath()
 // Called each loop iteration
 bool j1Scene::Update(float dt)
 {
+	//Update selection if needed
+	if (update_selection == true) {
+		hud->HUDUpdateSelection(App->entityManager->getPlayer()->GetEntitiesSelected(), nullptr, dont_update_types_of_troops);
+		update_selection = false;
+		dont_update_types_of_troops = true;
+	}
+
 	// Gui ---
 	switch (hud->close_menus)
 	{
@@ -404,14 +413,16 @@ bool j1Scene::Update(float dt)
 	}*/
 
 	if (App->input->GetMouseWheel() > 0) {
-		hud->HUDScrollUp();
-		App->render->camera.x = -(hud->thing_selected->position.x - App->render->camera.w * 0.5f);
-		App->render->camera.y = -(hud->thing_selected->position.y - App->render->camera.h * 0.5f);
+		if (hud->HUDScrollUp() == true) {
+			App->render->camera.x = -(hud->thing_selected->position.x - App->render->camera.w * 0.5f);
+			App->render->camera.y = -(hud->thing_selected->position.y - App->render->camera.h * 0.5f);
+		}
 	}
 	else if (App->input->GetMouseWheel() < 0) {
-		hud->HUDScrollDown();
-		App->render->camera.x = -(hud->thing_selected->position.x - App->render->camera.w * 0.5f);
-		App->render->camera.y = -(hud->thing_selected->position.y - App->render->camera.h * 0.5f);
+		if (hud->HUDScrollDown() == true) {
+			App->render->camera.x = -(hud->thing_selected->position.x - App->render->camera.w * 0.5f);
+			App->render->camera.y = -(hud->thing_selected->position.y - App->render->camera.h * 0.5f);
+		}
 	}
 
 	return true;
@@ -730,6 +741,9 @@ void j1Scene::OnClick(UI* element, float argument)
 		else if (element->name == "Produce_Chaotic_Miracle")
 		{
 			building_meteor = true;
+		}
+		else if (element->name == "Troop") {
+			hud->ClickOnSelectionButton(element->sprite1);
 		}
 		break;
 

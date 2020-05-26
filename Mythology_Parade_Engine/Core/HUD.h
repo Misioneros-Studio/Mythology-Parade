@@ -61,7 +61,7 @@ public:
 	void DeactivateConfirmationMenu();
 
 	// Called when selecting troops or buildings
-	void HUDUpdateSelection(std::list<Entity*>, Building*);
+	void HUDUpdateSelection(std::list<Entity*>, Building*, bool update_list = true);
 
 	// Called to order the list of selected
 	std::list<Entity*> OrderSelectedList(std::list<Entity*>, int);
@@ -73,7 +73,7 @@ public:
 	bool HUDScrollUp();
 
 	// Called when deleting the list of troops in the HUD
-	void HUDDeleteListTroops();
+	void HUDDeleteListTroops(bool delete_everything = true);
 
 	// Called when deleting the selected troop in the HUD
 	void HUDDeleteSelectedTroop();
@@ -84,11 +84,23 @@ public:
 	// Called to update every frame the information of the selected thing
 	void UpdateSelectedThing();
 
+	// Called when clicked on one of the buttons of the right after selecting troops
+	void ClickOnSelectionButton(SDL_Rect);
+
+	// Called when changing the type of unit appearing in the central part of the HUD
+	void ChangeTypeOfUnitFirstSelected(int, int);
+
+	// Called when deleting a type of troop in the selected list
+	void DeleteTroopsInSelectedList(int, int);
+
 	//Called when creating or updating the action buttons
 	void ManageActionButtons(bool create_buttons = false, bool viking = true);
 
 	// Called to get the rect of the sprite of the portrait
 	SDL_Rect GetSpritePortrait(int type_of_portrait, UnitType unit_type);
+
+	// Called to get the unit type from a sprite portrait
+	UnitType GetUnitTypeFromSpritePortrait(SDL_Rect);
 
 	// Called to get the rect of the sprite of the portrait of the building
 	SDL_Rect GetSpritePortraitBuilding(int type_of_portrait, BuildingType building_type, CivilizationType civilization);
@@ -137,7 +149,7 @@ private:
 	WindowUI* ui_confirmation_window;
 	ButtonUI* ui_button_confirmation[2];
 	TextUI* ui_text_confirmation[4];
-	ImageUI* hud_list_troops[13];
+	ButtonUI* hud_list_troops[13];
 	TextUI* hud_number_troops[13];
 	int number_of_troops[13];
 	UnitType type_of_troops[13];
