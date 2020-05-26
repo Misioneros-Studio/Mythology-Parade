@@ -724,9 +724,7 @@ void HUD::UpdateSelectedThing() {
 		}
 		if (hud_bar_producing[1] != nullptr) {
 			float w = building->GetPercentage();
-			App->gui->DeleteUIElement(hud_bar_producing[1]);
-			hud_bar_producing[1] = nullptr;
-			hud_bar_producing[1] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, static_cast<UI*>(ui_ingame), { 826,652,(int)(28 * w),5 }, { 1072,250,181,17 }, "", Panel_Fade::no_one_fade));
+			hud_bar_producing[1]->quad.w = 28 * w;
 		}
 	}
 }
