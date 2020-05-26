@@ -122,6 +122,9 @@ public:
 	Player* getPlayer() const;
 
 	static bool IsPointInsideQuad(SDL_Rect rect, int x, int y);
+	void FxUnits(int channel, int fx, int posx, int posy);
+	int volume;
+	iPoint MapPos();
 
 public:
 
@@ -132,8 +135,6 @@ public:
 	//The way to store the spritesheets
 	std::unordered_map<SpriteSheetType, SDL_Texture*> entitySpriteSheets;
 	std::vector<BuildingInfo> buildingsData;
-	void FxUnits(int channel, int fx, int posx, int posy);
-	int volume;
 
 private:
 	int buildingTestIndex = 0;
@@ -156,18 +157,7 @@ public:
 	std::unordered_map<UnitType, std::unordered_map<AnimationType, std::unordered_map<Direction, Animation_char>>> animations;
 	std::multimap<int, Entity*> orderedSprites;
 
-	int Building_destruction;
-	int Building_placed;
-	int Decrease_Faith;
-	int Getting_resources;
-	int hit_1;
-	int Increase_faith;
-	int increase_prayers;
-	int increase_sacrifice;
-	int Walking_troops;
-	int CreateMonk_sound;
-	int CreateAssasin_sound;
-	int Research_sound;
+
 
 	bool initCivilizations;
 

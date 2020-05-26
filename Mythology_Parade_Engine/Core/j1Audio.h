@@ -64,7 +64,20 @@ public:
 
 	bool Load(pugi::xml_node&);
 
-
+	int OpenMenu_sfx;
+	int Building_destruction;
+	int Building_placed;
+	int Decrease_Faith;
+	int Getting_resources;
+	int hit_1;
+	int Increase_faith;
+	int increase_prayers;
+	int increase_sacrifice;
+	int Walking_troops;
+	int Walking_troop2;
+	int CreateMonk_sound;
+	int CreateAssasin_sound;
+	int Research_sound;
 private:
 
 	_Mix_Music*			music = NULL;

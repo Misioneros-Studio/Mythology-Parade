@@ -6,7 +6,9 @@
 #include "j1Gui.h"
 #include"j1ParticleManager.h"
 #include "j1Minimap.h"
+#include"j1Audio.h"
 
+#include "SDL_mixer/include/SDL_mixer.h"
 
 Unit::Unit(UnitType type, iPoint pos): unitType(type), state(AnimationType::IDLE),  moveSpeed(60)
 {
@@ -228,10 +230,9 @@ void Unit::MoveToTarget()
 
 
 	state = AnimationType::WALK;
-	if (Mix_Playing(3) == 0)
-	{
-		App->entityManager->FxUnits(3, App->entityManager->Walking_troops, position.x, position.y);
-	}
+	
+	
+
 
 	iPoint targetIso = App->map->MapToWorld(targetPosition.x, targetPosition.y);
 	targetIso += App->map->GetTilesHalfSize();
@@ -243,6 +244,7 @@ void Unit::MoveToTarget()
 	fPoint increment = { normalizedDirection.x * speed,  normalizedDirection.y * speed };
 
 	position = position + increment;
+	App->entityManager->FxUnits(6, App->audio->Walking_troops, position.x, position.y);
 
 	//state = AnimationType::WALK;
 
