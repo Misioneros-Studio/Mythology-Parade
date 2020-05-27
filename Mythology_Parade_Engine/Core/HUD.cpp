@@ -97,29 +97,44 @@ void HUD::ActivatePauseMenu() {
 		uint w, h;
 		App->win->GetWindowSize(w, h);
 		ui_pause_black_screen[0] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, nullptr, { 0,0,(int)w,(int)h }, "", 0, 0, 0, 150, Panel_Fade::panel_fade_in));
-		ui_pause_window = static_cast<WindowUI*>(App->gui->CreateUIElement(Type::WINDOW, nullptr, { 410,50,459,531 }, { 216,21,459,531 }, "", Panel_Fade::panel_fade_in));
-		ui_button[0] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_pause_window, { 520,110,237,38 }, { 787,240,237,38 }, "SAVE", Panel_Fade::panel_fade_in, { 787,342,237,38 },
-			{ 787,291,237,38 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::SAVE));
-		ui_text[0] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 607,122,237,38 }, { 0,0,100,100 }, "Save Game", Panel_Fade::panel_fade_in, { 0,0,0,255 }));
-		ui_button[1] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_pause_window, { 520,170,237,38 }, { 787,240,237,38 }, "LOAD", Panel_Fade::panel_fade_in, { 787,342,237,38 },
-			{ 787,291,237,38 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::LOAD));
-		ui_text[1] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 604,182,237,38 }, { 0,0,100,100 }, "Load Game", Panel_Fade::panel_fade_in, { 0,0,0,255 }));
-		ui_button[2] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_pause_window, { 520,230,237,38 }, { 787,240,237,38 }, "OPTIONS", Panel_Fade::panel_fade_in, { 787,342,237,38 },
-			{ 787,291,237,38 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::OPTIONS));
-		ui_text[2] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 613,242,237,38 }, { 0,0,100,100 }, "Options", Panel_Fade::panel_fade_in, { 0,0,0,255 }));
-		ui_button[3] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_pause_window, { 520,290,237,38 }, { 787,240,237,38 }, "RESTART", Panel_Fade::panel_fade_in, { 787,342,237,38 },
-			{ 787,291,237,38 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::RESTART));
-		ui_text[3] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 614,302,237,38 }, { 0,0,100,100 }, "Restart", Panel_Fade::panel_fade_in, { 0,0,0,255 }));
-		ui_button[4] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_pause_window, { 520,350,237,38 }, { 787,240,237,38 }, "SURRENDER", Panel_Fade::panel_fade_in, { 787,342,237,38 },
-			{ 787,291,237,38 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::SURRENDER));
-		ui_text[4] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 607,362,237,38 }, { 0,0,100,100 }, "Surrender", Panel_Fade::panel_fade_in));
-		ui_button[5] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_pause_window, { 520,410,237,38 }, { 787,240,237,38 }, "EXIT", Panel_Fade::panel_fade_in, { 787,342,237,38 },
-			{ 787,291,237,38 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::EXIT));
-		ui_text[5] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 625,422,237,38 }, { 0,0,100,100 }, "Exit", Panel_Fade::panel_fade_in, { 0,0,0,255 }));
-		ui_button[6] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_pause_window, { 520,510,237,38 }, { 787,240,237,38 }, "CLOSE", Panel_Fade::panel_fade_in, { 787,342,237,38 },
-			{ 787,291,237,38 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::CLOSE));
-		ui_text[6] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 620,522,237,38 }, { 0,0,100,100 }, "Close", Panel_Fade::panel_fade_in));
-		ui_text[7] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 604,62,237,38 }, { 0,0,100,100 }, "PAUSE", Panel_Fade::panel_fade_in, { 255,255,255,255 }, { 1,0,0,0 }));
+		if (App->scene->isInTutorial == false) {
+			ui_pause_window = static_cast<WindowUI*>(App->gui->CreateUIElement(Type::WINDOW, nullptr, { 410,50,459,531 }, { 216,21,459,531 }, "", Panel_Fade::panel_fade_in));
+			ui_button[0] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_pause_window, { 520,110,237,38 }, { 787,240,237,38 }, "SAVE", Panel_Fade::panel_fade_in, { 787,342,237,38 },
+				{ 787,291,237,38 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::SAVE));
+			ui_text[0] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 607,122,237,38 }, { 0,0,100,100 }, "Save Game", Panel_Fade::panel_fade_in, { 0,0,0,255 }));
+			ui_button[1] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_pause_window, { 520,170,237,38 }, { 787,240,237,38 }, "LOAD", Panel_Fade::panel_fade_in, { 787,342,237,38 },
+				{ 787,291,237,38 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::LOAD));
+			ui_text[1] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 604,182,237,38 }, { 0,0,100,100 }, "Load Game", Panel_Fade::panel_fade_in, { 0,0,0,255 }));
+			ui_button[2] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_pause_window, { 520,230,237,38 }, { 787,240,237,38 }, "OPTIONS", Panel_Fade::panel_fade_in, { 787,342,237,38 },
+				{ 787,291,237,38 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::OPTIONS));
+			ui_text[2] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 613,242,237,38 }, { 0,0,100,100 }, "Options", Panel_Fade::panel_fade_in, { 0,0,0,255 }));
+			ui_button[3] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_pause_window, { 520,290,237,38 }, { 787,240,237,38 }, "RESTART", Panel_Fade::panel_fade_in, { 787,342,237,38 },
+				{ 787,291,237,38 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::RESTART));
+			ui_text[3] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 614,302,237,38 }, { 0,0,100,100 }, "Restart", Panel_Fade::panel_fade_in, { 0,0,0,255 }));
+			ui_button[4] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_pause_window, { 520,350,237,38 }, { 787,240,237,38 }, "SURRENDER", Panel_Fade::panel_fade_in, { 787,342,237,38 },
+				{ 787,291,237,38 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::SURRENDER));
+			ui_text[4] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 607,362,237,38 }, { 0,0,100,100 }, "Surrender", Panel_Fade::panel_fade_in));
+			ui_button[5] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_pause_window, { 520,410,237,38 }, { 787,240,237,38 }, "EXIT", Panel_Fade::panel_fade_in, { 787,342,237,38 },
+				{ 787,291,237,38 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::EXIT));
+			ui_text[5] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 625,422,237,38 }, { 0,0,100,100 }, "Exit", Panel_Fade::panel_fade_in, { 0,0,0,255 }));
+			ui_button[6] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_pause_window, { 520,510,237,38 }, { 787,240,237,38 }, "CLOSE", Panel_Fade::panel_fade_in, { 787,342,237,38 },
+				{ 787,291,237,38 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::CLOSE));
+			ui_text[6] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 620,522,237,38 }, { 0,0,100,100 }, "Close", Panel_Fade::panel_fade_in));
+			ui_text[7] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 604,62,237,38 }, { 0,0,100,100 }, "PAUSE", Panel_Fade::panel_fade_in, { 255,255,255,255 }, { 1,0,0,0 }));
+		}
+		else {
+			ui_pause_window = static_cast<WindowUI*>(App->gui->CreateUIElement(Type::WINDOW, nullptr, { 410,150,459,303 }, { 216,21,459,531 }, "", Panel_Fade::panel_fade_in));
+			ui_button[2] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_pause_window, { 520,210,237,38 }, { 787,240,237,38 }, "OPTIONS", Panel_Fade::panel_fade_in, { 787,342,237,38 },
+				{ 787,291,237,38 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::OPTIONS));
+			ui_text[2] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 613,222,237,38 }, { 0,0,100,100 }, "Options", Panel_Fade::panel_fade_in, { 0,0,0,255 }));
+			ui_button[5] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_pause_window, { 520,270,237,38 }, { 787,240,237,38 }, "EXIT", Panel_Fade::panel_fade_in, { 787,342,237,38 },
+				{ 787,291,237,38 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::EXIT));
+			ui_text[5] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 625,282,237,38 }, { 0,0,100,100 }, "Exit", Panel_Fade::panel_fade_in, { 0,0,0,255 }));
+			ui_button[6] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_pause_window, { 520,390,237,38 }, { 787,240,237,38 }, "CLOSE", Panel_Fade::panel_fade_in, { 787,342,237,38 },
+				{ 787,291,237,38 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::CLOSE));
+			ui_text[6] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 620,402,237,38 }, { 0,0,100,100 }, "Close", Panel_Fade::panel_fade_in));
+			ui_text[7] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 604,162,237,38 }, { 0,0,100,100 }, "PAUSE", Panel_Fade::panel_fade_in, { 255,255,255,255 }, { 1,0,0,0 }));
+		}
 	}
 }
 
