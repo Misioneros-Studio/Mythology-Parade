@@ -53,7 +53,7 @@ bool j1Audio::Awake(pugi::xml_node& config)
 	}
 	active = true;
 	//LoadingFX
-	Building_destruction =LoadFx("audio/fx/Building_destruction.wav");
+	
 	Building_placed =LoadFx("audio/fx/BuildingPlaced.wav");
 	Decrease_Faith =LoadFx("audio/fx/Descrease_FAITH.wav");
 	Getting_resources =LoadFx("audio/fx/Getting_Resources.wav");
@@ -73,6 +73,10 @@ bool j1Audio::Awake(pugi::xml_node& config)
 	ogre4 = LoadFx("audio/fx/ogre4.wav");
 	ogre5 = LoadFx("audio/fx/ogre5.wav");
 	shade12 = LoadFx("audio/fx/shade12.wav");
+	hit_2 = LoadFx("audio/fx/hit2.wav");
+	ResearchFinished = LoadFx("audio/fx/ResearchFinished.wav");
+	UpgradeUnit = LoadFx("audio/fx/UpgradeUnit.wav");
+	Death_sfx = LoadFx("audio/fx/Death.wav");
 
 	return ret;
 }
