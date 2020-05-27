@@ -40,6 +40,7 @@
     <ClCompile Include="ResearchMenu.cpp" />
     <ClCompile Include="TooltipData.cpp" />
     <ClCompile Include="Unit.cpp" />
+    <ClCompile Include="IA.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h" />
@@ -88,6 +89,7 @@
     <ClInclude Include="ResearchMenu.h" />
     <ClInclude Include="TooltipData.h" />
     <ClInclude Include="Unit.h" />
+    <ClInclude Include="IA.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="TODOS.txt" />
