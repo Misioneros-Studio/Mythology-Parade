@@ -314,7 +314,7 @@ bool Building::Update(float dt)
 		if (civilization != App->entityManager->getPlayer()->civilization)
 			enemy = true;
 		Draw_Building_Bar(blitWidth, 1, active_building, enemy);
-
+	
 	}
 	//IF MONASTERY DETECTS NEARBY MONKS,INCREASE FAITH
 	if (buildingType == BuildingType::MONASTERY)

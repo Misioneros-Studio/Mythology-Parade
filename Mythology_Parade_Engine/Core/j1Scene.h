@@ -92,7 +92,8 @@ public:
 	uint Lose_sound;
 	uint OpenPauseMenu_sfx;
 	uint Research_sound;
-	uint ResearchFinished;;
+	uint ResearchFinished;
+	uint Select_sfx;
 	bool isInTutorial;
 };
 

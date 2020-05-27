@@ -161,13 +161,14 @@ void Player::SelectionDraw_Logic()
 			{
 				unit->SetSelected(false);
 			}
-			if(buildingSelect!=nullptr)
+			if(buildingSelect!=nullptr) 
 				buildingSelect->SetSelected(false);
 			listEntities.clear();
 			buildingSelect = nullptr;
 			ClickLogic();
 			SeeEntitiesInside();
 			App->scene->hud->HUDUpdateSelection(listEntities, (Building*)buildingSelect);
+		
 		}
 	}
 }
@@ -283,13 +284,16 @@ void Player::ClickLogic()
 	std::list<Entity*>::iterator it = App->entityManager->entities[EntityType::BUILDING].begin();
 	for (it; it != App->entityManager->entities[EntityType::BUILDING].end(); ++it)
 	{
+		App->audio->PlayFx(3, App->scene->Select_sfx);
 		if (click.x >= it._Ptr->_Myval->getCollisionRect().x && click.x <= it._Ptr->_Myval->getCollisionRect().x + it._Ptr->_Myval->getCollisionRect().w)
 		{
 			if (click.y <= it._Ptr->_Myval->getCollisionRect().y && click.y >= it._Ptr->_Myval->getCollisionRect().y + it._Ptr->_Myval->getCollisionRect().h)
 			{
+				
 				if (it._Ptr->_Myval->civilization == civilization) {
 					buildingSelect = it._Ptr->_Myval;
 					it._Ptr->_Myval->SetSelected(true);
+					App->audio->PlayFx(3, App->scene->Select_sfx);
 				}
 			}
 		}

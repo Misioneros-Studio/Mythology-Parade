@@ -99,6 +99,7 @@ bool j1Scene::Start()
 	OpenPauseMenu_sfx = App->audio->LoadFx("audio/fx/OpenPause.wav");
 	Research_sound = App->audio->LoadFx("audio/fx/Research_Sound.wav");
 	ResearchFinished = App->audio->LoadFx("audio/fx/ResearchFinished.wav");
+	Select_sfx = App->audio->LoadFx("audio/ui/Menu Select 1.wav");
 
 
 	paused_game = false;
