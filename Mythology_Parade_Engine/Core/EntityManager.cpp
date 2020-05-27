@@ -702,32 +702,32 @@ Entity* EntityManager::CreateUnitEntity(UnitType type, iPoint pos, CivilizationT
 	{
 	case UnitType::ASSASSIN:
 		ret = new CombatUnit(UnitType::ASSASSIN, pos);
-		FxUnits(8, CreateAssasin_sound, pos.x, pos.y);
+		FxUnits(4, CreateAssasin_sound, pos.x, pos.y);
 		break;
 	case UnitType::MONK:
 		ret = new Unit(UnitType::MONK, pos);
 		//ret->texture = animationManager.character_tmx_data.texture;
-		FxUnits(8, CreateMonk_sound, pos.x, pos.y);
+		FxUnits(4, CreateMonk_sound, pos.x, pos.y);
 		break;
 	case UnitType::PIKEMAN:
 		ret = new CombatUnit(UnitType::PIKEMAN, pos);
-		FxUnits(8, CreateAssasin_sound, pos.x, pos.y);
+		FxUnits(4, CreateAssasin_sound, pos.x, pos.y);
 		break;
 	case UnitType::JOTNAR:
 		ret = new CombatUnit(UnitType::JOTNAR, pos);
-		FxUnits(8, ogre5, pos.x, pos.y);
+		FxUnits(4, ogre5, pos.x, pos.y);
 		break;
 	case UnitType::DRAUGAR:
 		ret = new CombatUnit(UnitType::DRAUGAR, pos);
-		FxUnits(8, shade12, pos.x, pos.y);
+		FxUnits(4, shade12, pos.x, pos.y);
 		break;
 	case UnitType::CYCLOP:
 		ret = new CombatUnit(UnitType::CYCLOP, pos);
-		FxUnits(8, giant3, pos.x, pos.y);
+		FxUnits(4, giant3, pos.x, pos.y);
 		break;
 	case UnitType::MINOTAUR:
 		ret = new CombatUnit(UnitType::MINOTAUR, pos);
-		FxUnits(8, Monster1, pos.x, pos.y);
+		FxUnits(4, Monster1, pos.x, pos.y);
 		break;
 	}
 	ret->civilization = civilization;
@@ -777,15 +777,19 @@ Entity* EntityManager::CreateBuildingEntity(iPoint pos, BuildingType type, Build
 	{
 	case FORTRESS:
 		ret = new Building(BuildingType::FORTRESS, pos, info);
+		FxUnits(4, App->audio->Building_placed, pos.x, pos.y);
 		break;
 	case MONASTERY:
 		ret = new Building(BuildingType::MONASTERY, pos, info);
+		FxUnits(4, App->audio->Building_placed, pos.x, pos.y);
 		break;
 	case TEMPLE:
 		ret = new Building(BuildingType::TEMPLE, pos, info);
+		FxUnits(4, App->audio->Building_placed, pos.x, pos.y);
 		break;
 	case ENCAMPMENT:
 		ret = new Building(BuildingType::ENCAMPMENT, pos, info);
+		FxUnits(4, App->audio->Building_placed, pos.x, pos.y);
 		break;
 	}
 

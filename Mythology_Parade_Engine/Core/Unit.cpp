@@ -452,6 +452,7 @@ void Unit::StateMachineActions(float dt)
 	case AnimationType::ATTACK:
 		if (currentAnim.current_sprite == currentAnim.num_sprites - 1)
 		{
+			App->entityManager->FxUnits(4, App->audio->hit_2, position.x, position.y);
 			CombatUnit* unit = (CombatUnit*)this;
 			if (enemyTarget->RecieveDamage(unit->GetDamageValue()))
 			{
@@ -463,7 +464,7 @@ void Unit::StateMachineActions(float dt)
 
 		break;
 	case AnimationType::DIE:
-
+		App->entityManager->FxUnits(4, App->audio->Death_sfx, position.x, position.y);
 		timeToDespawn -= dt;
 
 		if (timeToDespawn <= 0)
