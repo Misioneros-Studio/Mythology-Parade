@@ -239,7 +239,7 @@ bool Building::Update(float dt)
 		damage_timer.Resume();
 	if (show_bar_for_damage == true && damage_timer.ReadSec() > 2)
 		show_bar_for_damage = false;
-	percentage_life = (float)defenses / (float)max_defenses;
+	percentage_life = (float)GetHealth() / (float)GetMaxHealth();
 	if (percentage_life < 0)
 		percentage_life = 0;
 	if (damaged_now == true) {
