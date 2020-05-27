@@ -926,7 +926,7 @@ void EntityManager::FxUnits(int channel, int fx, int posx, int posy)
 		iPoint distance = { posx - (-App->render->camera.x + App->render->camera.w / 2), posy - (-App->render->camera.y + App->render->camera.h / 2) };
 
 		int distance_normalized = (distance.x * distance.x + distance.y * distance.y);
-		distance_normalized = distance_normalized / 500;
+		distance_normalized = distance_normalized / 750;
 		volume = (distance_normalized * 255) / App->render->camera.w;
 
 		float angle = 90;

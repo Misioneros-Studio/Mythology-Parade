@@ -97,6 +97,8 @@ bool j1Scene::Start()
 	WinGreek_sound = App->audio->LoadFx("audio/fx/win_greeks.wav");
 	Lose_sound = App->audio->LoadFx("audio/fx/lose_sound.wav");
 	OpenPauseMenu_sfx = App->audio->LoadFx("audio/fx/OpenPause.wav");
+	Research_sound = App->audio->LoadFx("audio/fx/Research_Sound.wav");
+	ResearchFinished = App->audio->LoadFx("audio/fx/ResearchFinished.wav");
 
 
 	paused_game = false;

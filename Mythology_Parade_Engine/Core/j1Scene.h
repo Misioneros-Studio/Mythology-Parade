@@ -91,6 +91,8 @@ public:
 	uint WinGreek_sound;
 	uint Lose_sound;
 	uint OpenPauseMenu_sfx;
+	uint Research_sound;
+	uint ResearchFinished;;
 	bool isInTutorial;
 };
 
