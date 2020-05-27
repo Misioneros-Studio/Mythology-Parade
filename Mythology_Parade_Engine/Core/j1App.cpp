@@ -25,6 +25,7 @@
 #include "j1ParticleManager.h"
 #include "j1App.h"
 #include "TooltipData.h"
+#include "IA.h"
 
 
 // Constructor
@@ -51,6 +52,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	fowManager = new FoWManager();
 	fade_to_black = new j1FadeToBlack();
 	particleManager = new j1ParticleManager();
+	ia = new IA();
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
@@ -77,6 +79,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	// entities
 	AddModule(entityManager);
 	AddModule(audio);
+	AddModule(ia);
 	// render last to swap buffer
 	AddModule(fade_to_black);
 
