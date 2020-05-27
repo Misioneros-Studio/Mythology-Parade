@@ -219,24 +219,30 @@ void j1Scene::ClickToPath()
 		CivilizationType playerCiv = App->entityManager->getPlayer()->civilization;
 		bool attacking = false;
 
-		for (std::list<Entity*>::iterator it = App->entityManager->entities[EntityType::UNIT].begin(); it != App->entityManager->entities[EntityType::UNIT].end(); it++)
+
+		for (int i = 1; i < 3; i++)
 		{
-			SDL_Rect collider = it._Ptr->_Myval->getCollisionRect();
-			if (it._Ptr->_Myval->civilization != playerCiv && EntityManager::IsPointInsideQuad(collider, p.x, p.y))
 			{
-				Unit* unt = nullptr;
-				for (std::list<Entity*>::iterator sel = list.begin(); sel != list.end(); sel++)
+				for (std::list<Entity*>::iterator it = App->entityManager->entities[static_cast<EntityType>(i)].begin(); it != App->entityManager->entities[static_cast<EntityType>(i)].end(); it++)
 				{
-					unt = (Unit*)sel._Ptr->_Myval;
-					unt->enemyTarget = (Unit*)it._Ptr->_Myval;
-					attacking = true;
+					SDL_Rect collider = it._Ptr->_Myval->getCollisionRect();
+					if (it._Ptr->_Myval->civilization != playerCiv && EntityManager::IsPointInsideQuad(collider, p.x, p.y))
+					{
+						Unit* unt = nullptr;
+						for (std::list<Entity*>::iterator sel = list.begin(); sel != list.end(); sel++)
+						{
+							unt = (Unit*)sel._Ptr->_Myval;
+							unt->enemyTarget = it._Ptr->_Myval;
+							attacking = true;
+						}
+					}
 				}
 			}
 		}
+		
 
 		if (!attacking)
 		{
-
 			Unit* unt = nullptr;
 			for (std::list<Entity*>::iterator sel = list.begin(); sel != list.end(); sel++)
 			{
@@ -688,6 +694,7 @@ void j1Scene::OnClick(UI* element, float argument)
 		else if (element->name == "Attack")
 		{
 			App->gui->cursor_attack = true;
+			clickToPath = true;
 			//BERNAT & JORDI
 		}
 		else if (element->name == "Heal")

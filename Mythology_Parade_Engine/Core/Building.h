@@ -2,7 +2,6 @@
 #define __BUILDING_H__
 
 #include "Entity.h"
-#include "HealthSystem.h"
 #include "EntityManager.h"
 #include "j1Timer.h"
 #include <queue>
@@ -29,7 +28,7 @@ enum class BuildingAction
 
 struct BuildingInfo;
 
-class Building: public Entity, public HealthSystem
+class Building: public Entity
 {
 public:
 	Building(BuildingType, iPoint, BuildingInfo);
@@ -70,6 +69,7 @@ private:
 	bool Draw(float dt);
 
 	void FinishProduction(std::string thing_produced);
+	void Kill(iPoint) override;
 
 	//Stats
 	int defenses;

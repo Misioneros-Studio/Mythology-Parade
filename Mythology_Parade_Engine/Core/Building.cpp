@@ -1,6 +1,7 @@
 #include "Building.h"
 #include "p2Log.h"
 #include "j1Minimap.h"
+#include "j1ParticleManager.h"
 Building::Building(BuildingType type, iPoint pos, BuildingInfo info)
 {
 	//default inits with none value
@@ -163,6 +164,11 @@ void Building::CreateUnit()
 	}
 }
 
+void Building::Kill(iPoint direction)
+{
+	buildingStatus = BuildingStatus::DESTROYED;
+	App->particleManager->CreateParticle({ (int)position.x - 20,(int)position.y - 50 }, { 0,-1 }, 10, ParticleAnimation::Skull);
+}
 
 bool Building::GetResearched()
 {
