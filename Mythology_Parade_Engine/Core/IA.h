@@ -7,6 +7,13 @@
 #include"j1Input.h"
 #include "EntityManager.h"
 
+enum class GameBehaviour
+{
+	EARLY,
+	MID,
+	LATE
+};
+
 enum class EarlyGameBehaviour
 {
 	CREATION,
@@ -58,8 +65,16 @@ public:
 	void Atack();
 	void Win();
 
-private:
+public:
+	void EarlyGame();
+	void MidGame();
+	void LateGame();
 
+private:
+	GameBehaviour gamePhase;
+	EarlyGameBehaviour early;
+	MidGameBehaviour mid;
+	LateGameBehaviour late;
 
 };
 
