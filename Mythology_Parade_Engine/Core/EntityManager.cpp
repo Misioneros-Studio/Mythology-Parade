@@ -298,9 +298,9 @@ bool EntityManager::PostUpdate()
 		//TODO 8: Test unit to building collision
 		fPoint points[4];
 		points[0] = (*it)->position;
-		points[1] = { (*it)->position.x, (*it)->position.y - (*it)->blitRect.y };
-		points[2] = { (*it)->position.x + (*it)->blitRect.x, (*it)->position.y };
-		points[3] = { (*it)->position.x + (*it)->blitRect.x, (*it)->position.y - (*it)->blitRect.y };
+		points[1] = { (*it)->position.x, (*it)->position.y - (*it)->getCollisionRect().h };
+		points[2] = { (*it)->position.x + (*it)->getCollisionRect().w, (*it)->position.y };
+		points[3] = { (*it)->position.x + (*it)->getCollisionRect().w, (*it)->position.y - (*it)->getCollisionRect().h};
 
 		int checks = 0;
 
@@ -655,85 +655,6 @@ bool EntityManager::Save(pugi::xml_node& s) const
 	return true;
 }
 
-//Called when creating a new Entity
-//Entity* EntityManager::CreateEntity(EntityType type, UnitType unitType)
-//{
-//	Entity* ret = nullptr;
-	//pugi::xml_document	info_file;
-	//pugi::xml_document info_file2;
-
-	//switch (type)
-	//{
-
-	//case EntityType::PLAYER:
-	//	ret = new Player();
-	//	break;
-
-	//case EntityType::UNIT:
-	//	switch (unitType)
-	//	{
-	//	case ASSASSIN:
-	//	ret = new CombatUnit(UnitType::ASSASSIN);
-	//		break;
-	//	case MONK:
-	//	ret = new Unit(UnitType::MONK);
-	//		break;
-	//	case PIKEMAN:
-	//	ret = new CombatUnit(UnitType::PIKEMAN);
-	//		break;
-	//	}
-	//	break;
-
-	//case EntityType::BUILDING:
-	//	ret = new Building(BuildingType::FORTRESS);
-	//	break;
-	//}
-	//entities[type].push_back(ret);
-
-	//switch (type)
-	//{
-	//case Types::player:
-	//	ret = new j1Player(Types::player);
-	//	break;
-
-	//case Types::enemy_ground:
-	//	info_file.load_file("textures/Enemy_Sprites/snake.tmx");
-	//	ret = new eSnakeEnemy(Types::enemy_ground, info_file.child("map"));
-	//	break;
-
-	//case Types::enemy_air:
-	//	info_file.load_file("textures/Enemy_Sprites/bat.tmx");
-	//	ret = new eBatEnemy(Types::enemy_air, info_file.child("map"));
-	//	break;
-
-	//case Types::healing_potion:
-	//	//load healing potion
-	//	ret = new ePotion(Types::healing_potion, info_file.child("map"));
-	//	break;
-
-	//case Types::coins:
-	//	ret = new eCoins(Types::coins, info_file.child("map"));
-	//	break;
-
-	//}
-	/*info_file2.load_file("config.xml");
-	if (ret != nullptr)
-	{
-		entities.add(ret);
-		if (type == Types::enemy_ground)
-			ret->Awake(info_file2.child("config").child("entity_manager").child("enemy_info").child("ground_enemy"));
-		else if (type == Types::enemy_air)
-			ret->Awake(info_file2.child("config").child("entity_manager").child("enemy_info").child("fly_enemy"));
-		else if (type == Types::healing_potion)
-			ret->Awake(info_file2.child("config").child("entity_manager").child("pickups").child("potion"));
-		else if (type == Types::coins)
-			ret->Awake(info_file2.child("config").child("entity_manager").child("pickups").child("coins"));
-
-
-	}*/
-//	return ret;
-//}
-
 Entity* EntityManager::CreatePlayerEntity(std::string civilization_string)
 {
 	Entity* ret = nullptr;
@@ -924,6 +845,91 @@ bool EntityManager::DeleteEntity(Entity* e)
 {
 	if (e != nullptr) 
 	{
+
+		switch (e->type)
+		{
+			case EntityType::UNIT: 
+			{
+				//Delete from AABBtree
+				AABBNode* node = aabbTree.FindLowestNodeInPoint(&aabbTree.baseNode, static_cast<Point>(e->position));
+
+				node->data.remove(e);
+
+				if (node->data.size() <= 0)
+				{
+					AABBNode* parent = node->parent;
+
+					//if (parent) 
+					//{
+					//	for (int i = 0; i < parent->childNodes.size(); i++)
+					//	{
+					//		if (parent->childNodes[i].data.size() > 0)
+					//		{
+					//			//parent->data.merge(parent->childNodes[i].data);
+					//			parent->data.insert(parent->data.end(), parent->childNodes[i].data.begin(), parent->childNodes[i].data.end());
+
+					//			parent->childNodes[i].data.clear();
+					//		}
+					//	}
+					//}
+
+					//parent->isDivided = false;
+					//parent->childNodes.clear();
+					//parent->childNodes.shrink_to_fit();
+
+
+				}
+				break;
+			}
+
+
+			case EntityType::BUILDING:
+			{
+
+				quadTree.FindLowestNodeInPoint(&quadTree.baseNode, e->position);
+
+				quadTree.lowestNode->data.remove(e);
+
+						//QuadNode* parent = quadTree.lowestNode->parent;
+
+						//bool isEmpty = true;
+
+						////Same as aabbTree, you need to check if every possible child inside a child is empty before merging
+						//if (parent) 
+						//{
+						//	for (int i = 0; i < QUADNODE_CHILD_NUMBER; i++)
+						//	{
+						//		if (parent->childNodes[i].data.size() > 0)
+						//		{
+						//			isEmpty = false;
+						//		}
+						//	}
+
+						//	if (isEmpty && parent != nullptr)
+						//	{
+						//		for (int i = 0; i < QUADNODE_CHILD_NUMBER; i++)
+						//		{
+						//			parent->data.insert(parent->data.end(), parent->childNodes[i].data.begin(), parent->childNodes[i].data.end());
+						//			parent->childNodes[i].data.clear();
+						//		}
+
+						//		parent->isDivided = false;
+						//		parent->childNodes.clear();
+						//		parent->childNodes.shrink_to_fit();
+
+						//	}
+						//}
+
+				quadTree.lowestNode = nullptr;
+
+				break;
+			}
+		}
+
+
+
+
+
 		entities[e->type].remove(e);
 		delete e;
 		return true;
