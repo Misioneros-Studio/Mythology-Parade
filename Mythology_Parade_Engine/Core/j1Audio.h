@@ -78,7 +78,10 @@ public:
 	int CreateMonk_sound;
 	int CreateAssasin_sound;
 	int Research_sound;
-	
+	int hit_2;
+	int ResearchFinished;
+	int UpgradeUnit;
+	int Death_sfx;
 	int Monster1;
 	int Monster2;
 	int giant3;

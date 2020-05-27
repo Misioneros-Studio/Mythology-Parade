@@ -53,7 +53,7 @@ bool j1Audio::Awake(pugi::xml_node& config)
 	}
 	active = true;
 	//LoadingFX
-	
+	Building_destruction = LoadFx("audio/fx/Building_destruction.wav");
 	Building_placed =LoadFx("audio/fx/BuildingPlaced.wav");
 	Decrease_Faith =LoadFx("audio/fx/Descrease_FAITH.wav");
 	Getting_resources =LoadFx("audio/fx/Getting_Resources.wav");

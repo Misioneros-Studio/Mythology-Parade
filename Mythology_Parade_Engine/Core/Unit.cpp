@@ -206,7 +206,6 @@ bool Unit::Update(float dt)
 		else
 			Draw_Life_Bar();
 	}
-
 	return ret;
 }
 
