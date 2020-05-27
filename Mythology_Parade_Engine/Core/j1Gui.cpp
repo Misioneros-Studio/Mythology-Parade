@@ -24,7 +24,7 @@ j1Gui::j1Gui() : j1Module()
 	atlas_num_1 = nullptr;
 	atlas_num_2 = nullptr;
 	cursor_tex = nullptr;
-	lockClick = cursor_attack = cursor_move = false;
+	lockClick = cursor_attack = cursor_move = cursor_heal = false;
 	cursor_size = { 0,0 };
 	LOG("%s", atlas_file_name_num_0.c_str());
 }
@@ -149,6 +149,8 @@ bool j1Gui::PostUpdate()
 		sec = { 162,0,36,36 };
 	if (cursor_attack == true && App->scene->active == true && App->scene->paused_game == false)
 		sec = { 216,0,35,33 };
+	if (cursor_move == true && App->scene->active == true && App->scene->paused_game == false)
+		sec = { 324,0,27,32 };
 
 	cursor_size = { sec.w,sec.h };
 	p = App->render->ScreenToWorld(x, y);

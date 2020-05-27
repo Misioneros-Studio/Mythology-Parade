@@ -168,6 +168,7 @@ void Player::SelectionDraw_Logic()
 			SeeEntitiesInside();
 			ActionToUnit();
 			ActionToBuilding();
+			App->scene->nextUnit_selected = false;
 			App->scene->hud->HUDUpdateSelection(listEntities, (Building*)buildingSelect);
 		}
 	}
@@ -192,14 +193,20 @@ void Player::ActionToUnit()
 {
 	if (listEntities.size() == 1 && App->scene->nextUnit_selected)
 	{
+		App->entityManager->DeleteEntity(App->scene->hud->thing_selected);
 		Unit* unit = static_cast<Unit*>(listEntities.begin()._Ptr->_Myval);
 		unit->SetMaxUnitHealth();
-		App->scene->nextUnit_selected = false;
 	}
 }
 
 void Player::ActionToBuilding()
 {
+	if(App->scene->nextUnit_selected && buildingSelect!=nullptr)
+	{
+		App->entityManager->DeleteEntity(App->scene->hud->thing_selected);
+		Building* unit = static_cast<Building*>(buildingSelect);
+		unit->SetMaxUnitHealth();
+	}
 	if (App->scene->nextBuilding_selected && GetEnemySelectedBuild()->name == "encampment" && civilization != GetEnemySelectedBuild()->civilization)
 	{
 		CivilizationType civ;

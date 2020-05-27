@@ -156,6 +156,10 @@ bool j1Scene::PreUpdate()
 	{
 		App->gui->cursor_attack = false;
 	}
+	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN && App->gui->cursor_move == true)
+	{
+		App->gui->cursor_move = false;
+	}
 
 	if (App->title_scene->wantToLoad)
 	{
@@ -688,7 +692,7 @@ void j1Scene::OnClick(UI* element, float argument)
 		}
 		else if (element->name == "Heal")
 		{
-			App->entityManager->DeleteEntity(hud->thing_selected);
+			App->gui->cursor_move = true;
 			nextUnit_selected = true;
 		}
 		else if (element->name == "Produce_Cleric")

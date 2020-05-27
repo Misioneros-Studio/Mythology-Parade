@@ -354,6 +354,7 @@ public:
 	bool lockClick;
 	bool cursor_attack;
 	bool cursor_move;
+	bool cursor_heal;
 	iPoint cursor_size;
 
 };
