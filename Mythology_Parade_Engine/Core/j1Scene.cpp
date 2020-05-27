@@ -225,15 +225,17 @@ void j1Scene::ClickToPath()
 			{
 				for (std::list<Entity*>::iterator it = App->entityManager->entities[static_cast<EntityType>(i)].begin(); it != App->entityManager->entities[static_cast<EntityType>(i)].end(); it++)
 				{
-					SDL_Rect collider = it._Ptr->_Myval->getCollisionRect();
-					if (it._Ptr->_Myval->civilization != playerCiv && EntityManager::IsPointInsideQuad(collider, p.x, p.y))
-					{
-						Unit* unt = nullptr;
-						for (std::list<Entity*>::iterator sel = list.begin(); sel != list.end(); sel++)
+					if (!it._Ptr->_Myval->IsDeath()) {
+						SDL_Rect collider = it._Ptr->_Myval->getCollisionRect();
+						if (it._Ptr->_Myval->civilization != playerCiv && EntityManager::IsPointInsideQuad(collider, p.x, p.y))
 						{
-							unt = (Unit*)sel._Ptr->_Myval;
-							unt->enemyTarget = it._Ptr->_Myval;
-							attacking = true;
+							Unit* unt = nullptr;
+							for (std::list<Entity*>::iterator sel = list.begin(); sel != list.end(); sel++)
+							{
+								unt = (Unit*)sel._Ptr->_Myval;
+								unt->enemyTarget = it._Ptr->_Myval;
+								attacking = true;
+							}
 						}
 					}
 				}

@@ -64,4 +64,9 @@ void HealthSystem::DivideHealth()
 	health = health / 2;
 }
 
+bool HealthSystem::IsDeath()
+{
+	return isDeath;
+}
+
 

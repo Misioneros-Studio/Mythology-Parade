@@ -14,7 +14,7 @@ Unit::Unit(UnitType type, iPoint pos): unitType(type), state(AnimationType::IDLE
 	displayDebug = false;
 
 	collisionRect = { 0, 0, 30, -55 };
-
+	enemyTarget = nullptr;
 	unitType = type;
 	position = {(float)pos.x, (float)pos.y};
 	state = AnimationType::IDLE;

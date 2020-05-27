@@ -6,11 +6,10 @@ Building::Building(BuildingType type, iPoint pos, BuildingInfo info)
 {
 	//default inits with none value
 	damage = 0;
-	defenses = 0;
-	max_defenses = 0;
 	influence = 0;
 	maxCap = 0;
 	nearbyMonks = 0;
+	nearbyBeasts = 0;
 	researched = false;
 	time_construction = 0;
 	time_research = 0;
@@ -39,7 +38,7 @@ Building::Building(BuildingType type, iPoint pos, BuildingInfo info)
 		time_construction =time_research = 0;
 		damage = 25;
 		SetMaxHealth(500);
-		defenses = max_defenses = 500;
+		SetHealth(500);
 		influence = 20;
 		maxCap = 1;
 		description = "I'm a fortress";
@@ -52,7 +51,7 @@ Building::Building(BuildingType type, iPoint pos, BuildingInfo info)
 		time_construction = 180;
 		damage = 15;
 		SetMaxHealth(250);
-		defenses = max_defenses = 250;
+		SetHealth(250);
 		influence = 10;
 		maxCap = 5;
 		description = "I'm a monastery";
@@ -66,7 +65,7 @@ Building::Building(BuildingType type, iPoint pos, BuildingInfo info)
 		time_construction = 150;
 		damage = 15;
 		SetMaxHealth(200);
-		defenses = max_defenses = 200;
+		SetHealth(200);
 		influence = 10;
 		maxCap = 8;
 		description = "I'm a temple";
@@ -80,7 +79,7 @@ Building::Building(BuildingType type, iPoint pos, BuildingInfo info)
 		time_construction = 180;
 		damage = 20;
 		SetMaxHealth(350);
-		defenses = max_defenses = 350;
+		SetHealth(350);
 		influence = 10;
 		maxCap = 7;
 		description = "I'm an encampment";
@@ -104,7 +103,7 @@ Building::Building(BuildingType type, iPoint pos, BuildingInfo info)
 	}
 	show_bar_for_damage = false;
 
-	mainDef = defenses;
+	mainDef = GetHealth();
 	original_spriteRect = spriteRect = info.spriteRect;
 	blitRect = info.blitSize;
 
@@ -371,8 +370,12 @@ bool Building::Update(float dt)
 					count++;
 			}
 		}
-		defenses = mainDef;
-		defenses += 50 * count;
+		if (nearbyBeasts != count) {
+
+			IncreaseHealth(50 * (count - nearbyBeasts));
+			nearbyBeasts = count;
+			LOG("Health: %i MaxHealth: %i", GetHealth(), GetMaxHealth());
+		}
 	}
 
 	//IF BUILDING DETECTS JOTNAR
@@ -387,8 +390,12 @@ bool Building::Update(float dt)
 					count++;
 			}
 		}
-		defenses = mainDef;
-		defenses += 50 * count;
+		if (nearbyBeasts != count) {
+
+		    IncreaseHealth(50 * (count - nearbyBeasts));
+			nearbyBeasts = count;
+			LOG("Health: %i MaxHealth: %i", GetHealth(), GetMaxHealth());
+		}
 	}
 
 	std::vector<iPoint> tiles;

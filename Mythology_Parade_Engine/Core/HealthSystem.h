@@ -37,6 +37,7 @@ public:
 	void SetMaxUnitHealth();
 
 	void DivideHealth();
+	bool IsDeath();
 
 };
 

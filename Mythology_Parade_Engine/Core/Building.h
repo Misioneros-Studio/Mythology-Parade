@@ -72,8 +72,6 @@ private:
 	void Kill(iPoint) override;
 
 	//Stats
-	int defenses;
-	int max_defenses;
 	int influence;
 	int damage;
 	int maxCap;
@@ -86,6 +84,7 @@ private:
 	std::queue<std::string> queuedResearch;
 
 	int nearbyMonks;
+	int nearbyBeasts;
 	std::string description;
 	int mainDef;
 
