@@ -166,7 +166,12 @@ void Building::CreateUnit()
 void Building::Kill(iPoint direction)
 {
 	buildingStatus = BuildingStatus::DESTROYED;
-	App->particleManager->CreateParticle({ (int)position.x - 20,(int)position.y - 50 }, { 0,-1 }, 10, ParticleAnimation::Skull);
+	if (buildingType == BuildingType::FORTRESS) {
+		App->particleManager->CreateParticle({ (int)position.x + 10,(int)position.y - 100 }, { 0,0 }, 10, ParticleAnimation::Explosion);
+	}
+	else {
+		App->particleManager->CreateParticle({ (int)position.x - 22,(int)position.y - 100 }, { 0,0 }, 10, ParticleAnimation::Explosion);
+	}
 }
 
 bool Building::GetResearched()

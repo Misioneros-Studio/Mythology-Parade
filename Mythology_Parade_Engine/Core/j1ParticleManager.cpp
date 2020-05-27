@@ -93,59 +93,78 @@ void j1ParticleManager::UpdateParticleAnimation(ParticleAnimation animation)
 
 void j1ParticleManager::CreateExplosionAnimation()
 {
-	explosion_animation.PushBack(SDL_Rect{ 0, 0, 59, 59 }, 1, 0, 0);
-	explosion_animation.PushBack(SDL_Rect{ 59, 0, 59, 59 }, 1, 0, 0);
-	explosion_animation.PushBack(SDL_Rect{ 118, 0, 59, 59 }, 1, 0, 0);
-	explosion_animation.PushBack(SDL_Rect{ 177, 0, 59, 59 }, 1, 0, 0);
-	explosion_animation.PushBack(SDL_Rect{ 236, 0, 59, 59 }, 1, 0, 0);
-	explosion_animation.PushBack(SDL_Rect{ 295, 0, 59, 59 }, 1, 0, 0);
-	explosion_animation.PushBack(SDL_Rect{ 354, 0, 59, 59 }, 2, 0, 0);
-	explosion_animation.PushBack(SDL_Rect{ 413, 0, 59, 59 }, 1, 0, 0);
+	explosion_animation.PushBack(SDL_Rect{ 0, 0, 172, 172 }, 1, 0, 0);
+	explosion_animation.PushBack(SDL_Rect{ 172, 0, 172, 172 }, 1, 0, 0);
+	explosion_animation.PushBack(SDL_Rect{ 344, 0, 172, 172 }, 1, 0, 0);
+	explosion_animation.PushBack(SDL_Rect{ 516, 0, 172, 172 }, 1, 0, 0);
+	explosion_animation.PushBack(SDL_Rect{ 688, 0, 172, 172 }, 1, 0, 0);
+	explosion_animation.PushBack(SDL_Rect{ 860, 0, 172, 172 }, 1, 0, 0);
+	explosion_animation.PushBack(SDL_Rect{ 1032, 0, 172, 172 }, 2, 0, 0);
+	explosion_animation.PushBack(SDL_Rect{ 1204, 0, 172, 172 }, 1, 0, 0);
+	explosion_animation.PushBack(SDL_Rect{ 0, 172, 172, 172 }, 1, 0, 0);
+	explosion_animation.PushBack(SDL_Rect{ 172, 172, 172, 172 }, 1, 0, 0);
+	explosion_animation.PushBack(SDL_Rect{ 344, 172, 172, 172 }, 1, 0, 0);
+	explosion_animation.PushBack(SDL_Rect{ 516, 172, 172, 172 }, 1, 0, 0);
+	explosion_animation.PushBack(SDL_Rect{ 688, 172, 172, 172 }, 1, 0, 0);
+	explosion_animation.PushBack(SDL_Rect{ 860, 172, 172, 172 }, 1, 0, 0);
+	explosion_animation.PushBack(SDL_Rect{ 1032, 172, 172, 172 }, 2, 0, 0);
+	explosion_animation.PushBack(SDL_Rect{ 1204, 172, 172, 172 }, 1, 0, 0);
+	explosion_animation.PushBack(SDL_Rect{ 0, 344, 172, 172 }, 1, 0, 0);
+	explosion_animation.PushBack(SDL_Rect{ 172, 344, 172, 172 }, 1, 0, 0);
+	explosion_animation.PushBack(SDL_Rect{ 344, 344, 172, 172 }, 1, 0, 0);
+	explosion_animation.PushBack(SDL_Rect{ 516, 344, 172, 172 }, 1, 0, 0);
+	explosion_animation.PushBack(SDL_Rect{ 688, 344, 172, 172 }, 1, 0, 0);
+	explosion_animation.PushBack(SDL_Rect{ 860, 344, 172, 172 }, 1, 0, 0);
+	explosion_animation.PushBack(SDL_Rect{ 1032, 344, 172, 172 }, 2, 0, 0);
+	explosion_animation.PushBack(SDL_Rect{ 1204, 344, 172, 172 }, 1, 0, 0);
+	explosion_animation.PushBack(SDL_Rect{ 0, 516, 172, 172 }, 1, 0, 0);
+	explosion_animation.PushBack(SDL_Rect{ 172, 516, 172, 172 }, 1, 0, 0);
+	explosion_animation.PushBack(SDL_Rect{ 344, 516, 172, 172 }, 1, 0, 0);
 	explosion_animation.speed = 15.f;
-	explosion_animation.loop = true;
+	explosion_animation.loop = false;
 }
 
 
 void j1ParticleManager::CreateArrowsCursorAnimation()
 {
-	arrows_animation.PushBack(SDL_Rect{ 0, 256, 64, 32 }, 1, 0, 0);
-	arrows_animation.PushBack(SDL_Rect{ 64, 256, 64, 32 }, 1, 0, 0);
-	arrows_animation.PushBack(SDL_Rect{ 128, 256, 64, 32 }, 1, 0, 0);
-	arrows_animation.PushBack(SDL_Rect{ 192, 256, 64, 32 }, 1, 0, 0);
-	arrows_animation.PushBack(SDL_Rect{ 256, 256, 64, 32 }, 1, 0, 0);
-	arrows_animation.PushBack(SDL_Rect{ 320, 256, 64, 32 }, 1, 0, 0);
-	arrows_animation.PushBack(SDL_Rect{ 384, 256, 64, 32 }, 1, 0, 0);
-	arrows_animation.PushBack(SDL_Rect{ 0, 288, 64, 32 }, 1, 0, 0);
-	arrows_animation.PushBack(SDL_Rect{ 64, 288, 64, 32 }, 1, 0, 0);
-	arrows_animation.PushBack(SDL_Rect{ 128, 288, 64, 32 }, 1, 0, 0);
-	arrows_animation.PushBack(SDL_Rect{ 192, 288, 64, 32 }, 1, 0, 0);
-	arrows_animation.PushBack(SDL_Rect{ 256, 288, 64, 32 }, 1, 0, 0);
-	arrows_animation.PushBack(SDL_Rect{ 320, 288, 64, 32 }, 1, 0, 0);
-	arrows_animation.PushBack(SDL_Rect{ 384, 288, 64, 32 }, 1, 0, 0);
+	arrows_animation.PushBack(SDL_Rect{ 687, 558, 64, 32 }, 1, 0, 0);
+	arrows_animation.PushBack(SDL_Rect{ 751, 558, 64, 32 }, 1, 0, 0);
+	arrows_animation.PushBack(SDL_Rect{ 815, 558, 64, 32 }, 1, 0, 0);
+	arrows_animation.PushBack(SDL_Rect{ 879, 558, 64, 32 }, 1, 0, 0);
+	arrows_animation.PushBack(SDL_Rect{ 943, 558, 64, 32 }, 1, 0, 0);
+	arrows_animation.PushBack(SDL_Rect{ 1007, 558, 64, 32 }, 1, 0, 0);
+	arrows_animation.PushBack(SDL_Rect{ 1071, 558, 64, 32 }, 1, 0, 0);
+	arrows_animation.PushBack(SDL_Rect{ 687, 590, 64, 32 }, 1, 0, 0);
+	arrows_animation.PushBack(SDL_Rect{ 751, 590, 64, 32 }, 1, 0, 0);
+	arrows_animation.PushBack(SDL_Rect{ 815, 590, 64, 32 }, 1, 0, 0);
+	arrows_animation.PushBack(SDL_Rect{ 879, 590, 64, 32 }, 1, 0, 0);
+	arrows_animation.PushBack(SDL_Rect{ 943, 590, 64, 32 }, 1, 0, 0);
+	arrows_animation.PushBack(SDL_Rect{ 1007, 590, 64, 32 }, 1, 0, 0);
+	arrows_animation.PushBack(SDL_Rect{ 1071, 590, 64, 32 }, 1, 0, 0);
 	arrows_animation.speed = 300.f;
 	arrows_animation.loop = false;
 }
 
 void j1ParticleManager::CreateSkullAnimation()
 {
-	skull_animation.PushBack(SDL_Rect{ 0, 320, 32, 29 }, 1, 0, 0);
-	skull_animation.PushBack(SDL_Rect{ 32, 320, 32, 29 }, 1, 0, 0);
-	skull_animation.PushBack(SDL_Rect{ 64, 320, 32, 29 }, 1, 0, 0);
-	skull_animation.PushBack(SDL_Rect{ 96, 320, 32, 29 }, 1, 0, 0);
-	skull_animation.PushBack(SDL_Rect{ 128, 320, 32, 29 }, 1, 0, 0);
-	skull_animation.PushBack(SDL_Rect{ 160, 320, 32, 29 }, 1, 0, 0);
+	skull_animation.PushBack(SDL_Rect{ 687, 622, 32, 29 }, 1, 0, 0);
+	skull_animation.PushBack(SDL_Rect{ 719, 622, 32, 29 }, 1, 0, 0);
+	skull_animation.PushBack(SDL_Rect{ 751, 622, 32, 29 }, 1, 0, 0);
+	skull_animation.PushBack(SDL_Rect{ 783, 622, 32, 29 }, 1, 0, 0);
+	skull_animation.PushBack(SDL_Rect{ 815, 622, 32, 29 }, 1, 0, 0);
+	skull_animation.PushBack(SDL_Rect{ 847, 622, 32, 29 }, 1, 0, 0);
 	skull_animation.speed = 20.f;
 	skull_animation.loop = false;
 }
 
 void j1ParticleManager::CreateLevelUpAnimation()
 {
-	levelup_animation.PushBack(SDL_Rect{ 0, 349, 32, 22 }, 1, 0, 0);
-	levelup_animation.PushBack(SDL_Rect{ 32, 349, 32, 22 }, 1, 0, 0);
-	levelup_animation.PushBack(SDL_Rect{ 64, 349, 32, 22 }, 1, 0, 0);
-	levelup_animation.PushBack(SDL_Rect{ 96, 349, 32, 22 }, 1, 0, 0);
-	levelup_animation.PushBack(SDL_Rect{ 128, 349, 32, 22 }, 1, 0, 0);
-	levelup_animation.PushBack(SDL_Rect{ 160, 349, 32, 22 }, 1, 0, 0);
+	levelup_animation.PushBack(SDL_Rect{ 687, 651, 32, 22 }, 1, 0, 0);
+	levelup_animation.PushBack(SDL_Rect{ 719, 651, 32, 22 }, 1, 0, 0);
+	levelup_animation.PushBack(SDL_Rect{ 751, 651, 32, 22 }, 1, 0, 0);
+	levelup_animation.PushBack(SDL_Rect{ 783, 651, 32, 22 }, 1, 0, 0);
+	levelup_animation.PushBack(SDL_Rect{ 815, 651, 32, 22 }, 1, 0, 0);
+	levelup_animation.PushBack(SDL_Rect{ 847, 651, 32, 22 }, 1, 0, 0);
 	levelup_animation.speed = 20.f;
 	levelup_animation.loop = false;
 }
