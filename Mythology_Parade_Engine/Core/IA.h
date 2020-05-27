@@ -66,9 +66,13 @@ public:
 	void Win();
 
 public:
-	void EarlyGame();
-	void MidGame();
-	void LateGame();
+	void EarlyGame_Pre();
+	void MidGame_Pre();
+	void LateGame_Pre();
+
+	void EarlyGame_Upd();
+	void MidGame_Upd();
+	void LateGame_Upd();
 
 private:
 	GameBehaviour gamePhase;
