@@ -73,6 +73,16 @@ bool EntityManager::Start()
 	animations[UnitType::CYCLOP] = animationManager.Load("assets/units/Cyclop.tmx", UnitType::CYCLOP);
 	animations[UnitType::MINOTAUR] = animationManager.Load("assets/units/Minotaur.tmx", UnitType::MINOTAUR);
 
+	Monster1 = App->audio->LoadFx("audio/fx/Monster1.wav");
+	Monster2 = App->audio->LoadFx("audio/fx/Monster2.wav");
+	giant3 = App->audio->LoadFx("audio/fx/giant3.wav");
+	giant5 = App->audio->LoadFx("audio/fx/giant5.wav");
+	ogre4 = App->audio->LoadFx("audio/fx/ogre4.wav");
+	ogre5 = App->audio->LoadFx("audio/fx/ogre5.wav");
+	shade12 = App->audio->LoadFx("audio/fx/shade12.wav");
+	CreateMonk_sound = App->audio->LoadFx("audio/fx/Appear_monk.wav");
+	CreateAssasin_sound = App->audio->LoadFx("audio/fx/Appear_assasin.wav");
+
 
 	for (unsigned i = 0; i < entities.size(); i++)
 	{
@@ -692,25 +702,32 @@ Entity* EntityManager::CreateUnitEntity(UnitType type, iPoint pos, CivilizationT
 	{
 	case UnitType::ASSASSIN:
 		ret = new CombatUnit(UnitType::ASSASSIN, pos);
+		FxUnits(8, CreateAssasin_sound, pos.x, pos.y);
 		break;
 	case UnitType::MONK:
 		ret = new Unit(UnitType::MONK, pos);
 		//ret->texture = animationManager.character_tmx_data.texture;
+		FxUnits(8, CreateMonk_sound, pos.x, pos.y);
 		break;
 	case UnitType::PIKEMAN:
 		ret = new CombatUnit(UnitType::PIKEMAN, pos);
+		FxUnits(8, CreateAssasin_sound, pos.x, pos.y);
 		break;
 	case UnitType::JOTNAR:
 		ret = new CombatUnit(UnitType::JOTNAR, pos);
+		FxUnits(8, ogre5, pos.x, pos.y);
 		break;
 	case UnitType::DRAUGAR:
 		ret = new CombatUnit(UnitType::DRAUGAR, pos);
+		FxUnits(8, shade12, pos.x, pos.y);
 		break;
 	case UnitType::CYCLOP:
 		ret = new CombatUnit(UnitType::CYCLOP, pos);
+		FxUnits(8, giant3, pos.x, pos.y);
 		break;
 	case UnitType::MINOTAUR:
 		ret = new CombatUnit(UnitType::MINOTAUR, pos);
+		FxUnits(8, Monster1, pos.x, pos.y);
 		break;
 	}
 	ret->civilization = civilization;

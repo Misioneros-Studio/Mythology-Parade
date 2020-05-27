@@ -75,18 +75,10 @@ public:
 	int increase_sacrifice;
 	int Walking_troops;
 	int Walking_troop2;
-	int CreateMonk_sound;
-	int CreateAssasin_sound;
 	int hit_2;
 	int UpgradeUnit;
 	int Death_sfx;
-	int Monster1;
-	int Monster2;
-	int giant3;
-	int giant5;
-	int ogre4;
-	int ogre5;
-	int shade12;
+	
 private:
 
 	_Mix_Music*			music = NULL;

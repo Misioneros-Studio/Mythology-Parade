@@ -62,16 +62,9 @@ bool j1Audio::Awake(pugi::xml_node& config)
 	increase_sacrifice = LoadFx("audio/fx/Increase_sacrifice.wav");
 	Walking_troops =LoadFx("audio/fx/Walking_troop.wav");
 	Walking_troop2 = LoadFx("audio/fx/Walking_troop2.wav");
-	CreateMonk_sound =LoadFx("audio/fx/Appear_monk.wav");
-	CreateAssasin_sound = LoadFx("audio/fx/Appear_assasin.wav");
+	
 	OpenMenu_sfx = LoadFx("audio/ui/Close_Menu.wav");
-	Monster1 = LoadFx("audio/fx/Monster1.wav");
-	Monster2 = LoadFx("audio/fx/Monster2.wav");
-	giant3 = LoadFx("audio/fx/giant3.wav");
-	giant5 = LoadFx("audio/fx/giant5.wav");
-	ogre4 = LoadFx("audio/fx/ogre4.wav");
-	ogre5 = LoadFx("audio/fx/ogre5.wav");
-	shade12 = LoadFx("audio/fx/shade12.wav");
+	
 	hit_2 = LoadFx("audio/fx/hit2.wav");
 	UpgradeUnit = LoadFx("audio/fx/UpgradeUnit.wav");
 	Death_sfx = LoadFx("audio/fx/Death.wav");
