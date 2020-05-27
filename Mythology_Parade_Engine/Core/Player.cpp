@@ -284,7 +284,6 @@ void Player::ClickLogic()
 	std::list<Entity*>::iterator it = App->entityManager->entities[EntityType::BUILDING].begin();
 	for (it; it != App->entityManager->entities[EntityType::BUILDING].end(); ++it)
 	{
-		App->audio->PlayFx(3, App->scene->Select_sfx);
 		if (click.x >= it._Ptr->_Myval->getCollisionRect().x && click.x <= it._Ptr->_Myval->getCollisionRect().x + it._Ptr->_Myval->getCollisionRect().w)
 		{
 			if (click.y <= it._Ptr->_Myval->getCollisionRect().y && click.y >= it._Ptr->_Myval->getCollisionRect().y + it._Ptr->_Myval->getCollisionRect().h)
@@ -307,6 +306,7 @@ void Player::ClickLogic()
 			{
 				if (click.y <= it._Ptr->_Myval->getCollisionRect().y && click.y >= it._Ptr->_Myval->getCollisionRect().y + it._Ptr->_Myval->getCollisionRect().h)
 				{
+					App->audio->PlayFx(3, App->scene->Select_sfx);
 					if (it._Ptr->_Myval->civilization == civilization) 
 					{
 						it._Ptr->_Myval->SetSelected(true);
