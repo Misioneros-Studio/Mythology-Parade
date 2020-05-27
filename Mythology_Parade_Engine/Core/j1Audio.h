@@ -78,7 +78,7 @@ public:
 	int CreateMonk_sound;
 	int CreateAssasin_sound;
 	int Research_sound;
-	int OpenPauseMenu_sfx;
+	
 	int Monster1;
 	int Monster2;
 	int giant3;

@@ -90,7 +90,7 @@ public:
 	uint WinViking_sound;
 	uint WinGreek_sound;
 	uint Lose_sound;
-
+	uint OpenPauseMenu_sfx;
 	bool isInTutorial;
 };
 

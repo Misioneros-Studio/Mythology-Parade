@@ -91,7 +91,9 @@ void HUD::StartHUD(ResearchMenu* r) {
 
 // Called when clicking esc
 void HUD::ActivatePauseMenu() {
+	
 	if (ui_pause_window == nullptr) {
+		App->audio->PlayFx(3, App->scene->OpenPauseMenu_sfx);
 		PauseGame();
 		uint w, h;
 		App->win->GetWindowSize(w, h);

@@ -66,7 +66,6 @@ bool j1Audio::Awake(pugi::xml_node& config)
 	CreateAssasin_sound = LoadFx("audio/fx/Appear_assasin.wav");
 	Research_sound =LoadFx("audio/fx/Research_Sound.wav");
 	OpenMenu_sfx = LoadFx("audio/ui/Close_Menu.wav");
-	OpenPauseMenu_sfx = LoadFx("audio/fx/OpenPause.wav");
 	Monster1 = LoadFx("audio/fx/Monster1.wav");
 	Monster2 = LoadFx("audio/fx/Monster2.wav");
 	giant3 = LoadFx("audio/fx/giant3.wav");

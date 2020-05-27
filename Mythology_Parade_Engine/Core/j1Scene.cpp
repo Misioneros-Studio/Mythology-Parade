@@ -96,6 +96,7 @@ bool j1Scene::Start()
 	WinViking_sound = App->audio->LoadFx("audio/fx/WinVikings.wav");
 	WinGreek_sound = App->audio->LoadFx("audio/fx/win_greeks.wav");
 	Lose_sound = App->audio->LoadFx("audio/fx/lose_sound.wav");
+	OpenPauseMenu_sfx = App->audio->LoadFx("audio/fx/OpenPause.wav");
 
 
 	paused_game = false;
@@ -276,6 +277,7 @@ bool j1Scene::Update(float dt)
 	if (App->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN) {
 		hud->ActivatePauseMenu();
 		App->audio->FadeAudio(which_audio_fade::change_volume, 2, 50);
+		
 	}
     if (paused_game == true) {
       if (hud->ui_volume_sliders[0] != nullptr)
