@@ -514,8 +514,7 @@ void Building::CancelProduction(int index)
 
 void Building::FinishProduction(const std::string &thing_produced, bool cancelled)
 {
-	element_producing = "";
-	App->scene->update_production_list = true;
+	
 	if (cancelled == false) {
 		if (thing_produced == "Victory")
 		{
@@ -541,6 +540,8 @@ void Building::FinishProduction(const std::string &thing_produced, bool cancelle
 			CreateUnit();
 		}
 	}
+	element_producing = "";
+	App->scene->update_production_list = true;
 }
 
 void Building::StartResearching(const std::string &thing_producing) {

@@ -307,7 +307,7 @@ void HUD::HUDUpdateSelection(std::list<Entity*> listEntities, Building* building
 	bool viking = true;
 	if (App->scene->isInTutorial == true)
 		App->tutorialscene->fortress_selected = false;
-	HUDDeleteListTroops();
+	HUDDeleteListTroops(update_list);
 	HUDDeleteSelectedTroop();
 	HUDDeleteActionButtons();
 	for (std::list<Entity*>::iterator it = listEntities.begin(); it != listEntities.end(); ++it) {
@@ -735,10 +735,10 @@ void HUD::UpdateSelectedThing() {
 						"Thing_Produced", Panel_Fade::no_one_fade, GetSpritePortraitProduction(2, thing_produced, civ), GetSpritePortraitProduction(1, thing_produced, civ), false, { 0,0,0,0 },
 						App->scene, 0, false, -1.0F, 1));
 					r.x += 34;
-					if (building->GetElementProducing() != "") {
-						hud_bar_producing[0] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, static_cast<UI*>(ui_ingame), { 826,652,28,5 }, { 1072,319,181,17 }, "", Panel_Fade::no_one_fade));
-						hud_bar_producing[1] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, static_cast<UI*>(ui_ingame), { 826,652,28,5 }, { 1072,250,181,17 }, "", Panel_Fade::no_one_fade));
-					}
+				}
+				if (building->GetElementProducing() != "") {
+					hud_bar_producing[0] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, static_cast<UI*>(ui_ingame), { 826,652,28,5 }, { 1072,319,181,17 }, "", Panel_Fade::no_one_fade));
+					hud_bar_producing[1] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, static_cast<UI*>(ui_ingame), { 826,652,28,5 }, { 1072,250,181,17 }, "", Panel_Fade::no_one_fade));
 				}
 			}
 			App->scene->update_production_list = false;

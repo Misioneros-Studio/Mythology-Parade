@@ -514,9 +514,12 @@ void j1Scene::RestartGame() {
 			App->fade_to_black->FadeToBlack(which_fade::tutorial_to_tutorial, 2, "greek");
 		else
 			App->fade_to_black->FadeToBlack(which_fade::scene_to_scene, 2, "greek");
-	else if (civ==CivilizationType::VIKING)
-		App->fade_to_black->FadeToBlack(which_fade::scene_to_scene, 2, "viking");
-	destroy = true;
+	else if (civ == CivilizationType::VIKING) {
+		if (isInTutorial == true)
+			App->fade_to_black->FadeToBlack(which_fade::tutorial_to_tutorial, 2, "viking");
+		else
+			App->fade_to_black->FadeToBlack(which_fade::scene_to_scene, 2, "viking");
+	}
 	App->entityManager->initCivilizations = true;
 }
 
@@ -547,10 +550,7 @@ void j1Scene::ReturnFaith(std::string thing_canceled)
 	else if (thing_canceled == "Chaotic_Beast") {
 		App->entityManager->getPlayer()->IncreaseFaith(200);
 	}
-		if (isInTutorial == true)
-			App->fade_to_black->FadeToBlack(which_fade::tutorial_to_tutorial, 2, "viking");
-		else
-			App->fade_to_black->FadeToBlack(which_fade::scene_to_scene, 2, "viking");
+		
 }
 
 void j1Scene::OnClick(UI* element, float argument)
