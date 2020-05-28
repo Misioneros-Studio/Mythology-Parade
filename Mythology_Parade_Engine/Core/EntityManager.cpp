@@ -138,7 +138,7 @@ bool EntityManager::Update(float dt)
 			Unit* tmp = (Unit*)it._Ptr->_Myval;
 			if (tmp->toDelete)
 			{
-				//entities[EntityType::UNIT].erase(it);
+				entities[EntityType::UNIT].erase(it);
 				DeleteEntity(tmp);
 				//delete tmp;
 			}
