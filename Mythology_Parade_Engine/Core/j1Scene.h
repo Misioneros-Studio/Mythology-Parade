@@ -113,7 +113,6 @@ public:
 	bool nextBuilding_selected;
 	bool building_meteor;
 
-	bool oneTime;
 };
 
 #endif // __j1SCENE_H__

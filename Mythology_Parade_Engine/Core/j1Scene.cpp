@@ -142,14 +142,6 @@ bool j1Scene::Start()
 // Called each loop iteration
 bool j1Scene::PreUpdate()
 {
-	//DELETE THIS
-	if (oneTime)
-	{
-		App->entityManager->CreateBuildingEntity({ 100,100 }, BuildingType::ENCAMPMENT, App->entityManager->buildingsData[3], CivilizationType::VIKING);
-		oneTime = false;
-	}
-	//
-
 
 	// debug pathfing ------------------
 	if (App->input->GetMouseButtonDown(SDL_BUTTON_RIGHT) == KEY_DOWN)
