@@ -185,10 +185,12 @@ bool Unit::Update(float dt)
 		}
 	}
 
-
-	std::vector<iPoint> tiles;
-	App->fowManager->GetTilesInsideRadius(fowRadius, position, { collisionRect.w / 2, -collisionRect.w / 2 }, tiles);
-	App->fowManager->ApplyMaskToTiles(fowRadius, tiles);
+	if (civilization == App->entityManager->getPlayer()->civilization) 
+	{
+		std::vector<iPoint> tiles;
+		App->fowManager->GetTilesInsideRadius(fowRadius, position, { collisionRect.w / 2, -collisionRect.w / 2 }, tiles);
+		App->fowManager->ApplyMaskToTiles(fowRadius, tiles);
+	}
 
 
 	//Return
