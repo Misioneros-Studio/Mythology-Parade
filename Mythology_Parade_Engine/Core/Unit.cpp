@@ -215,7 +215,7 @@ bool Unit::Update(float dt)
 			Draw_Life_Bar();
 	}
 
-	App->render->DrawQuad(collisionRect, 255, 0, 0, 50);
+	//App->render->DrawQuad(collisionRect, 255, 0, 0, 50);
 
 	return ret;
 }

@@ -29,7 +29,6 @@ j1Scene::j1Scene() : j1Module()
 	winlose_tex = nullptr;
 	clickToPath = false;
 	nextUnit_selected = nextBuilding_selected = building_meteor = false;
-	oneTime = true;
 	update_selection = false;
 	dont_update_types_of_troops = true;
 	update_production_list = false;
@@ -82,11 +81,6 @@ bool j1Scene::Start()
 		RELEASE_ARRAY(data);
 	}
 
-	App->render->camera.x = -2683;
-	App->render->camera.y = -2000;
-
-
-
   //Load building debug textures
 	debugBlue_tex = App->tex->Load("maps/path2.png");
 	debugRed_tex = App->tex->Load("maps/cantBuild.png");
@@ -129,9 +123,15 @@ bool j1Scene::Start()
 	Player* player = static_cast<Player*>(App->entityManager->CreatePlayerEntity(App->fade_to_black->actual_civilization));
 
 	if (player->player_type == CivilizationType::VIKING)
-		App->render->camera.x = -2683;
+	{
+		App->render->camera.x = 580;
+		App->render->camera.y = -369;
+	}
 	else if (player->player_type == CivilizationType::GREEK)
-		App->render->camera.x = -1683;
+	{
+		App->render->camera.x = 779;
+		App->render->camera.y = -3931;
+	}
 
 	research_menu = new ResearchMenu(player);
 	hud = new HUD(research_menu);
@@ -142,7 +142,6 @@ bool j1Scene::Start()
 // Called each loop iteration
 bool j1Scene::PreUpdate()
 {
-
 	// debug pathfing ------------------
 	if (App->input->GetMouseButtonDown(SDL_BUTTON_RIGHT) == KEY_DOWN)
 	{
