@@ -684,6 +684,7 @@ Entity* EntityManager::CreatePlayerEntity(std::string civilization_string)
 	Player* p = (Player*)ret;
 
 	entities[EntityType::PLAYER].push_back(ret);
+	entities[EntityType::PLAYER].begin()._Ptr->_Myval->Start();
 
 	if (civilization_string == "viking") {
 		ret->civilization = CivilizationType::VIKING;
@@ -698,8 +699,6 @@ Entity* EntityManager::CreatePlayerEntity(std::string civilization_string)
 		ret->civilization = CivilizationType::VIKING;
 		p->player_type = CivilizationType::VIKING;
 	}
-
-	entities[EntityType::PLAYER].begin()._Ptr->_Myval->Start();
 
 	return ret;
 }
