@@ -13,7 +13,7 @@ IA::IA()
 	positionViking.push_back({ 160,816 }); //Cleric1
 	positionViking.push_back({ 224,848 }); //Cleric2
 	positionViking.push_back({ 192,832 }); //Cleric3
-	positionViking.push_back({ -416,720 }); //Monk1
+	positionViking.push_back({ -224,624 }); //Monk1
 	positionViking.push_back({ -384,736 }); //Monk2
 	positionViking.push_back({ -352,752 }); //Monk3
 	positionViking.push_back({ -3904,2464 }); //Cleric1Pos
@@ -113,21 +113,48 @@ void IA::EarlyGame()
 		{
 			if (civilization == CivilizationType::VIKING)
 			{
-				//existence monk
-				CreateUnit(UnitType::MONK, positionViking.at((int)EarlyMovements::MONK2));
-				CreateUnit(UnitType::MONK, positionViking.at((int)EarlyMovements::MONK3));
+				MoveUnity(positionViking.at((int)EarlyMovements::MONK1), "monk");
+				listEntities.push_back(static_cast<Entity*>(CreateUnit(UnitType::MONK, positionViking.at((int)EarlyMovements::MONK2))));
+				listEntities.push_back(static_cast<Entity*>(CreateUnit(UnitType::MONK, positionViking.at((int)EarlyMovements::MONK3))));
 			}
 			else
 			{
-				//existence monk
-				CreateUnit(UnitType::MONK, positionGreek.at((int)EarlyMovements::MONK2));
-				CreateUnit(UnitType::MONK, positionGreek.at((int)EarlyMovements::MONK3));
+				MoveUnity(positionGreek.at((int)EarlyMovements::MONK1), "monk");
+				listEntities.push_back(static_cast<Entity*>(CreateUnit(UnitType::MONK, positionGreek.at((int)EarlyMovements::MONK2))));
+				listEntities.push_back(static_cast<Entity*>(CreateUnit(UnitType::MONK, positionGreek.at((int)EarlyMovements::MONK3))));
 			}
+			early = EarlyGameBehaviour::BASIC_UNITS_CREATION;
+			timer.Start();
 		}
 		break;
 	case EarlyGameBehaviour::BASIC_UNITS_CREATION:
+		if (timer.ReadSec() >= 3)//150
+		{
+			if (civilization == CivilizationType::VIKING)
+			{
+				listEntities.push_back(static_cast<Entity*>(CreateUnit(UnitType::CLERIC, positionViking.at((int)EarlyMovements::CLERIC1))));
+				listEntities.push_back(static_cast<Entity*>(CreateUnit(UnitType::CLERIC, positionViking.at((int)EarlyMovements::CLERIC2))));
+				listEntities.push_back(static_cast<Entity*>(CreateUnit(UnitType::CLERIC, positionViking.at((int)EarlyMovements::CLERIC3))));
+			}
+			else
+			{
+				listEntities.push_back(static_cast<Entity*>(CreateUnit(UnitType::CLERIC, positionGreek.at((int)EarlyMovements::CLERIC1))));
+				listEntities.push_back(static_cast<Entity*>(CreateUnit(UnitType::CLERIC, positionGreek.at((int)EarlyMovements::CLERIC2))));
+				listEntities.push_back(static_cast<Entity*>(CreateUnit(UnitType::CLERIC, positionGreek.at((int)EarlyMovements::CLERIC3))));
+			}
+			early = EarlyGameBehaviour::EXPLORE1;
+			timer.Start();
+		}
 		break;
-	case EarlyGameBehaviour::EXPLORE:
+	case EarlyGameBehaviour::EXPLORE1:
+		Explore1();
+		early = EarlyGameBehaviour::EXPLORE2;
+		break;
+	case EarlyGameBehaviour::EXPLORE2:
+
+		break;
+	case EarlyGameBehaviour::EXPLORE3:
+
 		break;
 	default:
 		break;
@@ -139,14 +166,43 @@ void IA::MidGame()
 	switch (mid)
 	{
 	case MidGameBehaviour::ASSEMBLE:
+		AssembleClerics();
+		mid = MidGameBehaviour::CREATE_ECONOMY;
 		break;
 	case MidGameBehaviour::CREATE_ECONOMY:
 		break;
 	case MidGameBehaviour::RESEARCH_ASSASSIN:
+		if(civilization==CivilizationType::VIKING)
+			//CreateBuilding(BuildingType::ENCAMPMENT, );
+		//else
+			//CreateBuilding(BuildingType::ENCAMPMENT, );
+
+		mid = MidGameBehaviour::CREATE_ASSASSIN;
 		break;
 	case MidGameBehaviour::CREATE_ASSASSIN:
+		if (civilization == CivilizationType::VIKING) {
+			//CreateUnit(UnitType::ASSASSIN, );
+			//CreateUnit(UnitType::ASSASSIN, );
+			//CreateUnit(UnitType::ASSASSIN, );
+			//CreateUnit(UnitType::ASSASSIN, );
+			//CreateUnit(UnitType::ASSASSIN, );
+			//CreateUnit(UnitType::ASSASSIN, );
+			//CreateUnit(UnitType::ASSASSIN, );
+		}
+		else {
+			//CreateUnit(UnitType::ASSASSIN, );
+			//CreateUnit(UnitType::ASSASSIN, );
+			//CreateUnit(UnitType::ASSASSIN, );
+			//CreateUnit(UnitType::ASSASSIN, );
+			//CreateUnit(UnitType::ASSASSIN, );
+			//CreateUnit(UnitType::ASSASSIN, );
+			//CreateUnit(UnitType::ASSASSIN, );
+		}
+		mid = MidGameBehaviour::DISTRIBUTION;
+		timer.Start();
 		break;
 	case MidGameBehaviour::DISTRIBUTION:
+		
 		break;
 	default:
 		break;
@@ -216,14 +272,11 @@ bool IA::CreateBuilding(BuildingType type, iPoint pos)
 }
 
 
-bool IA::CreateUnit(UnitType type, iPoint pos)
+Unit* IA::CreateUnit(UnitType type, iPoint pos)
 {
-	if (type == UnitType::MONK)
-	{
-		App->entityManager->CreateUnitEntity(type, pos, civilization);
-	}
+	Entity* entity = App->entityManager->CreateUnitEntity(type, pos, civilization);
 
-	return true;
+	return static_cast<Unit*>(entity);
 }
 
 bool IA::InitExplore()
@@ -233,11 +286,6 @@ bool IA::InitExplore()
 }
 
 bool IA::CheckExplore()
-{
-	return false;
-}
-
-bool IA::Assemble()
 {
 	return false;
 }
@@ -258,6 +306,78 @@ bool IA::Win()
 {
 	return true;
 
+}
+
+bool IA::MoveUnity(iPoint pos, std::string name, Unit* u)
+{
+	std::list<Entity*>::iterator it = listEntities.begin();
+	std::list<Entity*> entities;
+	if (u == nullptr)
+	{
+		for (it; it != listEntities.end(); ++it)
+		{
+			if (it._Ptr->_Myval->name == name)
+			{
+				iPoint origin = App->map->WorldToMap((int)it._Ptr->_Myval->position.x, (int)it._Ptr->_Myval->position.y);
+				iPoint ending = App->map->WorldToMap(pos.x, pos.y);
+				entities.push_back(it._Ptr->_Myval);
+				App->pathfinding->RequestPath(origin, ending, entities);
+				break;
+			}
+			entities.clear();
+		}
+	}
+	else
+	{
+		for (it; it != listEntities.end(); ++it)
+		{
+			if (it._Ptr->_Myval == u)
+			{
+				iPoint origin = App->map->WorldToMap((int)it._Ptr->_Myval->position.x, (int)it._Ptr->_Myval->position.y);
+				iPoint ending = App->map->WorldToMap(pos.x, pos.y);
+				entities.push_back(it._Ptr->_Myval);
+				App->pathfinding->RequestPath(origin, ending, entities);
+				break;
+			}
+			entities.clear();
+		}
+	}
+	
+	return true;
+}
+
+void IA::Explore1()
+{
+	int i = 0;
+	std::list<Entity*>::iterator it = listEntities.begin();
+	for (it; it != listEntities.end(); ++it)
+	{
+		if (it._Ptr->_Myval->name == "cleric")
+		{
+			Unit* u = static_cast<Unit*>(it._Ptr->_Myval);
+			if (civilization == CivilizationType::VIKING)
+				MoveUnity(positionViking.at((int)EarlyMovements::CLERIC1POS + i), "cleric", u);
+			else
+				MoveUnity(positionGreek.at((int)EarlyMovements::CLERIC1POS + i), "cleric", u);
+			i++;
+		}
+	}
+}
+
+void IA::AssembleClerics()
+{
+	std::list<Entity*>::iterator it = listEntities.begin();
+	for (it; it != listEntities.end(); ++it)
+	{
+		if (it._Ptr->_Myval->name == "cleric")
+		{
+			Unit* u = static_cast<Unit*>(it._Ptr->_Myval);
+			if (civilization == CivilizationType::VIKING)
+				MoveUnity(positionViking.at((int)EarlyMovements::HOME), "cleric", u);
+			else
+				MoveUnity(positionGreek.at((int)EarlyMovements::HOME), "cleric", u);
+		}
+	}
 }
 
 

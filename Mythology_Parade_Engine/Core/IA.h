@@ -20,7 +20,9 @@ enum class EarlyGameBehaviour
 	BASIC_BUILDINGS_CREATION,
 	RESEARCH_CLERIC,
 	BASIC_UNITS_CREATION,
-	EXPLORE
+	EXPLORE1,
+	EXPLORE2,
+	EXPLORE3
 };
 
 enum class MidGameBehaviour
@@ -53,13 +55,17 @@ public:
 public:
 	bool InitCiv();
 	bool CreateBuilding(BuildingType, iPoint);
-	bool CreateUnit(UnitType, iPoint);
+	Unit* CreateUnit(UnitType, iPoint);
 	bool InitExplore();
 	bool CheckExplore();
-	bool Assemble();
 	bool Defense();
 	bool Atack();
 	bool Win();
+	bool MoveUnity(iPoint, std::string, Unit* u = nullptr);
+	
+public:
+	void Explore1();
+	void AssembleClerics();
 
 public:
 	void EarlyGame();
