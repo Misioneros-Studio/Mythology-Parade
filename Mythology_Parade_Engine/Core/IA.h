@@ -77,6 +77,10 @@ private:
 	MidGameBehaviour mid;
 	LateGameBehaviour late;
 
+	CivilizationType civilization;
+
+	std::list<Entity*> listEntities;
+
 };
 
 

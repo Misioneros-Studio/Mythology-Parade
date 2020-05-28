@@ -58,6 +58,7 @@ void IA::EarlyGame()
 	switch (early)
 	{
 	case EarlyGameBehaviour::CREATION:
+		InitCiv();
 		break;
 	case EarlyGameBehaviour::BASIC_RESEARCH:
 		break;
@@ -112,6 +113,27 @@ void IA::LateGame()
 
 bool IA::InitCiv()
 {
+	if (App->entityManager->playerCreated)
+	{
+		//CIVILIZATION
+		if (App->entityManager->getPlayer()->civilization == CivilizationType::VIKING) civilization = CivilizationType::GREEK;
+		else civilization = CivilizationType::VIKING;
+
+		
+		//UNIT
+		for (int i = 1; i <= 2; ++i)
+		{
+			std::list<Entity*>::iterator it = App->entityManager->entities[static_cast<EntityType>(i)].begin();
+			for (it; it != App->entityManager->entities[static_cast<EntityType>(i)].end(); ++it)
+			{
+				if (it._Ptr->_Myval->civilization == civilization) {
+					listEntities.push_back(it._Ptr->_Myval);
+				}
+			}
+		}
+
+		early = EarlyGameBehaviour::BASIC_RESEARCH;
+	}
 
 	return true;
 }

@@ -174,5 +174,6 @@ public:
 
 	bool initCivilizations;
 
+	bool playerCreated;
 };
 #endif // !_ENTITYMANAGER_H
