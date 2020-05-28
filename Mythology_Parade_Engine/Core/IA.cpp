@@ -182,29 +182,39 @@ void IA::LateGame_Upd()
 	}
 }
 
-void IA::InitCiv()
+bool IA::InitCiv()
 {
+	return true;
+
 }
 
-void IA::ResearchFirstLv()
+bool IA::ResearchFirstLv()
 {
+	return true;
+
 }
 
-void IA::CreateReligiousBuilds()
+bool IA::CreateReligiousBuilds()
 {
+	return true;
+
 }
 
-void IA::CreateUnit(std::string, int)
+bool IA::CreateUnit(std::string, int)
 {
+	return true;
+
 }
 
 bool IA::WantToResearch(std::string)
 {
-	return false;
+	return true;
 }
 
-void IA::InitExplore()
+bool IA::InitExplore()
 {
+	return true;
+
 }
 
 bool IA::CheckExplore()
@@ -217,20 +227,28 @@ bool IA::Assemble()
 	return false;
 }
 
-void IA::CreateMonastery(int)
+bool IA::CreateMonastery(int)
 {
+	return true;
+
 }
 
-void IA::Defense()
+bool IA::Defense()
 {
+	return true;
+
 }
 
-void IA::Atack()
+bool IA::Atack()
 {
+	return true;
+
 }
 
-void IA::Win()
+bool IA::Win()
 {
+	return true;
+
 }
 
 

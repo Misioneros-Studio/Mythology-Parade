@@ -52,18 +52,18 @@ public:
 	bool CleanUp();
 
 public:
-	void InitCiv();
-	void ResearchFirstLv();
-	void CreateReligiousBuilds();
-	void CreateUnit(std::string, int);
+	bool InitCiv();
+	bool ResearchFirstLv();
+	bool CreateReligiousBuilds();
+	bool CreateUnit(std::string, int);
 	bool WantToResearch(std::string);
-	void InitExplore();
+	bool InitExplore();
 	bool CheckExplore();
 	bool Assemble();
-	void CreateMonastery(int);
-	void Defense();
-	void Atack();
-	void Win();
+	bool CreateMonastery(int);
+	bool Defense();
+	bool Atack();
+	bool Win();
 
 public:
 	void EarlyGame_Pre();
