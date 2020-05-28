@@ -124,7 +124,6 @@ public:
 	void FxUnits(int channel, int fx, int posx, int posy);
 
 	static bool IsPointInsideQuad(SDL_Rect rect, int x, int y);
-	void FxUnits(int channel, int fx, int posx, int posy);
 	int volume;
 	iPoint MapPos();
 
