@@ -29,6 +29,7 @@ class FoWManager;
 class j1FadeToBlack;
 class j1ParticleManager;
 class TooltipData;
+class IA;
 
 class j1App
 {
@@ -114,6 +115,7 @@ public:
 	FoWManager*			fowManager = NULL;
 	j1FadeToBlack*		fade_to_black = NULL;
 	j1ParticleManager*	particleManager = NULL;
+	IA*					ia = NULL;
  
 
 private:

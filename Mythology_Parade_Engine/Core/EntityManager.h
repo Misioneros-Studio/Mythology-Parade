@@ -123,6 +123,9 @@ public:
 	Player* getPlayer() const;
 	void FxUnits(int channel, int fx, int posx, int posy);
 
+	void InitVikings();
+	void InitGreek();
+
 	static bool IsPointInsideQuad(SDL_Rect rect, int x, int y);
 	int volume;
 	iPoint MapPos();
@@ -176,5 +179,6 @@ public:
 
 	bool initCivilizations;
 
+	bool playerCreated;
 };
 #endif // !_ENTITYMANAGER_H

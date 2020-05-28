@@ -49,6 +49,7 @@
       <Filter>Trees</Filter>
     </ClCompile>
     <ClCompile Include="TutorialMessages.cpp" />
+    <ClCompile Include="IA.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h" />
@@ -106,6 +107,7 @@
       <Filter>Trees</Filter>
     </ClInclude>
     <ClInclude Include="TutorialMessages.h" />
+    <ClInclude Include="IA.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="TODOS.txt" />

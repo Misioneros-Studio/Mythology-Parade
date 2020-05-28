@@ -550,7 +550,7 @@ void j1Scene::ReturnFaith(std::string thing_canceled)
 	else if (thing_canceled == "Chaotic_Beast") {
 		App->entityManager->getPlayer()->IncreaseFaith(200);
 	}
-		
+
 }
 
 void j1Scene::OnClick(UI* element, float argument)

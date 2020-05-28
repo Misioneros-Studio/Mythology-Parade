@@ -11,6 +11,7 @@ EntityManager::EntityManager()
 	buildingsData.reserve(MAX_BUILDING_TYPES);
 	buildingTestIndex = 0;
 	initCivilizations = true;
+	playerCreated = false;
 }
 
 //Destructor
@@ -694,7 +695,6 @@ Entity* EntityManager::CreatePlayerEntity(std::string civilization_string)
 		ret->civilization = CivilizationType::VIKING;
 		p->player_type = CivilizationType::VIKING;
 	}
-
 	return ret;
 }
 
