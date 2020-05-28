@@ -17,7 +17,6 @@ enum class GameBehaviour
 enum class EarlyGameBehaviour
 {
 	CREATION,
-	BASIC_RESEARCH,
 	BASIC_BUILDINGS_CREATION,
 	RESEARCH_CLERIC,
 	BASIC_UNITS_CREATION,
@@ -53,14 +52,11 @@ public:
 
 public:
 	bool InitCiv();
-	bool ResearchFirstLv();
-	bool CreateReligiousBuilds();
-	bool CreateUnit(std::string, int);
-	bool WantToResearch(std::string);
+	bool CreateBuilding(BuildingType, iPoint);
+	bool CreateUnit(UnitType, iPoint);
 	bool InitExplore();
 	bool CheckExplore();
 	bool Assemble();
-	bool CreateMonastery(int);
 	bool Defense();
 	bool Atack();
 	bool Win();
@@ -81,6 +77,27 @@ private:
 
 	std::list<Entity*> listEntities;
 
+	j1Timer timer;
+
+	std::vector<iPoint> positionViking;
+	std::vector<iPoint> positionGreek;
+	iPoint mouse;
+};
+
+enum class EarlyMovements
+{
+	MONASTERY,
+	TEMPLE,
+	CLERIC1,
+	CLERIC2,
+	CLERIC3,
+	MONK1,
+	MONK2,
+	MONK3,
+	CLERIC1POS,
+	CLERIC2POS,
+	CLERIC3POS,
+	HOME
 };
 
 

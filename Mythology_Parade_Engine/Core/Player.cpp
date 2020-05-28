@@ -17,7 +17,6 @@ Player::Player()
 	shift = false;
 	alt = false;
 	Start();
-	marc = 69;
 }
 
 Player::~Player()
