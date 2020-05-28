@@ -5,6 +5,7 @@
 #include"CombatUnit.h"
 #include "j1Gui.h"
 #include"j1ParticleManager.h"
+#include "j1Minimap.h"
 
 
 Unit::Unit(UnitType type, iPoint pos): unitType(type), state(AnimationType::IDLE),  moveSpeed(60)
@@ -13,7 +14,7 @@ Unit::Unit(UnitType type, iPoint pos): unitType(type), state(AnimationType::IDLE
 	displayDebug = false;
 
 	collisionRect = { 0, 0, 30, -55 };
-
+	enemyTarget = nullptr;
 	unitType = type;
 	position = {(float)pos.x, (float)pos.y};
 	state = AnimationType::IDLE;
@@ -36,32 +37,44 @@ Unit::Unit(UnitType type, iPoint pos): unitType(type), state(AnimationType::IDLE
 		collisionRect = { 0, 0, 30, -55 };
 		break;
 	case UnitType::JOTNAR:
-		time_production = 7;
+		time_production = 120;
 		time_research = 210;
+		name = "jotnar";
 		researched = true;
 		Init(150);
 		collisionRect = { 0, 0, 123, -175 };
 		break;
 	case UnitType::DRAUGAR:
-		time_production = 7;
+		time_production = 120;
 		time_research = 210;
+		name = "draugar";
 		researched = true;
 		Init(40);
 		collisionRect = { 0, 0, 40, -60 };
 		break;
 	case UnitType::CYCLOP:
-		time_production = 7;
+		time_production = 120;
 		time_research = 210;
 		researched = true;
+		name = "cyclop";
 		Init(150);
 		collisionRect = { 0, 0, 118, -130 };
 		break;
 	case UnitType::MINOTAUR:
-		time_production = 7;
+		time_production = 120;
 		time_research = 210;
 		researched = true;
+		name = "minotaur";
 		Init(40);
 		collisionRect = { 0, 0, 60, -67 };
+		break;
+	case UnitType::CLERIC:
+		time_production = 90;
+		time_research = 70;
+		researched = true;
+		name = "cleric";
+		Init(100);
+		collisionRect = { 0, 0, 30, -55 };
 		break;
 	}
 
@@ -185,6 +198,7 @@ bool Unit::Update(float dt)
 	else if (damage_timer.isPaused() == true && App->scene->paused_game == false)
 		damage_timer.Resume();
 	if (damaged_now == true) {
+		App->minimap->EntityAttacked(this);
 		damage_timer.Start();
 		damaged_now = false;
 		show_bar_for_damage = true;

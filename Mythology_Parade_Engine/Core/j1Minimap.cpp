@@ -6,12 +6,25 @@
 #include "j1Render.h"
 #include "j1Map.h"
 #include "p2Log.h"
+#include "EntityManager.h"
+#include "FoWManager.h"
 
 j1Minimap::j1Minimap() : j1Module() {
 	name.append("minimap");
-
+	corner = Corner::TOP_LEFT;
+	height = 0;
+	width = 0;
+	map_height = 0;
+	map_width = 0;
+	margin = 0;
+	scale = 0;
+	texture_fow = nullptr;
 	texture = nullptr;
 	minimap_test_rect = { 0,0,4,4 };
+	update_minimap_fow = true;
+	reset_timer_fow = true;
+	show_damage_area = false;
+
 }
 
 j1Minimap::~j1Minimap() {
@@ -85,8 +98,92 @@ bool j1Minimap::Start() {
 }
 
 bool j1Minimap::PostUpdate() {
-
+	if (reset_timer_fow == true) {
+		reset_timer_fow = false;
+		timer_fow.Start();
+	}
+	else if (timer_fow.ReadSec() >= 1) {
+		update_minimap_fow = true;
+		reset_timer_fow = true;
+	}
 	App->render->Blit(texture, position.x, position.y, NULL, 0.0, 0);
+	for (unsigned i = 0; i < App->entityManager->entities.size(); i++)
+	{
+		for (std::list<Entity*>::iterator it = App->entityManager->entities[(EntityType)i].begin(); it != App->entityManager->entities[(EntityType)i].end(); it++)
+		{
+			Entity* ent = it._Ptr->_Myval;
+			if (ent->type == EntityType::UNIT || ent->type == EntityType::BUILDING) {
+				fPoint pos_map = ent->position;
+				fPoint fow_pos = App->map->WorldToMap((int)ent->position.x, (int)ent->position.y);
+				if (App->fowManager->CheckTileVisibility({ (int)fow_pos.x,(int)fow_pos.y })) {
+					iPoint pos_minimap = WorldToMinimap((int)pos_map.x, (int)pos_map.y);
+					int x = pos_minimap.x;
+					int y = pos_minimap.y;
+					int red = 255;
+					int blue = 255;
+					int green = 255;
+					int w = 4;
+					int h = 4;
+					if (ent->type == EntityType::UNIT) {
+						green = 0;
+						w = h = 2;
+						if (ent->civilization == App->entityManager->getPlayer()->civilization) {
+							red = 0;
+						}
+						else {
+							blue = 0;
+						}
+					}
+					else {
+						if (ent->civilization == App->entityManager->getPlayer()->civilization) {
+							red = 0;
+						}
+						else {
+							blue = 0;
+							green = 100;
+						}
+					}
+
+					App->render->DrawQuad({ x,y,w,h }, red, green, blue, 255, true, false);
+				}
+			}
+		}
+	}
+	
+	if (update_minimap_fow == true) {
+		SDL_DestroyTexture(texture_fow);
+		texture_fow = nullptr;
+		uint win_w, win_h;
+		App->win->GetWindowSize(win_w, win_h);
+		texture_fow = SDL_CreateTexture(App->render->renderer, SDL_GetWindowPixelFormat(App->win->window), SDL_TEXTUREACCESS_TARGET, 1.05f * width, 1.05f * height);
+		SDL_SetTextureBlendMode(texture_fow, SDL_BLENDMODE_BLEND);
+		SDL_SetRenderTarget(App->render->renderer, texture_fow);
+		SDL_SetRenderDrawColor(App->render->renderer, 0, 0, 0, 0);
+		SDL_RenderClear(App->render->renderer);
+		SDL_RenderFillRect(App->render->renderer, NULL);
+		App->render->DrawQuad({ 0,0,(int)win_w,(int)win_h }, 0, 0, 0, 255, false, false);
+		for (int x = 0; x < App->map->data.width; x++) {
+			for (int y = 0; y < App->map->data.height; y++) {
+				if ((!App->fowManager->CheckTileVisibility({ x,y }))) {
+					int mid_width = width / 2;
+					float width_calculated = (float)mid_width / (float)(App->map->data.width);
+					float height_calculated = (float)height / (float)(App->map->data.height * 2);
+					int x2 = mid_width + ((x - y) * width_calculated);
+					int y2 = (x + y) * height_calculated;
+					if ((!App->fowManager->CheckTileVisibilityWithoutCountingShroud({ x,y }))) {
+						App->render->DrawQuad({ x2,y2,1,1 }, 0, 0, 0, 255, true, false);
+					}
+					else {
+						App->render->DrawQuad({ x2,y2,1,1 }, 0, 0, 0, 50, true, false);
+					}
+				}
+			}
+		}
+		SDL_SetRenderTarget(App->render->renderer, NULL);
+		update_minimap_fow = false;
+	}
+
+	App->render->Blit(texture_fow, position.x, position.y, NULL, 0.0, 0);
 
 	return true;
 }
@@ -152,6 +249,7 @@ bool j1Minimap::CreateMinimap() {
 bool j1Minimap::CleanUp() 
 {
 	SDL_DestroyTexture(texture);
+	SDL_DestroyTexture(texture_fow);
 	return true;
 }
 
@@ -169,4 +267,19 @@ iPoint j1Minimap::ScreenToMinimapToWorld(int x, int y) {
 	minimap_position.y = (y - position.y) / scale;
 
 	return minimap_position;
+}
+
+void j1Minimap::EntityAttacked(Entity* entity)
+{
+	if (show_damage_area == false) {
+		if (entity->civilization == App->entityManager->getPlayer()->civilization) {
+			fPoint pos = entity->position;
+			SDL_Rect cam = App->render->camera;
+			iPoint screen_pos=App->render->WorldToScreen((int)pos.x, (int)pos.y);
+			if (screen_pos.x<0 || screen_pos.x>cam.w || screen_pos.y<0 || screen_pos.y>cam.h) {
+				show_damage_area = true;
+				damage_area = WorldToMinimap( (int)pos.x,(int)pos.y);
+			}
+		}
+	}
 }

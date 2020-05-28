@@ -60,6 +60,11 @@ public:
 	bool CheckFoWTileBoundaries(iPoint mapPos)const;
 	//Returns true if the tile is visible (there's no FOG in it) otherwise returns false
 	bool CheckTileVisibility(iPoint mapPos)const;
+	//Returns true if the tile is visible  (there's no FOG in it) otherwise returns false (if there's shroud it will return true)
+	bool CheckTileVisibilityWithoutCountingShroud(iPoint mapPos)const;
+	//Returns true if the tile has shroud instead of fog (only use when certain tile is not visible)
+	bool CheckShroud(iPoint mapPos)const;
+
 
 	unsigned short* GetMaskFromRadius(int radius);
 	void RequestMaskGeneration(int radius);

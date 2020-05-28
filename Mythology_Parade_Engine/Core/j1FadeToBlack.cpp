@@ -24,6 +24,7 @@
 
 j1FadeToBlack::j1FadeToBlack()
 {
+	name.append("FadeToBlack");
 	screen = { 0, 0, 1280,720 };
 	actual_civilization = "";
 	temp = false;

@@ -4,11 +4,9 @@
 #include "j1PathFinding.h"
 
 
-j1PathFinding::j1PathFinding() : j1Module(), map(NULL), width(0), height(0), requestPath(false)
+j1PathFinding::j1PathFinding() : j1Module(), map(NULL), width(0), height(0), requestPath(false),maxPathLenght(0)
 {
 	name.append("pathfinding");
-
-
 }
 
 // Destructor

@@ -3,7 +3,6 @@
 
 #include "Entity.h"
 #include "SDL/include/SDL_rect.h"
-#include "HealthSystem.h"
 #include"EntityManager.h"
 #include "Animation.h"
 #include "j1Timer.h"
@@ -35,7 +34,7 @@ enum class UnitType
 	UNKNOWN
 
 };
-class Unit : public Entity, public HealthSystem
+class Unit : public Entity
 {
 private:
 
@@ -51,7 +50,7 @@ public:
 	int time_production;
 	int time_research;
 	bool researched;
-	Unit* enemyTarget;
+	Entity* enemyTarget;
 	bool toDelete = false;
 
 	bool insideMinotaur;

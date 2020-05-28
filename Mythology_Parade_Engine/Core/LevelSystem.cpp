@@ -6,7 +6,7 @@ void LevelSystem::Init(int lvl1, int lvl2, int lvl3)
 	exp_to_lvl_2 = lvl2;
 	exp_to_lvl_3 = lvl3;
 
-	experience = lvl1 + lvl2 +lvl3;
+	experience = 0;
 	level = 0;
 	canLevelUp = false;
 }

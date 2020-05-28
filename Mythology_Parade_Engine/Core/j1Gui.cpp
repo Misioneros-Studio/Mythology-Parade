@@ -24,7 +24,7 @@ j1Gui::j1Gui() : j1Module()
 	atlas_num_1 = nullptr;
 	atlas_num_2 = nullptr;
 	cursor_tex = nullptr;
-	lockClick = cursor_attack = cursor_move = false;
+	lockClick = cursor_attack = cursor_move = cursor_heal = false;
 	cursor_size = { 0,0 };
 	LOG("%s", atlas_file_name_num_0.c_str());
 }
@@ -132,6 +132,12 @@ bool j1Gui::PostUpdate()
 	if(App->minimap->active==true)
 		App->render->DrawQuad({ rect_position.x, rect_position.y, (int)(App->render->camera.w * App->minimap->scale),(int)(App->render->camera.h * App->minimap->scale) }, 255, 255, 255, 255, 
 			false, false);
+	if (App->minimap->show_damage_area == true) {
+		App->minimap->show_damage_area = false;
+		minimap_feedback_timer.Start();
+	}
+	if(minimap_feedback_timer.ReadSec()<=1)
+		App->render->DrawQuad({ App->minimap->damage_area.x - 5,App->minimap->damage_area.y - 5,10,10 }, 255, 255, 0, 255, false, false);
 
 
 	//Show cursor ------------------------------
@@ -143,6 +149,8 @@ bool j1Gui::PostUpdate()
 		sec = { 162,0,36,36 };
 	if (cursor_attack == true && App->scene->active == true && App->scene->paused_game == false)
 		sec = { 216,0,35,33 };
+	if (cursor_move == true && App->scene->active == true && App->scene->paused_game == false)
+		sec = { 324,0,27,32 };
 
 	cursor_size = { sec.w,sec.h };
 	p = App->render->ScreenToWorld(x, y);

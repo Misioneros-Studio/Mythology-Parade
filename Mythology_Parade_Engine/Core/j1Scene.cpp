@@ -28,6 +28,8 @@ j1Scene::j1Scene() : j1Module()
 	name.append("scene");
 	winlose_tex = nullptr;
 	clickToPath = false;
+	nextUnit_selected = nextBuilding_selected = building_meteor = false;
+	oneTime = true;
 }
 
 // Destructor
@@ -133,6 +135,14 @@ bool j1Scene::Start()
 // Called each loop iteration
 bool j1Scene::PreUpdate()
 {
+	//DELETE THIS
+	if (oneTime)
+	{
+		App->entityManager->CreateBuildingEntity({ 100,100 }, BuildingType::ENCAMPMENT, App->entityManager->buildingsData[3], CivilizationType::VIKING);
+		oneTime = false;
+	}
+	//
+
 
 	// debug pathfing ------------------
 	if (App->input->GetMouseButtonDown(SDL_BUTTON_RIGHT) == KEY_DOWN)
@@ -149,6 +159,10 @@ bool j1Scene::PreUpdate()
 	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN && App->gui->cursor_attack==true)
 	{
 		App->gui->cursor_attack = false;
+	}
+	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN && App->gui->cursor_move == true)
+	{
+		App->gui->cursor_move = false;
 	}
 
 	if (App->title_scene->wantToLoad)
@@ -209,24 +223,32 @@ void j1Scene::ClickToPath()
 		CivilizationType playerCiv = App->entityManager->getPlayer()->civilization;
 		bool attacking = false;
 
-		for (std::list<Entity*>::iterator it = App->entityManager->entities[EntityType::UNIT].begin(); it != App->entityManager->entities[EntityType::UNIT].end(); it++)
+
+		for (int i = 1; i < 3; i++)
 		{
-			SDL_Rect collider = it._Ptr->_Myval->getCollisionRect();
-			if (it._Ptr->_Myval->civilization != playerCiv && EntityManager::IsPointInsideQuad(collider, p.x, p.y))
 			{
-				Unit* unt = nullptr;
-				for (std::list<Entity*>::iterator sel = list.begin(); sel != list.end(); sel++)
+				for (std::list<Entity*>::iterator it = App->entityManager->entities[static_cast<EntityType>(i)].begin(); it != App->entityManager->entities[static_cast<EntityType>(i)].end(); it++)
 				{
-					unt = (Unit*)sel._Ptr->_Myval;
-					unt->enemyTarget = (Unit*)it._Ptr->_Myval;
-					attacking = true;
+					if (!it._Ptr->_Myval->IsDeath()) {
+						SDL_Rect collider = it._Ptr->_Myval->getCollisionRect();
+						if (it._Ptr->_Myval->civilization != playerCiv && EntityManager::IsPointInsideQuad(collider, p.x, p.y))
+						{
+							Unit* unt = nullptr;
+							for (std::list<Entity*>::iterator sel = list.begin(); sel != list.end(); sel++)
+							{
+								unt = (Unit*)sel._Ptr->_Myval;
+								unt->enemyTarget = it._Ptr->_Myval;
+								attacking = true;
+							}
+						}
+					}
 				}
 			}
 		}
+		
 
 		if (!attacking)
 		{
-
 			Unit* unt = nullptr;
 			for (std::list<Entity*>::iterator sel = list.begin(); sel != list.end(); sel++)
 			{
@@ -465,6 +487,8 @@ void j1Scene::RestartGame() {
 		App->fade_to_black->FadeToBlack(which_fade::scene_to_scene, 2, "greek");
 	else if (civ==CivilizationType::VIKING)
 		App->fade_to_black->FadeToBlack(which_fade::scene_to_scene, 2, "viking");
+	destroy = true;
+	App->entityManager->initCivilizations = true;
 }
 
 void j1Scene::OnClick(UI* element, float argument)
@@ -644,36 +668,31 @@ void j1Scene::OnClick(UI* element, float argument)
 			Building* building = (Building*)hud->thing_selected;
 			App->entityManager->getPlayer()->DecreaseFaith(100);
 
-			building->StartProducing("Assassin");
-
-			//building->CreateUnitQueue(10, "Assassin");
+			building->ProduceQueue("Assassin");
 		}
 		else if (element->name == "Produce_Monk")
 		{
 			Building* building = (Building*)hud->thing_selected;
 			App->entityManager->getPlayer()->DecreaseFaith(50);
-			building->StartProducing("Monk");
-			//building->CreateUnitQueue(10, "Monk");
-
-
+			building->ProduceQueue("Monk");
 		}
 		else if (element->name == "Produce_Victory")
 		{
 			Building* building = (Building*)hud->thing_selected;
 			App->entityManager->getPlayer()->DecreaseFaith(600);
-			building->StartProducing("Victory");
+			building->ProduceQueue("Victory");
 		}
 		else if (element->name == "Produce_Sacrifices")
 		{
 			Building* building = (Building*)hud->thing_selected;
 			App->entityManager->getPlayer()->DecreaseFaith(40);
-			building->StartProducing("Sacrifices");
+			building->ProduceQueue("Sacrifices");
 		}
 		else if (element->name == "Produce_Prayers")
 		{
 			Building* building = (Building*)hud->thing_selected;
 			App->entityManager->getPlayer()->DecreaseFaith(100);
-			building->StartProducing("Prayers");
+			building->ProduceQueue("Prayers");
 		}
 		else if (element->name == "Upgrade") {
 			//Upgrade level
@@ -688,31 +707,39 @@ void j1Scene::OnClick(UI* element, float argument)
 		else if (element->name == "Attack")
 		{
 			App->gui->cursor_attack = true;
+			clickToPath = true;
 			//BERNAT & JORDI
 		}
 		else if (element->name == "Heal")
 		{
-		//BERNAT
+			App->gui->cursor_move = true;
+			nextUnit_selected = true;
 		}
 		else if (element->name == "Produce_Cleric")
 		{
-			//BERNAT
+			Building* building = (Building*)hud->thing_selected;
+			App->entityManager->getPlayer()->DecreaseFaith(150);
+			building->ProduceQueue("Cleric");
 		}
 		else if (element->name == "Produce_Chaotic_Beast")
 		{
-			//BERNAT
+			Building* building = (Building*)hud->thing_selected;
+			App->entityManager->getPlayer()->DecreaseFaith(200);
+			building->ProduceQueue("Lawful_Beast");
 		}
 		else if (element->name == "Produce_Lawful_Beast")
 		{
-			//BERNAT
+			Building* building = (Building*)hud->thing_selected;
+			App->entityManager->getPlayer()->DecreaseFaith(200);
+			building->ProduceQueue("Chaotic_Beast");
 		}
 		else if (element->name == "Produce_Lawful_Miracle")
 		{
-			//BERNAT
+			nextBuilding_selected = true;
 		}
 		else if (element->name == "Produce_Chaotic_Miracle")
 		{
-			//BERNAT
+			building_meteor = true;
 		}
 		break;
 

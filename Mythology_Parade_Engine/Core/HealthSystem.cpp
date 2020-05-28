@@ -53,3 +53,20 @@ void HealthSystem::SetHealth(int value)
 {
 	health = value;
 }
+
+void HealthSystem::SetMaxUnitHealth()
+{
+	health = defaultHealth;
+}
+
+void HealthSystem::DivideHealth()
+{
+	health = health / 2;
+}
+
+bool HealthSystem::IsDeath()
+{
+	return isDeath;
+}
+
+

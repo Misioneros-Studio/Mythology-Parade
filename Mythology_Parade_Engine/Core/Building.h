@@ -2,9 +2,9 @@
 #define __BUILDING_H__
 
 #include "Entity.h"
-#include "HealthSystem.h"
-#include"EntityManager.h"
+#include "EntityManager.h"
 #include "j1Timer.h"
+#include <queue>
 
 enum BuildingType 
 {
@@ -28,7 +28,7 @@ enum class BuildingAction
 
 struct BuildingInfo;
 
-class Building: public Entity, public HealthSystem
+class Building: public Entity
 {
 public:
 	Building(BuildingType, iPoint, BuildingInfo);
@@ -58,7 +58,7 @@ public:
 
 	std::string GetElementProducing();
 
-	void CreateUnitQueue(int time, std::string thing_producing);
+	void ProduceQueue(std::string thing_producing);
 
 private:
 
@@ -69,10 +69,9 @@ private:
 	bool Draw(float dt);
 
 	void FinishProduction(std::string thing_produced);
+	void Kill(iPoint) override;
 
 	//Stats
-	int defenses;
-	int max_defenses;
 	int influence;
 	int damage;
 	int maxCap;
@@ -82,9 +81,10 @@ private:
 	int time_producing;
 	bool researched;
 
-	int unitsToCreate;
+	std::queue<std::string> queuedResearch;
 
 	int nearbyMonks;
+	int nearbyBeasts;
 	std::string description;
 	int mainDef;
 

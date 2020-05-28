@@ -83,6 +83,7 @@ bool EntityManager::Start()
 	animations[UnitType::JOTNAR] = animationManager.Load("assets/units/Jotnar.tmx", UnitType::JOTNAR);
 	animations[UnitType::CYCLOP] = animationManager.Load("assets/units/Cyclop.tmx", UnitType::CYCLOP);
 	animations[UnitType::MINOTAUR] = animationManager.Load("assets/units/Minotaur.tmx", UnitType::MINOTAUR);
+	animations[UnitType::CLERIC] = animationManager.Load("assets/units/Cleric.tmx", UnitType::CLERIC);
 
 	for (unsigned i = 0; i < entities.size(); i++)
 	{
@@ -399,6 +400,7 @@ bool EntityManager::Load(pugi::xml_node& n)
 	player->research_lawful_victory = p.child("research").child("lawful_victory").attribute("research").as_bool();
 	player->research_temple = p.child("research").child("temple").attribute("research").as_bool();
 
+
 	player->SetFaith(p.child("economy").attribute("faith").as_int());
 	player->SetSacrifices(p.child("economy").attribute("sacrifices").as_int());
 	player->SetPrayers(p.child("economy").attribute("prayers").as_int());
@@ -445,16 +447,26 @@ bool EntityManager::Load(pugi::xml_node& n)
 			footman->SetLevel(it.attribute("level").as_int());
 			footman->SetHealth(it.attribute("health").as_int());
 		}
-
-		//OTRAS UNIDADES PARA EL SIGUIENTE COMMIT
-		//else if (!strcmp(it.attribute("type").as_string(), "cyclop"))
-		//	CreateUnitEntity(UnitType::CYCLOP, pos, civ);
-		//else if (!strcmp(it.attribute("type").as_string(), "minotaur"))
-		//	CreateUnitEntity(UnitType::MINOTAUR, pos, civ);
-		//else if (!strcmp(it.attribute("type").as_string(), "jotnar"))
-		//	CreateUnitEntity(UnitType::JOTNAR, pos, civ);
-		//else if (!strcmp(it.attribute("type").as_string(), "draugar"))
-		//	CreateUnitEntity(UnitType::DRAUGAR, pos, civ);
+		else if (!strcmp(it.attribute("type").as_string(), "cyclop")) {
+			Unit* cyclop = static_cast<Unit*>(CreateUnitEntity(UnitType::CYCLOP, pos, unit_civ));
+			cyclop->SetHealth(it.attribute("health").as_int());
+		}
+		else if (!strcmp(it.attribute("type").as_string(), "minotaur")) {
+			Unit* minotaur = static_cast<Unit*>(CreateUnitEntity(UnitType::MINOTAUR, pos, unit_civ));
+			minotaur->SetHealth(it.attribute("health").as_int());
+		}
+		else if (!strcmp(it.attribute("type").as_string(), "jotnar")) {
+			Unit* jotnar = static_cast<Unit*>(CreateUnitEntity(UnitType::JOTNAR, pos, unit_civ));
+			jotnar->SetHealth(it.attribute("health").as_int());
+		}
+		else if (!strcmp(it.attribute("type").as_string(), "draugar")) {
+			Unit* draugar = static_cast<Unit*>(CreateUnitEntity(UnitType::DRAUGAR, pos, unit_civ));
+			draugar->SetHealth(it.attribute("health").as_int());
+		}
+		else if (!strcmp(it.attribute("type").as_string(), "cleric")) {
+			Unit* cleric = static_cast<Unit*>(CreateUnitEntity(UnitType::CLERIC, pos, unit_civ));
+			cleric->SetHealth(it.attribute("health").as_int());
+		}
 	}
 
 	//BUILDINGS LOADING
@@ -543,6 +555,8 @@ bool EntityManager::Load(pugi::xml_node& n)
 			else if (action == BuildingAction::RESEARCHING) { fortress->StartResearching(it.attribute("element").as_string()); fortress->timer_construction.StartAt(it.attribute("time").as_int()); }
 		}
 	}
+
+
 	return true;
 }
 
@@ -684,7 +698,7 @@ Entity* EntityManager::CreatePlayerEntity(std::string civilization_string)
 	return ret;
 }
 
-Entity* EntityManager::CreateUnitEntity(UnitType type, iPoint pos, CivilizationType civilization)
+Entity* EntityManager::CreateUnitEntity(UnitType type, iPoint pos, CivilizationType civ)
 {
 	pos.x += 20;
 	AABBNode* node = aabbTree.FindLowestNodeInPoint(&aabbTree.baseNode, (Point)pos);
@@ -722,8 +736,11 @@ Entity* EntityManager::CreateUnitEntity(UnitType type, iPoint pos, CivilizationT
 	case UnitType::MINOTAUR:
 		ret = new CombatUnit(UnitType::MINOTAUR, pos);
 		break;
+	case UnitType::CLERIC:
+		ret = new Unit(UnitType::CLERIC, pos);
+		break;
 	}
-	ret->civilization = civilization;
+	ret->civilization = civ;
 	ret->type = EntityType::UNIT;
 	ret->texture = animationManager.charData[type].texture;
 

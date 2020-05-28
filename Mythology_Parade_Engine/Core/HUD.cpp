@@ -750,12 +750,6 @@ void HUD::ManageActionButtons(bool create_buttons, bool viking) {
 		case Type_Selected::Temple:
 		{
 			Building* building = static_cast<Building*>(thing_selected);
-
-			if (building->buildingStatus == BuildingStatus::FINISHED) {
-				hud_button_actions_unclickable[0] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, ui_ingame, { 200,613,67,41 }, { 337,382,67,41 }, "",Panel_Fade::no_one_fade, { 0,0,0,0 }, { 0,0,0,0 },
-					false, { 0,0,0,0 }, nullptr, 0, false, -1.0F, 1));
-			}
-
 			if (building->buildingStatus == BuildingStatus::FINISHED) {
 				if (player->GetFaith() >= 150 && building->buildingAction == BuildingAction::NOTHING && player->research_cleric == true) {
 					hud_button_actions[0] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 200,613,67,41 }, { 574,540,67,41 }, "Produce_Cleric", Panel_Fade::no_one_fade, { 574,634,67,41 },

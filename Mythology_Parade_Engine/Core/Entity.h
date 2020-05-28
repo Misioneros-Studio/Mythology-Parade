@@ -5,7 +5,7 @@
 #include "SDL/include/SDL_rect.h"
 #include "j1App.h"
 #include "j1Render.h"
-
+#include "HealthSystem.h"
 #include "FoWBitDefs.h"
 #include"MaykMath.h"
 
@@ -19,7 +19,7 @@ enum class EntityType
 	BUILDING
 };
 
-class Entity :public j1Module
+class Entity :public j1Module, public HealthSystem
 {
 public:
 	Entity(/*EntityTypes type*/) : fowRadius(10)
@@ -80,6 +80,10 @@ public:
 		return true;
 	}
 
+	virtual void Kill(iPoint direction) {
+
+	}	
+	
 
 public:
 
@@ -136,7 +140,7 @@ public:
 		_isSelected = value;
 	}
 
-
+	
 protected:
 	SDL_RendererFlip flipState;
 	SDL_Rect collisionRect;

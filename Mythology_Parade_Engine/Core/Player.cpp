@@ -9,7 +9,10 @@
 
 Player::Player()
 {
+	research_assassin = research_chaotic_beast = research_chaotic_miracle = research_cleric = research_encampment = research_lawful_beast = research_lawful_miracle = research_lawful_victory =
+		research_temple = research_chaotic_victory = false;
 	Start();
+	marc = 69;
 }
 
 Player::~Player()
@@ -45,8 +48,7 @@ bool Player::Start()
 	else
 		name = "viking";
 
-	research_assassin = research_chaotic_beast = research_chaotic_miracle = research_cleric = research_encampment = research_lawful_beast = research_lawful_miracle = research_lawful_victory =
-		research_temple = research_chaotic_victory = false;
+
 	buildingSelect = nullptr;
 
 	if (App->entityManager->initCivilizations)
@@ -100,7 +102,7 @@ bool Player::Update(float dt)
 	//	//Todo change assassin for the type of unit
 	//	App->entityManager->CreateUnitEntity(UnitType::MONK, spawnPos);
 	//}
-  
+	
 	//Selection logics and drawing
 	if (!App->scene->paused_game)
 	{
@@ -164,6 +166,9 @@ void Player::SelectionDraw_Logic()
 			buildingSelect = nullptr;
 			ClickLogic();
 			SeeEntitiesInside();
+			ActionToUnit();
+			ActionToBuilding();
+			App->scene->nextUnit_selected = false;
 			App->scene->hud->HUDUpdateSelection(listEntities, (Building*)buildingSelect);
 		}
 	}
@@ -177,6 +182,55 @@ std::list<Entity*> Player::GetEntitiesSelected()
 Building* Player::GetSelectedBuild()
 {
 	return (Building*) buildingSelect;
+}
+
+Building* Player::GetEnemySelectedBuild()
+{
+	return (Building*)enemyBuildingSelect;
+}
+
+void Player::ActionToUnit()
+{
+	if (listEntities.size() == 1 && App->scene->nextUnit_selected)
+	{
+		App->entityManager->DeleteEntity(App->scene->hud->thing_selected);
+		Unit* unit = static_cast<Unit*>(listEntities.begin()._Ptr->_Myval);
+		unit->SetMaxUnitHealth();
+	}
+}
+
+void Player::ActionToBuilding()
+{
+	if(App->scene->nextUnit_selected && buildingSelect!=nullptr)
+	{
+		App->entityManager->DeleteEntity(App->scene->hud->thing_selected);
+		Building* unit = static_cast<Building*>(buildingSelect);
+		unit->SetMaxUnitHealth();
+	}
+	if (App->scene->nextBuilding_selected && GetEnemySelectedBuild()->name == "encampment" && civilization != GetEnemySelectedBuild()->civilization)
+	{
+		CivilizationType civ;
+		int info;
+		if (GetEnemySelectedBuild()->civilization == CivilizationType::GREEK)
+		{
+			civ = CivilizationType::VIKING; info = 3;
+		}
+		else
+		{
+			civ = CivilizationType::GREEK; info = 7;
+		}
+
+		iPoint pos = { (int)GetEnemySelectedBuild()->position.x, (int)GetEnemySelectedBuild()->position.y };
+		Building* building = static_cast<Building*>(App->entityManager->CreateBuildingEntity(pos, BuildingType::ENCAMPMENT, App->entityManager->buildingsData[info], civ));
+		building->SetTimeProducing(0);
+		App->entityManager->DeleteEntity(GetEnemySelectedBuild());
+		App->scene->nextBuilding_selected = false;
+	}
+	else if (App->scene->building_meteor && GetEnemySelectedBuild()->name == "encampment")
+	{
+		App->scene->building_meteor = false;
+		App->entityManager->DeleteEntity(GetEnemySelectedBuild());
+	}
 }
 
 void Player::SeeEntitiesInside()
@@ -218,7 +272,7 @@ void Player::PlayerInputs()
 	{
 		iPoint mouse = App->map->GetMousePositionOnMap();
 		iPoint spawnPos = App->map->TileCenterPoint(mouse);
-		App->entityManager->CreateUnitEntity(UnitType::CYCLOP, spawnPos,civilization);
+		App->entityManager->CreateUnitEntity(UnitType::JOTNAR, spawnPos,civilization);
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN && App->scene->godMode)
@@ -269,6 +323,20 @@ void Player::PlayerInputs()
 			}
 		}
 	}
+
+	if (App->input->GetKey(SDL_SCANCODE_Y) == KEY_DOWN && App->scene->godMode)
+	{
+		if (!listEntities.empty())
+		{
+			std::list<Entity*>::iterator it = listEntities.begin();
+			for (it; it != listEntities.end(); ++it)
+			{
+				Unit* unit = static_cast<Unit*>(it._Ptr->_Myval);
+				unit->DivideHealth();
+			}
+			listEntities.clear();
+		}
+	}
 }
 
 void Player::ClickLogic()
@@ -285,6 +353,9 @@ void Player::ClickLogic()
 				if (it._Ptr->_Myval->civilization == civilization) {
 					buildingSelect = it._Ptr->_Myval;
 					it._Ptr->_Myval->SetSelected(true);
+				}
+				else {
+					enemyBuildingSelect = it._Ptr->_Myval;
 				}
 			}
 		}
@@ -345,12 +416,12 @@ void Player::SetSacrifices(int var)
 void Player::InitVikings() 
 {
 	if (App->scene->isInTutorial == false) {
-		iPoint fortress = { 122,21 };
+		iPoint fortress = { 21,23 };
 		fortress = App->map->MapToWorld(fortress.x, fortress.y);
 		fortress.x -= App->map->GetTilesHalfSize().x;
 
-		iPoint monkPos = { 119,26 };
-		iPoint assassinPos = { 121,28 };
+		iPoint monkPos = {26,24 };
+		iPoint assassinPos = { 25,24 };
 		monkPos = App->map->MapToWorld(monkPos.x, monkPos.y);
 		assassinPos = App->map->MapToWorld(assassinPos.x, assassinPos.y);
 
@@ -377,12 +448,12 @@ void Player::InitVikings()
 void Player::InitGreek()
 {
 	if (App->scene->isInTutorial == false) {
-		iPoint fortress = { 102,41 };
+		iPoint fortress = { 129,137 };
 		fortress = App->map->MapToWorld(fortress.x, fortress.y);
 		fortress.x -= App->map->GetTilesHalfSize().x;
 
-		iPoint monkPos = { 106,34 };
-		iPoint assassinPos = { 109,37 };
+		iPoint monkPos = { 130,139 };
+		iPoint assassinPos = { 129,139 };
 		monkPos = App->map->MapToWorld(monkPos.x, monkPos.y);
 		assassinPos = App->map->MapToWorld(assassinPos.x, assassinPos.y);
 

@@ -345,6 +345,7 @@ private:
 	std::string atlas_file_name_num_1;
 	std::string atlas_file_name_num_2;
 	SDL_Texture* cursor_tex;
+	j1Timer minimap_feedback_timer;
 
 public:
 
@@ -353,6 +354,7 @@ public:
 	bool lockClick;
 	bool cursor_attack;
 	bool cursor_move;
+	bool cursor_heal;
 	iPoint cursor_size;
 
 };

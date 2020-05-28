@@ -36,8 +36,10 @@ bool j1TitleScene::Awake(pugi::xml_node& config)
 // Called before the first frame
 bool j1TitleScene::Start()
 {
-	App->gui->active = true;
-	App->gui->Start();
+	if (App->gui->active == false) {
+		App->gui->active = true;
+		App->gui->Start();
+	}
 
 	for (int i = 0; i < 6; i++)
 	{
@@ -545,7 +547,10 @@ void j1TitleScene::OnClick(UI* element, float argument)
 		{
 			if (confirmation_option.compare("LOAD") == 0)
 			{
-				App->fade_to_black->FadeToBlack(which_fade::title_to_scene, 2, "viking");
+				pugi::xml_document doc;
+				pugi::xml_parse_result result = doc.load_file("info.xml");
+				pugi::xml_node node = doc.child("info").child("players").first_child();
+				App->fade_to_black->FadeToBlack(which_fade::title_to_scene, 2, node.name());
 				destroy = true;
 				wantToLoad = true;
 			}

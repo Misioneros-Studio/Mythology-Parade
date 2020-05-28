@@ -1,21 +1,21 @@
 #include "Building.h"
 #include "p2Log.h"
+#include "j1Minimap.h"
+#include "j1ParticleManager.h"
 Building::Building(BuildingType type, iPoint pos, BuildingInfo info)
 {
 	//default inits with none value
 	damage = 0;
-	defenses = 0;
-	max_defenses = 0;
 	influence = 0;
 	maxCap = 0;
 	nearbyMonks = 0;
+	nearbyBeasts = 0;
 	researched = false;
 	time_construction = 0;
 	time_research = 0;
 	percentage_constructing = 0;
 	time_producing = 0;
 	first_time_constructing = true;
-	unitsToCreate = 0;
 	percentage_life = 0.f;
 	/*---------------*/
 
@@ -38,7 +38,7 @@ Building::Building(BuildingType type, iPoint pos, BuildingInfo info)
 		time_construction =time_research = 0;
 		damage = 25;
 		SetMaxHealth(500);
-		defenses = max_defenses = 500;
+		SetHealth(500);
 		influence = 20;
 		maxCap = 1;
 		description = "I'm a fortress";
@@ -51,7 +51,7 @@ Building::Building(BuildingType type, iPoint pos, BuildingInfo info)
 		time_construction = 180;
 		damage = 15;
 		SetMaxHealth(250);
-		defenses = max_defenses = 250;
+		SetHealth(250);
 		influence = 10;
 		maxCap = 5;
 		description = "I'm a monastery";
@@ -65,7 +65,7 @@ Building::Building(BuildingType type, iPoint pos, BuildingInfo info)
 		time_construction = 150;
 		damage = 15;
 		SetMaxHealth(200);
-		defenses = max_defenses = 200;
+		SetHealth(200);
 		influence = 10;
 		maxCap = 8;
 		description = "I'm a temple";
@@ -79,7 +79,7 @@ Building::Building(BuildingType type, iPoint pos, BuildingInfo info)
 		time_construction = 180;
 		damage = 20;
 		SetMaxHealth(350);
-		defenses = max_defenses = 350;
+		SetHealth(350);
 		influence = 10;
 		maxCap = 7;
 		description = "I'm an encampment";
@@ -103,7 +103,7 @@ Building::Building(BuildingType type, iPoint pos, BuildingInfo info)
 	}
 	show_bar_for_damage = false;
 
-	mainDef = defenses;
+	mainDef = GetHealth();
 	original_spriteRect = spriteRect = info.spriteRect;
 	blitRect = info.blitSize;
 
@@ -130,6 +130,16 @@ void Building::CreateUnit()
 	switch (buildingType)
 	{
 	case FORTRESS:
+		if (element_producing == "Lawful_Beast")
+		{
+			if (this->civilization == CivilizationType::GREEK)	App->entityManager->CreateUnitEntity(UnitType::MINOTAUR, { (int)position.x - 30, (int)position.y }, civilization);
+			else App->entityManager->CreateUnitEntity(UnitType::DRAUGAR, { (int)position.x - 30, (int)position.y }, civilization);
+		}
+		else
+		{
+			if (this->civilization == CivilizationType::GREEK)	App->entityManager->CreateUnitEntity(UnitType::CYCLOP, { (int)position.x - 30, (int)position.y }, civilization);
+			else App->entityManager->CreateUnitEntity(UnitType::JOTNAR, { (int)position.x - 30, (int)position.y }, civilization);
+		}
 		break;
 	case MONASTERY:
 		App->entityManager->CreateUnitEntity(UnitType::MONK, { (int)position.x - 30, (int)position.y },civilization);
@@ -139,6 +149,8 @@ void Building::CreateUnit()
 		}
 		break;
 	case TEMPLE:
+		App->entityManager->CreateUnitEntity(UnitType::CLERIC, { (int)position.x - 30, (int)position.y }, civilization);
+		//TODO: FX?
 		break;
 	case ENCAMPMENT:
 		App->entityManager->CreateUnitEntity(UnitType::ASSASSIN, { (int)position.x - 20, (int)position.y },civilization);
@@ -151,6 +163,16 @@ void Building::CreateUnit()
 	}
 }
 
+void Building::Kill(iPoint direction)
+{
+	buildingStatus = BuildingStatus::DESTROYED;
+	if (buildingType == BuildingType::FORTRESS) {
+		App->particleManager->CreateParticle({ (int)position.x + 10,(int)position.y - 100 }, { 0,0 }, 10, ParticleAnimation::Explosion);
+	}
+	else {
+		App->particleManager->CreateParticle({ (int)position.x - 22,(int)position.y - 100 }, { 0,0 }, 10, ParticleAnimation::Explosion);
+	}
+}
 
 bool Building::GetResearched()
 {
@@ -181,12 +203,9 @@ std::string Building::GetElementProducing()
 {
 	return element_producing;
 }
-void Building::CreateUnitQueue(int time, std::string thing_producing)
+void Building::ProduceQueue(std::string thing_producing)
 {
-	unitsToCreate++;
-	time_producing = time;
-	element_producing = thing_producing;
-
+	queuedResearch.push(thing_producing);
 }
 
 bool Building::Awake(pugi::xml_node& a)
@@ -206,10 +225,12 @@ bool Building::Update(float dt)
 	else
 	{
 		displayDebug = false;
-  }
-	if (unitsToCreate > 0 && buildingAction == BuildingAction::NOTHING) {
-		StartProducing(element_producing);
-		unitsToCreate--;
+	}
+
+	if (queuedResearch.size() > 0 && buildingAction == BuildingAction::NOTHING) {
+		std::string elementToProduce = queuedResearch.front();
+		queuedResearch.pop();
+		StartProducing(elementToProduce);
 	}
 
 	if (App->scene->paused_game == true && timer_construction.isPaused() == false)
@@ -222,10 +243,11 @@ bool Building::Update(float dt)
 		damage_timer.Resume();
 	if (show_bar_for_damage == true && damage_timer.ReadSec() > 2)
 		show_bar_for_damage = false;
-	percentage_life = (float)defenses / (float)max_defenses;
+	percentage_life = (float)GetHealth() / (float)GetMaxHealth();
 	if (percentage_life < 0)
 		percentage_life = 0;
 	if (damaged_now == true) {
+		App->minimap->EntityAttacked(this);
 		damage_timer.Start();
 		damaged_now = false;
 		show_bar_for_damage = true;
@@ -353,8 +375,12 @@ bool Building::Update(float dt)
 					count++;
 			}
 		}
-		defenses = mainDef;
-		defenses += 50 * count;
+		if (nearbyBeasts != count) {
+
+			IncreaseHealth(50 * (count - nearbyBeasts));
+			nearbyBeasts = count;
+			LOG("Health: %i MaxHealth: %i", GetHealth(), GetMaxHealth());
+		}
 	}
 
 	//IF BUILDING DETECTS JOTNAR
@@ -369,8 +395,12 @@ bool Building::Update(float dt)
 					count++;
 			}
 		}
-		defenses = mainDef;
-		defenses += 50 * count;
+		if (nearbyBeasts != count) {
+
+		    IncreaseHealth(50 * (count - nearbyBeasts));
+			nearbyBeasts = count;
+			LOG("Health: %i MaxHealth: %i", GetHealth(), GetMaxHealth());
+		}
 	}
 
 	std::vector<iPoint> tiles;
@@ -440,8 +470,11 @@ void Building::StartProducing(std::string thing_producing) {
 	if (thing_producing == "Prayers") time_producing = App->entityManager->getPlayer()->time_prayers;
 	else if (thing_producing == "Sacrifices") time_producing = App->entityManager->getPlayer()->time_sacrifices;
 	else if (thing_producing == "Victory") time_producing = App->entityManager->getPlayer()->time_production_victory;
-	else if (thing_producing == "Monk") time_producing = 10;
-	else if (thing_producing == "Assasin") time_producing = 10;
+	else if (thing_producing == "Monk") time_producing = 90;
+	else if (thing_producing == "Assasin") time_producing = 90;
+	else if (thing_producing == "Cleric") time_producing = 90;
+	else if (thing_producing == "Chaotic_Beast") time_producing = 120;
+	else if (thing_producing == "Lawful_Beast") time_producing = 120;
 	element_producing = thing_producing;
 	timer_construction.Start();
 
