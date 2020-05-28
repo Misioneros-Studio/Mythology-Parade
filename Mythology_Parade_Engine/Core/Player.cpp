@@ -58,8 +58,8 @@ bool Player::Start()
 
 	if (App->entityManager->initCivilizations)
 	{
-		App->entityManager->InitVikings();
-		App->entityManager->InitGreek();
+		InitVikings();
+		InitGreek();
 		App->entityManager->initCivilizations = false;
 	}
 	App->entityManager->playerCreated = true;
