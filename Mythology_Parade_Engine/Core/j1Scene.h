@@ -90,7 +90,10 @@ public:
 	uint WinViking_sound;
 	uint WinGreek_sound;
 	uint Lose_sound;
-
+	uint OpenPauseMenu_sfx;
+	uint Research_sound;
+	uint ResearchFinished;
+	uint Select_sfx;
 	bool isInTutorial;
 
 public:

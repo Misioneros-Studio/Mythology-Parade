@@ -52,6 +52,22 @@ bool j1Audio::Awake(pugi::xml_node& config)
 		ret = true;
 	}
 	active = true;
+	//LoadingFX
+	Building_destruction = LoadFx("audio/fx/Building_destruction.wav");
+	Building_placed =LoadFx("audio/fx/BuildingPlaced.wav");
+	Decrease_Faith =LoadFx("audio/fx/Descrease_FAITH.wav");
+	Getting_resources =LoadFx("audio/fx/Getting_Resources.wav");
+	hit_1 = App->audio->LoadFx("audio/fx/hit_1.wav");
+	increase_prayers =LoadFx("audio/fx/Increase_prayers.wav");
+	increase_sacrifice = LoadFx("audio/fx/Increase_sacrifice.wav");
+	Walking_troops =LoadFx("audio/fx/Walking_troop.wav");
+	Walking_troop2 = LoadFx("audio/fx/Walking_troop2.wav");
+	
+	OpenMenu_sfx = LoadFx("audio/ui/Close_Menu.wav");
+	
+	hit_2 = LoadFx("audio/fx/hit2.wav");
+	UpgradeUnit = LoadFx("audio/fx/UpgradeUnit.wav");
+	Death_sfx = LoadFx("audio/fx/Death.wav");
 
 	return ret;
 }

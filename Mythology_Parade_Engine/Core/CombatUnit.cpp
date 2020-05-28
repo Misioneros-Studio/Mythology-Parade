@@ -98,6 +98,7 @@ void CombatUnit::LevelUp()
 
 	}
 	App->particleManager->CreateParticle({ (int)position.x-20,(int)position.y-60 }, { 0,-1 }, 10, ParticleAnimation::Level_Up);
+	App->entityManager->FxUnits(4, App->audio->UpgradeUnit, position.x, position.y);
 }
 
 void CombatUnit::SetDamage(int d)

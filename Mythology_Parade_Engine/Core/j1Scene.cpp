@@ -102,6 +102,10 @@ bool j1Scene::Start()
 	WinViking_sound = App->audio->LoadFx("audio/fx/WinVikings.wav");
 	WinGreek_sound = App->audio->LoadFx("audio/fx/win_greeks.wav");
 	Lose_sound = App->audio->LoadFx("audio/fx/lose_sound.wav");
+	OpenPauseMenu_sfx = App->audio->LoadFx("audio/fx/OpenPause.wav");
+	Research_sound = App->audio->LoadFx("audio/fx/Research_Sound.wav");
+	ResearchFinished = App->audio->LoadFx("audio/fx/ResearchFinished.wav");
+	Select_sfx = App->audio->LoadFx("audio/ui/Menu Select 1.wav");
 
 
 	paused_game = false;

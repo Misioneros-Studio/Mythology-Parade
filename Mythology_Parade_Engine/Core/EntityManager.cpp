@@ -54,18 +54,7 @@ bool EntityManager::Awake(pugi::xml_node& a)
 	}
 	active = false;
 
-	//LoadingFX
-	Building_destruction = App->audio->LoadFx("audio/fx/Building_destruction.wav");
-	Building_placed = App->audio->LoadFx("audio/fx/BuildingPlaced.wav");
-	Decrease_Faith = App->audio->LoadFx("audio/fx/Descrease_FAITH.wav");
-	Getting_resources = App->audio->LoadFx("audio/fx/Getting_Resources.wav");
-	hit_1 = App->audio->LoadFx("audio/fx/hit_1.wav");
-	increase_prayers = App->audio->LoadFx("audio/fx/Increase_prayers.wav");
-	increase_sacrifice = App->audio->LoadFx("audio/fx/Increase_sacrifice.wav");
-	Walking_troops = App->audio->LoadFx("audio/fx/Walking_troop.wav");
-	CreateMonk_sound = App->audio->LoadFx("audio/fx/Appear_monk.wav");
-	CreateAssasin_sound = App->audio->LoadFx("audio/fx/Appear_assasin.wav");
-	Research_sound = App->audio->LoadFx("audio/fx/Research_Sound.wav");
+
 
 	return true;
 }
@@ -85,6 +74,17 @@ bool EntityManager::Start()
 	animations[UnitType::MINOTAUR] = animationManager.Load("assets/units/Minotaur.tmx", UnitType::MINOTAUR);
 	animations[UnitType::CLERIC] = animationManager.Load("assets/units/Cleric.tmx", UnitType::CLERIC);
 
+	Monster1 = App->audio->LoadFx("audio/fx/Monster1.wav");
+	Monster2 = App->audio->LoadFx("audio/fx/Monster2.wav");
+	giant3 = App->audio->LoadFx("audio/fx/giant3.wav");
+	giant5 = App->audio->LoadFx("audio/fx/giant5.wav");
+	ogre4 = App->audio->LoadFx("audio/fx/ogre4.wav");
+	ogre5 = App->audio->LoadFx("audio/fx/ogre5.wav");
+	shade12 = App->audio->LoadFx("audio/fx/shade12.wav");
+	CreateMonk_sound = App->audio->LoadFx("audio/fx/Appear_monk.wav");
+	CreateAssasin_sound = App->audio->LoadFx("audio/fx/Appear_assasin.wav");
+
+
 	for (unsigned i = 0; i < entities.size(); i++)
 	{
 		for (std::list<Entity*>::iterator it = entities[(EntityType)i].begin(); it != entities[(EntityType)i].end(); it++)
@@ -96,7 +96,7 @@ bool EntityManager::Start()
 	return true;
 }
 
-void EntityManager::LoadBuildingsBlitRect() 
+void EntityManager::LoadBuildingsBlitRect()
 {
 	for (unsigned int i = 0; i < buildingsData.size(); i++)
 	{
@@ -133,10 +133,10 @@ bool EntityManager::Update(float dt)
 
 	for (std::list<Entity*>::iterator it = entities[EntityType::UNIT].begin(); it != entities[EntityType::UNIT].end(); it++)
 	{
-		if ((*it)->type == EntityType::UNIT) 
+		if ((*it)->type == EntityType::UNIT)
 		{
 			Unit* tmp = (Unit*)it._Ptr->_Myval;
-			if (tmp->toDelete) 
+			if (tmp->toDelete)
 			{
 				//entities[EntityType::UNIT].erase(it);
 				DeleteEntity(tmp);
@@ -145,20 +145,20 @@ bool EntityManager::Update(float dt)
 
 		}
 	}
-  
+
 	//TODO: Move this logic to the player
 	if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN && App->scene->godMode==true)
 	{
 		EnterBuildMode();
 	}
-	
+
 	if (crPreview.active == true && App->input->GetMouseButtonDown(3) == KEY_UP) {
 		EnterBuildMode();
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN && App->scene->godMode == true)
 	{
-		if (buildingTestIndex < MAX_BUILDING_TYPES - 1) 
+		if (buildingTestIndex < MAX_BUILDING_TYPES - 1)
 		{
 			buildingTestIndex++;
 		}
@@ -176,7 +176,7 @@ bool EntityManager::Update(float dt)
 
 		crPreview.canBuild = true;
 		debugTex = App->scene->debugBlue_tex;
-		
+
 		for (int i = 0; i <= 1; i++)
 		{
 			for (int y = mouse.y; y > mouse.y - crPreview.height; y--)
@@ -185,7 +185,7 @@ bool EntityManager::Update(float dt)
 				{
 					if (i == 0)
 					{
-						if (crPreview.canBuild && App->pathfinding->IsWalkable({ x, y }) == false) 
+						if (crPreview.canBuild && App->pathfinding->IsWalkable({ x, y }) == false)
 						{
 							debugTex = App->scene->debugRed_tex;
 							crPreview.canBuild = false;
@@ -214,7 +214,7 @@ bool EntityManager::Update(float dt)
 		iPoint mouse = App->map->GetMousePositionOnMap();
 		iPoint spawnPos = App->map->MapToWorld(mouse.x, mouse.y);
 		spawnPos.y += App->map->data.tile_height / 2;
-		switch (buildingTestIndex) 
+		switch (buildingTestIndex)
 		{
 		case 0:
 			CreateBuildingEntity(spawnPos, BuildingType::FORTRESS, buildingsData[buildingTestIndex], CivilizationType::VIKING);
@@ -248,7 +248,7 @@ bool EntityManager::Update(float dt)
 			faithToDescrease = 200;
 			break;
 		}
-		
+
 		//Onces you build disable building mode
 		App->entityManager->getPlayer()->DecreaseFaith(faithToDescrease);
 		crPreview.active = false;
@@ -265,7 +265,7 @@ bool EntityManager::Update(float dt)
 
 
 
-bool EntityManager::PostUpdate() 
+bool EntityManager::PostUpdate()
 {
 
 	//TODO 7: Test collision detection in Debug and Release mode
@@ -645,7 +645,7 @@ bool EntityManager::Save(pugi::xml_node& s) const
 		pugi::xml_node player;
 		if(var3->civilization == CivilizationType::VIKING)
 			 player = node3.append_child("viking");
-		else if(var3->civilization == CivilizationType::GREEK) 
+		else if(var3->civilization == CivilizationType::GREEK)
 			player = node3.append_child("greek");
 
 		pugi::xml_node economy = player.append_child("economy");
@@ -684,7 +684,7 @@ Entity* EntityManager::CreatePlayerEntity(std::string civilization_string)
 	if (civilization_string == "viking") {
 		ret->civilization = CivilizationType::VIKING;
 		p->player_type = CivilizationType::VIKING;
-		
+
 	}
 	else if (civilization_string == "greek") {
 		ret->civilization = CivilizationType::GREEK;
@@ -716,25 +716,32 @@ Entity* EntityManager::CreateUnitEntity(UnitType type, iPoint pos, CivilizationT
 	{
 	case UnitType::ASSASSIN:
 		ret = new CombatUnit(UnitType::ASSASSIN, pos);
+		FxUnits(4, CreateAssasin_sound, pos.x, pos.y);
 		break;
 	case UnitType::MONK:
 		ret = new Unit(UnitType::MONK, pos);
 		//ret->texture = animationManager.character_tmx_data.texture;
+		FxUnits(4, CreateMonk_sound, pos.x, pos.y);
 		break;
 	case UnitType::PIKEMAN:
 		ret = new CombatUnit(UnitType::PIKEMAN, pos);
+		FxUnits(4, CreateAssasin_sound, pos.x, pos.y);
 		break;
 	case UnitType::JOTNAR:
 		ret = new CombatUnit(UnitType::JOTNAR, pos);
+		FxUnits(4, ogre5, pos.x, pos.y);
 		break;
 	case UnitType::DRAUGAR:
 		ret = new CombatUnit(UnitType::DRAUGAR, pos);
+		FxUnits(4, shade12, pos.x, pos.y);
 		break;
 	case UnitType::CYCLOP:
 		ret = new CombatUnit(UnitType::CYCLOP, pos);
+		FxUnits(4, giant3, pos.x, pos.y);
 		break;
 	case UnitType::MINOTAUR:
 		ret = new CombatUnit(UnitType::MINOTAUR, pos);
+		FxUnits(4, Monster1, pos.x, pos.y);
 		break;
 	case UnitType::CLERIC:
 		ret = new Unit(UnitType::CLERIC, pos);
@@ -754,7 +761,7 @@ Entity* EntityManager::CreateUnitEntity(UnitType type, iPoint pos, CivilizationT
 	return ret;
 }
 
-void EntityManager::DrawEverything() 
+void EntityManager::DrawEverything()
 {
 
 	float dt = App->GetDT();
@@ -800,15 +807,19 @@ Entity* EntityManager::CreateBuildingEntity(iPoint pos, BuildingType type, Build
 	{
 	case FORTRESS:
 		ret = new Building(BuildingType::FORTRESS, pos, info);
+		FxUnits(4, App->audio->Building_placed, pos.x, pos.y);
 		break;
 	case MONASTERY:
 		ret = new Building(BuildingType::MONASTERY, pos, info);
+		FxUnits(4, App->audio->Building_placed, pos.x, pos.y);
 		break;
 	case TEMPLE:
 		ret = new Building(BuildingType::TEMPLE, pos, info);
+		FxUnits(4, App->audio->Building_placed, pos.x, pos.y);
 		break;
 	case ENCAMPMENT:
 		ret = new Building(BuildingType::ENCAMPMENT, pos, info);
+		FxUnits(4, App->audio->Building_placed, pos.x, pos.y);
 		break;
 	}
 
@@ -861,12 +872,12 @@ void EntityManager::SetBuildIndex(int index)
 //Called when deleting a new Entity
 bool EntityManager::DeleteEntity(Entity* e)
 {
-	if (e != nullptr) 
+	if (e != nullptr)
 	{
 
 		switch (e->type)
 		{
-			case EntityType::UNIT: 
+			case EntityType::UNIT:
 			{
 				//Delete from AABBtree
 				AABBNode* node = aabbTree.FindLowestNodeInPoint(&aabbTree.baseNode, static_cast<Point>(e->position));
@@ -877,7 +888,7 @@ bool EntityManager::DeleteEntity(Entity* e)
 				{
 					AABBNode* parent = node->parent;
 
-					//if (parent) 
+					//if (parent)
 					//{
 					//	for (int i = 0; i < parent->childNodes.size(); i++)
 					//	{
@@ -913,7 +924,7 @@ bool EntityManager::DeleteEntity(Entity* e)
 						//bool isEmpty = true;
 
 						////Same as aabbTree, you need to check if every possible child inside a child is empty before merging
-						//if (parent) 
+						//if (parent)
 						//{
 						//	for (int i = 0; i < QUADNODE_CHILD_NUMBER; i++)
 						//	{
@@ -955,7 +966,7 @@ bool EntityManager::DeleteEntity(Entity* e)
 	return false;
 }
 
-void EntityManager::UpdateBuildPreview(int index) 
+void EntityManager::UpdateBuildPreview(int index)
 {
 	BuildingInfo data = buildingsData[index];
 	crPreview.height = data.tileLenght;
@@ -1026,7 +1037,7 @@ void EntityManager::LoadBuildingsData(pugi::xml_node& node)
 
 }
 
-iPoint EntityManager::CalculateBuildingSize(int bw, int w, int h) 
+iPoint EntityManager::CalculateBuildingSize(int bw, int w, int h)
 {
 	return {bw , (bw * h) / w};
 }
@@ -1045,31 +1056,59 @@ bool EntityManager::IsPointInsideQuad(SDL_Rect rect, int x, int y)
 	return false;
 }
 
-void EntityManager::FxUnits(int channel, int fx, int posx, int posy) 
+void EntityManager::FxUnits(int channel, int fx, int posx, int posy)
 {
-	Mix_Playing(channel);
-	Mix_HaltChannel(channel);
+	if (Mix_Playing(channel) == 0) {
+		Mix_HaltChannel(channel);
 
-	int distance = ((posx - App->render->camera.x * App->render->camera.x) + (posy - App->render->camera.y * App->render->camera.y));
-	distance = distance;
-	int volume = (distance * 2000) / App->render->camera.w;
-	if (volume < 0) {
-		volume = 0;
-	} 
-	if (volume > 200) {
-		volume = 200; 
+		iPoint distance = { posx - (-App->render->camera.x + App->render->camera.w / 2), posy - (-App->render->camera.y + App->render->camera.h / 2) };
+
+		int distance_normalized = (distance.x * distance.x + distance.y * distance.y);
+		distance_normalized = distance_normalized / 750;
+		volume = (distance_normalized * 255) / App->render->camera.w;
+
+		float angle = 90;
+		if (App->render->camera.y == 0) {
+			angle = atan(-App->render->camera.x);
+		}
+		else {
+			angle = atan((-App->render->camera.x) / (App->render->camera.y));
+		}
+		angle = angle * 57 + 360;
+
+
+		if (volume < 0) { volume = 0; }
+		if (volume > 255) { volume = 255; }
+
+		Mix_SetPosition(channel, angle, volume);
+		App->audio->PlayFx(channel, fx, 0);
 	}
 
-	float angle = 90;
-	if (App->render->camera.y == 0) {
-		angle = atan(-App->render->camera.x);
-	}
-	else {
-		angle = atan((-App->render->camera.x) / (App->render->camera.y));
-	}
-	angle = angle * 57 + 360;
+	/*if (Mix_Playing(channel) == 0) {
 
-	Mix_SetPosition(channel, angle, volume);
-	App->audio->PlayFx(channel, fx, 0);
+		Mix_HaltChannel(channel);
+
+
+		iPoint distance = { ((posx - App->render->camera.x * App->render->camera.x) + (posy - App->render->camera.y * App->render->camera.y)) };
+		distance = distance;
+		int volume = (distance * 2000) / App->render->camera.w;
+		if (volume < 0) {
+			volume = 0;
+		}
+		if (volume > 200) {
+			volume = 200;
+		}
+
+		float angle = 90;
+		if (App->render->camera.y == 0) {
+			angle = atan(-App->render->camera.x);
+		}
+		else {
+			angle = atan((-App->render->camera.x) / (App->render->camera.y));
+		}
+		angle = angle * 57 + 360;
+
+		Mix_SetPosition(channel, angle, volume);
+		App->audio->PlayFx(channel, fx, 0);
+	}*/
 }
-

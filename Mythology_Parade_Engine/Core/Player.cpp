@@ -7,6 +7,9 @@
 #include "HUD.h"
 #include "EntityManager.h"
 
+#include "j1Audio.h"
+
+#include "SDL_mixer/include/SDL_mixer.h"
 Player::Player()
 {
 	research_assassin = research_chaotic_beast = research_chaotic_miracle = research_cleric = research_encampment = research_lawful_beast = research_lawful_miracle = research_lawful_victory =
@@ -64,9 +67,9 @@ bool Player::PreUpdate()
 {
 	//Logic Faith Increase
 	tick1 = SDL_GetTicks();
-	if (tick1 - tick2 >= 2000) 
+	if (tick1 - tick2 >= 2000)
 	{
-		
+
 		IncreaseFaith();
 		tick2 = SDL_GetTicks();
 	}
@@ -92,8 +95,8 @@ bool Player::Update(float dt)
 	App->scene->hud->ui_text_ingame[0]->SetString(faith);
 	App->scene->hud->ui_text_ingame[1]->SetString(sacrifice);
 	App->scene->hud->ui_text_ingame[2]->SetString(prayer);
-	
-	//if (App->input->GetKey(SDL_SCANCODE_5) == KEY_DOWN && !App->entityManager->crPreview.active) 
+
+	//if (App->input->GetKey(SDL_SCANCODE_5) == KEY_DOWN && !App->entityManager->crPreview.active)
 	//{
 	//	//Unit spawn
 	//	iPoint mouse = App->map->GetMousePositionOnMap();
@@ -102,11 +105,11 @@ bool Player::Update(float dt)
 	//	//Todo change assassin for the type of unit
 	//	App->entityManager->CreateUnitEntity(UnitType::MONK, spawnPos);
 	//}
-	
+
 	//Selection logics and drawing
 	if (!App->scene->paused_game)
 	{
-		SelectionDraw_Logic(); 
+		SelectionDraw_Logic();
 		PlayerInputs();
 	}
 
@@ -129,7 +132,7 @@ void Player::SelectionDraw_Logic()
 	if (!App->input->GetMouseButtonDown(1) == KEY_DOWN)
 	{
 		App->input->GetMousePosition(preClicked.x, preClicked.y);
-		if(preClicked.y>=590) 
+		if(preClicked.y>=590)
 		{
 			dontSelect = true;
 			return;
@@ -170,6 +173,7 @@ void Player::SelectionDraw_Logic()
 			ActionToBuilding();
 			App->scene->nextUnit_selected = false;
 			App->scene->hud->HUDUpdateSelection(listEntities, (Building*)buildingSelect);
+
 		}
 	}
 }
@@ -280,6 +284,7 @@ void Player::PlayerInputs()
 		iPoint mouse = App->map->GetMousePositionOnMap();
 		iPoint spawnPos = App->map->TileCenterPoint(mouse);
 		App->entityManager->CreateUnitEntity(UnitType::DRAUGAR , spawnPos, civilization);
+
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_F4) == KEY_DOWN && App->scene->godMode)
@@ -350,9 +355,11 @@ void Player::ClickLogic()
 		{
 			if (click.y <= it._Ptr->_Myval->getCollisionRect().y && click.y >= it._Ptr->_Myval->getCollisionRect().y + it._Ptr->_Myval->getCollisionRect().h)
 			{
+
 				if (it._Ptr->_Myval->civilization == civilization) {
 					buildingSelect = it._Ptr->_Myval;
 					it._Ptr->_Myval->SetSelected(true);
+					App->audio->PlayFx(3, App->scene->Select_sfx);
 				}
 				else {
 					enemyBuildingSelect = it._Ptr->_Myval;
@@ -360,7 +367,7 @@ void Player::ClickLogic()
 			}
 		}
 	}
-	if (listEntities.empty()) 
+	if (listEntities.empty())
 	{
 		it = App->entityManager->entities[EntityType::UNIT].begin();
 		for (it; it != App->entityManager->entities[EntityType::UNIT].end(); ++it)
@@ -369,7 +376,8 @@ void Player::ClickLogic()
 			{
 				if (click.y <= it._Ptr->_Myval->getCollisionRect().y && click.y >= it._Ptr->_Myval->getCollisionRect().y + it._Ptr->_Myval->getCollisionRect().h)
 				{
-					if (it._Ptr->_Myval->civilization == civilization) 
+					App->audio->PlayFx(3, App->scene->Select_sfx);
+					if (it._Ptr->_Myval->civilization == civilization)
 					{
 						it._Ptr->_Myval->SetSelected(true);
 						listEntities.push_back(it._Ptr->_Myval);
@@ -382,17 +390,17 @@ void Player::ClickLogic()
 	}
 }
 
-int Player::GetFaith() 
+int Player::GetFaith()
 {
 	return CurrencySystem::faith;
 }
 
-int Player::GetPrayers() 
+int Player::GetPrayers()
 {
 	return CurrencySystem::prayers;
 }
 
-int Player::GetSacrifices() 
+int Player::GetSacrifices()
 {
 	return CurrencySystem::sacrifices;
 }
@@ -413,7 +421,7 @@ void Player::SetSacrifices(int var)
 }
 
 
-void Player::InitVikings() 
+void Player::InitVikings()
 {
 	if (App->scene->isInTutorial == false) {
 		iPoint fortress = { 21,23 };

@@ -91,7 +91,9 @@ void HUD::StartHUD(ResearchMenu* r) {
 
 // Called when clicking esc
 void HUD::ActivatePauseMenu() {
+	
 	if (ui_pause_window == nullptr) {
+		App->audio->PlayFx(3, App->scene->OpenPauseMenu_sfx);
 		PauseGame();
 		uint w, h;
 		App->win->GetWindowSize(w, h);
@@ -1366,6 +1368,7 @@ void HUD::ActivateResearchMenu() {
 		App->win->GetWindowSize(w, h);
 		ui_pause_black_screen[1] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, nullptr, { 0,0,(int)w,(int)h }, "", 0, 0, 0, 150,Panel_Fade::panel_fade_in));
 		research_menu->ActivateResearchMenu();
+		App->audio->PlayFx(4, App->scene->Research_sound);
 	}
 }
 
@@ -1381,6 +1384,7 @@ void HUD::DeactivateResearchMenu()
 			ui_pause_black_screen[1] = nullptr;
 		}
 	}
+	App->audio->PlayFx(4, App->scene->ResearchFinished);
 	ResumeGame();
 }
 
