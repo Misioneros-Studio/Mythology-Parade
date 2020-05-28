@@ -66,13 +66,10 @@ public:
 	bool Win();
 
 public:
-	void EarlyGame_Pre();
-	void MidGame_Pre();
-	void LateGame_Pre();
+	void EarlyGame();
+	void MidGame();
+	void LateGame();
 
-	void EarlyGame_Upd();
-	void MidGame_Upd();
-	void LateGame_Upd();
 
 private:
 	GameBehaviour gamePhase;

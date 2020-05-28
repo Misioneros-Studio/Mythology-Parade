@@ -40,9 +40,6 @@ public:
 	void SetPrayers(int var);
 	void SetSacrifices(int var);
 
-	void InitVikings();
-	void InitGreek();
-
 private:
 	std::string faith, sacrifice, prayer;
 

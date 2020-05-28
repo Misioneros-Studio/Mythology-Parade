@@ -121,6 +121,9 @@ public:
 
 	Player* getPlayer() const;
 
+	void InitVikings();
+	void InitGreek();
+
 	static bool IsPointInsideQuad(SDL_Rect rect, int x, int y);
 
 public:
