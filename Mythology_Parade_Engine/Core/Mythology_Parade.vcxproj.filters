@@ -48,6 +48,7 @@
     <ClCompile Include="AABBTree.cpp">
       <Filter>Trees</Filter>
     </ClCompile>
+    <ClCompile Include="TutorialMessages.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h" />
@@ -104,6 +105,7 @@
     <ClInclude Include="AABBTree.h">
       <Filter>Trees</Filter>
     </ClInclude>
+    <ClInclude Include="TutorialMessages.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="TODOS.txt" />

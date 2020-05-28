@@ -551,21 +551,21 @@ void UI::ShowTooltip(int mouse_x, int mouse_y, uint win_x, uint win_y)
 	else {
 		x = mouse_x - 322;
 	}
-	if (mouse_y + (tooltip.lines*15) <= win_y) {
+	if (mouse_y + (tooltip.lines*18) <= win_y) {
 		y = mouse_y;
 	}
 	else {
-		y = mouse_y - (tooltip.lines * 15);
+		y = mouse_y - (tooltip.lines * 18);
 	}
-	tooltip_window = static_cast<WindowUI*>(App->gui->CreateUIElement(Type::WINDOW, nullptr, { x,y,317,(tooltip.lines * 15) }, { 1285,11,305,(tooltip.lines * 15)} ));
+	tooltip_window = static_cast<WindowUI*>(App->gui->CreateUIElement(Type::WINDOW, nullptr, { x,y,317,(tooltip.lines * 18) }, { 1285,11,305,(tooltip.lines * 18)} ));
 	int j = 0;
 	for (int i = 1; i <= tooltip.lines; i++) {
 		if (tooltip.has_title&& i == 1) {
-			tooltip_texts[i - 1] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, tooltip_window, { x,y + (15 * (i - 1)),317,15 }, { 0,0,0,0 }, tooltip.title, Panel_Fade::no_one_fade, { 255,255,255,255 }));
+			tooltip_texts[i - 1] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, tooltip_window, { x,y + (18 * (i - 1)),317,18 }, { 0,0,0,0 }, tooltip.title, Panel_Fade::no_one_fade, { 255,255,255,255 }));
 			j--;
 		}
 		else {
-			tooltip_texts[i - 1] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, tooltip_window, { x,y + (15 * (i - 1)),317,15 }, { 0,0,0,0 },
+			tooltip_texts[i - 1] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, tooltip_window, { x,y + (18 * (i - 1)),317,18 }, { 0,0,0,0 },
 				App->tooltipdata->GetLineTooltip(i + j, tooltip), Panel_Fade::no_one_fade, { 255,255,255,255 }));
 		}
 	}	

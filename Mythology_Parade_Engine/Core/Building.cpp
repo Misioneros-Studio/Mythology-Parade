@@ -2,6 +2,7 @@
 #include "p2Log.h"
 #include "j1Minimap.h"
 #include "j1ParticleManager.h"
+#include  "j1TutorialScene.h"
 Building::Building(BuildingType type, iPoint pos, BuildingInfo info)
 {
 	//default inits with none value
@@ -143,14 +144,26 @@ void Building::CreateUnit()
 		break;
 	case MONASTERY:
 		App->entityManager->CreateUnitEntity(UnitType::MONK, { (int)position.x - 30, (int)position.y },civilization);
+		if (Mix_Playing(4) == 0)
+    {
+			App->entityManager->FxUnits(6, App->entityManager->CreateMonk_sound, position.x, position.y);
+		}
+		if (App->scene->isInTutorial == true)
+			App->tutorialscene->monk_created = true;
 		break;
 	case TEMPLE:
 		App->entityManager->CreateUnitEntity(UnitType::CLERIC, { (int)position.x - 30, (int)position.y }, civilization);
-		//TODO: FX?
+		if (App->scene->isInTutorial == true)
+			App->tutorialscene->unit_created = true;
 		break;
 	case ENCAMPMENT:
 		App->entityManager->CreateUnitEntity(UnitType::ASSASSIN, { (int)position.x - 20, (int)position.y },civilization);
-
+		if(Mix_Playing(4) == 0)
+    {
+			App->entityManager->FxUnits(7, App->entityManager->CreateAssasin_sound, position.x, position.y);
+		}
+		if (App->scene->isInTutorial == true)
+			App->tutorialscene->unit_created = true;
 		break;
 	}
 }
@@ -335,7 +348,7 @@ bool Building::Update(float dt)
 		if (civilization != App->entityManager->getPlayer()->civilization)
 			enemy = true;
 		Draw_Building_Bar(blitWidth, 1, active_building, enemy);
-	
+
 	}
 	//IF MONASTERY DETECTS NEARBY MONKS,INCREASE FAITH
 	if (buildingType == BuildingType::MONASTERY)

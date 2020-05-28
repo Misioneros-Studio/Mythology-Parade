@@ -10,6 +10,7 @@
 #include "HUD.h"
 #include "ResearchMenu.h"
 #include "TooltipData.h"
+#include "j1TutorialScene.h"
 
 
 //Constructor
@@ -92,36 +93,51 @@ void HUD::StartHUD(ResearchMenu* r) {
 
 // Called when clicking esc
 void HUD::ActivatePauseMenu() {
-	
+
 	if (ui_pause_window == nullptr) {
 		App->audio->PlayFx(3, App->scene->OpenPauseMenu_sfx);
 		PauseGame();
 		uint w, h;
 		App->win->GetWindowSize(w, h);
 		ui_pause_black_screen[0] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, nullptr, { 0,0,(int)w,(int)h }, "", 0, 0, 0, 150, Panel_Fade::panel_fade_in));
-		ui_pause_window = static_cast<WindowUI*>(App->gui->CreateUIElement(Type::WINDOW, nullptr, { 410,50,459,531 }, { 216,21,459,531 }, "", Panel_Fade::panel_fade_in));
-		ui_button[0] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_pause_window, { 520,110,237,38 }, { 787,240,237,38 }, "SAVE", Panel_Fade::panel_fade_in, { 787,342,237,38 },
-			{ 787,291,237,38 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::SAVE));
-		ui_text[0] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 607,122,237,38 }, { 0,0,100,100 }, "Save Game", Panel_Fade::panel_fade_in, { 0,0,0,255 }));
-		ui_button[1] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_pause_window, { 520,170,237,38 }, { 787,240,237,38 }, "LOAD", Panel_Fade::panel_fade_in, { 787,342,237,38 },
-			{ 787,291,237,38 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::LOAD));
-		ui_text[1] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 604,182,237,38 }, { 0,0,100,100 }, "Load Game", Panel_Fade::panel_fade_in, { 0,0,0,255 }));
-		ui_button[2] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_pause_window, { 520,230,237,38 }, { 787,240,237,38 }, "OPTIONS", Panel_Fade::panel_fade_in, { 787,342,237,38 },
-			{ 787,291,237,38 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::OPTIONS));
-		ui_text[2] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 613,242,237,38 }, { 0,0,100,100 }, "Options", Panel_Fade::panel_fade_in, { 0,0,0,255 }));
-		ui_button[3] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_pause_window, { 520,290,237,38 }, { 787,240,237,38 }, "RESTART", Panel_Fade::panel_fade_in, { 787,342,237,38 },
-			{ 787,291,237,38 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::RESTART));
-		ui_text[3] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 614,302,237,38 }, { 0,0,100,100 }, "Restart", Panel_Fade::panel_fade_in, { 0,0,0,255 }));
-		ui_button[4] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_pause_window, { 520,350,237,38 }, { 787,240,237,38 }, "SURRENDER", Panel_Fade::panel_fade_in, { 787,342,237,38 },
-			{ 787,291,237,38 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::SURRENDER));
-		ui_text[4] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 607,362,237,38 }, { 0,0,100,100 }, "Surrender", Panel_Fade::panel_fade_in));
-		ui_button[5] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_pause_window, { 520,410,237,38 }, { 787,240,237,38 }, "EXIT", Panel_Fade::panel_fade_in, { 787,342,237,38 },
-			{ 787,291,237,38 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::EXIT));
-		ui_text[5] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 625,422,237,38 }, { 0,0,100,100 }, "Exit", Panel_Fade::panel_fade_in, { 0,0,0,255 }));
-		ui_button[6] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_pause_window, { 520,510,237,38 }, { 787,240,237,38 }, "CLOSE", Panel_Fade::panel_fade_in, { 787,342,237,38 },
-			{ 787,291,237,38 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::CLOSE));
-		ui_text[6] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 620,522,237,38 }, { 0,0,100,100 }, "Close", Panel_Fade::panel_fade_in));
-		ui_text[7] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 604,62,237,38 }, { 0,0,100,100 }, "PAUSE", Panel_Fade::panel_fade_in, { 255,255,255,255 }, { 1,0,0,0 }));
+		if (App->scene->isInTutorial == false) {
+			ui_pause_window = static_cast<WindowUI*>(App->gui->CreateUIElement(Type::WINDOW, nullptr, { 410,50,459,531 }, { 216,21,459,531 }, "", Panel_Fade::panel_fade_in));
+			ui_button[0] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_pause_window, { 520,110,237,38 }, { 787,240,237,38 }, "SAVE", Panel_Fade::panel_fade_in, { 787,342,237,38 },
+				{ 787,291,237,38 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::SAVE));
+			ui_text[0] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 607,122,237,38 }, { 0,0,100,100 }, "Save Game", Panel_Fade::panel_fade_in, { 0,0,0,255 }));
+			ui_button[1] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_pause_window, { 520,170,237,38 }, { 787,240,237,38 }, "LOAD", Panel_Fade::panel_fade_in, { 787,342,237,38 },
+				{ 787,291,237,38 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::LOAD));
+			ui_text[1] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 604,182,237,38 }, { 0,0,100,100 }, "Load Game", Panel_Fade::panel_fade_in, { 0,0,0,255 }));
+			ui_button[2] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_pause_window, { 520,230,237,38 }, { 787,240,237,38 }, "OPTIONS", Panel_Fade::panel_fade_in, { 787,342,237,38 },
+				{ 787,291,237,38 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::OPTIONS));
+			ui_text[2] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 613,242,237,38 }, { 0,0,100,100 }, "Options", Panel_Fade::panel_fade_in, { 0,0,0,255 }));
+			ui_button[3] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_pause_window, { 520,290,237,38 }, { 787,240,237,38 }, "RESTART", Panel_Fade::panel_fade_in, { 787,342,237,38 },
+				{ 787,291,237,38 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::RESTART));
+			ui_text[3] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 614,302,237,38 }, { 0,0,100,100 }, "Restart", Panel_Fade::panel_fade_in, { 0,0,0,255 }));
+			ui_button[4] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_pause_window, { 520,350,237,38 }, { 787,240,237,38 }, "SURRENDER", Panel_Fade::panel_fade_in, { 787,342,237,38 },
+				{ 787,291,237,38 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::SURRENDER));
+			ui_text[4] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 607,362,237,38 }, { 0,0,100,100 }, "Surrender", Panel_Fade::panel_fade_in));
+			ui_button[5] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_pause_window, { 520,410,237,38 }, { 787,240,237,38 }, "EXIT", Panel_Fade::panel_fade_in, { 787,342,237,38 },
+				{ 787,291,237,38 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::EXIT));
+			ui_text[5] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 625,422,237,38 }, { 0,0,100,100 }, "Exit", Panel_Fade::panel_fade_in, { 0,0,0,255 }));
+			ui_button[6] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_pause_window, { 520,510,237,38 }, { 787,240,237,38 }, "CLOSE", Panel_Fade::panel_fade_in, { 787,342,237,38 },
+				{ 787,291,237,38 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::CLOSE));
+			ui_text[6] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 620,522,237,38 }, { 0,0,100,100 }, "Close", Panel_Fade::panel_fade_in));
+			ui_text[7] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 604,62,237,38 }, { 0,0,100,100 }, "PAUSE", Panel_Fade::panel_fade_in, { 255,255,255,255 }, { 1,0,0,0 }));
+		}
+		else {
+			ui_pause_window = static_cast<WindowUI*>(App->gui->CreateUIElement(Type::WINDOW, nullptr, { 410,150,459,303 }, { 216,21,459,531 }, "", Panel_Fade::panel_fade_in));
+			ui_button[2] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_pause_window, { 520,210,237,38 }, { 787,240,237,38 }, "OPTIONS", Panel_Fade::panel_fade_in, { 787,342,237,38 },
+				{ 787,291,237,38 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::OPTIONS));
+			ui_text[2] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 613,222,237,38 }, { 0,0,100,100 }, "Options", Panel_Fade::panel_fade_in, { 0,0,0,255 }));
+			ui_button[5] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_pause_window, { 520,270,237,38 }, { 787,240,237,38 }, "EXIT", Panel_Fade::panel_fade_in, { 787,342,237,38 },
+				{ 787,291,237,38 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::EXIT));
+			ui_text[5] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 625,282,237,38 }, { 0,0,100,100 }, "Exit", Panel_Fade::panel_fade_in, { 0,0,0,255 }));
+			ui_button[6] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_pause_window, { 520,390,237,38 }, { 787,240,237,38 }, "CLOSE", Panel_Fade::panel_fade_in, { 787,342,237,38 },
+				{ 787,291,237,38 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::CLOSE));
+			ui_text[6] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 620,402,237,38 }, { 0,0,100,100 }, "Close", Panel_Fade::panel_fade_in));
+			ui_text[7] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 604,162,237,38 }, { 0,0,100,100 }, "PAUSE", Panel_Fade::panel_fade_in, { 255,255,255,255 }, { 1,0,0,0 }));
+		}
 	}
 }
 
@@ -289,7 +305,9 @@ void HUD::DeactivateConfirmationMenu() {
 void HUD::HUDUpdateSelection(std::list<Entity*> listEntities, Building* building_selected, bool update_list) {
 	int i = 0;
 	bool viking = true;
-	HUDDeleteListTroops(update_list);
+	if (App->scene->isInTutorial == true)
+		App->tutorialscene->fortress_selected = false;
+	HUDDeleteListTroops();
 	HUDDeleteSelectedTroop();
 	HUDDeleteActionButtons();
 	for (std::list<Entity*>::iterator it = listEntities.begin(); it != listEntities.end(); ++it) {
@@ -360,8 +378,8 @@ void HUD::HUDUpdateSelection(std::list<Entity*> listEntities, Building* building
 				r.y += 50;
 				r.x = 825;
 			}
-			hud_list_troops[j] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, static_cast<UI*>(ui_ingame), r, GetSpritePortraitProduction(0, thing_produced, civ), 
-				"Thing_Produced", Panel_Fade::no_one_fade, GetSpritePortraitProduction(2, thing_produced, civ), GetSpritePortraitProduction(1, thing_produced, civ), false, { 0,0,0,0 }, 
+			hud_list_troops[j] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, static_cast<UI*>(ui_ingame), r, GetSpritePortraitProduction(0, thing_produced, civ),
+				"Thing_Produced", Panel_Fade::no_one_fade, GetSpritePortraitProduction(2, thing_produced, civ), GetSpritePortraitProduction(1, thing_produced, civ), false, { 0,0,0,0 },
 				App->scene, 0, false, -1.0F, 1));
 			r.x += 34;
 		}
@@ -433,33 +451,33 @@ void HUD::HUDUpdateSelection(std::list<Entity*> listEntities, Building* building
 				CombatUnit* cunit = static_cast<CombatUnit*>(unit);
 				hud_stats_selected_troop[1] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 720,622,30,30 }, { 0,0,100,100 }, "Damage:", Panel_Fade::no_one_fade,
 					{ 0,0,0,255 }));
-				hud_stats_selected_troop[2] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 780,622,30,30 }, { 0,0,100,100 }, 
+				hud_stats_selected_troop[2] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 780,622,30,30 }, { 0,0,100,100 },
 					std::to_string(cunit->GetDamageValue()), Panel_Fade::no_one_fade, { 0,0,0,255 }));
 				hud_stats_selected_troop[3] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 720,636,30,30 }, { 0,0,100,100 }, "Range:", Panel_Fade::no_one_fade,
 					{ 0,0,0,255 }));
-				hud_stats_selected_troop[4] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 768,636,30,30 }, { 0,0,100,100 }, 
+				hud_stats_selected_troop[4] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 768,636,30,30 }, { 0,0,100,100 },
 					std::to_string(cunit->GetRangeValue()), Panel_Fade::no_one_fade, { 0,0,0,255 }));
 				hud_stats_selected_troop[5] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 720,650,30,30 }, { 0,0,100,100 }, "Speed:", Panel_Fade::no_one_fade,
 					{ 0,0,0,255 }));
-				hud_stats_selected_troop[6] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 760,650,30,30 }, { 0,0,100,100 }, 
+				hud_stats_selected_troop[6] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 760,650,30,30 }, { 0,0,100,100 },
 					std::to_string(cunit->GetSpeedValue()), Panel_Fade::no_one_fade, { 0,0,0,255 }));
 				hud_stats_selected_troop[7] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 720,664,30,30 }, { 0,0,100,100 }, "Level:", Panel_Fade::no_one_fade,
 					{ 0,0,0,255 }));
-				hud_stats_selected_troop[8] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 760,664,30,30 }, { 0,0,100,100 }, 
+				hud_stats_selected_troop[8] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 760,664,30,30 }, { 0,0,100,100 },
 					std::to_string(cunit->GetLevel()), Panel_Fade::no_one_fade, { 0,0,0,255 }));
 				hud_stats_selected_troop[9] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 720,678,30,30 }, { 0,0,100,100 }, "Exp:", Panel_Fade::no_one_fade,
 					{ 0,0,0,255 }));
-				hud_stats_selected_troop[10] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 747,678,30,30 }, { 0,0,100,100 }, 
+				hud_stats_selected_troop[10] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 747,678,30,30 }, { 0,0,100,100 },
 					std::to_string(cunit->GetExperience()), Panel_Fade::no_one_fade, { 0,0,0,255 }));
 				hud_stats_selected_troop[11] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 720,703,30,10 }, { 0,0,100,100 }, "Health:", Panel_Fade::no_one_fade,
 					{ 0,0,0,255 }));
-				hud_stats_selected_troop[12] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 773,703,30,10 }, { 0,0,100,100 }, 
+				hud_stats_selected_troop[12] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 773,703,30,10 }, { 0,0,100,100 },
 					std::to_string(unit->GetHealth()), Panel_Fade::no_one_fade, { 0,0,0,255 }));
 			}
 			else {
 				hud_stats_selected_troop[1] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 720,703,30,10 }, { 0,0,100,100 }, "Health:", Panel_Fade::no_one_fade,
 					{ 0,0,0,255 }));
-				hud_stats_selected_troop[2] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 773,703,30,10 }, { 0,0,100,100 }, 
+				hud_stats_selected_troop[2] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 773,703,30,10 }, { 0,0,100,100 },
 					std::to_string(unit->GetHealth()), Panel_Fade::no_one_fade, { 0,0,0,255 }));
 				if (unit->unitType == UnitType::CLERIC) {
 					hud_stats_selected_troop[3] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 720,622,30,10 }, { 0,0,100,100 }, "Influence % every 5 s:", Panel_Fade::no_one_fade,
@@ -496,11 +514,13 @@ void HUD::HUDUpdateSelection(std::list<Entity*> listEntities, Building* building
 	}
 	else if (building_selected != nullptr) {
 		thing_selected = building_selected;
-		hud_selected_troop = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, static_cast<UI*>(ui_ingame), { 640,613,76,105 }, GetSpritePortraitBuilding(0, 
+		hud_selected_troop = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, static_cast<UI*>(ui_ingame), { 640,613,76,105 }, GetSpritePortraitBuilding(0,
 			building_selected->GetBuildingType(), building_selected->civilization), "Building", Panel_Fade::no_one_fade, { 0,0,0,0 }, { 0,0,0,0 }, false, { 0,0,0,0 }, nullptr, 0, false, -1.0F, 1));
 		hud_stats_selected_troop[0] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), position_name, { 0,0,100,100 }, "Building", Panel_Fade::no_one_fade, { 0,0,0,255 }));
 		switch (building_selected->GetBuildingType()) {
 		case BuildingType::FORTRESS:
+			if (App->scene->isInTutorial == true)
+				App->tutorialscene->fortress_selected = true;
 			hud_stats_selected_troop[0]->SetString("Fortress");
 			//position_name.x += 18;
 			hud_stats_selected_troop[0]->SetRect(position_name);
@@ -522,16 +542,16 @@ void HUD::HUDUpdateSelection(std::list<Entity*> listEntities, Building* building
 			break;
 		}
 		hud_stats_selected_troop[1] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 720,622,30,30 }, { 0,0,100,100 }, "Influence:", Panel_Fade::no_one_fade, { 0,0,0,255 }));
-		hud_stats_selected_troop[2] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 790,622,30,30 }, { 0,0,100,100 }, 
+		hud_stats_selected_troop[2] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 790,622,30,30 }, { 0,0,100,100 },
 			std::to_string(building_selected->GetInfluence()), Panel_Fade::no_one_fade, { 0,0,0,255 }));
 		hud_stats_selected_troop[3] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 720,636,30,30 }, { 0,0,100,100 }, "Damage:", Panel_Fade::no_one_fade, { 0,0,0,255 }));
-		hud_stats_selected_troop[4] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 778,636,30,30 }, { 0,0,100,100 }, 
+		hud_stats_selected_troop[4] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 778,636,30,30 }, { 0,0,100,100 },
 			std::to_string(building_selected->GetDamage()), Panel_Fade::no_one_fade, { 0,0,0,255 }));
 		hud_stats_selected_troop[5] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 720,650,30,30 }, { 0,0,100,100 }, "Max Cap:", Panel_Fade::no_one_fade, { 0,0,0,255 }));
-		hud_stats_selected_troop[6] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 780,650,30,30 }, { 0,0,100,100 }, 
+		hud_stats_selected_troop[6] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 780,650,30,30 }, { 0,0,100,100 },
 			std::to_string(building_selected->GetMaxCap()), Panel_Fade::no_one_fade, { 0,0,0,255 }));
 		hud_stats_selected_troop[7] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 720,703,30,10 }, { 0,0,100,100 }, "Health:", Panel_Fade::no_one_fade, { 0,0,0,255 }));
-		hud_stats_selected_troop[8] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 773,703,30,10 }, { 0,0,100,100 }, 
+		hud_stats_selected_troop[8] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 773,703,30,10 }, { 0,0,100,100 },
 			std::to_string(building_selected->GetHealth()), Panel_Fade::no_one_fade, { 0,0,0,255 }));
 		if (building_selected->civilization == CivilizationType::GREEK)
 			viking = false;
@@ -1904,12 +1924,12 @@ void HUD::ActivateResearchMenu() {
 }
 
 //Called when clicking close button in the research menu
-void HUD::DeactivateResearchMenu() 
+void HUD::DeactivateResearchMenu()
 {
-	if (research_menu->CheckReasearchWindow() == true) 
+	if (research_menu->CheckReasearchWindow() == true)
 	{
 		research_menu->DeactivateResearchMenu();
-		if (ui_pause_black_screen[1] != nullptr) 
+		if (ui_pause_black_screen[1] != nullptr)
 		{
 			App->gui->DeleteUIElement(ui_pause_black_screen[1]);
 			ui_pause_black_screen[1] = nullptr;
