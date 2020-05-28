@@ -39,7 +39,7 @@ void HUD::StartHUD(ResearchMenu* r) {
 	ui_ingame = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, nullptr, { 0,590,1280,130 }, { 0,590,1280,130 }));
 
 
-	for (int i = 0; i < 13; i++)
+	for (int i = 0; i < 12; i++)
 	{
 		hud_list_troops[i] = nullptr;
 		hud_number_troops[i] = nullptr;
@@ -69,6 +69,7 @@ void HUD::StartHUD(ResearchMenu* r) {
 									ui_button_options[i] = nullptr;
 									ui_pause_black_screen[i] = nullptr;
 									ui_text_volume_sliders[i] = nullptr;
+									hud_bar_producing[i] = nullptr;
 								}
 							}
 						}
@@ -285,13 +286,13 @@ void HUD::DeactivateConfirmationMenu() {
 }
 
 // Called when selecting troops or buildings
-void HUD::HUDUpdateSelection(std::list<Entity*> listEntities, Building* building_selected) {
+void HUD::HUDUpdateSelection(std::list<Entity*> listEntities, Building* building_selected, bool update_list) {
 	int i = 0;
 	bool viking = true;
-	HUDDeleteListTroops();
+	HUDDeleteListTroops(update_list);
 	HUDDeleteSelectedTroop();
 	HUDDeleteActionButtons();
-	for (std::list<Entity*>::iterator it = listEntities.begin(); it != listEntities.end(); it++) {
+	for (std::list<Entity*>::iterator it = listEntities.begin(); it != listEntities.end(); ++it) {
 		if (it._Ptr->_Myval->type == EntityType::UNIT) {
 			Unit* unit = static_cast<Unit*>(it._Ptr->_Myval);
 			if (i == 0) {
@@ -315,32 +316,67 @@ void HUD::HUDUpdateSelection(std::list<Entity*> listEntities, Building* building
 			}
 		}
 	}
+	listEntities=OrderSelectedList(listEntities, i);
 	SDL_Rect r = { 825,618,30,41 };
 	SDL_Rect r2 = { 828,645,17,9 };
+	if (update_list == true) {
+		for (int j = 0; j < i; j++) {
 
-	for (int j = 0; j < i; j++) {
-
-		if (j == 6) {
-			r.y += 50;
-			r2.y += 50;
-			r.x = 825;
-			r2.x = 828;
+			if (j == 6) {
+				r.y += 50;
+				r2.y += 50;
+				r.x = 825;
+				r2.x = 828;
+			}
+			hud_list_troops[j] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, static_cast<UI*>(ui_ingame), r, GetSpritePortrait(1, type_of_troops[j]), "Troop",
+				Panel_Fade::no_one_fade, GetSpritePortrait(3, type_of_troops[j]), GetSpritePortrait(2, type_of_troops[j]), false, { 0,0,0,0 }, App->scene, 0, false, -1.0F, 1));
+			if (number_of_troops[j] > 1) {
+				if (number_of_troops[j] < 10) {
+					r2.x += 5;
+				}
+				hud_number_troops[j] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), r2, { 0,0,100,100 }, std::to_string(number_of_troops[j]), Panel_Fade::no_one_fade,
+					{ 255,255,255,255 }));
+				if (number_of_troops[j] < 10) {
+					r2.x -= 5;
+				}
+			}
+			r.x += 34;
+			r2.x += 34;
 		}
-		hud_list_troops[j] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, static_cast<UI*>(ui_ingame), r, GetSpritePortrait(0, type_of_troops[j]), "Troop", Panel_Fade::no_one_fade, { 0,0,0,0 },
-			{ 0,0,0,0 }, false, { 0,0,0,0 }, nullptr, 0, false, -1.0F, 1));
-		if (number_of_troops[j] > 1)
-			hud_number_troops[j] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), r2, { 0,0,100,100 }, std::to_string(number_of_troops[j]), Panel_Fade::no_one_fade,
-				{ 255,255,255,255 }));
-		r.x += 34;
-		r2.x += 34;
 	}
-
+	if (building_selected != nullptr && listEntities.empty()) {
+		std::queue<std::string> production_queue = building_selected->GetProduction();
+		int size_queue = production_queue.size();
+		CivilizationType civ = building_selected->civilization;
+		for (int j = 0; j < size_queue + 1; j++) {
+			std::string thing_produced;
+			if (j == 0)
+				thing_produced = building_selected->GetElementProducing();
+			else {
+				thing_produced = production_queue.front();
+				production_queue.pop();
+			}
+			if (j == 6) {
+				r.y += 50;
+				r.x = 825;
+			}
+			hud_list_troops[j] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, static_cast<UI*>(ui_ingame), r, GetSpritePortraitProduction(0, thing_produced, civ), 
+				"Thing_Produced", Panel_Fade::no_one_fade, GetSpritePortraitProduction(2, thing_produced, civ), GetSpritePortraitProduction(1, thing_produced, civ), false, { 0,0,0,0 }, 
+				App->scene, 0, false, -1.0F, 1));
+			r.x += 34;
+		}
+		if (building_selected->GetElementProducing() != "") {
+			float w = building_selected->GetPercentage();
+			hud_bar_producing[0] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, static_cast<UI*>(ui_ingame), { 826,652,28,5 }, { 1072,319,181,17 }, "", Panel_Fade::no_one_fade));
+			hud_bar_producing[1] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, static_cast<UI*>(ui_ingame), { 826,652,(int)(28 * w),5 }, { 1072,250,181,17 }, "", Panel_Fade::no_one_fade));
+		}
+	}
 	SDL_Rect position_name = { 725,603,30,30 };
 	if (!listEntities.empty()) {
 		if (listEntities.begin()._Ptr->_Myval->type == EntityType::UNIT) {
 			thing_selected = listEntities.begin()._Ptr->_Myval;
 			Unit* unit = static_cast<Unit*>(listEntities.begin()._Ptr->_Myval);
-			hud_selected_troop = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, static_cast<UI*>(ui_ingame), { 640,613,76,105 }, GetSpritePortrait(1, unit->unitType), "Troop", Panel_Fade::no_one_fade,
+			hud_selected_troop = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, static_cast<UI*>(ui_ingame), { 640,613,76,105 }, GetSpritePortrait(0, unit->unitType), "Troop", Panel_Fade::no_one_fade,
 				{ 0,0,0,0 }, { 0,0,0,0 }, false, { 0,0,0,0 }, nullptr, 0, false, -1.0F, 1));
 			hud_stats_selected_troop[0] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), position_name, { 0,0,100,100 }, "Unit", Panel_Fade::no_one_fade, { 0,0,0,255 }));
 			bool combat_unit = false;
@@ -351,9 +387,10 @@ void HUD::HUDUpdateSelection(std::list<Entity*> listEntities, Building* building
 				position_name.x += 18;
 				hud_stats_selected_troop[0]->SetRect(position_name);
 				break;
-			case UnitType::PRIEST:
+			case UnitType::CLERIC:
 				hud_stats_selected_troop[0]->SetString("Cleric");
 				type_thing_selected = Type_Selected::Cleric;
+				hud_stats_selected_troop[0]->SetRect(position_name);
 				break;
 			case UnitType::ASSASSIN:
 				hud_stats_selected_troop[0]->SetString("Assassin");
@@ -366,6 +403,30 @@ void HUD::HUDUpdateSelection(std::list<Entity*> listEntities, Building* building
 				hud_stats_selected_troop[0]->SetString("Pikeman");
 				type_thing_selected = Type_Selected::Pikeman;
 				combat_unit = true;
+				break;
+			case UnitType::MINOTAUR:
+				hud_stats_selected_troop[0]->SetString("Minotaur");
+				type_thing_selected = Type_Selected::Minotaur;
+				position_name.x += 6;
+				hud_stats_selected_troop[0]->SetRect(position_name);
+				break;
+			case UnitType::CYCLOP:
+				hud_stats_selected_troop[0]->SetString("Cyclop");
+				type_thing_selected = Type_Selected::Cyclop;
+				position_name.x += 14;
+				hud_stats_selected_troop[0]->SetRect(position_name);
+				break;
+			case UnitType::DRAUGAR:
+				hud_stats_selected_troop[0]->SetString("Draugar");
+				type_thing_selected = Type_Selected::Draugar;
+				position_name.x += 12;
+				hud_stats_selected_troop[0]->SetRect(position_name);
+				break;
+			case UnitType::JOTNAR:
+				hud_stats_selected_troop[0]->SetString("Jotnar");
+				type_thing_selected = Type_Selected::Jotnar;
+				position_name.x += 14;
+				hud_stats_selected_troop[0]->SetRect(position_name);
 				break;
 			}
 			if (combat_unit == true) {
@@ -400,6 +461,36 @@ void HUD::HUDUpdateSelection(std::list<Entity*> listEntities, Building* building
 					{ 0,0,0,255 }));
 				hud_stats_selected_troop[2] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 773,703,30,10 }, { 0,0,100,100 }, 
 					std::to_string(unit->GetHealth()), Panel_Fade::no_one_fade, { 0,0,0,255 }));
+				if (unit->unitType == UnitType::CLERIC) {
+					hud_stats_selected_troop[3] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 720,622,30,10 }, { 0,0,100,100 }, "Influence % every 5 s:", Panel_Fade::no_one_fade,
+						{ 0,0,0,255 }));
+					hud_stats_selected_troop[4] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 890,622,30,10 }, { 0,0,100,100 },
+						std::to_string(5), Panel_Fade::no_one_fade, { 0,0,0,255 }));
+				}
+				else if(unit->unitType == UnitType::MINOTAUR||unit->unitType==UnitType::DRAUGAR) {
+					hud_stats_selected_troop[3] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 720,622,30,10 }, { 0,0,100,100 }, "Health", Panel_Fade::no_one_fade,
+						{ 0,0,0,255 }));
+					hud_stats_selected_troop[4] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 720,636,30,10 }, { 0,0,100,100 }, "decreased:", Panel_Fade::no_one_fade,
+						{ 0,0,0,255 }));
+					hud_stats_selected_troop[5] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 791,636,30,10 }, { 0,0,100,100 },
+						std::to_string(20), Panel_Fade::no_one_fade, { 0,0,0,255 }));
+					hud_stats_selected_troop[6] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 720,664,30,30 }, { 0,0,100,100 }, "Range:", Panel_Fade::no_one_fade,
+						{ 0,0,0,255 }));
+					hud_stats_selected_troop[7] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 768,664,30,30 }, { 0,0,100,100 },
+						std::to_string(3), Panel_Fade::no_one_fade, { 0,0,0,255 }));
+				}
+				else if (unit->unitType == UnitType::JOTNAR || unit->unitType == UnitType::CYCLOP) {
+					hud_stats_selected_troop[3] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 720,622,30,10 }, { 0,0,100,100 }, "Health", Panel_Fade::no_one_fade,
+						{ 0,0,0,255 }));
+					hud_stats_selected_troop[4] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 720,636,30,10 }, { 0,0,100,100 }, "raised:", Panel_Fade::no_one_fade,
+						{ 0,0,0,255 }));
+					hud_stats_selected_troop[5] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 767,636,30,10 }, { 0,0,100,100 },
+						std::to_string(50), Panel_Fade::no_one_fade, { 0,0,0,255 }));
+					hud_stats_selected_troop[6] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 720,664,30,30 }, { 0,0,100,100 }, "Range:", Panel_Fade::no_one_fade,
+						{ 0,0,0,255 }));
+					hud_stats_selected_troop[7] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 768,664,30,30 }, { 0,0,100,100 },
+						std::to_string(1), Panel_Fade::no_one_fade, { 0,0,0,255 }));
+				}
 			}
 		}
 	}
@@ -448,17 +539,102 @@ void HUD::HUDUpdateSelection(std::list<Entity*> listEntities, Building* building
 	ManageActionButtons(true, viking);
 }
 
+
+std::list<Entity*> HUD::OrderSelectedList(std::list<Entity*> list_selected, int different_types_of_units)
+{
+	if (different_types_of_units < 2)
+		return list_selected;
+	std::list<Entity*> list_to_return;
+	for (int i = 0; i < different_types_of_units; i++) {
+		int number_of_units_of_one_type = 0;
+		int j = 0;
+		for (std::list<Entity*>::iterator it = list_selected.begin(); it!=list_selected.end() && number_of_units_of_one_type < number_of_troops[i]; ++it) {
+			if (j < i)
+				j++;
+			else if (it._Ptr->_Myval->type == EntityType::UNIT) {
+				Unit* unit = static_cast<Unit*>(it._Ptr->_Myval);
+				if (unit->unitType == type_of_troops[i])
+					list_to_return.push_back(it._Ptr->_Myval);
+			}
+		}
+	}
+	App->entityManager->getPlayer()->SetEntitiesSelected(list_to_return);
+	return list_to_return;
+}
+
+//Called when scrolling down
+bool HUD::HUDScrollDown()
+{
+	std::list <Entity*> list_entities = App->entityManager->getPlayer()->GetEntitiesSelected();
+	int number_of_units = number_of_troops[0];
+	if (number_of_units > 1) {
+		Entity* entity = list_entities.begin()._Ptr->_Myval;
+		if (entity->type == EntityType::UNIT) {
+			std::list<Entity*>::iterator it = list_entities.begin();
+			std::list<Entity*>::iterator it2 = list_entities.begin();
+			for (int i = 0; i < number_of_units; i++) {
+				++it2;
+				it._Ptr->_Myval = it2._Ptr->_Myval;
+				if (i + 1 < number_of_units)
+					++it;
+			}
+			it._Ptr->_Myval = entity;
+			thing_selected = list_entities.begin()._Ptr->_Myval;
+			App->entityManager->getPlayer()->SetEntitiesSelected(list_entities);
+		}
+	}
+	if (number_of_units == 0)
+		return false;
+	else
+		return true;
+}
+
+//Called when scrolling up
+bool HUD::HUDScrollUp()
+{
+	std::list <Entity*> list_entities = App->entityManager->getPlayer()->GetEntitiesSelected();
+	int number_of_units = number_of_troops[0];
+	if (number_of_units > 1) {
+		Entity* entity = list_entities.begin()._Ptr->_Myval;
+		Entity* entity2;
+		if (entity->type == EntityType::UNIT) {
+			std::list<Entity*>::iterator it = list_entities.begin();
+			for (int i = 1; i < number_of_units; i++) {
+				++it;
+				entity2 = it._Ptr->_Myval;
+				it._Ptr->_Myval = entity;
+				entity = entity2;
+			}
+			list_entities.begin()._Ptr->_Myval = entity;
+			thing_selected = list_entities.begin()._Ptr->_Myval;
+			App->entityManager->getPlayer()->SetEntitiesSelected(list_entities);
+		}
+	}
+	if (number_of_units == 0)
+		return false;
+	else
+		return true;
+}
+
 // Called when deleting the list of troops in the HUD
-void HUD::HUDDeleteListTroops() {
+void HUD::HUDDeleteListTroops(bool delete_everything) {
 	for (int i = 12; i >= 0; i--) {
 		number_of_troops[i] = 0;
-		if (hud_list_troops[i] != nullptr) {
-			App->gui->DeleteUIElement(hud_list_troops[i]);
-			hud_list_troops[i] = nullptr;
+		if (i < 2) {
+			if (hud_bar_producing[i] != nullptr) {
+				App->gui->DeleteUIElement(hud_bar_producing[i]);
+				hud_bar_producing[i] = nullptr;
+			}
 		}
-		if (hud_number_troops[i] != nullptr) {
-			App->gui->DeleteUIElement(hud_number_troops[i]);
-			hud_number_troops[i] = nullptr;
+		if (delete_everything) {
+			if (hud_list_troops[i] != nullptr) {
+				App->gui->DeleteUIElement(hud_list_troops[i]);
+				hud_list_troops[i] = nullptr;
+			}
+			if (hud_number_troops[i] != nullptr) {
+				App->gui->DeleteUIElement(hud_number_troops[i]);
+				hud_number_troops[i] = nullptr;
+			}
 		}
 	}
 }
@@ -496,7 +672,7 @@ void HUD::HUDDeleteActionButtons() {
 // Called to update every frame the information of the selected thing
 void HUD::UpdateSelectedThing() {
 	if (thing_selected->type == EntityType::UNIT) {
-		if (hud_stats_selected_troop[5] != nullptr) {
+		if (hud_stats_selected_troop[9] != nullptr) {
 			CombatUnit* cunit = static_cast<CombatUnit*>(thing_selected);
 			hud_stats_selected_troop[2]->SetString(std::to_string(cunit->GetDamageValue()));
 			hud_stats_selected_troop[4]->SetString(std::to_string(cunit->GetRangeValue()));
@@ -516,7 +692,129 @@ void HUD::UpdateSelectedThing() {
 		hud_stats_selected_troop[4]->SetString(std::to_string(building->GetDamage()));
 		hud_stats_selected_troop[6]->SetString(std::to_string(building->GetMaxCap()));
 		hud_stats_selected_troop[8]->SetString(std::to_string(building->GetHealth()));
+		if (App->scene->update_production_list) {
+			HUDDeleteListTroops();
+			std::queue<std::string> production_queue = building->GetProduction();
+			if (!production_queue.empty() || building->GetElementProducing() != "") {
+				SDL_Rect r = { 825,618,30,41 };
+				int size_queue = production_queue.size();
+				CivilizationType civ = building->civilization;
+				for (int j = 0; j < size_queue+1; j++) {
+					std::string thing_produced;
+					if (j == 0)
+						thing_produced = building->GetElementProducing();
+					else {
+						thing_produced = production_queue.front();
+						production_queue.pop();
+					}
+					if (j == 6) {
+						r.y += 50;
+						r.x = 825;
+					}
+					hud_list_troops[j] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, static_cast<UI*>(ui_ingame), r, GetSpritePortraitProduction(0, thing_produced, civ),
+						"Thing_Produced", Panel_Fade::no_one_fade, GetSpritePortraitProduction(2, thing_produced, civ), GetSpritePortraitProduction(1, thing_produced, civ), false, { 0,0,0,0 },
+						App->scene, 0, false, -1.0F, 1));
+					r.x += 34;
+					if (building->GetElementProducing() != "") {
+						hud_bar_producing[0] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, static_cast<UI*>(ui_ingame), { 826,652,28,5 }, { 1072,319,181,17 }, "", Panel_Fade::no_one_fade));
+						hud_bar_producing[1] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, static_cast<UI*>(ui_ingame), { 826,652,28,5 }, { 1072,250,181,17 }, "", Panel_Fade::no_one_fade));
+					}
+				}
+			}
+			App->scene->update_production_list = false;
+		}
+		if (hud_bar_producing[1] != nullptr) {
+			float w = building->GetPercentage();
+			hud_bar_producing[1]->quad.w = 28 * w;
+		}
 	}
+}
+
+// Called when clicking a thing in the production queue of a building
+void HUD::CancelProduction(iPoint position)
+{
+	int index = 0;
+	switch (position.x) {
+	case 825:
+		index = 0;
+		break;
+	case 859:
+		index = 1;
+		break;
+	case 893:
+		index = 2;
+		break;
+	case 927:
+		index = 3;
+		break;
+	case 961:
+		index = 4;
+		break;
+	case  995:
+		index = 5;
+		break;
+	}
+	if (position.y == 668)
+		index += 6;
+	if (thing_selected->type == EntityType::BUILDING) {
+		Building* building = static_cast<Building*>(thing_selected);
+		building->CancelProduction(index);
+	}
+}
+
+// Called when clicked on one of the buttons of the right after selecting troops
+void HUD::ClickOnSelectionButton(SDL_Rect sprite)
+{
+	UnitType unit_type = GetUnitTypeFromSpritePortrait(sprite);
+	if (thing_selected->type == EntityType::UNIT) {
+		Unit* unit = static_cast<Unit*>(thing_selected);
+		int index = 0;
+		int total = 0;
+		for (int i = 0; i < 12 && type_of_troops[i] != unit_type; i++) {
+			total += number_of_troops[i];
+			index++;
+		}
+		if (index < 12) {
+			if (unit_type == unit->unitType)
+				DeleteTroopsInSelectedList(index, total);
+			else
+				ChangeTypeOfUnitFirstSelected(index, total);
+		}
+	}
+}
+
+// Called when changing the type of unit appearing in the central part of the HUD
+void HUD::ChangeTypeOfUnitFirstSelected(int index, int number_of_troops_before)
+{
+	std::list<Entity*> entity_list = App->entityManager->getPlayer()->GetEntitiesSelected();
+	for (int i = 0; i < number_of_troops[index]; i++) {
+		std::list<Entity*>::iterator it = entity_list.begin();
+		for (int j = 1; j < number_of_troops_before+ number_of_troops[index]; j++) {
+			++it;
+		}
+		Entity* entity = it._Ptr->_Myval;
+		entity_list.erase(it);
+		entity_list.push_front(entity);
+	}
+	App->entityManager->getPlayer()->SetEntitiesSelected(entity_list);
+	App->scene->update_selection = true;
+	App->scene->dont_update_types_of_troops = false;
+}
+
+// Called when deleting a type of troop in the selected list
+void HUD::DeleteTroopsInSelectedList(int index, int number_of_troops_before)
+{
+	std::list<Entity*> entity_list = App->entityManager->getPlayer()->GetEntitiesSelected();
+	for (int i = 0; i < number_of_troops[index]; i++) {
+		std::list<Entity*>::iterator it = entity_list.begin();
+		for (int i = 0; i < number_of_troops_before; i++) {
+			++it;
+		}
+		it._Ptr->_Myval->SetSelected(false);
+		entity_list.erase(it);
+	}
+	App->entityManager->getPlayer()->SetEntitiesSelected(entity_list);
+	App->scene->update_selection = true;
 }
 
 //Called when creating or updating the action buttons
@@ -546,6 +844,10 @@ void HUD::ManageActionButtons(bool create_buttons, bool viking) {
 			hud_button_actions[1] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 241,613,36,36 }, { 16,529,36,36 }, "Heal", Panel_Fade::no_one_fade, { 98,529,36,36 }, { 57,529,36,36 },
 				false, { 0,0,0,0 }, App->scene, (int)UI_Audio::MAIN_MENU, false, -1.0f, 0, (int)TooltipsAvailable::healbutton));
 		case Type_Selected::Cleric:
+		case Type_Selected::Jotnar:
+		case Type_Selected::Minotaur:
+		case Type_Selected::Cyclop:
+		case Type_Selected::Draugar:
 			hud_button_actions[0] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 200,613,36,36 }, { 16,185,36,36 }, "Move", Panel_Fade::no_one_fade, { 98,185,36,36 }, { 57,185,36,36 },
 				false, { 0,0,0,0 }, App->scene, (int)UI_Audio::MAIN_MENU, false, -1.0f, 0, (int)TooltipsAvailable::movebutton));
 			break;
@@ -590,7 +892,7 @@ void HUD::ManageActionButtons(bool create_buttons, bool viking) {
 						hud_button_actions_unclickable[2] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, ui_ingame, { 408,612,99,52 }, { 532,321,99,52 }, "", Panel_Fade::no_one_fade, { 0,0,0,0 },
 							{ 0,0,0,0 }, false, { 0,0,0,0 }, nullptr, 0, false, -1.0F, 1, (int)TooltipsAvailable::monastery));
 					}
-					if (player->GetFaith() >= 200 && building->buildingAction == BuildingAction::NOTHING && player->research_lawful_beast == true) {
+					if (player->GetFaith() >= 200 && building->GetProduction().size() < 11 && player->research_lawful_beast == true) {
 						hud_button_actions[7] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 200,672,67,41 }, { 434,540,67,41 }, "Produce_Lawful_Beast", Panel_Fade::no_one_fade,
 							{ 434,634,67,41 }, { 434,587,67,41 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::MAIN_MENU, false, -1.0F, 1, (int)TooltipsAvailable::jotnar_unlocked));
 					}
@@ -604,7 +906,7 @@ void HUD::ManageActionButtons(bool create_buttons, bool viking) {
 								{ 0,0,0,0 }, false, { 0,0,0,0 }, nullptr, 0, false, -1.0F, 1, (int)TooltipsAvailable::jotnar_unlocked));
 						}
 					}
-					if (player->GetFaith() >= 200 && building->buildingAction == BuildingAction::NOTHING && player->research_chaotic_beast == true) {
+					if (player->GetFaith() >= 200 && building->GetProduction().size() < 11 && player->research_chaotic_beast == true) {
 						hud_button_actions[8] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 272,672,67,41 }, { 504,540,67,41 }, "Produce_Chaotic_Beast", Panel_Fade::no_one_fade,
 							{ 504,634,67,41 }, { 504,587,67,41 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::MAIN_MENU, false, -1.0F, 1, (int)TooltipsAvailable::draugar_unlocked));
 					}
@@ -656,7 +958,7 @@ void HUD::ManageActionButtons(bool create_buttons, bool viking) {
 						hud_button_actions_unclickable[2] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, ui_ingame, { 408,612,99,52 }, { 532,256,99,52 }, "", Panel_Fade::no_one_fade, { 0,0,0,0 },
 							{ 0,0,0,0 }, false, { 0,0,0,0 }, nullptr, 0, false, -1.0F, 1, (int)TooltipsAvailable::monastery));
 					}
-					if (player->GetFaith() >= 200 && building->buildingAction == BuildingAction::NOTHING && player->research_lawful_beast == true) {
+					if (player->GetFaith() >= 200 && building->GetProduction().size() < 11 && player->research_lawful_beast == true) {
 						hud_button_actions[7] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 200,672,67,41 }, { 363,540,67,41 }, "Produce_Lawful_Beast", Panel_Fade::no_one_fade,
 							{ 363,634,67,41 }, { 363,587,67,41 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::MAIN_MENU, false, -1.0F, 1, (int)TooltipsAvailable::cyclop_unlocked));
 					}
@@ -670,7 +972,7 @@ void HUD::ManageActionButtons(bool create_buttons, bool viking) {
 								{ 0,0,0,0 }, false, { 0,0,0,0 }, nullptr, 0, false, -1.0F, 1, (int)TooltipsAvailable::cyclop_unlocked));
 						}
 					}
-					if (player->GetFaith() >= 200 && building->buildingAction == BuildingAction::NOTHING && player->research_chaotic_beast == true) {
+					if (player->GetFaith() >= 200 && building->GetProduction().size() < 11 && player->research_chaotic_beast == true) {
 						hud_button_actions[8] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 272,672,67,41 }, { 293,540,67,41 }, "Produce_Chaotic_Beast", Panel_Fade::no_one_fade,
 							{ 293,634,67,41 }, { 293,587,67,41 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::MAIN_MENU, false, -1.0F, 1, (int)TooltipsAvailable::minotaur_unlocked));
 					}
@@ -685,7 +987,7 @@ void HUD::ManageActionButtons(bool create_buttons, bool viking) {
 						}
 					}
 				}
-				if (player->GetFaith() >= 600 && building->buildingAction == BuildingAction::NOTHING && (player->research_chaotic_victory == true || player->research_lawful_victory == true)) {
+				if (player->GetFaith() >= 600 && building->GetProduction().size() < 11 && (player->research_chaotic_victory == true || player->research_lawful_victory == true)) {
 					if (player->research_chaotic_victory == true) {
 						hud_button_actions[3] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 512,621,67,41 }, { 75,540,67,41 }, "Produce_Victory", Panel_Fade::no_one_fade,
 							{ 75,632,67,41 }, { 75,586,67,41 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::MAIN_MENU, false, -1.0F, 1, (int)TooltipsAvailable::victory2_unlocked));
@@ -710,7 +1012,7 @@ void HUD::ManageActionButtons(bool create_buttons, bool viking) {
 					}
 
 				}
-				if (player->GetFaith() >= 300 && building->buildingAction == BuildingAction::NOTHING && player->research_lawful_miracle == true) {
+				if (player->GetFaith() >= 300 && building->GetProduction().size() < 11 && player->research_lawful_miracle == true) {
 					hud_button_actions[5] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 344,672,67,41 }, { 219,540,67,41 }, "Produce_Lawful_Miracle", Panel_Fade::no_one_fade,
 						{ 219,632,67,41 }, { 219,586,67,41 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::MAIN_MENU, false, -1.0F, 1, (int)TooltipsAvailable::miracle_unlocked));
 				}
@@ -724,7 +1026,7 @@ void HUD::ManageActionButtons(bool create_buttons, bool viking) {
 							{ 0,0,0,0 }, false, { 0,0,0,0 }, nullptr, 0, false, -1.0F, 1, (int)TooltipsAvailable::miracle_unlocked));
 					}
 				}
-				if (player->GetFaith() >= 300 && building->buildingAction == BuildingAction::NOTHING && player->research_chaotic_miracle == true) {
+				if (player->GetFaith() >= 300 && building->GetProduction().size() < 11 && player->research_chaotic_miracle == true) {
 					hud_button_actions[6] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 416,672,67,41 }, { 412,726,67,41 }, "Produce_Chaotic_Miracle", Panel_Fade::no_one_fade,
 						{ 412,820,67,41 }, { 412,773,67,41 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::MAIN_MENU, false, -1.0F, 1, (int)TooltipsAvailable::disaster_unlocked));
 				}
@@ -753,7 +1055,7 @@ void HUD::ManageActionButtons(bool create_buttons, bool viking) {
 		{
 			Building* building = static_cast<Building*>(thing_selected);
 			if (building->buildingStatus == BuildingStatus::FINISHED) {
-				if (player->GetFaith() >= 150 && building->buildingAction == BuildingAction::NOTHING && player->research_cleric == true) {
+				if (player->GetFaith() >= 150 && building->GetProduction().size() < 11 && player->research_cleric == true) {
 					hud_button_actions[0] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 200,613,67,41 }, { 574,540,67,41 }, "Produce_Cleric", Panel_Fade::no_one_fade, { 574,634,67,41 },
 						{ 574,587,67,41 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::MAIN_MENU, false, -1.0F, 1, (int)TooltipsAvailable::cleric_unlocked));
 				}
@@ -774,7 +1076,7 @@ void HUD::ManageActionButtons(bool create_buttons, bool viking) {
 		{
 			Building* building = static_cast<Building*>(thing_selected);
 			if (building->buildingStatus == BuildingStatus::FINISHED) {
-				if (player->GetFaith() >= 100 && player->GetSacrifices() >= 10 && building->buildingAction == BuildingAction::NOTHING) {
+				if (player->GetFaith() >= 100 && player->research_assassin == true && building->GetProduction().size() < 11) {
 					hud_button_actions[0] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 200,613,67,41 }, { 215,185,67,41 }, "Produce_Assassin", Panel_Fade::no_one_fade,
 						{ 215,275,67,41 }, { 215,230,67,41 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::MAIN_MENU, false, -1.0F, 1, (int)TooltipsAvailable::assassin_unlocked));
 				}
@@ -795,7 +1097,7 @@ void HUD::ManageActionButtons(bool create_buttons, bool viking) {
 		{
 			Building* building = static_cast<Building*>(thing_selected);
 			if (building->buildingStatus == BuildingStatus::FINISHED) {
-				if (player->GetFaith() >= 50 && building->buildingAction == BuildingAction::NOTHING) {
+				if (player->GetFaith() >= 50 && building->GetProduction().size() < 11) {
 					hud_button_actions[0] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 200,613,67,41 }, { 73,185,67,41 }, "Produce_Monk", Panel_Fade::no_one_fade, { 73,275,67,41 },
 						{ 73,230,67,41 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::MAIN_MENU, false, -1.0F, 1, (int)TooltipsAvailable::monk));
 				}
@@ -803,7 +1105,7 @@ void HUD::ManageActionButtons(bool create_buttons, bool viking) {
 					hud_button_actions_unclickable[0] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, ui_ingame, { 200,613,67,41 }, { 407,382,67,41 }, "", Panel_Fade::no_one_fade, { 0,0,0,0 },
 						{ 0,0,0,0 }, false, { 0,0,0,0 }, nullptr, 0, false, -1.0F, 1, (int)TooltipsAvailable::monk));
 				}
-				if (player->GetFaith() >= 40 && building->buildingAction == BuildingAction::NOTHING) {
+				if (player->GetFaith() >= 40 && building->GetProduction().size() < 11) {
 					hud_button_actions[1] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 272,613,67,41 }, { 3,540,67,41 }, "Produce_Sacrifices", Panel_Fade::no_one_fade, { 3,632,67,41 },
 						{ 3,586,67,41 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::MAIN_MENU, false, -1.0F, 1, (int)TooltipsAvailable::producecurrencybutton));
 				}
@@ -811,7 +1113,7 @@ void HUD::ManageActionButtons(bool create_buttons, bool viking) {
 					hud_button_actions_unclickable[1] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, ui_ingame, { 272,613,67,41 }, { 3,678,67,41 }, "", Panel_Fade::no_one_fade, { 0,0,0,0 }, { 0,0,0,0 },
 						false, { 0,0,0,0 }, nullptr, 0, false, -1.0F, 1, (int)TooltipsAvailable::producecurrencybutton));
 				}
-				if (player->GetFaith() >= 40 && building->buildingAction == BuildingAction::NOTHING) {
+				if (player->GetFaith() >= 40 && building->GetProduction().size() < 11) {
 					hud_button_actions[2] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 344,613,67,41 }, { 146,540,67,41 }, "Produce_Prayers", Panel_Fade::no_one_fade, { 146,632,67,41 },
 						{ 146,586,67,41 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::MAIN_MENU, false, -1.0F, 1, (int)TooltipsAvailable::producecurrencybutton));
 				}
@@ -913,7 +1215,7 @@ void HUD::ManageActionButtons(bool create_buttons, bool viking) {
 						hud_button_actions_unclickable[2] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, ui_ingame, { 408,612,99,52 }, { 532,321,99,52 }, "", Panel_Fade::no_one_fade, { 0,0,0,0 },
 							{ 0,0,0,0 }, false, { 0,0,0,0 }, nullptr, 0, false, -1.0F, 1, (int)TooltipsAvailable::monastery));
 					}
-					if (hud_button_actions[7] == nullptr && player->GetFaith() >= 200 && building->buildingAction == BuildingAction::NOTHING && player->research_lawful_beast == true) {
+					if (hud_button_actions[7] == nullptr && player->GetFaith() >= 200 && building->GetProduction().size() < 11 && player->research_lawful_beast == true) {
 						if (hud_button_actions_unclickable[7] != nullptr) {
 							App->gui->DeleteUIElement(hud_button_actions_unclickable[7]);
 							hud_button_actions_unclickable[7] = nullptr;
@@ -921,7 +1223,7 @@ void HUD::ManageActionButtons(bool create_buttons, bool viking) {
 						hud_button_actions[7] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 200,672,67,41 }, { 434,540,67,41 }, "Produce_Lawful_Beast", Panel_Fade::no_one_fade,
 							{ 434,634,67,41 }, { 434,587,67,41 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::MAIN_MENU, false, -1.0F, 1, (int)TooltipsAvailable::jotnar_unlocked));
 					}
-					else if (hud_button_actions_unclickable[7] == nullptr && (player->GetFaith() < 200 || building->buildingAction != BuildingAction::NOTHING ||
+					else if (hud_button_actions_unclickable[7] == nullptr && (player->GetFaith() < 200 || building->GetProduction().size() >= 11 ||
 						player->research_lawful_beast != true)) {
 						if (hud_button_actions[7] != nullptr) {
 							App->gui->DeleteUIElement(hud_button_actions[7]);
@@ -936,7 +1238,7 @@ void HUD::ManageActionButtons(bool create_buttons, bool viking) {
 								{ 0,0,0,0 }, false, { 0,0,0,0 }, nullptr, 0, false, -1.0F, 1, (int)TooltipsAvailable::jotnar_unlocked));
 						}
 					}
-					if (hud_button_actions[8] == nullptr && player->GetFaith() >= 200 && building->buildingAction == BuildingAction::NOTHING && player->research_chaotic_beast == true) {
+					if (hud_button_actions[8] == nullptr && player->GetFaith() >= 200 && building->GetProduction().size() < 11 && player->research_chaotic_beast == true) {
 						if (hud_button_actions_unclickable[7] != nullptr) {
 							App->gui->DeleteUIElement(hud_button_actions_unclickable[7]);
 							hud_button_actions_unclickable[7] = nullptr;
@@ -944,7 +1246,7 @@ void HUD::ManageActionButtons(bool create_buttons, bool viking) {
 						hud_button_actions[8] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 272,672,67,41 }, { 504,540,67,41 }, "Produce_Chaotic_Beast", Panel_Fade::no_one_fade,
 							{ 504,634,67,41 }, { 504,587,67,41 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::MAIN_MENU, false, -1.0F, 1, (int)TooltipsAvailable::draugar_unlocked));
 					}
-					else if (hud_button_actions_unclickable[8] == nullptr && (player->GetFaith() < 200 || building->buildingAction != BuildingAction::NOTHING ||
+					else if (hud_button_actions_unclickable[8] == nullptr && (player->GetFaith() < 200 || building->GetProduction().size() >= 11 ||
 						player->research_chaotic_beast != true)) {
 						if (hud_button_actions[8] != nullptr) {
 							App->gui->DeleteUIElement(hud_button_actions[8]);
@@ -1021,7 +1323,7 @@ void HUD::ManageActionButtons(bool create_buttons, bool viking) {
 						hud_button_actions_unclickable[2] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, ui_ingame, { 408,612,99,52 }, { 532,256,99,52 }, "", Panel_Fade::no_one_fade, { 0,0,0,0 },
 							{ 0,0,0,0 }, false, { 0,0,0,0 }, nullptr, 0, false, -1.0F, 1, (int)TooltipsAvailable::monastery));
 					}
-					if (hud_button_actions[7] == nullptr && player->GetFaith() >= 200 && building->buildingAction == BuildingAction::NOTHING && player->research_lawful_beast == true) {
+					if (hud_button_actions[7] == nullptr && player->GetFaith() >= 200 && building->GetProduction().size() < 11 && player->research_lawful_beast == true) {
 						if (hud_button_actions_unclickable[7] != nullptr) {
 							App->gui->DeleteUIElement(hud_button_actions_unclickable[7]);
 							hud_button_actions_unclickable[7] = nullptr;
@@ -1029,7 +1331,7 @@ void HUD::ManageActionButtons(bool create_buttons, bool viking) {
 						hud_button_actions[7] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 200,672,67,41 }, { 363,540,67,41 }, "Produce_Lawful_Beast", Panel_Fade::no_one_fade,
 							{ 363,634,67,41 }, { 363,587,67,41 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::MAIN_MENU, false, -1.0F, 1, (int)TooltipsAvailable::cyclop_unlocked));
 					}
-					else if (hud_button_actions_unclickable[7] == nullptr && (player->GetFaith() < 200 || building->buildingAction != BuildingAction::NOTHING ||
+					else if (hud_button_actions_unclickable[7] == nullptr && (player->GetFaith() < 200 || building->GetProduction().size() >= 11 ||
 						player->research_lawful_beast != true)) {
 						if (hud_button_actions[7] != nullptr) {
 							App->gui->DeleteUIElement(hud_button_actions[7]);
@@ -1044,7 +1346,7 @@ void HUD::ManageActionButtons(bool create_buttons, bool viking) {
 								{ 0,0,0,0 }, false, { 0,0,0,0 }, nullptr, 0, false, -1.0F, 1, (int)TooltipsAvailable::cyclop_unlocked));
 						}
 					}
-					if (hud_button_actions[8] == nullptr && player->GetFaith() >= 200 && building->buildingAction == BuildingAction::NOTHING && player->research_chaotic_beast == true) {
+					if (hud_button_actions[8] == nullptr && player->GetFaith() >= 200 && building->GetProduction().size() < 11 && player->research_chaotic_beast == true) {
 						if (hud_button_actions_unclickable[7] != nullptr) {
 							App->gui->DeleteUIElement(hud_button_actions_unclickable[7]);
 							hud_button_actions_unclickable[7] = nullptr;
@@ -1052,7 +1354,7 @@ void HUD::ManageActionButtons(bool create_buttons, bool viking) {
 						hud_button_actions[8] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 272,672,67,41 }, { 293,540,67,41 }, "Produce_Chaotic_Beast", Panel_Fade::no_one_fade,
 							{ 293,634,67,41 }, { 293,587,67,41 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::MAIN_MENU, false, -1.0F, 1, (int)TooltipsAvailable::minotaur_unlocked));
 					}
-					else if (hud_button_actions_unclickable[8] == nullptr && (player->GetFaith() < 200 || building->buildingAction != BuildingAction::NOTHING ||
+					else if (hud_button_actions_unclickable[8] == nullptr && (player->GetFaith() < 200 || building->GetProduction().size() >= 11 ||
 						player->research_chaotic_beast != true)) {
 						if (hud_button_actions[8] != nullptr) {
 							App->gui->DeleteUIElement(hud_button_actions[8]);
@@ -1068,7 +1370,7 @@ void HUD::ManageActionButtons(bool create_buttons, bool viking) {
 						}
 					}
 				}
-				if (hud_button_actions[3] == nullptr && player->GetFaith() >= 600 && building->buildingAction == BuildingAction::NOTHING && (player->research_chaotic_victory == true ||
+				if (hud_button_actions[3] == nullptr && player->GetFaith() >= 600 && building->GetProduction().size() < 11 && (player->research_chaotic_victory == true ||
 					player->research_lawful_victory == true)) {
 					if (hud_button_actions_unclickable[3] != nullptr) {
 						App->gui->DeleteUIElement(hud_button_actions_unclickable[3]);
@@ -1083,7 +1385,7 @@ void HUD::ManageActionButtons(bool create_buttons, bool viking) {
 							{ 75,632,67,41 }, { 75,586,67,41 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::MAIN_MENU, false, -1.0F, 1, (int)TooltipsAvailable::victory1_unlocked));
 					}
 				}
-				else if (hud_button_actions_unclickable[3] == nullptr && (player->GetFaith() < 600 || building->buildingAction != BuildingAction::NOTHING)) {
+				else if (hud_button_actions_unclickable[3] == nullptr && (player->GetFaith() < 600 || building->GetProduction().size() >= 11)) {
 					if (hud_button_actions[3] != nullptr) {
 						App->gui->DeleteUIElement(hud_button_actions[3]);
 						hud_button_actions[3] = nullptr;
@@ -1117,7 +1419,7 @@ void HUD::ManageActionButtons(bool create_buttons, bool viking) {
 					hud_button_actions_unclickable[4] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, ui_ingame, { 584,626,36,36 }, { 98,484,36,36 }, "", Panel_Fade::no_one_fade, { 0,0,0,0 },
 						{ 0,0,0,0 }, false, { 0,0,0,0 }, nullptr, 0, false, -1.0f, 0, (int)TooltipsAvailable::researchbutton));
 				}
-				if (hud_button_actions[5] == nullptr && player->GetFaith() >= 300 && building->buildingAction == BuildingAction::NOTHING && player->research_lawful_miracle == true) {
+				if (hud_button_actions[5] == nullptr && player->GetFaith() >= 300 && building->GetProduction().size() < 11 && player->research_lawful_miracle == true) {
 					if (hud_button_actions_unclickable[5] != nullptr) {
 						App->gui->DeleteUIElement(hud_button_actions_unclickable[5]);
 						hud_button_actions_unclickable[5] = nullptr;
@@ -1125,7 +1427,7 @@ void HUD::ManageActionButtons(bool create_buttons, bool viking) {
 					hud_button_actions[5] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 344,672,67,41 }, { 219,540,67,41 }, "Produce_Lawful_Miracle", Panel_Fade::no_one_fade,
 						{ 219,632,67,41 }, { 219,586,67,41 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::MAIN_MENU, false, -1.0F, 1, (int)TooltipsAvailable::miracle_unlocked));
 				}
-				else if (hud_button_actions_unclickable[5] == nullptr && (player->GetFaith() < 300 || building->buildingAction != BuildingAction::NOTHING ||
+				else if (hud_button_actions_unclickable[5] == nullptr && (player->GetFaith() < 300 || building->GetProduction().size() >= 11 ||
 					player->research_lawful_miracle != true)) {
 					if (hud_button_actions[5] != nullptr) {
 						App->gui->DeleteUIElement(hud_button_actions[5]);
@@ -1140,7 +1442,7 @@ void HUD::ManageActionButtons(bool create_buttons, bool viking) {
 							{ 0,0,0,0 }, false, { 0,0,0,0 }, nullptr, 0, false, -1.0F, 1, (int)TooltipsAvailable::miracle_unlocked));
 					}
 				}
-				if (hud_button_actions[6] == nullptr && player->GetFaith() >= 300 && building->buildingAction == BuildingAction::NOTHING && player->research_chaotic_miracle == true) {
+				if (hud_button_actions[6] == nullptr && player->GetFaith() >= 300 && building->GetProduction().size() < 11 && player->research_chaotic_miracle == true) {
 					if (hud_button_actions_unclickable[6] != nullptr) {
 						App->gui->DeleteUIElement(hud_button_actions_unclickable[6]);
 						hud_button_actions_unclickable[6] = nullptr;
@@ -1148,7 +1450,7 @@ void HUD::ManageActionButtons(bool create_buttons, bool viking) {
 					hud_button_actions[6] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 416,672,67,41 }, { 412,726,67,41 }, "Produce_Chaotic_Miracle", Panel_Fade::no_one_fade,
 						{ 412,820,67,41 }, { 412,773,67,41 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::MAIN_MENU, false, -1.0F, 1, (int)TooltipsAvailable::disaster_unlocked));
 				}
-				else if (hud_button_actions_unclickable[6] == nullptr && (player->GetFaith() < 300 || building->buildingAction != BuildingAction::NOTHING ||
+				else if (hud_button_actions_unclickable[6] == nullptr && (player->GetFaith() < 300 || building->GetProduction().size() >= 11 ||
 					player->research_chaotic_miracle != true)) {
 					if (hud_button_actions[6] != nullptr) {
 						App->gui->DeleteUIElement(hud_button_actions[6]);
@@ -1170,8 +1472,8 @@ void HUD::ManageActionButtons(bool create_buttons, bool viking) {
 		{
 			Building* building = static_cast<Building*>(thing_selected);
 			if (building->buildingStatus == BuildingStatus::FINISHED) {
-				if (hud_button_actions[0] == nullptr && player->GetFaith() >= 100 && player->GetSacrifices() >= 10 &&
-					building->buildingAction == BuildingAction::NOTHING) {
+				if (hud_button_actions[0] == nullptr && player->GetFaith() >= 100 && player->research_assassin == true &&
+					building->GetProduction().size() < 11) {
 					if (hud_button_actions_unclickable[0] != nullptr) {
 						App->gui->DeleteUIElement(hud_button_actions_unclickable[0]);
 						hud_button_actions_unclickable[0] = nullptr;
@@ -1179,8 +1481,8 @@ void HUD::ManageActionButtons(bool create_buttons, bool viking) {
 					hud_button_actions[0] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 200,613,67,41 }, { 215,185,67,41 }, "Produce_Assassin", Panel_Fade::no_one_fade,
 						{ 215,275,67,41 }, { 215,230,67,41 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::MAIN_MENU, false, -1.0F, 1, (int)TooltipsAvailable::assassin_unlocked));
 				}
-				else if (hud_button_actions_unclickable[0] == nullptr && (player->GetFaith() < 100 || player->GetSacrifices() < 10 ||
-					building->buildingAction != BuildingAction::NOTHING)) {
+				else if (hud_button_actions_unclickable[0] == nullptr && (player->GetFaith() < 100 || player->research_assassin == false ||
+					building->GetProduction().size() >= 11)) {
 					if (hud_button_actions[0] != nullptr) {
 						App->gui->DeleteUIElement(hud_button_actions[0]);
 						hud_button_actions[0] = nullptr;
@@ -1201,7 +1503,7 @@ void HUD::ManageActionButtons(bool create_buttons, bool viking) {
 		{
 			Building* building = static_cast<Building*>(thing_selected);
 			if (building->buildingStatus == BuildingStatus::FINISHED) {
-				if (hud_button_actions[0] == nullptr && player->GetFaith() >= 50 && building->buildingAction == BuildingAction::NOTHING) {
+				if (hud_button_actions[0] == nullptr && player->GetFaith() >= 50 && building->GetProduction().size() < 11) {
 					if (hud_button_actions_unclickable[0] != nullptr) {
 						App->gui->DeleteUIElement(hud_button_actions_unclickable[0]);
 						hud_button_actions_unclickable[0] = nullptr;
@@ -1209,7 +1511,7 @@ void HUD::ManageActionButtons(bool create_buttons, bool viking) {
 					hud_button_actions[0] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 200,613,67,41 }, { 73,185,67,41 }, "Produce_Monk", Panel_Fade::no_one_fade, { 73,275,67,41 },
 						{ 73,230,67,41 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::MAIN_MENU, false, -1.0F, 1, (int)TooltipsAvailable::monk));
 				}
-				else if (hud_button_actions_unclickable[0] == nullptr && (player->GetFaith() < 50 || building->buildingAction != BuildingAction::NOTHING)) {
+				else if (hud_button_actions_unclickable[0] == nullptr && (player->GetFaith() < 50 || building->GetProduction().size() >= 11)) {
 					if (hud_button_actions[0] != nullptr) {
 						App->gui->DeleteUIElement(hud_button_actions[0]);
 						hud_button_actions[0] = nullptr;
@@ -1217,7 +1519,7 @@ void HUD::ManageActionButtons(bool create_buttons, bool viking) {
 					hud_button_actions_unclickable[0] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, ui_ingame, { 200,613,67,41 }, { 407,382,67,41 }, "", Panel_Fade::no_one_fade, { 0,0,0,0 },
 						{ 0,0,0,0 }, false, { 0,0,0,0 }, nullptr, 0, false, -1.0F, 1, (int)TooltipsAvailable::monk));
 				}
-				if (hud_button_actions[1] == nullptr && player->GetFaith() >= 40 && building->buildingAction == BuildingAction::NOTHING) {
+				if (hud_button_actions[1] == nullptr && player->GetFaith() >= 40 && building->GetProduction().size() < 11) {
 					if (hud_button_actions_unclickable[1] != nullptr) {
 						App->gui->DeleteUIElement(hud_button_actions_unclickable[1]);
 						hud_button_actions_unclickable[1] = nullptr;
@@ -1225,7 +1527,7 @@ void HUD::ManageActionButtons(bool create_buttons, bool viking) {
 					hud_button_actions[1] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 272,613,67,41 }, { 3,540,67,41 }, "Produce_Sacrifices", Panel_Fade::no_one_fade, { 3,632,67,41 },
 						{ 3,586,67,41 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::MAIN_MENU, false, -1.0F, 1, (int)TooltipsAvailable::producecurrencybutton));
 				}
-				else if (hud_button_actions_unclickable[1] == nullptr && (player->GetFaith() < 20 || building->buildingAction != BuildingAction::NOTHING)) {
+				else if (hud_button_actions_unclickable[1] == nullptr && (player->GetFaith() < 20 || building->GetProduction().size() >= 11)) {
 					if (hud_button_actions[1] != nullptr) {
 						App->gui->DeleteUIElement(hud_button_actions[1]);
 						hud_button_actions[1] = nullptr;
@@ -1233,7 +1535,7 @@ void HUD::ManageActionButtons(bool create_buttons, bool viking) {
 					hud_button_actions_unclickable[1] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, ui_ingame, { 272,613,67,41 }, { 3,678,67,41 }, "", Panel_Fade::no_one_fade, { 0,0,0,0 }, { 0,0,0,0 },
 						false, { 0,0,0,0 }, nullptr, 0, false, -1.0F, 1, (int)TooltipsAvailable::producecurrencybutton));
 				}
-				if (hud_button_actions[2] == nullptr && player->GetFaith() >= 40 && building->buildingAction == BuildingAction::NOTHING) {
+				if (hud_button_actions[2] == nullptr && player->GetFaith() >= 40 && building->GetProduction().size() < 11) {
 					if (hud_button_actions_unclickable[2] != nullptr) {
 						App->gui->DeleteUIElement(hud_button_actions_unclickable[2]);
 						hud_button_actions_unclickable[2] = nullptr;
@@ -1241,7 +1543,7 @@ void HUD::ManageActionButtons(bool create_buttons, bool viking) {
 					hud_button_actions[2] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 344,613,67,41 }, { 146,540,67,41 }, "Produce_Prayers", Panel_Fade::no_one_fade, { 146,632,67,41 },
 						{ 146,586,67,41 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::MAIN_MENU, false, -1.0F, 1, (int)TooltipsAvailable::producecurrencybutton));
 				}
-				else if (hud_button_actions_unclickable[2] == nullptr && (player->GetFaith() < 20 || building->buildingAction != BuildingAction::NOTHING)) {
+				else if (hud_button_actions_unclickable[2] == nullptr && (player->GetFaith() < 20 || building->GetProduction().size() >= 11)) {
 					if (hud_button_actions[2] != nullptr) {
 						App->gui->DeleteUIElement(hud_button_actions[2]);
 						hud_button_actions[2] = nullptr;
@@ -1256,7 +1558,7 @@ void HUD::ManageActionButtons(bool create_buttons, bool viking) {
 		{
 			Building* building = static_cast<Building*>(thing_selected);
 			if (building->buildingStatus == BuildingStatus::FINISHED) {
-				if (hud_button_actions[0] == nullptr && player->GetFaith() >= 150 && building->buildingAction == BuildingAction::NOTHING && player->research_cleric == true) {
+				if (hud_button_actions[0] == nullptr && player->GetFaith() >= 150 && building->GetProduction().size() < 11 && player->research_cleric == true) {
 					if (hud_button_actions_unclickable[0] != nullptr) {
 						App->gui->DeleteUIElement(hud_button_actions_unclickable[0]);
 						hud_button_actions_unclickable[0] = nullptr;
@@ -1264,7 +1566,7 @@ void HUD::ManageActionButtons(bool create_buttons, bool viking) {
 					hud_button_actions[0] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 200,613,67,41 }, { 574,540,67,41 }, "Produce_Cleric", Panel_Fade::no_one_fade, { 574,634,67,41 },
 						{ 574,587,67,41 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::MAIN_MENU, false, -1.0F, 1, (int)TooltipsAvailable::cleric_unlocked));
 				}
-				else if (hud_button_actions_unclickable[0] == nullptr && (player->GetFaith() < 150 || building->buildingAction != BuildingAction::NOTHING ||
+				else if (hud_button_actions_unclickable[0] == nullptr && (player->GetFaith() < 150 || building->GetProduction().size() >= 11 ||
 					player->research_cleric != true)) {
 					if (hud_button_actions[0] != nullptr) {
 						App->gui->DeleteUIElement(hud_button_actions[0]);
@@ -1293,22 +1595,6 @@ SDL_Rect HUD::GetSpritePortrait(int type_of_portrait, UnitType unit_type) {
 	if (type_of_portrait == 0) {
 		switch (unit_type) {
 		case UnitType::ASSASSIN:
-			sprite = { 299,194,30,41 };
-			break;
-		case UnitType::PIKEMAN:
-			sprite = { 331,194,30,41 };
-			break;
-		case UnitType::MONK:
-			sprite = { 362,194,30,41 };
-			break;
-		case UnitType::PRIEST:
-			sprite = { 393,194,30,41 };
-			break;
-		}
-	}
-	else if (type_of_portrait == 1) {
-		switch (unit_type) {
-		case UnitType::ASSASSIN:
 			sprite = { 2,321,76,105 };
 			break;
 		case UnitType::PIKEMAN:
@@ -1320,10 +1606,146 @@ SDL_Rect HUD::GetSpritePortrait(int type_of_portrait, UnitType unit_type) {
 		case UnitType::PRIEST:
 			sprite = { 242,321,76,105 };
 			break;
+		case UnitType::MINOTAUR:
+			sprite = { 324,726,76,105 };
+			break;
+		case UnitType::CYCLOP:
+			sprite = { 242,726,76,105 };
+			break;
+		case UnitType::JOTNAR:
+			sprite = { 162,726,76,105 };
+			break;
+		case UnitType::DRAUGAR:
+			sprite = { 82,726,76,105 };
+			break;
+		case UnitType::CLERIC:
+			sprite = { 2,726,76,105 };
+			break;
+		}
+	}
+	else if (type_of_portrait == 1) {
+		switch (unit_type) {
+		case UnitType::ASSASSIN:
+			sprite = { 299,194,30,41 };
+			break;
+		case UnitType::PIKEMAN:
+			sprite = { 331,194,30,41 };
+			break;
+		case UnitType::MONK:
+			sprite = { 362,194,30,41 };
+			break;
+		case UnitType::PRIEST:
+			sprite = { 393,194,30,41 };
+			break;
+		case UnitType::MINOTAUR:
+			sprite = { 424,194,30,41 };
+			break;
+		case UnitType::CYCLOP:
+			sprite = { 455,194,30,41 };
+			break;
+		case UnitType::JOTNAR:
+			sprite = { 487,194,30,41 };
+			break;
+		case UnitType::DRAUGAR:
+			sprite = { 518,194,30,41 };
+			break;
+		case UnitType::CLERIC:
+			sprite = { 549,194,30,41 };
+			break;
+		}
+	}
+	else if (type_of_portrait == 2) {
+		switch (unit_type) {
+		case UnitType::ASSASSIN:
+			sprite = { 3,836,30,41 };
+			break;
+		case UnitType::PIKEMAN:
+			sprite = { 34,836,30,41 };
+			break;
+		case UnitType::MONK:
+			sprite = { 66,836,30,41 };
+			break;
+		case UnitType::PRIEST:
+			sprite = { 97,836,30,41 };
+			break;
+		case UnitType::MINOTAUR:
+			sprite = { 128,836,30,41 };
+			break;
+		case UnitType::CYCLOP:
+			sprite = { 159,836,30,41 };
+			break;
+		case UnitType::JOTNAR:
+			sprite = { 191,836,30,41 };
+			break;
+		case UnitType::DRAUGAR:
+			sprite = { 222,836,30,41 };
+			break;
+		case UnitType::CLERIC:
+			sprite = { 253,836,30,41 };
+			break;
+		}
+	}
+	else if (type_of_portrait == 3) {
+		switch (unit_type) {
+		case UnitType::ASSASSIN:
+			sprite = { 3,881,30,41 };
+			break;
+		case UnitType::PIKEMAN:
+			sprite = { 34,881,30,41 };
+			break;
+		case UnitType::MONK:
+			sprite = { 66,881,30,41 };
+			break;
+		case UnitType::PRIEST:
+			sprite = { 97,881,30,41 };
+			break;
+		case UnitType::MINOTAUR:
+			sprite = { 128,881,30,41 };
+			break;
+		case UnitType::CYCLOP:
+			sprite = { 159,881,30,41 };
+			break;
+		case UnitType::JOTNAR:
+			sprite = { 191,881,30,41 };
+			break;
+		case UnitType::DRAUGAR:
+			sprite = { 222,881,30,41 };
+			break;
+		case UnitType::CLERIC:
+			sprite = { 253,881,30,41 };
+			break;
 		}
 	}
 	return sprite;
 
+}
+
+// Called to get the unit type from a sprite portrait
+UnitType HUD::GetUnitTypeFromSpritePortrait(SDL_Rect sprite)
+{
+	if (sprite.w == 30 && sprite.h == 41) {
+		if (sprite.y == 194) {
+			if (sprite.x == 299)
+				return UnitType::ASSASSIN;
+			else if (sprite.x == 331)
+				return UnitType::PIKEMAN;
+			else if (sprite.x == 362)
+				return UnitType::MONK;
+			else if (sprite.x == 393)
+				return UnitType::PRIEST;
+			else if (sprite.x == 424)
+				return UnitType::MINOTAUR;
+			else if (sprite.x == 455)
+				return UnitType::CYCLOP;
+			else if (sprite.x == 487)
+				return UnitType::JOTNAR;
+			else if (sprite.x == 518)
+				return UnitType::DRAUGAR;
+			else if (sprite.x == 549)
+				return UnitType::CLERIC;
+		}
+	}
+	return UnitType::NONE;
 }
 
 // Called to get the rect of the sprite of the portrait of the building
@@ -1356,6 +1778,115 @@ SDL_Rect HUD::GetSpritePortraitBuilding(int type_of_portrait, BuildingType build
 				sprite = { 563,431,76,105 };
 			break;
 		}
+	}
+	return sprite;
+}
+
+// Called to get the rect of the sprite of the portrait of the thing produced
+SDL_Rect HUD::GetSpritePortraitProduction(int type_of_portrait, const std::string &produced_type, CivilizationType civilization)
+{
+	SDL_Rect sprite = { 0,0,0,0 };
+	if (type_of_portrait == 0) {
+		if(produced_type=="Assassin")
+			sprite = { 3,931,30,41 };
+		else if (produced_type == "Pikeman")
+			sprite = { 34,931,30,41 };
+		else if (produced_type == "Monk")
+			sprite = { 66,931,30,41 };
+		else if (produced_type == "Priest")
+			sprite = { 97,931,30,41 };
+		else if (produced_type == "Lawful_Beast") {
+			if (civilization == CivilizationType::VIKING)
+				sprite = { 191,931,30,41 };
+			else if (civilization == CivilizationType::GREEK)
+				sprite = { 159,931,30,41 };
+		}
+		else if (produced_type == "Chaotic_Beast") {
+			if (civilization == CivilizationType::GREEK)
+				sprite = { 128,931,30,41 };
+			else if (civilization == CivilizationType::VIKING)
+				sprite = { 222,931,30,41 };
+		}
+		else if (produced_type == "Cleric")
+			sprite = { 253,931,30,41 };
+		else if (produced_type == "Miracle")
+			sprite = { 284,931,30,41 };
+		else if (produced_type == "Prayers")
+			sprite = { 316,931,30,41 };
+		else if (produced_type == "Victory")
+			sprite = { 347,931,30,41 };
+		else if (produced_type == "Sacrifices")
+			sprite = { 378,931,30,41 };
+		else if (produced_type == "Disaster")
+			sprite = { 409,931,30,41 };
+	}
+	else if (type_of_portrait == 1) {
+		if (produced_type == "Assassin")
+			sprite = { 3,976,30,41 };
+		else if (produced_type == "Pikeman")
+			sprite = { 34,976,30,41 };
+		else if (produced_type == "Monk")
+			sprite = { 66,976,30,41 };
+		else if (produced_type == "Priest")
+			sprite = { 97,976,30,41 };
+		else if (produced_type == "Lawful_Beast") {
+			if (civilization == CivilizationType::VIKING)
+				sprite = { 191,976,30,41 };
+			else if (civilization == CivilizationType::GREEK)
+				sprite = { 159,976,30,41 };
+		}
+		else if (produced_type == "Chaotic_Beast") {
+			if (civilization == CivilizationType::GREEK)
+				sprite = { 128,976,30,41 };
+			else if (civilization == CivilizationType::VIKING)
+				sprite = { 222,976,30,41 };
+		}
+		else if (produced_type == "Cleric")
+			sprite = { 253,976,30,41 };
+		else if (produced_type == "Miracle")
+			sprite = { 284,976,30,41 };
+		else if (produced_type == "Prayers")
+			sprite = { 316,976,30,41 };
+		else if (produced_type == "Victory")
+			sprite = { 347,976,30,41 };
+		else if (produced_type == "Sacrifices")
+			sprite = { 378,976,30,41 };
+		else if (produced_type == "Disaster")
+			sprite = { 409,976,30,41 };
+	}
+	else if (type_of_portrait == 2) {
+		if (produced_type == "Assassin")
+			sprite = { 3,1021,30,41 };
+		else if (produced_type == "Pikeman")
+			sprite = { 34,1021,30,41 };
+		else if (produced_type == "Monk")
+			sprite = { 66,1021,30,41 };
+		else if (produced_type == "Priest")
+			sprite = { 97,1021,30,41 };
+		else if (produced_type == "Lawful_Beast") {
+			if (civilization == CivilizationType::VIKING)
+				sprite = { 191,1021,30,41 };
+			else if (civilization == CivilizationType::GREEK)
+				sprite = { 159,1021,30,41 };
+		}
+		else if (produced_type == "Chaotic_Beast") {
+			if (civilization == CivilizationType::GREEK)
+				sprite = { 128,1021,30,41 };
+			else if (civilization == CivilizationType::VIKING)
+				sprite = { 222,1021,30,41 };
+		}
+		else if (produced_type == "Cleric")
+			sprite = { 253,1021,30,41 };
+		else if (produced_type == "Miracle")
+			sprite = { 284,1021,30,41 };
+		else if (produced_type == "Prayers")
+			sprite = { 316,1021,30,41 };
+		else if (produced_type == "Victory")
+			sprite = { 347,1021,30,41 };
+		else if (produced_type == "Sacrifices")
+			sprite = { 378,1021,30,41 };
+		else if (produced_type == "Disaster")
+			sprite = { 409,1021,30,41 };
 	}
 	return sprite;
 }

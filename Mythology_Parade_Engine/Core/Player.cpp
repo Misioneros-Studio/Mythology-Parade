@@ -14,6 +14,8 @@ Player::Player()
 {
 	research_assassin = research_chaotic_beast = research_chaotic_miracle = research_cleric = research_encampment = research_lawful_beast = research_lawful_miracle = research_lawful_victory =
 		research_temple = research_chaotic_victory = false;
+	shift = false;
+	alt = false;
 	Start();
 	marc = 69;
 }
@@ -142,6 +144,12 @@ void Player::SelectionDraw_Logic()
 			dontSelect = false;
 		}
 		preClicked = App->render->ScreenToWorld(preClicked.x, preClicked.y);
+		if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_DOWN || App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT) {
+			shift = true;
+		}
+		else if (App->input->GetKey(SDL_SCANCODE_LALT) == KEY_DOWN || App->input->GetKey(SDL_SCANCODE_LALT) == KEY_REPEAT) {
+			alt = true;
+		}
 	}
 	if (!dontSelect)
 	{
@@ -154,16 +162,43 @@ void Player::SelectionDraw_Logic()
 			}
 			postClicked = App->render->ScreenToWorld(postClicked.x, postClicked.y);
 
-			App->render->DrawQuad({ preClicked.x, preClicked.y, postClicked.x - preClicked.x, postClicked.y - preClicked.y }, 255, 255, 255, 255, false);
+			if (shift == true && App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT)
+				App->render->DrawQuad({ preClicked.x, preClicked.y, postClicked.x - preClicked.x, postClicked.y - preClicked.y }, 100, 0, 255, 255, false);
+			else if(alt==true&& App->input->GetKey(SDL_SCANCODE_LALT) == KEY_REPEAT)
+				App->render->DrawQuad({ preClicked.x, preClicked.y, postClicked.x - preClicked.x, postClicked.y - preClicked.y }, 255, 0, 100, 255, false);
+			else
+				App->render->DrawQuad({ preClicked.x, preClicked.y, postClicked.x - preClicked.x, postClicked.y - preClicked.y }, 255, 255, 255, 255, false);
 		}
 
 		if (App->input->GetMouseButtonDown(1) == KEY_UP)
 		{
-			for each (Unit* unit in listEntities)
-			{
-				unit->SetSelected(false);
+			if (shift == true && App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT) {
+				buildingSelect = nullptr;
+				SeeEntitiesInside(true);
+
 			}
-			if(buildingSelect!=nullptr)
+			else if (alt == true && App->input->GetKey(SDL_SCANCODE_LALT) == KEY_REPEAT) {
+				buildingSelect = nullptr;
+				SeeEntitiesInside(false,true);
+
+			}
+			else {
+				for each (Unit * unit in listEntities)
+				{
+					unit->SetSelected(false);
+				}
+				if (buildingSelect != nullptr)
+					buildingSelect->SetSelected(false);
+				listEntities.clear();
+				buildingSelect = nullptr;
+				ClickLogic();
+				SeeEntitiesInside();
+				ActionToUnit();
+				ActionToBuilding();
+			}
+
+			//Teorically donnt needed on UI_Improved
+			/*if(buildingSelect!=nullptr)
 				buildingSelect->SetSelected(false);
 			listEntities.clear();
 			buildingSelect = nullptr;
@@ -172,15 +207,25 @@ void Player::SelectionDraw_Logic()
 			ActionToUnit();
 			ActionToBuilding();
 			App->scene->nextUnit_selected = false;
+			*/
 			App->scene->hud->HUDUpdateSelection(listEntities, (Building*)buildingSelect);
 
 		}
+	}
+	else {
+		shift = false;
+		alt = false;
 	}
 }
 
 std::list<Entity*> Player::GetEntitiesSelected()
 {
 	return listEntities;
+}
+
+void Player::SetEntitiesSelected( const std::list<Entity*> &entities_list)
+{
+	listEntities = entities_list;
 }
 
 Building* Player::GetSelectedBuild()
@@ -237,7 +282,7 @@ void Player::ActionToBuilding()
 	}
 }
 
-void Player::SeeEntitiesInside()
+void Player::SeeEntitiesInside(bool shift, bool alt)
 {
 	//ALERT MAYK
 	std::list<Entity*>::iterator it = App->entityManager->entities[EntityType::UNIT].begin();
@@ -249,8 +294,26 @@ void Player::SeeEntitiesInside()
 			{
 				if (it._Ptr->_Myval->civilization == player_type)
 				{
-					it._Ptr->_Myval->SetSelected(true);
-					listEntities.push_back(it._Ptr->_Myval);
+					if (shift == true) {
+						if (!it._Ptr->_Myval->isSelected()) {
+							it._Ptr->_Myval->SetSelected(true);
+							listEntities.push_back(it._Ptr->_Myval);
+						}
+					}
+					else if (alt == true) {
+						if (it._Ptr->_Myval->isSelected()) {
+							it._Ptr->_Myval->SetSelected(false);
+							bool finish = false;
+							for (std::list<Entity*>::iterator it2 = listEntities.begin(); it != listEntities.end() && finish == false; ++it2) {
+								if (it2._Ptr->_Myval->position == it._Ptr->_Myval->position)
+									finish = true;
+							}
+						}
+					}
+					else {
+						it._Ptr->_Myval->SetSelected(true);
+						listEntities.push_back(it._Ptr->_Myval);
+					}
 				}
 			}
 		}
@@ -276,15 +339,20 @@ void Player::PlayerInputs()
 	{
 		iPoint mouse = App->map->GetMousePositionOnMap();
 		iPoint spawnPos = App->map->TileCenterPoint(mouse);
-		App->entityManager->CreateUnitEntity(UnitType::JOTNAR, spawnPos,civilization);
+		if(civilization==CivilizationType::GREEK)
+			App->entityManager->CreateUnitEntity(UnitType::CYCLOP, spawnPos,civilization);
+		else if(civilization == CivilizationType::VIKING)
+			App->entityManager->CreateUnitEntity(UnitType::JOTNAR, spawnPos, civilization);
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN && App->scene->godMode)
 	{
 		iPoint mouse = App->map->GetMousePositionOnMap();
 		iPoint spawnPos = App->map->TileCenterPoint(mouse);
-		App->entityManager->CreateUnitEntity(UnitType::DRAUGAR , spawnPos, civilization);
-
+		if (civilization == CivilizationType::GREEK)
+			App->entityManager->CreateUnitEntity(UnitType::MINOTAUR, spawnPos, civilization);
+		else if (civilization == CivilizationType::VIKING)
+			App->entityManager->CreateUnitEntity(UnitType::DRAUGAR, spawnPos, civilization);
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_F4) == KEY_DOWN && App->scene->godMode)

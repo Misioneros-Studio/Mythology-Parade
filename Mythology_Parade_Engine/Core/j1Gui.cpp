@@ -12,6 +12,7 @@
 #include "j1Scene.h"
 #include "j1Audio.h"
 #include "TooltipData.h"
+#include "HUD.h"
 
 j1Gui::j1Gui() : j1Module()
 {

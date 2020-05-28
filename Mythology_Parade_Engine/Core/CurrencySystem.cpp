@@ -30,6 +30,17 @@ void CurrencySystem::IncreaseFaith()
 	}
 }
 
+void CurrencySystem::IncreaseFaith(int number)
+{
+	if (!App->scene->paused_game)
+	{
+		if (number > 0)
+		{
+			faith += number;
+		}
+	}
+}
+
 void CurrencySystem::DecreaseFaith(int number)
 {
 	if (!App->scene->paused_game)

@@ -60,6 +60,9 @@ public:
 	// Called when returning to main menu (either winning/losing or by menu options like exit)
 	void BackToTitleMenu();
 
+	// Called to return faith after canceling a production
+	void ReturnFaith(std::string);
+
 	void OnClick(UI* element, float argument = 0);
 
 	void FinishResearching(std::string);
@@ -69,10 +72,11 @@ public:
 	float LerpValue(float percent, float start, float end);
 
 private:
-	
+
 	fPoint global_pos;
 
 	SDL_Texture* winlose_tex;
+
 
 
 public:
@@ -90,10 +94,18 @@ public:
 	uint WinViking_sound;
 	uint WinGreek_sound;
 	uint Lose_sound;
+
+	//Ramos
 	uint OpenPauseMenu_sfx;
 	uint Research_sound;
 	uint ResearchFinished;
 	uint Select_sfx;
+
+	//Arnau
+	bool update_selection;
+	bool dont_update_types_of_troops;
+	bool update_production_list;
+
 	bool isInTutorial;
 
 public:

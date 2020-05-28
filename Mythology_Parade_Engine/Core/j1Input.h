@@ -72,6 +72,11 @@ public:
 		return mouse_buttons[id - 1];
 	}
 
+	int GetMouseWheel()const
+	{
+		return mouse_wheel;
+	}
+
 	// Check if a certain window event happened
 	bool GetWindowEvent(int code);
 
@@ -91,6 +96,7 @@ private:
 	int			mouse_motion_y;
 	int			mouse_x;
 	int			mouse_y;
+	int			mouse_wheel;
 };
 
 #endif // __j1INPUT_H__

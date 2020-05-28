@@ -30,6 +30,9 @@ j1Scene::j1Scene() : j1Module()
 	clickToPath = false;
 	nextUnit_selected = nextBuilding_selected = building_meteor = false;
 	oneTime = true;
+	update_selection = false;
+	dont_update_types_of_troops = true;
+	update_production_list = false;
 }
 
 // Destructor
@@ -270,6 +273,13 @@ void j1Scene::ClickToPath()
 // Called each loop iteration
 bool j1Scene::Update(float dt)
 {
+	//Update selection if needed
+	if (update_selection == true) {
+		hud->HUDUpdateSelection(App->entityManager->getPlayer()->GetEntitiesSelected(), nullptr, dont_update_types_of_troops);
+		update_selection = false;
+		dont_update_types_of_troops = true;
+	}
+
 	// Gui ---
 	switch (hud->close_menus)
 	{
@@ -387,11 +397,16 @@ bool j1Scene::Update(float dt)
 
 	if (App->entityManager->getPlayer() != nullptr) {
 		if (App->entityManager->getPlayer()->player_win == true) {
-			if (App->entityManager->getPlayer()->player_type == CivilizationType::VIKING) {
-				DoWinOrLoseWindow(1, true);
+			if (isInTutorial == true) {
+				DoWinOrLoseWindow(3, true);
 			}
 			else {
-				DoWinOrLoseWindow(2, true);
+				if (App->entityManager->getPlayer()->player_type == CivilizationType::VIKING) {
+					DoWinOrLoseWindow(1, true);
+				}
+				else {
+					DoWinOrLoseWindow(2, true);
+				}
 			}
 		}
 
@@ -417,6 +432,19 @@ bool j1Scene::Update(float dt)
 		Mix_SetPosition(3, 90, 1);
 		App->audio->PlayFx(3, WinGreek_sound, 1);
 	}*/
+
+	if (App->input->GetMouseWheel() > 0) {
+		if (hud->HUDScrollUp() == true) {
+			App->render->camera.x = -(hud->thing_selected->position.x - App->render->camera.w * 0.5f);
+			App->render->camera.y = -(hud->thing_selected->position.y - App->render->camera.h * 0.5f);
+		}
+	}
+	else if (App->input->GetMouseWheel() < 0) {
+		if (hud->HUDScrollDown() == true) {
+			App->render->camera.x = -(hud->thing_selected->position.x - App->render->camera.w * 0.5f);
+			App->render->camera.y = -(hud->thing_selected->position.y - App->render->camera.h * 0.5f);
+		}
+	}
 
 	return true;
 }
@@ -493,6 +521,35 @@ void j1Scene::RestartGame() {
 		App->fade_to_black->FadeToBlack(which_fade::scene_to_scene, 2, "viking");
 	destroy = true;
 	App->entityManager->initCivilizations = true;
+}
+
+// Called to return faith after canceling a production
+void j1Scene::ReturnFaith(std::string thing_canceled)
+{
+	if (thing_canceled == "Assassin") {
+		App->entityManager->getPlayer()->IncreaseFaith(100);
+	}
+	else if (thing_canceled == "Monk") {
+		App->entityManager->getPlayer()->IncreaseFaith(50);
+	}
+	else if (thing_canceled == "Victory") {
+		App->entityManager->getPlayer()->IncreaseFaith(600);
+	}
+	else if (thing_canceled == "Sacrifices") {
+		App->entityManager->getPlayer()->IncreaseFaith(40);
+	}
+	else if (thing_canceled == "Prayers") {
+		App->entityManager->getPlayer()->IncreaseFaith(40);
+	}
+	else if (thing_canceled == "Cleric") {
+		App->entityManager->getPlayer()->IncreaseFaith(150);
+	}
+	else if (thing_canceled == "Lawful_Beast") {
+		App->entityManager->getPlayer()->IncreaseFaith(200);
+	}
+	else if (thing_canceled == "Chaotic_Beast") {
+		App->entityManager->getPlayer()->IncreaseFaith(200);
+	}
 }
 
 void j1Scene::OnClick(UI* element, float argument)
@@ -695,7 +752,7 @@ void j1Scene::OnClick(UI* element, float argument)
 		else if (element->name == "Produce_Prayers")
 		{
 			Building* building = (Building*)hud->thing_selected;
-			App->entityManager->getPlayer()->DecreaseFaith(100);
+			App->entityManager->getPlayer()->DecreaseFaith(40);
 			building->ProduceQueue("Prayers");
 		}
 		else if (element->name == "Upgrade") {
@@ -745,6 +802,12 @@ void j1Scene::OnClick(UI* element, float argument)
 		{
 			building_meteor = true;
 		}
+		else if (element->name == "Troop") {
+			hud->ClickOnSelectionButton(element->sprite1);
+		}
+		else if (element->name == "Thing_Produced") {
+			hud->CancelProduction(element->GetScreenPos());
+		}
 		break;
 
 	default:
@@ -761,6 +824,9 @@ void j1Scene::DoWinOrLoseWindow(int type, bool win) {
 
 	SDL_Rect sec_win = { 807, 0,807, 345 };
 	SDL_Rect sec_lose = { 807, 345,807, 345 };
+
+	SDL_Rect sec_tutorial = { 0, 690,807, 345 };
+	SDL_Rect sec_completed = { 807, 690,807, 345 };
 
 	if (hud->start_timer == false) {
 		hud->timer_win_lose.Start();
@@ -809,6 +875,15 @@ void j1Scene::DoWinOrLoseWindow(int type, bool win) {
 			if (Mix_Playing(3) == 0) {
 				App->audio->PlayFx(3, Lose_sound);
 			}
+		}
+	}
+
+	if (type == 3) {
+		App->render->Blit(winlose_tex, global_pos.x, global_pos.y, &sec_tutorial, NULL, 0.0F);
+		App->render->Blit(winlose_tex, global_pos.x, global_pos.y, &sec_completed, NULL, 0.0F);
+		if (Mix_Playing(3) == 0)
+		{
+			App->audio->PlayFx(3, WinViking_sound);
 		}
 	}
 	if (hud->timer_win_lose.ReadSec() >= 5) {

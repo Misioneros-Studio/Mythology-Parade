@@ -237,14 +237,14 @@ void j1TitleScene::ActivateOptionsMenu() {
 		ui_text_options[2] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, ui_options_window, { 620,270,237,38 }, { 0,0,100,100 }, "FULLSCREEN", Panel_Fade::panel_fade_in, { 255,255,255,255 }));
 		ui_text_volume_sliders[0] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, ui_options_window, { 590,314,237,38 }, { 0,0,100,100 }, "MUSIC'S VOLUME", Panel_Fade::panel_fade_in, { 255,255,255,255 }));
 		ui_volume_sliders[0] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, ui_options_window, { 548,340,(int)(181* ((float)App->audio->GetVolumeMusic() / (float)128)),17 },
-			{ 1072,250,181,17 }));
-		ui_volume_sliders[1]=static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, ui_options_window, { 531,334,215,30 }, { 1053,350,215,30 }));
+			{ 1072,250,181,17 },"", Panel_Fade::panel_fade_in));
+		ui_volume_sliders[1]=static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, ui_options_window, { 531,334,215,30 }, { 1053,350,215,30 },"", Panel_Fade::panel_fade_in));
 		ui_volume_sliders[2]=static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, ui_options_window, { 548,337,36,24 }, { 1072,180,36,24 }, "VOLUME_CONTROL", Panel_Fade::panel_fade_in, { 0,0,0,0 }, { 0,0,0,0 },
 			true, { 548,337,181,0 }, App->audio, 0, false, ((float)App->audio->GetVolumeMusic() / (float)128)));
 		ui_text_volume_sliders[1] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, ui_options_window, { 598,379,237,38 }, { 0,0,100,100 }, "FX'S VOLUME", Panel_Fade::panel_fade_in, { 255,255,255,255 }));
 		ui_volume_sliders[3] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, ui_options_window, { 548,405,(int)(181 * ((float)App->audio->GetVolumeFx() / (float)128)),17 },
-			{ 1072,250,181,17 }));
-		ui_volume_sliders[4] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, ui_options_window, { 531,399,215,30 }, { 1053,350,215,30 }));
+			{ 1072,250,181,17 }, "", Panel_Fade::panel_fade_in));
+		ui_volume_sliders[4] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, ui_options_window, { 531,399,215,30 }, { 1053,350,215,30 }, "", Panel_Fade::panel_fade_in));
 		ui_volume_sliders[5] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, ui_options_window, { 548,402,36,24 }, { 1072,180,36,24 }, "FX_CONTROL", Panel_Fade::panel_fade_in, { 0,0,0,0 }, { 0,0,0,0 },
 			true, { 548,402,181,0 }, App->audio, 0, false, ((float)App->audio->GetVolumeFx() / (float)128)));
 

@@ -198,6 +198,7 @@ std::string Building::GetElementProducing()
 void Building::ProduceQueue(std::string thing_producing)
 {
 	queuedResearch.push(thing_producing);
+	App->scene->update_production_list = true;
 }
 
 bool Building::Awake(pugi::xml_node& a)
@@ -456,50 +457,80 @@ void Building::Draw_Building_Bar(int blitWidth, int bar_used, bool building_acti
 }
 
 
-void Building::StartProducing(std::string thing_producing) {
+void Building::StartProducing(const std::string &thing_to_produce) {
+	App->scene->update_production_list = true;
 	buildingAction = BuildingAction::PRODUCING;
 	percentage_constructing = 0;
-	if (thing_producing == "Prayers") time_producing = App->entityManager->getPlayer()->time_prayers;
-	else if (thing_producing == "Sacrifices") time_producing = App->entityManager->getPlayer()->time_sacrifices;
-	else if (thing_producing == "Victory") time_producing = App->entityManager->getPlayer()->time_production_victory;
-	else if (thing_producing == "Monk") time_producing = 90;
-	else if (thing_producing == "Assasin") time_producing = 90;
-	else if (thing_producing == "Cleric") time_producing = 90;
-	else if (thing_producing == "Chaotic_Beast") time_producing = 120;
-	else if (thing_producing == "Lawful_Beast") time_producing = 120;
-	element_producing = thing_producing;
+	if (thing_to_produce == "Prayers") time_producing = App->entityManager->getPlayer()->time_prayers;
+	else if (thing_to_produce == "Sacrifices") time_producing = App->entityManager->getPlayer()->time_sacrifices;
+	else if (thing_to_produce == "Victory") time_producing = App->entityManager->getPlayer()->time_production_victory;
+	else if (thing_to_produce == "Monk") time_producing = 90;
+	else if (thing_to_produce == "Assasin") time_producing = 90;
+	else if (thing_to_produce == "Cleric") time_producing = 90;
+	else if (thing_to_produce == "Chaotic_Beast") time_producing = 120;
+	else if (thing_to_produce == "Lawful_Beast") time_producing = 120;
+	element_producing = thing_to_produce;
 	timer_construction.Start();
 
 }
 
-void Building::FinishProduction(std::string thing_produced)
+void Building::CancelProduction(int index)
 {
-	if (thing_produced == "Victory")
-	{
-		if (civilization == CivilizationType::VIKING)
-		{
-			App->entityManager->getPlayer()->player_win = true;
+	App->scene->update_production_list = true;
+	int size = queuedResearch.size();
+	if (index != 0) {
+		index--;
+		std::string string;
+		for (int i = 0; i < size; i++) {
+			string = queuedResearch.front();
+			queuedResearch.pop();
+			if (index != i)
+				queuedResearch.push(string);
+			else {
+				App->scene->ReturnFaith(string);
+			}
 		}
-		else
-		{
-			App->entityManager->getPlayer()->player_lose = true;
-		}
 	}
-	else if(thing_produced == "Sacrifices")
-	{
-		App->entityManager->getPlayer()->sacrifices += 1;
-	}
-	else if(thing_produced == "Prayers")
-	{
-		App->entityManager->getPlayer()->prayers += 1;
-	}
-	else
-	{
-	CreateUnit();
+	else {
+		App->scene->ReturnFaith(element_producing);
+		FinishProduction(element_producing, true);
+		buildingAction = BuildingAction::NOTHING;
+		percentage_constructing = 1;
 	}
 }
 
-void Building::StartResearching(std::string thing_producing) {
+void Building::FinishProduction(const std::string &thing_produced, bool cancelled)
+{
+	element_producing = "";
+	App->scene->update_production_list = true;
+	if (cancelled == false) {
+		if (thing_produced == "Victory")
+		{
+			if (civilization == CivilizationType::VIKING)
+			{
+				App->entityManager->getPlayer()->player_win = true;
+			}
+			else
+			{
+				App->entityManager->getPlayer()->player_lose = true;
+			}
+		}
+		else if (thing_produced == "Sacrifices")
+		{
+			App->entityManager->getPlayer()->sacrifices += 1;
+		}
+		else if (thing_produced == "Prayers")
+		{
+			App->entityManager->getPlayer()->prayers += 1;
+		}
+		else
+		{
+			CreateUnit();
+		}
+	}
+}
+
+void Building::StartResearching(const std::string &thing_producing) {
 	buildingAction = BuildingAction::RESEARCHING;
 	percentage_constructing = 0;
 

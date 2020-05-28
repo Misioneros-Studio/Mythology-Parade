@@ -6,7 +6,7 @@
 #include "j1Timer.h"
 #include <queue>
 
-enum BuildingType 
+enum BuildingType
 {
 	FORTRESS,
 	MONASTERY,
@@ -33,15 +33,17 @@ class Building: public Entity
 public:
 	Building(BuildingType, iPoint, BuildingInfo);
 	~Building();
-	
+
 	const char* GetDescription();
 	BuildingType GetBuildingType() { return buildingType; }
 	int GetInfluence() { return influence; }
 	int GetDamage() { return damage; }
 	int GetMaxCap() { return maxCap; }
+	std::queue<std::string> GetProduction() { return queuedResearch; }
 
-	void StartProducing(std::string thing_producing);
-	void StartResearching(std::string thing_producing);
+	void StartProducing(const std::string &thing_producing);
+	void CancelProduction(int);
+	void StartResearching(const std::string &thing_producing);
 
 	void SetTimeProducing(int time);
 
@@ -68,8 +70,9 @@ private:
 	void Draw_Building_Bar(int blitWidth, int bar_used = 0, bool building_active = false, bool enemy = false);
 	bool Draw(float dt);
 
-	void FinishProduction(std::string thing_produced);
+
 	void Kill(iPoint) override;
+	void FinishProduction(const std::string &thing_produced, bool cancelled = false);
 
 	//Stats
 	int influence;
@@ -92,7 +95,7 @@ private:
 	float percentage_constructing;
 	bool first_time_constructing;
 	std::string element_producing;
-	
+
 	//Used to show life
 	float percentage_life;
 	bool show_bar_for_damage;
@@ -107,7 +110,6 @@ public:
 	j1Timer timer_construction;
 	BuildingStatus buildingStatus;
 	BuildingAction buildingAction;
-
 
 
 };
