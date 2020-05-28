@@ -11,8 +11,6 @@ Player::Player()
 {
 	research_assassin = research_chaotic_beast = research_chaotic_miracle = research_cleric = research_encampment = research_lawful_beast = research_lawful_miracle = research_lawful_victory =
 		research_temple = research_chaotic_victory = false;
-	Start();
-	marc = 69;
 }
 
 Player::~Player()
@@ -53,10 +51,10 @@ bool Player::Start()
 
 	if (App->entityManager->initCivilizations)
 	{
-		if(civilization==CivilizationType::VIKING)
-			App->entityManager->InitVikings();
-		else
+		if (civilization == CivilizationType::GREEK)
 			App->entityManager->InitGreek();
+		else 
+			App->entityManager->InitVikings();
 		App->entityManager->initCivilizations = false;
 	}
 	return true;
@@ -79,12 +77,6 @@ bool Player::PreUpdate()
 	sacrifice = std::to_string(CurrencySystem::sacrifices);
 	prayer = std::to_string(CurrencySystem::prayers);
 
-	//if (oneTime)
-	//{
-	//	InitVikings();
-	//	InitGreek();
-	//	oneTime = false;
-	//}
 
 	return true;
 }
