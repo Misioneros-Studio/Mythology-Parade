@@ -137,8 +137,9 @@ bool EntityManager::Update(float dt)
 			Unit* tmp = (Unit*)it._Ptr->_Myval;
 			if (tmp->toDelete) 
 			{
-				entities[EntityType::UNIT].erase(it);
-				delete tmp;
+				//entities[EntityType::UNIT].erase(it);
+				DeleteEntity(tmp);
+				//delete tmp;
 			}
 
 		}
@@ -297,10 +298,10 @@ bool EntityManager::PostUpdate()
 
 		//TODO 8: Test unit to building collision
 		fPoint points[4];
-		points[0] = (*it)->position;
-		points[1] = { (*it)->position.x, (*it)->position.y - (*it)->getCollisionRect().h };
-		points[2] = { (*it)->position.x + (*it)->getCollisionRect().w, (*it)->position.y };
-		points[3] = { (*it)->position.x + (*it)->getCollisionRect().w, (*it)->position.y - (*it)->getCollisionRect().h};
+		points[0] = { (*it)->position.x - (*it)->getCollisionRect().w / 2 , (*it)->position.y};
+		points[1] = { (*it)->position.x - (*it)->getCollisionRect().w / 2, (*it)->position.y + (*it)->getCollisionRect().h };
+		points[2] = { (*it)->position.x + (*it)->getCollisionRect().w / 2, (*it)->position.y };
+		points[3] = { (*it)->position.x + (*it)->getCollisionRect().w / 2, (*it)->position.y + (*it)->getCollisionRect().h};
 
 		int checks = 0;
 
@@ -316,7 +317,7 @@ bool EntityManager::PostUpdate()
 				//Check every data element in this node
 				for (std::list<Entity*>::iterator it2 = quadTree.lowestNode->data.begin(); it2 != quadTree.lowestNode->data.end(); it2++)
 				{
-					App->render->DrawLine((int)points[i].x, (int)points[i].y, (int)(*it2)->position.x, (int)(*it2)->position.y, 255, 0, 0);
+					//App->render->DrawLine((int)points[i].x, (int)points[i].y, (int)(*it2)->position.x, (int)(*it2)->position.y, 255, 0, 0);
 					//if ((*it2)->position.DistanceNoSqrt(points[i]) <= 20000)
 					//{
 

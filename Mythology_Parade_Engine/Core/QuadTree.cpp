@@ -100,7 +100,7 @@ void QuadNode::SubDivide(QuadNode& node, int divisionsLeft)
 }
 
 //////////////// QUAD TREE ////////////////
-QuadTree::QuadTree() : type(TreeType::ORTHOGRAPHIC), lowest_height(0), tile_width(0), tile_height(0), displayTree(true)
+QuadTree::QuadTree() : type(TreeType::ORTHOGRAPHIC), lowest_height(0), tile_width(0), tile_height(0), displayTree(false)
 {
 }
 void QuadTree::Init(TreeType s_type, int s_x, int s_y, int s_w, int s_h) 

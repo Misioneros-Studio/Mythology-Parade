@@ -127,7 +127,7 @@ void AABBNode::SubDivide(AABBNode& node)
 }
 
 //////////////// QUAD TREE ////////////////
-AABBTree::AABBTree() : displayTree(true)
+AABBTree::AABBTree() : displayTree(false)
 {
 }
 void AABBTree::Init(int s_x, int s_y, int s_w, int s_h)
