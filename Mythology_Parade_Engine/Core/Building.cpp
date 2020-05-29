@@ -409,7 +409,7 @@ bool Building::Update(float dt)
 		}
 	}
 
-	if (civilization == App->entityManager->getPlayer()->civilization)
+	if (civilization == App->entityManager->getPlayer()->civilization || App->scene->godMode)
 	{
 		std::vector<iPoint> tiles;
 		App->fowManager->GetTilesInsideRadius(fowRadius, position, { collisionRect.w / 2, collisionRect.h / 4 }, tiles);
