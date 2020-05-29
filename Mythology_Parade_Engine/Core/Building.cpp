@@ -172,7 +172,15 @@ void Building::Kill(iPoint direction)
 {
 	buildingStatus = BuildingStatus::DESTROYED;
 	if (buildingType == BuildingType::FORTRESS) {
+
 		App->particleManager->CreateParticle({ (int)position.x + 10,(int)position.y - 100 }, { 0,0 }, 10, ParticleAnimation::Explosion);
+		if (civilization == App->entityManager->getPlayer()->civilization) {
+			App->entityManager->getPlayer()->player_lose = true;
+		}
+		else {
+			App->entityManager->getPlayer()->player_win = true;
+			
+		}
 	}
 	else {
 		App->particleManager->CreateParticle({ (int)position.x - 22,(int)position.y - 100 }, { 0,0 }, 10, ParticleAnimation::Explosion);
