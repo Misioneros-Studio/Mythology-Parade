@@ -18,7 +18,7 @@ IA::IA()
 	positionViking.push_back({ -352,752 }); //Monk3
 	positionViking.push_back({ -3904,2464 }); //Cleric1Pos
 	positionViking.push_back({ 3200,2304 }); //Cleric2Pos
-	positionViking.push_back({ -224,3920 }); //Cleric3Pos
+	positionViking.push_back({ -192,4448 }); //Cleric3Pos
 	positionViking.push_back({ -128,576 }); //Home
 
 	positionGreek.push_back({ -576,4256 }); //Monastery
@@ -156,7 +156,8 @@ void IA::EarlyGame()
 		}
 		break;
 	case EarlyGameBehaviour::FIND:
-
+		if (Find())
+			gamePhase = GameBehaviour::MID;
 		break;
 	default:
 		break;
@@ -236,13 +237,17 @@ bool IA::InitCiv()
 		if (App->entityManager->getPlayer()->civilization == CivilizationType::VIKING) civilization = CivilizationType::GREEK;
 		else civilization = CivilizationType::VIKING;
 
-		for (int i = 1; i <= 2; ++i)
+		for (int i = 1; i <= 3; ++i)
 		{
 			std::list<Entity*>::iterator it = App->entityManager->entities[static_cast<EntityType>(i)].begin();
 			for (it; it != App->entityManager->entities[static_cast<EntityType>(i)].end(); ++it)
 			{
 				if (it._Ptr->_Myval->civilization == civilization) {
 					listEntities.push_back(it._Ptr->_Myval);
+				}
+				if (it._Ptr->_Myval->name == "fortress" && it._Ptr->_Myval->civilization != civilization)
+				{
+					enemyFortress = static_cast<Building*>(it._Ptr->_Myval);
 				}
 			}
 		}
@@ -281,12 +286,6 @@ Unit* IA::CreateUnit(UnitType type, iPoint pos)
 	return static_cast<Unit*>(entity);
 }
 
-bool IA::InitExplore()
-{
-	return true;
-
-}
-
 bool IA::CheckExplore()
 {
 	bool ret = false;
@@ -308,6 +307,25 @@ bool IA::CheckExplore()
 	}
 	if (units == 2) {
 		ret = true;
+	}
+
+	return ret;
+}
+
+bool IA::Find()
+{
+	bool ret = false;
+
+	std::list<Entity*>::iterator it = listEntities.begin();
+	for (it; it != listEntities.end(); ++it)
+	{
+		if (it._Ptr->_Myval->name == "cleric")
+		{
+			if (it._Ptr->_Myval->position.DistanceManhattan(enemyFortress->position)<=700)
+			{
+				ret = true;
+			}
+		}
 	}
 
 	return ret;

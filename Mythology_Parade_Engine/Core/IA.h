@@ -56,8 +56,8 @@ public:
 	bool InitCiv();
 	bool CreateBuilding(BuildingType, iPoint);
 	Unit* CreateUnit(UnitType, iPoint);
-	bool InitExplore();
 	bool CheckExplore();
+	bool Find();
 	bool Defense();
 	bool Atack();
 	bool Win();
@@ -89,6 +89,8 @@ private:
 	std::vector<iPoint> positionViking;
 	std::vector<iPoint> positionGreek;
 	iPoint mouse;
+
+	Building* enemyFortress;
 };
 
 enum class EarlyMovements
