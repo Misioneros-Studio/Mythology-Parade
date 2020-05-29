@@ -315,9 +315,6 @@ bool IA::InitCiv()
 		}
 		timer.Start();
 		early = EarlyGameBehaviour::BASIC_BUILDINGS_CREATION;
-		//DELETE THIS
-		gamePhase = GameBehaviour::MID;
-		mid = MidGameBehaviour::CREATE_ECONOMY;
 	}
 
 	return true;
