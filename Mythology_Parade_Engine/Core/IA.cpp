@@ -286,6 +286,8 @@ void IA::LateGame()
 			Win();
 		}
 		break;
+	case LateGameBehaviour::FINISH:
+		break;
 	default:
 		break;
 	}
@@ -390,7 +392,7 @@ bool IA::Find()
 	{
 		if (it._Ptr->_Myval->name == "cleric")
 		{
-			if (it._Ptr->_Myval->position.DistanceManhattan(enemyFortress->position)<=350)
+			if (it._Ptr->_Myval->position.DistanceManhattan(enemyFortress->position)<=800)
 			{
 				ret = true;
 			}
