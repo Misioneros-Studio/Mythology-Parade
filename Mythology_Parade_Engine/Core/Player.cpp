@@ -109,6 +109,19 @@ bool Player::Update(float dt)
 	//	App->entityManager->CreateUnitEntity(UnitType::MONK, spawnPos);
 	//}
 
+	////Selection logics and drawing
+	//if (!App->scene->paused_game)
+	//{
+	//	SelectionDraw_Logic();
+	//	PlayerInputs();
+	//}
+
+	return true;
+}
+
+bool Player::PostUpdate()
+{
+
 	//Selection logics and drawing
 	if (!App->scene->paused_game)
 	{
@@ -116,11 +129,6 @@ bool Player::Update(float dt)
 		PlayerInputs();
 	}
 
-	return true;
-}
-
-bool Player::PostUpdate()
-{
 	return true;
 }
 

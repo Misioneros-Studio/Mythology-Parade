@@ -269,6 +269,14 @@ bool EntityManager::Update(float dt)
 bool EntityManager::PostUpdate()
 {
 
+	for (unsigned i = 0; i < entities.size(); i++)
+	{
+		for (std::list<Entity*>::iterator it = entities[(EntityType)i].begin(); it != entities[(EntityType)i].end(); it++)
+		{
+			(*it)->PostUpdate();
+		}
+	}
+
 	//TODO 7: Test collision detection in Debug and Release mode
 	for (std::list<Entity*>::iterator it = entities[EntityType::UNIT].begin(); it != entities[EntityType::UNIT].end(); it++)
 	{
