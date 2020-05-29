@@ -10,7 +10,6 @@
 //Constructor
 ResearchMenu::ResearchMenu(Player* player) {
 	StartResearchMenu(player);
-	LOG("%i", player->marc);
 }
 
 //Destructor
