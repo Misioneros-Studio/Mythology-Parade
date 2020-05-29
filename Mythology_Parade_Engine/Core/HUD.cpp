@@ -480,10 +480,10 @@ void HUD::HUDUpdateSelection(std::list<Entity*> listEntities, Building* building
 				hud_stats_selected_troop[2] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 773,703,30,10 }, { 0,0,100,100 },
 					std::to_string(unit->GetHealth()), Panel_Fade::no_one_fade, { 0,0,0,255 }));
 				if (unit->unitType == UnitType::CLERIC) {
-					hud_stats_selected_troop[3] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 720,622,30,10 }, { 0,0,100,100 }, "Influence % every 5 s:", Panel_Fade::no_one_fade,
+					hud_stats_selected_troop[3] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 720,622,30,30 }, { 0,0,100,100 }, "Speed:", Panel_Fade::no_one_fade,
 						{ 0,0,0,255 }));
-					hud_stats_selected_troop[4] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 890,622,30,10 }, { 0,0,100,100 },
-						std::to_string(5), Panel_Fade::no_one_fade, { 0,0,0,255 }));
+					hud_stats_selected_troop[4] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 760,622,30,30 }, { 0,0,100,100 },
+						std::to_string(100), Panel_Fade::no_one_fade, { 0,0,0,255 }));
 				}
 				else if(unit->unitType == UnitType::MINOTAUR||unit->unitType==UnitType::DRAUGAR) {
 					hud_stats_selected_troop[3] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 720,622,30,10 }, { 0,0,100,100 }, "Health", Panel_Fade::no_one_fade,
