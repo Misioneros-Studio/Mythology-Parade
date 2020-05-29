@@ -256,30 +256,37 @@ void Player::ActionToBuilding()
 		Building* unit = static_cast<Building*>(buildingSelect);
 		unit->SetMaxUnitHealth();
 	}
-	if (App->scene->nextBuilding_selected && GetEnemySelectedBuild()->name == "encampment" && civilization != GetEnemySelectedBuild()->civilization)
+	if (GetEnemySelectedBuild() != nullptr)
 	{
-		CivilizationType civ;
-		int info;
-		if (GetEnemySelectedBuild()->civilization == CivilizationType::GREEK)
+		if (App->scene->nextBuilding_selected && GetEnemySelectedBuild()->name == "encampment" && civilization != GetEnemySelectedBuild()->civilization)
 		{
-			civ = CivilizationType::VIKING; info = 3;
-		}
-		else
-		{
-			civ = CivilizationType::GREEK; info = 7;
-		}
+			CivilizationType civ;
+			int info;
+			if (GetEnemySelectedBuild()->civilization == CivilizationType::GREEK)
+			{
+				civ = CivilizationType::VIKING; info = 3;
+			}
+			else
+			{
+				civ = CivilizationType::GREEK; info = 7;
+			}
 
-		iPoint pos = { (int)GetEnemySelectedBuild()->position.x, (int)GetEnemySelectedBuild()->position.y };
-		Building* building = static_cast<Building*>(App->entityManager->CreateBuildingEntity(pos, BuildingType::ENCAMPMENT, App->entityManager->buildingsData[info], civ));
-		building->SetTimeProducing(0);
-		App->entityManager->DeleteEntity(GetEnemySelectedBuild());
-		App->scene->nextBuilding_selected = false;
+			iPoint pos = { (int)GetEnemySelectedBuild()->position.x, (int)GetEnemySelectedBuild()->position.y };
+			Building* building = static_cast<Building*>(App->entityManager->CreateBuildingEntity(pos, BuildingType::ENCAMPMENT, App->entityManager->buildingsData[info], civ));
+			building->SetTimeProducing(0);
+			App->entityManager->DeleteEntity(GetEnemySelectedBuild());
+			App->scene->nextBuilding_selected = false;
+			Miracle(Miracles::CallToArms);
+		}
+		else if (App->scene->building_meteor && GetEnemySelectedBuild()->name == "encampment")
+		{
+			App->scene->building_meteor = false;
+			App->entityManager->DeleteEntity(GetEnemySelectedBuild());
+			Disaster(Disasters::HolyMeteor);
+		}
 	}
-	else if (App->scene->building_meteor && GetEnemySelectedBuild()->name == "encampment")
-	{
-		App->scene->building_meteor = false;
-		App->entityManager->DeleteEntity(GetEnemySelectedBuild());
-	}
+	
+	
 }
 
 void Player::SeeEntitiesInside(bool shift, bool alt)

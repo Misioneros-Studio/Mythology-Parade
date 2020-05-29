@@ -184,6 +184,7 @@ void CurrencySystem::Miracle(Miracles action)
 		if (prayers >= 60) {
 			prayers += 3;
 			sacrifices -= 3;
+			faith -= 300;
 			//FUNCTION OF THE EFFECT
 		}
 		break;
@@ -226,6 +227,7 @@ void CurrencySystem::Disaster(Disasters action)
 		if (sacrifices >= 60) {
 			prayers -= 3;
 			sacrifices += 3;
+			faith -= 300;
 			//FUNCTION OF THE EFFECT
 		}
 		break;

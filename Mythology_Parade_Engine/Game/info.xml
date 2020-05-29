@@ -1,33 +1,28 @@
 <?xml version="1.0"?>
 <info>
 	<entities>
-		<unit type="monk" position_x="-364" position_y="736" civilization="viking" health="1" />
-		<unit type="monk" position_x="-224" position_y="624" civilization="viking" health="1" />
-		<unit type="monk" position_x="-332" position_y="752" civilization="viking" health="1" />
-		<unit type="assassin" position_x="21.3171597" position_y="777.822388" civilization="viking" health="100" level="0" />
-		<unit type="cleric" position_x="2680.87329" position_y="2627.72168" civilization="viking" health="100" />
-		<unit type="cleric" position_x="-3520" position_y="2927.06006" civilization="viking" health="100" />
+		<unit type="assassin" position_x="52" position_y="784" civilization="viking" health="100" level="0" />
+		<unit type="monk" position_x="84" position_y="800" civilization="viking" health="1" />
 		<unit type="assassin" position_x="-300" position_y="4288" civilization="greek" health="100" level="0" />
 		<unit type="monk" position_x="-268" position_y="4304" civilization="greek" health="1" />
 	</entities>
 	<buildings>
-		<build type="monastery" position_x="-384" position_y="672" civilization="viking" health="250" status="constructing" time="89.2699966" progress="0.49444443" action="nothing" />
-		<build type="temple" position_x="224" position_y="688" civilization="viking" health="200" status="constructing" time="89.2699966" progress="0.593333304" action="nothing" />
 		<build type="fortress" position_x="-96" position_y="704" civilization="viking" health="500" status="finished" action="nothing" />
+		<build type="encampment" position_x="-704" position_y="800" civilization="viking" health="350" status="finished" action="nothing" />
 		<build type="fortress" position_x="-288" position_y="4256" civilization="greek" health="500" status="finished" action="nothing" />
 	</buildings>
 	<players>
 		<greek>
-			<economy faith="716" prayers="0" sacrifices="0" />
+			<economy faith="1634" prayers="1020" sacrifices="1020" />
 			<research>
-				<temple research="false" />
-				<encampment research="false" />
-				<cleric research="false" />
-				<assassin research="false" />
-				<lawful_beast research="false" />
-				<chaotic_beast research="false" />
-				<lawful_miracle research="false" />
-				<chaotic_miracle research="false" />
+				<temple research="true" />
+				<encampment research="true" />
+				<cleric research="true" />
+				<assassin research="true" />
+				<lawful_beast research="true" />
+				<chaotic_beast research="true" />
+				<lawful_miracle research="true" />
+				<chaotic_miracle research="true" />
 				<lawful_victory research="false" />
 				<chaotic_victory research="false" />
 			</research>
@@ -35,7 +30,7 @@
 	</players>
 	<volume music="50" fx="128" />
 	<IA>
-		<Game_Phase macroState="0" state="6" />
+		<Game_Phase macroState="1" state="3" />
 	</IA>
-	<camera x="551" y="-485" />
+	<camera x="851" y="-3880" />
 </info>
