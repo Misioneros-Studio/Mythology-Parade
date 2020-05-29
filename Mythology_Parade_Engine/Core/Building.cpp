@@ -595,7 +595,7 @@ void Building::FinishProduction(const std::string &thing_produced, bool cancelle
 	if (cancelled == false) {
 		if (thing_produced == "Victory")
 		{
-			if (civilization == CivilizationType::VIKING)
+			if (civilization == App->entityManager->getPlayer()->civilization)
 			{
 				App->entityManager->getPlayer()->player_win = true;
 			}
