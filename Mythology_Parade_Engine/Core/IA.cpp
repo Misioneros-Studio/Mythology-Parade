@@ -8,24 +8,24 @@ IA::IA()
 	mid = MidGameBehaviour::ASSEMBLE;
 	late = LateGameBehaviour::ATACK;
 
+	civilization = CivilizationType::GREEK;
+
 	positionViking.push_back({ -384,672 }); //Monastery
 	positionViking.push_back({ 224,688 }); //Temple
 	positionViking.push_back({ 160,816 }); //Cleric1
 	positionViking.push_back({ 224,848 }); //Cleric2
-	positionViking.push_back({ 192,832 }); //Cleric3
 	positionViking.push_back({ -224,624 }); //Monk1
 	positionViking.push_back({ -384,736 }); //Monk2
 	positionViking.push_back({ -352,752 }); //Monk3
 	positionViking.push_back({ -3904,2464 }); //Cleric1Pos
 	positionViking.push_back({ 3200,2304 }); //Cleric2Pos
 	positionViking.push_back({ -192,4448 }); //Cleric3Pos
-	positionViking.push_back({ -128,576 }); //Home
+	positionViking.push_back({ 64,864 }); //Home
 
 	positionGreek.push_back({ -576,4256 }); //Monastery
 	positionGreek.push_back({ 64,4224 }); //Temple
 	positionGreek.push_back({ -256,4416 }); //Cleric1
-	positionGreek.push_back({ -192,4416 }); //Cleric2
-	positionGreek.push_back({ -128,4416 }); //Cleric3
+	positionGreek.push_back({ -864,4272 }); //Cleric2
 	positionGreek.push_back({ -576,4192 }); //Monk1
 	positionGreek.push_back({ -640,4288 }); //Monk2
 	positionGreek.push_back({ -608,4304 }); //Monk3
@@ -33,6 +33,25 @@ IA::IA()
 	positionGreek.push_back({ 3200,2304 }); //Cleric2Pos
 	positionGreek.push_back({ -128,576 }); //Cleric3Pos
 	positionGreek.push_back({ -192,4352 }); //Home
+
+
+	positionViking.push_back({ -704,800 }); //encampment
+	positionViking.push_back({ 64,928 }); //assassin1
+	positionViking.push_back({ 32,912 }); //assassin2
+	positionViking.push_back({ 128,608 }); //assassin3
+	positionViking.push_back({ 160,624 }); //assassin4
+	positionViking.push_back({ 192,640 }); //assassin5
+	positionViking.push_back({ -224,848 }); //assassin6
+	positionViking.push_back({ -192,896 }); //assassin7	
+	
+	positionGreek.push_back({ -32,4048 }); //encampment
+	positionGreek.push_back({ -352,4464 }); //assassin1
+	positionGreek.push_back({ -320,4480 }); //assassin2
+	positionGreek.push_back({ -256,4480 }); //assassin3
+	positionGreek.push_back({ -160,4496 }); //assassin4
+	positionGreek.push_back({ -64,4480 }); //assassin5
+	positionGreek.push_back({ 64,4448 }); //assassin6
+	positionGreek.push_back({ 96,4400 }); //assassin7
 
 }
 
@@ -137,8 +156,8 @@ void IA::EarlyGame()
 			}
 			else
 			{
-				listEntities.push_back(static_cast<Entity*>(CreateUnit(UnitType::CLERIC, positionGreek.at((int)EarlyMovements::CLERIC2))));
 				listEntities.push_back(static_cast<Entity*>(CreateUnit(UnitType::CLERIC, positionGreek.at((int)EarlyMovements::CLERIC1))));
+				listEntities.push_back(static_cast<Entity*>(CreateUnit(UnitType::CLERIC, positionGreek.at((int)EarlyMovements::CLERIC2))));
 			}
 			early = EarlyGameBehaviour::EXPLORE1;
 			timer.Start();
@@ -170,36 +189,36 @@ void IA::MidGame()
 	{
 	case MidGameBehaviour::ASSEMBLE:
 		AssembleClerics();
-		mid = MidGameBehaviour::CREATE_ECONOMY;
+		mid = MidGameBehaviour::RESEARCH_ASSASSIN;
 		break;
 	case MidGameBehaviour::CREATE_ECONOMY:
 		break;
 	case MidGameBehaviour::RESEARCH_ASSASSIN:
 		if(civilization==CivilizationType::VIKING)
-			//CreateBuilding(BuildingType::ENCAMPMENT, );
-		//else
-			//CreateBuilding(BuildingType::ENCAMPMENT, );
+			CreateBuilding(BuildingType::ENCAMPMENT, positionViking.at((int)EarlyMovements::ENCAMPMENT));
+		else
+			CreateBuilding(BuildingType::ENCAMPMENT, positionGreek.at((int)EarlyMovements::ENCAMPMENT));
 
 		mid = MidGameBehaviour::CREATE_ASSASSIN;
 		break;
 	case MidGameBehaviour::CREATE_ASSASSIN:
 		if (civilization == CivilizationType::VIKING) {
-			//CreateUnit(UnitType::ASSASSIN, );
-			//CreateUnit(UnitType::ASSASSIN, );
-			//CreateUnit(UnitType::ASSASSIN, );
-			//CreateUnit(UnitType::ASSASSIN, );
-			//CreateUnit(UnitType::ASSASSIN, );
-			//CreateUnit(UnitType::ASSASSIN, );
-			//CreateUnit(UnitType::ASSASSIN, );
+			CreateUnit(UnitType::ASSASSIN, positionViking.at((int)EarlyMovements::ASSASSIN1));
+			CreateUnit(UnitType::ASSASSIN, positionViking.at((int)EarlyMovements::ASSASSIN2));
+			CreateUnit(UnitType::ASSASSIN, positionViking.at((int)EarlyMovements::ASSASSIN3));
+			CreateUnit(UnitType::ASSASSIN, positionViking.at((int)EarlyMovements::ASSASSIN4));
+			CreateUnit(UnitType::ASSASSIN, positionViking.at((int)EarlyMovements::ASSASSIN5));
+			CreateUnit(UnitType::ASSASSIN, positionViking.at((int)EarlyMovements::ASSASSIN6));
+			CreateUnit(UnitType::ASSASSIN, positionViking.at((int)EarlyMovements::ASSASSIN7));
 		}
 		else {
-			//CreateUnit(UnitType::ASSASSIN, );
-			//CreateUnit(UnitType::ASSASSIN, );
-			//CreateUnit(UnitType::ASSASSIN, );
-			//CreateUnit(UnitType::ASSASSIN, );
-			//CreateUnit(UnitType::ASSASSIN, );
-			//CreateUnit(UnitType::ASSASSIN, );
-			//CreateUnit(UnitType::ASSASSIN, );
+			CreateUnit(UnitType::ASSASSIN, positionGreek.at((int)EarlyMovements::ASSASSIN1));
+			CreateUnit(UnitType::ASSASSIN, positionGreek.at((int)EarlyMovements::ASSASSIN2));
+			CreateUnit(UnitType::ASSASSIN, positionGreek.at((int)EarlyMovements::ASSASSIN3));
+			CreateUnit(UnitType::ASSASSIN, positionGreek.at((int)EarlyMovements::ASSASSIN4));
+			CreateUnit(UnitType::ASSASSIN, positionGreek.at((int)EarlyMovements::ASSASSIN5));
+			CreateUnit(UnitType::ASSASSIN, positionGreek.at((int)EarlyMovements::ASSASSIN6));
+			CreateUnit(UnitType::ASSASSIN, positionGreek.at((int)EarlyMovements::ASSASSIN7));
 		}
 		mid = MidGameBehaviour::DISTRIBUTION;
 		timer.Start();
@@ -253,6 +272,8 @@ bool IA::InitCiv()
 		}
 		timer.Start();
 		early = EarlyGameBehaviour::BASIC_BUILDINGS_CREATION;
+		gamePhase = GameBehaviour::MID;
+		mid = MidGameBehaviour::RESEARCH_ASSASSIN;
 	}
 
 	return true;
@@ -273,6 +294,13 @@ bool IA::CreateBuilding(BuildingType type, iPoint pos)
 			App->entityManager->CreateBuildingEntity(pos, type, App->entityManager->buildingsData[6], civilization);
 		else
 			App->entityManager->CreateBuildingEntity(pos, type, App->entityManager->buildingsData[2], civilization);
+	}
+	else if (type == BuildingType::ENCAMPMENT)
+	{
+		if (civilization == CivilizationType::GREEK)
+			App->entityManager->CreateBuildingEntity(pos, type, App->entityManager->buildingsData[7], civilization);
+		else
+			App->entityManager->CreateBuildingEntity(pos, type, App->entityManager->buildingsData[3], civilization);
 	}
 
 	return true;
@@ -321,7 +349,7 @@ bool IA::Find()
 	{
 		if (it._Ptr->_Myval->name == "cleric")
 		{
-			if (it._Ptr->_Myval->position.DistanceManhattan(enemyFortress->position)<=700)
+			if (it._Ptr->_Myval->position.DistanceManhattan(enemyFortress->position)<=350)
 			{
 				ret = true;
 			}
