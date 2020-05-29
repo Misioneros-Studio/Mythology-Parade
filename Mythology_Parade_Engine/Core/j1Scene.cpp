@@ -771,11 +771,17 @@ void j1Scene::OnClick(UI* element, float argument)
 		}
 		else if (element->name == "Produce_Lawful_Miracle")
 		{
-			nextBuilding_selected = true;
+			if (App->entityManager->getPlayer()->prayers >= 60)
+			{
+				nextBuilding_selected = true;
+			}
 		}
 		else if (element->name == "Produce_Chaotic_Miracle")
 		{
-			building_meteor = true;
+			if (App->entityManager->getPlayer()->sacrifices >= 60)
+			{
+				building_meteor = true;
+			}
 		}
 		else if (element->name == "Troop") {
 			hud->ClickOnSelectionButton(element->sprite1);

@@ -18,10 +18,11 @@ Building::Building(BuildingType type, iPoint pos, BuildingInfo info)
 	time_producing = 0;
 	first_time_constructing = true;
 	percentage_life = 0.f;
+	
 	/*---------------*/
 
 	//inits with some values
-	position = { (float)pos.x, (float)pos.y};
+	position = {(float)pos.x,(float) pos.y};
 	buildingStatus = BuildingStatus::CONSTRUCTING;
 	buildingAction = BuildingAction::NOTHING;
 
@@ -30,7 +31,7 @@ Building::Building(BuildingType type, iPoint pos, BuildingInfo info)
 	blitRect = info.blitSize;
 
 	tileLenght = info.tileLenght;
-	int blitWidth = tileLenght * App->map->data.tile_width;
+	blitWidth = tileLenght * App->map->data.tile_width;
 
 	switch (buildingType)
 	{
@@ -178,14 +179,58 @@ void Building::Kill(iPoint direction)
 			App->entityManager->getPlayer()->player_lose = true;
 		}
 		else {
-			App->entityManager->getPlayer()->player_win = true;
-			
+			App->entityManager->getPlayer()->player_win = true;			
 		}
 	}
 	else {
 		App->particleManager->CreateParticle({ (int)position.x - 22,(int)position.y - 100 }, { 0,0 }, 10, ParticleAnimation::Explosion);
 	}
+	//Convert();
+	//App->entityManager->DeleteEntity(this);
 }
+
+void Building::Convert()
+{
+	int data = 0;
+	switch (civilization)
+	{
+	case VIKING:
+		civilization = CivilizationType::GREEK;
+		break;
+	case GREEK:
+		civilization = CivilizationType::VIKING;
+		break;
+	}
+
+	switch (buildingType)
+	{
+	case MONASTERY:
+		switch (civilization)
+		{
+		case VIKING:
+			data = 1;
+			break;
+		case GREEK:
+			data = 5;
+			break;
+		}
+		break;
+	case ENCAMPMENT:
+		switch (civilization)
+		{
+		case VIKING:
+			data = 3;
+			break;
+		case GREEK:
+			data = 7;
+			break;
+		}
+		break;
+	}
+
+	App->entityManager->CreateBuildingEntity({ (int)position.x,(int)position.y }, buildingType, App->entityManager->buildingsData[data], civilization);
+}
+
 
 bool Building::GetResearched()
 {
@@ -361,7 +406,26 @@ bool Building::Update(float dt)
 
 	}
 	//IF MONASTERY DETECTS NEARBY MONKS,INCREASE FAITH
-	if (buildingType == BuildingType::MONASTERY)
+	if (buildingType == BuildingType::MONASTERY && civilization == App->entityManager->getPlayer()->civilization)
+	{
+		std::list<Entity*> list =  App->entityManager->entities[EntityType::UNIT];
+		int count = 0;
+		for each (Unit* var in list)
+		{
+			if (var->unitType == UnitType::MONK) {
+				if(position.DistanceManhattan(var->position) < 300)
+				count++;
+			}
+		}
+		if (nearbyMonks != count)
+		{
+			nearbyMonks = count;
+			App->entityManager->getPlayer()->IncreaseFaithRatio(nearbyMonks);
+		}
+	}	
+	
+	//IF MONASTERY DETECTS NEARBY MONKS,INCREASE FAITH
+	if (buildingType == BuildingType::TEMPLE && civilization == App->entityManager->getPlayer()->civilization)
 	{
 		std::list<Entity*> list =  App->entityManager->entities[EntityType::UNIT];
 		int count = 0;
