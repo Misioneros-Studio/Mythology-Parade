@@ -18,7 +18,7 @@ IA::IA()
 	positionViking.push_back({ -352,752 }); //Monk3
 	positionViking.push_back({ -3904,2464 }); //Cleric1Pos
 	positionViking.push_back({ 3200,2304 }); //Cleric2Pos
-	positionViking.push_back({ -192,4352 }); //Cleric3Pos
+	positionViking.push_back({ -224,3920 }); //Cleric3Pos
 	positionViking.push_back({ -128,576 }); //Home
 
 	positionGreek.push_back({ -576,4256 }); //Monastery
@@ -132,15 +132,13 @@ void IA::EarlyGame()
 		{
 			if (civilization == CivilizationType::VIKING)
 			{
-				listEntities.push_back(static_cast<Entity*>(CreateUnit(UnitType::CLERIC, positionViking.at((int)EarlyMovements::CLERIC1))));
 				listEntities.push_back(static_cast<Entity*>(CreateUnit(UnitType::CLERIC, positionViking.at((int)EarlyMovements::CLERIC2))));
-				listEntities.push_back(static_cast<Entity*>(CreateUnit(UnitType::CLERIC, positionViking.at((int)EarlyMovements::CLERIC3))));
+				listEntities.push_back(static_cast<Entity*>(CreateUnit(UnitType::CLERIC, positionViking.at((int)EarlyMovements::CLERIC1))));
 			}
 			else
 			{
-				listEntities.push_back(static_cast<Entity*>(CreateUnit(UnitType::CLERIC, positionGreek.at((int)EarlyMovements::CLERIC1))));
 				listEntities.push_back(static_cast<Entity*>(CreateUnit(UnitType::CLERIC, positionGreek.at((int)EarlyMovements::CLERIC2))));
-				listEntities.push_back(static_cast<Entity*>(CreateUnit(UnitType::CLERIC, positionGreek.at((int)EarlyMovements::CLERIC3))));
+				listEntities.push_back(static_cast<Entity*>(CreateUnit(UnitType::CLERIC, positionGreek.at((int)EarlyMovements::CLERIC1))));
 			}
 			early = EarlyGameBehaviour::EXPLORE1;
 			timer.Start();
@@ -148,12 +146,16 @@ void IA::EarlyGame()
 		break;
 	case EarlyGameBehaviour::EXPLORE1:
 		Explore1();
-		early = EarlyGameBehaviour::EXPLORE2;
+		early = EarlyGameBehaviour::CHECKEXPLORER1;
 		break;
-	case EarlyGameBehaviour::EXPLORE2:
-
+	case EarlyGameBehaviour::CHECKEXPLORER1:
+		if (CheckExplore())
+		{
+			Explore2();
+			early = EarlyGameBehaviour::FIND;
+		}
 		break;
-	case EarlyGameBehaviour::EXPLORE3:
+	case EarlyGameBehaviour::FIND:
 
 		break;
 	default:
@@ -287,7 +289,28 @@ bool IA::InitExplore()
 
 bool IA::CheckExplore()
 {
-	return false;
+	bool ret = false;
+
+	int units = 0;
+
+	int i = 0;
+	std::list<Entity*>::iterator it = listEntities.begin();
+	for (it; it != listEntities.end(); ++it)
+	{
+		if (it._Ptr->_Myval->name == "cleric")
+		{
+			if (it._Ptr->_Myval->position == positionViking.at((int)EarlyMovements::CLERIC1POS + i))
+			{
+				units++;
+			}
+			i++;
+		}
+	}
+	if (units == 2) {
+		ret = true;
+	}
+
+	return ret;
 }
 
 bool IA::Defense()
@@ -360,6 +383,22 @@ void IA::Explore1()
 			else
 				MoveUnity(positionGreek.at((int)EarlyMovements::CLERIC1POS + i), "cleric", u);
 			i++;
+		}
+	}
+}
+
+void IA::Explore2()
+{
+	std::list<Entity*>::iterator it = listEntities.begin();
+	for (it; it != listEntities.end(); ++it)
+	{
+		if (it._Ptr->_Myval->name == "cleric")
+		{
+			Unit* u = static_cast<Unit*>(it._Ptr->_Myval);
+			if (civilization == CivilizationType::VIKING)
+				MoveUnity(positionViking.at((int)EarlyMovements::CLERIC3POS), "cleric", u);
+			else
+				MoveUnity(positionGreek.at((int)EarlyMovements::CLERIC3POS), "cleric", u);
 		}
 	}
 }

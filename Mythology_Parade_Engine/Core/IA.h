@@ -21,8 +21,8 @@ enum class EarlyGameBehaviour
 	RESEARCH_CLERIC,
 	BASIC_UNITS_CREATION,
 	EXPLORE1,
-	EXPLORE2,
-	EXPLORE3
+	CHECKEXPLORER1,
+	FIND
 };
 
 enum class MidGameBehaviour
@@ -65,6 +65,7 @@ public:
 	
 public:
 	void Explore1();
+	void Explore2();
 	void AssembleClerics();
 
 public:
