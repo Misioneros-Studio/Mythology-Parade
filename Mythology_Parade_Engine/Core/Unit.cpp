@@ -31,7 +31,7 @@ Unit::Unit(UnitType type, iPoint pos): unitType(type), state(AnimationType::IDLE
 	switch (type)
 	{
 	case UnitType::MONK:
-		time_production = 90;
+		time_production = 15;
 		time_research = 0;
 		researched = true;
 		name = "monk";
@@ -39,40 +39,40 @@ Unit::Unit(UnitType type, iPoint pos): unitType(type), state(AnimationType::IDLE
 		collisionRect = { 0, 0, 30, -55 };
 		break;
 	case UnitType::JOTNAR:
-		time_production = 120;
-		time_research = 210;
+		time_production = 35;
+		time_research = 50;
 		name = "jotnar";
 		researched = true;
 		Init(150);
 		collisionRect = { 0, 0, 123, -175 };
 		break;
 	case UnitType::DRAUGAR:
-		time_production = 120;
-		time_research = 210;
+		time_production = 35;
+		time_research = 50;
 		name = "draugar";
 		researched = true;
 		Init(40);
 		collisionRect = { 0, 0, 40, -60 };
 		break;
 	case UnitType::CYCLOP:
-		time_production = 120;
-		time_research = 210;
+		time_production = 35;
+		time_research = 50;
 		researched = true;
 		name = "cyclop";
 		Init(150);
 		collisionRect = { 0, 0, 118, -130 };
 		break;
 	case UnitType::MINOTAUR:
-		time_production = 120;
-		time_research = 210;
+		time_production = 35;
+		time_research = 50;
 		researched = true;
 		name = "minotaur";
 		Init(40);
 		collisionRect = { 0, 0, 60, -67 };
 		break;
 	case UnitType::CLERIC:
-		time_production = 90;
-		time_research = 70;
+		time_production = 15;
+		time_research = 50;
 		researched = true;
 		name = "cleric";
 		Init(100);

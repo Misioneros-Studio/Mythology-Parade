@@ -12,7 +12,7 @@ CombatUnit::CombatUnit(UnitType type, iPoint pos) : Unit(type, pos), range(0), d
 	switch (unitType)
 	{
 	case UnitType::ASSASSIN:
-		time_production = 90;
+		time_production = 20;
 		name = "assassin";
 		time_research = 0;
 		researched = true;

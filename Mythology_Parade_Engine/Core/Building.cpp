@@ -49,7 +49,7 @@ Building::Building(BuildingType type, iPoint pos, BuildingInfo info)
 	case MONASTERY:
 		this->buildingType = BuildingType::MONASTERY;
 		time_research = 60;
-		time_construction = 180;
+		time_construction = 40;
 		damage = 15;
 		SetMaxHealth(250);
 		SetHealth(250);
@@ -62,8 +62,8 @@ Building::Building(BuildingType type, iPoint pos, BuildingInfo info)
 		break;
 	case TEMPLE:
 		this->buildingType = BuildingType::TEMPLE;
-		time_research = 90;
-		time_construction = 150;
+		time_research = 50;
+		time_construction = 40;
 		damage = 15;
 		SetMaxHealth(200);
 		SetHealth(200);
@@ -76,8 +76,8 @@ Building::Building(BuildingType type, iPoint pos, BuildingInfo info)
 		break;
 	case ENCAMPMENT:
 		this->buildingType = BuildingType::ENCAMPMENT;
-		time_research = 90;
-		time_construction = 180;
+		time_research = 50;
+		time_construction = 40;
 		damage = 20;
 		SetMaxHealth(350);
 		SetHealth(350);
@@ -488,11 +488,11 @@ void Building::StartProducing(const std::string &thing_to_produce) {
 	if (thing_to_produce == "Prayers") time_producing = App->entityManager->getPlayer()->time_prayers;
 	else if (thing_to_produce == "Sacrifices") time_producing = App->entityManager->getPlayer()->time_sacrifices;
 	else if (thing_to_produce == "Victory") time_producing = App->entityManager->getPlayer()->time_production_victory;
-	else if (thing_to_produce == "Monk") time_producing = 90;
-	else if (thing_to_produce == "Assasin") time_producing = 90;
-	else if (thing_to_produce == "Cleric") time_producing = 90;
-	else if (thing_to_produce == "Chaotic_Beast") time_producing = 120;
-	else if (thing_to_produce == "Lawful_Beast") time_producing = 120;
+	else if (thing_to_produce == "Monk") time_producing = 15;
+	else if (thing_to_produce == "Assasin") time_producing = 20;
+	else if (thing_to_produce == "Cleric") time_producing = 15;
+	else if (thing_to_produce == "Chaotic_Beast") time_producing = 35;
+	else if (thing_to_produce == "Lawful_Beast") time_producing = 35;
 	element_producing = thing_to_produce;
 	timer_construction.Start();
 
@@ -559,16 +559,16 @@ void Building::StartResearching(const std::string &thing_producing) {
 	buildingAction = BuildingAction::RESEARCHING;
 	percentage_constructing = 0;
 
-	if (thing_producing == "Chaotic Miracle") time_producing = 240;
-	else if (thing_producing == "Lawful Miracle") time_producing = 240;
-	else if (thing_producing == "Chaotic Victory") time_producing = 420;
-	else if (thing_producing == "Lawful Victory") time_producing = 420;
-	else if (thing_producing == "Assassin") time_producing = 70;
-	else if (thing_producing == "Cleric") time_producing = 70;
-	else if (thing_producing == "Encampment") time_producing = 90;
-	else if (thing_producing == "Temple") time_producing = 90;
-	else if (thing_producing == "Chaotic Beast") time_producing = 210;
-	else if (thing_producing == "Lawful Beast") time_producing = 210;
+	if (thing_producing == "Chaotic Miracle") time_producing = 60;
+	else if (thing_producing == "Lawful Miracle") time_producing = 60;
+	else if (thing_producing == "Chaotic Victory") time_producing = 90;
+	else if (thing_producing == "Lawful Victory") time_producing = 90;
+	else if (thing_producing == "Assassin") time_producing = 20;
+	else if (thing_producing == "Cleric") time_producing = 15;
+	else if (thing_producing == "Encampment") time_producing = 40;
+	else if (thing_producing == "Temple") time_producing = 40;
+	else if (thing_producing == "Chaotic Beast") time_producing = 35;
+	else if (thing_producing == "Lawful Beast") time_producing = 35;
 
 	element_producing = thing_producing;
 	timer_construction.Start();
