@@ -25,6 +25,7 @@ public:
 	Entity(/*EntityTypes type*/) : fowRadius(10)
 	{
 		_isSelected = false;
+		shown_minimap = false;
 	}
 
 	// Destructor
@@ -134,6 +135,8 @@ public:
 
 
 	bool canLevel;
+
+	bool shown_minimap;
 
 
 	bool isSelected() 
