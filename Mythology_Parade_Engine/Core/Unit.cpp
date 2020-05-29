@@ -473,6 +473,7 @@ void Unit::StateMachineActions(float dt)
 			CombatUnit* unit = (CombatUnit*)this;
 			if (enemyTarget->RecieveDamage(unit->GetDamageValue()))
 			{
+				unit->GainExperience(Action::killEnemy);
 				enemyTarget->Kill(App->map->WorldToMap(position.x, position.y));
 				enemyTarget = nullptr;
 				ChangeState(targetPosition, AnimationType::IDLE);
