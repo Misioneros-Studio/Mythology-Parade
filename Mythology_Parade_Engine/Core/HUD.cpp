@@ -408,6 +408,7 @@ void HUD::HUDUpdateSelection(std::list<Entity*> listEntities, Building* building
 			case UnitType::CLERIC:
 				hud_stats_selected_troop[0]->SetString("Cleric");
 				type_thing_selected = Type_Selected::Cleric;
+				position_name.x += 14;
 				hud_stats_selected_troop[0]->SetRect(position_name);
 				break;
 			case UnitType::ASSASSIN:
@@ -778,7 +779,8 @@ void HUD::CancelProduction(iPoint position)
 		index += 6;
 	if (thing_selected->type == EntityType::BUILDING) {
 		Building* building = static_cast<Building*>(thing_selected);
-		building->CancelProduction(index);
+		if(building->buildingAction==BuildingAction::PRODUCING)
+			building->CancelProduction(index);
 	}
 }
 

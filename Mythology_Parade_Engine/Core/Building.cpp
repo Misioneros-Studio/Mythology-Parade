@@ -291,6 +291,8 @@ bool Building::Update(float dt)
 			}
 			else if(buildingAction== BuildingAction::RESEARCHING){
 				App->scene->FinishResearching(element_producing);
+				element_producing = "";
+				App->scene->update_production_list = true;
 			}
 			buildingAction = BuildingAction::NOTHING;
 			percentage_constructing = 1;
@@ -556,6 +558,7 @@ void Building::FinishProduction(const std::string &thing_produced, bool cancelle
 }
 
 void Building::StartResearching(const std::string &thing_producing) {
+	App->scene->update_production_list = true;
 	buildingAction = BuildingAction::RESEARCHING;
 	percentage_constructing = 0;
 
