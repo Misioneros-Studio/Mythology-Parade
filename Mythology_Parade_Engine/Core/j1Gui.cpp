@@ -1319,7 +1319,7 @@ void j1Gui::DoWinOrLoseWindow(int type, bool win) {
 			}
 		}
 		else {
-			App->render->Blit(winlose_tex, global_pos.x, global_pos.y, &sec_greek, NULL, 0.0F);
+			App->render->Blit(winlose_tex, global_pos.x, global_pos.y, &sec_viking, NULL, 0.0F);
 			App->render->Blit(winlose_tex, global_pos.x, global_pos.y, &sec_lose, NULL, 0.0F);
 			if (Mix_Playing(3) == 0) {
 				App->audio->PlayFx(3, App->scene->Lose_sound);
@@ -1330,14 +1330,14 @@ void j1Gui::DoWinOrLoseWindow(int type, bool win) {
 	if (type == 2) {
 		if (win == true) {
 			App->render->Blit(winlose_tex, global_pos.x, global_pos.y, &sec_greek, NULL, 0.0F);
-			App->render->Blit(winlose_tex, global_pos.x, global_pos.y, &sec_lose, NULL, 0.0F);
+			App->render->Blit(winlose_tex, global_pos.x, global_pos.y, &sec_win, NULL, 0.0F);
 			if (Mix_Playing(3) == 0) {
 				App->audio->PlayFx(3, App->scene->WinGreek_sound);
 			}
 		}
 		else {
-			App->render->Blit(winlose_tex, global_pos.x, global_pos.y, &sec_viking, NULL, 0.0F);
-			App->render->Blit(winlose_tex, global_pos.x, global_pos.y, &sec_win, NULL, 0.0F);
+			App->render->Blit(winlose_tex, global_pos.x, global_pos.y, &sec_greek, NULL, 0.0F);
+			App->render->Blit(winlose_tex, global_pos.x, global_pos.y, &sec_lose, NULL, 0.0F);
 			if (Mix_Playing(3) == 0) {
 				App->audio->PlayFx(3, App->scene->Lose_sound);
 			}
