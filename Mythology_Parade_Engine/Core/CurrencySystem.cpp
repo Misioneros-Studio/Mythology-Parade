@@ -8,7 +8,7 @@ CurrencySystem::CurrencySystem()
 	sacrifices = 0;
 	prayers = 0;
 
-	time_prayers = time_sacrifices = 10;
+	time_prayers = time_sacrifices = 6;
 
 	basefaithRatio = 2;
 	faithRatio = basefaithRatio;
