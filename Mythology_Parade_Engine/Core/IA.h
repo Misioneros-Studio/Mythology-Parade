@@ -60,7 +60,7 @@ public:
 	bool Defense();
 	bool Atack();
 	bool Win();
-	bool MoveUnity(iPoint, std::string, Unit* u = nullptr);
+	bool MoveUnit(iPoint, std::string, Unit* u = nullptr, int number = 0);
 	
 public:
 	void Explore1();
@@ -117,7 +117,8 @@ enum class EarlyMovements
 	
 	MONASTERY2,
 	MONK4,
-	MONK5
+	MONK5,
+
 };
 
 
