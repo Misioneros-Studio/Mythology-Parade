@@ -12,11 +12,13 @@
 #include "j1Scene.h"
 #include "j1Audio.h"
 #include "TooltipData.h"
+#include "EntityManager.h"
 #include "HUD.h"
 
 j1Gui::j1Gui() : j1Module()
 {
 	name.append("gui");
+	winlose_tex = nullptr;
 	atlas_file_name_num_0 = "";
 	atlas_file_name_num_1 = "";
 	atlas_file_name_num_2 = "";
@@ -58,6 +60,9 @@ bool j1Gui::Start()
 		sfx_UI[i] = 0;
 	}
 	cursor_tex = App->tex->Load("gui/cursors.png");
+
+	winlose_tex = App->tex->Load("gui/WinLoseBackground.png");
+
 	return true;
 }
 
@@ -157,6 +162,34 @@ bool j1Gui::PostUpdate()
 	p = App->render->ScreenToWorld(x, y);
 
 	App->render->Blit(cursor_tex, p.x, p.y, &sec);
+
+	//Win or Lose Window
+	if (App->entityManager->getPlayer() != nullptr && App->entityManager->active==true) {
+		if (App->entityManager->getPlayer()->player_win == true) {
+			if (App->scene->isInTutorial == true) {
+				DoWinOrLoseWindow(3, true);
+			}
+			else {
+				if (App->entityManager->getPlayer()->player_type == CivilizationType::VIKING) {
+					DoWinOrLoseWindow(1, true);
+				}
+				else {
+					DoWinOrLoseWindow(2, true);
+				}
+			}
+		}
+
+		else if (App->entityManager->getPlayer()->player_lose == true) {
+			if (App->entityManager->getPlayer()->player_type == CivilizationType::VIKING) {
+				DoWinOrLoseWindow(1, false);
+			}
+			else {
+				DoWinOrLoseWindow(2, false);
+			}
+		}
+	}
+
+
 	return true;
 }
 
@@ -184,6 +217,7 @@ bool j1Gui::CleanUp()
 		App->tex->UnLoad(atlas_num_2);
 	}
 	App->tex->UnLoad(cursor_tex);
+	App->tex->UnLoad(winlose_tex);
 	return true;
 }
 
@@ -1246,4 +1280,105 @@ void TextInputUI::SetLabel(std::string text)
 
 void TextInputUI::SetPositionToZero() {
 	position = 0;
+}
+
+void j1Gui::DoWinOrLoseWindow(int type, bool win) {
+	SDL_Rect sec_viking = { 0, 0,807, 345 };
+	SDL_Rect sec_greek = { 0, 345,807, 345 };
+
+	SDL_Rect sec_win = { 807, 0,807, 345 };
+	SDL_Rect sec_lose = { 807, 345,807, 345 };
+
+	SDL_Rect sec_tutorial = { 0, 690,807, 345 };
+	SDL_Rect sec_completed = { 807, 690,807, 345 };
+
+	if (App->scene->hud != nullptr) {
+		if (App->scene->hud->start_timer == false) {
+			App->scene->hud->timer_win_lose.Start();
+			animation_win_lose_timer.Start();
+		}
+
+		App->scene->hud->start_timer = true;
+	}
+
+	if (animation_win_lose_timer.ReadSec() <= 2) {
+		global_pos = DoTransitionWinLose(230, 100, winlose_tex, animation_win_lose_timer);
+	}
+
+	else if (animation_win_lose_timer.ReadSec() >= 2) {
+		global_pos.y = 100;
+	}
+
+	if (type == 1) {
+		if (win == true) {
+			App->render->Blit(winlose_tex, global_pos.x, global_pos.y, &sec_viking, NULL, 0.0F);
+			App->render->Blit(winlose_tex, global_pos.x, global_pos.y, &sec_win, NULL, 0.0F);
+			if (Mix_Playing(3) == 0)
+			{
+				App->audio->PlayFx(3, App->scene->WinViking_sound);
+			}
+		}
+		else {
+			App->render->Blit(winlose_tex, global_pos.x, global_pos.y, &sec_greek, NULL, 0.0F);
+			App->render->Blit(winlose_tex, global_pos.x, global_pos.y, &sec_lose, NULL, 0.0F);
+			if (Mix_Playing(3) == 0) {
+				App->audio->PlayFx(3, App->scene->Lose_sound);
+			}
+		}
+	}
+
+	if (type == 2) {
+		if (win == true) {
+			App->render->Blit(winlose_tex, global_pos.x, global_pos.y, &sec_greek, NULL, 0.0F);
+			App->render->Blit(winlose_tex, global_pos.x, global_pos.y, &sec_lose, NULL, 0.0F);
+			if (Mix_Playing(3) == 0) {
+				App->audio->PlayFx(3, App->scene->WinGreek_sound);
+			}
+		}
+		else {
+			App->render->Blit(winlose_tex, global_pos.x, global_pos.y, &sec_viking, NULL, 0.0F);
+			App->render->Blit(winlose_tex, global_pos.x, global_pos.y, &sec_win, NULL, 0.0F);
+			if (Mix_Playing(3) == 0) {
+				App->audio->PlayFx(3, App->scene->Lose_sound);
+			}
+		}
+	}
+
+	if (type == 3) {
+		App->render->Blit(winlose_tex, global_pos.x, global_pos.y, &sec_tutorial, NULL, 0.0F);
+		App->render->Blit(winlose_tex, global_pos.x, global_pos.y, &sec_completed, NULL, 0.0F);
+		if (Mix_Playing(3) == 0)
+		{
+			App->audio->PlayFx(3, App->scene->WinViking_sound);
+		}
+	}
+
+	if (App->scene->hud != nullptr) {
+		if (App->scene->hud->timer_win_lose.ReadSec() >= 5) {
+
+			App->scene->BackToTitleMenu();
+		}
+	}
+}
+
+fPoint j1Gui::DoTransitionWinLose(int pos_x, int pos_y, SDL_Texture* tex, j1Timer time) {
+	fPoint position_global;
+	position_global.x = pos_x;
+
+	if (first_time_timer_win == false) {
+		animation_win_lose_timer.Start();
+		first_time_timer_win = true;
+	}
+
+	float percentatge = time.ReadSec() * 0.5f;
+	position_global.y = LerpValue(percentatge, 200, 100);
+
+	SDL_SetTextureAlphaMod(tex, 255 * percentatge);
+
+	return position_global;
+}
+
+float j1Gui::LerpValue(float percent, float start, float end)
+{
+	return start + percent * (end - start);
 }

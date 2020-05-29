@@ -26,7 +26,7 @@
 j1Scene::j1Scene() : j1Module()
 {
 	name.append("scene");
-	winlose_tex = nullptr;
+
 	clickToPath = false;
 	nextUnit_selected = nextBuilding_selected = building_meteor = false;
 	update_selection = false;
@@ -107,8 +107,6 @@ bool j1Scene::Start()
 
 	paused_game = false;
 	godMode = false;
-
-	winlose_tex = App->tex->Load("gui/WinLoseBackground.png");
 
 	//iPoint position;
 	//iPoint size;
@@ -386,30 +384,7 @@ bool j1Scene::Update(float dt)
 		}
 	}
 
-	if (App->entityManager->getPlayer() != nullptr) {
-		if (App->entityManager->getPlayer()->player_win == true) {
-			if (isInTutorial == true) {
-				DoWinOrLoseWindow(3, true);
-			}
-			else {
-				if (App->entityManager->getPlayer()->player_type == CivilizationType::VIKING) {
-					DoWinOrLoseWindow(1, true);
-				}
-				else {
-					DoWinOrLoseWindow(2, true);
-				}
-			}
-		}
 
-		else if (App->entityManager->getPlayer()->player_lose == true) {
-			if (App->entityManager->getPlayer()->player_type == CivilizationType::VIKING) {
-				DoWinOrLoseWindow(1, false);
-			}
-			else {
-				DoWinOrLoseWindow(2, false);
-			}
-		}
-	}
 	//App->render->DrawQuad(mapLimitsRect, 255, 255, 255, 40);
 
 	/*CheckSpatial Audio
@@ -469,7 +444,6 @@ bool j1Scene::CleanUp()
 
 	App->tex->UnLoad(debugBlue_tex);
 	App->tex->UnLoad(debugRed_tex);
-	App->tex->UnLoad(winlose_tex);
 	if (hud != nullptr) {
 		hud->DeactivateResearchMenu();
 		hud->DeactivateConfirmationMenu();
@@ -818,81 +792,6 @@ void j1Scene::OnClick(UI* element, float argument)
 
 }
 
-
-void j1Scene::DoWinOrLoseWindow(int type, bool win) {
-	SDL_Rect sec_viking = { 0, 0,807, 345 };
-	SDL_Rect sec_greek = { 0, 345,807, 345 };
-
-	SDL_Rect sec_win = { 807, 0,807, 345 };
-	SDL_Rect sec_lose = { 807, 345,807, 345 };
-
-	SDL_Rect sec_tutorial = { 0, 690,807, 345 };
-	SDL_Rect sec_completed = { 807, 690,807, 345 };
-
-	if (hud->start_timer == false) {
-		hud->timer_win_lose.Start();
-		animation_win_lose_timer.Start();
-	}
-
-	hud->start_timer = true;
-
-	if (animation_win_lose_timer.ReadSec() <= 2) {
-		global_pos = DoTransitionWinLose(230, 100, winlose_tex, animation_win_lose_timer);
-	}
-
-	else if (animation_win_lose_timer.ReadSec() >=2) {
-		global_pos.y = 100;
-	}
-
-	if (type == 1) {
-		if (win == true) {
-			App->render->Blit(winlose_tex, global_pos.x, global_pos.y, &sec_viking, NULL, 0.0F);
-			App->render->Blit(winlose_tex, global_pos.x, global_pos.y, &sec_win, NULL, 0.0F);
-			if (Mix_Playing(3) == 0)
-			{
-				App->audio->PlayFx(3, WinViking_sound);
-			}
-		}
-		else {
-			App->render->Blit(winlose_tex, global_pos.x, global_pos.y, &sec_greek, NULL, 0.0F);
-			App->render->Blit(winlose_tex, global_pos.x, global_pos.y, &sec_lose, NULL, 0.0F);
-			if (Mix_Playing(3) == 0) {
-				App->audio->PlayFx(3, Lose_sound);
-			}
-		}
-	}
-
-	if (type == 2) {
-		if (win == true) {
-			App->render->Blit(winlose_tex, global_pos.x, global_pos.y, &sec_greek, NULL, 0.0F);
-			App->render->Blit(winlose_tex, global_pos.x, global_pos.y, &sec_lose, NULL, 0.0F);
-			if (Mix_Playing(3) == 0) {
-				App->audio->PlayFx(3, WinGreek_sound);
-			}
-		}
-		else {
-			App->render->Blit(winlose_tex, global_pos.x, global_pos.y, &sec_viking, NULL, 0.0F);
-			App->render->Blit(winlose_tex, global_pos.x, global_pos.y, &sec_win, NULL, 0.0F);
-			if (Mix_Playing(3) == 0) {
-				App->audio->PlayFx(3, Lose_sound);
-			}
-		}
-	}
-
-	if (type == 3) {
-		App->render->Blit(winlose_tex, global_pos.x, global_pos.y, &sec_tutorial, NULL, 0.0F);
-		App->render->Blit(winlose_tex, global_pos.x, global_pos.y, &sec_completed, NULL, 0.0F);
-		if (Mix_Playing(3) == 0)
-		{
-			App->audio->PlayFx(3, WinViking_sound);
-		}
-	}
-	if (hud->timer_win_lose.ReadSec() >= 5) {
-
-		BackToTitleMenu();
-	}
-}
-
 void j1Scene::FinishResearching(std::string thing_researched) {
 	if (thing_researched == "Temple") {
 		App->entityManager->getPlayer()->research_temple = true;
@@ -925,27 +824,4 @@ void j1Scene::FinishResearching(std::string thing_researched) {
 		App->entityManager->getPlayer()->research_chaotic_victory = true;
 	}
 
-}
-
-
-fPoint j1Scene::DoTransitionWinLose(int pos_x, int pos_y, SDL_Texture* tex, j1Timer time) {
-	fPoint position_global;
-	position_global.x = pos_x;
-
-	if (first_time_timer_win == false) {
-		animation_win_lose_timer.Start();
-		first_time_timer_win = true;
-	}
-
-	float percentatge = time.ReadSec() *0.5f;
-	position_global.y = LerpValue(percentatge, 200, 100);
-
-	SDL_SetTextureAlphaMod(tex, 255*percentatge);
-
-	return position_global;
-}
-
-float j1Scene::LerpValue(float percent, float start, float end)
-{
-	return start + percent * (end - start);
 }

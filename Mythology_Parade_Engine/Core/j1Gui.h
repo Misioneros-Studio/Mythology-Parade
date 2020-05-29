@@ -100,6 +100,9 @@ public:
 	SDL_Rect Check_Printable_Rect(SDL_Rect sprite, iPoint& dif_sprite, SDL_Rect quad);
 	bool GetConsole() { return console; }
 
+
+
+
 public:
 	SDL_Rect sprite1;
 	SDL_Rect quad;
@@ -335,6 +338,10 @@ public:
 
 	SDL_Texture* GetTexture();
 
+	void DoWinOrLoseWindow(int type, bool win);
+	fPoint DoTransitionWinLose(int pos_x, int pos_y, SDL_Texture* tex, j1Timer time);
+	float LerpValue(float percent, float start, float end);
+
 private:
 
 	std::list <UI*> UIs;
@@ -346,6 +353,11 @@ private:
 	std::string atlas_file_name_num_2;
 	SDL_Texture* cursor_tex;
 	j1Timer minimap_feedback_timer;
+
+	bool first_time_timer_win = false;
+	j1Timer animation_win_lose_timer;
+	fPoint global_pos;
+	SDL_Texture* winlose_tex;
 
 public:
 

@@ -67,17 +67,6 @@ public:
 
 	void FinishResearching(std::string);
 
-	void DoWinOrLoseWindow(int type, bool win);
-	fPoint DoTransitionWinLose(int pos_x, int pos_y, SDL_Texture* tex, j1Timer time);
-	float LerpValue(float percent, float start, float end);
-
-private:
-
-	fPoint global_pos;
-
-	SDL_Texture* winlose_tex;
-
-
 
 public:
 	SDL_Rect mapLimitsRect;
@@ -86,8 +75,7 @@ public:
 	bool paused_game;
 	bool godMode;
 	bool clickToPath;
-	bool first_time_timer_win = false;
-	j1Timer animation_win_lose_timer;
+
 
 	HUD* hud;
 	ResearchMenu* research_menu;
