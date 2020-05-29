@@ -27,7 +27,6 @@ enum class BuildingAction
 };
 
 struct BuildingInfo;
-
 class Building: public Entity
 {
 public:
@@ -61,7 +60,7 @@ public:
 	std::string GetElementProducing();
 
 	void ProduceQueue(std::string thing_producing);
-
+	void Convert();
 private:
 
 	bool Awake(pugi::xml_node&);
@@ -72,6 +71,7 @@ private:
 
 
 	void Kill(iPoint) override;
+
 	void FinishProduction(const std::string &thing_produced, bool cancelled = false);
 
 	//Stats
@@ -105,6 +105,7 @@ private:
 	BuildingType buildingType;
 	int tileLenght;
 	SDL_Rect original_spriteRect;
+	int blitWidth;
 
 public:
 	j1Timer timer_construction;
