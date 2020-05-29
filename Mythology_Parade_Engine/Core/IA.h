@@ -31,7 +31,6 @@ enum class MidGameBehaviour
 	CREATE_ECONOMY,
 	RESEARCH_ASSASSIN,
 	CREATE_ASSASSIN,
-	DISTRIBUTION
 };
 
 enum class LateGameBehaviour

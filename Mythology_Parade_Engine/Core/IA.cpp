@@ -36,22 +36,22 @@ IA::IA()
 
 
 	positionViking.push_back({ -704,800 }); //encampment
-	positionViking.push_back({ 64,928 }); //assassin1
-	positionViking.push_back({ 32,912 }); //assassin2
-	positionViking.push_back({ 128,608 }); //assassin3
-	positionViking.push_back({ 160,624 }); //assassin4
-	positionViking.push_back({ 192,640 }); //assassin5
-	positionViking.push_back({ -224,848 }); //assassin6
-	positionViking.push_back({ -192,896 }); //assassin7	
+	positionViking.push_back({ -800,848 }); //assassin1
+	positionViking.push_back({ -672,912 }); //assassin2
+	positionViking.push_back({ -96,976 }); //assassin3
+	positionViking.push_back({ 32,976 }); //assassin4
+	positionViking.push_back({ 0,1120 }); //assassin5
+	positionViking.push_back({ 480,848 }); //assassin6
+	positionViking.push_back({ 640,832 }); //assassin7	
 	
 	positionGreek.push_back({ -32,4048 }); //encampment
-	positionGreek.push_back({ -352,4464 }); //assassin1
-	positionGreek.push_back({ -320,4480 }); //assassin2
-	positionGreek.push_back({ -256,4480 }); //assassin3
-	positionGreek.push_back({ -160,4496 }); //assassin4
-	positionGreek.push_back({ -64,4480 }); //assassin5
-	positionGreek.push_back({ 64,4448 }); //assassin6
-	positionGreek.push_back({ 96,4400 }); //assassin7
+	positionGreek.push_back({ -256,3840 }); //assassin1
+	positionGreek.push_back({ -160,3792 }); //assassin2
+	positionGreek.push_back({ -64,3840 }); //assassin3
+	positionGreek.push_back({ 512,4256 }); //assassin4
+	positionGreek.push_back({ -992,4240 }); //assassin5
+	positionGreek.push_back({ -960,4128 }); //assassin6
+	positionGreek.push_back({ -160,3888 }); //assassin7
 
 }
 
@@ -200,31 +200,32 @@ void IA::MidGame()
 			CreateBuilding(BuildingType::ENCAMPMENT, positionGreek.at((int)EarlyMovements::ENCAMPMENT));
 
 		mid = MidGameBehaviour::CREATE_ASSASSIN;
-		break;
-	case MidGameBehaviour::CREATE_ASSASSIN:
-		if (civilization == CivilizationType::VIKING) {
-			CreateUnit(UnitType::ASSASSIN, positionViking.at((int)EarlyMovements::ASSASSIN1));
-			CreateUnit(UnitType::ASSASSIN, positionViking.at((int)EarlyMovements::ASSASSIN2));
-			CreateUnit(UnitType::ASSASSIN, positionViking.at((int)EarlyMovements::ASSASSIN3));
-			CreateUnit(UnitType::ASSASSIN, positionViking.at((int)EarlyMovements::ASSASSIN4));
-			CreateUnit(UnitType::ASSASSIN, positionViking.at((int)EarlyMovements::ASSASSIN5));
-			CreateUnit(UnitType::ASSASSIN, positionViking.at((int)EarlyMovements::ASSASSIN6));
-			CreateUnit(UnitType::ASSASSIN, positionViking.at((int)EarlyMovements::ASSASSIN7));
-		}
-		else {
-			CreateUnit(UnitType::ASSASSIN, positionGreek.at((int)EarlyMovements::ASSASSIN1));
-			CreateUnit(UnitType::ASSASSIN, positionGreek.at((int)EarlyMovements::ASSASSIN2));
-			CreateUnit(UnitType::ASSASSIN, positionGreek.at((int)EarlyMovements::ASSASSIN3));
-			CreateUnit(UnitType::ASSASSIN, positionGreek.at((int)EarlyMovements::ASSASSIN4));
-			CreateUnit(UnitType::ASSASSIN, positionGreek.at((int)EarlyMovements::ASSASSIN5));
-			CreateUnit(UnitType::ASSASSIN, positionGreek.at((int)EarlyMovements::ASSASSIN6));
-			CreateUnit(UnitType::ASSASSIN, positionGreek.at((int)EarlyMovements::ASSASSIN7));
-		}
-		mid = MidGameBehaviour::DISTRIBUTION;
 		timer.Start();
 		break;
-	case MidGameBehaviour::DISTRIBUTION:
-		
+	case MidGameBehaviour::CREATE_ASSASSIN:
+		if (timer.ReadSec() >= 2) //50
+		{
+			if (civilization == CivilizationType::VIKING) {
+				CreateUnit(UnitType::ASSASSIN, positionViking.at((int)EarlyMovements::ASSASSIN1));
+				CreateUnit(UnitType::ASSASSIN, positionViking.at((int)EarlyMovements::ASSASSIN2));
+				CreateUnit(UnitType::ASSASSIN, positionViking.at((int)EarlyMovements::ASSASSIN3));
+				CreateUnit(UnitType::ASSASSIN, positionViking.at((int)EarlyMovements::ASSASSIN4));
+				CreateUnit(UnitType::ASSASSIN, positionViking.at((int)EarlyMovements::ASSASSIN5));
+				CreateUnit(UnitType::ASSASSIN, positionViking.at((int)EarlyMovements::ASSASSIN6));
+				CreateUnit(UnitType::ASSASSIN, positionViking.at((int)EarlyMovements::ASSASSIN7));
+			}
+			else {
+				CreateUnit(UnitType::ASSASSIN, positionGreek.at((int)EarlyMovements::ASSASSIN1));
+				CreateUnit(UnitType::ASSASSIN, positionGreek.at((int)EarlyMovements::ASSASSIN2));
+				CreateUnit(UnitType::ASSASSIN, positionGreek.at((int)EarlyMovements::ASSASSIN3));
+				CreateUnit(UnitType::ASSASSIN, positionGreek.at((int)EarlyMovements::ASSASSIN4));
+				CreateUnit(UnitType::ASSASSIN, positionGreek.at((int)EarlyMovements::ASSASSIN5));
+				CreateUnit(UnitType::ASSASSIN, positionGreek.at((int)EarlyMovements::ASSASSIN6));
+				CreateUnit(UnitType::ASSASSIN, positionGreek.at((int)EarlyMovements::ASSASSIN7));
+			}
+			gamePhase = GameBehaviour::LATE;
+			timer.Start();
+		}
 		break;
 	default:
 		break;
@@ -272,6 +273,7 @@ bool IA::InitCiv()
 		}
 		timer.Start();
 		early = EarlyGameBehaviour::BASIC_BUILDINGS_CREATION;
+		//DELETE THIS
 		gamePhase = GameBehaviour::MID;
 		mid = MidGameBehaviour::RESEARCH_ASSASSIN;
 	}
