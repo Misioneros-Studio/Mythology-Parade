@@ -145,9 +145,9 @@ bool j1Minimap::PostUpdate() {
 								green = 100;
 							}
 							ent->shown_minimap = true;
-							App->render->DrawQuad({ x,y,w,h }, red, green, blue, 255, true, false);
 						}
 					}
+					App->render->DrawQuad({ x,y,w,h }, red, green, blue, 255, true, false);
 				}
 			}
 		}
