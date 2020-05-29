@@ -1,29 +1,28 @@
 <?xml version="1.0"?>
 <info>
 	<entities>
-		<unit type="assassin" position_x="-160" position_y="4080" civilization="greek" health="100" level="0" />
-		<unit type="monk" position_x="-510" position_y="4160" civilization="greek" health="1" />
-		<unit type="monk" position_x="-510" position_y="4160" civilization="greek" health="1" />
-		<unit type="monk" position_x="-416" position_y="4208" civilization="greek" health="1" />
-		<unit type="cleric" position_x="-32" position_y="976" civilization="greek" health="100" />
-		<unit type="cleric" position_x="-384" position_y="768" civilization="greek" health="100" />
-		<unit type="cleric" position_x="416" position_y="752" civilization="greek" health="100" />
+		<unit type="monk" position_x="-364" position_y="736" civilization="viking" health="1" />
+		<unit type="monk" position_x="-224" position_y="624" civilization="viking" health="1" />
+		<unit type="monk" position_x="-332" position_y="752" civilization="viking" health="1" />
+		<unit type="assassin" position_x="21.3171597" position_y="777.822388" civilization="viking" health="100" level="0" />
+		<unit type="cleric" position_x="2680.87329" position_y="2627.72168" civilization="viking" health="100" />
+		<unit type="cleric" position_x="-3520" position_y="2927.06006" civilization="viking" health="100" />
+		<unit type="assassin" position_x="-300" position_y="4288" civilization="greek" health="100" level="0" />
+		<unit type="monk" position_x="-268" position_y="4304" civilization="greek" health="1" />
 	</entities>
 	<buildings>
-		<build type="encampment" position_x="100" position_y="100" civilization="viking" health="350" status="finished" action="nothing" />
+		<build type="monastery" position_x="-384" position_y="672" civilization="viking" health="250" status="constructing" time="89.2699966" progress="0.49444443" action="nothing" />
+		<build type="temple" position_x="224" position_y="688" civilization="viking" health="200" status="constructing" time="89.2699966" progress="0.593333304" action="nothing" />
 		<build type="fortress" position_x="-96" position_y="704" civilization="viking" health="500" status="finished" action="nothing" />
-		<build type="monastery" position_x="-480" position_y="4160" civilization="greek" health="250" status="finished" action="nothing" />
-		<build type="temple" position_x="-704" position_y="4208" civilization="greek" health="200" status="finished" action="nothing" />
 		<build type="fortress" position_x="-288" position_y="4256" civilization="greek" health="500" status="finished" action="nothing" />
-		<build type="encampment" position_x="-544" position_y="4320" civilization="greek" health="350" status="finished" action="nothing" />
 	</buildings>
 	<players>
 		<greek>
-			<economy faith="16090" prayers="174" sacrifices="170" />
+			<economy faith="716" prayers="0" sacrifices="0" />
 			<research>
-				<temple research="true" />
-				<encampment research="true" />
-				<cleric research="true" />
+				<temple research="false" />
+				<encampment research="false" />
+				<cleric research="false" />
 				<assassin research="false" />
 				<lawful_beast research="false" />
 				<chaotic_beast research="false" />
@@ -35,5 +34,8 @@
 		</greek>
 	</players>
 	<volume music="50" fx="128" />
-	<camera x="1099" y="-3810" />
+	<IA>
+		<Game_Phase macroState="0" state="6" />
+	</IA>
+	<camera x="551" y="-485" />
 </info>

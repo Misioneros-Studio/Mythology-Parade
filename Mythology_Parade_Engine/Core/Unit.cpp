@@ -75,7 +75,7 @@ Unit::Unit(UnitType type, iPoint pos): unitType(type), state(AnimationType::IDLE
 		time_research = 70;
 		researched = true;
 		name = "cleric";
-		Init(100);
+		Init(1);
 		collisionRect = { 0, 0, 30, -55 };
 		break;
 	}

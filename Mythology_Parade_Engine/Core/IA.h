@@ -38,7 +38,8 @@ enum class LateGameBehaviour
 	ATACK,
 	ECONOMY_FOCUS,
 	DEFENSE,
-	WIN
+	WIN,
+	FINISH
 };
 
 class IA : public j1Module
@@ -50,6 +51,8 @@ public:
 	bool Update(float dt);
 	bool PostUpdate();
 	bool CleanUp();
+	bool Load(pugi::xml_node&);
+	bool Save(pugi::xml_node&) const;
 
 public:
 	bool InitCiv();

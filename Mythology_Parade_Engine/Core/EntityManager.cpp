@@ -794,13 +794,13 @@ Entity* EntityManager::CreateBuildingEntity(iPoint pos, BuildingType type, Build
 
 	//Figure lowest node out
 	quadTree.FindLowestNodeInPoint(&quadTree.baseNode, { pos.x, pos.y });
-	for (std::list<Entity*>::iterator it = quadTree.lowestNode->data.begin(); it != quadTree.lowestNode->data.end(); it++)
-	{
-		if (App->map->WorldToMap(pos.x + App->map->data.tile_width / 2, pos.y) == App->map->WorldToMap((*it)->position.x + App->map->data.tile_width / 2, (*it)->position.y))
-		{
-			return nullptr;
-		}
-	}
+	//for (std::list<Entity*>::iterator it = quadTree.lowestNode->data.begin(); it != quadTree.lowestNode->data.end(); it++)
+	//{
+	//	if (App->map->WorldToMap(pos.x + App->map->data.tile_width / 2, pos.y) == App->map->WorldToMap((*it)->position.x + App->map->data.tile_width / 2, (*it)->position.y))
+	//	{
+	//		return nullptr;
+	//	}
+	//}
 
 	Entity* ret = nullptr;
 	switch (type)

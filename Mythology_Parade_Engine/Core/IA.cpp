@@ -1,5 +1,6 @@
 #include "IA.h"
 #include "j1App.h"
+#include "PugiXml/src/pugixml.hpp"
 
 IA::IA()
 {
@@ -111,6 +112,111 @@ bool IA::CleanUp()
 	return ret;
 }
 
+bool IA::Load(pugi::xml_node& s)
+{
+	InitCiv();
+	timer.Start();
+	pugi::xml_node node = s.child("IA").child("Game_Phase");
+	switch (node.attribute("microState").as_int())
+	{
+	case 0:
+		gamePhase = GameBehaviour::EARLY;
+		switch (node.attribute("state").as_int())
+		{
+		case 1:
+			early = EarlyGameBehaviour::BASIC_BUILDINGS_CREATION;
+			break;
+		case 2:
+			early = EarlyGameBehaviour::RESEARCH_CLERIC;
+			break;
+		case 3:
+			early = EarlyGameBehaviour::BASIC_UNITS_CREATION;
+			break;
+		case 4:
+			early = EarlyGameBehaviour::EXPLORE1;
+			break;
+		case 5:
+			early = EarlyGameBehaviour::CHECKEXPLORER1;
+			Explore2();
+			break;
+		case 6:
+			early = EarlyGameBehaviour::FIND;
+			break;
+		default:
+			break;
+		}
+		break;
+	case 1:
+		gamePhase = GameBehaviour::MID;
+		switch (node.attribute("state").as_int())
+		{
+		case 1:
+			mid = MidGameBehaviour::ASSEMBLE;
+			break;
+		case 2:
+			mid = MidGameBehaviour::CREATE_ECONOMY;
+			break;
+		case 3:
+			mid = MidGameBehaviour::RESEARCH_ASSASSIN;
+			break;
+		case 4:
+			mid = MidGameBehaviour::CREATE_ASSASSIN;
+			break;
+		default:
+			break;
+		}
+		break;
+	case 2:
+		gamePhase = GameBehaviour::LATE;
+		switch (node.attribute("state").as_int())
+		{
+		case 1:
+			late = LateGameBehaviour::ATACK;
+			break;
+		case 2:
+			late = LateGameBehaviour::ECONOMY_FOCUS;
+			break;
+		case 3:
+			late = LateGameBehaviour::DEFENSE;
+			break;
+		case 4:
+			late = LateGameBehaviour::WIN;
+			break;
+		case 5:
+			late = LateGameBehaviour::FINISH;
+			break;
+		default:
+			break;
+		}
+		break;
+	default:
+		break;
+	}
+	return true;
+}
+
+bool IA::Save(pugi::xml_node& s) const
+{
+
+	pugi::xml_node node = s.append_child("IA");
+	pugi::xml_node gameph = s.child("IA").append_child("Game_Phase");
+	gameph.append_attribute("macroState").set_value((int)gamePhase);
+	if (gamePhase == GameBehaviour::EARLY)
+	{
+		gameph.append_attribute("state").set_value((int)early);
+	}
+	else if (gamePhase == GameBehaviour::MID)
+	{
+		gameph.append_attribute("state").set_value((int)mid);
+	}
+	else if (gamePhase == GameBehaviour::LATE)
+	{
+		gameph.append_attribute("state").set_value((int)late);
+	}
+
+	return true;
+}
+
 void IA::EarlyGame()
 {
 	switch (early)
@@ -119,7 +225,7 @@ void IA::EarlyGame()
 		InitCiv();
 		break;
 	case EarlyGameBehaviour::BASIC_BUILDINGS_CREATION:
-		if (timer.ReadSec() >= 3)//45
+		if (timer.ReadSec() >= 45)
 		{
 			if (civilization == CivilizationType::VIKING)
 			{
@@ -136,7 +242,7 @@ void IA::EarlyGame()
 		}
 		break;
 	case EarlyGameBehaviour::RESEARCH_CLERIC:
-		if (timer.ReadSec() >= 5)//50
+		if (timer.ReadSec() >= 100)
 		{
 			if (civilization == CivilizationType::VIKING)
 			{
@@ -155,7 +261,7 @@ void IA::EarlyGame()
 		}
 		break;
 	case EarlyGameBehaviour::BASIC_UNITS_CREATION:
-		if (timer.ReadSec() >= 3)//150
+		if (timer.ReadSec() >= 150)
 		{
 			if (civilization == CivilizationType::VIKING)
 			{
@@ -201,7 +307,7 @@ void IA::MidGame()
 		timer.Start();
 		break;
 	case MidGameBehaviour::CREATE_ECONOMY:
-		if (timer.ReadSec() >= 3)//?
+		if (timer.ReadSec() >= 100)
 		{
 			if (civilization == CivilizationType::VIKING) {
 				CreateBuilding(BuildingType::MONASTERY, positionViking.at((int)EarlyMovements::MONASTERY2));
@@ -219,7 +325,7 @@ void IA::MidGame()
 		}
 		break;
 	case MidGameBehaviour::RESEARCH_ASSASSIN:
-		if (timer.ReadSec() >= 3)//?
+		if (timer.ReadSec() >= 80)
 		{
 			if (civilization == CivilizationType::VIKING)
 				CreateBuilding(BuildingType::ENCAMPMENT, positionViking.at((int)EarlyMovements::ENCAMPMENT));
@@ -231,7 +337,7 @@ void IA::MidGame()
 		}
 		break;
 	case MidGameBehaviour::CREATE_ASSASSIN:
-		if (timer.ReadSec() >= 2) //50
+		if (timer.ReadSec() >= 50)
 		{
 			if (civilization == CivilizationType::VIKING) {
 				listEntities.push_back(static_cast<Entity*>(CreateUnit(UnitType::ASSASSIN, positionViking.at((int)EarlyMovements::ASSASSIN1))));
@@ -270,7 +376,7 @@ void IA::LateGame()
 		timer.Start();
 		break;
 	case LateGameBehaviour::ECONOMY_FOCUS:
-		if (timer.ReadSec() >= 2)//120?
+		if (timer.ReadSec() >= 120)
 		{
 			late = LateGameBehaviour::DEFENSE;
 		}
@@ -281,7 +387,7 @@ void IA::LateGame()
 		late = LateGameBehaviour::WIN;
 		break;
 	case LateGameBehaviour::WIN:
-		if (timer.ReadSec() >= 2)//360?
+		if (timer.ReadSec() >= 360)
 		{
 			Win();
 		}
@@ -292,6 +398,8 @@ void IA::LateGame()
 		break;
 	}
 }
+
+
 
 bool IA::InitCiv()
 {
@@ -426,7 +534,7 @@ bool IA::Atack()
 
 bool IA::Win()
 {
-	App->entityManager->getPlayer()->player_win = true;
+	App->entityManager->getPlayer()->player_lose = true;
 	return true;
 }
 
