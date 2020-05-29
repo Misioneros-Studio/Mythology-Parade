@@ -53,6 +53,14 @@ IA::IA()
 	positionGreek.push_back({ -960,4128 }); //assassin6
 	positionGreek.push_back({ -160,3888 }); //assassin7
 
+	positionGreek.push_back({ -64,4416 }); //monastery 2
+	positionGreek.push_back({ -32,4368 }); //monk4
+	positionGreek.push_back({ -64,4384 }); //monk5	
+	
+	positionViking.push_back({ -224,560 }); //monastery 2
+	positionViking.push_back({ -256,576 }); //monk4
+	positionViking.push_back({ -224,592 }); //monk5
+
 }
 
 bool IA::PreUpdate()
@@ -189,18 +197,38 @@ void IA::MidGame()
 	{
 	case MidGameBehaviour::ASSEMBLE:
 		AssembleClerics();
-		mid = MidGameBehaviour::RESEARCH_ASSASSIN;
+		mid = MidGameBehaviour::CREATE_ECONOMY;
+		timer.Start();
 		break;
 	case MidGameBehaviour::CREATE_ECONOMY:
+		if (timer.ReadSec() >= 3)//?
+		{
+			if (civilization == CivilizationType::VIKING) {
+				CreateBuilding(BuildingType::MONASTERY, positionViking.at((int)EarlyMovements::MONASTERY2));
+				CreateUnit(UnitType::MONK, positionViking.at((int)EarlyMovements::MONK4));
+				CreateUnit(UnitType::MONK, positionViking.at((int)EarlyMovements::MONK5));
+
+			}
+			else {
+				CreateBuilding(BuildingType::MONASTERY, positionGreek.at((int)EarlyMovements::MONASTERY2));
+				CreateUnit(UnitType::MONK, positionGreek.at((int)EarlyMovements::MONK4));
+				CreateUnit(UnitType::MONK, positionGreek.at((int)EarlyMovements::MONK5));
+			}
+			timer.Start();
+		}
+		mid = MidGameBehaviour::RESEARCH_ASSASSIN;
 		break;
 	case MidGameBehaviour::RESEARCH_ASSASSIN:
-		if(civilization==CivilizationType::VIKING)
-			CreateBuilding(BuildingType::ENCAMPMENT, positionViking.at((int)EarlyMovements::ENCAMPMENT));
-		else
-			CreateBuilding(BuildingType::ENCAMPMENT, positionGreek.at((int)EarlyMovements::ENCAMPMENT));
+		if (timer.ReadSec() >= 3)//?
+		{
+			if (civilization == CivilizationType::VIKING)
+				CreateBuilding(BuildingType::ENCAMPMENT, positionViking.at((int)EarlyMovements::ENCAMPMENT));
+			else
+				CreateBuilding(BuildingType::ENCAMPMENT, positionGreek.at((int)EarlyMovements::ENCAMPMENT));
 
-		mid = MidGameBehaviour::CREATE_ASSASSIN;
-		timer.Start();
+			mid = MidGameBehaviour::CREATE_ASSASSIN;
+			timer.Start();
+		}
 		break;
 	case MidGameBehaviour::CREATE_ASSASSIN:
 		if (timer.ReadSec() >= 2) //50
@@ -275,7 +303,7 @@ bool IA::InitCiv()
 		early = EarlyGameBehaviour::BASIC_BUILDINGS_CREATION;
 		//DELETE THIS
 		gamePhase = GameBehaviour::MID;
-		mid = MidGameBehaviour::RESEARCH_ASSASSIN;
+		mid = MidGameBehaviour::CREATE_ECONOMY;
 	}
 
 	return true;

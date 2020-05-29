@@ -114,6 +114,10 @@ enum class EarlyMovements
 	ASSASSIN5,
 	ASSASSIN6,
 	ASSASSIN7,
+	
+	MONASTERY2,
+	MONK4,
+	MONK5
 };
 
 
