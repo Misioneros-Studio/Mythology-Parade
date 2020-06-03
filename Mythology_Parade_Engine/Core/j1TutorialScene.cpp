@@ -47,7 +47,7 @@ bool j1TutorialScene::Start()
 {
 	App->render->camera.x = 578;
 	App->render->camera.y = -1865;
-	tutorial_message_data = new TutorialMessageData;
+	tutorial_message_data = new TutorialMessageData();
 	tutorial_message_timer.Start();
 	message_number = 0;
 	return true;

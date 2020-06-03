@@ -6,6 +6,7 @@
 #include "j1App.h"
 #include "j1Textures.h"
 #include <unordered_map>
+#include <map>
 //#include "Unit.h"
 
 enum class UnitType;
@@ -98,10 +99,7 @@ struct CharacterTMXData
 	int						tile_width = 0u;
 	int						tile_height = 0u;
 
-	void Clean()
-	{
-		App->tex->UnLoad(texture);
-	}
+	void Clean();
 
 };
 
@@ -118,7 +116,7 @@ public:
 	virtual Animation_char LoadAnimation(pugi::xml_node& obj_group, int row, int sprite_num, std::string name, CharacterTMXData* cData);
 
 public:
-	std::unordered_map<UnitType, CharacterTMXData> charData;
+	std::map<UnitType, CharacterTMXData> charData;
 };
 
 #endif
