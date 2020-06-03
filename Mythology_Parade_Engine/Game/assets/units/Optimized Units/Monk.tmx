@@ -7,7 +7,7 @@
     <property name="dicType" type="int" value="0"/>
     <property name="dir" type="int" value="3"/>
     <property name="row" type="int" value="0"/>
-    <property name="sprites" type="int" value="16"/>
+    <property name="sprites" type="int" value="15"/>
     <property name="type" value="ATCK_DIAG_DOWN"/>
    </properties>
    <animation>
@@ -33,7 +33,7 @@
     <property name="dicType" type="int" value="0"/>
     <property name="dir" type="int" value="4"/>
     <property name="row" type="int" value="1"/>
-    <property name="sprites" type="int" value="16"/>
+    <property name="sprites" type="int" value="15"/>
     <property name="type" value="ATCK_DIAG_UP"/>
    </properties>
    <animation>
@@ -59,7 +59,7 @@
     <property name="dicType" type="int" value="0"/>
     <property name="dir" type="int" value="2"/>
     <property name="row" type="int" value="2"/>
-    <property name="sprites" type="int" value="16"/>
+    <property name="sprites" type="int" value="15"/>
     <property name="type" value="ATCK_DOWN"/>
    </properties>
    <animation>
@@ -85,7 +85,7 @@
     <property name="dicType" type="int" value="0"/>
     <property name="dir" type="int" value="1"/>
     <property name="row" type="int" value="3"/>
-    <property name="sprites" type="int" value="16"/>
+    <property name="sprites" type="int" value="15"/>
     <property name="type" value="ATCK_LATERAL"/>
    </properties>
    <animation>
@@ -111,7 +111,7 @@
     <property name="dicType" type="int" value="0"/>
     <property name="dir" type="int" value="0"/>
     <property name="row" type="int" value="4"/>
-    <property name="sprites" type="int" value="16"/>
+    <property name="sprites" type="int" value="15"/>
     <property name="type" value="ATCK_UP"/>
    </properties>
    <animation>
@@ -137,7 +137,7 @@
     <property name="dicType" value="1"/>
     <property name="dir" type="int" value="3"/>
     <property name="row" value="5"/>
-    <property name="sprites" value="16"/>
+    <property name="sprites" value="18"/>
     <property name="type" value="DIE_DIAG_DOWN"/>
    </properties>
    <animation>
@@ -166,7 +166,7 @@
     <property name="dicType" value="1"/>
     <property name="dir" type="int" value="4"/>
     <property name="row" value="6"/>
-    <property name="sprites" value="16"/>
+    <property name="sprites" value="18"/>
     <property name="type" value="DIE_DIAG_UP"/>
    </properties>
    <animation>
@@ -195,7 +195,7 @@
     <property name="dicType" value="1"/>
     <property name="dir" type="int" value="1"/>
     <property name="row" value="7"/>
-    <property name="sprites" value="16"/>
+    <property name="sprites" value="18"/>
     <property name="type" value="DIE_LATERAL"/>
    </properties>
    <animation>
@@ -224,7 +224,7 @@
     <property name="dicType" value="1"/>
     <property name="dir" type="int" value="2"/>
     <property name="row" value="8"/>
-    <property name="sprites" value="16"/>
+    <property name="sprites" value="18"/>
     <property name="type" value="DIE_DOWN"/>
    </properties>
    <animation>
@@ -253,7 +253,7 @@
     <property name="dicType" value="1"/>
     <property name="dir" type="int" value="0"/>
     <property name="row" value="9"/>
-    <property name="sprites" value="16"/>
+    <property name="sprites" value="18"/>
     <property name="type" value="DIE_UP"/>
    </properties>
    <animation>
@@ -282,7 +282,7 @@
     <property name="dicType" value="2"/>
     <property name="dir" type="int" value="3"/>
     <property name="row" value="10"/>
-    <property name="sprites" value="12"/>
+    <property name="sprites" value="11"/>
     <property name="type" value="HIT_DIAG_DOWN"/>
    </properties>
    <animation>
@@ -304,7 +304,7 @@
     <property name="dicType" value="2"/>
     <property name="dir" type="int" value="4"/>
     <property name="row" value="11"/>
-    <property name="sprites" value="12"/>
+    <property name="sprites" value="11"/>
     <property name="type" value="HIT_DIAG_UP"/>
    </properties>
    <animation>
@@ -326,7 +326,7 @@
     <property name="dicType" value="2"/>
     <property name="dir" type="int" value="2"/>
     <property name="row" value="12"/>
-    <property name="sprites" value="12"/>
+    <property name="sprites" value="11"/>
     <property name="type" value="HIT_DOWN"/>
    </properties>
    <animation>
@@ -348,7 +348,7 @@
     <property name="dicType" value="2"/>
     <property name="dir" type="int" value="1"/>
     <property name="row" value="13"/>
-    <property name="sprites" value="12"/>
+    <property name="sprites" value="11"/>
     <property name="type" value="HIT_LATERAL"/>
    </properties>
    <animation>
@@ -370,7 +370,7 @@
     <property name="dicType" value="2"/>
     <property name="dir" type="int" value="0"/>
     <property name="row" value="14"/>
-    <property name="sprites" value="12"/>
+    <property name="sprites" value="11"/>
     <property name="type" value="HIT_UP"/>
    </properties>
    <animation>
@@ -392,7 +392,7 @@
     <property name="dicType" value="3"/>
     <property name="dir" type="int" value="3"/>
     <property name="row" value="15"/>
-    <property name="sprites" value="12"/>
+    <property name="sprites" value="15"/>
     <property name="type" value="IDLE_DIAG_DOWN"/>
    </properties>
    <animation>
@@ -418,7 +418,7 @@
     <property name="dicType" value="3"/>
     <property name="dir" type="int" value="4"/>
     <property name="row" value="16"/>
-    <property name="sprites" value="12"/>
+    <property name="sprites" value="15"/>
     <property name="type" value="IDLE_DIAG_UP"/>
    </properties>
    <animation>
@@ -444,7 +444,7 @@
     <property name="dicType" value="3"/>
     <property name="dir" type="int" value="2"/>
     <property name="row" value="17"/>
-    <property name="sprites" value="12"/>
+    <property name="sprites" value="15"/>
     <property name="type" value="IDLE_DOWN"/>
    </properties>
    <animation>
@@ -470,7 +470,7 @@
     <property name="dicType" value="3"/>
     <property name="dir" type="int" value="1"/>
     <property name="row" value="18"/>
-    <property name="sprites" value="12"/>
+    <property name="sprites" value="15"/>
     <property name="type" value="IDLE_LATERAL"/>
    </properties>
    <animation>
@@ -496,7 +496,7 @@
     <property name="dicType" value="3"/>
     <property name="dir" type="int" value="0"/>
     <property name="row" value="19"/>
-    <property name="sprites" value="12"/>
+    <property name="sprites" value="15"/>
     <property name="type" value="IDLE_UP"/>
    </properties>
    <animation>
