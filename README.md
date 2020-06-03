@@ -1,4 +1,4 @@
-<img src="https://github.com/Misioneros-Studio/Mythology-Parade/blob/Develop/Wiki_pics/Art/Team%20Logo.png" >
+<img src="https://github.com/Misioneros-Studio/Mythology-Parade/blob/Develop/Web/Team_Logo.png?raw=true" >
 
 ![](https://github.com/Misioneros-Studio/Mythology-Parade/blob/Develop/Wiki_pics/Art/Team%20Logo.png?raw=true)
 
