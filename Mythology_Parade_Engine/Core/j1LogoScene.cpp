@@ -58,6 +58,8 @@ bool j1LogoScene::PostUpdate()
 bool j1LogoScene::CleanUp()
 {
 	App->tex->UnLoad(debug_tex);
+	debug_tex = nullptr;
+
 	return true;
 }
 

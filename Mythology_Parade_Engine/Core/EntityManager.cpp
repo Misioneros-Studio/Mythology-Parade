@@ -370,6 +370,7 @@ bool EntityManager::CleanUp()
 	}
 	entities.clear();
 
+	//BUG: This is not working
 	for (unsigned int i = 0; i < animations.size(); i++)
 	{
 		for (unsigned int k = 0; k < animations[(UnitType)i].size(); k++)
@@ -383,6 +384,12 @@ bool EntityManager::CleanUp()
 		animations[(UnitType)i].clear();
 	}
 	animations.clear();
+
+	for (auto& it : animationManager.charData)
+	{
+		// Do stuff
+		it.second.Clean();
+	}
 
 	return true;
 }
