@@ -3,7 +3,7 @@ Misioneros Studio is an on-going project working team due to "Project II" subjec
 
 <br>
 
-![](https://github.com/Misioneros-Studio/Mythology-Parade/blob/master/docs/Images/WhatsApp%20Image%202020-03-06%20at%2012.34.56.jpeg)
+<img src="Wiki_Pics/Art/Game Logo.png">
 
 <br>
 
