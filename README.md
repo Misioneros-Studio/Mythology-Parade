@@ -3,7 +3,7 @@ Misioneros Studio is an on-going project working team due to "Project II" subjec
 
 <br>
 
-<img src="Wiki_Pics/Art/Game Logo.png">
+<img src="docs/Images/WhatsApp Image 2020-03-06 at 12.34.56.jpeg">
 
 <br>
 
