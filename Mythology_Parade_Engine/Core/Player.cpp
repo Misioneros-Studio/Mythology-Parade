@@ -10,6 +10,7 @@
 #include "j1Audio.h"
 
 #include "SDL_mixer/include/SDL_mixer.h"
+
 Player::Player()
 {
 	research_assassin = research_chaotic_beast = research_chaotic_miracle = research_cleric = research_encampment = research_lawful_beast = research_lawful_miracle = research_lawful_victory =
@@ -55,6 +56,7 @@ bool Player::Start()
 
 	buildingSelect = nullptr;
 
+	//assert(App->entityManager->initCivilizations == false);
 	if (App->entityManager->initCivilizations)
 	{
 		InitVikings();

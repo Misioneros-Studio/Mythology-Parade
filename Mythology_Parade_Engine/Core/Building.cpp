@@ -3,24 +3,10 @@
 #include "j1Minimap.h"
 #include "j1ParticleManager.h"
 #include  "j1TutorialScene.h"
-Building::Building(BuildingType type, iPoint pos, BuildingInfo info)
+Building::Building(BuildingType type, iPoint pos, BuildingInfo info) : damage(0), influence(0), maxCap(0),
+nearbyMonks(0), nearbyBeasts(0), researched(false), time_construction(0), time_research(0),
+percentage_constructing(0), time_producing(0), first_time_constructing(true), percentage_life(0.f)
 {
-	//default inits with none value
-	damage = 0;
-	influence = 0;
-	maxCap = 0;
-	nearbyMonks = 0;
-	nearbyBeasts = 0;
-	researched = false;
-	time_construction = 0;
-	time_research = 0;
-	percentage_constructing = 0;
-	time_producing = 0;
-	first_time_constructing = true;
-	percentage_life = 0.f;
-	
-	/*---------------*/
-
 	//inits with some values
 	position = {(float)pos.x,(float) pos.y};
 	buildingStatus = BuildingStatus::CONSTRUCTING;

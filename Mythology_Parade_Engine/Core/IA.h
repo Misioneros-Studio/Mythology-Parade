@@ -47,6 +47,9 @@ class IA : public j1Module
 public:
 	IA();
 	~IA() {};
+
+	void Init();
+
 	bool PreUpdate();
 	bool Update(float dt);
 	bool PostUpdate();

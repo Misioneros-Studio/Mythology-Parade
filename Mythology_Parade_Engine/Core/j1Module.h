@@ -23,7 +23,7 @@ public:
 	virtual ~j1Module()
 	{}
 
-	void Init()
+	virtual void Init()
 	{
 		active = true;
 	}

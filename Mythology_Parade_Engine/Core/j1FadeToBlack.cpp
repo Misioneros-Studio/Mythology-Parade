@@ -21,6 +21,7 @@
 #include "j1Gui.h"
 #include "Console.h"
 #include "EntityManager.h"
+#include "IA.h"
 
 j1FadeToBlack::j1FadeToBlack()
 {
@@ -77,6 +78,9 @@ bool j1FadeToBlack::PostUpdate()
 				App->minimap->Enable();
 				App->fowManager->Enable();
 
+				//Enable IA
+				App->ia->Enable();
+
 				break;
 			case(which_fade::scene_to_title):
 				App->entityManager->Disable();
@@ -86,6 +90,10 @@ bool j1FadeToBlack::PostUpdate()
 				App->minimap->Disable();
 				App->map->Disable();
 				App->title_scene->Enable();
+
+				//Disable IA
+				App->ia->Disable();
+
 				break;
 			case(which_fade::scene_to_scene):
 				App->entityManager->Disable();
@@ -94,12 +102,18 @@ bool j1FadeToBlack::PostUpdate()
 				App->fowManager->Disable();
 				App->minimap->Disable();
 				App->map->Disable();
+				//Enable IA
+				App->ia->Disable();
+
 				App->map->Enable();
 				App->entityManager->Enable();
 				App->pathfinding->Enable();
 				App->scene->Enable();
 				App->minimap->Enable();
 				App->fowManager->Enable();
+				//Enable IA
+				App->ia->Enable();
+
 				break;
 			case(which_fade::title_to_tutorial):
 				App->title_scene->Disable();
@@ -111,6 +125,9 @@ bool j1FadeToBlack::PostUpdate()
 				App->tutorialscene->Enable();
 				App->minimap->Enable();
 				App->fowManager->Enable();
+				//Enable IA
+				App->ia->Enable();
+
 				break;
 			case(which_fade::tutorial_to_title):
 				App->entityManager->Disable();
@@ -121,6 +138,8 @@ bool j1FadeToBlack::PostUpdate()
 				App->minimap->Disable();
 				App->map->Disable();
 				App->title_scene->Enable();
+				//Disable IA
+				App->ia->Disable();
 				break;
 			case(which_fade::tutorial_to_tutorial):
 				App->entityManager->Disable();
@@ -130,6 +149,9 @@ bool j1FadeToBlack::PostUpdate()
 				App->tutorialscene->Disable();
 				App->minimap->Disable();
 				App->map->Disable();
+				//Disable IA
+				App->ia->Disable();
+
 				App->map->Enable();
 				App->entityManager->Enable();
 				App->pathfinding->Enable();
@@ -137,6 +159,8 @@ bool j1FadeToBlack::PostUpdate()
 				App->tutorialscene->Enable();
 				App->minimap->Enable();
 				App->fowManager->Enable();
+				//Enable IA
+				App->ia->Enable();
 				break;
 			}
 
