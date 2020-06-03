@@ -1,4 +1,4 @@
-<img src=https://github.com/Misioneros-Studio/Mythology-Parade/blob/Develop/Web/40de52fb66400004ed4ab67f183928fb.png?raw=true" >
+<img src= "https://github.com/Misioneros-Studio/Mythology-Parade/blob/Develop/Web/40de52fb66400004ed4ab67f183928fb.png?raw=true" >
 
 ![](https://github.com/Misioneros-Studio/Mythology-Parade/blob/Develop/Wiki_pics/Art/Team%20Logo.png?raw=true)
 
