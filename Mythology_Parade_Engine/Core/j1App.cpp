@@ -153,7 +153,7 @@ bool j1App::Awake()
 		}
 	}
 
-	tooltipdata = new TooltipData;
+	tooltipdata = new TooltipData();
 
 	PERF_PEEK(ptimer);
 	
