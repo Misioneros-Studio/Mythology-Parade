@@ -623,52 +623,62 @@ void j1Scene::OnClick(UI* element, float argument)
 		}
 		else if (element->name == "RESEARCH TEMPLE") {
 			Building* building = (Building*)hud->thing_selected;
-			building->StartResearching("Temple");
+			building->ProduceQueue("Temple", true);
+			//building->StartResearching("Temple");
 			hud->close_menus = CloseSceneMenus::Research;
 		}
 		else if (element->name == "RESEARCH ENCAMPMENT") {
 			Building* building = (Building*)hud->thing_selected;
-			building->StartResearching("Encampment");
+			building->ProduceQueue("Encampment", true);
+			//building->StartResearching("Encampment");
 			hud->close_menus = CloseSceneMenus::Research;
 		}
 		else if (element->name == "RESEARCH CLERIC") {
 			Building* building = (Building*)hud->thing_selected;
-			building->StartResearching("Cleric");
+			building->ProduceQueue("Cleric", true);
+			//building->StartResearching("Cleric");
 			hud->close_menus = CloseSceneMenus::Research;
 		}
 		else if (element->name == "RESEARCH ASSASSIN") {
 			Building* building = (Building*)hud->thing_selected;
-			building->StartResearching("Assassin");
+			building->ProduceQueue("Assassin", true);
+			//building->StartResearching("Assassin");
 			hud->close_menus = CloseSceneMenus::Research;
 		}
 		else if (element->name == "RESEARCH LAWFUL BEAST") {
 			Building* building = (Building*)hud->thing_selected;
-			building->StartResearching("Lawful Beast");
+			building->ProduceQueue("Lawful Beast", true);
+			//building->StartResearching("Lawful Beast");
 			hud->close_menus = CloseSceneMenus::Research;
 		}
 		else if (element->name == "RESEARCH CHAOTIC BEAST") {
 			Building* building = (Building*)hud->thing_selected;
-			building->StartResearching("Chaotic Beast");
+			building->ProduceQueue("Chaotic Beast", true);
+			//building->StartResearching("Chaotic Beast");
 			hud->close_menus = CloseSceneMenus::Research;
 		}
 		else if (element->name == "RESEARCH LAWFUL MIRACLE") {
 			Building* building = (Building*)hud->thing_selected;
-			building->StartResearching("Lawful Miracle");
+			building->ProduceQueue("Lawful Miracle", true);
+			//building->StartResearching("Lawful Miracle");
 			hud->close_menus = CloseSceneMenus::Research;
 		}
 		else if (element->name == "RESEARCH CHAOTIC MIRACLE") {
 			Building* building = (Building*)hud->thing_selected;
-			building->StartResearching("Chaotic Miracle");
+			building->ProduceQueue("Chaotic Miracle", true);
+			//building->StartResearching("Chaotic Miracle");
 			hud->close_menus = CloseSceneMenus::Research;
 		}
 		else if (element->name == "RESEARCH LAWFUL VICTORY") {
 			Building* building = (Building*)hud->thing_selected;
-			building->StartResearching("Lawful Victory");
+			building->ProduceQueue("Lawful Victory", true);
+			//building->StartResearching("Lawful Victory");
 			hud->close_menus = CloseSceneMenus::Research;
 		}
 		else if (element->name == "RESEARCH CHAOTIC VICTORY") {
 			Building* building = (Building*)hud->thing_selected;
-			building->StartResearching("Chaotic Victory");
+			building->ProduceQueue("Chaotic Victory", true);
+			//building->StartResearching("Chaotic Victory");
 			hud->close_menus = CloseSceneMenus::Research;
 		}
 		else if (element->name == "Produce_Temple")
@@ -761,13 +771,13 @@ void j1Scene::OnClick(UI* element, float argument)
 		{
 			Building* building = (Building*)hud->thing_selected;
 			App->entityManager->getPlayer()->DecreaseFaith(200);
-			building->ProduceQueue("Lawful_Beast");
+			building->ProduceQueue("Chaotic_Beast");
 		}
 		else if (element->name == "Produce_Lawful_Beast")
 		{
 			Building* building = (Building*)hud->thing_selected;
 			App->entityManager->getPlayer()->DecreaseFaith(200);
-			building->ProduceQueue("Chaotic_Beast");
+			building->ProduceQueue("Lawful_Beast");
 		}
 		else if (element->name == "Produce_Lawful_Miracle")
 		{
