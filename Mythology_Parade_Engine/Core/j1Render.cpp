@@ -2,6 +2,7 @@
 #include "p2Log.h"
 #include "j1App.h"
 #include "j1Window.h"
+#include "j1Textures.h"
 
 #include "j1Render.h"
 
@@ -35,6 +36,11 @@ bool j1Render::Awake(pugi::xml_node& config)
 	}
 
 	renderer = SDL_CreateRenderer(App->win->window, -1, flags);
+
+	SDL_Surface* surf = App->tex->GetSurface("assets/Icon.png");
+	SDL_SetWindowIcon(App->win->window, surf);
+	SDL_FreeSurface(surf);
+
 
 	if (renderer == NULL)
 	{

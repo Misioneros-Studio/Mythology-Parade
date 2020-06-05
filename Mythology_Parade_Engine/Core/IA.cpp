@@ -72,7 +72,7 @@ bool IA::PreUpdate()
 	{
 		mouse = App->map->GetMousePositionOnMap();
 		mouse = App->map->TileCenterPoint(mouse);
-		LOG("%i %i", mouse.x, mouse.y);
+		//LOG("%i %i", mouse.x, mouse.y);
 	}
 
 	return ret;
