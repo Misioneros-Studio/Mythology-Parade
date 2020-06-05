@@ -55,7 +55,7 @@ public:
 	bool CleanUp();
 
 	// Called when creating a tutorial message
-	void CreateTutorialMessage(int);
+	void CreateTutorialMessage(int, bool = false);
 
 	// Called when deleting a tutorial message
 	void DeleteTutorialMessage();

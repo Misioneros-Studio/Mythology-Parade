@@ -68,8 +68,13 @@ bool j1TutorialScene::PreUpdate()
 bool j1TutorialScene::Update(float dt)
 {
 	
-	if (message_number<3&&tutorial_message_timer.ReadSec() >= 3) {
-		CreateTutorialMessage(message_number);
+	if ((message_number == 1 && tutorial_message_timer.ReadSec() >= 6) || (message_number !=1 && message_number < 3 && tutorial_message_timer.ReadSec() >= 3)) {
+		if (message_number == 1)
+			DeleteTutorialMessage();
+		if (message_number == 0)
+			CreateTutorialMessage(message_number, true);
+		else
+			CreateTutorialMessage(message_number);
 		message_number++;
 		if (message_number == 3) {
 			camera_first_position = { App->render->camera.x,App->render->camera.y };
@@ -163,7 +168,7 @@ bool j1TutorialScene::CleanUp()
 }
 
 // Called when creating a tutorial message
-void j1TutorialScene::CreateTutorialMessage(int index)
+void j1TutorialScene::CreateTutorialMessage(int index, bool middle)
 {
 	SDL_Rect color = { 255,255,255,255 };
 	int screen_position = 1;
@@ -173,6 +178,7 @@ void j1TutorialScene::CreateTutorialMessage(int index)
 	}
 	int number_message = 3;
 	int y = 0;
+	int x = 0;
 	if (third_message_shown[screen_position] == false)
 		number_message = 2;
 	else
@@ -188,34 +194,42 @@ void j1TutorialScene::CreateTutorialMessage(int index)
 	y += 5;
 	uint w, h;
 	App->win->GetWindowSize(w, h);
+	if (middle == true) {
+		x = (int)(w / 2);
+		x -= (int)(295 / 2);
+		y = (int)((h-130) / 2);
+		screen_position = 0;
+	}
 	TutorialMessage tutorial_message = tutorial_message_data->GetTutorialMessage(index);
 	window_tutorial_message[actual_message] = static_cast<WindowUI*>(App->gui->CreateUIElement(Type::WINDOW, nullptr, 
-		{ ((int)w- 295)*screen_position,y,290,(tutorial_message.lines * 18) }, { 1285,11,305,(tutorial_message.lines * 18) }));
+		{ ((int)w - 295) * screen_position + x ,y,290,(tutorial_message.lines * 18) }, { 1285,11,305,(tutorial_message.lines * 18) }));
 	int j = 0;
 	for (int i = 1; i <= tutorial_message.lines; i++) {
 		int k = i + (actual_message * 9);
 		if (tutorial_message.has_title && i == 1) {
 			text_tutorial_message[k - 1] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, window_tutorial_message[actual_message],
-				{ ((int)w - 295) * screen_position,y + (18 * (i - 1)),290,18 }, { 0,0,0,0 }, tutorial_message.title, Panel_Fade::no_one_fade, color));
+				{ ((int)w - 295) * screen_position + x ,y + (18 * (i - 1)),290,18 }, { 0,0,0,0 }, tutorial_message.title, Panel_Fade::no_one_fade, color));
 			j--;
 		}
 		else {
 			text_tutorial_message[k - 1] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, window_tutorial_message[actual_message],
-				{ ((int)w - 295) * screen_position,y + (18 * (i - 1)),290,18 }, { 0,0,0,0 }, tutorial_message_data->GetLineTutorialMessage(i + j, tutorial_message),
+				{ ((int)w - 295) * screen_position + x ,y + (18 * (i - 1)),290,18 }, { 0,0,0,0 }, tutorial_message_data->GetLineTutorialMessage(i + j, tutorial_message),
 				Panel_Fade::no_one_fade, { 255,255,255,255 }));
 		}
 	}
-	if (number_message == 0) {
-		first_message_shown[screen_position] = true;
-		first_message_height[screen_position] = (tutorial_message.lines * 18)+5;
-	}
-	else if(number_message==1){
-		second_message_shown[screen_position] = true;
-		second_message_height[screen_position] = (tutorial_message.lines * 18)+5;
-	}
-	else if (number_message == 2) {
-		third_message_shown[screen_position] = true;
-		third_message_height[screen_position] = (tutorial_message.lines * 18) + 5;
+	if (middle == false) {
+		if (number_message == 0) {
+			first_message_shown[screen_position] = true;
+			first_message_height[screen_position] = (tutorial_message.lines * 18) + 5;
+		}
+		else if (number_message == 1) {
+			second_message_shown[screen_position] = true;
+			second_message_height[screen_position] = (tutorial_message.lines * 18) + 5;
+		}
+		else if (number_message == 2) {
+			third_message_shown[screen_position] = true;
+			third_message_height[screen_position] = (tutorial_message.lines * 18) + 5;
+		}
 	}
 	actual_message++;
 }
