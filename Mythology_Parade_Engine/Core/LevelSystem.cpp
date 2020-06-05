@@ -43,7 +43,7 @@ void LevelSystem::LevelUp()
 	}	
 }
 
-void LevelSystem::GainExperience(Action action)
+void LevelSystem::GainExperience(Action action, bool tutorial)
 {
 	if (level >= 3)
 		return;
@@ -57,7 +57,9 @@ void LevelSystem::GainExperience(Action action)
 	case convertEnemyUnit:		value = 300;	break;
 	case convertEnemyBuilding:	value = 500;	break;
 	}
-
+	
+	if (tutorial == true)
+		value = 3500;
 	experience += value;
 	
 	if (experience >= exp_to_lvl_1) {
