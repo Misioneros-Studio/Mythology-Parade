@@ -488,18 +488,18 @@
     <property name="type" value="IDLE_UP"/>
    </properties>
    <animation>
-    <frame tileid="323" duration="100"/>
-    <frame tileid="324" duration="100"/>
-    <frame tileid="325" duration="100"/>
-    <frame tileid="326" duration="100"/>
-    <frame tileid="327" duration="100"/>
-    <frame tileid="328" duration="100"/>
-    <frame tileid="329" duration="100"/>
-    <frame tileid="330" duration="100"/>
-    <frame tileid="331" duration="100"/>
-    <frame tileid="332" duration="100"/>
-    <frame tileid="333" duration="100"/>
-    <frame tileid="334" duration="100"/>
+    <frame tileid="323" duration="2"/>
+    <frame tileid="324" duration="2"/>
+    <frame tileid="325" duration="2"/>
+    <frame tileid="326" duration="2"/>
+    <frame tileid="327" duration="2"/>
+    <frame tileid="328" duration="2"/>
+    <frame tileid="329" duration="2"/>
+    <frame tileid="330" duration="2"/>
+    <frame tileid="331" duration="2"/>
+    <frame tileid="332" duration="2"/>
+    <frame tileid="333" duration="2"/>
+    <frame tileid="334" duration="2"/>
    </animation>
   </tile>
   <tile id="340">
