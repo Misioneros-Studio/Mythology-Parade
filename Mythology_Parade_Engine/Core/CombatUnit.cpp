@@ -20,6 +20,7 @@ CombatUnit::CombatUnit(UnitType type, iPoint pos) : Unit(type, pos), range(0), d
 		LevelSystem::Init(3500, 6500, 9500);
 		CombatUnit::Init(100, 15, 1, 80);
 		collisionRect = { 0, 0, 30, -55 };
+		sizeMultiplier = 2;
 		break;
 	case UnitType::PIKEMAN:
 		time_production = 90;
@@ -36,6 +37,7 @@ CombatUnit::CombatUnit(UnitType type, iPoint pos) : Unit(type, pos), range(0), d
 		break;
 	case UnitType::PRIEST:
 		name = "priest";
+		sizeMultiplier = 2;
 		break;
 	case UnitType::FOOTMAN:
 		name = "footman";

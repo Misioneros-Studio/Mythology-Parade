@@ -55,6 +55,7 @@ public:
 
 	bool insideMinotaur;
 	bool insideDraugar;
+	float sizeMultiplier;
 
 public:
 	Unit(UnitType, iPoint);

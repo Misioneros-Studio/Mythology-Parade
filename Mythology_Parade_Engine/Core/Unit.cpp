@@ -10,7 +10,7 @@
 
 #include "SDL_mixer/include/SDL_mixer.h"
 
-Unit::Unit(UnitType type, iPoint pos): unitType(type), state(AnimationType::IDLE),  moveSpeed(60)
+Unit::Unit(UnitType type, iPoint pos): unitType(type), state(AnimationType::IDLE),  moveSpeed(60), sizeMultiplier(1)
 {
 
 	displayDebug = false;
@@ -37,6 +37,7 @@ Unit::Unit(UnitType type, iPoint pos): unitType(type), state(AnimationType::IDLE
 		name = "monk";
 		Init(1);
 		collisionRect = { 0, 0, 30, -55 };
+		sizeMultiplier = 2;
 		break;
 	case UnitType::JOTNAR:
 		time_production = 35;
@@ -45,6 +46,7 @@ Unit::Unit(UnitType type, iPoint pos): unitType(type), state(AnimationType::IDLE
 		researched = true;
 		Init(150);
 		collisionRect = { 0, 0, 123, -175 };
+		sizeMultiplier = 4;
 		break;
 	case UnitType::DRAUGAR:
 		time_production = 35;
@@ -53,6 +55,7 @@ Unit::Unit(UnitType type, iPoint pos): unitType(type), state(AnimationType::IDLE
 		researched = true;
 		Init(40);
 		collisionRect = { 0, 0, 40, -60 };
+		sizeMultiplier = 2;
 		break;
 	case UnitType::CYCLOP:
 		time_production = 35;
@@ -61,6 +64,7 @@ Unit::Unit(UnitType type, iPoint pos): unitType(type), state(AnimationType::IDLE
 		name = "cyclop";
 		Init(150);
 		collisionRect = { 0, 0, 118, -130 };
+		sizeMultiplier = 3;
 		break;
 	case UnitType::MINOTAUR:
 		time_production = 35;
@@ -69,6 +73,7 @@ Unit::Unit(UnitType type, iPoint pos): unitType(type), state(AnimationType::IDLE
 		name = "minotaur";
 		Init(40);
 		collisionRect = { 0, 0, 60, -67 };
+		sizeMultiplier = 2;
 		break;
 	case UnitType::CLERIC:
 		time_production = 15;
@@ -78,6 +83,7 @@ Unit::Unit(UnitType type, iPoint pos): unitType(type), state(AnimationType::IDLE
 		Init(1);
 		moveSpeed = 100;
 		collisionRect = { 0, 0, 30, -55 };
+		sizeMultiplier = 2;
 		break;
 	}
 
@@ -340,7 +346,7 @@ bool Unit::Draw(float dt)
 		MoveToTarget();
 
 	int num_current_anim = currentAnim.GetSprite();
-	blitRect = { (int)(currentAnim.sprites[num_current_anim].rect.w / 1.5f), (int)(currentAnim.sprites[num_current_anim].rect.h / 1.5f) };
+	blitRect = { static_cast<int>((currentAnim.sprites[num_current_anim].rect.w / 1.5f) * sizeMultiplier), static_cast<int>((currentAnim.sprites[num_current_anim].rect.h / 1.5f) * sizeMultiplier)};
 
 	//Collider update
 	collisionRect.x = position.x - (collisionRect.w / 2);
