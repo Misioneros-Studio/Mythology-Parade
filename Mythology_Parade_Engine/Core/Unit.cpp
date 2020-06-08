@@ -346,13 +346,14 @@ bool Unit::Draw(float dt)
 		MoveToTarget();
 
 	int num_current_anim = currentAnim.GetSprite();
-	blitRect = { static_cast<int>((currentAnim.sprites[num_current_anim].rect.w / 1.5f) * sizeMultiplier), static_cast<int>((currentAnim.sprites[num_current_anim].rect.h / 1.5f) * sizeMultiplier)};
+	blitRect = { static_cast<int>((currentAnim.sprites[num_current_anim].rect.w * sizeMultiplier) / 1.5f), static_cast<int>((currentAnim.sprites[num_current_anim].rect.h * sizeMultiplier) / 1.5f)};
 
 	//Collider update
 	collisionRect.x = position.x - (collisionRect.w / 2);
 	collisionRect.y = position.y;
 
 	App->render->Blit(texture, position.x - blitRect.x / 2, position.y - blitRect.y, blitRect, &currentAnim.sprites[num_current_anim].rect, 1.f, flipState);
+	//App->render->DrawQuad(getMovementRect(), 255, 0, 0);
 
 	//App->render->DrawQuad({(int)position.x, (int)position.y, 2, 2}, 0, 255, 0);
 
