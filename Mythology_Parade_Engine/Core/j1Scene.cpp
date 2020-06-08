@@ -156,9 +156,9 @@ bool j1Scene::PreUpdate()
 	{
 		App->gui->cursor_attack = false;
 	}
-	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN && App->gui->cursor_move == true)
+	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN && App->gui->cursor_heal == true)
 	{
-		App->gui->cursor_move = false;
+		App->gui->cursor_heal = false;
 	}
 
 	if (App->title_scene->wantToLoad)
@@ -748,7 +748,7 @@ void j1Scene::OnClick(UI* element, float argument)
 		}
 		else if (element->name == "Heal")
 		{
-			App->gui->cursor_move = true;
+			App->gui->cursor_heal = true;
 			nextUnit_selected = true;
 		}
 		else if (element->name == "Produce_Cleric")
