@@ -58,8 +58,7 @@ public:
 	void SetPercentage(float var);
 
 	std::string GetElementProducing();
-
-	void ProduceQueue(std::string thing_producing);
+	void ProduceQueue(std::string thing_producing, bool = false);
 	void Convert();
 private:
 
@@ -111,8 +110,8 @@ public:
 	j1Timer timer_construction;
 	BuildingStatus buildingStatus;
 	BuildingAction buildingAction;
-
-
+	bool researching;
+	int index_researching;
 };
 
 #endif // !__BUILDING_H__

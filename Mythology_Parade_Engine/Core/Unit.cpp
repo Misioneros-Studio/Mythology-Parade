@@ -7,6 +7,7 @@
 #include"j1ParticleManager.h"
 #include "j1Minimap.h"
 #include"j1Audio.h"
+#include "j1TutorialScene.h"
 
 #include "SDL_mixer/include/SDL_mixer.h"
 
@@ -433,6 +434,8 @@ void Unit::Kill(iPoint direction)
 {
 	ChangeState(direction, AnimationType::DIE);
 	App->particleManager->CreateParticle({ (int)position.x-20,(int)position.y-50 }, { 0,-1 }, 10, ParticleAnimation::Skull);
+	if (App->scene->isInTutorial == true && civilization != App->entityManager->getPlayer()->civilization)
+		App->tutorialscene->convert_or_kill = true;
 }
 void Unit::Draw_Life_Bar(bool enemy)
 {
@@ -474,7 +477,7 @@ void Unit::StateMachineActions(float dt)
 			CombatUnit* unit = (CombatUnit*)this;
 			if (enemyTarget->RecieveDamage(unit->GetDamageValue()))
 			{
-				unit->GainExperience(Action::killEnemy);
+				unit->GainExperience(Action::killEnemy, App->scene->isInTutorial);
 				enemyTarget->Kill(App->map->WorldToMap(position.x, position.y));
 				enemyTarget = nullptr;
 				ChangeState(targetPosition, AnimationType::IDLE);

@@ -18,7 +18,8 @@ Building::Building(BuildingType type, iPoint pos, BuildingInfo info)
 	time_producing = 0;
 	first_time_constructing = true;
 	percentage_life = 0.f;
-	
+	researching = false;
+	index_researching = 0;
 	/*---------------*/
 
 	//inits with some values
@@ -261,10 +262,15 @@ std::string Building::GetElementProducing()
 {
 	return element_producing;
 }
-void Building::ProduceQueue(std::string thing_producing)
+
+void Building::ProduceQueue(std::string thing_producing, bool research)
 {
 	queuedResearch.push(thing_producing);
 	App->scene->update_production_list = true;
+	if (research == true) {
+		index_researching = queuedResearch.size();
+		researching = true;
+	}
 }
 
 bool Building::Awake(pugi::xml_node& a)
@@ -287,9 +293,15 @@ bool Building::Update(float dt)
 	}
 
 	if (queuedResearch.size() > 0 && buildingAction == BuildingAction::NOTHING) {
+		if (researching == true) {
+			index_researching--;
+		}
 		std::string elementToProduce = queuedResearch.front();
 		queuedResearch.pop();
-		StartProducing(elementToProduce);
+		if (researching == true && index_researching == 0)
+			StartResearching(elementToProduce);
+		else
+			StartProducing(elementToProduce);
 	}
 
 	if (App->scene->paused_game == true && timer_construction.isPaused() == false)
@@ -338,6 +350,8 @@ bool Building::Update(float dt)
 				App->scene->FinishResearching(element_producing);
 				element_producing = "";
 				App->scene->update_production_list = true;
+				researching = false;
+				index_researching = 0;
 			}
 			buildingAction = BuildingAction::NOTHING;
 			percentage_constructing = 1;
@@ -568,6 +582,10 @@ void Building::CancelProduction(int index)
 {
 	App->scene->update_production_list = true;
 	int size = queuedResearch.size();
+	if (researching == true && index == index_researching) {
+		researching = false;
+		index_researching = 0;
+	}
 	if (index != 0) {
 		index--;
 		std::string string;
@@ -582,7 +600,9 @@ void Building::CancelProduction(int index)
 		}
 	}
 	else {
-		App->scene->ReturnFaith(element_producing);
+		if (buildingAction == BuildingAction::PRODUCING) {
+			App->scene->ReturnFaith(element_producing);
+		}
 		FinishProduction(element_producing, true);
 		buildingAction = BuildingAction::NOTHING;
 		percentage_constructing = 1;
