@@ -255,6 +255,7 @@ void Player::ActionToUnit()
 		App->entityManager->DeleteEntity(App->scene->hud->thing_selected);
 		Unit* unit = static_cast<Unit*>(listEntities.begin()._Ptr->_Myval);
 		unit->SetMaxUnitHealth();
+		App->scene->nextUnit_selected = false;
 	}
 }
 
@@ -265,6 +266,7 @@ void Player::ActionToBuilding()
 		App->entityManager->DeleteEntity(App->scene->hud->thing_selected);
 		Building* unit = static_cast<Building*>(buildingSelect);
 		unit->SetMaxUnitHealth();
+		App->scene->nextUnit_selected = false;
 	}
 	if (GetEnemySelectedBuild() != nullptr)
 	{

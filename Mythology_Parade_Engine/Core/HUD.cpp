@@ -386,7 +386,10 @@ void HUD::HUDUpdateSelection(std::list<Entity*> listEntities, Building* building
 		if (building_selected->GetElementProducing() != "") {
 			float w = building_selected->GetPercentage();
 			hud_bar_producing[0] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, static_cast<UI*>(ui_ingame), { 826,652,28,5 }, { 1072,319,181,17 }, "", Panel_Fade::no_one_fade));
-			hud_bar_producing[1] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, static_cast<UI*>(ui_ingame), { 826,652,(int)(28 * w),5 }, { 1072,250,181,17 }, "", Panel_Fade::no_one_fade));
+			if (building_selected->researching == true && building_selected->index_researching == 0)
+				hud_bar_producing[1] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, static_cast<UI*>(ui_ingame), { 826,652,(int)(28 * w),5 }, { 1072,284,181,17 }, "", Panel_Fade::no_one_fade));
+			else
+				hud_bar_producing[1] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, static_cast<UI*>(ui_ingame), { 826,652,(int)(28 * w),5 }, { 1072,250,181,17 }, "", Panel_Fade::no_one_fade));
 		}
 	}
 	SDL_Rect position_name = { 725,603,30,30 };
@@ -739,7 +742,10 @@ void HUD::UpdateSelectedThing() {
 				}
 				if (building->GetElementProducing() != "") {
 					hud_bar_producing[0] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, static_cast<UI*>(ui_ingame), { 826,652,28,5 }, { 1072,319,181,17 }, "", Panel_Fade::no_one_fade));
-					hud_bar_producing[1] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, static_cast<UI*>(ui_ingame), { 826,652,28,5 }, { 1072,250,181,17 }, "", Panel_Fade::no_one_fade));
+					if (building->researching == true && building->index_researching == 0)
+						hud_bar_producing[1] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, static_cast<UI*>(ui_ingame), { 826,652,28,5 }, { 1072,284,181,17 }, "", Panel_Fade::no_one_fade));
+					else
+						hud_bar_producing[1] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, static_cast<UI*>(ui_ingame), { 826,652,28,5 }, { 1072,250,181,17 }, "", Panel_Fade::no_one_fade));
 				}
 			}
 			App->scene->update_production_list = false;
@@ -779,8 +785,7 @@ void HUD::CancelProduction(iPoint position)
 		index += 6;
 	if (thing_selected->type == EntityType::BUILDING) {
 		Building* building = static_cast<Building*>(thing_selected);
-		if(building->buildingAction==BuildingAction::PRODUCING)
-			building->CancelProduction(index);
+		building->CancelProduction(index);
 	}
 }
 
@@ -1062,7 +1067,7 @@ void HUD::ManageActionButtons(bool create_buttons, bool viking) {
 							{ 0,0,0,0 }, false, { 0,0,0,0 }, nullptr, 0, false, -1.0F, 1, (int)TooltipsAvailable::disaster_unlocked));
 					}
 				}
-				if (building->buildingAction == BuildingAction::NOTHING) {
+				if (building->researching == false && building->GetProduction().size() < 11) {
 					hud_button_actions[4] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 584,626,36,36 }, { 16,227,36,36 }, "Research", Panel_Fade::no_one_fade, { 98,227,36,36 },
 						{ 57,227,36,36 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::MAIN_MENU, false, -1.0f, 0, (int)TooltipsAvailable::researchbutton));
 				}
@@ -1425,7 +1430,7 @@ void HUD::ManageActionButtons(bool create_buttons, bool viking) {
 							{ 0,0,0,0 }, false, { 0,0,0,0 }, nullptr, 0, false, -1.0F, 1, (int)TooltipsAvailable::victory1_unlocked));
 					}
 				}
-				if (hud_button_actions[4] == nullptr && building->buildingAction == BuildingAction::NOTHING) {
+				if (hud_button_actions[4] == nullptr && building->researching == false && building->GetProduction().size() < 11) {
 					if (hud_button_actions_unclickable[4] != nullptr) {
 						App->gui->DeleteUIElement(hud_button_actions_unclickable[4]);
 						hud_button_actions_unclickable[4] = nullptr;
@@ -1433,7 +1438,7 @@ void HUD::ManageActionButtons(bool create_buttons, bool viking) {
 					hud_button_actions[4] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 584,626,36,36 }, { 16,227,36,36 }, "Research", Panel_Fade::no_one_fade, { 98,227,36,36 },
 						{ 57,227,36,36 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::MAIN_MENU, false, -1.0f, 0, (int)TooltipsAvailable::researchbutton));
 				}
-				else if (hud_button_actions_unclickable[4] == nullptr && building->buildingAction != BuildingAction::NOTHING) {
+				else if (hud_button_actions_unclickable[4] == nullptr && (building->researching == true || building->GetProduction().size() >= 11)) {
 					if (hud_button_actions[4] != nullptr) {
 						App->gui->DeleteUIElement(hud_button_actions[4]);
 						hud_button_actions[4] = nullptr;
@@ -1549,7 +1554,7 @@ void HUD::ManageActionButtons(bool create_buttons, bool viking) {
 					hud_button_actions[1] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 272,613,67,41 }, { 3,540,67,41 }, "Produce_Sacrifices", Panel_Fade::no_one_fade, { 3,632,67,41 },
 						{ 3,586,67,41 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::MAIN_MENU, false, -1.0F, 1, (int)TooltipsAvailable::producecurrencybutton));
 				}
-				else if (hud_button_actions_unclickable[1] == nullptr && (player->GetFaith() < 20 || building->GetProduction().size() >= 11)) {
+				else if (hud_button_actions_unclickable[1] == nullptr && (player->GetFaith() < 40 || building->GetProduction().size() >= 11)) {
 					if (hud_button_actions[1] != nullptr) {
 						App->gui->DeleteUIElement(hud_button_actions[1]);
 						hud_button_actions[1] = nullptr;
@@ -1565,7 +1570,7 @@ void HUD::ManageActionButtons(bool create_buttons, bool viking) {
 					hud_button_actions[2] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 344,613,67,41 }, { 146,540,67,41 }, "Produce_Prayers", Panel_Fade::no_one_fade, { 146,632,67,41 },
 						{ 146,586,67,41 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::MAIN_MENU, false, -1.0F, 1, (int)TooltipsAvailable::producecurrencybutton));
 				}
-				else if (hud_button_actions_unclickable[2] == nullptr && (player->GetFaith() < 20 || building->GetProduction().size() >= 11)) {
+				else if (hud_button_actions_unclickable[2] == nullptr && (player->GetFaith() < 40 || building->GetProduction().size() >= 11)) {
 					if (hud_button_actions[2] != nullptr) {
 						App->gui->DeleteUIElement(hud_button_actions[2]);
 						hud_button_actions[2] = nullptr;
@@ -1809,7 +1814,7 @@ SDL_Rect HUD::GetSpritePortraitProduction(int type_of_portrait, const std::strin
 {
 	SDL_Rect sprite = { 0,0,0,0 };
 	if (type_of_portrait == 0) {
-		if(produced_type=="Assassin")
+		if (produced_type == "Assassin")
 			sprite = { 3,931,30,41 };
 		else if (produced_type == "Pikeman")
 			sprite = { 34,931,30,41 };
@@ -1817,13 +1822,13 @@ SDL_Rect HUD::GetSpritePortraitProduction(int type_of_portrait, const std::strin
 			sprite = { 66,931,30,41 };
 		else if (produced_type == "Priest")
 			sprite = { 97,931,30,41 };
-		else if (produced_type == "Lawful_Beast") {
+		else if (produced_type == "Lawful_Beast" || produced_type == "Lawful Beast") {
 			if (civilization == CivilizationType::VIKING)
 				sprite = { 191,931,30,41 };
 			else if (civilization == CivilizationType::GREEK)
 				sprite = { 159,931,30,41 };
 		}
-		else if (produced_type == "Chaotic_Beast") {
+		else if (produced_type == "Chaotic_Beast" || produced_type == "Chaotic Beast") {
 			if (civilization == CivilizationType::GREEK)
 				sprite = { 128,931,30,41 };
 			else if (civilization == CivilizationType::VIKING)
@@ -1831,16 +1836,28 @@ SDL_Rect HUD::GetSpritePortraitProduction(int type_of_portrait, const std::strin
 		}
 		else if (produced_type == "Cleric")
 			sprite = { 253,931,30,41 };
-		else if (produced_type == "Miracle")
+		else if (produced_type == "Miracle" || produced_type == "Lawful Miracle")
 			sprite = { 284,931,30,41 };
 		else if (produced_type == "Prayers")
 			sprite = { 316,931,30,41 };
-		else if (produced_type == "Victory")
+		else if (produced_type == "Victory" || produced_type == "Lawful Victory" || produced_type == "Chaotic Victory")
 			sprite = { 347,931,30,41 };
 		else if (produced_type == "Sacrifices")
 			sprite = { 378,931,30,41 };
-		else if (produced_type == "Disaster")
+		else if (produced_type == "Disaster" || produced_type == "Chaotic Miracle")
 			sprite = { 409,931,30,41 };
+		else if (produced_type == "Temple") {
+			if (civilization == CivilizationType::VIKING)
+				sprite = { 470,931,30,41 };
+			else if (civilization == CivilizationType::GREEK)
+				sprite = { 533,931,30,41 };
+		}
+		else if (produced_type == "Encampment") {
+			if (civilization == CivilizationType::GREEK)
+				sprite = { 502,931,30,41 };
+			else if (civilization == CivilizationType::VIKING)
+				sprite = { 440,931,30,41 };
+		}
 	}
 	else if (type_of_portrait == 1) {
 		if (produced_type == "Assassin")
@@ -1851,13 +1868,13 @@ SDL_Rect HUD::GetSpritePortraitProduction(int type_of_portrait, const std::strin
 			sprite = { 66,976,30,41 };
 		else if (produced_type == "Priest")
 			sprite = { 97,976,30,41 };
-		else if (produced_type == "Lawful_Beast") {
+		else if (produced_type == "Lawful_Beast" || produced_type == "Lawful Beast") {
 			if (civilization == CivilizationType::VIKING)
 				sprite = { 191,976,30,41 };
 			else if (civilization == CivilizationType::GREEK)
 				sprite = { 159,976,30,41 };
 		}
-		else if (produced_type == "Chaotic_Beast") {
+		else if (produced_type == "Chaotic_Beast" || produced_type == "Chaotic Beast") {
 			if (civilization == CivilizationType::GREEK)
 				sprite = { 128,976,30,41 };
 			else if (civilization == CivilizationType::VIKING)
@@ -1865,16 +1882,28 @@ SDL_Rect HUD::GetSpritePortraitProduction(int type_of_portrait, const std::strin
 		}
 		else if (produced_type == "Cleric")
 			sprite = { 253,976,30,41 };
-		else if (produced_type == "Miracle")
+		else if (produced_type == "Miracle" || produced_type == "Lawful Miracle")
 			sprite = { 284,976,30,41 };
 		else if (produced_type == "Prayers")
 			sprite = { 316,976,30,41 };
-		else if (produced_type == "Victory")
+		else if (produced_type == "Victory" || produced_type == "Lawful Victory" || produced_type == "Chaotic Victory")
 			sprite = { 347,976,30,41 };
 		else if (produced_type == "Sacrifices")
 			sprite = { 378,976,30,41 };
-		else if (produced_type == "Disaster")
+		else if (produced_type == "Disaster" || produced_type == "Chaotic Miracle")
 			sprite = { 409,976,30,41 };
+		else if (produced_type == "Temple") {
+			if (civilization == CivilizationType::VIKING)
+				sprite = { 470,976,30,41 };
+			else if (civilization == CivilizationType::GREEK)
+				sprite = { 533,976,30,41 };
+		}
+		else if (produced_type == "Encampment") {
+			if (civilization == CivilizationType::GREEK)
+				sprite = { 502,976,30,41 };
+			else if (civilization == CivilizationType::VIKING)
+				sprite = { 440,976,30,41 };
+		}
 	}
 	else if (type_of_portrait == 2) {
 		if (produced_type == "Assassin")
@@ -1885,13 +1914,13 @@ SDL_Rect HUD::GetSpritePortraitProduction(int type_of_portrait, const std::strin
 			sprite = { 66,1021,30,41 };
 		else if (produced_type == "Priest")
 			sprite = { 97,1021,30,41 };
-		else if (produced_type == "Lawful_Beast") {
+		else if (produced_type == "Lawful_Beast" || produced_type == "Lawful Beast") {
 			if (civilization == CivilizationType::VIKING)
 				sprite = { 191,1021,30,41 };
 			else if (civilization == CivilizationType::GREEK)
 				sprite = { 159,1021,30,41 };
 		}
-		else if (produced_type == "Chaotic_Beast") {
+		else if (produced_type == "Chaotic_Beast" || produced_type == "Chaotic Beast") {
 			if (civilization == CivilizationType::GREEK)
 				sprite = { 128,1021,30,41 };
 			else if (civilization == CivilizationType::VIKING)
@@ -1899,16 +1928,28 @@ SDL_Rect HUD::GetSpritePortraitProduction(int type_of_portrait, const std::strin
 		}
 		else if (produced_type == "Cleric")
 			sprite = { 253,1021,30,41 };
-		else if (produced_type == "Miracle")
+		else if (produced_type == "Miracle" || produced_type == "Lawful Miracle")
 			sprite = { 284,1021,30,41 };
 		else if (produced_type == "Prayers")
 			sprite = { 316,1021,30,41 };
-		else if (produced_type == "Victory")
+		else if (produced_type == "Victory" || produced_type == "Lawful Victory" || produced_type == "Chaotic Victory")
 			sprite = { 347,1021,30,41 };
 		else if (produced_type == "Sacrifices")
 			sprite = { 378,1021,30,41 };
-		else if (produced_type == "Disaster")
+		else if (produced_type == "Disaster" || produced_type == "Chaotic Miracle")
 			sprite = { 409,1021,30,41 };
+		else if (produced_type == "Temple") {
+			if (civilization == CivilizationType::VIKING)
+				sprite = { 470,1021,30,41 };
+			else if (civilization == CivilizationType::GREEK)
+				sprite = { 533,1021,30,41 };
+		}
+		else if (produced_type == "Encampment") {
+			if (civilization == CivilizationType::GREEK)
+				sprite = { 502,1021,30,41 };
+			else if (civilization == CivilizationType::VIKING)
+				sprite = { 440,1021,30,41 };
+		}
 	}
 	return sprite;
 }

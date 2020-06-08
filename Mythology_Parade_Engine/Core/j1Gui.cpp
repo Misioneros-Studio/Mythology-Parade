@@ -155,7 +155,7 @@ bool j1Gui::PostUpdate()
 		sec = { 162,0,36,36 };
 	if (cursor_attack == true && App->scene->active == true && App->scene->paused_game == false)
 		sec = { 216,0,35,33 };
-	if (cursor_move == true && App->scene->active == true && App->scene->paused_game == false)
+	if (cursor_heal == true && App->scene->active == true && App->scene->paused_game == false)
 		sec = { 324,0,27,32 };
 
 	cursor_size = { sec.w,sec.h };
