@@ -1549,7 +1549,7 @@ void HUD::ManageActionButtons(bool create_buttons, bool viking) {
 					hud_button_actions[1] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 272,613,67,41 }, { 3,540,67,41 }, "Produce_Sacrifices", Panel_Fade::no_one_fade, { 3,632,67,41 },
 						{ 3,586,67,41 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::MAIN_MENU, false, -1.0F, 1, (int)TooltipsAvailable::producecurrencybutton));
 				}
-				else if (hud_button_actions_unclickable[1] == nullptr && (player->GetFaith() < 20 || building->GetProduction().size() >= 11)) {
+				else if (hud_button_actions_unclickable[1] == nullptr && (player->GetFaith() < 40 || building->GetProduction().size() >= 11)) {
 					if (hud_button_actions[1] != nullptr) {
 						App->gui->DeleteUIElement(hud_button_actions[1]);
 						hud_button_actions[1] = nullptr;
@@ -1565,7 +1565,7 @@ void HUD::ManageActionButtons(bool create_buttons, bool viking) {
 					hud_button_actions[2] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 344,613,67,41 }, { 146,540,67,41 }, "Produce_Prayers", Panel_Fade::no_one_fade, { 146,632,67,41 },
 						{ 146,586,67,41 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::MAIN_MENU, false, -1.0F, 1, (int)TooltipsAvailable::producecurrencybutton));
 				}
-				else if (hud_button_actions_unclickable[2] == nullptr && (player->GetFaith() < 20 || building->GetProduction().size() >= 11)) {
+				else if (hud_button_actions_unclickable[2] == nullptr && (player->GetFaith() < 40 || building->GetProduction().size() >= 11)) {
 					if (hud_button_actions[2] != nullptr) {
 						App->gui->DeleteUIElement(hud_button_actions[2]);
 						hud_button_actions[2] = nullptr;
