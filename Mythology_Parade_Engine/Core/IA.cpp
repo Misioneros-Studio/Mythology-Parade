@@ -61,7 +61,12 @@ IA::IA()
 	positionViking.push_back({ -224,560 }); //monastery 2
 	positionViking.push_back({ -256,576 }); //monk4
 	positionViking.push_back({ -224,592 }); //monk5
+}
 
+void IA::Init() 
+{
+	active = false;
+	LOG("A");
 }
 
 bool IA::PreUpdate()
@@ -72,7 +77,7 @@ bool IA::PreUpdate()
 	{
 		mouse = App->map->GetMousePositionOnMap();
 		mouse = App->map->TileCenterPoint(mouse);
-		LOG("%i %i", mouse.x, mouse.y);
+		//LOG("%i %i", mouse.x, mouse.y);
 	}
 
 	return ret;
