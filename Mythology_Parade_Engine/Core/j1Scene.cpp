@@ -95,7 +95,7 @@ bool j1Scene::Start()
 	App->gui->sfx_UI[(int)UI_Audio::SURRENDER] = App->audio->LoadFx("audio/ui/Surrender.wav");
 	App->gui->sfx_UI[(int)UI_Audio::EXIT] = App->audio->LoadFx("audio/ui/Exit.wav");
 	App->gui->sfx_UI[(int)UI_Audio::CLOSE] = App->audio->LoadFx("audio/ui/Close_Menu.wav");
-	App->gui->sfx_UI[(int)UI_Audio::HOVER] = App->audio->LoadFx("audio/ui/VOLUME_Hover.wav");
+	App->gui->sfx_UI[(int)UI_Audio::HOVER] = App->audio->LoadFx("audio/ui/Hover.wav");
 
 	WinViking_sound = App->audio->LoadFx("audio/fx/WinVikings.wav");
 	WinGreek_sound = App->audio->LoadFx("audio/fx/win_greeks.wav");
