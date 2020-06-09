@@ -36,7 +36,7 @@ public:
 public:
 
 	std::list<TTF_Font*>	fonts;
-	TTF_Font*			default;
+	TTF_Font*			default_font;
 	TTF_Font*			default_title;
 };
 

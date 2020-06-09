@@ -11,7 +11,7 @@
 j1Fonts::j1Fonts() : j1Module()
 {
 	name.append("fonts");
-	default = nullptr;
+	default_font = nullptr;
 	default_title = nullptr;
 }
 
@@ -34,7 +34,7 @@ bool j1Fonts::Awake(pugi::xml_node& conf)
 	{
 		const char* path = conf.child("default_font").attribute("file").as_string(DEFAULT_FONT);
 		int size = conf.child("default_font").attribute("size").as_int(DEFAULT_FONT_SIZE);
-		default = Load(path, size);
+		default_font = Load(path, size);
 		default_title = Load(path, 24);
 	}
 	active = true;
@@ -61,9 +61,10 @@ TTF_Font* const j1Fonts::Load(const char* path, int size)
 {
 	TTF_Font* font = TTF_OpenFont(path, size);
 
-	if(font == NULL)
+	if(font == nullptr)
 	{
 		LOG("Could not load TTF font with path: %s. TTF_OpenFont: %s", path, TTF_GetError());
+		font = nullptr;
 	}
 	else
 	{
@@ -77,15 +78,15 @@ TTF_Font* const j1Fonts::Load(const char* path, int size)
 // Print text using font
 SDL_Texture* j1Fonts::Print(const char* text, SDL_Color color, TTF_Font* font)
 {
-	SDL_Texture* ret = NULL;
+	SDL_Texture* ret = nullptr;
 
-	SDL_Surface* surface = TTF_RenderText_Blended((font) ? font : default, text, color);
+	SDL_Surface* surface = TTF_RenderText_Blended(font? font : default_font, text, color);
 
-	if(surface == NULL)
+	if(surface == nullptr)
 	{
 		LOG("Unable to render text surface! SDL_ttf Error: %s\n", TTF_GetError());
 	}
-	else
+	else if (surface != nullptr)
 	{
 		ret = App->tex->LoadSurface(surface);
 		SDL_FreeSurface(surface);
@@ -99,7 +100,7 @@ bool j1Fonts::CalcSize(const char* text, int& width, int& height, TTF_Font* font
 {
 	bool ret = false;
 
-	if(TTF_SizeText((font) ? font : default, text, &width, &height) != 0)
+	if(TTF_SizeText((font) ? font : default_font, text, &width, &height) != 0)
 		LOG("Unable to calc size of text surface! SDL_ttf Error: %s\n", TTF_GetError());
 	else
 		ret = true;
