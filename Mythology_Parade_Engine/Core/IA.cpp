@@ -425,8 +425,7 @@ bool IA::InitCiv()
 		}
 		timer.Start();
 		early = EarlyGameBehaviour::BASIC_BUILDINGS_CREATION;
-		mid = MidGameBehaviour::RESEARCH_ASSASSIN;
-		gamePhase = GameBehaviour::MID;
+		gamePhase = GameBehaviour::EARLY;
 	}
 
 	return true;
