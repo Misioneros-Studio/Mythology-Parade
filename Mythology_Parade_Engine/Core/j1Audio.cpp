@@ -13,6 +13,7 @@ j1Audio::j1Audio() : j1Module()
 {
 	music = NULL;
 	name.append("audio");
+	Building_destruction = Building_placed = Death_sfx = Decrease_Faith = Getting_resources = Increase_faith = 0;
 }
 
 // Destructor

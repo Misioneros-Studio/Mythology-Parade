@@ -2,7 +2,7 @@
 #include "j1App.h"
 #include "PugiXml/src/pugixml.hpp"
 
-IA::IA()
+IA::IA() : enemyFortress(nullptr)
 {
 	gamePhase = GameBehaviour::EARLY;
 	early = EarlyGameBehaviour::CREATION;
