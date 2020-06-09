@@ -12,6 +12,8 @@ EntityManager::EntityManager()
 	buildingTestIndex = 0;
 	initCivilizations = true;
 	playerCreated = false;
+	level_tex = nullptr;
+	level_rect = { 0,0,10,10 };
 }
 
 //Destructor
@@ -85,7 +87,7 @@ bool EntityManager::Start()
 	CreateMonk_sound = App->audio->LoadFx("audio/fx/Appear_monk.wav");
 	CreateAssasin_sound = App->audio->LoadFx("audio/fx/Appear_assasin.wav");
 
-
+	level_tex =  App->tex->Load("gui/StarLevel.png");
 	for (unsigned i = 0; i < entities.size(); i++)
 	{
 		for (std::list<Entity*>::iterator it = entities[(EntityType)i].begin(); it != entities[(EntityType)i].end(); it++)

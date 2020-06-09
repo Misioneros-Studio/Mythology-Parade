@@ -143,6 +143,9 @@ public:
 
 	//int volume;
 
+	//Textures
+	SDL_Texture* level_tex;
+	SDL_Rect level_rect;
 
 private:
 	int buildingTestIndex = 0;

@@ -6,6 +6,7 @@
 CombatUnit::CombatUnit(UnitType type, iPoint pos) : Unit(type, pos), range(0), damage(0)
 {
 	//TODO 10: Change textures
+	speed = 0;
 	unitType = type;
 	position = {(float)pos.x, (float)pos.y};
 	canLevel = true;
@@ -133,16 +134,16 @@ bool CombatUnit::Update(float dt)
 		switch (GetLevel())
 		{
 		case (1):
-			App->render->Blit(level_tex, (position.x - 6), (position.y - 63), &level_rect, 1, 0, 0, 0, 1);
+			App->render->Blit(App->entityManager->level_tex, (position.x - 6), (position.y - 63), &App->entityManager->level_rect, 1, 0, 0, 0, 1);
 			break;
 		case (2):
-			App->render->Blit(level_tex, (position.x - 2), (position.y - 63), &level_rect, 1, 0, 0, 0, 1);
-			App->render->Blit(level_tex, (position.x - 10), (position.y - 63), &level_rect, 1, 0, 0, 0, 1);
+			App->render->Blit(App->entityManager->level_tex, (position.x - 2), (position.y - 63), &App->entityManager->level_rect, 1, 0, 0, 0, 1);
+			App->render->Blit(App->entityManager->level_tex, (position.x - 10), (position.y - 63), &App->entityManager->level_rect, 1, 0, 0, 0, 1);
 			break;
 		case (3):
-			App->render->Blit(level_tex, (position.x - 6), (position.y - 63), &level_rect, 1, 0, 0, 0, 1);
-			App->render->Blit(level_tex, (position.x - 14), (position.y - 63), &level_rect, 1, 0, 0, 0, 1);
-			App->render->Blit(level_tex, (position.x + 2), (position.y - 63), &level_rect, 1, 0, 0, 0, 1);
+			App->render->Blit(App->entityManager->level_tex, (position.x - 6), (position.y - 63), &App->entityManager->level_rect, 1, 0, 0, 0, 1);
+			App->render->Blit(App->entityManager->level_tex, (position.x - 14), (position.y - 63), &App->entityManager->level_rect, 1, 0, 0, 0, 1);
+			App->render->Blit(App->entityManager->level_tex, (position.x + 2), (position.y - 63), &App->entityManager->level_rect, 1, 0, 0, 0, 1);
 			break;
 		}
 	}

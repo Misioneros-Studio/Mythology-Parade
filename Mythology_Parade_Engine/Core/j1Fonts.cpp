@@ -80,10 +80,9 @@ TTF_Font* const j1Fonts::Load(const char* path, int size)
 // Print text using font
 SDL_Texture* j1Fonts::Print(const char* text, SDL_Color color, TTF_Font* font)
 {
-	if (surface != nullptr) {
-		SDL_FreeSurface(surface);
-		surface = nullptr;
-	}
+	//if (surface != nullptr) {
+	//	SDL_FreeSurface(surface);
+	//}
 	texture = nullptr;
 
 	surface = TTF_RenderText_Blended(font? font : default_font, text, color);
@@ -96,7 +95,7 @@ SDL_Texture* j1Fonts::Print(const char* text, SDL_Color color, TTF_Font* font)
 	{
 		texture = App->tex->LoadSurface(surface);
 		SDL_FreeSurface(surface);
-		//surface = nullptr;
+		surface = nullptr;
 	}
 
 	return texture;
