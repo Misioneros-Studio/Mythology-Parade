@@ -1,5 +1,7 @@
 #include "IA.h"
 #include "j1App.h"
+#include "Entity.h"
+#include "EntityManager.h"
 #include "PugiXml/src/pugixml.hpp"
 
 IA::IA()
@@ -62,6 +64,8 @@ IA::IA()
 	positionViking.push_back({ -256,576 }); //monk4
 	positionViking.push_back({ -224,592 }); //monk5
 
+
+	loading = false;
 }
 
 bool IA::PreUpdate()
@@ -109,19 +113,30 @@ bool IA::PostUpdate()
 bool IA::CleanUp()
 {
 	bool ret = true;
+
+	gamePhase = GameBehaviour::EARLY;
+	early = EarlyGameBehaviour::CREATION;
+	mid = MidGameBehaviour::ASSEMBLE;
+	late = LateGameBehaviour::ATACK;
+
 	return ret;
 }
 
 bool IA::Load(pugi::xml_node& s)
 {
+	listEntities.clear();
 	InitCiv();
 	timer.Start();
+	loading = true;
 	pugi::xml_node node = s.child("IA").child("Game_Phase");
-	switch (node.attribute("microState").as_int())
+	int macroState = node.attribute("macroState").as_int();
+	int state = node.attribute("state").as_int();
+	DoThingsBefore(macroState, state);
+	switch (macroState)
 	{
 	case 0:
 		gamePhase = GameBehaviour::EARLY;
-		switch (node.attribute("state").as_int())
+		switch (state)
 		{
 		case 1:
 			early = EarlyGameBehaviour::BASIC_BUILDINGS_CREATION;
@@ -148,18 +163,18 @@ bool IA::Load(pugi::xml_node& s)
 		break;
 	case 1:
 		gamePhase = GameBehaviour::MID;
-		switch (node.attribute("state").as_int())
+		switch (state)
 		{
-		case 1:
+		case 0:
 			mid = MidGameBehaviour::ASSEMBLE;
 			break;
-		case 2:
+		case 1:
 			mid = MidGameBehaviour::CREATE_ECONOMY;
 			break;
-		case 3:
+		case 2:
 			mid = MidGameBehaviour::RESEARCH_ASSASSIN;
 			break;
-		case 4:
+		case 3:
 			mid = MidGameBehaviour::CREATE_ASSASSIN;
 			break;
 		default:
@@ -168,21 +183,21 @@ bool IA::Load(pugi::xml_node& s)
 		break;
 	case 2:
 		gamePhase = GameBehaviour::LATE;
-		switch (node.attribute("state").as_int())
+		switch (state)
 		{
-		case 1:
+		case 0:
 			late = LateGameBehaviour::ATACK;
 			break;
-		case 2:
+		case 1:
 			late = LateGameBehaviour::ECONOMY_FOCUS;
 			break;
-		case 3:
+		case 2:
 			late = LateGameBehaviour::DEFENSE;
 			break;
-		case 4:
+		case 3:
 			late = LateGameBehaviour::WIN;
 			break;
-		case 5:
+		case 4:
 			late = LateGameBehaviour::FINISH;
 			break;
 		default:
@@ -192,6 +207,8 @@ bool IA::Load(pugi::xml_node& s)
 	default:
 		break;
 	}
+
+	loading = false;
 	return true;
 }
 
@@ -225,7 +242,7 @@ void IA::EarlyGame()
 		InitCiv();
 		break;
 	case EarlyGameBehaviour::BASIC_BUILDINGS_CREATION:
-		if (timer.ReadSec() >= 45)
+		if (timer.ReadSec() >= 45 || loading)
 		{
 			if (civilization == CivilizationType::VIKING)
 			{
@@ -242,7 +259,7 @@ void IA::EarlyGame()
 		}
 		break;
 	case EarlyGameBehaviour::RESEARCH_CLERIC:
-		if (timer.ReadSec() >= 100)
+		if (timer.ReadSec() >= 100 || loading)
 		{
 			if (civilization == CivilizationType::VIKING)
 			{
@@ -261,7 +278,7 @@ void IA::EarlyGame()
 		}
 		break;
 	case EarlyGameBehaviour::BASIC_UNITS_CREATION:
-		if (timer.ReadSec() >= 150)
+		if (timer.ReadSec() >= 150 || loading)
 		{
 			if (civilization == CivilizationType::VIKING)
 			{
@@ -307,7 +324,7 @@ void IA::MidGame()
 		timer.Start();
 		break;
 	case MidGameBehaviour::CREATE_ECONOMY:
-		if (timer.ReadSec() >= 100)
+		if (timer.ReadSec() >= 100 || loading)
 		{
 			if (civilization == CivilizationType::VIKING) {
 				CreateBuilding(BuildingType::MONASTERY, positionViking.at((int)EarlyMovements::MONASTERY2));
@@ -325,7 +342,7 @@ void IA::MidGame()
 		}
 		break;
 	case MidGameBehaviour::RESEARCH_ASSASSIN:
-		if (timer.ReadSec() >= 80)
+		if (timer.ReadSec() >= 80 || loading)
 		{
 			if (civilization == CivilizationType::VIKING)
 				CreateBuilding(BuildingType::ENCAMPMENT, positionViking.at((int)EarlyMovements::ENCAMPMENT));
@@ -337,7 +354,7 @@ void IA::MidGame()
 		}
 		break;
 	case MidGameBehaviour::CREATE_ASSASSIN:
-		if (timer.ReadSec() >= 50)
+		if (timer.ReadSec() >= 50 || loading)
 		{
 			if (civilization == CivilizationType::VIKING) {
 				listEntities.push_back(static_cast<Entity*>(CreateUnit(UnitType::ASSASSIN, positionViking.at((int)EarlyMovements::ASSASSIN1))));
@@ -376,7 +393,7 @@ void IA::LateGame()
 		timer.Start();
 		break;
 	case LateGameBehaviour::ECONOMY_FOCUS:
-		if (timer.ReadSec() >= 120)
+		if (timer.ReadSec() >= 120 || loading)
 		{
 			late = LateGameBehaviour::DEFENSE;
 		}
@@ -387,7 +404,7 @@ void IA::LateGame()
 		late = LateGameBehaviour::WIN;
 		break;
 	case LateGameBehaviour::WIN:
-		if (timer.ReadSec() >= 360)
+		if (timer.ReadSec() >= 360 || loading)
 		{
 			Win();
 		}
@@ -557,7 +574,13 @@ bool IA::MoveUnit(iPoint pos, std::string name, Unit* u, int number)
 				iPoint origin = App->map->WorldToMap((int)it._Ptr->_Myval->position.x, (int)it._Ptr->_Myval->position.y);
 				iPoint ending = App->map->WorldToMap(pos.x, pos.y);
 				entities.push_back(it._Ptr->_Myval);
-				App->pathfinding->RequestPath(origin, ending, entities);
+				Unit* unit = static_cast<Unit*>(it._Ptr->_Myval);
+				if(!loading)
+					App->pathfinding->RequestPath(origin, ending, entities);
+				else {
+					App->entityManager->CreateUnitEntity(unit->unitType, ending, unit->civilization);
+					App->entityManager->DeleteEntity(it._Ptr->_Myval);
+				}
 				break;
 			}
 			entities.clear();
@@ -572,7 +595,13 @@ bool IA::MoveUnit(iPoint pos, std::string name, Unit* u, int number)
 				iPoint origin = App->map->WorldToMap((int)it._Ptr->_Myval->position.x, (int)it._Ptr->_Myval->position.y);
 				iPoint ending = App->map->WorldToMap(pos.x, pos.y);
 				entities.push_back(it._Ptr->_Myval);
-				App->pathfinding->RequestPath(origin, ending, entities);
+				Unit* unit = static_cast<Unit*>(it._Ptr->_Myval);
+				if (!loading)
+					App->pathfinding->RequestPath(origin, ending, entities);
+				else {
+					App->entityManager->CreateUnitEntity(unit->unitType, ending, unit->civilization);
+					App->entityManager->DeleteEntity(it._Ptr->_Myval);
+				}
 				break;
 			}
 			entities.clear();
@@ -580,6 +609,46 @@ bool IA::MoveUnit(iPoint pos, std::string name, Unit* u, int number)
 	}
 	
 	return true;
+}
+
+void IA::DoThingsBefore(int macro, int state)
+{
+	int maxStates[3] = { 7,4,5 };
+	for (int i = 0; i < macro; i++)
+	{
+		for (int j = 0; j <= maxStates[i]; ++j)
+		{
+			if (i == 0)
+			{
+				early = (EarlyGameBehaviour)j;
+				EarlyGame();
+			}
+			else if (i == 1)
+			{
+				mid = (MidGameBehaviour)j;
+				MidGame();
+			}
+		}
+	}
+
+	for (int i = 0; i < state; i++)
+	{
+		if (macro == 0)
+		{
+			early = (EarlyGameBehaviour)i;
+			EarlyGame();
+		}
+		else if (macro == 1)
+		{
+			mid = (MidGameBehaviour)i;
+			MidGame();
+		}
+		else if (macro == 2)
+		{
+			late = (LateGameBehaviour)i;
+			LateGame();
+		}
+	}
 }
 
 void IA::Explore1()

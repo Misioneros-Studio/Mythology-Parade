@@ -581,9 +581,13 @@ bool EntityManager::Load(pugi::xml_node& n)
 bool EntityManager::Save(pugi::xml_node& s) const
 {
 	pugi::xml_node node = s.append_child("entities");
+	bool assassin = true, monk = true;
 	std::list<Entity*> list = App->entityManager->entities[EntityType::UNIT];
 	for each (Unit * var in list)
 	{
+		if (var->civilization != getPlayer()->civilization)
+			continue;
+
 		pugi::xml_node entity = node.append_child("unit");
 		entity.append_attribute("type").set_value(var->name.c_str());
 		entity.append_attribute("position_x").set_value(var->position.x);
@@ -592,7 +596,7 @@ bool EntityManager::Save(pugi::xml_node& s) const
 
 		if (var->civilization == CivilizationType::GREEK)
 			entity.append_attribute("civilization").set_value("greek");
-		else
+		else if (var->civilization == CivilizationType::GREEK)
 			entity.append_attribute("civilization").set_value("viking");
 
 
@@ -608,20 +612,22 @@ bool EntityManager::Save(pugi::xml_node& s) const
 	pugi::xml_node node2 = s.append_child("buildings");
 	std::list<Entity*> list2 = App->entityManager->entities[EntityType::BUILDING];
 
-
 	for each (Building * var2 in list2)
 	{
+		if (var2->civilization != getPlayer()->civilization)
+			continue;
+
 		pugi::xml_node building = node2.append_child("build");
 
 		building.append_attribute("type").set_value(var2->name.c_str());
 		building.append_attribute("position_x").set_value(var2->position.x);
 		building.append_attribute("position_y").set_value(var2->position.y);
 
-
 		if (var2->civilization == CivilizationType::GREEK)
 			building.append_attribute("civilization").set_value("greek");
-		else
+		else if (var2->civilization == CivilizationType::GREEK)
 			building.append_attribute("civilization").set_value("viking");
+
 
 
 		building.append_attribute("health").set_value(var2->GetHealth());

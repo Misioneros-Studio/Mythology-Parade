@@ -180,6 +180,7 @@ bool j1Gui::PostUpdate()
 		}
 
 		else if (App->entityManager->getPlayer()->player_lose == true) {
+			App->entityManager->initCivilizations = true;
 			if (App->entityManager->getPlayer()->player_type == CivilizationType::VIKING) {
 				DoWinOrLoseWindow(1, false);
 			}

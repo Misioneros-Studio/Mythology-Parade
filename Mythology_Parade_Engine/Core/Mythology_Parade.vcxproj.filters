@@ -50,6 +50,7 @@
     </ClCompile>
     <ClCompile Include="TutorialMessages.cpp" />
     <ClCompile Include="IA.cpp" />
+    <ClCompile Include="Entity.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h" />
