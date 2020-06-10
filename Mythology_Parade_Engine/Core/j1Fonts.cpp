@@ -82,7 +82,6 @@ SDL_Texture* j1Fonts::Print(const char* text, SDL_Color color, TTF_Font* font)
 {
 
 	texture = nullptr;
-
 	surface = TTF_RenderText_Blended(font? font : default_font, text, color);
 
 	if(surface == nullptr || surface->format == nullptr || surface->pixels == nullptr)
