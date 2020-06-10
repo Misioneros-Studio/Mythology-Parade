@@ -945,6 +945,9 @@ bool TextUI::PostUpdate() {
 	else
 		text = App->font->Print(stri.c_str(), color, App->font->default_title);
 
+	if (text == nullptr) {
+		LOG("TEXTURE NULLPTR");
+	}
 	SDL_QueryTexture(text, NULL, NULL, &rect.w, &rect.h);
 
 	SDL_SetTextureAlphaMod(text, alpha);
