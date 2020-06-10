@@ -2,6 +2,7 @@
 #include "CombatUnit.h"
 #include "Building.h"
 #include "Player.h"
+#include "ResearchMenu.h"
 #include "j1Gui.h"
 
 #include "p2Log.h"
@@ -572,6 +573,7 @@ bool EntityManager::Load(pugi::xml_node& n)
 		}
 	}
 
+	App->scene->research_menu->UpdatePlayer(getPlayer());
 
 	return true;
 }

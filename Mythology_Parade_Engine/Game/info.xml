@@ -1,21 +1,21 @@
 <?xml version="1.0"?>
 <info>
 	<entities>
-		<unit type="monk" position_x="84" position_y="800" health="1" />
-		<unit type="monk" position_x="-268" position_y="4304" civilization="greek" health="1" />
-		<unit type="assassin" position_x="-300" position_y="4288" civilization="greek" health="100" level="0" />
+		<unit type="monk" position_x="104" position_y="800" civilization="greek" health="1" />
+		<unit type="monk" position_x="-248" position_y="4304" civilization="greek" health="1" />
+		<unit type="assassin" position_x="-280" position_y="4288" civilization="greek" health="100" level="0" />
 	</entities>
 	<buildings>
 		<build type="fortress" position_x="-288" position_y="4256" civilization="greek" health="500" status="finished" action="nothing" />
 	</buildings>
 	<players>
 		<greek>
-			<economy faith="508" prayers="0" sacrifices="0" />
+			<economy faith="1024" prayers="450" sacrifices="450" />
 			<research>
-				<temple research="false" />
-				<encampment research="false" />
+				<temple research="true" />
+				<encampment research="true" />
 				<cleric research="false" />
-				<assassin research="false" />
+				<assassin research="true" />
 				<lawful_beast research="false" />
 				<chaotic_beast research="false" />
 				<lawful_miracle research="false" />
@@ -27,7 +27,7 @@
 	</players>
 	<volume music="50" fx="128" />
 	<IA>
-		<Game_Phase macroState="0" state="1" />
+		<Game_Phase macroState="0" state="2" />
 	</IA>
-	<camera x="684" y="-530" />
+	<camera x="862" y="-3937" />
 </info>
