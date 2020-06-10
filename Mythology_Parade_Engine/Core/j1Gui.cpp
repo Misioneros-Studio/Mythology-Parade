@@ -939,7 +939,7 @@ bool TextUI::PostUpdate() {
 	iPoint dif_sprite = { 0,0 };
 
   
-	SDL_Texture* text;
+	SDL_Texture* text = nullptr;
 	if(title_default==false)
 		text = App->font->Print(stri.c_str(), color);
 	else
@@ -947,13 +947,15 @@ bool TextUI::PostUpdate() {
 
 	SDL_QueryTexture(text, NULL, NULL, &rect.w, &rect.h);
 
-	SDL_SetTextureAlphaMod(text, alpha);
-	SDL_Rect sprite = UI::Check_Printable_Rect(rect, dif_sprite);
-	if (this->active && this->GetConsole() == false)App->render->Blit(text, GetScreenToWorldPos().x + dif_sprite.x, GetScreenToWorldPos().y + dif_sprite.y, &sprite, 0.0F);
-	else if (this->active) App->render->Blit(text, quad.x + dif_sprite.x, quad.y + dif_sprite.y, &sprite, 0.0F);
-	UI::PostUpdate();
+	if (text != nullptr) {
+		SDL_SetTextureAlphaMod(text, alpha);
+		SDL_Rect sprite = UI::Check_Printable_Rect(rect, dif_sprite);
+		if (this->active && this->GetConsole() == false)App->render->Blit(text, GetScreenToWorldPos().x + dif_sprite.x, GetScreenToWorldPos().y + dif_sprite.y, &sprite, 0.0F);
+		else if (this->active) App->render->Blit(text, quad.x + dif_sprite.x, quad.y + dif_sprite.y, &sprite, 0.0F);
+		UI::PostUpdate();
 
-	App->tex->UnLoad(text);
+		App->tex->UnLoad(text);
+	}
 
 	return true;
 }
