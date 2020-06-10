@@ -235,7 +235,7 @@ const SDL_Texture* j1Gui::GetAtlas(int number_atlas) const
 // class Gui ---------------------------------------------------
 
 UI* j1Gui::CreateUIElement(Type type, UI* p, SDL_Rect r, SDL_Rect sprite, std::string str, Panel_Fade p_fade, SDL_Rect sprite2, SDL_Rect sprite3, bool drageable, SDL_Rect drag_area, j1Module* s_listener, int audio,
-	bool console, float drag_position_scroll_bar, int number_atlas, int num_tooltip)
+	bool console, float drag_position_scroll_bar, int number_atlas, int num_tooltip, bool tooltip_immediate)
 {
 	UI* ui = nullptr;
 	SDL_Color colour;
@@ -243,10 +243,10 @@ UI* j1Gui::CreateUIElement(Type type, UI* p, SDL_Rect r, SDL_Rect sprite, std::s
 	switch (type)
 	{
 	case Type::BUTTON:
-		ui = new ButtonUI(Type::BUTTON, p, r, sprite, sprite2, sprite3, true, true, drag_area, audio, p_fade, num_tooltip);
+		ui = new ButtonUI(Type::BUTTON, p, r, sprite, sprite2, sprite3, true, true, drag_area, audio, p_fade, num_tooltip, tooltip_immediate);
 		break;
 	case Type::IMAGE:
-		ui = new ImageUI(Type::IMAGE, p, r, sprite, drageable, drageable, drag_area, drag_position_scroll_bar, p_fade, num_tooltip);
+		ui = new ImageUI(Type::IMAGE, p, r, sprite, drageable, drageable, drag_area, drag_position_scroll_bar, p_fade, num_tooltip, tooltip_immediate);
 		break;
 	case Type::WINDOW:
 		ui = new WindowUI(Type::WINDOW, p, r, sprite, drageable, drageable, drag_area, p_fade);
@@ -257,7 +257,7 @@ UI* j1Gui::CreateUIElement(Type type, UI* p, SDL_Rect r, SDL_Rect sprite, std::s
 			title = false;
 		else
 			title = true;
-		ui = new TextUI(Type::TEXT, p, r, str, drageable, drageable, drag_area, console, colour, title, p_fade, num_tooltip);
+		ui = new TextUI(Type::TEXT, p, r, str, drageable, drageable, drag_area, console, colour, title, p_fade, num_tooltip, tooltip_immediate);
 		break;
 	case Type::LISTTEXTS:
 		ui = new ListTextsUI(Type::LISTTEXTS, p, r, str, drageable, drageable, drag_area, console, p_fade);
@@ -429,7 +429,7 @@ void j1Gui::WorkWithTextInput(std::string text) {
 	}
 }
 
-UI::UI(Type s_type, SDL_Rect r, UI* p, bool d, bool f, SDL_Rect d_area, bool consol, int num_tooltip)
+UI::UI(Type s_type, SDL_Rect r, UI* p, bool d, bool f, SDL_Rect d_area, bool consol, int num_tooltip, bool tooltip_immediate)
 {
 	name.append("UI");
 	type = s_type;
@@ -463,6 +463,10 @@ UI::UI(Type s_type, SDL_Rect r, UI* p, bool d, bool f, SDL_Rect d_area, bool con
 	}
 	tooltip_window = nullptr;
 	has_timer_tooltip_started = false;
+	if (tooltip_immediate == true)
+		time_tooltip = 0;
+	else
+		time_tooltip = 1.2;
 }
 
 bool UI::PreUpdate() {
@@ -525,7 +529,7 @@ bool UI::PreUpdate() {
 					timer_tooltip.Start();
 					has_timer_tooltip_started = true;
 				}
-				else if (timer_tooltip.ReadSec() >= 1.2 && tooltip_window == nullptr && has_timer_tooltip_started == true) {
+				else if (timer_tooltip.ReadSec() >= time_tooltip && tooltip_window == nullptr && has_timer_tooltip_started == true) {
 					ShowTooltip(x, y, win_x, win_y);
 				}
 			}
@@ -760,8 +764,8 @@ SDL_Rect UI::Check_Printable_Rect(SDL_Rect sprite, iPoint& dif_sprite, SDL_Rect 
 
 ///////////// IMAGE //////////////
 
-ImageUI::ImageUI(Type type, UI * p, SDL_Rect r, SDL_Rect sprite, bool d, bool f, SDL_Rect d_area, float drag_position_scroll_bar, Panel_Fade p_fade, int num_tooltip) :UI(type, r, p, d, f, d_area, false,
-	num_tooltip) {
+ImageUI::ImageUI(Type type, UI * p, SDL_Rect r, SDL_Rect sprite, bool d, bool f, SDL_Rect d_area, float drag_position_scroll_bar, Panel_Fade p_fade, int num_tooltip, bool tooltip_immediate)
+	:UI(type, r, p, d, f, d_area, false, num_tooltip, tooltip_immediate) {
 	name.append("ImageUI");
 	sprite1 = sprite;
 	quad = r;
@@ -908,8 +912,8 @@ bool WindowUI::PostUpdate() {
 
 ///////////// TEXT //////////////
 
-TextUI::TextUI(Type type, UI* p, SDL_Rect r, std::string str, bool d, bool f, SDL_Rect d_area, bool console, SDL_Color coulor, bool title, Panel_Fade p_fade, int num_tooltip) :UI(type, r, p, d, f, d_area,
-	console, num_tooltip)
+TextUI::TextUI(Type type, UI* p, SDL_Rect r, std::string str, bool d, bool f, SDL_Rect d_area, bool console, SDL_Color coulor, bool title, Panel_Fade p_fade, int num_tooltip, bool tooltip_immediate)
+	:UI(type, r, p, d, f, d_area, console, num_tooltip, tooltip_immediate)
 {
 	name.append("TextUI");
 	stri = str.c_str();
@@ -1038,8 +1042,8 @@ void ListTextsUI::SetListOfStrings(std::string string, int position)
 
 ///////////// BUTTON //////////////
 
-ButtonUI::ButtonUI(Type type, UI * p, SDL_Rect r, SDL_Rect sprite, SDL_Rect spriten2, SDL_Rect spriten3, bool d, bool f, SDL_Rect d_area, int audio, Panel_Fade p_fade, int num_tooltip) :UI(type, r, p, d, f,
-	d_area, false, num_tooltip) {
+ButtonUI::ButtonUI(Type type, UI * p, SDL_Rect r, SDL_Rect sprite, SDL_Rect spriten2, SDL_Rect spriten3, bool d, bool f, SDL_Rect d_area, int audio, Panel_Fade p_fade, int num_tooltip, bool tooltip_immediate)
+	:UI(type, r, p, d, f, d_area, false, num_tooltip, tooltip_immediate) {
 	name.append("ButtonUI");
 	sprite1 = sprite;
 	sprite2 = spriten2;
