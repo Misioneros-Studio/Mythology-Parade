@@ -9,11 +9,7 @@
 #include "SDL/include/SDL_keyboard.h"
 #include "j1Window.h"
 
-Console::Console() : background_alpha(255), background_red(0), background_green(0), background_blue(0),
-background_pos({ 0, 0, 0, 0 }), command(commands::none), console_background(nullptr), console_input(nullptr),
-console_log(nullptr), input_alpha(0), input_red(0), input_green(0), input_blue(0), input_pos({0, 0, 0, 0}),
-output_drag_area({ 0, 0, 0, 0 }), output_pos({0, 0, 0, 0})
-{
+Console::Console() {
 	name.append("console");
 	console_active = false;
 }

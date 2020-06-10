@@ -14,8 +14,7 @@
 
 
 //Constructor
-HUD::HUD(ResearchMenu* r) 
-{
+HUD::HUD(ResearchMenu* r) {
 	StartHUD(r);
 }
 

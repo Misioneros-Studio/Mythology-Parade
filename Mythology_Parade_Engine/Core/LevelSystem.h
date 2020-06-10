@@ -22,8 +22,6 @@ private:
 	int level;
 
 public:
-
-	LevelSystem();
 	void Init(int, int, int);
 
 	bool canLevelUp;

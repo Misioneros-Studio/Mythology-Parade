@@ -1,12 +1,5 @@
 #include "LevelSystem.h"
 #include "p2Log.h"
-
-LevelSystem::LevelSystem() : canLevelUp(false), exp_to_lvl_1(0), exp_to_lvl_2(0), exp_to_lvl_3(0), 
-experience(0), level(0)
-{
-
-}
-
 void LevelSystem::Init(int lvl1, int lvl2, int lvl3)
 {
 	exp_to_lvl_1 = lvl1;

@@ -5,11 +5,7 @@
 #include "j1Gui.h"
 
 #include "p2Log.h"
-EntityManager::EntityManager() : CreateAssasin_sound(0), CreateMonk_sound(0), Monster1(0), Monster2(0), construction_bar_back({0, 0, 0, 0}),
-construction_bar_empty({ 0, 0, 0, 0 }), construction_bar_front({ 0, 0, 0, 0 }), constructorSpriteRect({0, 0, 0, 0}), debugTex(nullptr),
-destructedSpriteRect({ 0, 0, 0, 0 }), giant3(0), giant5(0), life_bar_front({ 0, 0, 0, 0 }), life_bar_front_enemy({0, 0, 0, 0}), 
-ogre4(0), ogre5(0), research_bar_front({ 0, 0, 0, 0 }), shade12(0), unit_life_bar_back({ 0, 0, 0, 0 }), unit_life_bar_empty({ 0, 0, 0, 0 }),
-unit_life_bar_front({ 0, 0, 0, 0 }),  unit_life_bar_front_enemy({0, 0, 0, 0}), volume(0)
+EntityManager::EntityManager()
 {
 	name.append("entity_manager");
 	buildingsData.reserve(MAX_BUILDING_TYPES);

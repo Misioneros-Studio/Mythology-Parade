@@ -22,12 +22,10 @@ enum class EntityType
 class Entity :public j1Module, public HealthSystem
 {
 public:
-	Entity() : fowRadius(10), canLevel(false),
-	displayDebug(false), _isSelected(false), shown_minimap(false), flipState(SDL_FLIP_NONE), texture(nullptr),
-	type(EntityType::PLAYER)
+	Entity(/*EntityTypes type*/) : fowRadius(10)
 	{
-		collisionRect = { 0, 0, 0, 0 };
-		spriteRect = { 0, 0, 0, 0 };
+		_isSelected = false;
+		shown_minimap = false;
 	}
 
 	// Destructor
