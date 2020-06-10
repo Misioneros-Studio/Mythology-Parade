@@ -392,7 +392,7 @@ void IA::LateGame()
 		late = LateGameBehaviour::WIN;
 		break;
 	case LateGameBehaviour::WIN:
-		if (timer.ReadSec() >= 360)
+		if (timer.ReadSec() >= 960)
 		{
 			Win();
 		}

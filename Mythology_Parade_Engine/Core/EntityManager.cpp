@@ -18,6 +18,7 @@ unit_life_bar_front({ 0, 0, 0, 0 }),  unit_life_bar_front_enemy({0, 0, 0, 0}), v
 	playerCreated = false;
 	level_tex = nullptr;
 	level_rect = { 0,0,10,10 };
+	circle_unit_rect = { 0,0,64,32 };
 }
 
 //Destructor
@@ -92,6 +93,7 @@ bool EntityManager::Start()
 	CreateAssasin_sound = App->audio->LoadFx("audio/fx/Appear_assasin.wav");
 
 	level_tex =  App->tex->Load("gui/StarLevel.png");
+	circle_unit_tex = App->tex->Load("assets/units/CercleUnitats.png");
 	for (unsigned i = 0; i < entities.size(); i++)
 	{
 		for (std::list<Entity*>::iterator it = entities[(EntityType)i].begin(); it != entities[(EntityType)i].end(); it++)
