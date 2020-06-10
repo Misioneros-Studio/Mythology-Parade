@@ -42,7 +42,7 @@ bool Console::Awake(pugi::xml_node& node) {
 }
 
 bool Console::PreUpdate() {
-	if (App->input->GetKey(SDL_SCANCODE_GRAVE) == KEY_DOWN)
+	if ((App->input->GetKey(SDL_SCANCODE_GRAVE) == KEY_DOWN && App->scene->godMode == true) || (console_active == true && App->scene->godMode == false))
 	{
 		console_active = !console_active;
 		if (console_active == true) {

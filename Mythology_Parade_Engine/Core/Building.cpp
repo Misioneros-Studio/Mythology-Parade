@@ -123,7 +123,7 @@ void Building::CreateUnit()
 	switch (buildingType)
 	{
 	case FORTRESS:
-		if (element_producing == "Lawful_Beast")
+		if (element_producing == "Chaotic_Beast")
 		{
 			if (this->civilization == CivilizationType::GREEK)	App->entityManager->CreateUnitEntity(UnitType::MINOTAUR, { (int)position.x - 30, (int)position.y }, civilization);
 			else App->entityManager->CreateUnitEntity(UnitType::DRAUGAR, { (int)position.x - 30, (int)position.y }, civilization);
