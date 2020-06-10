@@ -559,7 +559,7 @@ void Building::StartProducing(const std::string &thing_to_produce) {
 	else if (thing_to_produce == "Sacrifices") time_producing = App->entityManager->getPlayer()->time_sacrifices;
 	else if (thing_to_produce == "Victory") time_producing = App->entityManager->getPlayer()->time_production_victory;
 	else if (thing_to_produce == "Monk") time_producing = 15;
-	else if (thing_to_produce == "Assasin") time_producing = 20;
+	else if (thing_to_produce == "Assassin") time_producing = 20;
 	else if (thing_to_produce == "Cleric") time_producing = 15;
 	else if (thing_to_produce == "Chaotic_Beast") time_producing = 35;
 	else if (thing_to_produce == "Lawful_Beast") time_producing = 35;

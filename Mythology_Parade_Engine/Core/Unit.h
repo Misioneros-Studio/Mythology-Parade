@@ -103,8 +103,7 @@ protected:
 	bool combat_unit;
 
 
-	SDL_Texture* circle_unit_tex;
-	SDL_Rect circle_unit_rect;
+
 };
 
 #endif // !__UNIT_H__

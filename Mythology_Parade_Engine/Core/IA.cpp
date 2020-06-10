@@ -2,7 +2,7 @@
 #include "j1App.h"
 #include "PugiXml/src/pugixml.hpp"
 
-IA::IA()
+IA::IA() : enemyFortress(nullptr)
 {
 	gamePhase = GameBehaviour::EARLY;
 	early = EarlyGameBehaviour::CREATION;
@@ -392,7 +392,7 @@ void IA::LateGame()
 		late = LateGameBehaviour::WIN;
 		break;
 	case LateGameBehaviour::WIN:
-		if (timer.ReadSec() >= 360)
+		if (timer.ReadSec() >= 2960)
 		{
 			Win();
 		}

@@ -2,6 +2,11 @@
 #include "j1App.h"
 #include "j1Scene.h"
 
+HealthSystem::HealthSystem() : health(0), maxHealth(0), defaultHealth(0), isDeath(false), damaged_now(false)
+{
+
+}
+
 void HealthSystem::Init()
 {
 	isDeath = false;

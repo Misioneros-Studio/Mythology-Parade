@@ -5,13 +5,20 @@
 #include "j1Gui.h"
 
 #include "p2Log.h"
-EntityManager::EntityManager()
+EntityManager::EntityManager() : CreateAssasin_sound(0), CreateMonk_sound(0), Monster1(0), Monster2(0), construction_bar_back({0, 0, 0, 0}),
+construction_bar_empty({ 0, 0, 0, 0 }), construction_bar_front({ 0, 0, 0, 0 }), constructorSpriteRect({0, 0, 0, 0}), debugTex(nullptr),
+destructedSpriteRect({ 0, 0, 0, 0 }), giant3(0), giant5(0), life_bar_front({ 0, 0, 0, 0 }), life_bar_front_enemy({0, 0, 0, 0}), 
+ogre4(0), ogre5(0), research_bar_front({ 0, 0, 0, 0 }), shade12(0), unit_life_bar_back({ 0, 0, 0, 0 }), unit_life_bar_empty({ 0, 0, 0, 0 }),
+unit_life_bar_front({ 0, 0, 0, 0 }),  unit_life_bar_front_enemy({0, 0, 0, 0}), volume(0)
 {
 	name.append("entity_manager");
 	buildingsData.reserve(MAX_BUILDING_TYPES);
 	buildingTestIndex = 0;
 	initCivilizations = true;
 	playerCreated = false;
+	level_tex = nullptr;
+	level_rect = { 0,0,10,10 };
+	circle_unit_rect = { 0,0,64,32 };
 }
 
 //Destructor
@@ -85,7 +92,8 @@ bool EntityManager::Start()
 	CreateMonk_sound = App->audio->LoadFx("audio/fx/Appear_monk.wav");
 	CreateAssasin_sound = App->audio->LoadFx("audio/fx/Appear_assasin.wav");
 
-
+	level_tex =  App->tex->Load("gui/StarLevel.png");
+	circle_unit_tex = App->tex->Load("assets/units/CercleUnitats.png");
 	for (unsigned i = 0; i < entities.size(); i++)
 	{
 		for (std::list<Entity*>::iterator it = entities[(EntityType)i].begin(); it != entities[(EntityType)i].end(); it++)

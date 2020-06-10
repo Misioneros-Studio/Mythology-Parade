@@ -2,17 +2,10 @@
 #include "j1App.h"
 #include "j1Scene.h"
 
-CurrencySystem::CurrencySystem()
+CurrencySystem::CurrencySystem() : faith(0), sacrifices(0), prayers(0), time_prayers(6), time_sacrifices(6)
 {
-	faith = 0;
-	sacrifices = 0;
-	prayers = 0;
-
-	time_prayers = time_sacrifices = 6;
-
 	basefaithRatio = 2;
 	faithRatio = basefaithRatio;
-
 }
 
 CurrencySystem::~CurrencySystem()
