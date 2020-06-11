@@ -337,7 +337,7 @@ bool j1App::CleanUp()
 			ret = it._Ptr->_Myval->CleanUp();
 	}
 	delete tooltipdata;
-
+	logs.clear();
 	PERF_PEEK(ptimer);
 	return ret;
 }
