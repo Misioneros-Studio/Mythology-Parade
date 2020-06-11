@@ -168,6 +168,15 @@ private:
 	ImageUI* ui_pause_black_screen[2];
 	TextUI* ui_text_volume_sliders[2];
 	ResearchMenu* research_menu;
+	int damage;
+	int range;
+	int speed;
+	int level;
+	int experience;
+	int health;
+	int influence;
+	int max_cap;
+
 
 public:
 	ImageUI* ui_ingame;

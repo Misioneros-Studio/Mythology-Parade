@@ -965,6 +965,7 @@ bool TextUI::CleanUp()
 
 void TextUI::SetString(std::string new_string) 
 {
+	App->tex->UnLoad(text);
 	stri = new_string;
 	if (title_default == false)
 		text = App->font->Print(stri.c_str(), color);
@@ -1324,6 +1325,7 @@ void TextInputUI::SetPositionToZero() {
 
 void TextInputUI::UpdateLabel()
 {
+	App->tex->UnLoad(text);
 	text = App->font->Print(label.c_str(), { 255,255,255,255 });
 }
 
