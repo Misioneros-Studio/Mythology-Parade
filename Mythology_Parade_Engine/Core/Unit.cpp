@@ -15,7 +15,7 @@ Unit::Unit(UnitType type, iPoint pos): unitType(type), state(AnimationType::IDLE
 {
 
 	displayDebug = false;
-
+	description = "";
 	collisionRect = { 0, 0, 30, -55 };
 	enemyTarget = nullptr;
 	unitType = type;
@@ -115,6 +115,7 @@ bool Unit::Start()
 bool Unit::Update(float dt)
 {
 	bool ret = true;
+	DetectNearbyEnemies();
 
 	if (App->entityManager->getPlayer())
 	{
@@ -463,6 +464,28 @@ void Unit::Draw_Life_Bar(bool enemy)
 		& life_spriteRect);
 	life_spriteRect = App->entityManager->unit_life_bar_empty;
 	App->render->Blit(App->gui->GetTexture(), pos.x, pos.y, &life_spriteRect);
+}
+void Unit::DetectNearbyEnemies()
+{
+	for (int i = 1; i < 3; i++)
+	{
+		for (std::list<Entity*>::iterator it = App->entityManager->entities[static_cast<EntityType>(i)].begin(); it != App->entityManager->entities[static_cast<EntityType>(i)].end(); it++)
+		{
+			Entity* entity = it._Ptr->_Myval;
+			if (!entity->IsDeath() && entity->civilization != civilization && entity != this) {
+				if (entity->position.DistanceManhattan(position) < 100) {
+					if (enemyTarget == nullptr) {
+						enemyTarget = entity;
+					}
+					if (entity->civilization == CivilizationType::GREEK && enemyTarget != nullptr) {
+
+					}
+					LOG("Enemy detected: %i", entity->type);
+
+				}
+			}
+		}
+	}
 }
 void Unit::StateMachineActions(float dt)
 {

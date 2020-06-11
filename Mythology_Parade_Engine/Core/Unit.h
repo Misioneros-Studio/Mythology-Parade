@@ -44,6 +44,7 @@ private:
 	//Description / Effect
 	std::string description;
 
+
 public:
 	//Unit Type
 	UnitType unitType;
@@ -81,6 +82,8 @@ public:
 	void Kill(iPoint);
 
 	void Draw_Life_Bar(bool enemy = false);
+
+	void DetectNearbyEnemies();
 
 protected:
 	//Animation
