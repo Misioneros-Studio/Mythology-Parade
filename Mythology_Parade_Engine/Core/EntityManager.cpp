@@ -724,14 +724,14 @@ Entity* EntityManager::CreatePlayerEntity(std::string civilization_string)
 Entity* EntityManager::CreateUnitEntity(UnitType type, iPoint pos, CivilizationType civ)
 {
 	pos.x += 20;
-	AABBNode* node = aabbTree.FindLowestNodeInPoint(&aabbTree.baseNode, (Point)pos);
-	for (std::list<Entity*>::iterator it = node->data.begin(); it != node->data.end(); it++)
-	{
-		if (App->map->WorldToMap(pos.x, pos.y) == App->map->WorldToMap((*it)->position.x, (*it)->position.y))
-		{
-			return nullptr;
-		}
-	}
+	//AABBNode* node = aabbTree.FindLowestNodeInPoint(&aabbTree.baseNode, (Point)pos);
+	//for (std::list<Entity*>::iterator it = node->data.begin(); it != node->data.end(); it++)
+	//{
+	//	if (App->map->WorldToMap(pos.x, pos.y) == App->map->WorldToMap((*it)->position.x, (*it)->position.y))
+	//	{
+	//		return nullptr;
+	//	}
+	//}
 
 	Entity* ret = nullptr;
 

@@ -283,6 +283,14 @@ void Unit::MoveToTarget()
 
 		}
 	}
+	else if(enemyTarget && position.DistanceManhattan(enemyTarget->position) < 80)
+	{
+		//position = App->map->MapToWorld((float)targetPosition.x, (float)targetPosition.y);
+		//position += App->map->GetTilesHalfSizeFloat();
+
+		//targetPosition.ResetAsPosition();
+		entPath.clear();
+	}
 
 }
 
@@ -307,36 +315,40 @@ void Unit::ChangeState(iPoint isoLookPosition, AnimationType newState)
 		if (App->entityManager->animations[unitType][newState][currentDirection].name != currentAnim.name)
 			currentAnim = App->entityManager->animations[unitType][newState][currentDirection];
 	}
-	state = newState;
+	if (state != newState) 
+	{
+		state = newState;
+	}
 }
 
 bool Unit::Draw(float dt)
 {
-	if (isSelected()) {
-		App->render->Blit(App->entityManager->circle_unit_tex, position.x - 32, position.y - 18, &App->entityManager->circle_unit_rect);
+	if (!IsDeath()) {
+		if (isSelected()) {
+			App->render->Blit(App->entityManager->circle_unit_tex, position.x - 32, position.y - 18, &App->entityManager->circle_unit_rect);
+		}
+
+		if (entPath.size() > 0 && targetPosition == iPoint(-1, -1))
+		{
+			targetPosition.x = entPath[0].x;
+			targetPosition.y = entPath[0].y;
+
+			iPoint rest = { (int)position.x, (int)position.y };
+
+			iPoint fTarget = App->map->MapToWorld(targetPosition.x, targetPosition.y);
+			fTarget += App->map->GetTilesHalfSize();
+
+			directionToTarget = fTarget - rest;
+			normalizedDirection = fPoint::Normalize((fPoint)directionToTarget);
+
+			ChangeState(targetPosition, AnimationType::WALK);
+
+			entPath.erase(entPath.begin(), entPath.begin() + 1);
+		}
+
+		if (targetPosition != iPoint(-1, -1))
+			MoveToTarget();
 	}
-
-	if (entPath.size() > 0 && targetPosition == iPoint(-1, -1))
-	{
-		targetPosition.x = entPath[0].x;
-		targetPosition.y = entPath[0].y;
-
-		iPoint rest = {(int)position.x, (int)position.y};
-
-		iPoint fTarget = App->map->MapToWorld(targetPosition.x, targetPosition.y);
-		fTarget += App->map->GetTilesHalfSize();
-
-		directionToTarget = fTarget - rest;
-		normalizedDirection = fPoint::Normalize((fPoint)directionToTarget);
-
-		ChangeState(targetPosition, AnimationType::WALK);
-		entPath.erase(entPath.begin(), entPath.begin() + 1);
-	}
-
-
-	if (targetPosition != iPoint(-1, -1))
-		MoveToTarget();
-
 	int num_current_anim = currentAnim.GetSprite();
 	blitRect = { (int)(currentAnim.sprites[num_current_anim].rect.w / 1.5f), (int)(currentAnim.sprites[num_current_anim].rect.h / 1.5f) };
 
@@ -429,10 +441,12 @@ void Unit::SetPath(const std::vector<iPoint> s_path)
 
 void Unit::Kill(iPoint direction)
 {
-	ChangeState(direction, AnimationType::DIE);
-	App->particleManager->CreateParticle({ (int)position.x-20,(int)position.y-50 }, { 0,-1 }, 10, ParticleAnimation::Skull);
-	if (App->scene->isInTutorial == true && civilization != App->entityManager->getPlayer()->civilization)
-		App->tutorialscene->convert_or_kill = true;
+	if (state != AnimationType::DIE) {
+		ChangeState(direction, AnimationType::DIE);
+		App->particleManager->CreateParticle({ (int)position.x - 20,(int)position.y - 50 }, { 0,-1 }, 10, ParticleAnimation::Skull);
+		if (App->scene->isInTutorial == true && civilization != App->entityManager->getPlayer()->civilization)
+			App->tutorialscene->convert_or_kill = true;
+	}
 }
 void Unit::Draw_Life_Bar(bool enemy)
 {
@@ -470,7 +484,7 @@ void Unit::StateMachineActions(float dt)
 	{
 		case AnimationType::ATTACK:
 		{
-			if (currentAnim.current_sprite == currentAnim.num_sprites - 4)
+			if (currentAnim.current_sprite == currentAnim.num_sprites - 1)
 			{
 				App->entityManager->FxUnits(4, App->audio->hit_2, position.x, position.y);
 				CombatUnit* unit = (CombatUnit*)this;
@@ -485,17 +499,20 @@ void Unit::StateMachineActions(float dt)
 					}
 				}
 
-				if (enemyTarget->RecieveDamage(unit->GetDamageValue()))
+				else if (enemyTarget->RecieveDamage(unit->GetDamageValue()))
 				{
 					unit->GainExperience(Action::killEnemy, App->scene->isInTutorial);
 					enemyTarget->Kill(App->map->WorldToMap(position.x, position.y));
 
 					Unit* unit = nullptr;
+					//BUG:: PETA A VEGADES
 					for (std::list<Entity*>::iterator it = App->entityManager->entities[static_cast<EntityType>(1)].begin(); it != App->entityManager->entities[static_cast<EntityType>(1)].end(); ++it)
 					{
 						unit = static_cast<Unit*>(*it);
-						unit->enemyTarget = nullptr;
-						unit->ChangeState(unit->targetPosition, AnimationType::IDLE);
+						if (unit->enemyTarget == enemyTarget) {
+							unit->enemyTarget = nullptr;
+							unit->ChangeState(unit->targetPosition, AnimationType::IDLE);
+						}
 					}
 				}
 			}

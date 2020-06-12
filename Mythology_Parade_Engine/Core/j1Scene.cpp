@@ -250,7 +250,7 @@ void j1Scene::ClickToPath()
 			for (std::list<Entity*>::iterator sel = list.begin(); sel != list.end(); sel++)
 			{
 				unt = (Unit*)sel._Ptr->_Myval;
-				unt->enemyTarget = nullptr;
+				//unt->enemyTarget = nullptr;
 			}
 		}
 

@@ -16,14 +16,14 @@ void HealthSystem::Init()
 
 bool HealthSystem::RecieveDamage(int value)
 {
-	if (!App->scene->godMode)
-	{
+	//if (!App->scene->godMode)
+	//{
 		if (!isDeath)
 			health -= value;
 
 		if (health <= 0)
 			isDeath = true;
-	}
+	//}
 	damaged_now = true;
 	return isDeath;
 }

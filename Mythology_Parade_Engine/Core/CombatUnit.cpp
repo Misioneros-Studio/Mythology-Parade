@@ -218,10 +218,9 @@ void CombatUnit::DetectNearbyEnemies()
 						enemyTarget = entity;
 						//Request path 
 						if (GetTilePosition() != enemyTarget->GetTilePosition())
-							App->pathfinding->RequestPath(GetTilePosition(), enemyTarget->GetTilePosition(), App->entityManager->getPlayer()->GetEntitiesSelected());
+							App->pathfinding->RequestPath(this->GetTilePosition(), enemyTarget->GetTilePosition(), this);
 						//Guardar enemy map position
 						oldEnemyPosition = enemyTarget->GetTilePosition();
-
 
 						LOG("Enemy detected: %i", entity->type);
 						return;
@@ -232,14 +231,14 @@ void CombatUnit::DetectNearbyEnemies()
 	}
 	else
 	{
-		////Sha mogut de tile?
+		//Sha mogut de tile?
 		//if (enemyTarget->GetTilePosition() != oldEnemyPosition) 
 		//{
+		//	//Updatear la tile on esta el enemic
 		//	oldEnemyPosition = enemyTarget->GetTilePosition();
+		//	//Request new path
 		//	if (GetTilePosition() != enemyTarget->GetTilePosition() && position.DistanceManhattan(enemyTarget->position) >= 300)
 		//		App->pathfinding->RequestPath(GetTilePosition(), enemyTarget->GetTilePosition(), App->entityManager->getPlayer()->GetEntitiesSelected());
-		//	//Updatear la tile on esta el enemic
-		//	//Request new path
 		//}
 	}
 }

@@ -8,6 +8,7 @@ PathFinder::PathFinder() : last_path(DEFAULT_PATH_LENGTH), pathCompleted(false),
 {
 	LOG("PathFinder created");
 	last_path.clear();
+	requestUnit = nullptr;
 }
 
 PathFinder::~PathFinder()
@@ -28,7 +29,28 @@ void PathFinder::PreparePath(const iPoint& o, const iPoint& d, std::list <Entity
 	origin = o;
 	destination = d;
 	requestUnitsList = req;
+	req.clear();
 
+	int currentDistance = destination.DistanceManhattan(origin);
+
+	max_iterations = App->pathfinding->maxPathLenght / currentDistance;
+
+	available = false;
+
+}
+void PathFinder::PreparePath(const iPoint& o, const iPoint& d, Entity* req)
+{
+	// Add the origin tile to open
+	if (open.GetNodeLowestScore() == NULL) {
+		open.list.push_back(PathNode(0,CalculateDistanceCost(o,d),o,nullptr));
+	}
+
+	uint iterations = 0;
+	
+	origin = o;
+	destination = d;
+	requestUnit = req;
+	req = nullptr;
 	int currentDistance = destination.DistanceManhattan(origin);
 
 	max_iterations = App->pathfinding->maxPathLenght / currentDistance;
@@ -67,23 +89,30 @@ bool PathFinder::IteratePath()
 		close.list.clear();
 
 		bool walkingToEnemy = false;
-		for (std::list<Entity*>::iterator it = requestUnitsList.begin(); it != requestUnitsList.end(); ++it)
-		{
-			Unit* unit = (Unit*)it._Ptr->_Myval;
+		if (requestUnit == nullptr) {
 
-			if (!walkingToEnemy && unit->enemyTarget != nullptr) 
+			for (std::list<Entity*>::iterator it = requestUnitsList.begin(); it != requestUnitsList.end(); ++it)
 			{
-				last_path.pop_back();
-				walkingToEnemy = true;
+				Unit* unit = (Unit*)it._Ptr->_Myval;
+
+				if (!walkingToEnemy && unit->enemyTarget != nullptr)
+				{
+					last_path.pop_back();
+					walkingToEnemy = true;
+				}
+
+				unit->SetPath(last_path);
 			}
+			requestUnitsList.clear();
 
-			unit->SetPath(last_path);
+			LOG("Path finished");
+			//requestUnit->SetPath(last_path);
 		}
-		requestUnitsList.clear();
+		else {
 
-		LOG("Path finished");
-		//requestUnit->SetPath(last_path);
-
+			static_cast<Unit*>(requestUnit)->SetPath(last_path);
+			requestUnit = nullptr;
+		}
 		RELEASE(currentNode);
 		return false;
 	}
@@ -303,4 +332,12 @@ PathRequest::PathRequest(iPoint o, iPoint d, std::list<Entity*> req)
 	origin = o;
 	destination = d;
 	requestEntity = req;
+	requestedUnit = nullptr;
+}
+
+PathRequest::PathRequest(iPoint o, iPoint d, Entity* req)
+{
+	origin = o;
+	destination = d;
+	requestedUnit = req;
 }
