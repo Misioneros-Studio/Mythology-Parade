@@ -3,6 +3,7 @@
 #include "j1App.h"
 #include "j1Audio.h"
 #include "j1Gui.h"
+#include "AssetsManager.h"
 
 #include "SDL/include/SDL_timer.h"
 #include "SDL/include/SDL.h"
@@ -144,7 +145,7 @@ bool j1Audio::PlayMusic(const char* path, float fade_time)
 		Mix_FreeMusic(music);
 	}
 
-	music = Mix_LoadMUS(path);
+	music = Mix_LoadMUS_RW(App->assets_manager->Load(path), 1);
 
 	if(music == NULL)
 	{
@@ -183,7 +184,7 @@ unsigned int j1Audio::LoadFx(const char* path)
 	if(!active)
 		return 0;
 
-	Mix_Chunk* chunk = Mix_LoadWAV(path);
+	Mix_Chunk* chunk = Mix_LoadWAV_RW(App->assets_manager->Load(path), 1);
 
 	if(chunk == NULL)
 	{

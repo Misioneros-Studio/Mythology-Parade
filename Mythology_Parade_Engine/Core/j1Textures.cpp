@@ -3,6 +3,7 @@
 #include "j1App.h"
 #include "j1Render.h"
 #include "j1Textures.h"
+#include "AssetsManager.h"
 
 #include "SDL_image/include/SDL_image.h"
 #pragma comment( lib, "SDL_image/libx86/SDL2_image.lib" )
@@ -63,7 +64,7 @@ SDL_Texture* const j1Textures::Load(const char* path)
 {
 	SDL_Surface* surface = nullptr;
 	SDL_Texture* texture = nullptr;
-	surface = IMG_Load(path);
+	surface = IMG_Load_RW(App->assets_manager->Load(path), 1);;
 
 	if(surface == nullptr)
 	{

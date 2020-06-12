@@ -30,6 +30,7 @@ class j1FadeToBlack;
 class j1ParticleManager;
 class TooltipData;
 class IA;
+class AssetsManager
 
 class j1App
 {
@@ -116,6 +117,7 @@ public:
 	j1FadeToBlack*		fade_to_black = NULL;
 	j1ParticleManager*	particleManager = NULL;
 	IA*					ia = NULL;
+	AssetsManager*		assets_manager = NULL;
  
 
 private:

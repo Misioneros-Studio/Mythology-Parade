@@ -50,6 +50,7 @@
     </ClCompile>
     <ClCompile Include="TutorialMessages.cpp" />
     <ClCompile Include="IA.cpp" />
+    <ClCompile Include="AssetsManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h" />
@@ -108,6 +109,7 @@
     </ClInclude>
     <ClInclude Include="TutorialMessages.h" />
     <ClInclude Include="IA.h" />
+    <ClInclude Include="AssetsManager.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="TODOS.txt" />

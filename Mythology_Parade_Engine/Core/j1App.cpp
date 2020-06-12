@@ -26,6 +26,7 @@
 #include "j1App.h"
 #include "TooltipData.h"
 #include "IA.h"
+#include "AssetsManager.h"
 
 
 // Constructor
@@ -53,9 +54,11 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	fade_to_black = new j1FadeToBlack();
 	particleManager = new j1ParticleManager();
 	ia = new IA();
+	assets_manager = new AssetsManager();
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
+	AddModule(assets_manager);
 	AddModule(input);
 	AddModule(win);
 	AddModule(tex);

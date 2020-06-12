@@ -79,6 +79,7 @@
   <ItemGroup>
     <ClCompile Include="AABBTree.cpp" />
     <ClCompile Include="Animation.cpp" />
+    <ClCompile Include="AssetsManager.cpp" />
     <ClCompile Include="Building.cpp" />
     <ClCompile Include="CombatUnit.cpp" />
     <ClCompile Include="Console.cpp" />
@@ -124,6 +125,7 @@
   <ItemGroup>
     <ClInclude Include="AABBTree.h" />
     <ClInclude Include="Animation.h" />
+    <ClInclude Include="AssetsManager.h" />
     <ClInclude Include="Building.h" />
     <ClInclude Include="ClassicAnimation.h" />
     <ClInclude Include="CombatUnit.h" />
