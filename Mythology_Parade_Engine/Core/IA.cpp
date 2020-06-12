@@ -114,6 +114,7 @@ bool IA::PostUpdate()
 bool IA::CleanUp()
 {
 	bool ret = true;
+	listEntities.clear();
 	return ret;
 }
 

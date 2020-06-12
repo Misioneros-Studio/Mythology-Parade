@@ -59,6 +59,9 @@ private:
 	iPoint click;
 	bool shift;
 	bool alt;
+	int faith_before;
+	int sacrifices_before;
+	int prayers_before;
 
 
 public:

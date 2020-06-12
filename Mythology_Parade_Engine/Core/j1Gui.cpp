@@ -921,6 +921,7 @@ TextUI::TextUI(Type type, UI* p, SDL_Rect r, std::string str, bool d, bool f, SD
 	color = coulor;
 	title_default = title;
 	fade_panel = p_fade;
+	text = nullptr;
 
 	if (fade_panel == Panel_Fade::no_one_fade) {
 		alpha = 255;
@@ -930,6 +931,7 @@ TextUI::TextUI(Type type, UI* p, SDL_Rect r, std::string str, bool d, bool f, SD
 		fade_panel_timer.Start();
 		fade_panel_time = 1;
 	}
+	SetString(stri);
 }
 
 bool TextUI::Update(float dt) {
@@ -943,15 +945,6 @@ bool TextUI::PostUpdate() {
 	iPoint dif_sprite = { 0,0 };
 
   
-	SDL_Texture* text;
-	if(title_default==false)
-		text = App->font->Print(stri.c_str(), color);
-	else
-		text = App->font->Print(stri.c_str(), color, App->font->default_title);
-
-	if (text == nullptr) {
-		LOG("TEXTURE NULLPTR");
-	}
 	SDL_QueryTexture(text, NULL, NULL, &rect.w, &rect.h);
 
 	SDL_SetTextureAlphaMod(text, alpha);
@@ -960,14 +953,27 @@ bool TextUI::PostUpdate() {
 	else if (this->active) App->render->Blit(text, quad.x + dif_sprite.x, quad.y + dif_sprite.y, &sprite, 0.0F);
 	UI::PostUpdate();
 
-	App->tex->UnLoad(text);
+	return true;
+}
 
+bool TextUI::CleanUp()
+{
+	UI::CleanUp();
+	App->tex->UnLoad(text);
 	return true;
 }
 
 void TextUI::SetString(std::string new_string) 
 {
+	App->tex->UnLoad(text);
 	stri = new_string;
+	if (title_default == false)
+		text = App->font->Print(stri.c_str(), color);
+	else
+		text = App->font->Print(stri.c_str(), color, App->font->default_title);
+	if (text == nullptr) {
+		LOG("TEXTURE NULLPTR");
+	}
 }
 
 ///////////// TEXT LIST //////////////
@@ -977,6 +983,7 @@ ListTextsUI::ListTextsUI(Type type, UI* p, SDL_Rect r, std::string str, bool d, 
 	stri.push_back(str);
 	number_of_stri = stri.size();
 	quad = r;
+	PushBackTexture(str);
 
 	fade_panel = p_fade;
 
@@ -1007,21 +1014,22 @@ bool ListTextsUI::PostUpdate()
 		dif_sprite = { 0,0 };
 
 		std::list<std::string>::iterator it = stri.begin();
+		std::list<SDL_Texture*>::iterator it_texture = text.begin();
 		std::advance(it, i);
+		std::advance(it_texture, i);
 
 		if (it._Ptr->_Myval != stri.end()._Ptr->_Myval) 
 		{
-			SDL_Texture* text = App->font->Print(it->c_str(), { 255,255,255,255 });
 
-			SDL_QueryTexture(text, NULL, NULL, &rect.w, &rect.h);
+			SDL_QueryTexture(it_texture._Ptr->_Myval, NULL, NULL, &rect.w, &rect.h);
 
 			SDL_SetTextureAlphaMod((SDL_Texture*)App->gui->GetAtlas(num_atlas), alpha);
 
 			SDL_Rect sprite = UI::Check_Printable_Rect(rect, dif_sprite, { quad.x,quad.y + (quad.h * i),quad.w,quad.h });
-			if (this->active && this->GetConsole() == false) App->render->Blit(text, quad.x + dif_sprite.x, quad.y + dif_sprite.y + (i * quad.h), &sprite, 0.0F);
-			else if (this->active) App->render->Blit(text, quad.x + dif_sprite.x, quad.y + dif_sprite.y + (i * quad.h), &sprite, 0.0F);
+			if (this->active && this->GetConsole() == false) App->render->Blit(it_texture._Ptr->_Myval, quad.x + dif_sprite.x, quad.y + dif_sprite.y + (i * quad.h), &sprite, 0.0F);
+			else if (this->active) App->render->Blit(it_texture._Ptr->_Myval, quad.x + dif_sprite.x, quad.y + dif_sprite.y + (i * quad.h), &sprite, 0.0F);
 
-			App->tex->UnLoad(text);
+			//App->tex->UnLoad(text);
 		}
 	}
 	UI::PostUpdate();
@@ -1029,10 +1037,21 @@ bool ListTextsUI::PostUpdate()
 	return true;
 }
 
+bool ListTextsUI::CleanUp()
+{
+	for (std::list<SDL_Texture*>::iterator it = text.begin(); it != text.end(); it++) {
+		App->tex->UnLoad(it._Ptr->_Myval);
+	}
+	text.clear();
+	stri.clear();
+	return false;
+}
+
 void ListTextsUI::SetListOfStrings(std::string string, int position) 
 {
 	if (position > number_of_stri) {
 		stri.push_back(string);
+		PushBackTexture(string);
 		number_of_stri++;
 		SDL_Rect screen_rect = GetScreenRect();
 		SDL_Rect parent_screen_rect = GetParentScreenRect();
@@ -1041,6 +1060,11 @@ void ListTextsUI::SetListOfStrings(std::string string, int position)
 		SetScreenRect(screen_rect);
 		UpdateLocalRect();
 	}
+}
+
+void ListTextsUI::PushBackTexture(std::string stri)
+{
+	text.push_back(App->font->Print(stri.c_str(), { 255,255,255,255 }));
 }
 
 ///////////// BUTTON //////////////
@@ -1149,6 +1173,7 @@ TextInputUI::TextInputUI(Type type, UI* p, SDL_Rect r, int re, int g, int b, int
 	blue = b;
 	alpha = a;
 	fade_panel = p_fade;
+	text = nullptr;
 
 	if (fade_panel == Panel_Fade::no_one_fade) {
 		alpha = 255;
@@ -1158,6 +1183,7 @@ TextInputUI::TextInputUI(Type type, UI* p, SDL_Rect r, int re, int g, int b, int
 		fade_panel_timer.Start();
 		fade_panel_time = 1;
 	}
+	UpdateLabel();
 }
 
 bool TextInputUI::Update(float dt) {
@@ -1191,6 +1217,7 @@ bool TextInputUI::PreUpdate() {
 			{
 				label = label.erase(position - 1, 1);
 				position--;
+				UpdateLabel();
 			}
 		}
 		else if (App->input->special_keys == specialkeys::Left) {
@@ -1206,6 +1233,7 @@ bool TextInputUI::PreUpdate() {
 			{
 				label = label.erase(position - 1);
 				position--;
+				UpdateLabel();
 			}
 		}
 		else if (App->input->special_keys == specialkeys::Home) {
@@ -1229,11 +1257,9 @@ bool TextInputUI::PostUpdate() {
 
 	SDL_Rect rect = { 0,0,0,0 };
 	if (strcmp(label.c_str(), "")) {
-		SDL_Texture* text = App->font->Print(label.c_str(), {255,255,255,255});
 		SDL_QueryTexture(text, NULL, NULL, &rect.w, &rect.h);
 		SDL_Rect sprite = UI::Check_Printable_Rect(rect, dif_sprite);
 		if (this->active) App->render->Blit(text, quad.x + dif_sprite.x, quad.y + dif_sprite.y, &sprite, 0.0F);
-		App->tex->UnLoad(text);
 	}
 
 	if (focus == true) 
@@ -1249,6 +1275,12 @@ bool TextInputUI::PostUpdate() {
 
 
 	return true;
+}
+
+bool TextInputUI::CleanUp()
+{
+	App->tex->UnLoad(text);
+	return false;
 }
 
 //BUG: when moving with left or right keys and typing
@@ -1274,6 +1306,7 @@ void TextInputUI::ChangeLabel(std::string text)
 	label_part_1 += label_part_2;
 	label = label_part_1;
 	position++;
+	UpdateLabel();
 }
 
 void TextInputUI::SetLabel(std::string text) 
@@ -1282,11 +1315,18 @@ void TextInputUI::SetLabel(std::string text)
 	{
 		label = text.c_str();
 		position += label.size() - 1;
+		UpdateLabel();
 	}
 }
 
 void TextInputUI::SetPositionToZero() {
 	position = 0;
+}
+
+void TextInputUI::UpdateLabel()
+{
+	App->tex->UnLoad(text);
+	text = App->font->Print(label.c_str(), { 255,255,255,255 });
 }
 
 void j1Gui::DoWinOrLoseWindow(int type, bool win) {

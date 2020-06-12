@@ -17,6 +17,7 @@ Player::Player()
 		research_temple = research_chaotic_victory = false;
 	shift = false;
 	alt = false;
+	sacrifices_before = prayers_before = faith_before = -1;
 	Start();
 }
 
@@ -96,9 +97,18 @@ bool Player::PreUpdate()
 
 bool Player::Update(float dt)
 {
-	App->scene->hud->ui_text_ingame[0]->SetString(faith);
-	App->scene->hud->ui_text_ingame[1]->SetString(sacrifice);
-	App->scene->hud->ui_text_ingame[2]->SetString(prayer);
+	if (faith_before!= CurrencySystem::faith) {
+		App->scene->hud->ui_text_ingame[0]->SetString(faith);
+		faith = CurrencySystem::faith;
+	}
+	if (sacrifices_before != CurrencySystem::sacrifices) {
+		App->scene->hud->ui_text_ingame[1]->SetString(sacrifice);
+		sacrifices_before = CurrencySystem::sacrifices;
+	}
+	if (prayers_before != CurrencySystem::prayers) {
+		App->scene->hud->ui_text_ingame[2]->SetString(prayer);
+		prayers_before = CurrencySystem::prayers;
+	}
 
 	//if (App->input->GetKey(SDL_SCANCODE_5) == KEY_DOWN && !App->entityManager->crPreview.active)
 	//{
