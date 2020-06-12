@@ -11,7 +11,7 @@
 
 #include "SDL_mixer/include/SDL_mixer.h"
 
-Unit::Unit(UnitType type, iPoint pos): unitType(type), state(AnimationType::IDLE),  moveSpeed(60)
+Unit::Unit(UnitType type, iPoint pos) : unitType(type), state(AnimationType::IDLE), moveSpeed(60), oldEnemyPosition({0, 0})
 {
 
 	displayDebug = false;
@@ -245,9 +245,6 @@ void Unit::MoveToTarget()
 
 	state = AnimationType::WALK;
 
-
-
-
 	iPoint targetIso = App->map->MapToWorld(targetPosition.x, targetPosition.y);
 	targetIso += App->map->GetTilesHalfSize();
 
@@ -467,23 +464,43 @@ void Unit::Draw_Life_Bar(bool enemy)
 }
 void Unit::DetectNearbyEnemies()
 {
-	for (int i = 1; i < 3; i++)
+	//if enemytarget == nullptr
+	if (enemyTarget == nullptr) 
 	{
-		for (std::list<Entity*>::iterator it = App->entityManager->entities[static_cast<EntityType>(i)].begin(); it != App->entityManager->entities[static_cast<EntityType>(i)].end(); it++)
+		for (int i = 1; i < 3; ++i)
 		{
-			Entity* entity = it._Ptr->_Myval;
-			if (!entity->IsDeath() && entity->civilization != civilization && entity != this) {
-				if (entity->position.DistanceManhattan(position) < 100) {
-					if (enemyTarget == nullptr) {
+			for (std::list<Entity*>::iterator it = App->entityManager->entities[static_cast<EntityType>(i)].begin(); it != App->entityManager->entities[static_cast<EntityType>(i)].end(); it++)
+			{
+				Entity* entity = it._Ptr->_Myval;
+				if (!entity->IsDeath() && entity->civilization != civilization && entity != this)
+				{
+					if (entity->position.DistanceManhattan(position) < 500) // Posar valor com a range variable
+					{
 						enemyTarget = entity;
-					}
-					if (entity->civilization == CivilizationType::GREEK && enemyTarget != nullptr) {
+						//Request path 
+						if (GetTilePosition() != enemyTarget->GetTilePosition())
+							App->pathfinding->RequestPath(GetTilePosition(), enemyTarget->GetTilePosition(), App->entityManager->getPlayer()->GetEntitiesSelected());
+						//Guardar enemy map position
+						oldEnemyPosition = enemyTarget->GetTilePosition();
+
+
+						LOG("Enemy detected: %i", entity->type);
 
 					}
-					LOG("Enemy detected: %i", entity->type);
-
 				}
 			}
+		}
+	}
+	else
+	{
+		//Sha mogut de tile?
+		if (enemyTarget->GetTilePosition() != oldEnemyPosition) 
+		{
+			oldEnemyPosition = enemyTarget->GetTilePosition();
+			if (GetTilePosition() != enemyTarget->GetTilePosition())
+				App->pathfinding->RequestPath(GetTilePosition(), enemyTarget->GetTilePosition(), App->entityManager->getPlayer()->GetEntitiesSelected());
+			//Updatear la tile on esta el enemic
+			//Request new path
 		}
 	}
 }
@@ -492,21 +509,35 @@ void Unit::StateMachineActions(float dt)
 	//LOG("%i", state);
 	switch (state)
 	{
-	case AnimationType::ATTACK:
-		if (currentAnim.current_sprite == currentAnim.num_sprites - 1)
+		case AnimationType::ATTACK:
 		{
-			App->entityManager->FxUnits(4, App->audio->hit_2, position.x, position.y);
-			CombatUnit* unit = (CombatUnit*)this;
-			if (enemyTarget->RecieveDamage(unit->GetDamageValue()))
+			if (currentAnim.current_sprite == currentAnim.num_sprites - 4)
 			{
-				unit->GainExperience(Action::killEnemy, App->scene->isInTutorial);
-				enemyTarget->Kill(App->map->WorldToMap(position.x, position.y));
-				enemyTarget = nullptr;
-				ChangeState(targetPosition, AnimationType::IDLE);
-			}
-		}
+				App->entityManager->FxUnits(4, App->audio->hit_2, position.x, position.y);
+				CombatUnit* unit = (CombatUnit*)this;
 
-		break;
+				//This is the building's defense system
+				if (enemyTarget->type == EntityType::BUILDING)
+				{
+					this->RecieveDamage(20);
+				}
+
+				if (enemyTarget->RecieveDamage(unit->GetDamageValue()))
+				{
+					unit->GainExperience(Action::killEnemy, App->scene->isInTutorial);
+					enemyTarget->Kill(App->map->WorldToMap(position.x, position.y));
+
+					Unit* unit = nullptr;
+					for (std::list<Entity*>::iterator it = App->entityManager->entities[static_cast<EntityType>(1)].begin(); it != App->entityManager->entities[static_cast<EntityType>(1)].end(); ++it)
+					{
+						unit = static_cast<Unit*>(*it);
+						unit->enemyTarget = nullptr;
+						unit->ChangeState(unit->targetPosition, AnimationType::IDLE);
+					}
+				}
+			}
+			break;
+		}
 	case AnimationType::DIE:
 		App->entityManager->FxUnits(4, App->audio->Death_sfx, position.x, position.y);
 		timeToDespawn -= dt;

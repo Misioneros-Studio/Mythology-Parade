@@ -52,6 +52,8 @@ public:
 	int time_research;
 	bool researched;
 	Entity* enemyTarget;
+	iPoint oldEnemyPosition;
+
 	bool toDelete = false;
 
 	bool insideMinotaur;
@@ -104,7 +106,6 @@ protected:
 	j1Timer damage_timer;
 	bool show_bar_for_damage;
 	bool combat_unit;
-
 
 
 };

@@ -82,6 +82,7 @@
     <ClCompile Include="Building.cpp" />
     <ClCompile Include="CombatUnit.cpp" />
     <ClCompile Include="Console.cpp" />
+    <ClCompile Include="Entity.cpp" />
     <ClCompile Include="EntityManager.cpp" />
     <ClCompile Include="FoWManager.cpp" />
     <ClCompile Include="HealthSystem.cpp" />
