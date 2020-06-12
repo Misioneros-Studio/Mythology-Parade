@@ -39,6 +39,9 @@ void HUD::StartHUD(ResearchMenu* r) {
 
 	start_timer = false;
 	ui_ingame = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, nullptr, { 0,590,1280,130 }, { 0,590,1280,130 }));
+	ia_bar_back = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, nullptr, { 360,3,561,25 }, { 1283,590,561,25 }));
+	ia_bar_front = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, nullptr, { 364,7,0,17 }, { 1287,619,553,17 }));
+
 	range = damage = influence = health = level = experience = max_cap = speed = 0;
 
 	for (int i = 0; i < 12; i++)
@@ -81,7 +84,6 @@ void HUD::StartHUD(ResearchMenu* r) {
 			}
 		}
 	}
-
 
 	hud_selected_troop = nullptr;
 	thing_selected = nullptr;
@@ -2051,4 +2053,9 @@ void HUD::UpdateSlider(int index) {
 			App->audio->PlayFx(-1, App->gui->sfx_UI[(int)UI_Audio::LOAD]);
 		}
 	}
+}
+
+void HUD::UpdateIABar(float percentage)
+{
+	ia_bar_front->quad.w = percentage * 553;
 }

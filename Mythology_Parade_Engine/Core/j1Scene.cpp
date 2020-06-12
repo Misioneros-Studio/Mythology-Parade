@@ -18,6 +18,7 @@
 #include "j1FadeToBlack.h"
 #include "HUD.h"
 #include "ResearchMenu.h"
+#include "IA.h"
 
 #include "j1TitleScene.h"
 #include "j1ParticleManager.h"
@@ -270,6 +271,12 @@ bool j1Scene::Update(float dt)
 		dont_update_types_of_troops = true;
 	}
 
+	//Update IA bar
+	float ia_bar_percentage = App->ia->timer_ia.ReadSec() / App->ia->time_ia;
+	if (ia_bar_percentage > 1)
+		ia_bar_percentage = 1;
+	hud->UpdateIABar(ia_bar_percentage);
+
 	// Gui ---
 	switch (hud->close_menus)
 	{
@@ -455,6 +462,10 @@ bool j1Scene::CleanUp()
 		hud->HUDDeleteActionButtons();
 		App->gui->DeleteUIElement(hud->ui_ingame);
 		hud->ui_ingame = nullptr;
+		App->gui->DeleteUIElement(hud->ia_bar_back);
+		hud->ia_bar_back = nullptr;
+		App->gui->DeleteUIElement(hud->ia_bar_front);
+		hud->ia_bar_front = nullptr;
 		for (int i = 0; i < 3; i++)
 		{
 			App->gui->DeleteUIElement(hud->ui_text_ingame[i]);
