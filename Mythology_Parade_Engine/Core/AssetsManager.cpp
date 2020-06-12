@@ -46,7 +46,7 @@ SDL_RWops* AssetsManager::Load(const char* path) const
 
 	SDL_RWops* ret = SDL_RWFromConstMem(buffer, bytes);
 
-	return nullptr;
+	return ret;
 
 }
 

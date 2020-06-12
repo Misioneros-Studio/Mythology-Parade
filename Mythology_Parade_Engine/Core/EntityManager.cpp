@@ -3,6 +3,7 @@
 #include "Building.h"
 #include "Player.h"
 #include "j1Gui.h"
+#include "AssetsManager.h"
 
 #include "p2Log.h"
 EntityManager::EntityManager() : CreateAssasin_sound(0), CreateMonk_sound(0), Monster1(0), Monster2(0), construction_bar_back({0, 0, 0, 0}),
@@ -31,7 +32,10 @@ bool EntityManager::Awake(pugi::xml_node& a)
 	App->fowManager->RequestMaskGeneration(10);
 	//Load buildings info
 	pugi::xml_document buildings;
-	buildings.load_file(a.child("buildings").attribute("file").as_string());
+	char* buffer;
+	int bytesFile = App->assets_manager->Load(a.child("buildings").attribute("file").as_string(), &buffer);
+	pugi::xml_parse_result result = buildings.load_buffer(buffer, bytesFile);
+	RELEASE_ARRAY(buffer);
 	LoadBuildingsData(buildings.child("map").child("objectgroup"));
 	life_bar_front = { 1310,503,115,10 };
 	life_bar_front_enemy = { 1310,483,115,10 };

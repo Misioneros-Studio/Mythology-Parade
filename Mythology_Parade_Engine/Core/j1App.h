@@ -30,7 +30,7 @@ class j1FadeToBlack;
 class j1ParticleManager;
 class TooltipData;
 class IA;
-class AssetsManager
+class AssetsManager;
 
 class j1App
 {

@@ -8,6 +8,7 @@
 #include <math.h>
 #include"j1Scene.h"
 #include"QuadTree.h"
+#include "AssetsManager.h"
 
 j1Map::j1Map() : j1Module(), map_loaded(false)
 {
@@ -351,7 +352,10 @@ bool j1Map::Load(const char* file_name)
 	tmp.append(folder.c_str());
 	tmp.append(file_name);
 
-	pugi::xml_parse_result result = map_file.load_file(tmp.c_str());
+	char* buffer;
+	int bytesFile = App->assets_manager->Load(tmp.c_str(), &buffer);
+	pugi::xml_parse_result result = map_file.load_buffer(buffer, bytesFile);
+	RELEASE_ARRAY(buffer);
 
 	if (result == NULL)
 	{
