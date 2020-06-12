@@ -56,7 +56,7 @@ bool j1Gui::Start()
 	atlas_num_0 = App->tex->Load(atlas_file_name_num_0.c_str());
 	atlas_num_1 = App->tex->Load(atlas_file_name_num_1.c_str());
 	atlas_num_2 = App->tex->Load(atlas_file_name_num_2.c_str());
-	for (int i = 0; i < 9; i++) {
+	for (int i = 0; i < 10; i++) {
 		sfx_UI[i] = 0;
 	}
 	cursor_tex = App->tex->Load("gui/cursors.png");
@@ -1077,6 +1077,7 @@ ButtonUI::ButtonUI(Type type, UI * p, SDL_Rect r, SDL_Rect sprite, SDL_Rect spri
 	sprite3 = spriten3;
 	over = false;
 	pushed = false;
+	hover = false;
 	quad = r;
 	isLocked = false;
 	front = true;
@@ -1107,9 +1108,14 @@ bool ButtonUI::PostUpdate() {
 	}
 	else if (over == true) {
 		sprite = UI::Check_Printable_Rect(sprite1, dif_sprite);
+		if (hover == false) {
+			hover = true;
+			App->audio->PlayFx(1, App->gui->sfx_UI[(int)UI_Audio::HOVER]);
+		}
 	}
 	else {
 		sprite = UI::Check_Printable_Rect(sprite3, dif_sprite);
+		hover = false;
 	}
 	//App->render->Blit((SDL_Texture*)App->gui->GetAtlas(), GetScreenToWorldPos().x + dif_sprite.x, GetScreenToWorldPos().y + dif_sprite.y, &sprite, 0.f);
 

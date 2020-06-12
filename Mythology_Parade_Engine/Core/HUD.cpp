@@ -127,7 +127,7 @@ void HUD::ActivatePauseMenu() {
 			ui_text[7] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 604,62,237,38 }, { 0,0,100,100 }, "PAUSE", Panel_Fade::panel_fade_in, { 255,255,255,255 }, { 1,0,0,0 }));
 		}
 		else {
-			ui_pause_window = static_cast<WindowUI*>(App->gui->CreateUIElement(Type::WINDOW, nullptr, { 410,150,459,303 }, { 216,21,459,531 }, "", Panel_Fade::panel_fade_in));
+			ui_pause_window = static_cast<WindowUI*>(App->gui->CreateUIElement(Type::WINDOW, nullptr, { 410,150,459,300 }, { 1749,0,459,300 }, "", Panel_Fade::panel_fade_in));
 			ui_button[2] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_pause_window, { 520,210,237,38 }, { 787,240,237,38 }, "OPTIONS", Panel_Fade::panel_fade_in, { 787,342,237,38 },
 				{ 787,291,237,38 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::OPTIONS));
 			ui_text[2] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 613,222,237,38 }, { 0,0,100,100 }, "Options", Panel_Fade::panel_fade_in, { 0,0,0,255 }));

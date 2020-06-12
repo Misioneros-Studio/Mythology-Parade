@@ -40,6 +40,7 @@ enum class UI_Audio
 	SURRENDER,
 	EXIT,
 	CLOSE,
+	HOVER,
 	UNKNOWN
 };
 
@@ -252,6 +253,7 @@ public:
 	bool over;
 	bool isLocked;
 	bool front;
+	bool hover;
 	int click_sfx;
 };
 
@@ -370,7 +372,7 @@ private:
 public:
 
 	//Audio
-	int sfx_UI[9];
+	int sfx_UI[10];
 	bool lockClick;
 	bool cursor_attack;
 	bool cursor_move;

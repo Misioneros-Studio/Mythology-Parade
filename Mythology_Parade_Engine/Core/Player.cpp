@@ -99,7 +99,7 @@ bool Player::Update(float dt)
 {
 	if (faith_before!= CurrencySystem::faith) {
 		App->scene->hud->ui_text_ingame[0]->SetString(faith);
-		faith = CurrencySystem::faith;
+		faith_before = CurrencySystem::faith;
 	}
 	if (sacrifices_before != CurrencySystem::sacrifices) {
 		App->scene->hud->ui_text_ingame[1]->SetString(sacrifice);
