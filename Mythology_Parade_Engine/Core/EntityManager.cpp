@@ -11,7 +11,6 @@ EntityManager::EntityManager()
 	name.append("entity_manager");
 	buildingsData.reserve(MAX_BUILDING_TYPES);
 	buildingTestIndex = 0;
-	initCivilizations = true;
 	playerCreated = false;
 }
 
@@ -22,6 +21,7 @@ EntityManager::~EntityManager()
 //Called before render is available
 bool EntityManager::Awake(pugi::xml_node& a)
 {
+	loading = false;
 	App->fowManager->RequestMaskGeneration(10);
 	//Load buildings info
 	pugi::xml_document buildings;
@@ -94,6 +94,8 @@ bool EntityManager::Start()
 			it._Ptr->_Myval->Start();
 		}
 	}
+
+	initCivilizations = true;
 
 	return true;
 }
@@ -400,6 +402,7 @@ bool EntityManager::Load(pugi::xml_node& n)
 {
 	CivilizationType civ;
 	entities.clear();
+	loading = true;
 
 	//PLAYER LOADING
 	pugi::xml_node p = n.child("players").first_child();
@@ -574,6 +577,7 @@ bool EntityManager::Load(pugi::xml_node& n)
 	}
 
 	App->scene->research_menu->UpdatePlayer(getPlayer());
+	loading = false;
 
 	return true;
 }
@@ -598,7 +602,7 @@ bool EntityManager::Save(pugi::xml_node& s) const
 
 		if (var->civilization == CivilizationType::GREEK)
 			entity.append_attribute("civilization").set_value("greek");
-		else if (var->civilization == CivilizationType::GREEK)
+		else if (var->civilization == CivilizationType::VIKING)
 			entity.append_attribute("civilization").set_value("viking");
 
 
@@ -701,7 +705,6 @@ Entity* EntityManager::CreatePlayerEntity(std::string civilization_string)
 	Player* p = (Player*)ret;
 
 	entities[EntityType::PLAYER].push_back(ret);
-	entities[EntityType::PLAYER].begin()._Ptr->_Myval->Start();
 
 	if (civilization_string == "viking") {
 		ret->civilization = CivilizationType::VIKING;
@@ -716,6 +719,7 @@ Entity* EntityManager::CreatePlayerEntity(std::string civilization_string)
 		ret->civilization = CivilizationType::VIKING;
 		p->player_type = CivilizationType::VIKING;
 	}
+	ret->Start();
 	return ret;
 }
 
@@ -1065,6 +1069,18 @@ bool EntityManager::IsPointInsideQuad(SDL_Rect rect, int x, int y)
 	return false;
 }
 
+void EntityManager::BuildCivilizations(CivilizationType c)
+{
+	if (c == CivilizationType::GREEK)
+	{
+		InitGreek();
+	}
+	else if (c == CivilizationType::VIKING)
+	{
+		InitVikings();
+	}
+}
+
 void EntityManager::FxUnits(int channel, int fx, int posx, int posy)
 {
 	if (Mix_Playing(channel) == 0) {
@@ -1120,4 +1136,67 @@ void EntityManager::FxUnits(int channel, int fx, int posx, int posy)
 		Mix_SetPosition(channel, angle, volume);
 		App->audio->PlayFx(channel, fx, 0);
 	}*/
+}
+void EntityManager::InitVikings()
+{
+	if (App->scene->isInTutorial == false) {
+		iPoint fortress = { 21,23 };
+		fortress = App->map->MapToWorld(fortress.x, fortress.y);
+		fortress.x -= App->map->GetTilesHalfSize().x;
+
+		iPoint monkPos = { 26,24 };
+		iPoint assassinPos = { 25,24 };
+		monkPos = App->map->MapToWorld(monkPos.x, monkPos.y);
+		assassinPos = App->map->MapToWorld(assassinPos.x, assassinPos.y);
+
+		App->entityManager->CreateBuildingEntity(fortress, BuildingType::FORTRESS, App->entityManager->buildingsData[0], CivilizationType::VIKING);
+		App->entityManager->CreateUnitEntity(UnitType::MONK, monkPos, CivilizationType::VIKING);
+		App->entityManager->CreateUnitEntity(UnitType::ASSASSIN, assassinPos, CivilizationType::VIKING);
+	}
+	else if (App->scene->isInTutorial == true) {
+		iPoint fortress = { 69,70 };
+		fortress = App->map->MapToWorld(fortress.x, fortress.y);
+		fortress.x -= App->map->GetTilesHalfSize().x;
+
+		iPoint monkPos = { 69,76 };
+		iPoint assassinPos = { 77,68 };
+		monkPos = App->map->MapToWorld(monkPos.x, monkPos.y);
+		assassinPos = App->map->MapToWorld(assassinPos.x, assassinPos.y);
+
+		App->entityManager->CreateBuildingEntity(fortress, BuildingType::FORTRESS, App->entityManager->buildingsData[0], CivilizationType::VIKING);
+		App->entityManager->CreateUnitEntity(UnitType::MONK, monkPos, CivilizationType::VIKING);
+		App->entityManager->CreateUnitEntity(UnitType::ASSASSIN, assassinPos, CivilizationType::VIKING);
+	}
+}
+
+void EntityManager::InitGreek()
+{
+	if (App->scene->isInTutorial == false) {
+		iPoint fortress = { 129,137 };
+		fortress = App->map->MapToWorld(fortress.x, fortress.y);
+		fortress.x -= App->map->GetTilesHalfSize().x;
+
+		iPoint monkPos = { 130,139 };
+		iPoint assassinPos = { 129,139 };
+		monkPos = App->map->MapToWorld(monkPos.x, monkPos.y);
+		assassinPos = App->map->MapToWorld(assassinPos.x, assassinPos.y);
+
+		App->entityManager->CreateBuildingEntity(fortress, BuildingType::FORTRESS, App->entityManager->buildingsData[4], CivilizationType::GREEK);
+		App->entityManager->CreateUnitEntity(UnitType::MONK, monkPos, CivilizationType::GREEK);
+		App->entityManager->CreateUnitEntity(UnitType::ASSASSIN, assassinPos, CivilizationType::GREEK);
+	}
+	else if (App->scene->isInTutorial == true) {
+		iPoint fortress = { 88,89 };
+		fortress = App->map->MapToWorld(fortress.x, fortress.y);
+		fortress.x -= App->map->GetTilesHalfSize().x;
+
+		iPoint monkPos = { 78,85 };
+		iPoint assassinPos = { 85,76 };
+		monkPos = App->map->MapToWorld(monkPos.x, monkPos.y);
+		assassinPos = App->map->MapToWorld(assassinPos.x, assassinPos.y);
+
+		App->entityManager->CreateBuildingEntity(fortress, BuildingType::FORTRESS, App->entityManager->buildingsData[4], CivilizationType::GREEK);
+		App->entityManager->CreateUnitEntity(UnitType::MONK, monkPos, CivilizationType::GREEK);
+		App->entityManager->CreateUnitEntity(UnitType::ASSASSIN, assassinPos, CivilizationType::GREEK);
+	}
 }

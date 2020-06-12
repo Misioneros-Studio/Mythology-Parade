@@ -125,7 +125,6 @@ bool IA::CleanUp()
 bool IA::Load(pugi::xml_node& s)
 {
 	listEntities.clear();
-	InitCiv();
 	timer.Start();
 	loading = true;
 	pugi::xml_node node = s.child("IA").child("Game_Phase");
@@ -423,23 +422,26 @@ bool IA::InitCiv()
 	if (App->entityManager->playerCreated)
 	{
 		//CIVILIZATION
-		if (App->entityManager->getPlayer()->civilization == CivilizationType::VIKING) civilization = CivilizationType::GREEK;
-		else civilization = CivilizationType::VIKING;
-
-		for (int i = 1; i <= 3; ++i)
+		if (App->entityManager->getPlayer()->civilization == CivilizationType::VIKING)
 		{
-			std::list<Entity*>::iterator it = App->entityManager->entities[static_cast<EntityType>(i)].begin();
-			for (it; it != App->entityManager->entities[static_cast<EntityType>(i)].end(); ++it)
+			civilization = CivilizationType::GREEK;
+		}
+		else
+		{
+			civilization = CivilizationType::VIKING;
+		}
+		
+		App->entityManager->BuildCivilizations(civilization);
+		
+		std::list<Entity*>::iterator it = App->entityManager->entities[EntityType::UNIT].begin();
+		for (it; it != App->entityManager->entities[EntityType::UNIT].end(); ++it)
+		{
+			if (it._Ptr->_Myval->civilization == civilization)
 			{
-				if (it._Ptr->_Myval->civilization == civilization) {
-					listEntities.push_back(it._Ptr->_Myval);
-				}
-				if (it._Ptr->_Myval->name == "fortress" && it._Ptr->_Myval->civilization != civilization)
-				{
-					enemyFortress = static_cast<Building*>(it._Ptr->_Myval);
-				}
+				listEntities.push_back(it._Ptr->_Myval);
 			}
 		}
+
 		timer.Start();
 		early = EarlyGameBehaviour::BASIC_BUILDINGS_CREATION;
 		gamePhase = GameBehaviour::EARLY;
