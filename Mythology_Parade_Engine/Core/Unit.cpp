@@ -497,7 +497,7 @@ void Unit::DetectNearbyEnemies()
 		if (enemyTarget->GetTilePosition() != oldEnemyPosition) 
 		{
 			oldEnemyPosition = enemyTarget->GetTilePosition();
-			if (GetTilePosition() != enemyTarget->GetTilePosition())
+			if (GetTilePosition() != enemyTarget->GetTilePosition() && position.DistanceManhattan(enemyTarget->position) >= 300)
 				App->pathfinding->RequestPath(GetTilePosition(), enemyTarget->GetTilePosition(), App->entityManager->getPlayer()->GetEntitiesSelected());
 			//Updatear la tile on esta el enemic
 			//Request new path
@@ -519,7 +519,11 @@ void Unit::StateMachineActions(float dt)
 				//This is the building's defense system
 				if (enemyTarget->type == EntityType::BUILDING)
 				{
-					this->RecieveDamage(20);
+					if (RecieveDamage(20))
+					{
+						enemyTarget = nullptr;
+						Kill(App->map->WorldToMap(position.x, position.y));
+					}
 				}
 
 				if (enemyTarget->RecieveDamage(unit->GetDamageValue()))
