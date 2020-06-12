@@ -115,7 +115,7 @@ bool Unit::Start()
 bool Unit::Update(float dt)
 {
 	bool ret = true;
-	DetectNearbyEnemies();
+
 
 	if (App->entityManager->getPlayer())
 	{
@@ -462,48 +462,7 @@ void Unit::Draw_Life_Bar(bool enemy)
 	life_spriteRect = App->entityManager->unit_life_bar_empty;
 	App->render->Blit(App->gui->GetTexture(), pos.x, pos.y, &life_spriteRect);
 }
-void Unit::DetectNearbyEnemies()
-{
-	//if enemytarget == nullptr
-	if (enemyTarget == nullptr) 
-	{
-		for (int i = 1; i < 3; ++i)
-		{
-			for (std::list<Entity*>::iterator it = App->entityManager->entities[static_cast<EntityType>(i)].begin(); it != App->entityManager->entities[static_cast<EntityType>(i)].end(); it++)
-			{
-				Entity* entity = it._Ptr->_Myval;
-				if (!entity->IsDeath() && entity->civilization != civilization && entity != this)
-				{
-					if (entity->position.DistanceManhattan(position) < 500) // Posar valor com a range variable
-					{
-						enemyTarget = entity;
-						//Request path 
-						if (GetTilePosition() != enemyTarget->GetTilePosition())
-							App->pathfinding->RequestPath(GetTilePosition(), enemyTarget->GetTilePosition(), App->entityManager->getPlayer()->GetEntitiesSelected());
-						//Guardar enemy map position
-						oldEnemyPosition = enemyTarget->GetTilePosition();
 
-
-						LOG("Enemy detected: %i", entity->type);
-
-					}
-				}
-			}
-		}
-	}
-	else
-	{
-		//Sha mogut de tile?
-		if (enemyTarget->GetTilePosition() != oldEnemyPosition) 
-		{
-			oldEnemyPosition = enemyTarget->GetTilePosition();
-			if (GetTilePosition() != enemyTarget->GetTilePosition() && position.DistanceManhattan(enemyTarget->position) >= 300)
-				App->pathfinding->RequestPath(GetTilePosition(), enemyTarget->GetTilePosition(), App->entityManager->getPlayer()->GetEntitiesSelected());
-			//Updatear la tile on esta el enemic
-			//Request new path
-		}
-	}
-}
 void Unit::StateMachineActions(float dt)
 {
 	//LOG("%i", state);

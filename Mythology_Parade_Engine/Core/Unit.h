@@ -85,7 +85,6 @@ public:
 
 	void Draw_Life_Bar(bool enemy = false);
 
-	void DetectNearbyEnemies();
 
 protected:
 	//Animation
