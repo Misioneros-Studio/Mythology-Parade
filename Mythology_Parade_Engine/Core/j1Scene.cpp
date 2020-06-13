@@ -495,13 +495,11 @@ void j1Scene::BackToTitleMenu() {
 // Called when restarting the game
 void j1Scene::RestartGame() {
 	CivilizationType civ = App->entityManager->getPlayer()->civilization;
-	if (civ == CivilizationType::GREEK)
-	{
-		if (isInTutorial == true)
+	if(civ==CivilizationType::GREEK)
+		if(isInTutorial==true)
 			App->fade_to_black->FadeToBlack(which_fade::tutorial_to_tutorial, 2, "greek");
 		else
 			App->fade_to_black->FadeToBlack(which_fade::scene_to_scene, 2, "greek");
-	}
 	else if (civ == CivilizationType::VIKING) {
 		if (isInTutorial == true)
 			App->fade_to_black->FadeToBlack(which_fade::tutorial_to_tutorial, 2, "viking");

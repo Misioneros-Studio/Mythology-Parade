@@ -70,9 +70,6 @@ public:
 	//Called to create the button or image to research the chaotic victory;
 	void CreateChaoticVictoryButton();
 
-	//Updating player
-	void UpdatePlayer(Player* play);
-
 
 private:
 	WindowUI* ui_research_window;

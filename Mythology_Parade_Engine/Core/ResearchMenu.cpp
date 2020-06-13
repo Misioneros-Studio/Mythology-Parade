@@ -329,8 +329,3 @@ void ResearchMenu::CreateChaoticVictoryButton() {
 			false, { 0,0,0,0 }, nullptr, 0, false, -1.0f, 2, (int)TooltipsAvailable::victory2_unlocked));
 	}
 }
-
-void ResearchMenu::UpdatePlayer(Player* play)
-{
-	player = play;
-}
