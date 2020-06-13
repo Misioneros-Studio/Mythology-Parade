@@ -15,6 +15,7 @@ j1Audio::j1Audio() : j1Module()
 	music = NULL;
 	name.append("audio");
 	Building_destruction = Building_placed = Death_sfx = Decrease_Faith = Getting_resources = Increase_faith = 0;
+	nullptrs = 0;
 }
 
 // Destructor
@@ -192,8 +193,23 @@ unsigned int j1Audio::LoadFx(const char* path)
 	}
 	else
 	{
-		fx.push_back(chunk);
-		ret = fx.size();
+		if (nullptrs == 0) {
+			fx.push_back(chunk);
+			ret = fx.size();
+		}
+		else {
+			int i = 0;
+			bool finish = false;
+			for (std::list<Mix_Chunk*>::iterator it = fx.begin(); it != fx.end() && finish == false; it++) {
+				if (it._Ptr->_Myval == nullptr) {
+					finish = true;
+					ret = i + 1;
+					nullptrs--;
+					it._Ptr->_Myval = chunk;
+				}
+				i++;
+			}
+		}
 	}
 
 	return ret;
@@ -232,8 +248,25 @@ bool j1Audio::CleanFxs() {
 	{
 		Mix_FreeChunk(it._Ptr->_Myval);
 	}
-
+	nullptrs = 0;
 	fx.clear();
+
+	return ret;
+}
+
+bool j1Audio::CleanFxs(int fx_to_delete)
+{
+	bool ret = false;
+
+	if (!active || fx.size() == 0)
+		return false;
+	Mix_HaltChannel(-1);
+
+	std::list<Mix_Chunk*>::iterator it = fx.begin();
+	std::advance(it, fx_to_delete - 1);
+	Mix_FreeChunk(it._Ptr->_Myval);
+	it._Ptr->_Myval = nullptr;
+	nullptrs++;
 
 	return ret;
 }

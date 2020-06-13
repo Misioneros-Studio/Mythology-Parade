@@ -1,6 +1,8 @@
 #include "TutorialMessages.h"
 #include "p2Log.h"
 #include "p2Defs.h"
+#include "j1App.h"
+#include "AssetsManager.h"
 
 
 
@@ -31,7 +33,10 @@ void TutorialMessageData::GetTutorialMessageData()
 	pugi::xml_document	tutorial_message_file;
 	pugi::xml_node		tutorial_message;
 
-	pugi::xml_parse_result result = tutorial_message_file.load_file("TutorialDialog.xml");
+	char* buffer;
+	int bytesFile = App->assets_manager->Load("xmls/TutorialDialog.xml", &buffer);
+	pugi::xml_parse_result result = tutorial_message_file.load_buffer(buffer, bytesFile);
+	RELEASE_ARRAY(buffer);
 
 
 	if (result == NULL)

@@ -1,7 +1,8 @@
 #include "TooltipData.h"
 #include "p2Log.h"
 #include "p2Defs.h"
-
+#include "j1App.h"
+#include "AssetsManager.h"
 
 
 TooltipData::TooltipData()
@@ -35,7 +36,11 @@ void TooltipData::GetTooltipData()
 	pugi::xml_document	tooltip_file;
 	pugi::xml_node		tooltip;
 
-	pugi::xml_parse_result result = tooltip_file.load_file("dialog.xml");
+	char* buffer;
+	int bytesFile = App->assets_manager->Load("xmls/dialog.xml", &buffer);
+	pugi::xml_parse_result result = tooltip_file.load_buffer(buffer, bytesFile);
+	RELEASE_ARRAY(buffer);
+
 
 
 	if (result == NULL)

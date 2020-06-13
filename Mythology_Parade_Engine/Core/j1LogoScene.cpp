@@ -59,7 +59,7 @@ bool j1LogoScene::CleanUp()
 {
 	App->tex->UnLoad(debug_tex);
 	debug_tex = nullptr;
-
+	App->audio->CleanFxs(sfx_logo);
 	return true;
 }
 

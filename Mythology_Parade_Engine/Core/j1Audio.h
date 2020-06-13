@@ -48,6 +48,10 @@ public:
 	// Clean all fxs to change scene
 	bool CleanFxs();
 
+	// Clean a fx
+	bool CleanFxs(int fx_to_delete);
+
+
 	void FadeAudio(which_audio_fade w_fade, float time = 2.0f, int volume=50);
 
 	// Get & Change volume fxs
@@ -88,6 +92,7 @@ private:
 	j1Timer a_timer;
 	float a_total_time;
 	int volume_fade;
+	int nullptrs;
 
 public:
 	enum afade_step

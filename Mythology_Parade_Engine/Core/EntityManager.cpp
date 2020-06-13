@@ -403,6 +403,18 @@ bool EntityManager::CleanUp()
 		it.second.Clean();
 	}
 
+	App->audio->CleanFxs(Monster1);
+	App->audio->CleanFxs(Monster2);
+	App->audio->CleanFxs(ogre4);
+	App->audio->CleanFxs(ogre5);
+	App->audio->CleanFxs(giant3);
+	App->audio->CleanFxs(giant5);
+	App->audio->CleanFxs(CreateMonk_sound);
+	App->audio->CleanFxs(CreateAssasin_sound);
+	App->audio->CleanFxs(shade12);
+
+
+
 	return true;
 }
 

@@ -149,7 +149,7 @@ private:
 public:
 	std::list<std::string>	logs;
 	int						num_logs = 0;
-	TooltipData*				tooltipdata;
+	TooltipData*			tooltipdata;
 };
 
 extern j1App* App; // No student is asking me about that ... odd :-S

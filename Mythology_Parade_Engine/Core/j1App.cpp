@@ -58,7 +58,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
-	AddModule(assets_manager);
+	assets_manager->Init();
 	AddModule(input);
 	AddModule(win);
 	AddModule(tex);
@@ -129,7 +129,8 @@ bool j1App::Awake()
 	{
 		existSaveFile = true;
 	}
-		
+	
+	assets_manager->Awake(config_file);
 	config = LoadConfig(config_file);
 
 	if(config.empty() == false)
@@ -209,8 +210,10 @@ bool j1App::Update()
 pugi::xml_node j1App::LoadConfig(pugi::xml_document& config_file) const
 {
 	pugi::xml_node ret;
-
-	pugi::xml_parse_result result = config_file.load_file("config.xml");
+	char* buffer;
+	int bytesFile = App->assets_manager->Load("xmls/config.xml", &buffer);
+	pugi::xml_parse_result result = config_file.load_buffer(buffer, bytesFile);
+	RELEASE_ARRAY(buffer);
 
 	if(result == NULL)
 		LOG("Could not load map xml file config.xml. pugi error: %s", result.description());

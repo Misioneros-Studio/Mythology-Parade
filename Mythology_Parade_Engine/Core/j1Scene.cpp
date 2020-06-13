@@ -85,7 +85,7 @@ bool j1Scene::Start()
 	debugBlue_tex = App->tex->Load("maps/path2.png");
 	debugRed_tex = App->tex->Load("maps/cantBuild.png");
 
-	App->audio->CleanFxs();
+	
 
 	App->gui->sfx_UI[(int)UI_Audio::SAVE] = App->audio->LoadFx("audio/ui/Save.wav");
 	App->gui->sfx_UI[(int)UI_Audio::LOAD] = App->audio->LoadFx("audio/ui/load.wav");
@@ -465,6 +465,17 @@ bool j1Scene::CleanUp()
 		delete research_menu;
 		research_menu = nullptr;
 	}
+	
+
+	App->audio->CleanFxs(App->gui->sfx_UI[(int)UI_Audio::SAVE]);
+	App->audio->CleanFxs(App->gui->sfx_UI[(int)UI_Audio::CONFIRMATION]);
+	App->audio->CleanFxs(App->gui->sfx_UI[(int)UI_Audio::LOAD]);
+	App->audio->CleanFxs(App->gui->sfx_UI[(int)UI_Audio::CLOSE]);
+	App->audio->CleanFxs(App->gui->sfx_UI[(int)UI_Audio::OPTIONS]);
+	App->audio->CleanFxs(App->gui->sfx_UI[(int)UI_Audio::RESTART]);
+	App->audio->CleanFxs(App->gui->sfx_UI[(int)UI_Audio::SURRENDER]);
+	App->audio->CleanFxs(App->gui->sfx_UI[(int)UI_Audio::EXIT]);
+
 	return true;
 }
 
