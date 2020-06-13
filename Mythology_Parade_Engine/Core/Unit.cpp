@@ -123,6 +123,7 @@ bool Unit::Update(float dt)
 	bool ret = true;
 
 
+
 	if (App->entityManager->getPlayer())
 	{
 		displayDebug = App->entityManager->getPlayer()->displayDebug;
@@ -496,17 +497,35 @@ void Unit::StateMachineActions(float dt)
 				App->entityManager->FxUnits(4, App->audio->hit_2, position.x, position.y);
 				CombatUnit* unit = (CombatUnit*)this;
 
-				//This is the building's defense system
+
+				if (enemyTarget == nullptr) 
+					break;
+
 				if (enemyTarget->type == EntityType::BUILDING)
 				{
 					if (RecieveDamage(20))
 					{
 						enemyTarget = nullptr;
 						Kill(App->map->WorldToMap(position.x, position.y));
+						Unit* unit = nullptr;
+						if (!IsDeath()) {
+							for (std::list<Entity*>::iterator it = App->entityManager->entities[static_cast<EntityType>(1)].begin(); it != App->entityManager->entities[static_cast<EntityType>(1)].end(); ++it)
+							{
+								LOG("%i", it);
+								unit = static_cast<Unit*>(*it);
+								if (unit->enemyTarget == enemyTarget) {
+									unit->enemyTarget = nullptr;
+									unit->ChangeState(unit->targetPosition, AnimationType::IDLE);
+								}
+
+							}
+						}
 					}
 				}
+				if (enemyTarget == nullptr) 
+					break;
 
-				else if (enemyTarget->RecieveDamage(unit->GetDamageValue()))
+				if (enemyTarget->RecieveDamage(unit->GetDamageValue()))
 				{
 					unit->GainExperience(Action::killEnemy, App->scene->isInTutorial);
 					enemyTarget->Kill(App->map->WorldToMap(position.x, position.y));
@@ -514,18 +533,21 @@ void Unit::StateMachineActions(float dt)
 					Unit* unit = nullptr;
 					int count = 0;
 					//BUG:: PETA A VEGADES
-					for (std::list<Entity*>::iterator it = App->entityManager->entities[static_cast<EntityType>(1)].begin(); it != App->entityManager->entities[static_cast<EntityType>(1)].end(); ++it)
-					{
-						LOG("%i", it);
-						unit = static_cast<Unit*>(*it);
-						if (unit->enemyTarget == enemyTarget) {
-							unit->enemyTarget = nullptr;
-							unit->ChangeState(unit->targetPosition, AnimationType::IDLE);
+					if (!IsDeath()) {
+						for (std::list<Entity*>::iterator it = App->entityManager->entities[static_cast<EntityType>(1)].begin(); it != App->entityManager->entities[static_cast<EntityType>(1)].end(); ++it)
+						{
+							LOG("%i", it);
+							unit = static_cast<Unit*>(*it);
+							if (unit->enemyTarget == enemyTarget) {
+								unit->enemyTarget = nullptr;
+								unit->ChangeState(unit->targetPosition, AnimationType::IDLE);
+							}
+							LOG("%i", count);
+							++count;
 						}
-						LOG("%i",count);
-						++count;
 					}
 				}
+
 			}
 			break;
 		}
