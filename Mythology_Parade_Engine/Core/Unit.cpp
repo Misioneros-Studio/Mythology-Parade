@@ -550,6 +550,7 @@ void Unit::StateMachineActions(float dt)
 				}
 
 			}
+			LOG("Attack state");
 			break;
 		}
 	case AnimationType::DIE:
@@ -561,13 +562,15 @@ void Unit::StateMachineActions(float dt)
 			//App->entityManager->DeleteEntity(this);
 			toDelete = true;
 		}
-
+		LOG("Die state");
 		break;
 	case AnimationType::HIT:
 		break;
 	case AnimationType::IDLE:
+		LOG("Idle state");
 		break;
 	case AnimationType::WALK:
+		LOG("Walk state");
 		break;
 	default:
 		break;
