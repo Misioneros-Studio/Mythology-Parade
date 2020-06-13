@@ -23,6 +23,8 @@ bool HealthSystem::RecieveDamage(int value)
 
 		if (health <= 0)
 			isDeath = true;
+		else
+			isDeath = false;
 	//}
 	damaged_now = true;
 	return isDeath;

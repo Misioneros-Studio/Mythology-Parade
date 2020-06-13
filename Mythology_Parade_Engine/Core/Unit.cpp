@@ -506,7 +506,6 @@ void Unit::StateMachineActions(float dt)
 				{
 					if (RecieveDamage(static_cast<Building*>(enemyTarget)->GetDamage()))
 					{
-						enemyTarget = nullptr;
 						Kill(App->map->WorldToMap(position.x, position.y));
 						Unit* unit = nullptr;
 						if (!IsDeath()) {
@@ -530,22 +529,21 @@ void Unit::StateMachineActions(float dt)
 				{
 					unit->GainExperience(Action::killEnemy, App->scene->isInTutorial);
 					enemyTarget->Kill(App->map->WorldToMap(position.x, position.y));
-
+					unit->ChangeState(unit->targetPosition, AnimationType::IDLE);
 					Unit* unit = nullptr;
 					int count = 0;
 					//BUG:: PETA A VEGADES
-					if (!IsDeath()) {
-						for (std::list<Entity*>::iterator it = App->entityManager->entities[static_cast<EntityType>(1)].begin(); it != App->entityManager->entities[static_cast<EntityType>(1)].end(); ++it)
-						{
-							LOG("%i", it);
-							unit = static_cast<Unit*>(*it);
-							if (unit->enemyTarget == enemyTarget) {
-								unit->enemyTarget = nullptr;
-								unit->ChangeState(unit->targetPosition, AnimationType::IDLE);
-							}
-							LOG("%i", count);
-							++count;
+					for (std::list<Entity*>::iterator it = App->entityManager->entities[static_cast<EntityType>(1)].begin(); it != App->entityManager->entities[static_cast<EntityType>(1)].end(); ++it)
+					{
+						LOG("%i", it);
+						unit = static_cast<Unit*>(*it);
+						if (unit != this && unit->enemyTarget == enemyTarget) {
+							unit->enemyTarget = nullptr;
+							unit->ChangeState(unit->targetPosition, AnimationType::IDLE);
 						}
+						LOG("%i", count);
+						++count;
+
 					}
 				}
 

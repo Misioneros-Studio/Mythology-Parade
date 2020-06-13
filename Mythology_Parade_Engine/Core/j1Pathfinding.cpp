@@ -112,7 +112,7 @@ bool j1PathFinding::Update(float dt)
 {
 	//This part distribute PathRequests to PathFinders
 	//Check if there are any path request
-	while (!pathRequestList.empty())
+	if (!pathRequestList.empty())
 	{
 		//Check if there are any pathFinder available to take that request
 		for (int i = 0; i < pathfinderList.size(); i++)
