@@ -79,6 +79,10 @@ public:
 	void LateGame();
 
 
+public:
+	j1Timer timer_ia;
+	int time_ia;
+
 private:
 	GameBehaviour gamePhase;
 	EarlyGameBehaviour early;

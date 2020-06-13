@@ -61,6 +61,10 @@ IA::IA() : enemyFortress(nullptr)
 	positionViking.push_back({ -224,560 }); //monastery 2
 	positionViking.push_back({ -256,576 }); //monk4
 	positionViking.push_back({ -224,592 }); //monk5
+
+	timer.Start();
+	timer_ia.Start();
+	time_ia = 2900;
 }
 
 void IA::Init() 
@@ -86,6 +90,15 @@ bool IA::PreUpdate()
 bool IA::Update(float dt)
 {
 	bool ret = true;
+
+	if (App->scene->paused_game == true && timer.isPaused() == false) {
+		timer.Pause();
+		timer_ia.Pause();
+	}
+	else if (App->scene->paused_game == false && timer.isPaused() == true) {
+		timer.Resume();
+		timer_ia.Resume();
+	}
 
 	switch (gamePhase)
 	{
