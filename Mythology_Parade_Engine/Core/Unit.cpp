@@ -484,7 +484,7 @@ void Unit::StateMachineActions(float dt)
 	{
 		case AnimationType::ATTACK:
 		{
-			if (currentAnim.current_sprite == currentAnim.num_sprites - 1)
+			if (currentAnim.current_sprite == currentAnim.num_sprites - 8)
 			{
 				App->entityManager->FxUnits(4, App->audio->hit_2, position.x, position.y);
 				CombatUnit* unit = (CombatUnit*)this;
