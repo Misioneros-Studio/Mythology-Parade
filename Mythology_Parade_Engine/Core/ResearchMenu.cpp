@@ -147,7 +147,7 @@ void ResearchMenu::CreateEncampmentButton() {
 //Called to create the button or image to research the cleric;
 void ResearchMenu::CreateClericButton() {
 	if (player->research_cleric == false) {
-		if (player->research_temple == true && player->GetPrayers() >= 10) {
+		if (player->research_temple == true && player->GetPrayers() >= 5) {
 			ui_button_research[2] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_research_window, { 196,197,140,99 }, { 12, 1171, 140, 99 }, "RESEARCH CLERIC", Panel_Fade::panel_fade_in,
 				{ 12,1389,140,99 }, { 12,1279,140,99 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::CLOSE, false, -1.0f, 2, (int)TooltipsAvailable::cleric_unresearched));
 		}
@@ -165,7 +165,7 @@ void ResearchMenu::CreateClericButton() {
 //Called to create the button or image to research the assassin;
 void ResearchMenu::CreateAssassinButton() {
 	if (player->research_assassin == false) {
-		if (player->research_encampment == true && player->GetSacrifices() >= 10) {
+		if (player->research_encampment == true && player->GetSacrifices() >= 5) {
 			ui_button_research[3] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_research_window, { 950,197,140,97 }, { 447, 1173, 140, 97 }, "RESEARCH ASSASSIN", Panel_Fade::panel_fade_in,
 				{ 447,1391,140,97 }, { 447,1281,140,97 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::CLOSE, false, -1.0f, 2, (int)TooltipsAvailable::assassin_unresearched));
 		}
@@ -186,7 +186,7 @@ void ResearchMenu::CreateLawfulBeastButton() {
 	{
 	case CivilizationType::VIKING:
 		if (player->research_lawful_beast == false) {
-			if (player->research_cleric == true && player->GetPrayers() >= 20) {
+			if (player->research_cleric == true && player->GetPrayers() >= 10) {
 				ui_button_research[4] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_research_window, { 216,330,140,99 }, { 157, 1171, 140, 99 }, "RESEARCH LAWFUL BEAST", Panel_Fade::panel_fade_in,
 					{ 157,1389,140,99 }, { 157,1279,140,99 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::CLOSE, false, -1.0f, 2, (int)TooltipsAvailable::jotnar_unresearched));
 			}
@@ -202,7 +202,7 @@ void ResearchMenu::CreateLawfulBeastButton() {
 		break;
 	case CivilizationType::GREEK:
 		if (player->research_lawful_beast == false) {
-			if (player->research_cleric == true && player->GetPrayers() >= 20) {
+			if (player->research_cleric == true && player->GetPrayers() >= 10) {
 				ui_button_research[4] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_research_window, { 216,330,140,99 }, { 302, 1171, 140, 99 }, "RESEARCH LAWFUL BEAST", Panel_Fade::panel_fade_in,
 					{ 302,1389,140,99 }, { 302,1279,140,99 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::CLOSE, false, -1.0f, 2, (int)TooltipsAvailable::cyclop_unresearched));
 			}
@@ -225,7 +225,7 @@ void ResearchMenu::CreateChaoticBeastButton() {
 	{
 	case CivilizationType::VIKING:
 		if (player->research_chaotic_beast == false) {
-			if (player->research_assassin == true && player->GetSacrifices() >= 20) {
+			if (player->research_assassin == true && player->GetSacrifices() >= 10) {
 				ui_button_research[5] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_research_window, { 933,330,140,98 }, { 737, 1172, 140, 98 }, "RESEARCH CHAOTIC BEAST", Panel_Fade::panel_fade_in,
 					{ 737,1390,140,98 }, { 737,1280,140,98 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::CLOSE, false, -1.0f, 2, (int)TooltipsAvailable::draugar_unresearched));
 			}
@@ -241,7 +241,7 @@ void ResearchMenu::CreateChaoticBeastButton() {
 		break;
 	case CivilizationType::GREEK:
 		if (player->research_chaotic_beast == false) {
-			if (player->research_assassin == true && player->GetSacrifices() >= 20) {
+			if (player->research_assassin == true && player->GetSacrifices() >= 10) {
 				ui_button_research[5] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_research_window, { 933,330,140,98 }, { 592, 1172, 140, 98 }, "RESEARCH CHAOTIC BEAST", Panel_Fade::panel_fade_in,
 					{ 592,1390,140,98 }, { 592,1280,140,98 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::CLOSE, false, -1.0f, 2, (int)TooltipsAvailable::minotaur_unresearched));
 			}
@@ -261,7 +261,7 @@ void ResearchMenu::CreateChaoticBeastButton() {
 //Called to create the button or image to research the lawful miracle;
 void ResearchMenu::CreateLawfulMiracleButton() {
 	if (player->research_lawful_miracle == false) {
-		if (player->research_lawful_beast == true && player->GetPrayers() >= 30) {
+		if (player->research_lawful_beast == true && player->GetPrayers() >= 15) {
 			ui_button_research[6] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_research_window, { 385,432,140,80 }, { 676, 720, 140, 80 }, "RESEARCH LAWFUL MIRACLE", Panel_Fade::panel_fade_in,
 				{ 676,897,140,80 }, { 676,809,140,80 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::CLOSE, false, -1.0f, 2, (int)TooltipsAvailable::miracle_unresearched));
 		}
@@ -279,7 +279,7 @@ void ResearchMenu::CreateLawfulMiracleButton() {
 //Called to create the button or image to research the chaotic miracle;
 void ResearchMenu::CreateChaoticMiracleButton() {
 	if (player->research_chaotic_miracle == false) {
-		if (player->research_chaotic_beast == true && player->GetSacrifices() >= 30) {
+		if (player->research_chaotic_beast == true && player->GetSacrifices() >= 15) {
 			ui_button_research[7] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_research_window, { 762,432,140,80 }, { 821, 720, 140, 80 }, "RESEARCH CHAOTIC MIRACLE", Panel_Fade::panel_fade_in,
 				{ 821,897,140,80 }, { 821,809,140,80 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::CLOSE, false, -1.0f, 2, (int)TooltipsAvailable::disaster_unresearched));
 		}
@@ -297,7 +297,7 @@ void ResearchMenu::CreateChaoticMiracleButton() {
 //Called to create the button or image to research the lawful victory;
 void ResearchMenu::CreateLawfulVictoryButton() {
 	if (player->research_lawful_victory == false) {
-		if (player->research_lawful_miracle == true && player->GetPrayers() >= 50) {
+		if (player->research_lawful_miracle == true && player->GetPrayers() >= 25) {
 			ui_button_research[8] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_research_window, { 494,301,140,80 }, { 966, 720, 140, 80 }, "RESEARCH LAWFUL VICTORY", Panel_Fade::panel_fade_in,
 				{ 966,897,140,80 }, { 966,809,140,80 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::CLOSE, false, -1.0f, 2, (int)TooltipsAvailable::victory1_unresearched));
 		}
@@ -315,7 +315,7 @@ void ResearchMenu::CreateLawfulVictoryButton() {
 //Called to create the button or image to research the chaotic victory;
 void ResearchMenu::CreateChaoticVictoryButton() {
 	if (player->research_chaotic_victory == false) {
-		if (player->research_chaotic_miracle == true && player->GetSacrifices() >= 50) {
+		if (player->research_chaotic_miracle == true && player->GetSacrifices() >= 25) {
 			ui_button_research[9] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_research_window, { 655,301,140,80 }, { 966, 720, 140, 80 }, "RESEARCH CHAOTIC VICTORY", Panel_Fade::panel_fade_in,
 				{ 966,897,140,80 }, { 966,809,140,80 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::CLOSE, false, -1.0f, 2, (int)TooltipsAvailable::victory2_unresearched));
 		}
