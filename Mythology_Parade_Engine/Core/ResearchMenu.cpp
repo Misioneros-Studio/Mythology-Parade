@@ -97,21 +97,21 @@ void ResearchMenu::CreateTempleButton() {
 	case CivilizationType::VIKING:
 		if (player->research_temple == false) {
 			ui_button_research[0] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_research_window, { 298,83,157,96 }, { 12, 617, 157, 96 }, "RESEARCH TEMPLE", Panel_Fade::panel_fade_in,
-				{ 12,837,157,96 }, { 12,727,157,96 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::CLOSE, false, -1.0f, 2, (int)TooltipsAvailable::temple_unresearched));
+				{ 12,837,157,96 }, { 12,727,157,96 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::CLOSE, false, -1.0f, 2, (int)TooltipsAvailable::temple_unresearched, true));
 		}
 		else {
 			ui_image_research[0] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, ui_research_window, { 298,83,157,96 }, { 12, 947, 157, 96 }, "", Panel_Fade::panel_fade_in, { 0,0,0,0 }, { 0,0,0,0 },
-				false, { 0,0,0,0 }, nullptr, 0, false, -1.0f, 2, (int)TooltipsAvailable::temple));
+				false, { 0,0,0,0 }, nullptr, 0, false, -1.0f, 2, (int)TooltipsAvailable::temple, true));
 		}
 		break;
 	case CivilizationType::GREEK:
 		if (player->research_temple == false) {
 			ui_button_research[0] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_research_window, { 298,80,157,99 }, { 337, 614, 157, 99 }, "RESEARCH TEMPLE", Panel_Fade::panel_fade_in,
-				{ 337,834,157,99 }, { 337,724,157,99 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::CLOSE, false, -1.0f, 2, (int)TooltipsAvailable::temple_unresearched));
+				{ 337,834,157,99 }, { 337,724,157,99 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::CLOSE, false, -1.0f, 2, (int)TooltipsAvailable::temple_unresearched, true));
 		}
 		else {
 			ui_image_research[0] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, ui_research_window, { 298,80,157,99 }, { 337, 944, 157, 99 }, "", Panel_Fade::panel_fade_in, { 0,0,0,0 }, { 0,0,0,0 },
-				false, { 0,0,0,0 }, nullptr, 0, false, -1.0f, 2, (int)TooltipsAvailable::temple));
+				false, { 0,0,0,0 }, nullptr, 0, false, -1.0f, 2, (int)TooltipsAvailable::temple, true));
 		}
 		break;
 	}
@@ -124,21 +124,21 @@ void ResearchMenu::CreateEncampmentButton() {
 	case CivilizationType::VIKING:
 		if (player->research_encampment == false) {
 			ui_button_research[1] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_research_window, { 831,99,157,82 }, { 174, 631, 157, 82 }, "RESEARCH ENCAMPMENT", Panel_Fade::panel_fade_in,
-				{ 174,851,157,82 }, { 174,741,157,82 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::CLOSE, false, -1.0f, 2, (int)TooltipsAvailable::encampment_unresearched));
+				{ 174,851,157,82 }, { 174,741,157,82 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::CLOSE, false, -1.0f, 2, (int)TooltipsAvailable::encampment_unresearched, true));
 		}
 		else {
 			ui_image_research[1] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, ui_research_window, { 831,99,157,82 }, { 174, 961, 157, 82 }, "", Panel_Fade::panel_fade_in, { 0,0,0,0 }, { 0,0,0,0 },
-				false, { 0,0,0,0 }, nullptr, 0, false, -1.0f, 2, (int)TooltipsAvailable::encampment));
+				false, { 0,0,0,0 }, nullptr, 0, false, -1.0f, 2, (int)TooltipsAvailable::encampment, true));
 		}
 		break;
 	case CivilizationType::GREEK:
 		if (player->research_encampment == false) {
 			ui_button_research[1] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_research_window, { 831,99,157,82 }, { 499, 631, 157, 82 }, "RESEARCH ENCAMPMENT", Panel_Fade::panel_fade_in,
-				{ 499,851,157,82 }, { 499,741,157,82 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::CLOSE, false, -1.0f, 2, (int)TooltipsAvailable::encampment_unresearched));
+				{ 499,851,157,82 }, { 499,741,157,82 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::CLOSE, false, -1.0f, 2, (int)TooltipsAvailable::encampment_unresearched, true));
 		}
 		else {
 			ui_image_research[1] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, ui_research_window, { 831,99,157,82 }, { 499, 961, 157, 82 }, "", Panel_Fade::panel_fade_in, { 0,0,0,0 }, { 0,0,0,0 },
-				false, { 0,0,0,0 }, nullptr, 0, false, -1.0f, 2, (int)TooltipsAvailable::encampment));
+				false, { 0,0,0,0 }, nullptr, 0, false, -1.0f, 2, (int)TooltipsAvailable::encampment, true));
 		}
 		break;
 	}
@@ -149,16 +149,16 @@ void ResearchMenu::CreateClericButton() {
 	if (player->research_cleric == false) {
 		if (player->research_temple == true && player->GetPrayers() >= 5) {
 			ui_button_research[2] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_research_window, { 196,197,140,99 }, { 12, 1171, 140, 99 }, "RESEARCH CLERIC", Panel_Fade::panel_fade_in,
-				{ 12,1389,140,99 }, { 12,1279,140,99 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::CLOSE, false, -1.0f, 2, (int)TooltipsAvailable::cleric_unresearched));
+				{ 12,1389,140,99 }, { 12,1279,140,99 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::CLOSE, false, -1.0f, 2, (int)TooltipsAvailable::cleric_unresearched, true));
 		}
 		else {
 			ui_image_research[2] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, ui_research_window, { 196,197,140,99 }, { 12, 1610, 140, 99 }, "", Panel_Fade::panel_fade_in, { 0,0,0,0 }, { 0,0,0,0 },
-				false, { 0,0,0,0 }, nullptr, 0, false, -1.0f, 2, (int)TooltipsAvailable::cleric_locked));
+				false, { 0,0,0,0 }, nullptr, 0, false, -1.0f, 2, (int)TooltipsAvailable::cleric_locked, true));
 		}
 	}
 	else {
 		ui_image_research[2] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, ui_research_window, { 196,197,140,99 }, { 12, 1499, 140, 99 }, "", Panel_Fade::panel_fade_in, { 0,0,0,0 }, { 0,0,0,0 },
-			false, { 0,0,0,0 }, nullptr, 0, false, -1.0f, 2, (int)TooltipsAvailable::cleric_unlocked));
+			false, { 0,0,0,0 }, nullptr, 0, false, -1.0f, 2, (int)TooltipsAvailable::cleric_unlocked, true));
 	}
 }
 
@@ -167,16 +167,16 @@ void ResearchMenu::CreateAssassinButton() {
 	if (player->research_assassin == false) {
 		if (player->research_encampment == true && player->GetSacrifices() >= 5) {
 			ui_button_research[3] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_research_window, { 950,197,140,97 }, { 447, 1173, 140, 97 }, "RESEARCH ASSASSIN", Panel_Fade::panel_fade_in,
-				{ 447,1391,140,97 }, { 447,1281,140,97 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::CLOSE, false, -1.0f, 2, (int)TooltipsAvailable::assassin_unresearched));
+				{ 447,1391,140,97 }, { 447,1281,140,97 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::CLOSE, false, -1.0f, 2, (int)TooltipsAvailable::assassin_unresearched, true));
 		}
 		else {
 			ui_image_research[3] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, ui_research_window, { 950,197,140,97 }, { 447, 1612, 140, 97 }, "", Panel_Fade::panel_fade_in, { 0,0,0,0 }, { 0,0,0,0 },
-				false, { 0,0,0,0 }, nullptr, 0, false, -1.0f, 2, (int)TooltipsAvailable::assassin_locked));
+				false, { 0,0,0,0 }, nullptr, 0, false, -1.0f, 2, (int)TooltipsAvailable::assassin_locked, true));
 		}
 	}
 	else {
 		ui_image_research[3] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, ui_research_window, { 950,197,140,97 }, { 447, 1501, 140, 97 }, "", Panel_Fade::panel_fade_in, { 0,0,0,0 }, { 0,0,0,0 },
-			false, { 0,0,0,0 }, nullptr, 0, false, -1.0f, 2, (int)TooltipsAvailable::assassin_unlocked));
+			false, { 0,0,0,0 }, nullptr, 0, false, -1.0f, 2, (int)TooltipsAvailable::assassin_unlocked, true));
 	}
 }
 
@@ -188,32 +188,32 @@ void ResearchMenu::CreateLawfulBeastButton() {
 		if (player->research_lawful_beast == false) {
 			if (player->research_cleric == true && player->GetPrayers() >= 10) {
 				ui_button_research[4] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_research_window, { 216,330,140,99 }, { 157, 1171, 140, 99 }, "RESEARCH LAWFUL BEAST", Panel_Fade::panel_fade_in,
-					{ 157,1389,140,99 }, { 157,1279,140,99 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::CLOSE, false, -1.0f, 2, (int)TooltipsAvailable::jotnar_unresearched));
+					{ 157,1389,140,99 }, { 157,1279,140,99 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::CLOSE, false, -1.0f, 2, (int)TooltipsAvailable::jotnar_unresearched, true));
 			}
 			else {
 				ui_image_research[4] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, ui_research_window, { 216,330,140,99 }, { 157, 1610, 140, 99 }, "", Panel_Fade::panel_fade_in, { 0,0,0,0 }, { 0,0,0,0 },
-					false, { 0,0,0,0 }, nullptr, 0, false, -1.0f, 2, (int)TooltipsAvailable::jotnar_locked));
+					false, { 0,0,0,0 }, nullptr, 0, false, -1.0f, 2, (int)TooltipsAvailable::jotnar_locked, true));
 			}
 		}
 		else {
 			ui_image_research[4] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, ui_research_window, { 216,330,140,99 }, { 157, 1499, 140, 99 }, "", Panel_Fade::panel_fade_in, { 0,0,0,0 }, { 0,0,0,0 },
-				false, { 0,0,0,0 }, nullptr, 0, false, -1.0f, 2, (int)TooltipsAvailable::jotnar_unlocked));
+				false, { 0,0,0,0 }, nullptr, 0, false, -1.0f, 2, (int)TooltipsAvailable::jotnar_unlocked, true));
 		}
 		break;
 	case CivilizationType::GREEK:
 		if (player->research_lawful_beast == false) {
 			if (player->research_cleric == true && player->GetPrayers() >= 10) {
 				ui_button_research[4] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_research_window, { 216,330,140,99 }, { 302, 1171, 140, 99 }, "RESEARCH LAWFUL BEAST", Panel_Fade::panel_fade_in,
-					{ 302,1389,140,99 }, { 302,1279,140,99 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::CLOSE, false, -1.0f, 2, (int)TooltipsAvailable::cyclop_unresearched));
+					{ 302,1389,140,99 }, { 302,1279,140,99 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::CLOSE, false, -1.0f, 2, (int)TooltipsAvailable::cyclop_unresearched, true));
 			}
 			else {
 				ui_image_research[4] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, ui_research_window, { 216,330,140,99 }, { 302, 1610, 140, 99 }, "", Panel_Fade::panel_fade_in, { 0,0,0,0 }, { 0,0,0,0 },
-					false, { 0,0,0,0 }, nullptr, 0, false, -1.0f, 2, (int)TooltipsAvailable::cyclop_locked));
+					false, { 0,0,0,0 }, nullptr, 0, false, -1.0f, 2, (int)TooltipsAvailable::cyclop_locked, true));
 			}
 		}
 		else {
 			ui_image_research[4] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, ui_research_window, { 216,330,140,99 }, { 302, 1499, 140, 99 }, "", Panel_Fade::panel_fade_in, { 0,0,0,0 }, { 0,0,0,0 },
-				false, { 0,0,0,0 }, nullptr, 0, false, -1.0f, 2, (int)TooltipsAvailable::cyclop_unlocked));
+				false, { 0,0,0,0 }, nullptr, 0, false, -1.0f, 2, (int)TooltipsAvailable::cyclop_unlocked, true));
 		}
 		break;
 	}
@@ -227,32 +227,32 @@ void ResearchMenu::CreateChaoticBeastButton() {
 		if (player->research_chaotic_beast == false) {
 			if (player->research_assassin == true && player->GetSacrifices() >= 10) {
 				ui_button_research[5] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_research_window, { 933,330,140,98 }, { 737, 1172, 140, 98 }, "RESEARCH CHAOTIC BEAST", Panel_Fade::panel_fade_in,
-					{ 737,1390,140,98 }, { 737,1280,140,98 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::CLOSE, false, -1.0f, 2, (int)TooltipsAvailable::draugar_unresearched));
+					{ 737,1390,140,98 }, { 737,1280,140,98 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::CLOSE, false, -1.0f, 2, (int)TooltipsAvailable::draugar_unresearched, true));
 			}
 			else {
 				ui_image_research[5] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, ui_research_window, { 933,330,140,98 }, { 737, 1611, 140, 98 }, "", Panel_Fade::panel_fade_in, { 0,0,0,0 }, { 0,0,0,0 },
-					false, { 0,0,0,0 }, nullptr, 0, false, -1.0f, 2, (int)TooltipsAvailable::draugar_locked));
+					false, { 0,0,0,0 }, nullptr, 0, false, -1.0f, 2, (int)TooltipsAvailable::draugar_locked, true));
 			}
 		}
 		else {
 			ui_image_research[5] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, ui_research_window, { 933,330,140,98 }, { 737, 1500, 140, 98 }, "", Panel_Fade::panel_fade_in, { 0,0,0,0 }, { 0,0,0,0 },
-				false, { 0,0,0,0 }, nullptr, 0, false, -1.0f, 2, (int)TooltipsAvailable::draugar_unlocked));
+				false, { 0,0,0,0 }, nullptr, 0, false, -1.0f, 2, (int)TooltipsAvailable::draugar_unlocked, true));
 		}
 		break;
 	case CivilizationType::GREEK:
 		if (player->research_chaotic_beast == false) {
 			if (player->research_assassin == true && player->GetSacrifices() >= 10) {
 				ui_button_research[5] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_research_window, { 933,330,140,98 }, { 592, 1172, 140, 98 }, "RESEARCH CHAOTIC BEAST", Panel_Fade::panel_fade_in,
-					{ 592,1390,140,98 }, { 592,1280,140,98 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::CLOSE, false, -1.0f, 2, (int)TooltipsAvailable::minotaur_unresearched));
+					{ 592,1390,140,98 }, { 592,1280,140,98 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::CLOSE, false, -1.0f, 2, (int)TooltipsAvailable::minotaur_unresearched, true));
 			}
 			else {
 				ui_image_research[5] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, ui_research_window, { 933,330,140,98 }, { 592, 1611, 140, 98 }, "", Panel_Fade::panel_fade_in, { 0,0,0,0 }, { 0,0,0,0 },
-					false, { 0,0,0,0 }, nullptr, 0, false, -1.0f, 2, (int)TooltipsAvailable::minotaur_locked));
+					false, { 0,0,0,0 }, nullptr, 0, false, -1.0f, 2, (int)TooltipsAvailable::minotaur_locked, true));
 			}
 		}
 		else {
 			ui_image_research[5] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, ui_research_window, { 933,330,140,98 }, { 592, 1500, 140, 98 }, "", Panel_Fade::panel_fade_in, { 0,0,0,0 }, { 0,0,0,0 },
-				false, { 0,0,0,0 }, nullptr, 0, false, -1.0f, 2, (int)TooltipsAvailable::minotaur_unlocked));
+				false, { 0,0,0,0 }, nullptr, 0, false, -1.0f, 2, (int)TooltipsAvailable::minotaur_unlocked, true));
 		}
 		break;
 	}
@@ -263,16 +263,16 @@ void ResearchMenu::CreateLawfulMiracleButton() {
 	if (player->research_lawful_miracle == false) {
 		if (player->research_lawful_beast == true && player->GetPrayers() >= 15) {
 			ui_button_research[6] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_research_window, { 385,432,140,80 }, { 676, 720, 140, 80 }, "RESEARCH LAWFUL MIRACLE", Panel_Fade::panel_fade_in,
-				{ 676,897,140,80 }, { 676,809,140,80 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::CLOSE, false, -1.0f, 2, (int)TooltipsAvailable::miracle_unresearched));
+				{ 676,897,140,80 }, { 676,809,140,80 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::CLOSE, false, -1.0f, 2, (int)TooltipsAvailable::miracle_unresearched, true));
 		}
 		else {
 			ui_image_research[6] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, ui_research_window, { 385,432,140,80 }, { 676, 1074, 140, 80 }, "", Panel_Fade::panel_fade_in, { 0,0,0,0 }, { 0,0,0,0 },
-				false, { 0,0,0,0 }, nullptr, 0, false, -1.0f, 2, (int)TooltipsAvailable::miracle_locked));
+				false, { 0,0,0,0 }, nullptr, 0, false, -1.0f, 2, (int)TooltipsAvailable::miracle_locked, true));
 		}
 	}
 	else {
 		ui_image_research[6] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, ui_research_window, { 385,432,140,80 }, { 676, 986, 140, 80 }, "", Panel_Fade::panel_fade_in, { 0,0,0,0 }, { 0,0,0,0 },
-			false, { 0,0,0,0 }, nullptr, 0, false, -1.0f, 2, (int)TooltipsAvailable::miracle_unlocked));
+			false, { 0,0,0,0 }, nullptr, 0, false, -1.0f, 2, (int)TooltipsAvailable::miracle_unlocked, true));
 	}
 }
 
@@ -281,16 +281,16 @@ void ResearchMenu::CreateChaoticMiracleButton() {
 	if (player->research_chaotic_miracle == false) {
 		if (player->research_chaotic_beast == true && player->GetSacrifices() >= 15) {
 			ui_button_research[7] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_research_window, { 762,432,140,80 }, { 821, 720, 140, 80 }, "RESEARCH CHAOTIC MIRACLE", Panel_Fade::panel_fade_in,
-				{ 821,897,140,80 }, { 821,809,140,80 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::CLOSE, false, -1.0f, 2, (int)TooltipsAvailable::disaster_unresearched));
+				{ 821,897,140,80 }, { 821,809,140,80 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::CLOSE, false, -1.0f, 2, (int)TooltipsAvailable::disaster_unresearched, true));
 		}
 		else {
 			ui_image_research[7] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, ui_research_window, { 762,432,140,80 }, { 821, 1074, 140, 80 }, "", Panel_Fade::panel_fade_in, { 0,0,0,0 }, { 0,0,0,0 },
-				false, { 0,0,0,0 }, nullptr, 0, false, -1.0f, 2, (int)TooltipsAvailable::disaster_locked));
+				false, { 0,0,0,0 }, nullptr, 0, false, -1.0f, 2, (int)TooltipsAvailable::disaster_locked, true));
 		}
 	}
 	else {
 		ui_image_research[7] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, ui_research_window, { 762,432,140,80 }, { 821, 986, 140, 80 }, "", Panel_Fade::panel_fade_in, { 0,0,0,0 }, { 0,0,0,0 },
-			false, { 0,0,0,0 }, nullptr, 0, false, -1.0f, 2, (int)TooltipsAvailable::disaster_unlocked));
+			false, { 0,0,0,0 }, nullptr, 0, false, -1.0f, 2, (int)TooltipsAvailable::disaster_unlocked, true));
 	}
 }
 
@@ -299,16 +299,16 @@ void ResearchMenu::CreateLawfulVictoryButton() {
 	if (player->research_lawful_victory == false) {
 		if (player->research_lawful_miracle == true && player->GetPrayers() >= 25) {
 			ui_button_research[8] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_research_window, { 494,301,140,80 }, { 966, 720, 140, 80 }, "RESEARCH LAWFUL VICTORY", Panel_Fade::panel_fade_in,
-				{ 966,897,140,80 }, { 966,809,140,80 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::CLOSE, false, -1.0f, 2, (int)TooltipsAvailable::victory1_unresearched));
+				{ 966,897,140,80 }, { 966,809,140,80 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::CLOSE, false, -1.0f, 2, (int)TooltipsAvailable::victory1_unresearched, true));
 		}
 		else {
 			ui_image_research[8] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, ui_research_window, { 494,301,140,80 }, { 966, 1161, 140, 80 }, "", Panel_Fade::panel_fade_in, { 0,0,0,0 }, { 0,0,0,0 },
-				false, { 0,0,0,0 }, nullptr, 0, false, -1.0f, 2, (int)TooltipsAvailable::victory1_locked));
+				false, { 0,0,0,0 }, nullptr, 0, false, -1.0f, 2, (int)TooltipsAvailable::victory1_locked, true));
 		}
 	}
 	else {
 		ui_image_research[8] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, ui_research_window, { 494,301,140,80 }, { 966, 986, 140, 80 }, "", Panel_Fade::panel_fade_in, { 0,0,0,0 }, { 0,0,0,0 },
-			false, { 0,0,0,0 }, nullptr, 0, false, -1.0f, 2, (int)TooltipsAvailable::victory1_unlocked));
+			false, { 0,0,0,0 }, nullptr, 0, false, -1.0f, 2, (int)TooltipsAvailable::victory1_unlocked, true));
 	}
 }
 
@@ -317,15 +317,15 @@ void ResearchMenu::CreateChaoticVictoryButton() {
 	if (player->research_chaotic_victory == false) {
 		if (player->research_chaotic_miracle == true && player->GetSacrifices() >= 25) {
 			ui_button_research[9] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_research_window, { 655,301,140,80 }, { 966, 720, 140, 80 }, "RESEARCH CHAOTIC VICTORY", Panel_Fade::panel_fade_in,
-				{ 966,897,140,80 }, { 966,809,140,80 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::CLOSE, false, -1.0f, 2, (int)TooltipsAvailable::victory2_unresearched));
+				{ 966,897,140,80 }, { 966,809,140,80 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::CLOSE, false, -1.0f, 2, (int)TooltipsAvailable::victory2_unresearched, true));
 		}
 		else {
 			ui_image_research[9] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, ui_research_window, { 655,301,140,80 }, { 966, 1074, 140, 80 }, "", Panel_Fade::panel_fade_in, { 0,0,0,0 }, { 0,0,0,0 },
-				false, { 0,0,0,0 }, nullptr, 0, false, -1.0f, 2, (int)TooltipsAvailable::victory2_locked));
+				false, { 0,0,0,0 }, nullptr, 0, false, -1.0f, 2, (int)TooltipsAvailable::victory2_locked, true));
 		}
 	}
 	else {
 		ui_image_research[9] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, ui_research_window, { 655,301,140,80 }, { 966, 986, 140, 80 }, "", Panel_Fade::panel_fade_in, { 0,0,0,0 }, { 0,0,0,0 },
-			false, { 0,0,0,0 }, nullptr, 0, false, -1.0f, 2, (int)TooltipsAvailable::victory2_unlocked));
+			false, { 0,0,0,0 }, nullptr, 0, false, -1.0f, 2, (int)TooltipsAvailable::victory2_unlocked, true));
 	}
 }
