@@ -13,9 +13,9 @@ CombatUnit::CombatUnit(UnitType type, iPoint pos) : Unit(type, pos), range(0), d
 	switch (unitType)
 	{
 	case UnitType::ASSASSIN:
-		time_production = 20;
+		time_production = 5;
 		name = "assassin";
-		time_research = 0;
+		time_research = 10;
 		researched = true;
 		//Change texture
 		LevelSystem::Init(3500, 6500, 9500);

@@ -32,7 +32,7 @@ Unit::Unit(UnitType type, iPoint pos): unitType(type), state(AnimationType::IDLE
 	switch (type)
 	{
 	case UnitType::MONK:
-		time_production = 15;
+		time_production = 5;
 		time_research = 0;
 		researched = true;
 		name = "monk";
@@ -41,8 +41,8 @@ Unit::Unit(UnitType type, iPoint pos): unitType(type), state(AnimationType::IDLE
 		sizeMultiplier = 2;
 		break;
 	case UnitType::JOTNAR:
-		time_production = 35;
-		time_research = 50;
+		time_production = 7;
+		time_research = 10;
 		name = "jotnar";
 		researched = true;
 		Init(150);
@@ -50,8 +50,8 @@ Unit::Unit(UnitType type, iPoint pos): unitType(type), state(AnimationType::IDLE
 		sizeMultiplier = 4;
 		break;
 	case UnitType::DRAUGAR:
-		time_production = 35;
-		time_research = 50;
+		time_production = 7;
+		time_research = 10;
 		name = "draugar";
 		researched = true;
 		Init(40);
@@ -59,8 +59,8 @@ Unit::Unit(UnitType type, iPoint pos): unitType(type), state(AnimationType::IDLE
 		sizeMultiplier = 2;
 		break;
 	case UnitType::CYCLOP:
-		time_production = 35;
-		time_research = 50;
+		time_production = 7;
+		time_research = 10;
 		researched = true;
 		name = "cyclop";
 		Init(150);
@@ -68,8 +68,8 @@ Unit::Unit(UnitType type, iPoint pos): unitType(type), state(AnimationType::IDLE
 		sizeMultiplier = 3;
 		break;
 	case UnitType::MINOTAUR:
-		time_production = 35;
-		time_research = 50;
+		time_production = 7;
+		time_research = 10;
 		researched = true;
 		name = "minotaur";
 		Init(40);
@@ -77,8 +77,8 @@ Unit::Unit(UnitType type, iPoint pos): unitType(type), state(AnimationType::IDLE
 		sizeMultiplier = 2;
 		break;
 	case UnitType::CLERIC:
-		time_production = 15;
-		time_research = 50;
+		time_production = 5;
+		time_research = 10;
 		researched = true;
 		name = "cleric";
 		Init(1);

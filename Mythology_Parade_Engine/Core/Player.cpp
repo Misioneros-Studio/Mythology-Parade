@@ -42,7 +42,7 @@ bool Player::Start()
 
 	dontSelect = false;
 	num_encampment = num_monastery = num_temple = 0;
-	time_production_victory = 10;
+	time_production_victory = 20;
 
 	displayDebug = false;
 	oneTime = true;
