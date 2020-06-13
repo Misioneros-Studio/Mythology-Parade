@@ -131,24 +131,26 @@ void CombatUnit::Init(int maxHealth, int damage, int range, int speed)
 bool CombatUnit::Update(float dt)
 {
 	Unit::Update(dt);
+	if (!IsDeath()) {
 
-	DetectNearbyEnemies();
+		DetectNearbyEnemies();
 
-	if (isSelected()) {
-		switch (GetLevel())
-		{
-		case (1):
-			App->render->Blit(App->entityManager->level_tex, (position.x - 6), (position.y - 63), &App->entityManager->level_rect, 1, 0, 0, 0, 1);
-			break;
-		case (2):
-			App->render->Blit(App->entityManager->level_tex, (position.x - 2), (position.y - 63), &App->entityManager->level_rect, 1, 0, 0, 0, 1);
-			App->render->Blit(App->entityManager->level_tex, (position.x - 10), (position.y - 63), &App->entityManager->level_rect, 1, 0, 0, 0, 1);
-			break;
-		case (3):
-			App->render->Blit(App->entityManager->level_tex, (position.x - 6), (position.y - 63), &App->entityManager->level_rect, 1, 0, 0, 0, 1);
-			App->render->Blit(App->entityManager->level_tex, (position.x - 14), (position.y - 63), &App->entityManager->level_rect, 1, 0, 0, 0, 1);
-			App->render->Blit(App->entityManager->level_tex, (position.x + 2), (position.y - 63), &App->entityManager->level_rect, 1, 0, 0, 0, 1);
-			break;
+		if (isSelected()) {
+			switch (GetLevel())
+			{
+			case (1):
+				App->render->Blit(App->entityManager->level_tex, (position.x - 6), (position.y - 63), &App->entityManager->level_rect, 1, 0, 0, 0, 1);
+				break;
+			case (2):
+				App->render->Blit(App->entityManager->level_tex, (position.x - 2), (position.y - 63), &App->entityManager->level_rect, 1, 0, 0, 0, 1);
+				App->render->Blit(App->entityManager->level_tex, (position.x - 10), (position.y - 63), &App->entityManager->level_rect, 1, 0, 0, 0, 1);
+				break;
+			case (3):
+				App->render->Blit(App->entityManager->level_tex, (position.x - 6), (position.y - 63), &App->entityManager->level_rect, 1, 0, 0, 0, 1);
+				App->render->Blit(App->entityManager->level_tex, (position.x - 14), (position.y - 63), &App->entityManager->level_rect, 1, 0, 0, 0, 1);
+				App->render->Blit(App->entityManager->level_tex, (position.x + 2), (position.y - 63), &App->entityManager->level_rect, 1, 0, 0, 0, 1);
+				break;
+			}
 		}
 	}
 	return true;
