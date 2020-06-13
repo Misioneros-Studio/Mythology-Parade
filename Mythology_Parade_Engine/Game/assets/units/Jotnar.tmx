@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.3.3" orientation="orthogonal" renderorder="right-down" width="5" height="5" tilewidth="254" tileheight="307" infinite="0" nextlayerid="2" nextobjectid="1">
- <tileset firstgid="1" name="SpriteSheet" tilewidth="254" tileheight="307" tilecount="750" columns="30">
-  <image source="JotnarSpritesheet.png" width="7675" height="7676"/>
+<map version="1.2" tiledversion="1.3.3" orientation="orthogonal" renderorder="right-down" width="5" height="5" tilewidth="63" tileheight="77" infinite="0" nextlayerid="2" nextobjectid="1">
+ <tileset firstgid="1" name="JotnarSpritesheet" tilewidth="63" tileheight="77" tilecount="750" columns="30">
+  <image source="JotnarSpritesheet.png" width="1919" height="1925"/>
   <tile id="0">
    <properties>
     <property name="dicType" type="int" value="0"/>

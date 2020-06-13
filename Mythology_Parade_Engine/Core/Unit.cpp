@@ -11,7 +11,7 @@
 
 #include "SDL_mixer/include/SDL_mixer.h"
 
-Unit::Unit(UnitType type, iPoint pos) : unitType(type), state(AnimationType::IDLE), moveSpeed(60), oldEnemyPosition({0, 0})
+Unit::Unit(UnitType type, iPoint pos): unitType(type), state(AnimationType::IDLE),  moveSpeed(60), oldEnemyPosition({0, 0}),sizeMultiplier(1)
 {
 
 	displayDebug = false;
@@ -38,6 +38,7 @@ Unit::Unit(UnitType type, iPoint pos) : unitType(type), state(AnimationType::IDL
 		name = "monk";
 		Init(1);
 		collisionRect = { 0, 0, 30, -55 };
+		sizeMultiplier = 2;
 		break;
 	case UnitType::JOTNAR:
 		time_production = 35;
@@ -46,6 +47,7 @@ Unit::Unit(UnitType type, iPoint pos) : unitType(type), state(AnimationType::IDL
 		researched = true;
 		Init(150);
 		collisionRect = { 0, 0, 123, -175 };
+		sizeMultiplier = 4;
 		break;
 	case UnitType::DRAUGAR:
 		time_production = 35;
@@ -54,6 +56,7 @@ Unit::Unit(UnitType type, iPoint pos) : unitType(type), state(AnimationType::IDL
 		researched = true;
 		Init(40);
 		collisionRect = { 0, 0, 40, -60 };
+		sizeMultiplier = 2;
 		break;
 	case UnitType::CYCLOP:
 		time_production = 35;
@@ -62,6 +65,7 @@ Unit::Unit(UnitType type, iPoint pos) : unitType(type), state(AnimationType::IDL
 		name = "cyclop";
 		Init(150);
 		collisionRect = { 0, 0, 118, -130 };
+		sizeMultiplier = 3;
 		break;
 	case UnitType::MINOTAUR:
 		time_production = 35;
@@ -70,6 +74,7 @@ Unit::Unit(UnitType type, iPoint pos) : unitType(type), state(AnimationType::IDL
 		name = "minotaur";
 		Init(40);
 		collisionRect = { 0, 0, 60, -67 };
+		sizeMultiplier = 2;
 		break;
 	case UnitType::CLERIC:
 		time_production = 15;
@@ -79,6 +84,7 @@ Unit::Unit(UnitType type, iPoint pos) : unitType(type), state(AnimationType::IDL
 		Init(1);
 		moveSpeed = 100;
 		collisionRect = { 0, 0, 30, -55 };
+		sizeMultiplier = 1;
 		break;
 	}
 
@@ -187,7 +193,7 @@ bool Unit::Update(float dt)
 		}
 	}
 
-	if (civilization == App->entityManager->getPlayer()->civilization || App->scene->godMode) 
+	if (civilization == App->entityManager->getPlayer()->civilization || App->scene->godMode)
 	{
 		std::vector<iPoint> tiles;
 		App->fowManager->GetTilesInsideRadius(fowRadius, position, { collisionRect.w / 2, -collisionRect.w / 2 }, tiles);
@@ -315,7 +321,7 @@ void Unit::ChangeState(iPoint isoLookPosition, AnimationType newState)
 		if (App->entityManager->animations[unitType][newState][currentDirection].name != currentAnim.name)
 			currentAnim = App->entityManager->animations[unitType][newState][currentDirection];
 	}
-	if (state != newState) 
+	if (state != newState)
 	{
 		state = newState;
 	}
@@ -350,13 +356,14 @@ bool Unit::Draw(float dt)
 			MoveToTarget();
 	}
 	int num_current_anim = currentAnim.GetSprite();
-	blitRect = { (int)(currentAnim.sprites[num_current_anim].rect.w / 1.5f), (int)(currentAnim.sprites[num_current_anim].rect.h / 1.5f) };
+	blitRect = { static_cast<int>((currentAnim.sprites[num_current_anim].rect.w * sizeMultiplier) / 1.5f), static_cast<int>((currentAnim.sprites[num_current_anim].rect.h * sizeMultiplier) / 1.5f)};
 
 	//Collider update
 	collisionRect.x = position.x - (collisionRect.w / 2);
 	collisionRect.y = position.y;
 
 	App->render->Blit(texture, position.x - blitRect.x / 2, position.y - blitRect.y, blitRect, &currentAnim.sprites[num_current_anim].rect, 1.f, flipState);
+	//App->render->DrawQuad(getMovementRect(), 255, 0, 0);
 
 	//App->render->DrawQuad({(int)position.x, (int)position.y, 2, 2}, 0, 255, 0);
 
