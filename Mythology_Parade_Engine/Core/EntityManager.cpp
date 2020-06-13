@@ -2,19 +2,19 @@
 #include "CombatUnit.h"
 #include "Building.h"
 #include "Player.h"
+#include "ResearchMenu.h"
 #include "j1Gui.h"
 
 #include "p2Log.h"
 EntityManager::EntityManager() : CreateAssasin_sound(0), CreateMonk_sound(0), Monster1(0), Monster2(0), construction_bar_back({0, 0, 0, 0}),
 construction_bar_empty({ 0, 0, 0, 0 }), construction_bar_front({ 0, 0, 0, 0 }), constructorSpriteRect({0, 0, 0, 0}), debugTex(nullptr),
-destructedSpriteRect({ 0, 0, 0, 0 }), giant3(0), giant5(0), life_bar_front({ 0, 0, 0, 0 }), life_bar_front_enemy({0, 0, 0, 0}), 
+destructedSpriteRect({ 0, 0, 0, 0 }), giant3(0), giant5(0), life_bar_front({ 0, 0, 0, 0 }), life_bar_front_enemy({0, 0, 0, 0}),
 ogre4(0), ogre5(0), research_bar_front({ 0, 0, 0, 0 }), shade12(0), unit_life_bar_back({ 0, 0, 0, 0 }), unit_life_bar_empty({ 0, 0, 0, 0 }),
 unit_life_bar_front({ 0, 0, 0, 0 }),  unit_life_bar_front_enemy({0, 0, 0, 0}), volume(0)
 {
 	name.append("entity_manager");
 	buildingsData.reserve(MAX_BUILDING_TYPES);
 	buildingTestIndex = 0;
-	initCivilizations = true;
 	playerCreated = false;
 	level_tex = nullptr;
 	level_rect = { 0,0,10,10 };
@@ -28,6 +28,7 @@ EntityManager::~EntityManager()
 //Called before render is available
 bool EntityManager::Awake(pugi::xml_node& a)
 {
+	loading = false;
 	App->fowManager->RequestMaskGeneration(10);
 	//Load buildings info
 	pugi::xml_document buildings;
@@ -101,6 +102,8 @@ bool EntityManager::Start()
 			it._Ptr->_Myval->Start();
 		}
 	}
+
+	initCivilizations = true;
 
 	return true;
 }
@@ -399,6 +402,7 @@ bool EntityManager::Load(pugi::xml_node& n)
 {
 	CivilizationType civ;
 	entities.clear();
+	loading = true;
 
 	//PLAYER LOADING
 	pugi::xml_node p = n.child("players").first_child();
@@ -572,6 +576,8 @@ bool EntityManager::Load(pugi::xml_node& n)
 		}
 	}
 
+	App->scene->research_menu->UpdatePlayer(getPlayer());
+	loading = false;
 
 	return true;
 }
@@ -581,9 +587,13 @@ bool EntityManager::Load(pugi::xml_node& n)
 bool EntityManager::Save(pugi::xml_node& s) const
 {
 	pugi::xml_node node = s.append_child("entities");
+	bool assassin = true, monk = true;
 	std::list<Entity*> list = App->entityManager->entities[EntityType::UNIT];
 	for each (Unit * var in list)
 	{
+		if (var->civilization != getPlayer()->civilization)
+			continue;
+
 		pugi::xml_node entity = node.append_child("unit");
 		entity.append_attribute("type").set_value(var->name.c_str());
 		entity.append_attribute("position_x").set_value(var->position.x);
@@ -592,7 +602,7 @@ bool EntityManager::Save(pugi::xml_node& s) const
 
 		if (var->civilization == CivilizationType::GREEK)
 			entity.append_attribute("civilization").set_value("greek");
-		else
+		else if (var->civilization == CivilizationType::VIKING)
 			entity.append_attribute("civilization").set_value("viking");
 
 
@@ -608,20 +618,22 @@ bool EntityManager::Save(pugi::xml_node& s) const
 	pugi::xml_node node2 = s.append_child("buildings");
 	std::list<Entity*> list2 = App->entityManager->entities[EntityType::BUILDING];
 
-
 	for each (Building * var2 in list2)
 	{
+		if (var2->civilization != getPlayer()->civilization)
+			continue;
+
 		pugi::xml_node building = node2.append_child("build");
 
 		building.append_attribute("type").set_value(var2->name.c_str());
 		building.append_attribute("position_x").set_value(var2->position.x);
 		building.append_attribute("position_y").set_value(var2->position.y);
 
-
 		if (var2->civilization == CivilizationType::GREEK)
 			building.append_attribute("civilization").set_value("greek");
-		else
+		else if (var2->civilization == CivilizationType::GREEK)
 			building.append_attribute("civilization").set_value("viking");
+
 
 
 		building.append_attribute("health").set_value(var2->GetHealth());
@@ -655,33 +667,31 @@ bool EntityManager::Save(pugi::xml_node& s) const
 	pugi::xml_node node3 = s.append_child("players");
 	std::list<Entity*> list3 = App->entityManager->entities[EntityType::PLAYER];
 
+	Player* p = getPlayer();
 
-	for each (Player * var3 in list3)
-	{
-		pugi::xml_node player;
-		if(var3->civilization == CivilizationType::VIKING)
-			 player = node3.append_child("viking");
-		else if(var3->civilization == CivilizationType::GREEK)
-			player = node3.append_child("greek");
+	pugi::xml_node player;
+	if(p->civilization == CivilizationType::VIKING)
+		 player = node3.append_child("viking");
+	else if(p->civilization == CivilizationType::GREEK)
+		player = node3.append_child("greek");
 
-		pugi::xml_node economy = player.append_child("economy");
-		economy.append_attribute("faith").set_value(var3->GetFaith());
-		economy.append_attribute("prayers").set_value(var3->GetPrayers());
-		economy.append_attribute("sacrifices").set_value(var3->GetSacrifices());
+	pugi::xml_node economy = player.append_child("economy");
+	economy.append_attribute("faith").set_value(p->GetFaith());
+	economy.append_attribute("prayers").set_value(p->GetPrayers());
+	economy.append_attribute("sacrifices").set_value(p->GetSacrifices());
 
 
-		pugi::xml_node research = player.append_child("research");
-		research.append_child("temple").append_attribute("research").set_value(var3->research_temple);
-		research.append_child("encampment").append_attribute("research").set_value(var3->research_encampment);
-		research.append_child("cleric").append_attribute("research").set_value(var3->research_cleric);
-		research.append_child("assassin").append_attribute("research").set_value(var3->research_assassin);
-		research.append_child("lawful_beast").append_attribute("research").set_value(var3->research_lawful_beast);
-		research.append_child("chaotic_beast").append_attribute("research").set_value(var3->research_chaotic_beast);
-		research.append_child("lawful_miracle").append_attribute("research").set_value(var3->research_lawful_miracle);
-		research.append_child("chaotic_miracle").append_attribute("research").set_value(var3->research_chaotic_miracle);
-		research.append_child("lawful_victory").append_attribute("research").set_value(var3->research_lawful_victory);
-		research.append_child("chaotic_victory").append_attribute("research").set_value(var3->research_chaotic_victory);
-	}
+	pugi::xml_node research = player.append_child("research");
+	research.append_child("temple").append_attribute("research").set_value(p->research_temple);
+	research.append_child("encampment").append_attribute("research").set_value(p->research_encampment);
+	research.append_child("cleric").append_attribute("research").set_value(p->research_cleric);
+	research.append_child("assassin").append_attribute("research").set_value(p->research_assassin);
+	research.append_child("lawful_beast").append_attribute("research").set_value(p->research_lawful_beast);
+	research.append_child("chaotic_beast").append_attribute("research").set_value(p->research_chaotic_beast);
+	research.append_child("lawful_miracle").append_attribute("research").set_value(p->research_lawful_miracle);
+	research.append_child("chaotic_miracle").append_attribute("research").set_value(p->research_chaotic_miracle);
+	research.append_child("lawful_victory").append_attribute("research").set_value(p->research_lawful_victory);
+	research.append_child("chaotic_victory").append_attribute("research").set_value(p->research_chaotic_victory);
 
 	return true;
 }
@@ -695,7 +705,6 @@ Entity* EntityManager::CreatePlayerEntity(std::string civilization_string)
 	Player* p = (Player*)ret;
 
 	entities[EntityType::PLAYER].push_back(ret);
-	entities[EntityType::PLAYER].begin()._Ptr->_Myval->Start();
 
 	if (civilization_string == "viking") {
 		ret->civilization = CivilizationType::VIKING;
@@ -710,6 +719,7 @@ Entity* EntityManager::CreatePlayerEntity(std::string civilization_string)
 		ret->civilization = CivilizationType::VIKING;
 		p->player_type = CivilizationType::VIKING;
 	}
+	ret->Start();
 	return ret;
 }
 
@@ -769,7 +779,7 @@ Entity* EntityManager::CreateUnitEntity(UnitType type, iPoint pos, CivilizationT
 	entities[EntityType::UNIT].push_back(ret);
 
 	//DELETE: THIS
-	entities[EntityType::UNIT].sort(entity_Sort());
+	//entities[EntityType::UNIT].sort(entity_Sort());
 
 	aabbTree.AddUnitToTree(*ret);
 
@@ -964,15 +974,9 @@ bool EntityManager::DeleteEntity(Entity* e)
 			}
 		}
 
-
-
-
-
 		entities[e->type].remove(e);
-		delete e;
-		return true;
 	}
-	return false;
+	return true;
 }
 
 void EntityManager::UpdateBuildPreview(int index)
@@ -1065,6 +1069,18 @@ bool EntityManager::IsPointInsideQuad(SDL_Rect rect, int x, int y)
 	return false;
 }
 
+void EntityManager::BuildCivilizations(CivilizationType c)
+{
+	if (c == CivilizationType::GREEK)
+	{
+		InitGreek();
+	}
+	else if (c == CivilizationType::VIKING)
+	{
+		InitVikings();
+	}
+}
+
 void EntityManager::FxUnits(int channel, int fx, int posx, int posy)
 {
 	if (Mix_Playing(channel) == 0) {
@@ -1120,4 +1136,67 @@ void EntityManager::FxUnits(int channel, int fx, int posx, int posy)
 		Mix_SetPosition(channel, angle, volume);
 		App->audio->PlayFx(channel, fx, 0);
 	}*/
+}
+void EntityManager::InitVikings()
+{
+	if (App->scene->isInTutorial == false) {
+		iPoint fortress = { 21,23 };
+		fortress = App->map->MapToWorld(fortress.x, fortress.y);
+		fortress.x -= App->map->GetTilesHalfSize().x;
+
+		iPoint monkPos = { 26,24 };
+		iPoint assassinPos = { 25,24 };
+		monkPos = App->map->MapToWorld(monkPos.x, monkPos.y);
+		assassinPos = App->map->MapToWorld(assassinPos.x, assassinPos.y);
+
+		App->entityManager->CreateBuildingEntity(fortress, BuildingType::FORTRESS, App->entityManager->buildingsData[0], CivilizationType::VIKING);
+		App->entityManager->CreateUnitEntity(UnitType::MONK, monkPos, CivilizationType::VIKING);
+		App->entityManager->CreateUnitEntity(UnitType::ASSASSIN, assassinPos, CivilizationType::VIKING);
+	}
+	else if (App->scene->isInTutorial == true) {
+		iPoint fortress = { 69,70 };
+		fortress = App->map->MapToWorld(fortress.x, fortress.y);
+		fortress.x -= App->map->GetTilesHalfSize().x;
+
+		iPoint monkPos = { 69,76 };
+		iPoint assassinPos = { 77,68 };
+		monkPos = App->map->MapToWorld(monkPos.x, monkPos.y);
+		assassinPos = App->map->MapToWorld(assassinPos.x, assassinPos.y);
+
+		App->entityManager->CreateBuildingEntity(fortress, BuildingType::FORTRESS, App->entityManager->buildingsData[0], CivilizationType::VIKING);
+		App->entityManager->CreateUnitEntity(UnitType::MONK, monkPos, CivilizationType::VIKING);
+		App->entityManager->CreateUnitEntity(UnitType::ASSASSIN, assassinPos, CivilizationType::VIKING);
+	}
+}
+
+void EntityManager::InitGreek()
+{
+	if (App->scene->isInTutorial == false) {
+		iPoint fortress = { 129,137 };
+		fortress = App->map->MapToWorld(fortress.x, fortress.y);
+		fortress.x -= App->map->GetTilesHalfSize().x;
+
+		iPoint monkPos = { 130,139 };
+		iPoint assassinPos = { 129,139 };
+		monkPos = App->map->MapToWorld(monkPos.x, monkPos.y);
+		assassinPos = App->map->MapToWorld(assassinPos.x, assassinPos.y);
+
+		App->entityManager->CreateBuildingEntity(fortress, BuildingType::FORTRESS, App->entityManager->buildingsData[4], CivilizationType::GREEK);
+		App->entityManager->CreateUnitEntity(UnitType::MONK, monkPos, CivilizationType::GREEK);
+		App->entityManager->CreateUnitEntity(UnitType::ASSASSIN, assassinPos, CivilizationType::GREEK);
+	}
+	else if (App->scene->isInTutorial == true) {
+		iPoint fortress = { 88,89 };
+		fortress = App->map->MapToWorld(fortress.x, fortress.y);
+		fortress.x -= App->map->GetTilesHalfSize().x;
+
+		iPoint monkPos = { 78,85 };
+		iPoint assassinPos = { 85,76 };
+		monkPos = App->map->MapToWorld(monkPos.x, monkPos.y);
+		assassinPos = App->map->MapToWorld(assassinPos.x, assassinPos.y);
+
+		App->entityManager->CreateBuildingEntity(fortress, BuildingType::FORTRESS, App->entityManager->buildingsData[4], CivilizationType::GREEK);
+		App->entityManager->CreateUnitEntity(UnitType::MONK, monkPos, CivilizationType::GREEK);
+		App->entityManager->CreateUnitEntity(UnitType::ASSASSIN, assassinPos, CivilizationType::GREEK);
+	}
 }
