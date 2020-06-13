@@ -505,14 +505,18 @@ void Unit::StateMachineActions(float dt)
 					enemyTarget->Kill(App->map->WorldToMap(position.x, position.y));
 
 					Unit* unit = nullptr;
+					int count = 0;
 					//BUG:: PETA A VEGADES
 					for (std::list<Entity*>::iterator it = App->entityManager->entities[static_cast<EntityType>(1)].begin(); it != App->entityManager->entities[static_cast<EntityType>(1)].end(); ++it)
 					{
+						LOG("%i", it);
 						unit = static_cast<Unit*>(*it);
 						if (unit->enemyTarget == enemyTarget) {
 							unit->enemyTarget = nullptr;
 							unit->ChangeState(unit->targetPosition, AnimationType::IDLE);
 						}
+						LOG("%i",count);
+						++count;
 					}
 				}
 			}

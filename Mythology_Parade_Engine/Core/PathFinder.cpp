@@ -9,6 +9,7 @@ PathFinder::PathFinder() : last_path(DEFAULT_PATH_LENGTH), pathCompleted(false),
 	LOG("PathFinder created");
 	last_path.clear();
 	requestUnit = nullptr;
+	numPathsCreated = 0;
 }
 
 PathFinder::~PathFinder()
@@ -105,13 +106,15 @@ bool PathFinder::IteratePath()
 			}
 			requestUnitsList.clear();
 
-			LOG("Path finished");
+			++numPathsCreated;
+			LOG("Path with list finished: %i",numPathsCreated);
 			//requestUnit->SetPath(last_path);
 		}
 		else {
-
+			++numPathsCreated;
 			static_cast<Unit*>(requestUnit)->SetPath(last_path);
 			requestUnit = nullptr;
+			LOG("Path with unit finished: %i",numPathsCreated);
 		}
 		RELEASE(currentNode);
 		return false;

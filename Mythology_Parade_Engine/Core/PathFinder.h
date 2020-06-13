@@ -102,6 +102,7 @@ private:
 	Entity* requestUnit;
 
 	int max_iterations;
+	int numPathsCreated;
 
 	// we store the created path here
 };
