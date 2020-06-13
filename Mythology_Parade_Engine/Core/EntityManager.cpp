@@ -307,8 +307,15 @@ bool EntityManager::PostUpdate()
 				//Check for collisions
 				if (it._Ptr->_Myval != it2._Ptr->_Myval && MaykMath::CheckRectCollision((*it)->getMovementRect(), (*it2)->getMovementRect()))
 				{
-					//LOG("Unit to unit collision");
+
 					fPoint direction = (*it)->position - (*it2)->position;
+
+					if (direction.IsZero()) 
+					{
+						direction = { 1, 1 };
+					}
+
+					//LOG("Unit to unit collision");
 					(*it2)->position -= fPoint::Normalize(direction);
 				}
 			}
@@ -335,16 +342,11 @@ bool EntityManager::PostUpdate()
 
 				if (MaykMath::IsPointInsideOffAxisRectangle(B, A, C, D, (*it)->position))
 				{
-					fPoint direction = (*it2)->position - (*it)->position;
+					fPoint buildingCenter = (*it2)->position + fPoint((*it2)->getCollisionRect().w / 2, 0);
+
+					fPoint direction = buildingCenter - (*it)->position;
 					(*it)->position -= fPoint::Normalize(direction);
 				}
-
-				//if (MaykMath::CheckRectCollision((*it)->getMovementRect(), (*it2)->getCollisionMathRect()))
-				//{
-				//	//fPoint direction = (*it2)->position - (*it)->position;
-				//	//(*it)->position -= fPoint::Normalize(direction);
-				//}
-				//checks++;
 			}
 
 			quadTree.lowestNode = nullptr;
