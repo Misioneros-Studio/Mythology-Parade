@@ -1,24 +1,24 @@
 <?xml version="1.0"?>
 <info>
 	<entities>
-		<unit type="monk" position_x="-268" position_y="4304" civilization="greek" health="1" />
-		<unit type="assassin" position_x="-300" position_y="4288" civilization="greek" health="100" level="0" />
+		<unit type="assassin" position_x="-280" position_y="4288" civilization="greek" health="100" level="0" />
+		<unit type="monk" position_x="-248" position_y="4304" civilization="greek" health="1" />
 	</entities>
 	<buildings>
 		<build type="fortress" position_x="-288" position_y="4256" civilization="greek" health="500" status="finished" action="nothing" />
 	</buildings>
 	<players>
 		<greek>
-			<economy faith="504" prayers="0" sacrifices="0" />
+			<economy faith="1972" prayers="1020" sacrifices="1020" />
 			<research>
-				<temple research="false" />
-				<encampment research="false" />
-				<cleric research="false" />
-				<assassin research="false" />
-				<lawful_beast research="false" />
-				<chaotic_beast research="false" />
-				<lawful_miracle research="false" />
-				<chaotic_miracle research="false" />
+				<temple research="true" />
+				<encampment research="true" />
+				<cleric research="true" />
+				<assassin research="true" />
+				<lawful_beast research="true" />
+				<chaotic_beast research="true" />
+				<lawful_miracle research="true" />
+				<chaotic_miracle research="true" />
 				<lawful_victory research="false" />
 				<chaotic_victory research="false" />
 			</research>
@@ -26,7 +26,7 @@
 	</players>
 	<volume music="50" fx="128" />
 	<IA>
-		<Game_Phase macroState="0" state="1" />
+		<Game_Phase macroState="2" state="1" />
 	</IA>
-	<camera x="773" y="-485" />
+	<camera x="720" y="-1248" />
 </info>
