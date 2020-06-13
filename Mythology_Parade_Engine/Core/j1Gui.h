@@ -40,6 +40,7 @@ enum class UI_Audio
 	SURRENDER,
 	EXIT,
 	CLOSE,
+	HOVER,
 	UNKNOWN
 };
 
@@ -187,15 +188,15 @@ public:
 	// Called after all Updates
 	bool Update(float dt);
 	bool PostUpdate();
+	bool CleanUp();
 
 	void SetString(std::string);
 
-public:
-	std::string stri;
-	SDL_Color color;
-
 private:
 	bool title_default;
+	SDL_Texture* text;
+	std::string stri;
+	SDL_Color color;
 };
 
 class ListTextsUI :public UI
@@ -209,14 +210,18 @@ public:
 	// Called after all Updates
 	bool Update(float dt);
 	bool PostUpdate();
+	bool CleanUp();
 
 	void SetListOfStrings(std::string string, int position);
 
 	int GetNumberOfStrings() { return number_of_stri; }
 
+	void PushBackTexture(std::string stri);
+
 private:
 
 	std::list<std::string> stri;
+	std::list<SDL_Texture*> text;
 	int number_of_stri;
 };
 
@@ -248,6 +253,7 @@ public:
 	bool over;
 	bool isLocked;
 	bool front;
+	bool hover;
 	int click_sfx;
 };
 
@@ -263,6 +269,7 @@ public:
 	bool PreUpdate();
 	bool Update(float dt);
 	bool PostUpdate();
+	bool CleanUp();
 
 	void ChangeLabel(std::string text);
 
@@ -271,6 +278,8 @@ public:
 	void SetPositionToZero();
 
 	std::string GetLabel() { return label; }
+
+	void UpdateLabel();
 
 private:
 	std::string label;
@@ -281,6 +290,7 @@ private:
 	int green;
 	int blue;
 	int alpha;
+	SDL_Texture* text;
 };
 // ---------------------------------------------------
 class j1Gui : public j1Module
@@ -362,7 +372,7 @@ private:
 public:
 
 	//Audio
-	int sfx_UI[9];
+	int sfx_UI[10];
 	bool lockClick;
 	bool cursor_attack;
 	bool cursor_move;

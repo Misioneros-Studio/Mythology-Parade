@@ -44,6 +44,7 @@ private:
 	//Description / Effect
 	std::string description;
 
+
 public:
 	//Unit Type
 	UnitType unitType;
@@ -51,10 +52,13 @@ public:
 	int time_research;
 	bool researched;
 	Entity* enemyTarget;
+	iPoint oldEnemyPosition;
+
 	bool toDelete = false;
 
 	bool insideMinotaur;
 	bool insideDraugar;
+	float sizeMultiplier;
 
 public:
 	Unit(UnitType, iPoint);
@@ -82,6 +86,7 @@ public:
 
 	void Draw_Life_Bar(bool enemy = false);
 
+
 protected:
 	//Animation
 	Direction currentDirection;
@@ -101,7 +106,6 @@ protected:
 	j1Timer damage_timer;
 	bool show_bar_for_damage;
 	bool combat_unit;
-
 
 
 };

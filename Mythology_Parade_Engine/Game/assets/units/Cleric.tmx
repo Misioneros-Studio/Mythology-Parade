@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.2" tiledversion="1.3.3" orientation="orthogonal" renderorder="right-down" width="5" height="5" tilewidth="94" tileheight="105" infinite="0" nextlayerid="2" nextobjectid="1">
  <tileset firstgid="1" name="SpriteSheet" tilewidth="94" tileheight="105" tilecount="450" columns="18">
-  <image source="SpriteSheet.png" width="1785" height="2625"/>
+  <image source="ClericSpriteSheet.png" width="1785" height="2625"/>
   <tile id="0">
    <properties>
     <property name="dicType" type="int" value="0"/>

@@ -39,7 +39,10 @@ void HUD::StartHUD(ResearchMenu* r) {
 
 	start_timer = false;
 	ui_ingame = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, nullptr, { 0,590,1280,130 }, { 0,590,1280,130 }));
+	ia_bar_back = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, nullptr, { 360,3,561,25 }, { 1283,590,561,25 }));
+	ia_bar_front = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, nullptr, { 364,7,0,17 }, { 1287,619,553,17 }));
 
+	range = damage = influence = health = level = experience = max_cap = speed = 0;
 
 	for (int i = 0; i < 12; i++)
 	{
@@ -81,7 +84,6 @@ void HUD::StartHUD(ResearchMenu* r) {
 			}
 		}
 	}
-
 
 	hud_selected_troop = nullptr;
 	thing_selected = nullptr;
@@ -127,7 +129,7 @@ void HUD::ActivatePauseMenu() {
 			ui_text[7] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 604,62,237,38 }, { 0,0,100,100 }, "PAUSE", Panel_Fade::panel_fade_in, { 255,255,255,255 }, { 1,0,0,0 }));
 		}
 		else {
-			ui_pause_window = static_cast<WindowUI*>(App->gui->CreateUIElement(Type::WINDOW, nullptr, { 410,150,459,303 }, { 216,21,459,531 }, "", Panel_Fade::panel_fade_in));
+			ui_pause_window = static_cast<WindowUI*>(App->gui->CreateUIElement(Type::WINDOW, nullptr, { 410,150,459,300 }, { 1749,0,459,300 }, "", Panel_Fade::panel_fade_in));
 			ui_button[2] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_pause_window, { 520,210,237,38 }, { 787,240,237,38 }, "OPTIONS", Panel_Fade::panel_fade_in, { 787,342,237,38 },
 				{ 787,291,237,38 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::OPTIONS));
 			ui_text[2] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 613,222,237,38 }, { 0,0,100,100 }, "Options", Panel_Fade::panel_fade_in, { 0,0,0,255 }));
@@ -458,37 +460,45 @@ void HUD::HUDUpdateSelection(std::list<Entity*> listEntities, Building* building
 					{ 0,0,0,255 }));
 				hud_stats_selected_troop[2] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 780,622,30,30 }, { 0,0,100,100 },
 					std::to_string(cunit->GetDamageValue()), Panel_Fade::no_one_fade, { 0,0,0,255 }));
+				damage = cunit->GetDamageValue();
 				hud_stats_selected_troop[3] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 720,636,30,30 }, { 0,0,100,100 }, "Range:", Panel_Fade::no_one_fade,
 					{ 0,0,0,255 }));
 				hud_stats_selected_troop[4] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 768,636,30,30 }, { 0,0,100,100 },
 					std::to_string(cunit->GetRangeValue()), Panel_Fade::no_one_fade, { 0,0,0,255 }));
+				range = cunit->GetRangeValue();
 				hud_stats_selected_troop[5] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 720,650,30,30 }, { 0,0,100,100 }, "Speed:", Panel_Fade::no_one_fade,
 					{ 0,0,0,255 }));
 				hud_stats_selected_troop[6] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 760,650,30,30 }, { 0,0,100,100 },
 					std::to_string(cunit->GetSpeedValue()), Panel_Fade::no_one_fade, { 0,0,0,255 }));
+				speed = cunit->GetSpeedValue();
 				hud_stats_selected_troop[7] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 720,664,30,30 }, { 0,0,100,100 }, "Level:", Panel_Fade::no_one_fade,
 					{ 0,0,0,255 }));
 				hud_stats_selected_troop[8] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 760,664,30,30 }, { 0,0,100,100 },
 					std::to_string(cunit->GetLevel()), Panel_Fade::no_one_fade, { 0,0,0,255 }));
+				level = cunit->GetLevel();
 				hud_stats_selected_troop[9] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 720,678,30,30 }, { 0,0,100,100 }, "Exp:", Panel_Fade::no_one_fade,
 					{ 0,0,0,255 }));
 				hud_stats_selected_troop[10] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 747,678,30,30 }, { 0,0,100,100 },
 					std::to_string(cunit->GetExperience()), Panel_Fade::no_one_fade, { 0,0,0,255 }));
+				experience = cunit->GetExperience();
 				hud_stats_selected_troop[11] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 720,703,30,10 }, { 0,0,100,100 }, "Health:", Panel_Fade::no_one_fade,
 					{ 0,0,0,255 }));
 				hud_stats_selected_troop[12] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 773,703,30,10 }, { 0,0,100,100 },
 					std::to_string(unit->GetHealth()), Panel_Fade::no_one_fade, { 0,0,0,255 }));
+				health = cunit->GetHealth();
 			}
 			else {
 				hud_stats_selected_troop[1] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 720,703,30,10 }, { 0,0,100,100 }, "Health:", Panel_Fade::no_one_fade,
 					{ 0,0,0,255 }));
 				hud_stats_selected_troop[2] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 773,703,30,10 }, { 0,0,100,100 },
 					std::to_string(unit->GetHealth()), Panel_Fade::no_one_fade, { 0,0,0,255 }));
+				health = unit->GetHealth();
 				if (unit->unitType == UnitType::CLERIC) {
 					hud_stats_selected_troop[3] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 720,622,30,30 }, { 0,0,100,100 }, "Speed:", Panel_Fade::no_one_fade,
 						{ 0,0,0,255 }));
 					hud_stats_selected_troop[4] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 760,622,30,30 }, { 0,0,100,100 },
 						std::to_string(100), Panel_Fade::no_one_fade, { 0,0,0,255 }));
+					speed = 100;
 				}
 				else if(unit->unitType == UnitType::MINOTAUR||unit->unitType==UnitType::DRAUGAR) {
 					hud_stats_selected_troop[3] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 720,622,30,10 }, { 0,0,100,100 }, "Health", Panel_Fade::no_one_fade,
@@ -549,15 +559,19 @@ void HUD::HUDUpdateSelection(std::list<Entity*> listEntities, Building* building
 		hud_stats_selected_troop[1] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 720,622,30,30 }, { 0,0,100,100 }, "Influence:", Panel_Fade::no_one_fade, { 0,0,0,255 }));
 		hud_stats_selected_troop[2] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 790,622,30,30 }, { 0,0,100,100 },
 			std::to_string(building_selected->GetInfluence()), Panel_Fade::no_one_fade, { 0,0,0,255 }));
+		influence = building_selected->GetInfluence();
 		hud_stats_selected_troop[3] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 720,636,30,30 }, { 0,0,100,100 }, "Damage:", Panel_Fade::no_one_fade, { 0,0,0,255 }));
 		hud_stats_selected_troop[4] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 778,636,30,30 }, { 0,0,100,100 },
 			std::to_string(building_selected->GetDamage()), Panel_Fade::no_one_fade, { 0,0,0,255 }));
+		damage = building_selected->GetDamage();
 		hud_stats_selected_troop[5] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 720,650,30,30 }, { 0,0,100,100 }, "Max Cap:", Panel_Fade::no_one_fade, { 0,0,0,255 }));
 		hud_stats_selected_troop[6] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 780,650,30,30 }, { 0,0,100,100 },
 			std::to_string(building_selected->GetMaxCap()), Panel_Fade::no_one_fade, { 0,0,0,255 }));
+		max_cap = building_selected->GetMaxCap();
 		hud_stats_selected_troop[7] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 720,703,30,10 }, { 0,0,100,100 }, "Health:", Panel_Fade::no_one_fade, { 0,0,0,255 }));
 		hud_stats_selected_troop[8] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 773,703,30,10 }, { 0,0,100,100 },
 			std::to_string(building_selected->GetHealth()), Panel_Fade::no_one_fade, { 0,0,0,255 }));
+		health = building_selected->GetHealth();
 		if (building_selected->civilization == CivilizationType::GREEK)
 			viking = false;
 	}
@@ -699,24 +713,57 @@ void HUD::UpdateSelectedThing() {
 	if (thing_selected->type == EntityType::UNIT) {
 		if (hud_stats_selected_troop[9] != nullptr) {
 			CombatUnit* cunit = static_cast<CombatUnit*>(thing_selected);
-			hud_stats_selected_troop[2]->SetString(std::to_string(cunit->GetDamageValue()));
-			hud_stats_selected_troop[4]->SetString(std::to_string(cunit->GetRangeValue()));
-			hud_stats_selected_troop[6]->SetString(std::to_string(cunit->GetSpeedValue()));
-			hud_stats_selected_troop[8]->SetString(std::to_string(cunit->GetLevel()));
-			hud_stats_selected_troop[10]->SetString(std::to_string(cunit->GetExperience()));
-			hud_stats_selected_troop[12]->SetString(std::to_string(cunit->GetHealth()));
+			if (damage != cunit->GetDamageValue()) {
+				hud_stats_selected_troop[2]->SetString(std::to_string(cunit->GetDamageValue()));
+				damage = cunit->GetDamageValue();
+			}
+			if (range != cunit->GetRangeValue()) {
+				hud_stats_selected_troop[4]->SetString(std::to_string(cunit->GetRangeValue()));
+				range = cunit->GetRangeValue();
+			}
+			if (speed != cunit->GetSpeedValue()) {
+				hud_stats_selected_troop[6]->SetString(std::to_string(cunit->GetSpeedValue()));
+				speed = cunit->GetSpeedValue();
+			}
+			if (level != cunit->GetLevel()) {
+				hud_stats_selected_troop[8]->SetString(std::to_string(cunit->GetLevel()));
+				level = cunit->GetLevel();
+			}
+			if (experience != cunit->GetExperience()) {
+				hud_stats_selected_troop[10]->SetString(std::to_string(cunit->GetExperience()));
+				experience = cunit->GetExperience();
+			}
+			if (health != cunit->GetHealth()) {
+				hud_stats_selected_troop[12]->SetString(std::to_string(cunit->GetHealth()));
+				health = cunit->GetHealth();
+			}
 		}
 		else {
 			Unit* unit = static_cast<Unit*>(thing_selected);
-			hud_stats_selected_troop[2]->SetString(std::to_string(unit->GetHealth()));
+			if (health != unit->GetHealth()) {
+				hud_stats_selected_troop[2]->SetString(std::to_string(unit->GetHealth()));
+				health = unit->GetHealth();
+			}
 		}
 	}
 	else if (thing_selected->type == EntityType::BUILDING) {
 		Building* building = static_cast<Building*>(thing_selected);
-		hud_stats_selected_troop[2]->SetString(std::to_string(building->GetInfluence()));
-		hud_stats_selected_troop[4]->SetString(std::to_string(building->GetDamage()));
-		hud_stats_selected_troop[6]->SetString(std::to_string(building->GetMaxCap()));
-		hud_stats_selected_troop[8]->SetString(std::to_string(building->GetHealth()));
+		if (influence != building->GetInfluence()) {
+			hud_stats_selected_troop[2]->SetString(std::to_string(building->GetInfluence()));
+			influence = building->GetInfluence();
+		}
+		if (damage != building->GetDamage()) {
+			hud_stats_selected_troop[4]->SetString(std::to_string(building->GetDamage()));
+			damage = building->GetDamage();
+		}
+		if (max_cap != building->GetMaxCap()) {
+			hud_stats_selected_troop[6]->SetString(std::to_string(building->GetMaxCap()));
+			max_cap = building->GetMaxCap();
+		}
+		if (health != building->GetHealth()) {
+			hud_stats_selected_troop[8]->SetString(std::to_string(building->GetHealth()));
+			health = building->GetHealth();
+		}
 		if (App->scene->update_production_list) {
 			HUDDeleteListTroops();
 			std::queue<std::string> production_queue = building->GetProduction();
@@ -2006,4 +2053,9 @@ void HUD::UpdateSlider(int index) {
 			App->audio->PlayFx(-1, App->gui->sfx_UI[(int)UI_Audio::LOAD]);
 		}
 	}
+}
+
+void HUD::UpdateIABar(float percentage)
+{
+	ia_bar_front->quad.w = percentage * 553;
 }

@@ -53,6 +53,7 @@ bool j1TitleScene::Start()
 	App->gui->sfx_UI[(int)UI_Audio::CONFIRMATION] = App->audio->LoadFx("audio/ui/Click_Standard2.wav");
 	App->gui->sfx_UI[(int)UI_Audio::CLOSE] = App->audio->LoadFx("audio/ui/Close_Menu.wav");
 	App->gui->sfx_UI[(int)UI_Audio::LOAD] = App->audio->LoadFx("audio/ui/load.wav");
+	App->gui->sfx_UI[(int)UI_Audio::HOVER] = App->audio->LoadFx("audio/ui/Hover.wav");
 
 
 	ui_button[0] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, nullptr, { 1535,145,237,38 }, { 787,240,237,38 }, "NEW", Panel_Fade::panel_fade_in, { 787,342,237,38 }, { 787,291,237,38 }, false,

@@ -2,6 +2,7 @@
 #include "p2Log.h"
 #include "j1App.h"
 #include "j1Window.h"
+#include "j1Textures.h"
 
 #include "j1Render.h"
 
@@ -35,6 +36,11 @@ bool j1Render::Awake(pugi::xml_node& config)
 	}
 
 	renderer = SDL_CreateRenderer(App->win->window, -1, flags);
+
+	SDL_Surface* surf = App->tex->GetSurface("assets/Icon.png");
+	SDL_SetWindowIcon(App->win->window, surf);
+	SDL_FreeSurface(surf);
+
 
 	if (renderer == NULL)
 	{
@@ -349,6 +355,7 @@ bool j1Render::DrawCircle(int x, int y, int radius, Uint8 r, Uint8 g, Uint8 b, U
 {
 	bool ret = true;
 	uint scale = App->win->GetScale();
+	float speed = 1.f;
 
 	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 	SDL_SetRenderDrawColor(renderer, r, g, b, a);
@@ -357,11 +364,13 @@ bool j1Render::DrawCircle(int x, int y, int radius, Uint8 r, Uint8 g, Uint8 b, U
 	SDL_Point points[360];
 
 	float factor = (float)M_PI / 180.0f;
+	x = (camera.x + x * scale);
+	y = (camera.y + y * scale);
 
 	for (uint i = 0; i < 360; ++i)
 	{
-		points[i].x = (int)(x + radius * cos(i * factor));
-		points[i].y = (int)(y + radius * sin(i * factor));
+		points[i].x = static_cast<int>(x + radius * cos(i * factor));
+		points[i].y = static_cast<int>(y + radius * sin(i * factor));
 	}
 
 	result = SDL_RenderDrawPoints(renderer, points, 360);

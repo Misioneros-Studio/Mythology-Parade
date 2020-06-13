@@ -40,6 +40,9 @@ public:
 	void SetLevel(int);
 	void SetHealth(int);
 
+
+	void DetectNearbyEnemies();
+
 };
 
 #endif // !__COMBATUNIT_H__
