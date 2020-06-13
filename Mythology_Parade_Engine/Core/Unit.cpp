@@ -137,6 +137,7 @@ bool Unit::Update(float dt)
 	StateMachineActions(dt);
 	//ret = Draw(dt);
 	if (IsDeath()) return true;
+
 	//MINOTAUR PASSIVE EFFECT
 	if (civilization == CivilizationType::VIKING)
 	{
@@ -503,7 +504,7 @@ void Unit::StateMachineActions(float dt)
 
 				if (enemyTarget->type == EntityType::BUILDING)
 				{
-					if (RecieveDamage(20))
+					if (RecieveDamage(static_cast<Building*>(enemyTarget)->GetDamage()))
 					{
 						enemyTarget = nullptr;
 						Kill(App->map->WorldToMap(position.x, position.y));
