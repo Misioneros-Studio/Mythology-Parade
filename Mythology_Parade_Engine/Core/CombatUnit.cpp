@@ -133,6 +133,11 @@ bool CombatUnit::Update(float dt)
 	Unit::Update(dt);
 	if (!IsDeath()) {
 
+		if (enemyTarget != nullptr) {
+			if (enemyTarget->IsDeath()) {
+				enemyTarget = nullptr;
+			}
+		}
 		DetectNearbyEnemies();
 
 		if (isSelected()) {

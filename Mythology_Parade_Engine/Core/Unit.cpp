@@ -136,7 +136,7 @@ bool Unit::Update(float dt)
 	//Allawys blit the sprite at the end
 	StateMachineActions(dt);
 	//ret = Draw(dt);
-	if (IsDeath()) return true;
+	//if (IsDeath()) return true;
 
 	//MINOTAUR PASSIVE EFFECT
 	if (civilization == CivilizationType::VIKING)

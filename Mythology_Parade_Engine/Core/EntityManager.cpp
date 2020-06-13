@@ -18,6 +18,7 @@ unit_life_bar_front({ 0, 0, 0, 0 }),  unit_life_bar_front_enemy({0, 0, 0, 0}), v
 	initCivilizations = true;
 	playerCreated = false;
 	level_tex = nullptr;
+	circle_unit_tex = nullptr;
 	level_rect = { 0,0,10,10 };
 	circle_unit_rect = { 0,0,64,32 };
 }
