@@ -83,7 +83,7 @@ Unit::Unit(UnitType type, iPoint pos): unitType(type), state(AnimationType::IDLE
 		Init(1);
 		moveSpeed = 100;
 		collisionRect = { 0, 0, 30, -55 };
-		sizeMultiplier = 2;
+		sizeMultiplier = 1;
 		break;
 	}
 
