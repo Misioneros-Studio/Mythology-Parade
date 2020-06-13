@@ -120,6 +120,11 @@ public:
 		return collisionRect;
 	}
 
+	Rect getMovementRect()
+	{
+		return { collisionRect.x, collisionRect.y - 10, collisionRect.w, 10};
+	}
+
 	Rect getCollisionAsrect()
 	{
 		return { collisionRect.x, collisionRect.y + (collisionRect.h * 2) + 16, collisionRect.w, -collisionRect.h };

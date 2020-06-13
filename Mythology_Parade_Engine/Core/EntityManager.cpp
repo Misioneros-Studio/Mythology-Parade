@@ -291,7 +291,7 @@ bool EntityManager::PostUpdate()
 
 		//Get the nodes to check inside this unit position
 		std::vector<AABBNode*> nodesToCheck;
-		aabbTree.LoadLeafNodesInsideRect(&aabbTree.baseNode, nodesToCheck, (*it)->getCollisionMathRect());
+		aabbTree.LoadLeafNodesInsideRect(&aabbTree.baseNode, nodesToCheck, (*it)->getMovementRect());
 
 		//Iterate all nodes
 		for (int i = 0; i < nodesToCheck.size(); i++)
@@ -301,7 +301,7 @@ bool EntityManager::PostUpdate()
 			for (std::list<Entity*>::iterator it2 = nodesToCheck[i]->data.begin(); it2 != nodesToCheck[i]->data.end(); it2++)
 			{
 				//Check for collisions
-				if (it._Ptr->_Myval != it2._Ptr->_Myval && MaykMath::CheckRectCollision((*it)->getCollisionMathRect(), (*it2)->getCollisionMathRect()))
+				if (it._Ptr->_Myval != it2._Ptr->_Myval && MaykMath::CheckRectCollision((*it)->getMovementRect(), (*it2)->getMovementRect()))
 				{
 					//LOG("Unit to unit collision");
 					fPoint direction = (*it)->position - (*it2)->position;
@@ -342,7 +342,7 @@ bool EntityManager::PostUpdate()
 					//}
 
 					//Check if they are colliding
-					if (MaykMath::CheckRectCollision((*it)->getCollisionMathRect(), (*it2)->getCollisionAsrect()))
+					if (MaykMath::CheckRectCollision((*it)->getMovementRect(), (*it2)->getCollisionAsrect()))
 					{
 						//LOG("Unit to building collision");
 					}
