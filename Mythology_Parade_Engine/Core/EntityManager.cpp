@@ -344,7 +344,7 @@ bool EntityManager::PostUpdate()
 					//Check if they are colliding
 					if (MaykMath::CheckRectCollision((*it)->getCollisionMathRect(), (*it2)->getCollisionAsrect()))
 					{
-						//LOG("Unit to building collision");
+						LOG("Unit to building collision");
 					}
 					checks++;
 				}
