@@ -20,6 +20,7 @@
 #include "j1Fonts.h"
 #include "j1Gui.h"
 #include "Console.h"
+#include "IA.h"
 #include "EntityManager.h"
 #include "IA.h"
 
@@ -77,10 +78,8 @@ bool j1FadeToBlack::PostUpdate()
 				App->scene->Enable();
 				App->minimap->Enable();
 				App->fowManager->Enable();
-
-				//Enable IA
+				App->ia->Disable();
 				App->ia->Enable();
-
 				break;
 			case(which_fade::scene_to_title):
 				App->entityManager->Disable();
@@ -111,9 +110,8 @@ bool j1FadeToBlack::PostUpdate()
 				App->scene->Enable();
 				App->minimap->Enable();
 				App->fowManager->Enable();
-				//Enable IA
+				App->ia->Disable();
 				App->ia->Enable();
-
 				break;
 			case(which_fade::title_to_tutorial):
 				App->title_scene->Disable();

@@ -182,6 +182,11 @@ public:
 	int CreateAssasin_sound;
 
 	bool initCivilizations;
+	void BuildCivilizations(CivilizationType);
+	void InitVikings();
+	void InitGreek();
+	bool loading;
+
 
 	bool playerCreated;
 };
