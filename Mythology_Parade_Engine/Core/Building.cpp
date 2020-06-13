@@ -494,6 +494,12 @@ bool Building::Update(float dt)
 		App->fowManager->ApplyMaskToTiles(fowRadius, tiles);
 	}
 
+
+	//App->render->DrawLine(position.x, position.y, position.x + (collisionRect.w/2), position.y + (collisionRect.h/4) , 255, 0, 0);
+	//App->render->DrawLine(position.x + (collisionRect.w / 2), position.y + (collisionRect.h / 4), position.x + collisionRect.w, position.y, 255, 0, 0);
+	//App->render->DrawLine(position.x + collisionRect.w, position.y, position.x + (collisionRect.w / 2), position.y - (collisionRect.h / 5), 255, 0, 0);
+	//App->render->DrawLine(position.x + (collisionRect.w / 2), position.y - (collisionRect.h / 5), position.x, position.y, 255, 0, 0);
+
 	return ret;
 }
 

@@ -312,47 +312,39 @@ bool EntityManager::PostUpdate()
 		//Clear the node vector
 		nodesToCheck.clear();
 
-		//Units can collide with buildings, so we use the QuadTree to check that
-
-		//TODO 8: Test unit to building collision
-		fPoint points[4];
-		points[0] = { (*it)->position.x - (*it)->getCollisionRect().w / 2 , (*it)->position.y};
-		points[1] = { (*it)->position.x - (*it)->getCollisionRect().w / 2, (*it)->position.y + (*it)->getCollisionRect().h };
-		points[2] = { (*it)->position.x + (*it)->getCollisionRect().w / 2, (*it)->position.y };
-		points[3] = { (*it)->position.x + (*it)->getCollisionRect().w / 2, (*it)->position.y + (*it)->getCollisionRect().h};
-
-		int checks = 0;
-
-		//Iterate all 4 points
-		for (int i = 0; i < sizeof(points) / sizeof(fPoint); i++)
+		//Find the lowest node in this point
+		quadTree.FindLowestNodeInPoint(&quadTree.baseNode, (*it)->position);
+		if (quadTree.lowestNode)
 		{
 
-			//Find the lowest node in this point
-			quadTree.FindLowestNodeInPoint(&quadTree.baseNode, points[i]);
-			if (quadTree.lowestNode)
+			//Check every data element in this node
+			for (std::list<Entity*>::iterator it2 = quadTree.lowestNode->data.begin(); it2 != quadTree.lowestNode->data.end(); it2++)
 			{
 
-				//Check every data element in this node
-				for (std::list<Entity*>::iterator it2 = quadTree.lowestNode->data.begin(); it2 != quadTree.lowestNode->data.end(); it2++)
+				fPoint htPos = (*it2)->position;
+				SDL_Rect htColl = (*it2)->getCollisionRect();
+
+				Point B = { htPos.x + (htColl.w / 2), htPos.y + (htColl.h / 3.5f) };
+				Point A = { htPos.x + htColl.w, htPos.y };
+				Point C = { htPos.x, htPos.y };
+				Point D = { htPos.x + (htColl.w / 2), htPos.y - (htColl.h / 5) };
+
+				if (MaykMath::IsPointInsideOffAxisRectangle(B, A, C, D, (*it)->position))
 				{
-					//App->render->DrawLine((int)points[i].x, (int)points[i].y, (int)(*it2)->position.x, (int)(*it2)->position.y, 255, 0, 0);
-					//if ((*it2)->position.DistanceNoSqrt(points[i]) <= 20000)
-					//{
-
-					//}
-
-					//Check if they are colliding
-					if (MaykMath::CheckRectCollision((*it)->getMovementRect(), (*it2)->getCollisionAsrect()))
-					{
-						LOG("Unit to building collision");
-					}
-					checks++;
+					fPoint direction = (*it2)->position - (*it)->position;
+					(*it)->position -= fPoint::Normalize(direction);
 				}
 
-				quadTree.lowestNode = nullptr;
+				//if (MaykMath::CheckRectCollision((*it)->getMovementRect(), (*it2)->getCollisionMathRect()))
+				//{
+				//	//fPoint direction = (*it2)->position - (*it)->position;
+				//	//(*it)->position -= fPoint::Normalize(direction);
+				//}
+				//checks++;
 			}
+
+			quadTree.lowestNode = nullptr;
 		}
-		//LOG("Building Checks: %i", a);
 	}
 
 	return true;
