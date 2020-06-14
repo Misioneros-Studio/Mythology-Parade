@@ -4,7 +4,7 @@
 
 CurrencySystem::CurrencySystem() : faith(0), sacrifices(0), prayers(0), time_prayers(6), time_sacrifices(6)
 {
-	basefaithRatio = 8;
+	basefaithRatio = 6;
 	faithRatio = basefaithRatio;
 }
 
@@ -174,10 +174,10 @@ void CurrencySystem::Miracle(Miracles action)
 		}
 		break;
 	case Miracles::CallToArms:
-		if (prayers >= 60) {
-			prayers += 3;
-			sacrifices -= 3;
-			faith -= 300;
+		if (prayers >= 15) {
+			prayers += 0;
+			sacrifices -= 0;
+			faith -= 75;
 			//FUNCTION OF THE EFFECT
 		}
 		break;
@@ -217,10 +217,10 @@ void CurrencySystem::Disaster(Disasters action)
 		}
 		break;
 	case Disasters::HolyMeteor:
-		if (sacrifices >= 60) {
-			prayers -= 3;
-			sacrifices += 3;
-			faith -= 300;
+		if (sacrifices >= 15) {
+			prayers -= 0;
+			sacrifices += 0;
+			faith -= 75;
 			//FUNCTION OF THE EFFECT
 		}
 		break;

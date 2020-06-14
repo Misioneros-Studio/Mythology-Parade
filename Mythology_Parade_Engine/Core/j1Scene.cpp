@@ -529,28 +529,28 @@ void j1Scene::RestartGame() {
 void j1Scene::ReturnFaith(std::string thing_canceled)
 {
 	if (thing_canceled == "Assassin") {
-		App->entityManager->getPlayer()->IncreaseFaith(100);
+		App->entityManager->getPlayer()->IncreaseFaith(25);
 	}
 	else if (thing_canceled == "Monk") {
-		App->entityManager->getPlayer()->IncreaseFaith(50);
+		App->entityManager->getPlayer()->IncreaseFaith(20);
 	}
 	else if (thing_canceled == "Victory") {
-		App->entityManager->getPlayer()->IncreaseFaith(600);
+		App->entityManager->getPlayer()->IncreaseFaith(100);
 	}
 	else if (thing_canceled == "Sacrifices") {
-		App->entityManager->getPlayer()->IncreaseFaith(40);
+		App->entityManager->getPlayer()->IncreaseFaith(15);
 	}
 	else if (thing_canceled == "Prayers") {
-		App->entityManager->getPlayer()->IncreaseFaith(40);
+		App->entityManager->getPlayer()->IncreaseFaith(15);
 	}
 	else if (thing_canceled == "Cleric") {
-		App->entityManager->getPlayer()->IncreaseFaith(150);
+		App->entityManager->getPlayer()->IncreaseFaith(25);
 	}
 	else if (thing_canceled == "Lawful_Beast") {
-		App->entityManager->getPlayer()->IncreaseFaith(200);
+		App->entityManager->getPlayer()->IncreaseFaith(50);
 	}
 	else if (thing_canceled == "Chaotic_Beast") {
-		App->entityManager->getPlayer()->IncreaseFaith(200);
+		App->entityManager->getPlayer()->IncreaseFaith(50);
 	}
 
 }
@@ -740,32 +740,32 @@ void j1Scene::OnClick(UI* element, float argument)
 		else if (element->name == "Produce_Assassin")
 		{
 			Building* building = (Building*)hud->thing_selected;
-			App->entityManager->getPlayer()->DecreaseFaith(100);
+			App->entityManager->getPlayer()->DecreaseFaith(25);
 
 			building->ProduceQueue("Assassin");
 		}
 		else if (element->name == "Produce_Monk")
 		{
 			Building* building = (Building*)hud->thing_selected;
-			App->entityManager->getPlayer()->DecreaseFaith(50);
+			App->entityManager->getPlayer()->DecreaseFaith(20);
 			building->ProduceQueue("Monk");
 		}
 		else if (element->name == "Produce_Victory")
 		{
 			Building* building = (Building*)hud->thing_selected;
-			App->entityManager->getPlayer()->DecreaseFaith(600);
+			App->entityManager->getPlayer()->DecreaseFaith(100);
 			building->ProduceQueue("Victory");
 		}
 		else if (element->name == "Produce_Sacrifices")
 		{
 			Building* building = (Building*)hud->thing_selected;
-			App->entityManager->getPlayer()->DecreaseFaith(40);
+			App->entityManager->getPlayer()->DecreaseFaith(15);
 			building->ProduceQueue("Sacrifices");
 		}
 		else if (element->name == "Produce_Prayers")
 		{
 			Building* building = (Building*)hud->thing_selected;
-			App->entityManager->getPlayer()->DecreaseFaith(40);
+			App->entityManager->getPlayer()->DecreaseFaith(15);
 			building->ProduceQueue("Prayers");
 		}
 		else if (element->name == "Upgrade") {
@@ -792,31 +792,31 @@ void j1Scene::OnClick(UI* element, float argument)
 		else if (element->name == "Produce_Cleric")
 		{
 			Building* building = (Building*)hud->thing_selected;
-			App->entityManager->getPlayer()->DecreaseFaith(150);
+			App->entityManager->getPlayer()->DecreaseFaith(25);
 			building->ProduceQueue("Cleric");
 		}
 		else if (element->name == "Produce_Chaotic_Beast")
 		{
 			Building* building = (Building*)hud->thing_selected;
-			App->entityManager->getPlayer()->DecreaseFaith(200);
+			App->entityManager->getPlayer()->DecreaseFaith(50);
 			building->ProduceQueue("Chaotic_Beast");
 		}
 		else if (element->name == "Produce_Lawful_Beast")
 		{
 			Building* building = (Building*)hud->thing_selected;
-			App->entityManager->getPlayer()->DecreaseFaith(200);
+			App->entityManager->getPlayer()->DecreaseFaith(50);
 			building->ProduceQueue("Lawful_Beast");
 		}
 		else if (element->name == "Produce_Lawful_Miracle")
 		{
-			if (App->entityManager->getPlayer()->prayers >= 60)
+			if (App->entityManager->getPlayer()->prayers >= 15)
 			{
 				nextBuilding_selected = true;
 			}
 		}
 		else if (element->name == "Produce_Chaotic_Miracle")
 		{
-			if (App->entityManager->getPlayer()->sacrifices >= 60)
+			if (App->entityManager->getPlayer()->sacrifices >= 15)
 			{
 				building_meteor = true;
 			}
