@@ -29,14 +29,15 @@
   </fogofwar>
 
   <fortressandproduction>
-    <line1>now that you know how to move around</line1>
+    <line1>Now that you know how to move around</line1>
     <line2>the map let us begin to rule your</line2>
     <line3>religion. This fortress is the back-line</line3>
     <line4> of it, from here you will be</line4>
     <line5>researching new paths for your religion</line5>
     <line6>on the Research Tree and producing</line6>
-    <line7>buildings to expand your influence</line7>
-    <line8> or your military-hand.</line8>
+    <line7>buildings to expand it. You can cancel</line7>
+    <line8>a production by clicking in the icon of</line8>
+    <line8>the production next the stats HUD.</line8>
   </fortressandproduction>
 
   <selectionsystem>
@@ -44,6 +45,8 @@
     <line2>or unit, you can drag to select an amount</line2>
     <line3>of them. You will see their properties</line3>
     <line4>and possible actions below in the HUD.</line4>
+    <line5>Use select+Alt to deselect a unit.</line5>
+    <line6>Use select+Mayus add a unit to the group.</line6>
   </selectionsystem>
 
   <buildabuildingandproduceaunit>
@@ -98,9 +101,9 @@
     <title>Attack or convert an enemy unit:</title>
     <line1>when you have selected a unit the HUD</line1>
     <line2>will show you the differents actions</line2>
-    <line3>the unit can perform, use the attack/</line3>
+    <line3>the unit can perform, use the attack</line3>
     <line4>convert button and then select the enemy</line4>
-    <line5>unit you want to attack/convert.</line5>
+    <line5>unit you want to attack.</line5>
   </attackorconvertanenemyunit>
 
   <levelupaunit>
@@ -110,6 +113,20 @@
     <line3>to level them up. Not all units have this</line3>
     <line4>option.</line4>
   </levelupaunit>
+
+  <tooltips>
+    <title>Tooltips:</title>
+    <line1>If you got lost in any moment of a game</line1>
+    <line2>you can stay above a module and a tip</line2>
+    <line3>will appear to help you.</line3>
+  </tooltips>
+
+  <winquest>
+    <title>Destroy the enemy fortress:</title>
+    <line1>Now that you know how to control</line1>
+    <line2>your religions, you must end with the</line2>
+    <line3>other beliefs. Destroy the enemy fortress</line3>
+  </winquest>
 
   <winconditions>
     <title>Win or Lose:</title>
