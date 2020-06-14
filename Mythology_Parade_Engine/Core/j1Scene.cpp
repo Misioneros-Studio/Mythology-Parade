@@ -222,27 +222,27 @@ void j1Scene::ClickToPath()
 		bool attacking = false;
 
 
-		for (int i = 1; i < 3; i++)
-		{
-			{
-				for (std::list<Entity*>::iterator it = App->entityManager->entities[static_cast<EntityType>(i)].begin(); it != App->entityManager->entities[static_cast<EntityType>(i)].end(); it++)
-				{
-					if (!it._Ptr->_Myval->IsDeath()) {
-						SDL_Rect collider = it._Ptr->_Myval->getCollisionRect();
-						if (it._Ptr->_Myval->civilization != playerCiv && EntityManager::IsPointInsideQuad(collider, p.x, p.y))
-						{
-							Unit* unt = nullptr;
-							for (std::list<Entity*>::iterator sel = list.begin(); sel != list.end(); sel++)
-							{
-								unt = (Unit*)sel._Ptr->_Myval;
-								unt->enemyTarget = it._Ptr->_Myval;
-								attacking = true;
-							}
-						}
-					}
-				}
-			}
-		}
+		//for (int i = 1; i < 3; i++)
+		//{
+		//	{
+		//		for (std::list<Entity*>::iterator it = App->entityManager->entities[static_cast<EntityType>(i)].begin(); it != App->entityManager->entities[static_cast<EntityType>(i)].end(); it++)
+		//		{
+		//			if (!it._Ptr->_Myval->IsDeath()) {
+		//				SDL_Rect collider = it._Ptr->_Myval->getCollisionRect();
+		//				if (it._Ptr->_Myval->civilization != playerCiv && EntityManager::IsPointInsideQuad(collider, p.x, p.y))
+		//				{
+		//					Unit* unt = nullptr;
+		//					for (std::list<Entity*>::iterator sel = list.begin(); sel != list.end(); sel++)
+		//					{
+		//						unit = (Unit*)sel._Ptr->_Myval;
+		//						unt->enemyTarget = it._Ptr->_Myval;
+		//						attacking = true;
+		//					}
+		//				}
+		//			}
+		//		}
+		//	}
+		//}
 
 
 		//if (!attacking)

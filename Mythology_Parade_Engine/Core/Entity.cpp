@@ -5,6 +5,7 @@ Entity::Entity() : fowRadius(10), canLevel(false),
 displayDebug(false), _isSelected(false), shown_minimap(false), flipState(SDL_FLIP_NONE), texture(nullptr),
 type(EntityType::PLAYER), civilization(CivilizationType::NONE)
 {
+	name = "";
 	collisionRect = { 0, 0, 0, 0 };
 	spriteRect = { 0, 0, 0, 0 };
 }

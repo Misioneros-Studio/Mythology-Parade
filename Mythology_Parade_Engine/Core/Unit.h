@@ -50,7 +50,6 @@ public:
 	int time_production;
 	int time_research;
 	bool researched;
-	Entity* enemyTarget;
 	iPoint oldEnemyPosition;
 
 	bool toDelete = false;

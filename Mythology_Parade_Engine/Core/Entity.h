@@ -20,7 +20,7 @@ enum class EntityType
 	BUILDING
 };
 
-class Entity :public j1Module, public HealthSystem
+class Entity : public HealthSystem
 {
 public:
 	Entity();
@@ -148,9 +148,11 @@ public:
 	void SetSelected(bool value);
 
 	
+	std::string name;
 protected:
 	SDL_RendererFlip flipState;
 	SDL_Rect collisionRect;
+
 
 	int fowRadius;
 	//Conditions

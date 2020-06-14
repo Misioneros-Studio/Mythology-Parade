@@ -105,7 +105,7 @@ bool PathFinder::IteratePath()
 			{
 				Unit* unit = (Unit*)it._Ptr->_Myval;
 
-				if (!walkingToEnemy && unit->enemyTarget != nullptr)
+				if (!walkingToEnemy)
 				{
 					last_path.pop_back();
 					walkingToEnemy = true;
@@ -124,6 +124,7 @@ bool PathFinder::IteratePath()
 			static_cast<Unit*>(requestUnit)->SetPath(last_path);
 			requestUnit = nullptr;
 			LOG("Path with unit finished: %i",numPathsCreated);
+
 		}
 		RELEASE(currentNode);
 		return false;
