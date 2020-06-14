@@ -8,6 +8,7 @@ IA::IA() : enemyFortress(nullptr)
 	early = EarlyGameBehaviour::CREATION;
 	mid = MidGameBehaviour::ASSEMBLE;
 	late = LateGameBehaviour::ATACK;
+	numWaves = 1;
 
 	civilization = CivilizationType::GREEK;
 
@@ -411,6 +412,15 @@ void IA::LateGame()
 		timer.Start();
 		late = LateGameBehaviour::WIN;
 		break;
+	case LateGameBehaviour::ATACK2:
+		if (timer.ReadSec() >= 10)
+		{
+			CreateAtack();
+			timer.Start();
+			if(numWaves == 10)
+				late = LateGameBehaviour::WIN;
+		}
+		break;
 	case LateGameBehaviour::WIN:
 		if (timer.ReadSec() >= 2960)
 		{
@@ -448,10 +458,12 @@ bool IA::InitCiv()
 				}
 			}
 		}
+
 		timer.Start();
 		early = EarlyGameBehaviour::BASIC_BUILDINGS_CREATION;
 		mid = MidGameBehaviour::RESEARCH_ASSASSIN;
-		gamePhase = GameBehaviour::MID;
+		late = LateGameBehaviour::ATACK2;
+		gamePhase = GameBehaviour::LATE;
 	}
 
 	return true;
@@ -554,8 +566,34 @@ bool IA::Defense()
 bool IA::Atack()
 {
 	iPoint pos = { (int)enemyFortress->position.x, (int)enemyFortress->position.y };
+	
 	MoveUnit(pos, "assassin");
 	MoveUnit(pos, "assassin", nullptr, 1);
+	return true;
+}
+
+bool IA::CreateAtack()
+{
+	iPoint pos = { (int)enemyFortress->position.x, (int)enemyFortress->position.y };
+	Unit* assassin1;
+	Unit* assassin2;
+
+	if (civilization == CivilizationType::VIKING)
+	{
+		assassin1 = CreateUnit(UnitType::ASSASSIN, positionViking.at((int)EarlyMovements::ASSASSIN1));
+		assassin2 = CreateUnit(UnitType::ASSASSIN, positionViking.at((int)EarlyMovements::ASSASSIN2));
+	}
+	else
+	{
+		assassin1 = CreateUnit(UnitType::ASSASSIN, positionGreek.at((int)EarlyMovements::ASSASSIN1));
+		assassin2 = CreateUnit(UnitType::ASSASSIN, positionGreek.at((int)EarlyMovements::ASSASSIN2));
+	}
+	listEntities.push_back((Entity*)assassin1);
+	listEntities.push_back((Entity*)assassin2);
+
+	MoveUnit(pos, "assassin", assassin1);
+	MoveUnit(pos, "assassin", assassin2);
+	numWaves++;
 	return true;
 }
 
