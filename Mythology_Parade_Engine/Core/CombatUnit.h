@@ -43,6 +43,8 @@ public:
 
 	void DetectNearbyEnemies();
 
+	std::list<Entity*> nearbyDetectedList;
+
 };
 
 #endif // !__COMBATUNIT_H__

@@ -138,6 +138,7 @@ bool CombatUnit::Update(float dt)
 				enemyTarget = nullptr;
 			}
 		}
+
 		DetectNearbyEnemies();
 
 		if (isSelected()) {
@@ -212,42 +213,73 @@ void CombatUnit::SetHealth(int value)
 
 void CombatUnit::DetectNearbyEnemies()
 {
-	//if enemytarget == nullptr
-	if (enemyTarget == nullptr)
-	{
-		for (int i = 1; i < 3; ++i)
-		{
-			for (std::list<Entity*>::iterator it = App->entityManager->entities[static_cast<EntityType>(i)].begin(); it != App->entityManager->entities[static_cast<EntityType>(i)].end(); it++)
-			{
-				Entity* entity = it._Ptr->_Myval;
-				if (!entity->IsDeath() && entity->civilization != civilization)
-				{
-					if (entity->position.DistanceManhattan(position) < 300) // Posar valor com a range variable
-					{
-						enemyTarget = entity;
-						//Request path 
-						if (GetTilePosition() != enemyTarget->GetTilePosition())
-							App->pathfinding->RequestPath(this->GetTilePosition(), enemyTarget->GetTilePosition(), this);
-						//Guardar enemy map position
-						oldEnemyPosition = enemyTarget->GetTilePosition();
 
-						LOG("Enemy detected: %i", entity->type);
-						return;
+	for (int i = 1; i < 3; ++i)
+	{
+		for (std::list<Entity*>::iterator it = App->entityManager->entities[static_cast<EntityType>(i)].begin(); it != App->entityManager->entities[static_cast<EntityType>(i)].end(); it++)
+		{
+			Entity* entity = it._Ptr->_Myval;
+			if (!entity->IsDeath() && entity->civilization != civilization)
+			{
+				if (entity->position.DistanceManhattan(position) < 300) // Posar valor com a range variable
+				{
+					if (std::find(nearbyDetectedList.begin(), nearbyDetectedList.end(), entity) != nearbyDetectedList.end())
+					{
+						continue; 
 					}
+					else 
+					{
+						nearbyDetectedList.push_back(entity);
+
+					}
+
+
+					//enemyTarget = entity;
+					////Request path 
+					//if (GetTilePosition() != enemyTarget->GetTilePosition())
+					//	App->pathfinding->RequestPath(this->GetTilePosition(), enemyTarget->GetTilePosition(), this);
+					////Guardar enemy map position
+					//oldEnemyPosition = enemyTarget->GetTilePosition();
+
+					//LOG("Enemy detected: %i", entity->type);
+					//return;
 				}
 			}
 		}
 	}
-	else
-	{
-		//Sha mogut de tile?
-		//if (enemyTarget->GetTilePosition() != oldEnemyPosition) 
-		//{
-		//	//Updatear la tile on esta el enemic
-		//	oldEnemyPosition = enemyTarget->GetTilePosition();
-		//	//Request new path
-		//	if (GetTilePosition() != enemyTarget->GetTilePosition() && position.DistanceManhattan(enemyTarget->position) >= 300)
-		//		App->pathfinding->RequestPath(GetTilePosition(), enemyTarget->GetTilePosition(), App->entityManager->getPlayer()->GetEntitiesSelected());
-		//}
+	if (!nearbyDetectedList.empty()) {
+		Entity* closestEntity = nearbyDetectedList.front();
+		for each (Entity * var in nearbyDetectedList)
+		{
+			if (position.DistanceManhattan(var->position) < position.DistanceManhattan(closestEntity->position)) {
+				closestEntity = var;
+			}
+		}
+
+		if (enemyTarget != closestEntity) {
+			enemyTarget = closestEntity;
+			//Request path 
+			if (GetTilePosition() != enemyTarget->GetTilePosition())
+				App->pathfinding->RequestPath(this->GetTilePosition(), enemyTarget->GetTilePosition(), this);
+			//Guardar enemy map position
+			oldEnemyPosition = enemyTarget->GetTilePosition();
+		}
 	}
+
+
+	
+	LOG("Detected units: %i", nearbyDetectedList.size());
+	
+	//else
+	//{
+	//	//Sha mogut de tile?
+	//	//if (enemyTarget->GetTilePosition() != oldEnemyPosition) 
+	//	//{
+	//	//	//Updatear la tile on esta el enemic
+	//	//	oldEnemyPosition = enemyTarget->GetTilePosition();
+	//	//	//Request new path
+	//	//	if (GetTilePosition() != enemyTarget->GetTilePosition() && position.DistanceManhattan(enemyTarget->position) >= 300)
+	//	//		App->pathfinding->RequestPath(GetTilePosition(), enemyTarget->GetTilePosition(), App->entityManager->getPlayer()->GetEntitiesSelected());
+	//	//}
+	//}
 }

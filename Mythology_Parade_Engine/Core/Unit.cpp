@@ -510,6 +510,7 @@ void Unit::StateMachineActions(float dt)
 					if (RecieveDamage(static_cast<Building*>(enemyTarget)->GetDamage()))
 					{
 						Kill(App->map->WorldToMap(position.x, position.y));
+
 						Unit* unit = nullptr;
 						if (!IsDeath()) {
 							for (std::list<Entity*>::iterator it = App->entityManager->entities[static_cast<EntityType>(1)].begin(); it != App->entityManager->entities[static_cast<EntityType>(1)].end(); ++it)
@@ -530,6 +531,7 @@ void Unit::StateMachineActions(float dt)
 				{
 					unit->GainExperience(Action::killEnemy, App->scene->isInTutorial);
 					enemyTarget->Kill(App->map->WorldToMap(position.x, position.y));
+					unit->nearbyDetectedList.remove(enemyTarget);
 					unit->ChangeState(unit->targetPosition, AnimationType::IDLE);
 					Unit* unit = nullptr;
 					int count = 0;

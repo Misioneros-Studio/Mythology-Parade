@@ -87,6 +87,7 @@ public:
 	void Draw_Life_Bar(bool enemy = false);
 
 
+	std::vector<iPoint> entPath;
 protected:
 	//Animation
 	Direction currentDirection;
@@ -98,7 +99,6 @@ protected:
 
 	AnimationType state;
 
-	std::vector<iPoint> entPath;
 
 	float timeToDespawn;
 	//void SetTarget();
