@@ -1,28 +1,24 @@
 <?xml version="1.0"?>
 <info>
 	<entities>
-		<unit type="assassin" position_x="52" position_y="784" civilization="viking" health="100" level="0" />
-		<unit type="monk" position_x="84" position_y="800" civilization="viking" health="1" />
-		<unit type="assassin" position_x="-300" position_y="4288" civilization="greek" health="100" level="0" />
 		<unit type="monk" position_x="-268" position_y="4304" civilization="greek" health="1" />
+		<unit type="assassin" position_x="-300" position_y="4288" civilization="greek" health="100" level="0" />
 	</entities>
 	<buildings>
-		<build type="fortress" position_x="-96" position_y="704" civilization="viking" health="500" status="finished" action="nothing" />
-		<build type="encampment" position_x="-704" position_y="800" civilization="viking" health="350" status="finished" action="nothing" />
 		<build type="fortress" position_x="-288" position_y="4256" civilization="greek" health="500" status="finished" action="nothing" />
 	</buildings>
 	<players>
 		<greek>
-			<economy faith="1634" prayers="1020" sacrifices="1020" />
+			<economy faith="650" prayers="0" sacrifices="0" />
 			<research>
-				<temple research="true" />
-				<encampment research="true" />
-				<cleric research="true" />
-				<assassin research="true" />
-				<lawful_beast research="true" />
-				<chaotic_beast research="true" />
-				<lawful_miracle research="true" />
-				<chaotic_miracle research="true" />
+				<temple research="false" />
+				<encampment research="false" />
+				<cleric research="false" />
+				<assassin research="false" />
+				<lawful_beast research="false" />
+				<chaotic_beast research="false" />
+				<lawful_miracle research="false" />
+				<chaotic_miracle research="false" />
 				<lawful_victory research="false" />
 				<chaotic_victory research="false" />
 			</research>
@@ -30,7 +26,7 @@
 	</players>
 	<volume music="50" fx="128" />
 	<IA>
-		<Game_Phase macroState="1" state="3" />
+		<Game_Phase macroState="0" state="2" />
 	</IA>
-	<camera x="851" y="-3880" />
+	<camera x="730" y="-406" />
 </info>

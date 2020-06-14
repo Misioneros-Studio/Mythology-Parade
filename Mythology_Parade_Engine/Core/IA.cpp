@@ -1,5 +1,6 @@
 #include "IA.h"
 #include "j1App.h"
+#include "j1TutorialScene.h"
 #include "PugiXml/src/pugixml.hpp"
 
 IA::IA() : enemyFortress(nullptr)
@@ -73,7 +74,6 @@ void IA::Init()
 	timer_ia.Start();
 	time_ia = 2900;
 	active = false;
-	LOG("A");
 }
 
 bool IA::PreUpdate()
@@ -440,6 +440,9 @@ void IA::LateGame()
 		break;
 	case LateGameBehaviour::FINISH:
 		break;
+	case LateGameBehaviour::CREATE_MONKS:
+		CreateMonks();
+		break;
 	default:
 		break;
 	}
@@ -483,8 +486,16 @@ bool IA::InitCiv()
 
 
 		timer.Start();
-		early = EarlyGameBehaviour::BASIC_BUILDINGS_CREATION;
-		gamePhase = GameBehaviour::EARLY;
+		if (!App->tutorialscene->active)
+		{
+			early = EarlyGameBehaviour::BASIC_BUILDINGS_CREATION;
+			gamePhase = GameBehaviour::EARLY;
+		}
+		else
+		{
+			gamePhase = GameBehaviour::LATE;
+			late = LateGameBehaviour::CREATE_MONKS;
+		}
 	}
 
 	return true;
@@ -768,5 +779,14 @@ void IA::AssembleClerics()
 			else
 				MoveUnit(positionGreek.at((int)EarlyMovements::HOME), "cleric", u);
 		}
+	}
+}
+
+void IA::CreateMonks()
+{
+	if (timer.ReadSec() >= 20)
+	{
+		timer.Start();
+		App->entityManager->CreateUnitEntity(UnitType::MONK, {32,2672}, civilization);
 	}
 }

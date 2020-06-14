@@ -40,7 +40,8 @@ enum class LateGameBehaviour
 	DEFENSE,
 	ATACK2,
 	WIN,
-	FINISH
+	FINISH,
+	CREATE_MONKS
 };
 
 class IA : public j1Module
@@ -75,6 +76,7 @@ public:
 	void Explore1();
 	void Explore2();
 	void AssembleClerics();
+	void CreateMonks();
 
 public:
 	void EarlyGame();
