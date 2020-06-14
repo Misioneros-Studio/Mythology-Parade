@@ -145,18 +145,38 @@ bool EntityManager::Update(float dt)
 	}
 
 
-	for (std::list<Entity*>::iterator it = entities[EntityType::UNIT].begin(); it != entities[EntityType::UNIT].end(); it++)
-	{
-		if ((*it)->type == EntityType::UNIT)
-		{
-			Unit* tmp = (Unit*)it._Ptr->_Myval;
-			if (tmp->toDelete)
-			{
-				entities[EntityType::UNIT].erase(it);
-				DeleteEntity(tmp);
-				//delete tmp;
-			}
+	//for (std::list<Entity*>::iterator it = entities[EntityType::UNIT].begin(); it != entities[EntityType::UNIT].end(); it++)
+	//{
+	//	if ((*it)->type == EntityType::UNIT)
+	//	{
+	//		Unit* tmp = (Unit*)it._Ptr->_Myval;
+	//		if (tmp->toDelete)
+	//		{
+	//			entities[EntityType::UNIT].erase(it);
+	//			DeleteEntity(tmp);
+	//			//delete tmp;
+	//		}
 
+	//	}
+	//}
+
+	std::list<Entity*>::iterator i = entities[EntityType::UNIT].begin();
+	while (i != entities[EntityType::UNIT].end())
+	{
+		if ((*i)->type == EntityType::UNIT) 
+		{
+			Unit* tmp = (Unit*)i._Ptr->_Myval;
+			bool isActive = (*tmp).toDelete;
+			if (isActive)
+			{
+				entities[EntityType::UNIT].erase(i++);  // alternatively, i = items.erase(i);
+				//entities[EntityType::UNIT].erase(it);
+				DeleteEntity(tmp);
+			}
+			else
+			{
+				++i;
+			}
 		}
 	}
 
