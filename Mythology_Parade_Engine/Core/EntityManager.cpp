@@ -9,10 +9,10 @@
 #include "ResearchMenu.h"
 
 #include "p2Log.h"
-EntityManager::EntityManager() : CreateAssasin_sound(0), CreateMonk_sound(0), Monster1(0), Monster2(0), construction_bar_back({0, 0, 0, 0}),
+EntityManager::EntityManager() : CreateAssasin_sound(0), CreateMonk_sound(0), increase_sacrifice(0), Monster2(0), construction_bar_back({0, 0, 0, 0}),
 construction_bar_empty({ 0, 0, 0, 0 }), construction_bar_front({ 0, 0, 0, 0 }), constructorSpriteRect({0, 0, 0, 0}), debugTex(nullptr),
-destructedSpriteRect({ 0, 0, 0, 0 }), giant3(0), giant5(0), life_bar_front({ 0, 0, 0, 0 }), life_bar_front_enemy({0, 0, 0, 0}),
-ogre4(0), ogre5(0), research_bar_front({ 0, 0, 0, 0 }), shade12(0), unit_life_bar_back({ 0, 0, 0, 0 }), unit_life_bar_empty({ 0, 0, 0, 0 }),
+destructedSpriteRect({ 0, 0, 0, 0 }), giant5(0), life_bar_front({ 0, 0, 0, 0 }), life_bar_front_enemy({0, 0, 0, 0}),
+ ogre5(0), research_bar_front({ 0, 0, 0, 0 }), shade12(0), unit_life_bar_back({ 0, 0, 0, 0 }), unit_life_bar_empty({ 0, 0, 0, 0 }),
 unit_life_bar_front({ 0, 0, 0, 0 }),  unit_life_bar_front_enemy({0, 0, 0, 0}), volume(0)
 {
 	name.append("entity_manager");
@@ -93,15 +93,17 @@ bool EntityManager::Start()
 	animations[UnitType::MINOTAUR] = animationManager.Load("assets/units/Minotaur.tmx", UnitType::MINOTAUR);
 	animations[UnitType::CLERIC] = animationManager.Load("assets/units/Cleric.tmx", UnitType::CLERIC);
 
-	Monster1 = App->audio->LoadFx("audio/fx/Monster1.wav");
+	CreateAssasin_sound = App->audio->LoadFx("audio/fx/Appear_assasin.wav");
+	CreateMonk_sound = App->audio->LoadFx("audio/fx/Appear_monk.wav");
+	increase_sacrifice = App->audio->LoadFx("audio/fx/Sacrifices.wav");
 	Monster2 = App->audio->LoadFx("audio/fx/Monster2.wav");
-	giant3 = App->audio->LoadFx("audio/fx/giant3.wav");
+	
 	giant5 = App->audio->LoadFx("audio/fx/giant5.wav");
-	ogre4 = App->audio->LoadFx("audio/fx/ogre4.wav");
+	
 	ogre5 = App->audio->LoadFx("audio/fx/ogre5.wav");
 	shade12 = App->audio->LoadFx("audio/fx/shade12.wav");
-	CreateMonk_sound = App->audio->LoadFx("audio/fx/Appear_monk.wav");
-	CreateAssasin_sound = App->audio->LoadFx("audio/fx/Appear_assasin.wav");
+	
+	
 
 	level_tex =  App->tex->Load("gui/StarLevel.png");
 	circle_unit_tex = App->tex->Load("assets/units/CercleUnitats.png");
@@ -432,12 +434,13 @@ bool EntityManager::CleanUp()
 		it.second.Clean();
 	}
 
-	App->audio->CleanFxs(Monster1);
-	App->audio->CleanFxs(Monster2);
-	App->audio->CleanFxs(ogre4);
+	
+
 	App->audio->CleanFxs(ogre5);
-	App->audio->CleanFxs(giant3);
+	
 	App->audio->CleanFxs(giant5);
+	App->audio->CleanFxs(Monster2);
+	App->audio->CleanFxs(increase_sacrifice);
 	App->audio->CleanFxs(CreateMonk_sound);
 	App->audio->CleanFxs(CreateAssasin_sound);
 	App->audio->CleanFxs(shade12);
@@ -900,19 +903,19 @@ Entity* EntityManager::CreateUnitEntity(UnitType type, iPoint pos, CivilizationT
 		break;
 	case UnitType::JOTNAR:
 		ret = new Unit(UnitType::JOTNAR, pos);
-		FxUnits(4, ogre5, pos.x, pos.y);
+		FxUnits(4, App->entityManager->ogre5, pos.x, pos.y);
 		break;
 	case UnitType::DRAUGAR:
 		ret = new Unit(UnitType::DRAUGAR, pos);
-		FxUnits(4, shade12, pos.x, pos.y);
+		FxUnits(4, App->entityManager->shade12, pos.x, pos.y);
 		break;
 	case UnitType::CYCLOP:
 		ret = new Unit(UnitType::CYCLOP, pos);
-		FxUnits(4, giant3, pos.x, pos.y);
+		FxUnits(4, App->entityManager->giant5, pos.x, pos.y);
 		break;
 	case UnitType::MINOTAUR:
 		ret = new Unit(UnitType::MINOTAUR, pos);
-		FxUnits(4, Monster1, pos.x, pos.y);
+		FxUnits(4, App->entityManager->Monster2, pos.x, pos.y);
 		break;
 	case UnitType::CLERIC:
 		ret = new Unit(UnitType::CLERIC, pos);
