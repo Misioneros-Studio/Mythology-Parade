@@ -8,6 +8,7 @@
 #include "HealthSystem.h"
 #include "FoWBitDefs.h"
 #include"MaykMath.h"
+#include"Animation.h"
 
 struct SDL_Texture;
 enum CivilizationType;
@@ -87,6 +88,7 @@ public:
 
 	}	
 	
+	virtual AnimationType GetState();
 
 public:
 

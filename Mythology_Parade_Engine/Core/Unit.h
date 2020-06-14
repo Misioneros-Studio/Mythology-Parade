@@ -4,7 +4,6 @@
 #include "Entity.h"
 #include "SDL/include/SDL_rect.h"
 #include"EntityManager.h"
-#include "Animation.h"
 #include "j1Timer.h"
 
 struct SDL_Texture;
@@ -85,6 +84,7 @@ public:
 	void Kill(iPoint);
 
 	void Draw_Life_Bar(bool enemy = false);
+	AnimationType GetState();
 
 
 	std::vector<iPoint> entPath;

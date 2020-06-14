@@ -23,3 +23,9 @@ void Entity::SetSelected(bool value)
 {
 	_isSelected = value;
 }
+
+
+AnimationType Entity::GetState()
+{
+	return AnimationType::IDLE;
+}

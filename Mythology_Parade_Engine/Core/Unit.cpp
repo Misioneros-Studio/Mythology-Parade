@@ -490,6 +490,11 @@ void Unit::Draw_Life_Bar(bool enemy)
 	App->render->Blit(App->gui->GetTexture(), pos.x, pos.y, &life_spriteRect);
 }
 
+AnimationType Unit::GetState()
+{
+	return state;
+}
+
 void Unit::StateMachineActions(float dt)
 {
 	//LOG("%i", state);
@@ -524,23 +529,23 @@ void Unit::StateMachineActions(float dt)
 						}
 					}
 				}
-				if (enemyTarget == nullptr) 
+				if (enemyTarget == nullptr || unit->GetState() == AnimationType::DIE) 
 					break;
 
-				if (enemyTarget->RecieveDamage(unit->GetDamageValue()))
+				if (enemyTarget->GetState() != AnimationType::DIE && enemyTarget->RecieveDamage(unit->GetDamageValue()))
 				{
 					unit->GainExperience(Action::killEnemy, App->scene->isInTutorial);
 					enemyTarget->Kill(App->map->WorldToMap(position.x, position.y));
 					unit->nearbyDetectedList.remove(enemyTarget);
 					unit->ChangeState(unit->targetPosition, AnimationType::IDLE);
-					Unit* unit = nullptr;
+					Unit* w_unit = nullptr;
 					int count = 0;
 					for (std::list<Entity*>::iterator it = App->entityManager->entities[static_cast<EntityType>(1)].begin(); it != App->entityManager->entities[static_cast<EntityType>(1)].end(); ++it)
 					{
-						unit = static_cast<Unit*>(*it);
-						if (unit != this && unit->enemyTarget == enemyTarget) {
-							unit->enemyTarget = nullptr;
-							unit->ChangeState(unit->targetPosition, AnimationType::IDLE);
+						w_unit = static_cast<Unit*>(*it);
+						if (w_unit != this && w_unit->enemyTarget == enemyTarget) {
+							w_unit->enemyTarget = nullptr;
+							w_unit->ChangeState(w_unit->targetPosition, AnimationType::IDLE);
 						}
 					}
 				}
