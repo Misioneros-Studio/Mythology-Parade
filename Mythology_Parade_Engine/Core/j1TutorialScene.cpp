@@ -74,7 +74,7 @@ bool j1TutorialScene::Update(float dt)
 			DeleteTutorialMessage();
 			iPoint arrow_pos;
 			arrow_pos = App->map->MapToWorld(63, 63);
-			App->particleManager->CreateParticle({ arrow_pos.x,arrow_pos.y }, { 0,0 }, 3, ParticleAnimation::Tutorial_Arrow);
+			App->particleManager->CreateParticle({ arrow_pos.x,arrow_pos.y }, { 0,0 }, 3, ParticleAnimation::Tutorial_Arrow_Down);
 		}
 		if (message_number == 0) {
 			CreateTutorialMessage(message_number, true);
@@ -87,8 +87,10 @@ bool j1TutorialScene::Update(float dt)
 			//FOG OF WAR
 			camera_first_position = { App->render->camera.x,App->render->camera.y };
 
-			App->particleManager->CreateParticle({ 611,490 }, { 0,0 }, 50, ParticleAnimation::Tutorial_Arrow,0.0f);
-			App->particleManager->CreateParticle({ 611,10 }, { 0,0 }, 50, ParticleAnimation::Tutorial_Arrow, 0.0f);
+			App->particleManager->CreateParticle({ 611,158 }, { 0,0 }, 5, ParticleAnimation::Tutorial_Arrow_Up,0.0f);
+			App->particleManager->CreateParticle({ 611,335 }, { 0,0 }, 5, ParticleAnimation::Tutorial_Arrow_Down, 0.0f);
+			App->particleManager->CreateParticle({ 503,266 }, { 0,0 }, 5, ParticleAnimation::Tutorial_Arrow_Right, 0.0f);
+			App->particleManager->CreateParticle({ 680,266 }, { 0,0 }, 5, ParticleAnimation::Tutorial_Arrow_Left, 0.0f);
 		}
 		tutorial_message_timer.Start();
 	}
@@ -99,8 +101,12 @@ bool j1TutorialScene::Update(float dt)
 		if ((quest_done == false && tutorial_message_timer.ReadSec() >= 40)|| (quest_done == true && tutorial_message_timer.ReadSec() >= 20)) {
 			DeleteTutorialMessage();
 			CreateTutorialMessage(message_number);
+			iPoint arrow_pos;
+			arrow_pos = App->map->MapToWorld(63, 63);
+			App->particleManager->CreateParticle({ arrow_pos.x,arrow_pos.y }, { 0,0 }, 5, ParticleAnimation::Tutorial_Arrow_Down);
 			message_number++;
 			CreateTutorialMessage(message_number);
+			App->particleManager->CreateParticle({ 380,485 }, { 0,0 }, 5, ParticleAnimation::Tutorial_Arrow_Down, 0.0f);
 			message_number++;
 			quest_done = false;
 		}
