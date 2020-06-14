@@ -67,7 +67,8 @@ public:
 	bool Atack();
 	bool Win();
 	bool MoveUnit(iPoint, std::string, Unit* u = nullptr, int number = 0);
-	
+	void DoThingsBefore(int, int);
+
 public:
 	void Explore1();
 	void Explore2();
@@ -100,6 +101,8 @@ private:
 	iPoint mouse;
 
 	Building* enemyFortress;
+	bool loading;
+
 };
 
 enum class EarlyMovements

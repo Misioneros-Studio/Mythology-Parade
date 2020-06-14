@@ -94,6 +94,7 @@ bool j1FadeToBlack::PostUpdate()
 
 				//Disable IA
 				App->ia->Disable();
+				App->ia->Enable();
 
 				break;
 			case(which_fade::scene_to_scene):
@@ -113,6 +114,7 @@ bool j1FadeToBlack::PostUpdate()
 				App->minimap->Enable();
 				App->fowManager->Enable();
 				//Enable IA
+				App->ia->Disable();
 				App->ia->Enable();
 
 				break;
