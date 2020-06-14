@@ -405,8 +405,8 @@
   </researchbutton>
 
   <movebutton>
-     <line1>Use this button to target a position where</line1>
-     <line2>you want your units to move.</line2>
+     <line1>Use to target a position whereyou want your</line1>
+     <line2>units to move. Or use the right click.</line2>
   </movebutton>
 
   <attackbutton>
@@ -444,22 +444,22 @@
   </buildingconstructionlocked>
 
   <unitproductionlocked>
-    <line1>unlock this unit in the research tree to</line1>
+    <line1>Unlock this unit in the research tree to</line1>
     <line2>produce it.</line2>
   </unitproductionlocked>
 
   <miraclelocked>
-    <line1>unlock this ability in the research tree to</line1>
+    <line1>Unlock this ability in the research tree to</line1>
     <line2>claim it.</line2>
   </miraclelocked>
 
   <disasterlocked>
-     <line1>unlock this ability in the research tree to</line1>
+     <line1>Unlock this ability in the research tree to</line1>
      <line2>claim it.</line2>
   </disasterlocked>
 
   <victorylocked>
-     <line1>unlock the possibility to win in the</line1>
+     <line1>Unlock the possibility to win in the</line1>
      <line2>research tree to claim it.</line2>
   </victorylocked>
   
