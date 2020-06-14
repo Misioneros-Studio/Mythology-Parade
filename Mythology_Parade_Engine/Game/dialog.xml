@@ -28,8 +28,8 @@
     <line1>Build a temple to create religion units. It</line1>
     <line2>will return a certain damage when receiving</line2>
     <line3>attacks.</line3>
-    <line4>Defense 200</line6>
-    <line5>Damage 15</line8>
+    <line4>Defense 200</line4>
+    <line5>Damage 15</line5>
   </temple_unresearched>
 
   <temple>
@@ -37,9 +37,9 @@
     <line1>Build a temple to create religion units. It</line1>
     <line2>will return a certain damage when receiving</line2>
     <line3>attacks.</line3>
-    <line4>Cost -50 faith-	Prod. Time -05s-</line6>
-    <line5>Defense 200</line7>
-    <line6>Damage 15</line8>
+    <line4>Cost -50 faith-	Prod. Time -05s-</line4>
+    <line5>Defense 200</line5>
+    <line6>Damage 15</line6>
   </temple>
 
   <encampment_unresearched>
@@ -48,7 +48,7 @@
     <line2>will return a certain damage when receiving</line2>
     <line3>attacks.</line3>
     <line4>Defense 350</line4>
-    <line5>Damage 20</line6>
+    <line5>Damage 20</line5>
   </encampment_unresearched>
 
   <encampment>
@@ -58,7 +58,7 @@
     <line3>attacks.</line3>
     <line4>Cost -50 faith-	Prod. Time -05s-</line4>
     <line5>Defense 350</line5>
-    <line6>Damage 20</line7>
+    <line6>Damage 20</line6>
   </encampment>
 
   <cleric_locked>
@@ -293,7 +293,7 @@
      <line4>your opponent.</line4>
      <line5>+3 sacrifices</line5>
      <line6>-3 prayers</line6>
-     <line7>Cost -75 faith-	Prod. Time -10s-</line5>
+     <line7>Cost -75 faith-	Prod. Time -10s-</line7>
   </disaster_unlocked>
 
  <miracle_locked>
@@ -327,7 +327,7 @@
      <line4>you domain an enemy's entire encampment.</line4>
      <line5>+3 sacrifices</line5>
      <line6>-3 prayers</line6>
-     <line7>Cost -75 faith-	Prod. Time -10s-</line5>
+     <line7>Cost -75 faith-	Prod. Time -10s-</line7>
   </miracle_unlocked>
 
   <victory1_locked>
