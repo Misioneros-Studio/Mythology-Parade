@@ -183,6 +183,11 @@ public:
 
 	bool initCivilizations;
 
+	void BuildCivilizations(CivilizationType);
+	void InitVikings();
+	void InitGreek();
+	bool loading;
+
 	bool playerCreated;
 };
 #endif // !_ENTITYMANAGER_H

@@ -31,6 +31,11 @@ void ResearchMenu::StartResearchMenu(Player* play) {
 	}
 }
 
+void ResearchMenu::UpdatePlayer(Player* play)
+{
+	player = play;
+}
+
 //Called when clicking the research button
 void ResearchMenu::ActivateResearchMenu() {
 	ui_research_window = static_cast<WindowUI*>(App->gui->CreateUIElement(Type::WINDOW, nullptr, { 130,10,1025,570 }, { 13,20,1025,570 }, "", Panel_Fade::panel_fade_in, { 0,0,0,0 }, { 0,0,0,0 }, false, { 0,0,0,0 },
