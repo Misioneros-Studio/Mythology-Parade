@@ -91,10 +91,10 @@ bool j1FadeToBlack::PostUpdate()
 				App->minimap->Disable();
 				App->map->Disable();
 				App->title_scene->Enable();
+				App->map->Enable();
 
 				//Disable IA
 				App->ia->Disable();
-				App->ia->Enable();
 
 				break;
 			case(which_fade::scene_to_scene):

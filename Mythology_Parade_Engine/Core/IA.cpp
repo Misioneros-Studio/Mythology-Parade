@@ -277,13 +277,13 @@ void IA::EarlyGame()
 		{
 			if (civilization == CivilizationType::VIKING)
 			{
-				MoveUnit(positionViking.at((int)EarlyMovements::MONK1), "monk");
+				if (!loading) MoveUnit(positionViking.at((int)EarlyMovements::MONK1), "monk");
 				listEntities.push_back(static_cast<Entity*>(CreateUnit(UnitType::MONK, positionViking.at((int)EarlyMovements::MONK2))));
 				listEntities.push_back(static_cast<Entity*>(CreateUnit(UnitType::MONK, positionViking.at((int)EarlyMovements::MONK3))));
 			}
 			else
 			{
-				MoveUnit(positionGreek.at((int)EarlyMovements::MONK1), "monk");
+				if (!loading) MoveUnit(positionGreek.at((int)EarlyMovements::MONK1), "monk");
 				listEntities.push_back(static_cast<Entity*>(CreateUnit(UnitType::MONK, positionGreek.at((int)EarlyMovements::MONK2))));
 				listEntities.push_back(static_cast<Entity*>(CreateUnit(UnitType::MONK, positionGreek.at((int)EarlyMovements::MONK3))));
 			}
@@ -292,6 +292,7 @@ void IA::EarlyGame()
 		}
 		break;
 	case EarlyGameBehaviour::BASIC_UNITS_CREATION:
+		if (loading) mid = MidGameBehaviour::CREATE_ECONOMY; gamePhase = GameBehaviour::MID; break;
 		if (timer.ReadSec() >= 150 || loading)
 		{
 			if (civilization == CivilizationType::VIKING)
@@ -309,10 +310,12 @@ void IA::EarlyGame()
 		}
 		break;
 	case EarlyGameBehaviour::EXPLORE1:
+		if (loading) mid = MidGameBehaviour::CREATE_ECONOMY; gamePhase = GameBehaviour::MID; break;
 		Explore1();
 		early = EarlyGameBehaviour::CHECKEXPLORER1;
 		break;
 	case EarlyGameBehaviour::CHECKEXPLORER1:
+		if (loading) mid = MidGameBehaviour::CREATE_ECONOMY; gamePhase = GameBehaviour::MID; break;
 		if (CheckExplore())
 		{
 			Explore2();
@@ -320,6 +323,7 @@ void IA::EarlyGame()
 		}
 		break;
 	case EarlyGameBehaviour::FIND:
+		if (loading) mid = MidGameBehaviour::CREATE_ECONOMY; gamePhase = GameBehaviour::MID; break;
 		if (Find())
 			gamePhase = GameBehaviour::MID;
 		break;
@@ -333,6 +337,7 @@ void IA::MidGame()
 	switch (mid)
 	{
 	case MidGameBehaviour::ASSEMBLE:
+		if (loading) mid = MidGameBehaviour::CREATE_ECONOMY; break;
 		AssembleClerics();
 		mid = MidGameBehaviour::CREATE_ECONOMY;
 		timer.Start();
@@ -465,6 +470,7 @@ bool IA::InitCiv()
 				if (it2._Ptr->_Myval->civilization != civilization) enemyFortress = (Building*)it2._Ptr->_Myval;
 			}
 		}
+
 
 		timer.Start();
 		early = EarlyGameBehaviour::BASIC_BUILDINGS_CREATION;
