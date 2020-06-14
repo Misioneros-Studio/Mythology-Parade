@@ -388,16 +388,24 @@ void Player::PlayerInputs()
 
 	if (App->input->GetKey(SDL_SCANCODE_F4) == KEY_DOWN && App->scene->godMode)
 	{
-		if (!listEntities.empty())
-		{
-			std::list<Entity*>::iterator it = listEntities.begin();
-			for (it; it != listEntities.end(); ++it)
-			{
-				App->entityManager->DeleteEntity(it._Ptr->_Myval);
-			}
-			listEntities.clear();
-			App->scene->hud->HUDUpdateSelection(listEntities, nullptr);
-		}
+		iPoint mouse = App->map->GetMousePositionOnMap();
+		iPoint spawnPos = App->map->TileCenterPoint(mouse);
+		if (civilization == CivilizationType::GREEK)
+			App->entityManager->CreateUnitEntity(UnitType::ASSASSIN, spawnPos, CivilizationType::GREEK);
+		else if (civilization == CivilizationType::VIKING)
+			App->entityManager->CreateUnitEntity(UnitType::ASSASSIN, spawnPos, CivilizationType::VIKING);
+		//if (!listEntities.empty())
+		//{
+		//	std::list<Entity*>::iterator it = listEntities.begin();
+		//	for (it; it != listEntities.end(); ++it)
+		//	{
+		//		App->entityManager->DeleteEntity(it._Ptr->_Myval);
+		//	}
+		//	listEntities.clear();
+		//	App->scene->hud->HUDUpdateSelection(listEntities, nullptr);
+		//}
+
+
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN && App->scene->godMode)
