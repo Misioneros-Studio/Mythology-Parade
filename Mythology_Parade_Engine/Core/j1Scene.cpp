@@ -97,6 +97,7 @@ bool j1Scene::Start()
 	App->gui->sfx_UI[(int)UI_Audio::EXIT] = App->audio->LoadFx("audio/ui/Exit.wav");
 	App->gui->sfx_UI[(int)UI_Audio::CLOSE] = App->audio->LoadFx("audio/ui/Close_Menu.wav");
 	App->gui->sfx_UI[(int)UI_Audio::HOVER] = App->audio->LoadFx("audio/ui/Hover.wav");
+	App->gui->sfx_UI[(int)UI_Audio::MAIN_MENU] = App->audio->LoadFx("audio/ui/Click_Main_Menu.wav");
 
 	WinViking_sound = App->audio->LoadFx("audio/fx/WinVikings.wav");
 	WinGreek_sound = App->audio->LoadFx("audio/fx/win_greeks.wav");
@@ -492,6 +493,7 @@ bool j1Scene::CleanUp()
 	App->audio->CleanFxs(App->gui->sfx_UI[(int)UI_Audio::RESTART]);
 	App->audio->CleanFxs(App->gui->sfx_UI[(int)UI_Audio::SURRENDER]);
 	App->audio->CleanFxs(App->gui->sfx_UI[(int)UI_Audio::EXIT]);
+	App->audio->CleanFxs(App->gui->sfx_UI[(int)UI_Audio::MAIN_MENU]);
 
 	return true;
 }

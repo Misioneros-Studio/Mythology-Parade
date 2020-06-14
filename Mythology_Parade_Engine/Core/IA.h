@@ -38,6 +38,7 @@ enum class LateGameBehaviour
 	ATACK,
 	ECONOMY_FOCUS,
 	DEFENSE,
+	ATACK2,
 	WIN,
 	FINISH
 };
@@ -66,6 +67,7 @@ public:
 	bool Find();
 	bool Defense();
 	bool Atack();
+	bool CreateAtack();
 	bool Win();
 	bool MoveUnit(iPoint, std::string, Unit* u = nullptr, int number = 0);
 	
@@ -89,6 +91,7 @@ private:
 	EarlyGameBehaviour early;
 	MidGameBehaviour mid;
 	LateGameBehaviour late;
+	int numWaves;
 
 	CivilizationType civilization;
 

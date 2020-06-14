@@ -45,6 +45,7 @@ public:
 	std::list<Entity*> nearbyDetectedList;
 	Entity* enemyTarget;
 
+
 };
 
 #endif // !__COMBATUNIT_H__
