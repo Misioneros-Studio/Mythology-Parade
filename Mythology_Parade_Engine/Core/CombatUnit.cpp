@@ -189,12 +189,12 @@ bool CombatUnit::Update(float dt)
 							}
 						}
 					}
-					if (enemyTarget->GetHealth() < 600) {
+					if (enemyTarget->GetHealth() < 600 && enemyTarget->texture != nullptr) {
 						if (enemyTarget != nullptr && enemyTarget->GetState() != AnimationType::DIE && enemyTarget->RecieveDamage(this->GetDamageValue()))
 						{
 							this->GainExperience(Action::killEnemy, App->scene->isInTutorial);
 							enemyTarget->Kill(App->map->WorldToMap(position.x, position.y));
-							this->nearbyDetectedList.remove(enemyTarget);
+							
 							this->ChangeState(this->targetPosition, AnimationType::IDLE);
 
 							//for (std::list<Entity*>::iterator it = App->entityManager->entities[static_cast<EntityType>(1)].begin(); it != App->entityManager->entities[static_cast<EntityType>(1)].end(); ++it)
@@ -205,12 +205,13 @@ bool CombatUnit::Update(float dt)
 								{
 									CombatUnit* combat_unit = static_cast<CombatUnit*>(it);
 									if (combat_unit != nullptr && combat_unit->enemyTarget == enemyTarget) {
+										combat_unit->nearbyDetectedList.remove(enemyTarget);
 										combat_unit->enemyTarget = nullptr;
 										combat_unit->ChangeState(combat_unit->targetPosition, AnimationType::IDLE);
 									}
-
 								}
 							}
+							this->nearbyDetectedList.remove(enemyTarget);
 							enemyTarget = nullptr;
 						}
 					}
@@ -236,6 +237,7 @@ bool CombatUnit::Update(float dt)
 			}
 		}
 	}
+
 	return true;
 }
 
