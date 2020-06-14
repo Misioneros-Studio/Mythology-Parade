@@ -12,6 +12,7 @@
 #include "j1Gui.h"
 #include "j1Window.h"
 #include "EntityManager.h"
+#include "j1ParticleManager.h"
 #include "Player.h"
 #include"QuadTree.h"
 
@@ -71,8 +72,12 @@ bool j1TutorialScene::Update(float dt)
 	if ((message_number == 1 && tutorial_message_timer.ReadSec() >= 6) || (message_number !=1 && message_number < 3 && tutorial_message_timer.ReadSec() >= 3)) {
 		if (message_number == 1)
 			DeleteTutorialMessage();
-		if (message_number == 0)
+		if (message_number == 0) {
 			CreateTutorialMessage(message_number, true);
+			iPoint arrow_pos;
+			arrow_pos = App->map->MapToWorld(71, 71);
+			App->particleManager->CreateParticle({ arrow_pos.x,arrow_pos.y }, { 0,0 }, 10, ParticleAnimation::Tutorial_Arrow);
+		}
 		else
 			CreateTutorialMessage(message_number);
 		message_number++;
@@ -201,34 +206,36 @@ void j1TutorialScene::CreateTutorialMessage(int index, bool middle)
 		screen_position = 0;
 	}
 	TutorialMessage tutorial_message = tutorial_message_data->GetTutorialMessage(index);
-	window_tutorial_message[actual_message] = static_cast<WindowUI*>(App->gui->CreateUIElement(Type::WINDOW, nullptr, 
-		{ ((int)w - 295) * screen_position + x ,y,290,(tutorial_message.lines * 18) }, { 1285,11,305,(tutorial_message.lines * 18) }));
+
+	window_tutorial_message[actual_message] = static_cast<WindowUI*>(App->gui->CreateUIElement(Type::WINDOW, nullptr,
+		{ ((int)w - 295) * screen_position + x ,y,290,(tutorial_message.lines * 18) + 15 }, { 1749,356,305,113 }));
 	int j = 0;
+
 	for (int i = 1; i <= tutorial_message.lines; i++) {
 		int k = i + (actual_message * 9);
 		if (tutorial_message.has_title && i == 1) {
 			text_tutorial_message[k - 1] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, window_tutorial_message[actual_message],
-				{ ((int)w - 295) * screen_position + x ,y + (18 * (i - 1)),290,18 }, { 0,0,0,0 }, tutorial_message.title, Panel_Fade::no_one_fade, color));
+				{ ((int)w - 285) * screen_position + x ,y + (18 * (i - 1)) + 10,280,18 }, { 0,0,0,0 }, tutorial_message.title, Panel_Fade::no_one_fade, color));
 			j--;
 		}
 		else {
 			text_tutorial_message[k - 1] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, window_tutorial_message[actual_message],
-				{ ((int)w - 295) * screen_position + x ,y + (18 * (i - 1)),290,18 }, { 0,0,0,0 }, tutorial_message_data->GetLineTutorialMessage(i + j, tutorial_message),
+				{ ((int)w - 285) * screen_position + x ,y + (18 * (i - 1)) + 10,280,18 }, { 0,0,0,0 }, tutorial_message_data->GetLineTutorialMessage(i + j, tutorial_message),
 				Panel_Fade::no_one_fade, { 255,255,255,255 }));
 		}
 	}
 	if (middle == false) {
 		if (number_message == 0) {
 			first_message_shown[screen_position] = true;
-			first_message_height[screen_position] = (tutorial_message.lines * 18) + 5;
+			first_message_height[screen_position] = (tutorial_message.lines * 18) + 25;
 		}
 		else if (number_message == 1) {
 			second_message_shown[screen_position] = true;
-			second_message_height[screen_position] = (tutorial_message.lines * 18) + 5;
+			second_message_height[screen_position] = (tutorial_message.lines * 18) + 25;
 		}
 		else if (number_message == 2) {
 			third_message_shown[screen_position] = true;
-			third_message_height[screen_position] = (tutorial_message.lines * 18) + 5;
+			third_message_height[screen_position] = (tutorial_message.lines * 18) + 25;
 		}
 	}
 	actual_message++;

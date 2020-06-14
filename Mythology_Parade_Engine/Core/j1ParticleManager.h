@@ -11,7 +11,8 @@ enum class ParticleAnimation {
 	Explosion,
 	Arrows_Cursor,
 	Skull,
-	Level_Up
+	Level_Up,
+	Tutorial_Arrow
 };
 
 class j1ParticleManager : public j1Module
@@ -25,6 +26,7 @@ public:
 	void UpdateParticleAnimation(ParticleAnimation animation);
 
 	bool Start() override;
+	void CreateTutorialArrowAnimation();
 	void CreateLevelUpAnimation();
 	void CreateSkullAnimation();
 	void CreateArrowsCursorAnimation();
@@ -40,6 +42,7 @@ private:
 	ClassicAnimation arrows_animation;
 	ClassicAnimation skull_animation;
 	ClassicAnimation levelup_animation;
+	ClassicAnimation tutorial_arrow_animation;
 
 	ClassicAnimation current_animation;
 
