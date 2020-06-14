@@ -283,6 +283,14 @@ bool j1Scene::Update(float dt)
 		ia_bar_percentage = 1;
 	hud->UpdateIABar(ia_bar_percentage);
 
+	if (App->input->GetKey(SDL_SCANCODE_M))
+	{
+		iPoint mouse;
+		mouse = App->map->GetMousePositionOnMap();
+		mouse = App->map->TileCenterPoint(mouse);
+		App->entityManager->CreateUnitEntity(UnitType::DRAUGAR, mouse, App->entityManager->getPlayer()->civilization);
+	}
+
 	// Gui ---
 	switch (hud->close_menus)
 	{

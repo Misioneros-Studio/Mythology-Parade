@@ -86,10 +86,6 @@ bool IA::PreUpdate()
 		mouse = App->map->TileCenterPoint(mouse);
 		//LOG("%i %i", mouse.x, mouse.y);
 	}
-	if (App->input->GetKey(SDL_SCANCODE_M))
-	{
-		Win();
-	}
 
 	return ret;
 }
