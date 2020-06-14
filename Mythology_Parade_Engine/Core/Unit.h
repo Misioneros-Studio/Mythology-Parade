@@ -4,7 +4,6 @@
 #include "Entity.h"
 #include "SDL/include/SDL_rect.h"
 #include"EntityManager.h"
-#include "Animation.h"
 #include "j1Timer.h"
 
 struct SDL_Texture;
@@ -51,7 +50,6 @@ public:
 	int time_production;
 	int time_research;
 	bool researched;
-	Entity* enemyTarget;
 	iPoint oldEnemyPosition;
 
 	bool toDelete = false;
@@ -85,8 +83,10 @@ public:
 	void Kill(iPoint);
 
 	void Draw_Life_Bar(bool enemy = false);
+	AnimationType GetState();
 
 
+	std::vector<iPoint> entPath;
 protected:
 	//Animation
 	Direction currentDirection;
@@ -98,7 +98,6 @@ protected:
 
 	AnimationType state;
 
-	std::vector<iPoint> entPath;
 
 	float timeToDespawn;
 	//void SetTarget();

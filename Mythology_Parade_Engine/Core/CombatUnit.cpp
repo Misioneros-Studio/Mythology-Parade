@@ -10,6 +10,7 @@ CombatUnit::CombatUnit(UnitType type, iPoint pos) : Unit(type, pos), range(0), d
 	unitType = type;
 	position = {(float)pos.x, (float)pos.y};
 	canLevel = true;
+	enemyTarget = nullptr;
 	switch (unitType)
 	{
 	case UnitType::ASSASSIN:
@@ -131,14 +132,91 @@ void CombatUnit::Init(int maxHealth, int damage, int range, int speed)
 bool CombatUnit::Update(float dt)
 {
 	Unit::Update(dt);
-	if (!IsDeath()) {
+	if (!IsDeath())
+	{
 
-		if (enemyTarget != nullptr) {
-			if (enemyTarget->IsDeath()) {
+		if (enemyTarget != nullptr)
+		{
+			if (enemyTarget->IsDeath())
+			{
 				enemyTarget = nullptr;
 			}
 		}
+
 		DetectNearbyEnemies();
+
+		if (enemyTarget && position.DistanceManhattan(enemyTarget->position) < 90)
+		{
+			ChangeState(App->map->WorldToMap(enemyTarget->position.x, enemyTarget->position.y), AnimationType::ATTACK);
+			//position = App->map->MapToWorld((float)targetPosition.x, (float)targetPosition.y);
+			//position += App->map->GetTilesHalfSizeFloat();
+
+			//targetPosition.ResetAsPosition();
+			entPath.clear();
+		}
+
+		if (state == AnimationType::ATTACK && enemyTarget != nullptr)
+		{
+			if (enemyTarget->civilization == civilization)
+			{
+				enemyTarget = nullptr;
+				ChangeState(targetPosition, AnimationType::IDLE);
+			}
+			else {
+				if (currentAnim.current_sprite == currentAnim.num_sprites - 8)
+				{
+					App->entityManager->FxUnits(4, App->audio->hit_2, position.x, position.y);
+
+					if (enemyTarget->type == EntityType::BUILDING)
+					{
+						if (RecieveDamage(static_cast<Building*>(enemyTarget)->GetDamage()))
+						{
+							Kill(App->map->WorldToMap(position.x, position.y));
+
+							CombatUnit* unit = nullptr;
+							for (std::list<Entity*>::iterator it = App->entityManager->entities[static_cast<EntityType>(1)].begin(); it != App->entityManager->entities[static_cast<EntityType>(1)].end(); ++it)
+							{
+								Unit* unit = static_cast<Unit*>((*it));
+								if (unit->unitType == UnitType::ASSASSIN)
+								{
+									CombatUnit* combat_unit = static_cast<CombatUnit*>(*it);
+
+									if (combat_unit->enemyTarget == this) {
+										combat_unit->enemyTarget = nullptr;
+										combat_unit->ChangeState({ -1,-1 }, AnimationType::IDLE);
+									}
+								}
+							}
+						}
+					}
+					if (enemyTarget->GetHealth() < 600) {
+						if (enemyTarget != nullptr && enemyTarget->GetState() != AnimationType::DIE && enemyTarget->RecieveDamage(this->GetDamageValue()))
+						{
+							this->GainExperience(Action::killEnemy, App->scene->isInTutorial);
+							enemyTarget->Kill(App->map->WorldToMap(position.x, position.y));
+							this->nearbyDetectedList.remove(enemyTarget);
+							this->ChangeState(this->targetPosition, AnimationType::IDLE);
+
+							//for (std::list<Entity*>::iterator it = App->entityManager->entities[static_cast<EntityType>(1)].begin(); it != App->entityManager->entities[static_cast<EntityType>(1)].end(); ++it)
+							for (auto& it : App->entityManager->entities[static_cast<EntityType>(1)])
+							{
+								Unit* unit = static_cast<Unit*>(it);
+								if (unit->unitType == UnitType::ASSASSIN)
+								{
+									CombatUnit* combat_unit = static_cast<CombatUnit*>(it);
+									if (combat_unit != nullptr && combat_unit->enemyTarget == enemyTarget) {
+										combat_unit->enemyTarget = nullptr;
+										combat_unit->ChangeState(combat_unit->targetPosition, AnimationType::IDLE);
+									}
+
+								}
+							}
+							enemyTarget = nullptr;
+						}
+					}
+				}
+			}
+		}
 
 		if (isSelected()) {
 			switch (GetLevel())
@@ -212,42 +290,73 @@ void CombatUnit::SetHealth(int value)
 
 void CombatUnit::DetectNearbyEnemies()
 {
-	//if enemytarget == nullptr
-	if (enemyTarget == nullptr)
-	{
-		for (int i = 1; i < 3; ++i)
-		{
-			for (std::list<Entity*>::iterator it = App->entityManager->entities[static_cast<EntityType>(i)].begin(); it != App->entityManager->entities[static_cast<EntityType>(i)].end(); it++)
-			{
-				Entity* entity = it._Ptr->_Myval;
-				if (!entity->IsDeath() && entity->civilization != civilization)
-				{
-					if (entity->position.DistanceManhattan(position) < 300) // Posar valor com a range variable
-					{
-						enemyTarget = entity;
-						//Request path 
-						if (GetTilePosition() != enemyTarget->GetTilePosition())
-							App->pathfinding->RequestPath(this->GetTilePosition(), enemyTarget->GetTilePosition(), this);
-						//Guardar enemy map position
-						oldEnemyPosition = enemyTarget->GetTilePosition();
 
-						LOG("Enemy detected: %i", entity->type);
-						return;
+	for (int i = 1; i < 3; ++i)
+	{
+		for (std::list<Entity*>::iterator it = App->entityManager->entities[static_cast<EntityType>(i)].begin(); it != App->entityManager->entities[static_cast<EntityType>(i)].end(); it++)
+		{
+			Entity* entity = it._Ptr->_Myval;
+			if (!entity->IsDeath() && entity->civilization != civilization)
+			{
+				if (entity->position.DistanceTo(position) < 400) // Posar valor com a range variable
+				{
+					if (std::find(nearbyDetectedList.begin(), nearbyDetectedList.end(), entity) != nearbyDetectedList.end())
+					{
+						continue; 
 					}
+					else 
+					{
+						nearbyDetectedList.push_back(entity);
+
+					}
+
+
+					//enemyTarget = entity;
+					////Request path 
+					//if (GetTilePosition() != enemyTarget->GetTilePosition())
+					//	App->pathfinding->RequestPath(this->GetTilePosition(), enemyTarget->GetTilePosition(), this);
+					////Guardar enemy map position
+					//oldEnemyPosition = enemyTarget->GetTilePosition();
+
+					//LOG("Enemy detected: %i", entity->type);
+					//return;
 				}
 			}
 		}
 	}
-	else
-	{
-		//Sha mogut de tile?
-		//if (enemyTarget->GetTilePosition() != oldEnemyPosition) 
-		//{
-		//	//Updatear la tile on esta el enemic
-		//	oldEnemyPosition = enemyTarget->GetTilePosition();
-		//	//Request new path
-		//	if (GetTilePosition() != enemyTarget->GetTilePosition() && position.DistanceManhattan(enemyTarget->position) >= 300)
-		//		App->pathfinding->RequestPath(GetTilePosition(), enemyTarget->GetTilePosition(), App->entityManager->getPlayer()->GetEntitiesSelected());
-		//}
+	if (!nearbyDetectedList.empty()) {
+		Entity* closestEntity = nearbyDetectedList.front();
+		for each (Entity * var in nearbyDetectedList)
+		{
+			if (position.DistanceManhattan(var->position) < position.DistanceManhattan(closestEntity->position)) {
+				closestEntity = var;
+			}
+		}
+
+		if (enemyTarget != closestEntity) {
+			enemyTarget = closestEntity;
+			//Request path 
+			if (GetTilePosition() != enemyTarget->GetTilePosition() && !enemyTarget->IsDeath())
+				App->pathfinding->RequestPath(this->GetTilePosition(), enemyTarget->GetTilePosition(), this);
+			//Guardar enemy map position
+			oldEnemyPosition = enemyTarget->GetTilePosition();
+		}
 	}
+
+
+	
+	LOG("Detected units: %i", nearbyDetectedList.size());
+	
+	//else
+	//{
+	//	//Sha mogut de tile?
+	//	//if (enemyTarget->GetTilePosition() != oldEnemyPosition) 
+	//	//{
+	//	//	//Updatear la tile on esta el enemic
+	//	//	oldEnemyPosition = enemyTarget->GetTilePosition();
+	//	//	//Request new path
+	//	//	if (GetTilePosition() != enemyTarget->GetTilePosition() && position.DistanceManhattan(enemyTarget->position) >= 300)
+	//	//		App->pathfinding->RequestPath(GetTilePosition(), enemyTarget->GetTilePosition(), App->entityManager->getPlayer()->GetEntitiesSelected());
+	//	//}
+	//}
 }

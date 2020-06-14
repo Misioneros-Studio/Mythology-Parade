@@ -17,7 +17,6 @@ Unit::Unit(UnitType type, iPoint pos): unitType(type), state(AnimationType::IDLE
 	displayDebug = false;
 	description = "";
 	collisionRect = { 0, 0, 30, -55 };
-	enemyTarget = nullptr;
 	unitType = type;
 	position = {(float)pos.x, (float)pos.y};
 	state = AnimationType::IDLE;
@@ -277,27 +276,21 @@ void Unit::MoveToTarget()
 		position += App->map->GetTilesHalfSizeFloat();
 
 		targetPosition.ResetAsPosition();
-		if (entPath.size() <= 0)
-		{
-			if (enemyTarget != nullptr && unitType != UnitType::MONK)
-			{
-				ChangeState(App->map->WorldToMap(enemyTarget->position.x, enemyTarget->position.y), AnimationType::ATTACK);
-			}
-			else
-			{
-				ChangeState(targetPosition, AnimationType::IDLE);
-			}
-
-
+		if (entPath.size() <= 0 && state != AnimationType::ATTACK) {
+			ChangeState(targetPosition, AnimationType::IDLE);
 		}
-	}
-	else if(enemyTarget && position.DistanceManhattan(enemyTarget->position) < 90)
-	{
-		//position = App->map->MapToWorld((float)targetPosition.x, (float)targetPosition.y);
-		//position += App->map->GetTilesHalfSizeFloat();
 
-		//targetPosition.ResetAsPosition();
-		entPath.clear();
+		//if (entPath.size() <= 0)
+		//{
+		//	if (enemyTarget != nullptr && unitType != UnitType::MONK)
+		//	{
+		//		ChangeState(App->map->WorldToMap(enemyTarget->position.x, enemyTarget->position.y), AnimationType::ATTACK);
+		//	}
+		//	else
+		//	{
+		//		ChangeState(targetPosition, AnimationType::IDLE);
+		//	}
+		//}
 	}
 
 }
@@ -358,7 +351,7 @@ bool Unit::Draw(float dt)
 			entPath.erase(entPath.begin(), entPath.begin() + 1);
 		}
 
-		if (targetPosition != iPoint(-1, -1))
+		if (targetPosition != iPoint(-1, -1) && state != AnimationType::ATTACK)
 			MoveToTarget();
 	}
 	int num_current_anim = currentAnim.GetSprite();
@@ -490,61 +483,16 @@ void Unit::Draw_Life_Bar(bool enemy)
 	App->render->Blit(App->gui->GetTexture(), pos.x, pos.y, &life_spriteRect);
 }
 
+AnimationType Unit::GetState()
+{
+	return state;
+}
+
 void Unit::StateMachineActions(float dt)
 {
 	//LOG("%i", state);
 	switch (state)
 	{
-		case AnimationType::ATTACK:
-		{
-			if (currentAnim.current_sprite == currentAnim.num_sprites - 8)
-			{
-				App->entityManager->FxUnits(4, App->audio->hit_2, position.x, position.y);
-				CombatUnit* unit = (CombatUnit*)this;
-
-				if (enemyTarget == nullptr) 
-					break;
-
-				if (enemyTarget->type == EntityType::BUILDING)
-				{
-					if (RecieveDamage(static_cast<Building*>(enemyTarget)->GetDamage()))
-					{
-						Kill(App->map->WorldToMap(position.x, position.y));
-						Unit* unit = nullptr;
-						if (!IsDeath()) {
-							for (std::list<Entity*>::iterator it = App->entityManager->entities[static_cast<EntityType>(1)].begin(); it != App->entityManager->entities[static_cast<EntityType>(1)].end(); ++it)
-							{
-								unit = static_cast<Unit*>(*it);
-								if (unit->enemyTarget == enemyTarget) {
-									unit->enemyTarget = nullptr;
-									unit->ChangeState(unit->targetPosition, AnimationType::IDLE);
-								}
-							}
-						}
-					}
-				}
-				if (enemyTarget == nullptr) 
-					break;
-
-				if (enemyTarget->RecieveDamage(unit->GetDamageValue()))
-				{
-					unit->GainExperience(Action::killEnemy, App->scene->isInTutorial);
-					enemyTarget->Kill(App->map->WorldToMap(position.x, position.y));
-					unit->ChangeState(unit->targetPosition, AnimationType::IDLE);
-					Unit* unit = nullptr;
-					int count = 0;
-					for (std::list<Entity*>::iterator it = App->entityManager->entities[static_cast<EntityType>(1)].begin(); it != App->entityManager->entities[static_cast<EntityType>(1)].end(); ++it)
-					{
-						unit = static_cast<Unit*>(*it);
-						if (unit != this && unit->enemyTarget == enemyTarget) {
-							unit->enemyTarget = nullptr;
-							unit->ChangeState(unit->targetPosition, AnimationType::IDLE);
-						}
-					}
-				}
-			}
-			break;
-		}
 	case AnimationType::DIE:
 		App->entityManager->FxUnits(4, App->audio->Death_sfx, position.x, position.y);
 		timeToDespawn -= dt;

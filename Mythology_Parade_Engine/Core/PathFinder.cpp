@@ -2,7 +2,8 @@
 #include "p2Log.h"
 #include "j1App.h"
 #include "j1Pathfinding.h"
-#include"Unit.h"
+#include "Unit.h"
+#include "CombatUnit.h"
 
 PathFinder::PathFinder() : last_path(DEFAULT_PATH_LENGTH), pathCompleted(false), max_iterations(5), available(true)
 {
@@ -69,7 +70,15 @@ bool PathFinder::IteratePath()
 	close.list.push_back(*currentNode);
 	open.list.erase(*open.Find(currentNode->pos));
 
-
+	//if (static_cast<Unit*>(requestUnit)->unitType == UnitType::ASSASSIN) {
+	//	if (static_cast<CombatUnit*>(requestUnit)->enemyTarget->IsDeath()) {
+	//		pathCompleted = true;
+	//		available = true;
+	//		open.list.clear();
+	//		close.list.clear();
+	//		static_cast<Unit*>(requestUnit)->entPath.clear();
+	//	}
+	//}
 	if (currentNode->pos == destination) {
 		const PathNode* iterator = currentNode;
 
@@ -96,7 +105,7 @@ bool PathFinder::IteratePath()
 			{
 				Unit* unit = (Unit*)it._Ptr->_Myval;
 
-				if (!walkingToEnemy && unit->enemyTarget != nullptr)
+				if (!walkingToEnemy)
 				{
 					last_path.pop_back();
 					walkingToEnemy = true;
@@ -115,6 +124,7 @@ bool PathFinder::IteratePath()
 			static_cast<Unit*>(requestUnit)->SetPath(last_path);
 			requestUnit = nullptr;
 			LOG("Path with unit finished: %i",numPathsCreated);
+
 		}
 		RELEASE(currentNode);
 		return false;

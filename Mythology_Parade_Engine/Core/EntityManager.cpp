@@ -762,19 +762,19 @@ Entity* EntityManager::CreateUnitEntity(UnitType type, iPoint pos, CivilizationT
 		FxUnits(4, CreateAssasin_sound, pos.x, pos.y);
 		break;
 	case UnitType::JOTNAR:
-		ret = new CombatUnit(UnitType::JOTNAR, pos);
+		ret = new Unit(UnitType::JOTNAR, pos);
 		FxUnits(4, ogre5, pos.x, pos.y);
 		break;
 	case UnitType::DRAUGAR:
-		ret = new CombatUnit(UnitType::DRAUGAR, pos);
+		ret = new Unit(UnitType::DRAUGAR, pos);
 		FxUnits(4, shade12, pos.x, pos.y);
 		break;
 	case UnitType::CYCLOP:
-		ret = new CombatUnit(UnitType::CYCLOP, pos);
+		ret = new Unit(UnitType::CYCLOP, pos);
 		FxUnits(4, giant3, pos.x, pos.y);
 		break;
 	case UnitType::MINOTAUR:
-		ret = new CombatUnit(UnitType::MINOTAUR, pos);
+		ret = new Unit(UnitType::MINOTAUR, pos);
 		FxUnits(4, Monster1, pos.x, pos.y);
 		break;
 	case UnitType::CLERIC:

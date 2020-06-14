@@ -8,6 +8,7 @@
 #include "HealthSystem.h"
 #include "FoWBitDefs.h"
 #include"MaykMath.h"
+#include"Animation.h"
 
 struct SDL_Texture;
 enum CivilizationType;
@@ -19,7 +20,7 @@ enum class EntityType
 	BUILDING
 };
 
-class Entity :public j1Module, public HealthSystem
+class Entity : public HealthSystem
 {
 public:
 	Entity();
@@ -87,6 +88,7 @@ public:
 
 	}	
 	
+	virtual AnimationType GetState();
 
 public:
 
@@ -146,9 +148,11 @@ public:
 	void SetSelected(bool value);
 
 	
+	std::string name;
 protected:
 	SDL_RendererFlip flipState;
 	SDL_Rect collisionRect;
+
 
 	int fowRadius;
 	//Conditions

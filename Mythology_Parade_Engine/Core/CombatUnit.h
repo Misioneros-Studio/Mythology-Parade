@@ -3,7 +3,6 @@
 
 #include "Unit.h"
 #include "LevelSystem.h"
-#include"Animation.h"
 
 class CombatUnit :	public Unit, public LevelSystem
 {
@@ -42,6 +41,9 @@ public:
 
 
 	void DetectNearbyEnemies();
+
+	std::list<Entity*> nearbyDetectedList;
+	Entity* enemyTarget;
 
 };
 
