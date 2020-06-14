@@ -207,9 +207,12 @@ bool IA::Load(pugi::xml_node& s)
 			late = LateGameBehaviour::DEFENSE;
 			break;
 		case 3:
-			late = LateGameBehaviour::WIN;
+			late = LateGameBehaviour::ATACK2;
 			break;
 		case 4:
+			late = LateGameBehaviour::WIN;
+			break;
+		case 5:
 			late = LateGameBehaviour::FINISH;
 			break;
 		default:
