@@ -83,6 +83,10 @@ bool IA::PreUpdate()
 		mouse = App->map->TileCenterPoint(mouse);
 		//LOG("%i %i", mouse.x, mouse.y);
 	}
+	if (App->input->GetKey(SDL_SCANCODE_M))
+	{
+		Win();
+	}
 
 	return ret;
 }
@@ -128,6 +132,8 @@ bool IA::CleanUp()
 {
 	bool ret = true;
 	listEntities.clear();
+	early = EarlyGameBehaviour::CREATION;
+	gamePhase = GameBehaviour::EARLY;
 	return ret;
 }
 
@@ -556,6 +562,7 @@ bool IA::Atack()
 bool IA::Win()
 {
 	App->entityManager->getPlayer()->player_lose = true;
+	CleanUp();
 	return true;
 }
 
