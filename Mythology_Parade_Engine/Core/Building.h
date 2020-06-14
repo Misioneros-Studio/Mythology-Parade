@@ -60,6 +60,7 @@ public:
 	std::string GetElementProducing();
 	void ProduceQueue(std::string thing_producing, bool = false);
 	void Convert();
+	void Kill(iPoint) override;
 private:
 
 	bool Awake(pugi::xml_node&);
@@ -69,7 +70,6 @@ private:
 	bool Draw(float dt);
 
 
-	void Kill(iPoint) override;
 
 	void FinishProduction(const std::string &thing_produced, bool cancelled = false);
 
