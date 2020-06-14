@@ -417,7 +417,7 @@ void IA::LateGame()
 	case LateGameBehaviour::DEFENSE:
 		Defense();
 		timer.Start();
-		late = LateGameBehaviour::WIN;
+		late = LateGameBehaviour::ATACK2;
 		break;
 	case LateGameBehaviour::ATACK2:
 		if (timer.ReadSec() >= 10)
@@ -689,7 +689,7 @@ bool IA::MoveUnit(iPoint pos, std::string name, Unit* u, int number)
 
 void IA::DoThingsBefore(int macro, int state)
 {
-	int maxStates[3] = { 7,4,5 };
+	int maxStates[3] = { 7,4,6 };
 	for (int i = 0; i < macro; i++)
 	{
 		for (int j = 0; j <= maxStates[i]; ++j)
