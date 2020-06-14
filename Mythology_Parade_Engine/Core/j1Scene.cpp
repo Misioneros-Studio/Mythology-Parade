@@ -18,7 +18,6 @@
 #include "j1FadeToBlack.h"
 #include "HUD.h"
 #include "ResearchMenu.h"
-#include "IA.h"
 
 #include "j1TitleScene.h"
 #include "j1ParticleManager.h"
@@ -86,7 +85,7 @@ bool j1Scene::Start()
 	debugBlue_tex = App->tex->Load("maps/path2.png");
 	debugRed_tex = App->tex->Load("maps/cantBuild.png");
 
-	
+
 
 	App->gui->sfx_UI[(int)UI_Audio::SAVE] = App->audio->LoadFx("audio/ui/Save.wav");
 	App->gui->sfx_UI[(int)UI_Audio::LOAD] = App->audio->LoadFx("audio/ui/load.wav");
@@ -96,7 +95,6 @@ bool j1Scene::Start()
 	App->gui->sfx_UI[(int)UI_Audio::SURRENDER] = App->audio->LoadFx("audio/ui/Surrender.wav");
 	App->gui->sfx_UI[(int)UI_Audio::EXIT] = App->audio->LoadFx("audio/ui/Exit.wav");
 	App->gui->sfx_UI[(int)UI_Audio::CLOSE] = App->audio->LoadFx("audio/ui/Close_Menu.wav");
-	App->gui->sfx_UI[(int)UI_Audio::HOVER] = App->audio->LoadFx("audio/ui/Hover.wav");
 
 	WinViking_sound = App->audio->LoadFx("audio/fx/WinVikings.wav");
 	WinGreek_sound = App->audio->LoadFx("audio/fx/win_greeks.wav");
@@ -158,9 +156,9 @@ bool j1Scene::PreUpdate()
 	{
 		App->gui->cursor_attack = false;
 	}
-	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN && App->gui->cursor_heal == true)
+	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN && App->gui->cursor_move == true)
 	{
-		App->gui->cursor_heal = false;
+		App->gui->cursor_move = false;
 	}
 
 	if (App->title_scene->wantToLoad)
@@ -262,7 +260,6 @@ void j1Scene::ClickToPath()
 			if (mapPos != ending)
 				App->pathfinding->RequestPath(mapPos, ending, it);
 		}
-
 	}
 }
 
@@ -275,12 +272,6 @@ bool j1Scene::Update(float dt)
 		update_selection = false;
 		dont_update_types_of_troops = true;
 	}
-
-	//Update IA bar
-	float ia_bar_percentage = App->ia->timer_ia.ReadSec() / App->ia->time_ia;
-	if (ia_bar_percentage > 1)
-		ia_bar_percentage = 1;
-	hud->UpdateIABar(ia_bar_percentage);
 
 	// Gui ---
 	switch (hud->close_menus)
@@ -467,10 +458,6 @@ bool j1Scene::CleanUp()
 		hud->HUDDeleteActionButtons();
 		App->gui->DeleteUIElement(hud->ui_ingame);
 		hud->ui_ingame = nullptr;
-		App->gui->DeleteUIElement(hud->ia_bar_back);
-		hud->ia_bar_back = nullptr;
-		App->gui->DeleteUIElement(hud->ia_bar_front);
-		hud->ia_bar_front = nullptr;
 		for (int i = 0; i < 3; i++)
 		{
 			App->gui->DeleteUIElement(hud->ui_text_ingame[i]);
@@ -482,7 +469,7 @@ bool j1Scene::CleanUp()
 		delete research_menu;
 		research_menu = nullptr;
 	}
-	
+
 
 	App->audio->CleanFxs(App->gui->sfx_UI[(int)UI_Audio::SAVE]);
 	App->audio->CleanFxs(App->gui->sfx_UI[(int)UI_Audio::CONFIRMATION]);
@@ -511,11 +498,13 @@ void j1Scene::BackToTitleMenu() {
 // Called when restarting the game
 void j1Scene::RestartGame() {
 	CivilizationType civ = App->entityManager->getPlayer()->civilization;
-	if(civ==CivilizationType::GREEK)
-		if(isInTutorial==true)
+	if (civ == CivilizationType::GREEK)
+	{
+		if (isInTutorial == true)
 			App->fade_to_black->FadeToBlack(which_fade::tutorial_to_tutorial, 2, "greek");
 		else
 			App->fade_to_black->FadeToBlack(which_fade::scene_to_scene, 2, "greek");
+	}
 	else if (civ == CivilizationType::VIKING) {
 		if (isInTutorial == true)
 			App->fade_to_black->FadeToBlack(which_fade::tutorial_to_tutorial, 2, "viking");
@@ -651,62 +640,52 @@ void j1Scene::OnClick(UI* element, float argument)
 		}
 		else if (element->name == "RESEARCH TEMPLE") {
 			Building* building = (Building*)hud->thing_selected;
-			building->ProduceQueue("Temple", true);
-			//building->StartResearching("Temple");
+			building->StartResearching("Temple");
 			hud->close_menus = CloseSceneMenus::Research;
 		}
 		else if (element->name == "RESEARCH ENCAMPMENT") {
 			Building* building = (Building*)hud->thing_selected;
-			building->ProduceQueue("Encampment", true);
-			//building->StartResearching("Encampment");
+			building->StartResearching("Encampment");
 			hud->close_menus = CloseSceneMenus::Research;
 		}
 		else if (element->name == "RESEARCH CLERIC") {
 			Building* building = (Building*)hud->thing_selected;
-			building->ProduceQueue("Cleric", true);
-			//building->StartResearching("Cleric");
+			building->StartResearching("Cleric");
 			hud->close_menus = CloseSceneMenus::Research;
 		}
 		else if (element->name == "RESEARCH ASSASSIN") {
 			Building* building = (Building*)hud->thing_selected;
-			building->ProduceQueue("Assassin", true);
-			//building->StartResearching("Assassin");
+			building->StartResearching("Assassin");
 			hud->close_menus = CloseSceneMenus::Research;
 		}
 		else if (element->name == "RESEARCH LAWFUL BEAST") {
 			Building* building = (Building*)hud->thing_selected;
-			building->ProduceQueue("Lawful Beast", true);
-			//building->StartResearching("Lawful Beast");
+			building->StartResearching("Lawful Beast");
 			hud->close_menus = CloseSceneMenus::Research;
 		}
 		else if (element->name == "RESEARCH CHAOTIC BEAST") {
 			Building* building = (Building*)hud->thing_selected;
-			building->ProduceQueue("Chaotic Beast", true);
-			//building->StartResearching("Chaotic Beast");
+			building->StartResearching("Chaotic Beast");
 			hud->close_menus = CloseSceneMenus::Research;
 		}
 		else if (element->name == "RESEARCH LAWFUL MIRACLE") {
 			Building* building = (Building*)hud->thing_selected;
-			building->ProduceQueue("Lawful Miracle", true);
-			//building->StartResearching("Lawful Miracle");
+			building->StartResearching("Lawful Miracle");
 			hud->close_menus = CloseSceneMenus::Research;
 		}
 		else if (element->name == "RESEARCH CHAOTIC MIRACLE") {
 			Building* building = (Building*)hud->thing_selected;
-			building->ProduceQueue("Chaotic Miracle", true);
-			//building->StartResearching("Chaotic Miracle");
+			building->StartResearching("Chaotic Miracle");
 			hud->close_menus = CloseSceneMenus::Research;
 		}
 		else if (element->name == "RESEARCH LAWFUL VICTORY") {
 			Building* building = (Building*)hud->thing_selected;
-			building->ProduceQueue("Lawful Victory", true);
-			//building->StartResearching("Lawful Victory");
+			building->StartResearching("Lawful Victory");
 			hud->close_menus = CloseSceneMenus::Research;
 		}
 		else if (element->name == "RESEARCH CHAOTIC VICTORY") {
 			Building* building = (Building*)hud->thing_selected;
-			building->ProduceQueue("Chaotic Victory", true);
-			//building->StartResearching("Chaotic Victory");
+			building->StartResearching("Chaotic Victory");
 			hud->close_menus = CloseSceneMenus::Research;
 		}
 		else if (element->name == "Produce_Temple")
@@ -786,7 +765,7 @@ void j1Scene::OnClick(UI* element, float argument)
 		}
 		else if (element->name == "Heal")
 		{
-			App->gui->cursor_heal = true;
+			App->gui->cursor_move = true;
 			nextUnit_selected = true;
 		}
 		else if (element->name == "Produce_Cleric")

@@ -16,8 +16,6 @@ protected:
 
 public:
 
-	HealthSystem();
-
 	//Initilization
 	void Init();
 

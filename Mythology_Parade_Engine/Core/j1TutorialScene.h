@@ -55,7 +55,7 @@ public:
 	bool CleanUp();
 
 	// Called when creating a tutorial message
-	void CreateTutorialMessage(int, bool = false);
+	void CreateTutorialMessage(int);
 
 	// Called when deleting a tutorial message
 	void DeleteTutorialMessage();
@@ -73,17 +73,16 @@ private:
 	TutorialMessageData* tutorial_message_data;
 	WindowUI* window_tutorial_message[4];
 	TextUI* text_tutorial_message[36];
-	bool first_message_shown[2];
-	bool second_message_shown[2];
-	bool third_message_shown[2];
-	int first_message_height[2];
-	int second_message_height[2];
-	int third_message_height[2];
+	bool first_message_shown;
+	bool second_message_shown;
+	bool third_message_shown;
+	int first_message_height;
+	int second_message_height;
+	int third_message_height;
 	j1Timer tutorial_message_timer;
 	int message_number;
 	iPoint camera_first_position;
 	bool quest_done;
-	int actual_message;
 };
 
 #endif // __j1TUTORIALSCENE_H__

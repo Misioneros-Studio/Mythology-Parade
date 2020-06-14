@@ -35,9 +35,9 @@ void ResearchMenu::StartResearchMenu(Player* play) {
 void ResearchMenu::ActivateResearchMenu() {
 	ui_research_window = static_cast<WindowUI*>(App->gui->CreateUIElement(Type::WINDOW, nullptr, { 130,10,1025,570 }, { 13,20,1025,570 }, "", Panel_Fade::panel_fade_in, { 0,0,0,0 }, { 0,0,0,0 }, false, { 0,0,0,0 },
 		nullptr, 0, false, -1.0f, 2));
-	ui_button_research[10] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_research_window, { 520,530,237,38 }, { 787,240,237,38 }, "CLOSE RESEARCH", Panel_Fade::panel_fade_in, { 787,342,237,38 },
+	ui_button_research[10] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_research_window, { 520,512,237,38 }, { 787,240,237,38 }, "CLOSE RESEARCH", Panel_Fade::panel_fade_in, { 787,342,237,38 },
 		{ 787,291,237,38 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::CLOSE));
-	ui_text_research[0] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 619,542,237,38 }, { 0,0,100,100 }, "Close", Panel_Fade::panel_fade_in, { 0,0,0,255 }));
+	ui_text_research[0] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 619,524,237,38 }, { 0,0,100,100 }, "Close", Panel_Fade::panel_fade_in, { 0,0,0,255 }));
 	ui_text_research[1] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 583,22,237,38 }, { 0,0,100,100 }, "RESEARCH", Panel_Fade::panel_fade_in, { 255,255,255,255 }, { 1,0,0,0 }));
 	if (player->civilization == CivilizationType::VIKING)
 		ui_image_research[10] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, ui_research_window, { 566,46,157,107 }, { 663, 606, 157, 107 }, "", Panel_Fade::panel_fade_in, { 0,0,0,0 }, { 0,0,0,0 },
@@ -328,4 +328,9 @@ void ResearchMenu::CreateChaoticVictoryButton() {
 		ui_image_research[9] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, ui_research_window, { 655,301,140,80 }, { 966, 986, 140, 80 }, "", Panel_Fade::panel_fade_in, { 0,0,0,0 }, { 0,0,0,0 },
 			false, { 0,0,0,0 }, nullptr, 0, false, -1.0f, 2, (int)TooltipsAvailable::victory2_unlocked, true));
 	}
+}
+
+void ResearchMenu::UpdatePlayer(Player* play)
+{
+	player = play;
 }

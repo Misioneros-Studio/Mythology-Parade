@@ -27,7 +27,7 @@ void PathFinder::PreparePath(const iPoint& o, const iPoint& d, std::list <Entity
 	}
 
 	uint iterations = 0;
-	
+
 	origin = o;
 	destination = d;
 	requestUnitsList = req;
@@ -48,7 +48,7 @@ void PathFinder::PreparePath(const iPoint& o, const iPoint& d, Entity* req)
 	}
 
 	uint iterations = 0;
-	
+
 	origin = o;
 	destination = d;
 	requestUnit = req;
@@ -149,7 +149,7 @@ bool PathFinder::IteratePath()
 			}
 			// If it is already in the open list, check if it is a better path (compare G)
 			else {
-				
+
 				if (tentativeCost < open.Find(adjacentNodes.list[i].pos)->_Ptr->gCost) {
 					// If it is a better path, Update the parent
 					adjacentNodes.list[i].parent = currentNode;
@@ -288,7 +288,7 @@ uint PathNode::FindWalkableAdjacents(PathList& list_to_fill) const
 	cell.create(pos.x + 1, pos.y + 1);
 	if (App->pathfinding->IsWalkable(cell))
 		list_to_fill.list.push_back(PathNode(0, -1, cell, this));
-	//	
+	//
 	//// north - west
 	cell.create(pos.x - 1, pos.y + 1);
 	if (App->pathfinding->IsWalkable(cell))

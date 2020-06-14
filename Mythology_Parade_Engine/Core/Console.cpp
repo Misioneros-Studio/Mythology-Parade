@@ -9,11 +9,7 @@
 #include "SDL/include/SDL_keyboard.h"
 #include "j1Window.h"
 
-Console::Console() : background_alpha(255), background_red(0), background_green(0), background_blue(0),
-background_pos({ 0, 0, 0, 0 }), command(commands::none), console_background(nullptr), console_input(nullptr),
-console_log(nullptr), input_alpha(0), input_red(0), input_green(0), input_blue(0), input_pos({0, 0, 0, 0}),
-output_drag_area({ 0, 0, 0, 0 }), output_pos({0, 0, 0, 0})
-{
+Console::Console() {
 	name.append("console");
 	console_active = false;
 }
@@ -76,7 +72,7 @@ bool Console::PreUpdate() {
 	return true;
 }
 
-void Console::ActivateConsole() 
+void Console::ActivateConsole()
 {
 	console_background = (ImageUI*)App->gui->CreateUIElement(Type::IMAGE, nullptr, background_pos, "", background_red, background_green, background_blue, background_alpha);
 	console_background->SetPriority(2);
@@ -88,7 +84,7 @@ void Console::ActivateConsole()
 	console_input->SetLabel(label.c_str());
 }
 
-void Console::CloseConsole() 
+void Console::CloseConsole()
 {
 	App->gui->DeleteUIElement(console_log);
 	App->gui->DeleteUIElement(console_background);

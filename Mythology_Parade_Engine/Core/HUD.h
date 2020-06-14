@@ -126,9 +126,6 @@ public:
 	//Called when updating the scene to change the width of the sliders
 	void UpdateSlider(int index);
 
-	//Called when updating the IA bar every frame
-	void UpdateIABar(float percentage);
-
 private:
 	enum class Type_Selected {
 		None,
@@ -171,15 +168,6 @@ private:
 	ImageUI* ui_pause_black_screen[2];
 	TextUI* ui_text_volume_sliders[2];
 	ResearchMenu* research_menu;
-	int damage;
-	int range;
-	int speed;
-	int level;
-	int experience;
-	int health;
-	int influence;
-	int max_cap;
-
 
 public:
 	ImageUI* ui_ingame;
@@ -191,8 +179,8 @@ public:
 	j1Timer timer_win_lose;
 	bool start_timer;
 	ImageUI* ui_volume_sliders[6];
-	ImageUI* ia_bar_back;
-	ImageUI* ia_bar_front;
+
+
 };
 
 #endif // !__HUD__H_

@@ -14,8 +14,7 @@
 
 
 //Constructor
-HUD::HUD(ResearchMenu* r) 
-{
+HUD::HUD(ResearchMenu* r) {
 	StartHUD(r);
 }
 
@@ -39,10 +38,7 @@ void HUD::StartHUD(ResearchMenu* r) {
 
 	start_timer = false;
 	ui_ingame = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, nullptr, { 0,590,1280,130 }, { 0,590,1280,130 }));
-	ia_bar_back = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, nullptr, { 360,3,561,25 }, { 1283,590,561,25 }));
-	ia_bar_front = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, nullptr, { 364,7,0,17 }, { 1287,619,553,17 }));
 
-	range = damage = influence = health = level = experience = max_cap = speed = 0;
 
 	for (int i = 0; i < 12; i++)
 	{
@@ -84,6 +80,7 @@ void HUD::StartHUD(ResearchMenu* r) {
 			}
 		}
 	}
+
 
 	hud_selected_troop = nullptr;
 	thing_selected = nullptr;
@@ -129,7 +126,7 @@ void HUD::ActivatePauseMenu() {
 			ui_text[7] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 604,62,237,38 }, { 0,0,100,100 }, "PAUSE", Panel_Fade::panel_fade_in, { 255,255,255,255 }, { 1,0,0,0 }));
 		}
 		else {
-			ui_pause_window = static_cast<WindowUI*>(App->gui->CreateUIElement(Type::WINDOW, nullptr, { 410,150,459,300 }, { 1749,0,459,300 }, "", Panel_Fade::panel_fade_in));
+			ui_pause_window = static_cast<WindowUI*>(App->gui->CreateUIElement(Type::WINDOW, nullptr, { 410,150,459,303 }, { 216,21,459,531 }, "", Panel_Fade::panel_fade_in));
 			ui_button[2] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_pause_window, { 520,210,237,38 }, { 787,240,237,38 }, "OPTIONS", Panel_Fade::panel_fade_in, { 787,342,237,38 },
 				{ 787,291,237,38 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::OPTIONS));
 			ui_text[2] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, nullptr, { 613,222,237,38 }, { 0,0,100,100 }, "Options", Panel_Fade::panel_fade_in, { 0,0,0,255 }));
@@ -389,10 +386,7 @@ void HUD::HUDUpdateSelection(std::list<Entity*> listEntities, Building* building
 		if (building_selected->GetElementProducing() != "") {
 			float w = building_selected->GetPercentage();
 			hud_bar_producing[0] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, static_cast<UI*>(ui_ingame), { 826,652,28,5 }, { 1072,319,181,17 }, "", Panel_Fade::no_one_fade));
-			if (building_selected->researching == true && building_selected->index_researching == 0)
-				hud_bar_producing[1] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, static_cast<UI*>(ui_ingame), { 826,652,(int)(28 * w),5 }, { 1072,284,181,17 }, "", Panel_Fade::no_one_fade));
-			else
-				hud_bar_producing[1] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, static_cast<UI*>(ui_ingame), { 826,652,(int)(28 * w),5 }, { 1072,250,181,17 }, "", Panel_Fade::no_one_fade));
+			hud_bar_producing[1] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, static_cast<UI*>(ui_ingame), { 826,652,(int)(28 * w),5 }, { 1072,250,181,17 }, "", Panel_Fade::no_one_fade));
 		}
 	}
 	SDL_Rect position_name = { 725,603,30,30 };
@@ -460,45 +454,37 @@ void HUD::HUDUpdateSelection(std::list<Entity*> listEntities, Building* building
 					{ 0,0,0,255 }));
 				hud_stats_selected_troop[2] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 780,622,30,30 }, { 0,0,100,100 },
 					std::to_string(cunit->GetDamageValue()), Panel_Fade::no_one_fade, { 0,0,0,255 }));
-				damage = cunit->GetDamageValue();
 				hud_stats_selected_troop[3] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 720,636,30,30 }, { 0,0,100,100 }, "Range:", Panel_Fade::no_one_fade,
 					{ 0,0,0,255 }));
 				hud_stats_selected_troop[4] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 768,636,30,30 }, { 0,0,100,100 },
 					std::to_string(cunit->GetRangeValue()), Panel_Fade::no_one_fade, { 0,0,0,255 }));
-				range = cunit->GetRangeValue();
 				hud_stats_selected_troop[5] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 720,650,30,30 }, { 0,0,100,100 }, "Speed:", Panel_Fade::no_one_fade,
 					{ 0,0,0,255 }));
 				hud_stats_selected_troop[6] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 760,650,30,30 }, { 0,0,100,100 },
 					std::to_string(cunit->GetSpeedValue()), Panel_Fade::no_one_fade, { 0,0,0,255 }));
-				speed = cunit->GetSpeedValue();
 				hud_stats_selected_troop[7] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 720,664,30,30 }, { 0,0,100,100 }, "Level:", Panel_Fade::no_one_fade,
 					{ 0,0,0,255 }));
 				hud_stats_selected_troop[8] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 760,664,30,30 }, { 0,0,100,100 },
 					std::to_string(cunit->GetLevel()), Panel_Fade::no_one_fade, { 0,0,0,255 }));
-				level = cunit->GetLevel();
 				hud_stats_selected_troop[9] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 720,678,30,30 }, { 0,0,100,100 }, "Exp:", Panel_Fade::no_one_fade,
 					{ 0,0,0,255 }));
 				hud_stats_selected_troop[10] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 747,678,30,30 }, { 0,0,100,100 },
 					std::to_string(cunit->GetExperience()), Panel_Fade::no_one_fade, { 0,0,0,255 }));
-				experience = cunit->GetExperience();
 				hud_stats_selected_troop[11] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 720,703,30,10 }, { 0,0,100,100 }, "Health:", Panel_Fade::no_one_fade,
 					{ 0,0,0,255 }));
 				hud_stats_selected_troop[12] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 773,703,30,10 }, { 0,0,100,100 },
 					std::to_string(unit->GetHealth()), Panel_Fade::no_one_fade, { 0,0,0,255 }));
-				health = cunit->GetHealth();
 			}
 			else {
 				hud_stats_selected_troop[1] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 720,703,30,10 }, { 0,0,100,100 }, "Health:", Panel_Fade::no_one_fade,
 					{ 0,0,0,255 }));
 				hud_stats_selected_troop[2] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 773,703,30,10 }, { 0,0,100,100 },
 					std::to_string(unit->GetHealth()), Panel_Fade::no_one_fade, { 0,0,0,255 }));
-				health = unit->GetHealth();
 				if (unit->unitType == UnitType::CLERIC) {
 					hud_stats_selected_troop[3] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 720,622,30,30 }, { 0,0,100,100 }, "Speed:", Panel_Fade::no_one_fade,
 						{ 0,0,0,255 }));
 					hud_stats_selected_troop[4] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 760,622,30,30 }, { 0,0,100,100 },
 						std::to_string(100), Panel_Fade::no_one_fade, { 0,0,0,255 }));
-					speed = 100;
 				}
 				else if(unit->unitType == UnitType::MINOTAUR||unit->unitType==UnitType::DRAUGAR) {
 					hud_stats_selected_troop[3] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 720,622,30,10 }, { 0,0,100,100 }, "Health", Panel_Fade::no_one_fade,
@@ -559,19 +545,15 @@ void HUD::HUDUpdateSelection(std::list<Entity*> listEntities, Building* building
 		hud_stats_selected_troop[1] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 720,622,30,30 }, { 0,0,100,100 }, "Influence:", Panel_Fade::no_one_fade, { 0,0,0,255 }));
 		hud_stats_selected_troop[2] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 790,622,30,30 }, { 0,0,100,100 },
 			std::to_string(building_selected->GetInfluence()), Panel_Fade::no_one_fade, { 0,0,0,255 }));
-		influence = building_selected->GetInfluence();
 		hud_stats_selected_troop[3] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 720,636,30,30 }, { 0,0,100,100 }, "Damage:", Panel_Fade::no_one_fade, { 0,0,0,255 }));
 		hud_stats_selected_troop[4] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 778,636,30,30 }, { 0,0,100,100 },
 			std::to_string(building_selected->GetDamage()), Panel_Fade::no_one_fade, { 0,0,0,255 }));
-		damage = building_selected->GetDamage();
 		hud_stats_selected_troop[5] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 720,650,30,30 }, { 0,0,100,100 }, "Max Cap:", Panel_Fade::no_one_fade, { 0,0,0,255 }));
 		hud_stats_selected_troop[6] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 780,650,30,30 }, { 0,0,100,100 },
 			std::to_string(building_selected->GetMaxCap()), Panel_Fade::no_one_fade, { 0,0,0,255 }));
-		max_cap = building_selected->GetMaxCap();
 		hud_stats_selected_troop[7] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 720,703,30,10 }, { 0,0,100,100 }, "Health:", Panel_Fade::no_one_fade, { 0,0,0,255 }));
 		hud_stats_selected_troop[8] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, static_cast<UI*>(ui_ingame), { 773,703,30,10 }, { 0,0,100,100 },
 			std::to_string(building_selected->GetHealth()), Panel_Fade::no_one_fade, { 0,0,0,255 }));
-		health = building_selected->GetHealth();
 		if (building_selected->civilization == CivilizationType::GREEK)
 			viking = false;
 	}
@@ -713,57 +695,24 @@ void HUD::UpdateSelectedThing() {
 	if (thing_selected->type == EntityType::UNIT) {
 		if (hud_stats_selected_troop[9] != nullptr) {
 			CombatUnit* cunit = static_cast<CombatUnit*>(thing_selected);
-			if (damage != cunit->GetDamageValue()) {
-				hud_stats_selected_troop[2]->SetString(std::to_string(cunit->GetDamageValue()));
-				damage = cunit->GetDamageValue();
-			}
-			if (range != cunit->GetRangeValue()) {
-				hud_stats_selected_troop[4]->SetString(std::to_string(cunit->GetRangeValue()));
-				range = cunit->GetRangeValue();
-			}
-			if (speed != cunit->GetSpeedValue()) {
-				hud_stats_selected_troop[6]->SetString(std::to_string(cunit->GetSpeedValue()));
-				speed = cunit->GetSpeedValue();
-			}
-			if (level != cunit->GetLevel()) {
-				hud_stats_selected_troop[8]->SetString(std::to_string(cunit->GetLevel()));
-				level = cunit->GetLevel();
-			}
-			if (experience != cunit->GetExperience()) {
-				hud_stats_selected_troop[10]->SetString(std::to_string(cunit->GetExperience()));
-				experience = cunit->GetExperience();
-			}
-			if (health != cunit->GetHealth()) {
-				hud_stats_selected_troop[12]->SetString(std::to_string(cunit->GetHealth()));
-				health = cunit->GetHealth();
-			}
+			hud_stats_selected_troop[2]->SetString(std::to_string(cunit->GetDamageValue()));
+			hud_stats_selected_troop[4]->SetString(std::to_string(cunit->GetRangeValue()));
+			hud_stats_selected_troop[6]->SetString(std::to_string(cunit->GetSpeedValue()));
+			hud_stats_selected_troop[8]->SetString(std::to_string(cunit->GetLevel()));
+			hud_stats_selected_troop[10]->SetString(std::to_string(cunit->GetExperience()));
+			hud_stats_selected_troop[12]->SetString(std::to_string(cunit->GetHealth()));
 		}
 		else {
 			Unit* unit = static_cast<Unit*>(thing_selected);
-			if (health != unit->GetHealth()) {
-				hud_stats_selected_troop[2]->SetString(std::to_string(unit->GetHealth()));
-				health = unit->GetHealth();
-			}
+			hud_stats_selected_troop[2]->SetString(std::to_string(unit->GetHealth()));
 		}
 	}
 	else if (thing_selected->type == EntityType::BUILDING) {
 		Building* building = static_cast<Building*>(thing_selected);
-		if (influence != building->GetInfluence()) {
-			hud_stats_selected_troop[2]->SetString(std::to_string(building->GetInfluence()));
-			influence = building->GetInfluence();
-		}
-		if (damage != building->GetDamage()) {
-			hud_stats_selected_troop[4]->SetString(std::to_string(building->GetDamage()));
-			damage = building->GetDamage();
-		}
-		if (max_cap != building->GetMaxCap()) {
-			hud_stats_selected_troop[6]->SetString(std::to_string(building->GetMaxCap()));
-			max_cap = building->GetMaxCap();
-		}
-		if (health != building->GetHealth()) {
-			hud_stats_selected_troop[8]->SetString(std::to_string(building->GetHealth()));
-			health = building->GetHealth();
-		}
+		hud_stats_selected_troop[2]->SetString(std::to_string(building->GetInfluence()));
+		hud_stats_selected_troop[4]->SetString(std::to_string(building->GetDamage()));
+		hud_stats_selected_troop[6]->SetString(std::to_string(building->GetMaxCap()));
+		hud_stats_selected_troop[8]->SetString(std::to_string(building->GetHealth()));
 		if (App->scene->update_production_list) {
 			HUDDeleteListTroops();
 			std::queue<std::string> production_queue = building->GetProduction();
@@ -790,10 +739,7 @@ void HUD::UpdateSelectedThing() {
 				}
 				if (building->GetElementProducing() != "") {
 					hud_bar_producing[0] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, static_cast<UI*>(ui_ingame), { 826,652,28,5 }, { 1072,319,181,17 }, "", Panel_Fade::no_one_fade));
-					if (building->researching == true && building->index_researching == 0)
-						hud_bar_producing[1] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, static_cast<UI*>(ui_ingame), { 826,652,28,5 }, { 1072,284,181,17 }, "", Panel_Fade::no_one_fade));
-					else
-						hud_bar_producing[1] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, static_cast<UI*>(ui_ingame), { 826,652,28,5 }, { 1072,250,181,17 }, "", Panel_Fade::no_one_fade));
+					hud_bar_producing[1] = static_cast<ImageUI*>(App->gui->CreateUIElement(Type::IMAGE, static_cast<UI*>(ui_ingame), { 826,652,28,5 }, { 1072,250,181,17 }, "", Panel_Fade::no_one_fade));
 				}
 			}
 			App->scene->update_production_list = false;
@@ -833,7 +779,8 @@ void HUD::CancelProduction(iPoint position)
 		index += 6;
 	if (thing_selected->type == EntityType::BUILDING) {
 		Building* building = static_cast<Building*>(thing_selected);
-		building->CancelProduction(index);
+		if(building->buildingAction==BuildingAction::PRODUCING)
+			building->CancelProduction(index);
 	}
 }
 
@@ -1115,7 +1062,7 @@ void HUD::ManageActionButtons(bool create_buttons, bool viking) {
 							{ 0,0,0,0 }, false, { 0,0,0,0 }, nullptr, 0, false, -1.0F, 1, (int)TooltipsAvailable::disaster_unlocked));
 					}
 				}
-				if (building->researching == false && building->GetProduction().size() < 11) {
+				if (building->buildingAction == BuildingAction::NOTHING) {
 					hud_button_actions[4] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 584,626,36,36 }, { 16,227,36,36 }, "Research", Panel_Fade::no_one_fade, { 98,227,36,36 },
 						{ 57,227,36,36 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::MAIN_MENU, false, -1.0f, 0, (int)TooltipsAvailable::researchbutton));
 				}
@@ -1478,7 +1425,7 @@ void HUD::ManageActionButtons(bool create_buttons, bool viking) {
 							{ 0,0,0,0 }, false, { 0,0,0,0 }, nullptr, 0, false, -1.0F, 1, (int)TooltipsAvailable::victory1_unlocked));
 					}
 				}
-				if (hud_button_actions[4] == nullptr && building->researching == false && building->GetProduction().size() < 11) {
+				if (hud_button_actions[4] == nullptr && building->buildingAction == BuildingAction::NOTHING) {
 					if (hud_button_actions_unclickable[4] != nullptr) {
 						App->gui->DeleteUIElement(hud_button_actions_unclickable[4]);
 						hud_button_actions_unclickable[4] = nullptr;
@@ -1486,7 +1433,7 @@ void HUD::ManageActionButtons(bool create_buttons, bool viking) {
 					hud_button_actions[4] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, ui_ingame, { 584,626,36,36 }, { 16,227,36,36 }, "Research", Panel_Fade::no_one_fade, { 98,227,36,36 },
 						{ 57,227,36,36 }, false, { 0,0,0,0 }, App->scene, (int)UI_Audio::MAIN_MENU, false, -1.0f, 0, (int)TooltipsAvailable::researchbutton));
 				}
-				else if (hud_button_actions_unclickable[4] == nullptr && (building->researching == true || building->GetProduction().size() >= 11)) {
+				else if (hud_button_actions_unclickable[4] == nullptr && building->buildingAction != BuildingAction::NOTHING) {
 					if (hud_button_actions[4] != nullptr) {
 						App->gui->DeleteUIElement(hud_button_actions[4]);
 						hud_button_actions[4] = nullptr;
@@ -1862,7 +1809,7 @@ SDL_Rect HUD::GetSpritePortraitProduction(int type_of_portrait, const std::strin
 {
 	SDL_Rect sprite = { 0,0,0,0 };
 	if (type_of_portrait == 0) {
-		if (produced_type == "Assassin")
+		if(produced_type=="Assassin")
 			sprite = { 3,931,30,41 };
 		else if (produced_type == "Pikeman")
 			sprite = { 34,931,30,41 };
@@ -1870,13 +1817,13 @@ SDL_Rect HUD::GetSpritePortraitProduction(int type_of_portrait, const std::strin
 			sprite = { 66,931,30,41 };
 		else if (produced_type == "Priest")
 			sprite = { 97,931,30,41 };
-		else if (produced_type == "Lawful_Beast" || produced_type == "Lawful Beast") {
+		else if (produced_type == "Lawful_Beast") {
 			if (civilization == CivilizationType::VIKING)
 				sprite = { 191,931,30,41 };
 			else if (civilization == CivilizationType::GREEK)
 				sprite = { 159,931,30,41 };
 		}
-		else if (produced_type == "Chaotic_Beast" || produced_type == "Chaotic Beast") {
+		else if (produced_type == "Chaotic_Beast") {
 			if (civilization == CivilizationType::GREEK)
 				sprite = { 128,931,30,41 };
 			else if (civilization == CivilizationType::VIKING)
@@ -1884,28 +1831,16 @@ SDL_Rect HUD::GetSpritePortraitProduction(int type_of_portrait, const std::strin
 		}
 		else if (produced_type == "Cleric")
 			sprite = { 253,931,30,41 };
-		else if (produced_type == "Miracle" || produced_type == "Lawful Miracle")
+		else if (produced_type == "Miracle")
 			sprite = { 284,931,30,41 };
 		else if (produced_type == "Prayers")
 			sprite = { 316,931,30,41 };
-		else if (produced_type == "Victory" || produced_type == "Lawful Victory" || produced_type == "Chaotic Victory")
+		else if (produced_type == "Victory")
 			sprite = { 347,931,30,41 };
 		else if (produced_type == "Sacrifices")
 			sprite = { 378,931,30,41 };
-		else if (produced_type == "Disaster" || produced_type == "Chaotic Miracle")
+		else if (produced_type == "Disaster")
 			sprite = { 409,931,30,41 };
-		else if (produced_type == "Temple") {
-			if (civilization == CivilizationType::VIKING)
-				sprite = { 470,931,30,41 };
-			else if (civilization == CivilizationType::GREEK)
-				sprite = { 533,931,30,41 };
-		}
-		else if (produced_type == "Encampment") {
-			if (civilization == CivilizationType::GREEK)
-				sprite = { 502,931,30,41 };
-			else if (civilization == CivilizationType::VIKING)
-				sprite = { 440,931,30,41 };
-		}
 	}
 	else if (type_of_portrait == 1) {
 		if (produced_type == "Assassin")
@@ -1916,13 +1851,13 @@ SDL_Rect HUD::GetSpritePortraitProduction(int type_of_portrait, const std::strin
 			sprite = { 66,976,30,41 };
 		else if (produced_type == "Priest")
 			sprite = { 97,976,30,41 };
-		else if (produced_type == "Lawful_Beast" || produced_type == "Lawful Beast") {
+		else if (produced_type == "Lawful_Beast") {
 			if (civilization == CivilizationType::VIKING)
 				sprite = { 191,976,30,41 };
 			else if (civilization == CivilizationType::GREEK)
 				sprite = { 159,976,30,41 };
 		}
-		else if (produced_type == "Chaotic_Beast" || produced_type == "Chaotic Beast") {
+		else if (produced_type == "Chaotic_Beast") {
 			if (civilization == CivilizationType::GREEK)
 				sprite = { 128,976,30,41 };
 			else if (civilization == CivilizationType::VIKING)
@@ -1930,28 +1865,16 @@ SDL_Rect HUD::GetSpritePortraitProduction(int type_of_portrait, const std::strin
 		}
 		else if (produced_type == "Cleric")
 			sprite = { 253,976,30,41 };
-		else if (produced_type == "Miracle" || produced_type == "Lawful Miracle")
+		else if (produced_type == "Miracle")
 			sprite = { 284,976,30,41 };
 		else if (produced_type == "Prayers")
 			sprite = { 316,976,30,41 };
-		else if (produced_type == "Victory" || produced_type == "Lawful Victory" || produced_type == "Chaotic Victory")
+		else if (produced_type == "Victory")
 			sprite = { 347,976,30,41 };
 		else if (produced_type == "Sacrifices")
 			sprite = { 378,976,30,41 };
-		else if (produced_type == "Disaster" || produced_type == "Chaotic Miracle")
+		else if (produced_type == "Disaster")
 			sprite = { 409,976,30,41 };
-		else if (produced_type == "Temple") {
-			if (civilization == CivilizationType::VIKING)
-				sprite = { 470,976,30,41 };
-			else if (civilization == CivilizationType::GREEK)
-				sprite = { 533,976,30,41 };
-		}
-		else if (produced_type == "Encampment") {
-			if (civilization == CivilizationType::GREEK)
-				sprite = { 502,976,30,41 };
-			else if (civilization == CivilizationType::VIKING)
-				sprite = { 440,976,30,41 };
-		}
 	}
 	else if (type_of_portrait == 2) {
 		if (produced_type == "Assassin")
@@ -1962,13 +1885,13 @@ SDL_Rect HUD::GetSpritePortraitProduction(int type_of_portrait, const std::strin
 			sprite = { 66,1021,30,41 };
 		else if (produced_type == "Priest")
 			sprite = { 97,1021,30,41 };
-		else if (produced_type == "Lawful_Beast" || produced_type == "Lawful Beast") {
+		else if (produced_type == "Lawful_Beast") {
 			if (civilization == CivilizationType::VIKING)
 				sprite = { 191,1021,30,41 };
 			else if (civilization == CivilizationType::GREEK)
 				sprite = { 159,1021,30,41 };
 		}
-		else if (produced_type == "Chaotic_Beast" || produced_type == "Chaotic Beast") {
+		else if (produced_type == "Chaotic_Beast") {
 			if (civilization == CivilizationType::GREEK)
 				sprite = { 128,1021,30,41 };
 			else if (civilization == CivilizationType::VIKING)
@@ -1976,28 +1899,16 @@ SDL_Rect HUD::GetSpritePortraitProduction(int type_of_portrait, const std::strin
 		}
 		else if (produced_type == "Cleric")
 			sprite = { 253,1021,30,41 };
-		else if (produced_type == "Miracle" || produced_type == "Lawful Miracle")
+		else if (produced_type == "Miracle")
 			sprite = { 284,1021,30,41 };
 		else if (produced_type == "Prayers")
 			sprite = { 316,1021,30,41 };
-		else if (produced_type == "Victory" || produced_type == "Lawful Victory" || produced_type == "Chaotic Victory")
+		else if (produced_type == "Victory")
 			sprite = { 347,1021,30,41 };
 		else if (produced_type == "Sacrifices")
 			sprite = { 378,1021,30,41 };
-		else if (produced_type == "Disaster" || produced_type == "Chaotic Miracle")
+		else if (produced_type == "Disaster")
 			sprite = { 409,1021,30,41 };
-		else if (produced_type == "Temple") {
-			if (civilization == CivilizationType::VIKING)
-				sprite = { 470,1021,30,41 };
-			else if (civilization == CivilizationType::GREEK)
-				sprite = { 533,1021,30,41 };
-		}
-		else if (produced_type == "Encampment") {
-			if (civilization == CivilizationType::GREEK)
-				sprite = { 502,1021,30,41 };
-			else if (civilization == CivilizationType::VIKING)
-				sprite = { 440,1021,30,41 };
-		}
 	}
 	return sprite;
 }
@@ -2053,9 +1964,4 @@ void HUD::UpdateSlider(int index) {
 			App->audio->PlayFx(-1, App->gui->sfx_UI[(int)UI_Audio::LOAD]);
 		}
 	}
-}
-
-void HUD::UpdateIABar(float percentage)
-{
-	ia_bar_front->quad.w = percentage * 553;
 }

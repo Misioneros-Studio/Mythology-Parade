@@ -6,7 +6,6 @@
 CombatUnit::CombatUnit(UnitType type, iPoint pos) : Unit(type, pos), range(0), damage(0)
 {
 	//TODO 10: Change textures
-	speed = 0;
 	unitType = type;
 	position = {(float)pos.x, (float)pos.y};
 	canLevel = true;
@@ -22,7 +21,6 @@ CombatUnit::CombatUnit(UnitType type, iPoint pos) : Unit(type, pos), range(0), d
 		LevelSystem::Init(3500, 6500, 9500);
 		CombatUnit::Init(100, 15, 1, 80);
 		collisionRect = { 0, 0, 30, -55 };
-		sizeMultiplier = 2;
 		break;
 	case UnitType::PIKEMAN:
 		time_production = 90;
@@ -39,7 +37,6 @@ CombatUnit::CombatUnit(UnitType type, iPoint pos) : Unit(type, pos), range(0), d
 		break;
 	case UnitType::PRIEST:
 		name = "priest";
-		sizeMultiplier = 2;
 		break;
 	case UnitType::FOOTMAN:
 		name = "footman";
@@ -194,7 +191,7 @@ bool CombatUnit::Update(float dt)
 						{
 							this->GainExperience(Action::killEnemy, App->scene->isInTutorial);
 							enemyTarget->Kill(App->map->WorldToMap(position.x, position.y));
-							
+
 							this->ChangeState(this->targetPosition, AnimationType::IDLE);
 
 							//for (std::list<Entity*>::iterator it = App->entityManager->entities[static_cast<EntityType>(1)].begin(); it != App->entityManager->entities[static_cast<EntityType>(1)].end(); ++it)
@@ -304,9 +301,9 @@ void CombatUnit::DetectNearbyEnemies()
 				{
 					if (std::find(nearbyDetectedList.begin(), nearbyDetectedList.end(), entity) != nearbyDetectedList.end())
 					{
-						continue; 
+						continue;
 					}
-					else 
+					else
 					{
 						nearbyDetectedList.push_back(entity);
 
@@ -314,7 +311,7 @@ void CombatUnit::DetectNearbyEnemies()
 
 
 					//enemyTarget = entity;
-					////Request path 
+					////Request path
 					//if (GetTilePosition() != enemyTarget->GetTilePosition())
 					//	App->pathfinding->RequestPath(this->GetTilePosition(), enemyTarget->GetTilePosition(), this);
 					////Guardar enemy map position
@@ -337,7 +334,7 @@ void CombatUnit::DetectNearbyEnemies()
 
 		if (enemyTarget != closestEntity) {
 			enemyTarget = closestEntity;
-			//Request path 
+			//Request path
 			if (GetTilePosition() != enemyTarget->GetTilePosition() && !enemyTarget->IsDeath())
 				App->pathfinding->RequestPath(this->GetTilePosition(), enemyTarget->GetTilePosition(), this);
 			//Guardar enemy map position
@@ -346,13 +343,13 @@ void CombatUnit::DetectNearbyEnemies()
 	}
 
 
-	
+
 	LOG("Detected units: %i", nearbyDetectedList.size());
-	
+
 	//else
 	//{
 	//	//Sha mogut de tile?
-	//	//if (enemyTarget->GetTilePosition() != oldEnemyPosition) 
+	//	//if (enemyTarget->GetTilePosition() != oldEnemyPosition)
 	//	//{
 	//	//	//Updatear la tile on esta el enemic
 	//	//	oldEnemyPosition = enemyTarget->GetTilePosition();

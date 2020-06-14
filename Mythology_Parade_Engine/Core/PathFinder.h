@@ -14,10 +14,8 @@ struct PathRequest
 	iPoint origin;
 	iPoint destination;
 	std::list <Entity*> requestEntity;
-	Entity* requestedUnit;
+
 	PathRequest(iPoint, iPoint, std::list <Entity*>);
-	PathRequest(iPoint, iPoint, Entity*);
-	
 };
 
 struct PathList;
@@ -75,7 +73,6 @@ public:
 
 	// Main function to request a path from A to B
 	void PreparePath(const iPoint& origin, const iPoint& destination, std::list <Entity*> req);
-	void PreparePath(const iPoint& origin, const iPoint& destination, Entity* req);
 
 
 	// To request all tiles involved in the last generated path
@@ -99,10 +96,8 @@ private:
 	iPoint destination;
 
 	std::list<Entity*> requestUnitsList;
-	Entity* requestUnit;
 
 	int max_iterations;
-	int numPathsCreated;
 
 	// we store the created path here
 };

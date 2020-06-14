@@ -22,13 +22,11 @@ private:
 	int level;
 
 public:
-
-	LevelSystem();
 	void Init(int, int, int);
 
 	bool canLevelUp;
 	void LevelUp();
-	void GainExperience(Action value, bool);
+	void GainExperience(Action value);
 	int GetLevel();
 	int GetExperience();
 	int GetExperienceToLevel(int level);

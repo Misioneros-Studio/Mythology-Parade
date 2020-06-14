@@ -65,9 +65,9 @@ bool j1Audio::Awake(pugi::xml_node& config)
 	increase_sacrifice = LoadFx("audio/fx/Increase_sacrifice.wav");
 	Walking_troops =LoadFx("audio/fx/Walking_troop.wav");
 	Walking_troop2 = LoadFx("audio/fx/Walking_troop2.wav");
-	
+
 	OpenMenu_sfx = LoadFx("audio/ui/Close_Menu.wav");
-	
+
 	hit_2 = LoadFx("audio/fx/hit2.wav");
 	UpgradeUnit = LoadFx("audio/fx/UpgradeUnit.wav");
 	Death_sfx = LoadFx("audio/fx/Death.wav");
@@ -109,7 +109,7 @@ bool j1Audio::CleanUp()
 		Mix_FreeMusic(music);
 	}
 
-	for (std::list<Mix_Chunk*>::iterator it = fx.begin(); it != fx.end(); it++) 
+	for (std::list<Mix_Chunk*>::iterator it = fx.begin(); it != fx.end(); it++)
 	{
 		Mix_FreeChunk(it._Ptr->_Myval);
 	}

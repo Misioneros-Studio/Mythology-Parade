@@ -143,12 +143,6 @@ public:
 
 	//int volume;
 
-	//Textures
-	SDL_Texture* level_tex;
-	SDL_Rect level_rect;
-
-	SDL_Texture* circle_unit_tex;
-	SDL_Rect circle_unit_rect;
 
 private:
 	int buildingTestIndex = 0;
@@ -182,6 +176,11 @@ public:
 	int CreateAssasin_sound;
 
 	bool initCivilizations;
+	void BuildCivilizations(CivilizationType);
+	void InitVikings();
+	void InitGreek();
+	bool loading;
+
 
 	bool playerCreated;
 };
