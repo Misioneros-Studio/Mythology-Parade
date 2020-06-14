@@ -2,6 +2,9 @@
 #include "j1ParticleManager.h"
 #include "p2Log.h"
 #include "j1TutorialScene.h"
+#include "Player.h"
+#include "HUD.h"
+
 
 CombatUnit::CombatUnit(UnitType type, iPoint pos) : Unit(type, pos), range(0), damage(0)
 {
@@ -171,6 +174,11 @@ bool CombatUnit::Update(float dt)
 					{
 						if (RecieveDamage(static_cast<Building*>(enemyTarget)->GetDamage()))
 						{
+							if (enemyTarget->civilization != App->entityManager->getPlayer()->civilization)
+							{
+								App->entityManager->getPlayer()->listEntities.remove(this);
+								App->scene->hud->HUDUpdateSelection(App->entityManager->getPlayer()->listEntities, nullptr);
+							}
 							Kill(App->map->WorldToMap(position.x, position.y));
 
 							CombatUnit* unit = nullptr;
@@ -182,6 +190,7 @@ bool CombatUnit::Update(float dt)
 									CombatUnit* combat_unit = static_cast<CombatUnit*>(*it);
 
 									if (combat_unit->enemyTarget == this) {
+	
 										combat_unit->enemyTarget = nullptr;
 										combat_unit->ChangeState({ -1,-1 }, AnimationType::IDLE);
 									}
@@ -193,8 +202,12 @@ bool CombatUnit::Update(float dt)
 						if (enemyTarget != nullptr && enemyTarget->GetState() != AnimationType::DIE && enemyTarget->RecieveDamage(this->GetDamageValue()))
 						{
 							this->GainExperience(Action::killEnemy, App->scene->isInTutorial);
+							if (enemyTarget->civilization == App->entityManager->getPlayer()->civilization)
+							{
+								App->entityManager->getPlayer()->listEntities.remove(enemyTarget);
+								App->scene->hud->HUDUpdateSelection(App->entityManager->getPlayer()->listEntities, nullptr);
+							}
 							enemyTarget->Kill(App->map->WorldToMap(position.x, position.y));
-							
 							this->ChangeState(this->targetPosition, AnimationType::IDLE);
 
 							//for (std::list<Entity*>::iterator it = App->entityManager->entities[static_cast<EntityType>(1)].begin(); it != App->entityManager->entities[static_cast<EntityType>(1)].end(); ++it)
@@ -204,7 +217,8 @@ bool CombatUnit::Update(float dt)
 								if (unit->unitType == UnitType::ASSASSIN)
 								{
 									CombatUnit* combat_unit = static_cast<CombatUnit*>(it);
-									if (combat_unit != nullptr && combat_unit->enemyTarget == enemyTarget) {
+									if (combat_unit != nullptr && combat_unit->enemyTarget == enemyTarget && combat_unit != this) {
+
 										combat_unit->nearbyDetectedList.remove(enemyTarget);
 										combat_unit->enemyTarget = nullptr;
 										combat_unit->ChangeState(combat_unit->targetPosition, AnimationType::IDLE);

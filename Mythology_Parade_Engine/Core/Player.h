@@ -51,7 +51,6 @@ private:
 	int tick1 = 0, tick2 = 0;
 	iPoint preClicked;
 	iPoint postClicked;
-	std::list<Entity*> listEntities;
 	Entity* buildingSelect;
 	Entity* enemyBuildingSelect;
 
@@ -65,6 +64,7 @@ private:
 
 
 public:
+	std::list<Entity*> listEntities;
 	bool dontSelect;
 	bool player_win = false;
 	bool player_lose = false;
