@@ -338,7 +338,7 @@ void Player::SeeEntitiesInside(bool shift, bool alt)
 							for (std::list<Entity*>::iterator it2 = listEntities.begin(); it != listEntities.end() && finish == false; ++it2) {
 								if (it2._Ptr->_Myval->position == it._Ptr->_Myval->position) {
 									finish = true;
-									listEntities.erase(it2);
+									//listEntities.erase(it2);
 								}
 							}
 						}
