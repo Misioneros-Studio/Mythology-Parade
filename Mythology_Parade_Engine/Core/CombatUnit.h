@@ -26,7 +26,8 @@ public:
 private:
 	void Init(int maxHealth, int damage, int range, int speed);
 
-
+	SDL_Texture* level_tex = App->tex->Load("gui/StarLevel.png");
+	SDL_Rect level_rect = { 0,0,10,10 };
 public:
 	int GetDamageValue();
 	int GetRangeValue();
@@ -39,9 +40,6 @@ public:
 
 	void SetLevel(int);
 	void SetHealth(int);
-
-
-	void DetectNearbyEnemies();
 
 };
 

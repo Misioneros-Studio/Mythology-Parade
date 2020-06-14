@@ -85,19 +85,6 @@ void j1PathFinding::RequestPath(const iPoint& origin, const iPoint& destination,
 	LOG("Path added to Path Request List");
 }
 
-void j1PathFinding::RequestPath(const iPoint& origin, const iPoint& destination, Entity* requestUnit)
-{
-	LOG("Requesting a path...");
-	if (/*!IsWalkable(origin) || */!IsWalkable(destination))
-	{
-		LOG("Invalid Path");
-		return;
-	}
-
-	pathRequestList.push(PathRequest(origin, destination, requestUnit));
-	LOG("Path added to Path Request List");
-}
-
 bool j1PathFinding::Start()
 {
 	//TODO 3: Add PathFinder to the vector.
@@ -123,12 +110,7 @@ bool j1PathFinding::Update(float dt)
 				PathRequest request = pathRequestList.front();
 				pathRequestList.pop();
 
-				if (request.requestedUnit == nullptr) {
-					pathfinderList[i].PreparePath(request.origin, request.destination, request.requestEntity);
-				}
-				else {
-					pathfinderList[i].PreparePath(request.origin, request.destination, request.requestedUnit);
-				}
+				pathfinderList[i].PreparePath(request.origin, request.destination, request.requestEntity);
 				break;
 			}
 		}

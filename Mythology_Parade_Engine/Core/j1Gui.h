@@ -40,7 +40,6 @@ enum class UI_Audio
 	SURRENDER,
 	EXIT,
 	CLOSE,
-	HOVER,
 	UNKNOWN
 };
 
@@ -49,7 +48,7 @@ struct SDL_Texture;
 class UI :public j1Module
 {
 public:
-	UI(Type s_type, SDL_Rect r, UI* p, bool d, bool f, SDL_Rect d_area, bool consol = false, int num_toooltip = -1, bool tooltip_immediate = false);
+	UI(Type s_type, SDL_Rect r, UI* p, bool d, bool f, SDL_Rect d_area, bool consol = false, int num_toooltip = -1);
 
 	// Destructor
 	virtual ~UI() {}
@@ -129,7 +128,7 @@ private:
 	WindowUI* tooltip_window;
 	TextUI* tooltip_texts[13];
 	bool has_timer_tooltip_started;
-	float time_tooltip;
+
 protected:
 	Panel_Fade fade_panel;
 	int alpha;
@@ -140,7 +139,7 @@ protected:
 class ImageUI :public UI
 {
 public:
-	ImageUI(Type type, UI* p, SDL_Rect r, SDL_Rect sprite, bool d, bool f, SDL_Rect d_area, float drag_position_scroll_bar, Panel_Fade p_fade, int num_tooltip, bool tooltip_immediate);
+	ImageUI(Type type, UI* p, SDL_Rect r, SDL_Rect sprite, bool d, bool f, SDL_Rect d_area, float drag_position_scroll_bar, Panel_Fade p_fade, int num_tooltip);
 	ImageUI(Type type, UI* p, SDL_Rect r, int re, int g, int b, int a, bool d, bool f, SDL_Rect d_area, Panel_Fade p_fade);
 
 	// Destructor
@@ -180,7 +179,7 @@ class TextUI :public UI
 {
 
 public:
-	TextUI(Type type, UI* p, SDL_Rect r, std::string str, bool d, bool f, SDL_Rect d_area, bool console, SDL_Color coulor, bool title, Panel_Fade p_fade, int num_tooltip, bool tooltip_immediate);
+	TextUI(Type type, UI* p, SDL_Rect r, std::string str, bool d, bool f, SDL_Rect d_area, bool console, SDL_Color coulor, bool title, Panel_Fade p_fade, int num_tooltip);
 
 	// Destructor
 	virtual ~TextUI() {}
@@ -188,15 +187,15 @@ public:
 	// Called after all Updates
 	bool Update(float dt);
 	bool PostUpdate();
-	bool CleanUp();
 
 	void SetString(std::string);
 
-private:
-	bool title_default;
-	SDL_Texture* text;
+public:
 	std::string stri;
 	SDL_Color color;
+
+private:
+	bool title_default;
 };
 
 class ListTextsUI :public UI
@@ -210,18 +209,14 @@ public:
 	// Called after all Updates
 	bool Update(float dt);
 	bool PostUpdate();
-	bool CleanUp();
 
 	void SetListOfStrings(std::string string, int position);
 
 	int GetNumberOfStrings() { return number_of_stri; }
 
-	void PushBackTexture(std::string stri);
-
 private:
 
 	std::list<std::string> stri;
-	std::list<SDL_Texture*> text;
 	int number_of_stri;
 };
 
@@ -229,7 +224,7 @@ class ButtonUI :public UI
 {
 public:
 
-	ButtonUI(Type type, UI* p, SDL_Rect r, SDL_Rect sprite, SDL_Rect spriten2, SDL_Rect spriten3, bool d, bool f, SDL_Rect d_area, int audio, Panel_Fade p_fade, int num_tooltip, bool tooltip_immediate);
+	ButtonUI(Type type, UI* p, SDL_Rect r, SDL_Rect sprite, SDL_Rect spriten2, SDL_Rect spriten3, bool d, bool f, SDL_Rect d_area, int audio, Panel_Fade p_fade, int num_tooltip);
 
 	// Destructor
 	virtual ~ButtonUI() {}
@@ -253,7 +248,6 @@ public:
 	bool over;
 	bool isLocked;
 	bool front;
-	bool hover;
 	int click_sfx;
 };
 
@@ -269,7 +263,6 @@ public:
 	bool PreUpdate();
 	bool Update(float dt);
 	bool PostUpdate();
-	bool CleanUp();
 
 	void ChangeLabel(std::string text);
 
@@ -278,8 +271,6 @@ public:
 	void SetPositionToZero();
 
 	std::string GetLabel() { return label; }
-
-	void UpdateLabel();
 
 private:
 	std::string label;
@@ -290,7 +281,6 @@ private:
 	int green;
 	int blue;
 	int alpha;
-	SDL_Texture* text;
 };
 // ---------------------------------------------------
 class j1Gui : public j1Module
@@ -323,7 +313,7 @@ public:
 	// Gui creation functions
 	UI* CreateUIElement(Type type, UI* p, SDL_Rect r, SDL_Rect sprite = { 0,0,0,0 }, std::string str = "", Panel_Fade p_fade = Panel_Fade::no_one_fade, SDL_Rect sprite2 = { 0,0,0,0 }, SDL_Rect sprite3 = { 0,0,0,0 }, bool drageable = false,
 		SDL_Rect drag_area = { 0,0,0,0 }, j1Module* s_listener = nullptr, int audio = 0, bool console = false, float drag_position_scroll_bar = -1, int number_atlas = 0,
-		int num_tooltip = -1, bool tooltip_immediate = false);
+		int num_tooltip = -1);
 	UI* CreateUIElement(Type type, UI* p, SDL_Rect r, std::string str, int re, int g, int b, int a, bool drageable = false, SDL_Rect drag_area = { 0,0,0,0 }, j1Module* s_listener = nullptr, Panel_Fade p_fade = Panel_Fade::no_one_fade);
 
 	bool DeleteUIElement(UI*);
@@ -372,7 +362,7 @@ private:
 public:
 
 	//Audio
-	int sfx_UI[10];
+	int sfx_UI[9];
 	bool lockClick;
 	bool cursor_attack;
 	bool cursor_move;

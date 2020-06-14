@@ -47,9 +47,6 @@ class IA : public j1Module
 public:
 	IA();
 	~IA() {};
-
-	void Init();
-
 	bool PreUpdate();
 	bool Update(float dt);
 	bool PostUpdate();
@@ -67,7 +64,8 @@ public:
 	bool Atack();
 	bool Win();
 	bool MoveUnit(iPoint, std::string, Unit* u = nullptr, int number = 0);
-	
+	void DoThingsBefore(int, int);
+
 public:
 	void Explore1();
 	void Explore2();
@@ -78,10 +76,6 @@ public:
 	void MidGame();
 	void LateGame();
 
-
-public:
-	j1Timer timer_ia;
-	int time_ia;
 
 private:
 	GameBehaviour gamePhase;
@@ -100,6 +94,8 @@ private:
 	iPoint mouse;
 
 	Building* enemyFortress;
+
+	bool loading;
 };
 
 enum class EarlyMovements

@@ -3,13 +3,22 @@
 #include "j1Minimap.h"
 #include "j1ParticleManager.h"
 #include  "j1TutorialScene.h"
-Building::Building(BuildingType type, iPoint pos, BuildingInfo info) : damage(0), influence(0), maxCap(0),
-nearbyMonks(0), nearbyBeasts(0), researched(false), time_construction(0), time_research(0),
-percentage_constructing(0), time_producing(0), first_time_constructing(true), percentage_life(0.f)
+Building::Building(BuildingType type, iPoint pos, BuildingInfo info)
 {
-  
-	researching = false;
-	index_researching = 0;
+	//default inits with none value
+	damage = 0;
+	influence = 0;
+	maxCap = 0;
+	nearbyMonks = 0;
+	nearbyBeasts = 0;
+	researched = false;
+	time_construction = 0;
+	time_research = 0;
+	percentage_constructing = 0;
+	time_producing = 0;
+	first_time_constructing = true;
+	percentage_life = 0.f;
+	
 	/*---------------*/
 
 	//inits with some values
@@ -123,7 +132,7 @@ void Building::CreateUnit()
 	switch (buildingType)
 	{
 	case FORTRESS:
-		if (element_producing == "Chaotic_Beast")
+		if (element_producing == "Lawful_Beast")
 		{
 			if (this->civilization == CivilizationType::GREEK)	App->entityManager->CreateUnitEntity(UnitType::MINOTAUR, { (int)position.x - 30, (int)position.y }, civilization);
 			else App->entityManager->CreateUnitEntity(UnitType::DRAUGAR, { (int)position.x - 30, (int)position.y }, civilization);
@@ -252,15 +261,10 @@ std::string Building::GetElementProducing()
 {
 	return element_producing;
 }
-
-void Building::ProduceQueue(std::string thing_producing, bool research)
+void Building::ProduceQueue(std::string thing_producing)
 {
 	queuedResearch.push(thing_producing);
 	App->scene->update_production_list = true;
-	if (research == true) {
-		index_researching = queuedResearch.size();
-		researching = true;
-	}
 }
 
 bool Building::Awake(pugi::xml_node& a)
@@ -283,15 +287,9 @@ bool Building::Update(float dt)
 	}
 
 	if (queuedResearch.size() > 0 && buildingAction == BuildingAction::NOTHING) {
-		if (researching == true) {
-			index_researching--;
-		}
 		std::string elementToProduce = queuedResearch.front();
 		queuedResearch.pop();
-		if (researching == true && index_researching == 0)
-			StartResearching(elementToProduce);
-		else
-			StartProducing(elementToProduce);
+		StartProducing(elementToProduce);
 	}
 
 	if (App->scene->paused_game == true && timer_construction.isPaused() == false)
@@ -340,8 +338,6 @@ bool Building::Update(float dt)
 				App->scene->FinishResearching(element_producing);
 				element_producing = "";
 				App->scene->update_production_list = true;
-				researching = false;
-				index_researching = 0;
 			}
 			buildingAction = BuildingAction::NOTHING;
 			percentage_constructing = 1;
@@ -494,12 +490,6 @@ bool Building::Update(float dt)
 		App->fowManager->ApplyMaskToTiles(fowRadius, tiles);
 	}
 
-
-	//App->render->DrawLine(position.x, position.y, position.x + (collisionRect.w/2), position.y + (collisionRect.h/4) , 255, 0, 0);
-	//App->render->DrawLine(position.x + (collisionRect.w / 2), position.y + (collisionRect.h / 4), position.x + collisionRect.w, position.y, 255, 0, 0);
-	//App->render->DrawLine(position.x + collisionRect.w, position.y, position.x + (collisionRect.w / 2), position.y - (collisionRect.h / 5), 255, 0, 0);
-	//App->render->DrawLine(position.x + (collisionRect.w / 2), position.y - (collisionRect.h / 5), position.x, position.y, 255, 0, 0);
-
 	return ret;
 }
 
@@ -565,7 +555,7 @@ void Building::StartProducing(const std::string &thing_to_produce) {
 	else if (thing_to_produce == "Sacrifices") time_producing = App->entityManager->getPlayer()->time_sacrifices;
 	else if (thing_to_produce == "Victory") time_producing = App->entityManager->getPlayer()->time_production_victory;
 	else if (thing_to_produce == "Monk") time_producing = 15;
-	else if (thing_to_produce == "Assassin") time_producing = 20;
+	else if (thing_to_produce == "Assasin") time_producing = 20;
 	else if (thing_to_produce == "Cleric") time_producing = 15;
 	else if (thing_to_produce == "Chaotic_Beast") time_producing = 35;
 	else if (thing_to_produce == "Lawful_Beast") time_producing = 35;
@@ -578,10 +568,6 @@ void Building::CancelProduction(int index)
 {
 	App->scene->update_production_list = true;
 	int size = queuedResearch.size();
-	if (researching == true && index == index_researching) {
-		researching = false;
-		index_researching = 0;
-	}
 	if (index != 0) {
 		index--;
 		std::string string;
@@ -596,9 +582,7 @@ void Building::CancelProduction(int index)
 		}
 	}
 	else {
-		if (buildingAction == BuildingAction::PRODUCING) {
-			App->scene->ReturnFaith(element_producing);
-		}
+		App->scene->ReturnFaith(element_producing);
 		FinishProduction(element_producing, true);
 		buildingAction = BuildingAction::NOTHING;
 		percentage_constructing = 1;

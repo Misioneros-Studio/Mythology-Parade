@@ -1,12 +1,5 @@
 #include "LevelSystem.h"
 #include "p2Log.h"
-
-LevelSystem::LevelSystem() : canLevelUp(false), exp_to_lvl_1(0), exp_to_lvl_2(0), exp_to_lvl_3(0), 
-experience(0), level(0)
-{
-
-}
-
 void LevelSystem::Init(int lvl1, int lvl2, int lvl3)
 {
 	exp_to_lvl_1 = lvl1;
@@ -50,7 +43,7 @@ void LevelSystem::LevelUp()
 	}	
 }
 
-void LevelSystem::GainExperience(Action action, bool tutorial)
+void LevelSystem::GainExperience(Action action)
 {
 	if (level >= 3)
 		return;
@@ -64,9 +57,7 @@ void LevelSystem::GainExperience(Action action, bool tutorial)
 	case convertEnemyUnit:		value = 300;	break;
 	case convertEnemyBuilding:	value = 500;	break;
 	}
-	
-	if (tutorial == true)
-		value = 3500;
+
 	experience += value;
 	
 	if (experience >= exp_to_lvl_1) {

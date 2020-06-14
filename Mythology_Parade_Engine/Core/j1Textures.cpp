@@ -61,11 +61,10 @@ bool j1Textures::CleanUp()
 // Load new texture from file path
 SDL_Texture* const j1Textures::Load(const char* path)
 {
-	SDL_Surface* surface = nullptr;
-	SDL_Texture* texture = nullptr;
-	surface = IMG_Load(path);
+	SDL_Texture* texture = NULL;
+	SDL_Surface* surface = IMG_Load(path);
 
-	if(surface == nullptr)
+	if(surface == NULL)
 	{
 		LOG("Could not load surface with path: %s. IMG_Load: %s", path, IMG_GetError());
 	}
@@ -73,7 +72,6 @@ SDL_Texture* const j1Textures::Load(const char* path)
 	{
 		texture = LoadSurface(surface);
 		SDL_FreeSurface(surface);
-		surface = nullptr;
 		LOG("Load success");
 	}
 
@@ -117,11 +115,4 @@ SDL_Texture* const j1Textures::LoadSurface(SDL_Surface* surface)
 void j1Textures::GetSize(const SDL_Texture* texture, uint& width, uint& height) const
 {
 	SDL_QueryTexture((SDL_Texture*)texture, NULL, NULL, (int*) &width, (int*) &height);
-}
-
-SDL_Surface * const j1Textures::GetSurface(const char * path) const
-{
-	SDL_Surface* surf = IMG_Load(path);
-
-	return surf != nullptr ? surf : nullptr;
 }

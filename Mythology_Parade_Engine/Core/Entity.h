@@ -22,7 +22,11 @@ enum class EntityType
 class Entity :public j1Module, public HealthSystem
 {
 public:
-	Entity();
+	Entity(/*EntityTypes type*/) : fowRadius(10)
+	{
+		_isSelected = false;
+		shown_minimap = false;
+	}
 
 	// Destructor
 	virtual ~Entity() 
@@ -114,11 +118,6 @@ public:
 		return collisionRect;
 	}
 
-	Rect getMovementRect()
-	{
-		return { collisionRect.x, collisionRect.y - 10, collisionRect.w, 10};
-	}
-
 	Rect getCollisionAsrect()
 	{
 		return { collisionRect.x, collisionRect.y + (collisionRect.h * 2) + 16, collisionRect.w, -collisionRect.h };
@@ -134,16 +133,21 @@ public:
 		return { collisionRect.x + (collisionRect.w / 2), collisionRect.y + (collisionRect.h / 2) };
 	}
 
-	iPoint GetTilePosition();
 
 	bool canLevel;
 
 	bool shown_minimap;
 
 
-	bool isSelected();
+	bool isSelected() 
+	{
+		return _isSelected;
+	}
 
-	void SetSelected(bool value);
+	void SetSelected(bool value)
+	{
+		_isSelected = value;
+	}
 
 	
 protected:

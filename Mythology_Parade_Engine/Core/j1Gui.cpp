@@ -56,7 +56,7 @@ bool j1Gui::Start()
 	atlas_num_0 = App->tex->Load(atlas_file_name_num_0.c_str());
 	atlas_num_1 = App->tex->Load(atlas_file_name_num_1.c_str());
 	atlas_num_2 = App->tex->Load(atlas_file_name_num_2.c_str());
-	for (int i = 0; i < 10; i++) {
+	for (int i = 0; i < 9; i++) {
 		sfx_UI[i] = 0;
 	}
 	cursor_tex = App->tex->Load("gui/cursors.png");
@@ -155,7 +155,7 @@ bool j1Gui::PostUpdate()
 		sec = { 162,0,36,36 };
 	if (cursor_attack == true && App->scene->active == true && App->scene->paused_game == false)
 		sec = { 216,0,35,33 };
-	if (cursor_heal == true && App->scene->active == true && App->scene->paused_game == false)
+	if (cursor_move == true && App->scene->active == true && App->scene->paused_game == false)
 		sec = { 324,0,27,32 };
 
 	cursor_size = { sec.w,sec.h };
@@ -180,6 +180,7 @@ bool j1Gui::PostUpdate()
 		}
 
 		else if (App->entityManager->getPlayer()->player_lose == true) {
+			App->entityManager->initCivilizations = true;
 			if (App->entityManager->getPlayer()->player_type == CivilizationType::VIKING) {
 				DoWinOrLoseWindow(1, false);
 			}
@@ -235,7 +236,7 @@ const SDL_Texture* j1Gui::GetAtlas(int number_atlas) const
 // class Gui ---------------------------------------------------
 
 UI* j1Gui::CreateUIElement(Type type, UI* p, SDL_Rect r, SDL_Rect sprite, std::string str, Panel_Fade p_fade, SDL_Rect sprite2, SDL_Rect sprite3, bool drageable, SDL_Rect drag_area, j1Module* s_listener, int audio,
-	bool console, float drag_position_scroll_bar, int number_atlas, int num_tooltip, bool tooltip_immediate)
+	bool console, float drag_position_scroll_bar, int number_atlas, int num_tooltip)
 {
 	UI* ui = nullptr;
 	SDL_Color colour;
@@ -243,10 +244,10 @@ UI* j1Gui::CreateUIElement(Type type, UI* p, SDL_Rect r, SDL_Rect sprite, std::s
 	switch (type)
 	{
 	case Type::BUTTON:
-		ui = new ButtonUI(Type::BUTTON, p, r, sprite, sprite2, sprite3, true, true, drag_area, audio, p_fade, num_tooltip, tooltip_immediate);
+		ui = new ButtonUI(Type::BUTTON, p, r, sprite, sprite2, sprite3, true, true, drag_area, audio, p_fade, num_tooltip);
 		break;
 	case Type::IMAGE:
-		ui = new ImageUI(Type::IMAGE, p, r, sprite, drageable, drageable, drag_area, drag_position_scroll_bar, p_fade, num_tooltip, tooltip_immediate);
+		ui = new ImageUI(Type::IMAGE, p, r, sprite, drageable, drageable, drag_area, drag_position_scroll_bar, p_fade, num_tooltip);
 		break;
 	case Type::WINDOW:
 		ui = new WindowUI(Type::WINDOW, p, r, sprite, drageable, drageable, drag_area, p_fade);
@@ -257,7 +258,7 @@ UI* j1Gui::CreateUIElement(Type type, UI* p, SDL_Rect r, SDL_Rect sprite, std::s
 			title = false;
 		else
 			title = true;
-		ui = new TextUI(Type::TEXT, p, r, str, drageable, drageable, drag_area, console, colour, title, p_fade, num_tooltip, tooltip_immediate);
+		ui = new TextUI(Type::TEXT, p, r, str, drageable, drageable, drag_area, console, colour, title, p_fade, num_tooltip);
 		break;
 	case Type::LISTTEXTS:
 		ui = new ListTextsUI(Type::LISTTEXTS, p, r, str, drageable, drageable, drag_area, console, p_fade);
@@ -429,7 +430,7 @@ void j1Gui::WorkWithTextInput(std::string text) {
 	}
 }
 
-UI::UI(Type s_type, SDL_Rect r, UI* p, bool d, bool f, SDL_Rect d_area, bool consol, int num_tooltip, bool tooltip_immediate)
+UI::UI(Type s_type, SDL_Rect r, UI* p, bool d, bool f, SDL_Rect d_area, bool consol, int num_tooltip)
 {
 	name.append("UI");
 	type = s_type;
@@ -463,10 +464,6 @@ UI::UI(Type s_type, SDL_Rect r, UI* p, bool d, bool f, SDL_Rect d_area, bool con
 	}
 	tooltip_window = nullptr;
 	has_timer_tooltip_started = false;
-	if (tooltip_immediate == true)
-		time_tooltip = 0;
-	else
-		time_tooltip = 1.2;
 }
 
 bool UI::PreUpdate() {
@@ -529,7 +526,7 @@ bool UI::PreUpdate() {
 					timer_tooltip.Start();
 					has_timer_tooltip_started = true;
 				}
-				else if (timer_tooltip.ReadSec() >= time_tooltip && tooltip_window == nullptr && has_timer_tooltip_started == true) {
+				else if (timer_tooltip.ReadSec() >= 1.2 && tooltip_window == nullptr && has_timer_tooltip_started == true) {
 					ShowTooltip(x, y, win_x, win_y);
 				}
 			}
@@ -764,8 +761,8 @@ SDL_Rect UI::Check_Printable_Rect(SDL_Rect sprite, iPoint& dif_sprite, SDL_Rect 
 
 ///////////// IMAGE //////////////
 
-ImageUI::ImageUI(Type type, UI * p, SDL_Rect r, SDL_Rect sprite, bool d, bool f, SDL_Rect d_area, float drag_position_scroll_bar, Panel_Fade p_fade, int num_tooltip, bool tooltip_immediate)
-	:UI(type, r, p, d, f, d_area, false, num_tooltip, tooltip_immediate) {
+ImageUI::ImageUI(Type type, UI * p, SDL_Rect r, SDL_Rect sprite, bool d, bool f, SDL_Rect d_area, float drag_position_scroll_bar, Panel_Fade p_fade, int num_tooltip) :UI(type, r, p, d, f, d_area, false,
+	num_tooltip) {
 	name.append("ImageUI");
 	sprite1 = sprite;
 	quad = r;
@@ -912,8 +909,8 @@ bool WindowUI::PostUpdate() {
 
 ///////////// TEXT //////////////
 
-TextUI::TextUI(Type type, UI* p, SDL_Rect r, std::string str, bool d, bool f, SDL_Rect d_area, bool console, SDL_Color coulor, bool title, Panel_Fade p_fade, int num_tooltip, bool tooltip_immediate)
-	:UI(type, r, p, d, f, d_area, console, num_tooltip, tooltip_immediate)
+TextUI::TextUI(Type type, UI* p, SDL_Rect r, std::string str, bool d, bool f, SDL_Rect d_area, bool console, SDL_Color coulor, bool title, Panel_Fade p_fade, int num_tooltip) :UI(type, r, p, d, f, d_area,
+	console, num_tooltip)
 {
 	name.append("TextUI");
 	stri = str.c_str();
@@ -921,7 +918,6 @@ TextUI::TextUI(Type type, UI* p, SDL_Rect r, std::string str, bool d, bool f, SD
 	color = coulor;
 	title_default = title;
 	fade_panel = p_fade;
-	text = nullptr;
 
 	if (fade_panel == Panel_Fade::no_one_fade) {
 		alpha = 255;
@@ -931,7 +927,6 @@ TextUI::TextUI(Type type, UI* p, SDL_Rect r, std::string str, bool d, bool f, SD
 		fade_panel_timer.Start();
 		fade_panel_time = 1;
 	}
-	SetString(stri);
 }
 
 bool TextUI::Update(float dt) {
@@ -945,6 +940,12 @@ bool TextUI::PostUpdate() {
 	iPoint dif_sprite = { 0,0 };
 
   
+	SDL_Texture* text;
+	if(title_default==false)
+		text = App->font->Print(stri.c_str(), color);
+	else
+		text = App->font->Print(stri.c_str(), color, App->font->default_title);
+
 	SDL_QueryTexture(text, NULL, NULL, &rect.w, &rect.h);
 
 	SDL_SetTextureAlphaMod(text, alpha);
@@ -953,27 +954,14 @@ bool TextUI::PostUpdate() {
 	else if (this->active) App->render->Blit(text, quad.x + dif_sprite.x, quad.y + dif_sprite.y, &sprite, 0.0F);
 	UI::PostUpdate();
 
-	return true;
-}
-
-bool TextUI::CleanUp()
-{
-	UI::CleanUp();
 	App->tex->UnLoad(text);
+
 	return true;
 }
 
 void TextUI::SetString(std::string new_string) 
 {
-	App->tex->UnLoad(text);
 	stri = new_string;
-	if (title_default == false)
-		text = App->font->Print(stri.c_str(), color);
-	else
-		text = App->font->Print(stri.c_str(), color, App->font->default_title);
-	if (text == nullptr) {
-		LOG("TEXTURE NULLPTR");
-	}
 }
 
 ///////////// TEXT LIST //////////////
@@ -983,7 +971,6 @@ ListTextsUI::ListTextsUI(Type type, UI* p, SDL_Rect r, std::string str, bool d, 
 	stri.push_back(str);
 	number_of_stri = stri.size();
 	quad = r;
-	PushBackTexture(str);
 
 	fade_panel = p_fade;
 
@@ -1014,22 +1001,21 @@ bool ListTextsUI::PostUpdate()
 		dif_sprite = { 0,0 };
 
 		std::list<std::string>::iterator it = stri.begin();
-		std::list<SDL_Texture*>::iterator it_texture = text.begin();
 		std::advance(it, i);
-		std::advance(it_texture, i);
 
 		if (it._Ptr->_Myval != stri.end()._Ptr->_Myval) 
 		{
+			SDL_Texture* text = App->font->Print(it->c_str(), { 255,255,255,255 });
 
-			SDL_QueryTexture(it_texture._Ptr->_Myval, NULL, NULL, &rect.w, &rect.h);
+			SDL_QueryTexture(text, NULL, NULL, &rect.w, &rect.h);
 
 			SDL_SetTextureAlphaMod((SDL_Texture*)App->gui->GetAtlas(num_atlas), alpha);
 
 			SDL_Rect sprite = UI::Check_Printable_Rect(rect, dif_sprite, { quad.x,quad.y + (quad.h * i),quad.w,quad.h });
-			if (this->active && this->GetConsole() == false) App->render->Blit(it_texture._Ptr->_Myval, quad.x + dif_sprite.x, quad.y + dif_sprite.y + (i * quad.h), &sprite, 0.0F);
-			else if (this->active) App->render->Blit(it_texture._Ptr->_Myval, quad.x + dif_sprite.x, quad.y + dif_sprite.y + (i * quad.h), &sprite, 0.0F);
+			if (this->active && this->GetConsole() == false) App->render->Blit(text, quad.x + dif_sprite.x, quad.y + dif_sprite.y + (i * quad.h), &sprite, 0.0F);
+			else if (this->active) App->render->Blit(text, quad.x + dif_sprite.x, quad.y + dif_sprite.y + (i * quad.h), &sprite, 0.0F);
 
-			//App->tex->UnLoad(text);
+			App->tex->UnLoad(text);
 		}
 	}
 	UI::PostUpdate();
@@ -1037,21 +1023,10 @@ bool ListTextsUI::PostUpdate()
 	return true;
 }
 
-bool ListTextsUI::CleanUp()
-{
-	for (std::list<SDL_Texture*>::iterator it = text.begin(); it != text.end(); it++) {
-		App->tex->UnLoad(it._Ptr->_Myval);
-	}
-	text.clear();
-	stri.clear();
-	return false;
-}
-
 void ListTextsUI::SetListOfStrings(std::string string, int position) 
 {
 	if (position > number_of_stri) {
 		stri.push_back(string);
-		PushBackTexture(string);
 		number_of_stri++;
 		SDL_Rect screen_rect = GetScreenRect();
 		SDL_Rect parent_screen_rect = GetParentScreenRect();
@@ -1062,22 +1037,16 @@ void ListTextsUI::SetListOfStrings(std::string string, int position)
 	}
 }
 
-void ListTextsUI::PushBackTexture(std::string stri)
-{
-	text.push_back(App->font->Print(stri.c_str(), { 255,255,255,255 }));
-}
-
 ///////////// BUTTON //////////////
 
-ButtonUI::ButtonUI(Type type, UI * p, SDL_Rect r, SDL_Rect sprite, SDL_Rect spriten2, SDL_Rect spriten3, bool d, bool f, SDL_Rect d_area, int audio, Panel_Fade p_fade, int num_tooltip, bool tooltip_immediate)
-	:UI(type, r, p, d, f, d_area, false, num_tooltip, tooltip_immediate) {
+ButtonUI::ButtonUI(Type type, UI * p, SDL_Rect r, SDL_Rect sprite, SDL_Rect spriten2, SDL_Rect spriten3, bool d, bool f, SDL_Rect d_area, int audio, Panel_Fade p_fade, int num_tooltip) :UI(type, r, p, d, f,
+	d_area, false, num_tooltip) {
 	name.append("ButtonUI");
 	sprite1 = sprite;
 	sprite2 = spriten2;
 	sprite3 = spriten3;
 	over = false;
 	pushed = false;
-	hover = false;
 	quad = r;
 	isLocked = false;
 	front = true;
@@ -1108,14 +1077,9 @@ bool ButtonUI::PostUpdate() {
 	}
 	else if (over == true) {
 		sprite = UI::Check_Printable_Rect(sprite1, dif_sprite);
-		if (hover == false) {
-			hover = true;
-			App->audio->PlayFx(1, App->gui->sfx_UI[(int)UI_Audio::HOVER]);
-		}
 	}
 	else {
 		sprite = UI::Check_Printable_Rect(sprite3, dif_sprite);
-		hover = false;
 	}
 	//App->render->Blit((SDL_Texture*)App->gui->GetAtlas(), GetScreenToWorldPos().x + dif_sprite.x, GetScreenToWorldPos().y + dif_sprite.y, &sprite, 0.f);
 
@@ -1179,7 +1143,6 @@ TextInputUI::TextInputUI(Type type, UI* p, SDL_Rect r, int re, int g, int b, int
 	blue = b;
 	alpha = a;
 	fade_panel = p_fade;
-	text = nullptr;
 
 	if (fade_panel == Panel_Fade::no_one_fade) {
 		alpha = 255;
@@ -1189,7 +1152,6 @@ TextInputUI::TextInputUI(Type type, UI* p, SDL_Rect r, int re, int g, int b, int
 		fade_panel_timer.Start();
 		fade_panel_time = 1;
 	}
-	UpdateLabel();
 }
 
 bool TextInputUI::Update(float dt) {
@@ -1223,7 +1185,6 @@ bool TextInputUI::PreUpdate() {
 			{
 				label = label.erase(position - 1, 1);
 				position--;
-				UpdateLabel();
 			}
 		}
 		else if (App->input->special_keys == specialkeys::Left) {
@@ -1239,7 +1200,6 @@ bool TextInputUI::PreUpdate() {
 			{
 				label = label.erase(position - 1);
 				position--;
-				UpdateLabel();
 			}
 		}
 		else if (App->input->special_keys == specialkeys::Home) {
@@ -1263,9 +1223,11 @@ bool TextInputUI::PostUpdate() {
 
 	SDL_Rect rect = { 0,0,0,0 };
 	if (strcmp(label.c_str(), "")) {
+		SDL_Texture* text = App->font->Print(label.c_str(), {255,255,255,255});
 		SDL_QueryTexture(text, NULL, NULL, &rect.w, &rect.h);
 		SDL_Rect sprite = UI::Check_Printable_Rect(rect, dif_sprite);
 		if (this->active) App->render->Blit(text, quad.x + dif_sprite.x, quad.y + dif_sprite.y, &sprite, 0.0F);
+		App->tex->UnLoad(text);
 	}
 
 	if (focus == true) 
@@ -1281,12 +1243,6 @@ bool TextInputUI::PostUpdate() {
 
 
 	return true;
-}
-
-bool TextInputUI::CleanUp()
-{
-	App->tex->UnLoad(text);
-	return false;
 }
 
 //BUG: when moving with left or right keys and typing
@@ -1312,7 +1268,6 @@ void TextInputUI::ChangeLabel(std::string text)
 	label_part_1 += label_part_2;
 	label = label_part_1;
 	position++;
-	UpdateLabel();
 }
 
 void TextInputUI::SetLabel(std::string text) 
@@ -1321,18 +1276,11 @@ void TextInputUI::SetLabel(std::string text)
 	{
 		label = text.c_str();
 		position += label.size() - 1;
-		UpdateLabel();
 	}
 }
 
 void TextInputUI::SetPositionToZero() {
 	position = 0;
-}
-
-void TextInputUI::UpdateLabel()
-{
-	App->tex->UnLoad(text);
-	text = App->font->Print(label.c_str(), { 255,255,255,255 });
 }
 
 void j1Gui::DoWinOrLoseWindow(int type, bool win) {
