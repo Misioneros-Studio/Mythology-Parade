@@ -4,6 +4,8 @@
 #include "Player.h"
 #include "j1Gui.h"
 #include "AssetsManager.h"
+#include "j1FadeToBlack.h"
+#include "j1App.h"
 
 #include "p2Log.h"
 EntityManager::EntityManager() : CreateAssasin_sound(0), CreateMonk_sound(0), Monster1(0), Monster2(0), construction_bar_back({0, 0, 0, 0}),
@@ -21,6 +23,9 @@ unit_life_bar_front({ 0, 0, 0, 0 }),  unit_life_bar_front_enemy({0, 0, 0, 0}), v
 	circle_unit_tex = nullptr;
 	level_rect = { 0,0,10,10 };
 	circle_unit_rect = { 0,0,64,32 };
+	enemyTextureAssassin = nullptr;
+	enemyTextureCleric = nullptr;
+	enemyTextureMonk = nullptr;
 }
 
 //Destructor
@@ -99,6 +104,9 @@ bool EntityManager::Start()
 
 	level_tex =  App->tex->Load("gui/StarLevel.png");
 	circle_unit_tex = App->tex->Load("assets/units/CercleUnitats.png");
+	enemyTextureAssassin = App->tex->Load("assets/units/IAAssassinSpriteSheet.png");
+	enemyTextureCleric = App->tex->Load("assets/units/IAClericSpriteSheet.png");
+	enemyTextureMonk = App->tex->Load("assets/units/IAMonkSpriteSheet.png");
 	for (unsigned i = 0; i < entities.size(); i++)
 	{
 		for (std::list<Entity*>::iterator it = entities[(EntityType)i].begin(); it != entities[(EntityType)i].end(); it++)
@@ -380,6 +388,9 @@ bool EntityManager::PostUpdate()
 // Called before quitting
 bool EntityManager::CleanUp()
 {
+	App->tex->UnLoad(enemyTextureAssassin);
+	enemyTextureAssassin = nullptr;
+
 	//Double for?
 	for (unsigned i = 0; i < entities.size(); i++)
 	{
@@ -770,11 +781,36 @@ Entity* EntityManager::CreateUnitEntity(UnitType type, iPoint pos, CivilizationT
 	{
 	case UnitType::ASSASSIN:
 		ret = new CombatUnit(UnitType::ASSASSIN, pos);
+		switch (civ)
+		{
+		case VIKING:
+			if (App->fade_to_black->actual_civilization == "greek") {
+				ret->texture = enemyTextureAssassin;
+			}
+			break;
+		case GREEK:
+			if (App->fade_to_black->actual_civilization == "viking") {
+				ret->texture = enemyTextureAssassin;
+			}
+			break;
+		}
 		FxUnits(4, CreateAssasin_sound, pos.x, pos.y);
 		break;
 	case UnitType::MONK:
 		ret = new Unit(UnitType::MONK, pos);
-		//ret->texture = animationManager.character_tmx_data.texture;
+		switch (civ)
+		{
+		case VIKING:
+			if (App->fade_to_black->actual_civilization == "greek") {
+				ret->texture = enemyTextureMonk;
+			}
+			break;
+		case GREEK:
+			if (App->fade_to_black->actual_civilization == "viking") {
+				ret->texture = enemyTextureMonk;
+			}
+			break;
+		}
 		FxUnits(4, CreateMonk_sound, pos.x, pos.y);
 		break;
 	case UnitType::PIKEMAN:
@@ -799,19 +835,36 @@ Entity* EntityManager::CreateUnitEntity(UnitType type, iPoint pos, CivilizationT
 		break;
 	case UnitType::CLERIC:
 		ret = new Unit(UnitType::CLERIC, pos);
+		switch (civ)
+		{
+		case VIKING:
+			if (App->fade_to_black->actual_civilization == "greek") {
+				ret->texture = enemyTextureCleric;
+			}
+			break;
+		case GREEK:
+			if (App->fade_to_black->actual_civilization == "viking") {
+				ret->texture = enemyTextureCleric;
+			}
+			break;
+		}
 		break;
 	}
-	ret->civilization = civ;
-	ret->type = EntityType::UNIT;
-	ret->texture = animationManager.charData[type].texture;
+	if (ret != nullptr) 
+	{
+		ret->civilization = civ;
+		ret->type = EntityType::UNIT;
+		if (ret->texture == nullptr) {
+			ret->texture = animationManager.charData[type].texture;
+		}
 
-	entities[EntityType::UNIT].push_back(ret);
+		entities[EntityType::UNIT].push_back(ret);
 
-	//DELETE: THIS
-	entities[EntityType::UNIT].sort(entity_Sort());
+		//DELETE: THIS
+		entities[EntityType::UNIT].sort(entity_Sort());
 
-	aabbTree.AddUnitToTree(*ret);
-
+		aabbTree.AddUnitToTree(*ret);
+	}
 	return ret;
 }
 
