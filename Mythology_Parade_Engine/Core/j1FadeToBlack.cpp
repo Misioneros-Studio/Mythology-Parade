@@ -79,6 +79,7 @@ bool j1FadeToBlack::PostUpdate()
 				App->fowManager->Enable();
 
 				//Enable IA
+				App->ia->Disable();
 				App->ia->Enable();
 
 				break;
