@@ -313,19 +313,23 @@ void Unit::Init(int maxHealth)
 
 void Unit::ChangeState(iPoint isoLookPosition, AnimationType newState)
 {
-	if (isoLookPosition == iPoint(-1, -1) && entPath.size() == 0)
+
+	if (state != AnimationType::DIE) 
 	{
-		currentAnim = App->entityManager->animations[unitType][AnimationType::IDLE][currentDirection];
-	}
-	else
-	{
-		currentDirection = getMovementDirection(isoLookPosition);
-		if (App->entityManager->animations[unitType][newState][currentDirection].name != currentAnim.name)
-			currentAnim = App->entityManager->animations[unitType][newState][currentDirection];
-	}
-	if (state != newState)
-	{
-		state = newState;
+		if (isoLookPosition == iPoint(-1, -1) && entPath.size() == 0)
+		{
+			currentAnim = App->entityManager->animations[unitType][AnimationType::IDLE][currentDirection];
+		}
+		else
+		{
+			currentDirection = getMovementDirection(isoLookPosition);
+			if (App->entityManager->animations[unitType][newState][currentDirection].name != currentAnim.name)
+				currentAnim = App->entityManager->animations[unitType][newState][currentDirection];
+		}
+		if (state != newState)
+		{
+			state = newState;
+		}
 	}
 }
 

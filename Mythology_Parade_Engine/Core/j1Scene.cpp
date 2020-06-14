@@ -245,18 +245,23 @@ void j1Scene::ClickToPath()
 		}
 
 
-		if (!attacking)
-		{
-			Unit* unt = nullptr;
-			for (std::list<Entity*>::iterator sel = list.begin(); sel != list.end(); sel++)
-			{
-				unt = (Unit*)sel._Ptr->_Myval;
-				//unt->enemyTarget = nullptr;
-			}
-		}
+		//if (!attacking)
+		//{
+		//	Unit* unt = nullptr;
+		//	for (std::list<Entity*>::iterator sel = list.begin(); sel != list.end(); sel++)
+		//	{
+		//		unt = (Unit*)sel._Ptr->_Myval;
+		//		//unt->enemyTarget = nullptr;
+		//	}
+		//}
 
-		if (origin != ending)
-			App->pathfinding->RequestPath(origin, ending, list);
+		iPoint mapPos = { 0, 0 };
+		for (auto& it : list)
+		{
+			mapPos = App->map->WorldToMap(it->position.x, it->position.y);
+			if (mapPos != ending)
+				App->pathfinding->RequestPath(mapPos, ending, it);
+		}
 
 	}
 }
