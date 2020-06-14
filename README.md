@@ -22,3 +22,8 @@ Misioneros Studio is formed by 8 members:
 Mythology Parade is an RTS videogame done by Misioneros Studio that is about trying to impose your religion on the other ones. You will have to manage correctly your resource, units and also the path that your religion is choosing (peaceful or chaotic with it's pros and cons). As a player, you will need to put into test your strategy skills. <br>
 
 <img src="Wiki_pics/Art/Camera.png">
+
+***
+
+<iframe width="853" height="480" src="https://www.youtube.com/watch?v=pljsC0pNg7A&" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+https://www.youtube.com/watch?v=pljsC0pNg7A&
