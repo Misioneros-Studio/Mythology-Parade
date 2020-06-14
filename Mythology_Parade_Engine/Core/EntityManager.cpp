@@ -627,6 +627,7 @@ bool EntityManager::Load(pugi::xml_node& n)
 	}
 
 	App->scene->research_menu->UpdatePlayer(getPlayer());
+	loading = false;
 
 	return true;
 }
