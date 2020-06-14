@@ -562,7 +562,7 @@ void j1TitleScene::OnClick(UI* element, float argument)
 			}
 			else if (confirmation_option.compare("TUTORIAL") == 0)
 			{
-				App->fade_to_black->FadeToBlack(which_fade::title_to_tutorial, 2.0f);
+				App->fade_to_black->FadeToBlack(which_fade::title_to_tutorial, 2.0f, "viking");
 			}
 			else if (confirmation_option.compare("EXIT") == 0)
 			{
