@@ -166,11 +166,16 @@ void Building::Kill(iPoint direction)
 	if (buildingType == BuildingType::FORTRESS) {
 
 		App->particleManager->CreateParticle({ (int)position.x + 10,(int)position.y - 100 }, { 0,0 }, 10, ParticleAnimation::Explosion);
-		if (civilization == App->entityManager->getPlayer()->civilization) {
-			App->entityManager->getPlayer()->player_lose = true;
+		if (App->scene->isInTutorial == true) {
+			App->tutorialscene->destroy_fortress = true;
 		}
 		else {
-			App->entityManager->getPlayer()->player_win = true;			
+			if (civilization == App->entityManager->getPlayer()->civilization) {
+				App->entityManager->getPlayer()->player_lose = true;
+			}
+			else {
+				App->entityManager->getPlayer()->player_win = true;
+			}
 		}
 	}
 	else {

@@ -19,7 +19,7 @@ j1TutorialScene::j1TutorialScene() : j1Module()
 {
 	name.append("tutorialscene");
 	tutorial_message_data = nullptr;
-	quest_done = fortress_selected = monk_created = unit_created = convert_or_kill = level_up = false;
+	quest_done = fortress_selected = monk_created = unit_created = convert_or_kill = level_up = destroy_fortress = false;
 	camera_first_position = { 0,0 };
 	actual_message = 0;
 	for (int i = 0; i < 36; i++) {
@@ -134,13 +134,30 @@ bool j1TutorialScene::Update(float dt)
 	}
 	else if (message_number == 13) {
 		if (level_up == true) {
-			App->entityManager->getPlayer()->player_win = true;
+			DeleteTutorialMessage();
+			CreateTutorialMessage(message_number);
+			message_number++;
+			tutorial_message_timer.Start();
 		}
 	}
+	else if (message_number == 14) {
+		if (tutorial_message_timer.ReadSec() >= 5) {
+			CreateTutorialMessage(message_number);
+			message_number++;
+			CreateTutorialMessage(message_number);
+			message_number++;
+		}
+	}
+	else if (message_number == 16) {
+		if(destroy_fortress==true)
+			App->entityManager->getPlayer()->player_win = true;
+	}
+
 	monk_created = false;
 	unit_created = false;
 	convert_or_kill = false;
 	level_up = false;
+	destroy_fortress = false;
 	return true;
 }
 
@@ -172,7 +189,7 @@ void j1TutorialScene::CreateTutorialMessage(int index, bool middle)
 {
 	SDL_Rect color = { 255,255,255,255 };
 	int screen_position = 1;
-	if (index == 5 || index == 7 || index == 9 || index == 11 || index == 12) {
+	if (index == 5 || index == 7 || index == 9 || index == 11 || index == 12 || index == 14) {
 		color.y = color.w = 100;
 		screen_position = 0;
 	}

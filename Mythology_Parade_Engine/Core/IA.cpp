@@ -62,15 +62,23 @@ IA::IA() : enemyFortress(nullptr)
 	positionViking.push_back({ -256,576 }); //monk4
 	positionViking.push_back({ -224,592 }); //monk5
 
-	timer.Start();
 }
 
 void IA::Init() 
 {
-	timer_ia.Start();
-	time_ia = 2900;
 	active = false;
 	LOG("A");
+}
+
+bool IA::Start()
+{
+	bool ret = true;
+
+	timer_ia.Start();
+	time_ia = 2900;
+	timer.Start();
+
+	return ret;
 }
 
 bool IA::PreUpdate()

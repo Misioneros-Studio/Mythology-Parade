@@ -5,7 +5,7 @@
 #include "PugiXml\src\pugixml.hpp"
 #include"p2Point.h"
 
-#define TOTAL_TOOLTIPS 49
+#define TOTAL_TOOLTIPS 50
 
 enum class TooltipsAvailable {
 	monastery,
@@ -56,7 +56,8 @@ enum class TooltipsAvailable {
 	unitproductionlocked,
 	miraclelocked,
 	disasterlocked,
-	victorylocked
+	victorylocked,
+	selectionhelp
 };
 
 struct Tooltip {

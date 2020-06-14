@@ -50,6 +50,7 @@ public:
 
 	void Init();
 
+	bool Start();
 	bool PreUpdate();
 	bool Update(float dt);
 	bool PostUpdate();

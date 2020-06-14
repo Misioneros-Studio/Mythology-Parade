@@ -350,7 +350,8 @@ void HUD::HUDUpdateSelection(std::list<Entity*> listEntities, Building* building
 				r2.x = 828;
 			}
 			hud_list_troops[j] = static_cast<ButtonUI*>(App->gui->CreateUIElement(Type::BUTTON, static_cast<UI*>(ui_ingame), r, GetSpritePortrait(1, type_of_troops[j]), "Troop",
-				Panel_Fade::no_one_fade, GetSpritePortrait(3, type_of_troops[j]), GetSpritePortrait(2, type_of_troops[j]), false, { 0,0,0,0 }, App->scene, 0, false, -1.0F, 1));
+				Panel_Fade::no_one_fade, GetSpritePortrait(3, type_of_troops[j]), GetSpritePortrait(2, type_of_troops[j]), false, { 0,0,0,0 }, App->scene, 0, false, -1.0F, 1, 
+				(int)TooltipsAvailable::selectionhelp));
 			if (number_of_troops[j] > 1) {
 				if (number_of_troops[j] < 10) {
 					r2.x += 5;

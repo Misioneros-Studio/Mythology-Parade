@@ -68,6 +68,7 @@ public:
 	bool unit_created;
 	bool convert_or_kill;
 	bool level_up;
+	bool destroy_fortress;
 
 private:
 	TutorialMessageData* tutorial_message_data;
