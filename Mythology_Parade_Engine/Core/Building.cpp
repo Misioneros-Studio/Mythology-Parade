@@ -618,10 +618,12 @@ void Building::FinishProduction(const std::string &thing_produced, bool cancelle
 		else if (thing_produced == "Sacrifices")
 		{
 			App->entityManager->getPlayer()->sacrifices += 1;
+			App->audio->PlayFx(1, App->audio->increase_sacrifice);
 		}
 		else if (thing_produced == "Prayers")
 		{
 			App->entityManager->getPlayer()->prayers += 1;
+			App->audio->PlayFx(1, App->audio->increase_prayers);
 		}
 		else
 		{
