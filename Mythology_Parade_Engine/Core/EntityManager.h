@@ -150,6 +150,10 @@ public:
 	SDL_Texture* circle_unit_tex;
 	SDL_Rect circle_unit_rect;
 
+	SDL_Texture* enemyTextureAssassin;
+	SDL_Texture* enemyTextureMonk;
+	SDL_Texture* enemyTextureCleric;
+
 private:
 	int buildingTestIndex = 0;
 	Animation animationManager;
