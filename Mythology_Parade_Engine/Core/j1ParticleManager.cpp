@@ -25,6 +25,7 @@ bool j1ParticleManager::Start()
 	CreateArrowsCursorAnimation();
 	CreateSkullAnimation();
 	CreateLevelUpAnimation();
+	CreateTutorialArrowAnimation();
 
 	return true;
 }
@@ -64,11 +65,11 @@ bool j1ParticleManager::CleanUp()
 	return true;
 }
 
-void j1ParticleManager::CreateParticle(iPoint pos, fPoint speed, float life, ParticleAnimation animation)
+void j1ParticleManager::CreateParticle(iPoint pos, fPoint speed, float life, ParticleAnimation animation, float blit_speed)
 {
 	UpdateParticleAnimation(animation);
 
-	particleList.push_back(new j1Particle(pos.x, pos.y, speed.x, speed.y, 0, 0, 0, 0, life, texture, current_animation, false));
+	particleList.push_back(new j1Particle(pos.x, pos.y, speed.x, speed.y, 0, 0, 0, 0, life, texture, current_animation, blit_speed, false));
 }
 
 

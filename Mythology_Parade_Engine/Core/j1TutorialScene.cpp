@@ -70,19 +70,25 @@ bool j1TutorialScene::Update(float dt)
 {
 	
 	if ((message_number == 1 && tutorial_message_timer.ReadSec() >= 6) || (message_number !=1 && message_number < 3 && tutorial_message_timer.ReadSec() >= 3)) {
-		if (message_number == 1)
+		if (message_number == 1) {
 			DeleteTutorialMessage();
+			iPoint arrow_pos;
+			arrow_pos = App->map->MapToWorld(63, 63);
+			App->particleManager->CreateParticle({ arrow_pos.x,arrow_pos.y }, { 0,0 }, 3, ParticleAnimation::Tutorial_Arrow);
+		}
 		if (message_number == 0) {
 			CreateTutorialMessage(message_number, true);
-			iPoint arrow_pos;
-			arrow_pos = App->map->MapToWorld(71, 71);
-			App->particleManager->CreateParticle({ arrow_pos.x,arrow_pos.y }, { 0,0 }, 10, ParticleAnimation::Tutorial_Arrow);
 		}
-		else
+		else {
 			CreateTutorialMessage(message_number);
+		}
 		message_number++;
 		if (message_number == 3) {
+			//FOG OF WAR
 			camera_first_position = { App->render->camera.x,App->render->camera.y };
+
+			App->particleManager->CreateParticle({ 611,490 }, { 0,0 }, 50, ParticleAnimation::Tutorial_Arrow,0.0f);
+			App->particleManager->CreateParticle({ 611,10 }, { 0,0 }, 50, ParticleAnimation::Tutorial_Arrow, 0.0f);
 		}
 		tutorial_message_timer.Start();
 	}
@@ -102,6 +108,7 @@ bool j1TutorialScene::Update(float dt)
 	else if (message_number == 5) {
 		if (fortress_selected == true){
 			CreateTutorialMessage(message_number);
+
 			message_number++;
 		}
 	}

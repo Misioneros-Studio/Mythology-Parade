@@ -21,7 +21,7 @@ public:
 	j1ParticleManager();
 	~j1ParticleManager();
 
-	void CreateParticle(iPoint pos, fPoint speed, float life, ParticleAnimation animation);
+	void CreateParticle(iPoint pos, fPoint speed, float life, ParticleAnimation animation, float blit_speed = 1.0f);
 
 	void UpdateParticleAnimation(ParticleAnimation animation);
 
