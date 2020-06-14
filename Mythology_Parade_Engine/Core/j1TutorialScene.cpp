@@ -106,7 +106,6 @@ bool j1TutorialScene::Update(float dt)
 			App->particleManager->CreateParticle({ arrow_pos.x,arrow_pos.y }, { 0,0 }, 5, ParticleAnimation::Tutorial_Arrow_Down);
 			message_number++;
 			CreateTutorialMessage(message_number);
-			App->particleManager->CreateParticle({ 380,485 }, { 0,0 }, 5, ParticleAnimation::Tutorial_Arrow_Down, 0.0f);
 			message_number++;
 			quest_done = false;
 		}
@@ -114,7 +113,9 @@ bool j1TutorialScene::Update(float dt)
 	else if (message_number == 5) {
 		if (fortress_selected == true){
 			CreateTutorialMessage(message_number);
-
+			iPoint arrow_pos;
+			arrow_pos = App->map->MapToWorld(63, 63);
+			App->particleManager->CreateParticle({ 380,485 }, { 0,0 }, 5, ParticleAnimation::Tutorial_Arrow_Down, 0.0f);
 			message_number++;
 		}
 	}
