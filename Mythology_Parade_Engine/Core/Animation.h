@@ -57,6 +57,7 @@ public:
 
 	int GetSprite()
 	{
+		
 		if (!finished) 
 		{
 			if (sprites[current_sprite].current_frame != sprites[current_sprite].frames)

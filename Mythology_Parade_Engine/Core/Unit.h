@@ -105,8 +105,6 @@ protected:
 	j1Timer damage_timer;
 	bool show_bar_for_damage;
 	bool combat_unit;
-
-
 };
 
 #endif // !__UNIT_H__
