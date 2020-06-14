@@ -88,7 +88,27 @@ void j1ParticleManager::UpdateParticleAnimation(ParticleAnimation animation)
 	case ParticleAnimation::Level_Up:
 		current_animation = levelup_animation;
 		break;
+	case ParticleAnimation::Tutorial_Arrow:
+		current_animation = tutorial_arrow_animation;
+		break;
 	}
+}
+
+void j1ParticleManager::CreateTutorialArrowAnimation()
+{
+	tutorial_arrow_animation.PushBack(SDL_Rect{ 0, 688, 58, 97 }, 1, 0, 0);
+	tutorial_arrow_animation.PushBack(SDL_Rect{ 58, 688, 58, 97 }, 1, 0, 0);
+	tutorial_arrow_animation.PushBack(SDL_Rect{ 116, 688, 58, 97 }, 1, 0, 0);
+	tutorial_arrow_animation.PushBack(SDL_Rect{ 174, 688, 58, 97 }, 1, 0, 0);
+	tutorial_arrow_animation.PushBack(SDL_Rect{ 232, 688, 58, 97 }, 1, 0, 0);
+	tutorial_arrow_animation.PushBack(SDL_Rect{ 290, 688, 58, 97 }, 2, 0, 0);
+	tutorial_arrow_animation.PushBack(SDL_Rect{ 232, 688, 58, 97 }, 1, 0, 0);
+	tutorial_arrow_animation.PushBack(SDL_Rect{ 174, 688, 58, 97 }, 1, 0, 0);
+	tutorial_arrow_animation.PushBack(SDL_Rect{ 116, 688, 58, 97 }, 1, 0, 0);
+	tutorial_arrow_animation.PushBack(SDL_Rect{ 58, 688, 58, 97 }, 1, 0, 0);
+	tutorial_arrow_animation.PushBack(SDL_Rect{ 0, 688, 58, 97 }, 1, 0, 0);
+	tutorial_arrow_animation.speed = 15.f;
+	tutorial_arrow_animation.loop = true;
 }
 
 void j1ParticleManager::CreateExplosionAnimation()
