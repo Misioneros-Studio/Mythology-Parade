@@ -938,8 +938,9 @@ Entity* EntityManager::CreateUnitEntity(UnitType type, iPoint pos, CivilizationT
 		if (ret->texture == nullptr) {
 			ret->texture = animationManager.charData[type].texture;
 		}
+		entities[EntityType::UNIT].push_back(ret);
 
-	aabbTree.AddUnitToTree(*ret);
+		aabbTree.AddUnitToTree(*ret);
 
 	}
 	return ret;
