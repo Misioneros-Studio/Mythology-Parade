@@ -25,5 +25,4 @@ Mythology Parade is an RTS videogame done by Misioneros Studio that is about try
 
 ***
 
-<iframe width="853" height="480" src="https://youtu.be/pljsC0pNg7A" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-https://youtu.be/pljsC0pNg7A
+<iframe width="560" height="315" src="https://www.youtube.com/embed/pljsC0pNg7A" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
