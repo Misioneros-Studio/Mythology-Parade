@@ -24,7 +24,8 @@ j1Particle::j1Particle(std::vector<float>& position, std::vector<float>& speed, 
 	animation(animation),
 
 	fade(fade),
-	active(false)
+	active(false),
+	dt_particle(0)
 
 {}
 
@@ -44,7 +45,8 @@ j1Particle::j1Particle(float life, SDL_Texture* texture, ClassicAnimation animat
 	animation(animation),
 
 	fade(fade),
-	active(false)
+	active(false),
+	dt_particle(0)
 {}
 
 
@@ -66,7 +68,8 @@ j1Particle::j1Particle(float positionX, float positionY, float speedX, float spe
 
 	fade(fade),
 	active(true),
-	b_speed(blit_speed)
+	b_speed(blit_speed),
+	dt_particle(0)
 
 {}
 
@@ -147,14 +150,15 @@ void j1Particle::Update(float dt)
 	{
 		Move(dt);
 		CheckLife(dt);
+		dt_particle = dt;
 	}
 }
 
 
-void j1Particle::PostUpdate(float dt)
+void j1Particle::PostUpdate()
 {
 	if (active)
-		Draw(dt);
+		Draw(dt_particle);
 }
 
 

@@ -37,6 +37,7 @@ public:
 	void CreateSkullAnimation();
 	void CreateArrowsCursorAnimation();
 	bool Update(float dt) override;
+	bool PostUpdate() override;
 	bool CleanUp() override;
 
 private:

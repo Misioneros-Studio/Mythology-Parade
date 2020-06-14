@@ -37,7 +37,7 @@ public:
 
 	//the actual useful functions
 	void Update(float dt);
-	void PostUpdate(float dt);
+	void PostUpdate();
 
 	bool Activate();
 	void Reset(float x, float y, float speedX, float speedY, float accX, float accY, float angularSpeed);
@@ -64,6 +64,7 @@ private:
 
 	float life;
 	float originalLife;
+	float dt_particle;
 
 	bool fade;
 	bool active;

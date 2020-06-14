@@ -43,14 +43,19 @@ bool j1ParticleManager::Update(float dt)
 			particle->Update(dt);
 		}
 
-		for each (j1Particle* particle in particleList)
-		{
-			particle->PostUpdate(dt);
-			if (!particle->IsActive()) {
-				particleList.remove(particle);
-				delete particle;
-					break;
-			}
+	}
+	return true;
+}
+
+bool j1ParticleManager::PostUpdate()
+{
+	for each (j1Particle * particle in particleList)
+	{
+		particle->PostUpdate();
+		if (!particle->IsActive()) {
+			particleList.remove(particle);
+			delete particle;
+			break;
 		}
 	}
 	return true;
