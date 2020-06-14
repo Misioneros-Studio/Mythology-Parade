@@ -163,10 +163,14 @@ bool j1TutorialScene::Update(float dt)
 			CreateTutorialMessage(message_number);
 			message_number++;
 			CreateTutorialMessage(message_number);
+			iPoint arrow_pos;
+			arrow_pos = App->map->MapToWorld(82, 82);
+			App->particleManager->CreateParticle({ arrow_pos.x,arrow_pos.y }, { 0,0 }, 5, ParticleAnimation::Tutorial_Arrow_Down);
 			message_number++;
 		}
 	}
 	else if (message_number == 16) {
+		App->particleManager->CreateParticle({ 611,80 }, { 0,0 }, 5, ParticleAnimation::Tutorial_Arrow_Up, 0.0f);
 		if(destroy_fortress==true)
 			App->entityManager->getPlayer()->player_win = true;
 	}
