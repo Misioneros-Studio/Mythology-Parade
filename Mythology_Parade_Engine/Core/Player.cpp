@@ -303,6 +303,8 @@ void Player::ActionToBuilding()
 		else if (App->scene->building_meteor && GetEnemySelectedBuild()->name == "encampment")
 		{
 			App->scene->building_meteor = false;
+			iPoint pos = { (int)GetEnemySelectedBuild()->position.x , (int)GetEnemySelectedBuild()->position.y };
+			GetEnemySelectedBuild()->Kill(pos);
 			App->entityManager->DeleteEntity(GetEnemySelectedBuild());
 			Disaster(Disasters::HolyMeteor);
 		}

@@ -238,28 +238,28 @@ bool EntityManager::Update(float dt)
 			break;
 		case 1:
 			CreateBuildingEntity(spawnPos, BuildingType::MONASTERY, buildingsData[buildingTestIndex], CivilizationType::VIKING);
-			faithToDescrease = 200;
+			faithToDescrease = 50;
 			break;
 		case 5:
 			CreateBuildingEntity(spawnPos, BuildingType::MONASTERY , buildingsData[buildingTestIndex],CivilizationType::GREEK);
-			faithToDescrease = 200;
+			faithToDescrease = 50;
 			break;
 		case 2:
 			CreateBuildingEntity(spawnPos, BuildingType::TEMPLE, buildingsData[buildingTestIndex], CivilizationType::VIKING);
-			faithToDescrease = 200;
+			faithToDescrease = 50;
 			break;
 		case 6:
 			CreateBuildingEntity(spawnPos, BuildingType::TEMPLE, buildingsData[buildingTestIndex], CivilizationType::GREEK);
-			faithToDescrease = 200;
+			faithToDescrease = 50;
 			break;
 		case 3:
 			CreateBuildingEntity(spawnPos, BuildingType::ENCAMPMENT, buildingsData[buildingTestIndex], CivilizationType::VIKING);
-			faithToDescrease = 200;
+			faithToDescrease = 50;
 			break;
 
 		case 7:
 			CreateBuildingEntity(spawnPos, BuildingType::ENCAMPMENT, buildingsData[buildingTestIndex], CivilizationType::GREEK);
-			faithToDescrease = 200;
+			faithToDescrease = 50;
 			break;
 		}
 
