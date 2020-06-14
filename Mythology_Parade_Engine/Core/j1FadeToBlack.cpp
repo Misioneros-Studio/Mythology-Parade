@@ -91,6 +91,7 @@ bool j1FadeToBlack::PostUpdate()
 				App->minimap->Disable();
 				App->map->Disable();
 				App->title_scene->Enable();
+				App->map->Enable();
 
 				//Disable IA
 				App->ia->Disable();
@@ -113,6 +114,7 @@ bool j1FadeToBlack::PostUpdate()
 				App->minimap->Enable();
 				App->fowManager->Enable();
 				//Enable IA
+				App->ia->Disable();
 				App->ia->Enable();
 
 				break;
