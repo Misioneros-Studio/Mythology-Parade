@@ -892,7 +892,7 @@ Entity* EntityManager::CreateUnitEntity(UnitType type, iPoint pos, CivilizationT
 			}
 			break;
 		}
-		FxUnits(4, CreateMonk_sound, pos.x, pos.y);
+		
 		break;
 	case UnitType::PIKEMAN:
 		ret = new CombatUnit(UnitType::PIKEMAN, pos);
