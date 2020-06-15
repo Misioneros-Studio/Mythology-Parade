@@ -265,7 +265,7 @@ void IA::EarlyGame()
 		InitCiv();
 		break;
 	case EarlyGameBehaviour::BASIC_BUILDINGS_CREATION:
-		if (timer.ReadSec() >= 45 || loading)
+		if (timer.ReadSec() >= 5 || loading)
 		{
 			if (civilization == CivilizationType::VIKING)
 			{
@@ -282,7 +282,7 @@ void IA::EarlyGame()
 		}
 		break;
 	case EarlyGameBehaviour::RESEARCH_CLERIC:
-		if (timer.ReadSec() >= 100 || loading)
+		if (timer.ReadSec() >= 5 || loading)
 		{
 			if (civilization == CivilizationType::VIKING)
 			{
@@ -301,8 +301,13 @@ void IA::EarlyGame()
 		}
 		break;
 	case EarlyGameBehaviour::BASIC_UNITS_CREATION:
-		if (loading) mid = MidGameBehaviour::CREATE_ECONOMY; gamePhase = GameBehaviour::MID; break;
-		if (timer.ReadSec() >= 150 || loading)
+		if (loading)
+		{
+			mid = MidGameBehaviour::CREATE_ECONOMY; 
+			gamePhase = GameBehaviour::MID; 
+			break;
+		}
+		if (timer.ReadSec() >= 10 || loading)
 		{
 			if (civilization == CivilizationType::VIKING)
 			{
@@ -319,20 +324,35 @@ void IA::EarlyGame()
 		}
 		break;
 	case EarlyGameBehaviour::EXPLORE1:
-		if (loading) mid = MidGameBehaviour::CREATE_ECONOMY; gamePhase = GameBehaviour::MID; break;
+		if (loading)
+		{
+			mid = MidGameBehaviour::CREATE_ECONOMY; 
+			gamePhase = GameBehaviour::MID; 
+			break;
+		}
 		Explore1();
 		early = EarlyGameBehaviour::CHECKEXPLORER1;
 		break;
 	case EarlyGameBehaviour::CHECKEXPLORER1:
-		if (loading) mid = MidGameBehaviour::CREATE_ECONOMY; gamePhase = GameBehaviour::MID; break;
+		if (loading) {
+			mid = MidGameBehaviour::CREATE_ECONOMY; 
+			gamePhase = GameBehaviour::MID; 
+			break;
+		}
 		if (CheckExplore())
 		{
 			Explore2();
 			early = EarlyGameBehaviour::FIND;
+			timer.Start();
 		}
 		break;
 	case EarlyGameBehaviour::FIND:
-		if (loading) mid = MidGameBehaviour::CREATE_ECONOMY; gamePhase = GameBehaviour::MID; break;
+		if (loading)
+		{
+			mid = MidGameBehaviour::CREATE_ECONOMY; 
+			gamePhase = GameBehaviour::MID; 
+			break;
+		}
 		if (Find())
 			gamePhase = GameBehaviour::MID;
 		break;
@@ -346,13 +366,17 @@ void IA::MidGame()
 	switch (mid)
 	{
 	case MidGameBehaviour::ASSEMBLE:
-		if (loading) mid = MidGameBehaviour::CREATE_ECONOMY; break;
+		if (loading)
+		{
+			mid = MidGameBehaviour::CREATE_ECONOMY; 
+			break;
+		}
 		AssembleClerics();
 		mid = MidGameBehaviour::CREATE_ECONOMY;
 		timer.Start();
 		break;
 	case MidGameBehaviour::CREATE_ECONOMY:
-		if (timer.ReadSec() >= 100 || loading)
+		if (timer.ReadSec() >= 10 || loading)
 		{
 			if (civilization == CivilizationType::VIKING) {
 				CreateBuilding(BuildingType::MONASTERY, positionViking.at((int)EarlyMovements::MONASTERY2));
@@ -382,24 +406,38 @@ void IA::MidGame()
 		}
 		break;
 	case MidGameBehaviour::CREATE_ASSASSIN:
-		if (timer.ReadSec() >= 50 || loading)
+		if (timer.ReadSec() >= 5 || loading)
 		{
 			if (civilization == CivilizationType::VIKING) {
 				listEntities.push_back(static_cast<Entity*>(CreateUnit(UnitType::ASSASSIN, positionViking.at((int)EarlyMovements::ASSASSIN1))));
+				listEntities.push_back(static_cast<Entity*>(CreateUnit(UnitType::ASSASSIN, positionViking.at((int)EarlyMovements::ASSASSIN1))));
+				listEntities.push_back(static_cast<Entity*>(CreateUnit(UnitType::ASSASSIN, positionViking.at((int)EarlyMovements::ASSASSIN2))));
 				listEntities.push_back(static_cast<Entity*>(CreateUnit(UnitType::ASSASSIN, positionViking.at((int)EarlyMovements::ASSASSIN2))));
 				listEntities.push_back(static_cast<Entity*>(CreateUnit(UnitType::ASSASSIN, positionViking.at((int)EarlyMovements::ASSASSIN3))));
+				listEntities.push_back(static_cast<Entity*>(CreateUnit(UnitType::ASSASSIN, positionViking.at((int)EarlyMovements::ASSASSIN3))));
+				listEntities.push_back(static_cast<Entity*>(CreateUnit(UnitType::ASSASSIN, positionViking.at((int)EarlyMovements::ASSASSIN4))));
 				listEntities.push_back(static_cast<Entity*>(CreateUnit(UnitType::ASSASSIN, positionViking.at((int)EarlyMovements::ASSASSIN4))));
 				listEntities.push_back(static_cast<Entity*>(CreateUnit(UnitType::ASSASSIN, positionViking.at((int)EarlyMovements::ASSASSIN5))));
+				listEntities.push_back(static_cast<Entity*>(CreateUnit(UnitType::ASSASSIN, positionViking.at((int)EarlyMovements::ASSASSIN5))));
 				listEntities.push_back(static_cast<Entity*>(CreateUnit(UnitType::ASSASSIN, positionViking.at((int)EarlyMovements::ASSASSIN6))));
+				listEntities.push_back(static_cast<Entity*>(CreateUnit(UnitType::ASSASSIN, positionViking.at((int)EarlyMovements::ASSASSIN6))));
+				listEntities.push_back(static_cast<Entity*>(CreateUnit(UnitType::ASSASSIN, positionViking.at((int)EarlyMovements::ASSASSIN7))));
 				listEntities.push_back(static_cast<Entity*>(CreateUnit(UnitType::ASSASSIN, positionViking.at((int)EarlyMovements::ASSASSIN7))));
 			}
 			else {
 				listEntities.push_back(static_cast<Entity*>(CreateUnit(UnitType::ASSASSIN, positionGreek.at((int)EarlyMovements::ASSASSIN1))));
+				listEntities.push_back(static_cast<Entity*>(CreateUnit(UnitType::ASSASSIN, positionGreek.at((int)EarlyMovements::ASSASSIN1))));
+				listEntities.push_back(static_cast<Entity*>(CreateUnit(UnitType::ASSASSIN, positionGreek.at((int)EarlyMovements::ASSASSIN2))));
 				listEntities.push_back(static_cast<Entity*>(CreateUnit(UnitType::ASSASSIN, positionGreek.at((int)EarlyMovements::ASSASSIN2))));
 				listEntities.push_back(static_cast<Entity*>(CreateUnit(UnitType::ASSASSIN, positionGreek.at((int)EarlyMovements::ASSASSIN3))));
+				listEntities.push_back(static_cast<Entity*>(CreateUnit(UnitType::ASSASSIN, positionGreek.at((int)EarlyMovements::ASSASSIN3))));
+				listEntities.push_back(static_cast<Entity*>(CreateUnit(UnitType::ASSASSIN, positionGreek.at((int)EarlyMovements::ASSASSIN4))));
 				listEntities.push_back(static_cast<Entity*>(CreateUnit(UnitType::ASSASSIN, positionGreek.at((int)EarlyMovements::ASSASSIN4))));
 				listEntities.push_back(static_cast<Entity*>(CreateUnit(UnitType::ASSASSIN, positionGreek.at((int)EarlyMovements::ASSASSIN5))));
+				listEntities.push_back(static_cast<Entity*>(CreateUnit(UnitType::ASSASSIN, positionGreek.at((int)EarlyMovements::ASSASSIN5))));
 				listEntities.push_back(static_cast<Entity*>(CreateUnit(UnitType::ASSASSIN, positionGreek.at((int)EarlyMovements::ASSASSIN6))));
+				listEntities.push_back(static_cast<Entity*>(CreateUnit(UnitType::ASSASSIN, positionGreek.at((int)EarlyMovements::ASSASSIN6))));
+				listEntities.push_back(static_cast<Entity*>(CreateUnit(UnitType::ASSASSIN, positionGreek.at((int)EarlyMovements::ASSASSIN7))));
 				listEntities.push_back(static_cast<Entity*>(CreateUnit(UnitType::ASSASSIN, positionGreek.at((int)EarlyMovements::ASSASSIN7))));
 			}
 			gamePhase = GameBehaviour::LATE;
@@ -421,7 +459,7 @@ void IA::LateGame()
 		timer.Start();
 		break;
 	case LateGameBehaviour::ECONOMY_FOCUS:
-		if (timer.ReadSec() >= 120 || loading)
+		if (timer.ReadSec() >= 20 || loading)
 		{
 			late = LateGameBehaviour::DEFENSE;
 		}
@@ -432,18 +470,26 @@ void IA::LateGame()
 		late = LateGameBehaviour::ATACK2;
 		break;
 	case LateGameBehaviour::ATACK2:
-		if (timer.ReadSec() >= 10)
+		if (timer.ReadSec() >= 30)
 		{
 			CreateAtack();
 			timer.Start();
-			if(numWaves == 10)
+			if (numWaves == 10)
+			{
 				late = LateGameBehaviour::WIN;
+				timerWaves_win.Start();
+			}
 		}
 		break;
 	case LateGameBehaviour::WIN:
-		if (timer.ReadSec() >= 2960)
+		if (timer.ReadSec() >= 400)
 		{
 			Win();
+		}
+		if (timerWaves_win.ReadSec() >= 40)
+		{
+			CreateAtack();
+			timerWaves_win.Start();
 		}
 		break;
 	case LateGameBehaviour::FINISH:
@@ -556,7 +602,7 @@ bool IA::CheckExplore()
 	{
 		if (it._Ptr->_Myval->name == "cleric")
 		{
-			if (it._Ptr->_Myval->position == positionViking.at((int)EarlyMovements::CLERIC1POS + i))
+			if (it._Ptr->_Myval->position.DistanceManhattan(positionViking.at((int)EarlyMovements::CLERIC1POS + i)))
 			{
 				units++;
 			}
@@ -585,6 +631,8 @@ bool IA::Find()
 			}
 		}
 	}
+	if (timer.ReadSec() <= 60)
+		ret = true;
 
 	return ret;
 }
@@ -593,10 +641,14 @@ bool IA::Defense()
 {
 	if (civilization == CivilizationType::VIKING) {
 		listEntities.push_back(static_cast<Entity*>(CreateUnit(UnitType::ASSASSIN, positionViking.at((int)EarlyMovements::ASSASSIN1))));
+		listEntities.push_back(static_cast<Entity*>(CreateUnit(UnitType::ASSASSIN, positionViking.at((int)EarlyMovements::ASSASSIN1))));
+		listEntities.push_back(static_cast<Entity*>(CreateUnit(UnitType::ASSASSIN, positionViking.at((int)EarlyMovements::ASSASSIN1))));
 		listEntities.push_back(static_cast<Entity*>(CreateUnit(UnitType::ASSASSIN, positionViking.at((int)EarlyMovements::ASSASSIN2))));
 
 	}
 	else {
+		listEntities.push_back(static_cast<Entity*>(CreateUnit(UnitType::ASSASSIN, positionGreek.at((int)EarlyMovements::ASSASSIN1))));
+		listEntities.push_back(static_cast<Entity*>(CreateUnit(UnitType::ASSASSIN, positionGreek.at((int)EarlyMovements::ASSASSIN1))));
 		listEntities.push_back(static_cast<Entity*>(CreateUnit(UnitType::ASSASSIN, positionGreek.at((int)EarlyMovements::ASSASSIN1))));
 		listEntities.push_back(static_cast<Entity*>(CreateUnit(UnitType::ASSASSIN, positionGreek.at((int)EarlyMovements::ASSASSIN2))));
 	}
@@ -609,6 +661,7 @@ bool IA::Atack()
 
 	MoveUnit(pos, "assassin");
 	MoveUnit(pos, "assassin", nullptr, 1);
+	MoveUnit(pos, "assassin", nullptr, 2);
 	return true;
 }
 
@@ -617,22 +670,27 @@ bool IA::CreateAtack()
 	iPoint pos = { (int)enemyFortress->position.x, (int)enemyFortress->position.y };
 	Unit* assassin1;
 	Unit* assassin2;
+	Unit* assassin3;
 
 	if (civilization == CivilizationType::VIKING)
 	{
 		assassin1 = CreateUnit(UnitType::ASSASSIN, positionViking.at((int)EarlyMovements::ASSASSIN1));
 		assassin2 = CreateUnit(UnitType::ASSASSIN, positionViking.at((int)EarlyMovements::ASSASSIN2));
+		assassin3 = CreateUnit(UnitType::ASSASSIN, positionViking.at((int)EarlyMovements::ASSASSIN2));
 	}
 	else
 	{
 		assassin1 = CreateUnit(UnitType::ASSASSIN, positionGreek.at((int)EarlyMovements::ASSASSIN1));
 		assassin2 = CreateUnit(UnitType::ASSASSIN, positionGreek.at((int)EarlyMovements::ASSASSIN2));
+		assassin3 = CreateUnit(UnitType::ASSASSIN, positionGreek.at((int)EarlyMovements::ASSASSIN2));
 	}
 	listEntities.push_back((Entity*)assassin1);
 	listEntities.push_back((Entity*)assassin2);
+	listEntities.push_back((Entity*)assassin3);
 
 	MoveUnit(pos, "assassin", assassin1);
 	MoveUnit(pos, "assassin", assassin2);
+	MoveUnit(pos, "assassin", assassin3);
 	numWaves++;
 	return true;
 }

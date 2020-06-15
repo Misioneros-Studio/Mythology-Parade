@@ -303,7 +303,7 @@ void Player::ActionToBuilding()
 			App->scene->building_meteor = false;
 			iPoint pos = { (int)GetEnemySelectedBuild()->position.x , (int)GetEnemySelectedBuild()->position.y };
 			GetEnemySelectedBuild()->Kill(pos);
-			App->entityManager->DeleteEntity(GetEnemySelectedBuild());
+			//App->entityManager->DeleteEntity(GetEnemySelectedBuild());
 			Disaster(Disasters::HolyMeteor);
 		}
 		enemyBuildingSelect = nullptr;
