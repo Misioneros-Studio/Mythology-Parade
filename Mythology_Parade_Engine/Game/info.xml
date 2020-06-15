@@ -26,7 +26,7 @@
 	</players>
 	<volume music="50" fx="128" />
 	<IA>
-		<Game_Phase macroState="0" state="3" time="16.3969994" />
+		<Game_Phase macroState="2" state="3" time="16.3969994" />
 	</IA>
 	<camera x="779" y="-3931" />
 </info>
