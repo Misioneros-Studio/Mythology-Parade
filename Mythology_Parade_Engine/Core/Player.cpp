@@ -6,6 +6,7 @@
 #include "j1Gui.h"
 #include "HUD.h"
 #include "EntityManager.h"
+#include "CombatUnit.h"
 
 #include "j1Audio.h"
 
@@ -260,6 +261,7 @@ void Player::ActionToUnit()
 {
 	if (listEntities.size() == 1 && App->scene->nextUnit_selected)
 	{
+		App->scene->hud->thing_selected->RecieveDamage(1);
 		App->scene->hud->thing_selected->Kill(App->map->WorldToMap(position.x, position.y));
 		Unit* unit = static_cast<Unit*>(listEntities.begin()._Ptr->_Myval);
 		unit->SetMaxUnitHealth();
