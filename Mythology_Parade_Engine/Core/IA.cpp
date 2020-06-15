@@ -1,5 +1,6 @@
 #include "IA.h"
 #include "j1App.h"
+#include "j1TutorialScene.h"
 #include "PugiXml/src/pugixml.hpp"
 
 IA::IA() : enemyFortress(nullptr)
@@ -71,7 +72,6 @@ IA::IA() : enemyFortress(nullptr)
 void IA::Init()
 {
 	active = false;
-	LOG("A");
 }
 
 bool IA::Start()
@@ -94,10 +94,6 @@ bool IA::PreUpdate()
 		mouse = App->map->GetMousePositionOnMap();
 		mouse = App->map->TileCenterPoint(mouse);
 		//LOG("%i %i", mouse.x, mouse.y);
-	}
-	if (App->input->GetKey(SDL_SCANCODE_M))
-	{
-		Win();
 	}
 
 	return ret;
@@ -220,9 +216,12 @@ bool IA::Load(pugi::xml_node& s)
 			late = LateGameBehaviour::DEFENSE;
 			break;
 		case 3:
-			late = LateGameBehaviour::WIN;
+			late = LateGameBehaviour::ATACK2;
 			break;
 		case 4:
+			late = LateGameBehaviour::WIN;
+			break;
+		case 5:
 			late = LateGameBehaviour::FINISH;
 			break;
 		default:
@@ -430,7 +429,7 @@ void IA::LateGame()
 	case LateGameBehaviour::DEFENSE:
 		Defense();
 		timer.Start();
-		late = LateGameBehaviour::WIN;
+		late = LateGameBehaviour::ATACK2;
 		break;
 	case LateGameBehaviour::ATACK2:
 		if (timer.ReadSec() >= 10)
@@ -448,6 +447,9 @@ void IA::LateGame()
 		}
 		break;
 	case LateGameBehaviour::FINISH:
+		break;
+	case LateGameBehaviour::CREATE_MONKS:
+		CreateMonks();
 		break;
 	default:
 		break;
@@ -492,9 +494,16 @@ bool IA::InitCiv()
 
 
 		timer.Start();
-		early = EarlyGameBehaviour::BASIC_BUILDINGS_CREATION;
-		mid = MidGameBehaviour::CREATE_ASSASSIN;
-		gamePhase = GameBehaviour::MID;
+		if (!App->tutorialscene->active)
+		{
+			early = EarlyGameBehaviour::BASIC_BUILDINGS_CREATION;
+			gamePhase = GameBehaviour::EARLY;
+		}
+		else
+		{
+			gamePhase = GameBehaviour::LATE;
+			late = LateGameBehaviour::CREATE_MONKS;
+		}
 	}
 
 	return true;
@@ -692,7 +701,7 @@ bool IA::MoveUnit(iPoint pos, std::string name, Unit* u, int number)
 
 void IA::DoThingsBefore(int macro, int state)
 {
-	int maxStates[3] = { 7,4,5 };
+	int maxStates[3] = { 7,4,6 };
 	for (int i = 0; i < macro; i++)
 	{
 		for (int j = 0; j <= maxStates[i]; ++j)
@@ -778,5 +787,14 @@ void IA::AssembleClerics()
 			else
 				MoveUnit(positionGreek.at((int)EarlyMovements::HOME), "cleric", u);
 		}
+	}
+}
+
+void IA::CreateMonks()
+{
+	if (timer.ReadSec() >= 20)
+	{
+		timer.Start();
+		App->entityManager->CreateUnitEntity(UnitType::MONK, {32,2672}, civilization);
 	}
 }

@@ -177,8 +177,11 @@ bool Unit::Update(float dt)
 				{
 					if (!insideDraugar)
 					{
-						IncreaseHealth(-20);
-						insideDraugar = true;
+						if (var->civilization != civilization)
+						{
+							IncreaseHealth(-20);
+							insideDraugar = true;
+						}
 					}
 					LOG("%i", GetHealth());
 				}
