@@ -9,10 +9,10 @@
 #include "ResearchMenu.h"
 
 #include "p2Log.h"
-EntityManager::EntityManager() : CreateAssasin_sound(0), CreateMonk_sound(0), increase_sacrifice(0), Monster2(0),DestroyBuilding(0), construction_bar_back({0, 0, 0, 0}),
+EntityManager::EntityManager() : CreateAssasin_sound(0), CreateMonk_sound(0), increase_sacrifice(0), DestroyBuilding(0), construction_bar_back({0, 0, 0, 0}),
 construction_bar_empty({ 0, 0, 0, 0 }), construction_bar_front({ 0, 0, 0, 0 }), constructorSpriteRect({0, 0, 0, 0}), debugTex(nullptr),
-destructedSpriteRect({ 0, 0, 0, 0 }), giant5(0), life_bar_front({ 0, 0, 0, 0 }), life_bar_front_enemy({0, 0, 0, 0}),
- ogre5(0), research_bar_front({ 0, 0, 0, 0 }), shade12(0), unit_life_bar_back({ 0, 0, 0, 0 }), unit_life_bar_empty({ 0, 0, 0, 0 }),
+destructedSpriteRect({ 0, 0, 0, 0 }), life_bar_front({ 0, 0, 0, 0 }), life_bar_front_enemy({0, 0, 0, 0}),
+ research_bar_front({ 0, 0, 0, 0 }), unit_life_bar_back({ 0, 0, 0, 0 }), unit_life_bar_empty({ 0, 0, 0, 0 }),
 unit_life_bar_front({ 0, 0, 0, 0 }),  unit_life_bar_front_enemy({0, 0, 0, 0}), volume(0)
 {
 	name.append("entity_manager");
@@ -96,12 +96,6 @@ bool EntityManager::Start()
 	CreateAssasin_sound = App->audio->LoadFx("audio/fx/Appear_assasin.wav");
 	CreateMonk_sound = App->audio->LoadFx("audio/fx/Appear_monk.wav");
 	increase_sacrifice = App->audio->LoadFx("audio/fx/Sacrifices.wav");
-	Monster2 = App->audio->LoadFx("audio/fx/Monster2.wav");
-	
-	giant5 = App->audio->LoadFx("audio/fx/giant5.wav");
-	
-	ogre5 = App->audio->LoadFx("audio/fx/ogre5.wav");
-	shade12 = App->audio->LoadFx("audio/fx/shade12.wav");
 	DestroyBuilding = App->audio->LoadFx("audio/fx/Building_destruction.wav");
 	
 	
@@ -434,17 +428,11 @@ bool EntityManager::CleanUp()
 		// Do stuff
 		it.second.Clean();
 	}
-
 	
 	App->audio->CleanFxs(DestroyBuilding);
-	App->audio->CleanFxs(ogre5);
-	
-	App->audio->CleanFxs(giant5);
-	App->audio->CleanFxs(Monster2);
 	App->audio->CleanFxs(increase_sacrifice);
 	App->audio->CleanFxs(CreateMonk_sound);
 	App->audio->CleanFxs(CreateAssasin_sound);
-	App->audio->CleanFxs(shade12);
 
 
 
@@ -905,22 +893,19 @@ Entity* EntityManager::CreateUnitEntity(UnitType type, iPoint pos, CivilizationT
 		break;
 	case UnitType::JOTNAR:
 		ret = new Unit(UnitType::JOTNAR, pos);
-		FxUnits(4, App->entityManager->ogre5, pos.x, pos.y);
 		break;
 	case UnitType::DRAUGAR:
 		ret = new Unit(UnitType::DRAUGAR, pos);
-		FxUnits(4, App->entityManager->shade12, pos.x, pos.y);
 		break;
 	case UnitType::CYCLOP:
 		ret = new Unit(UnitType::CYCLOP, pos);
-		FxUnits(4, App->entityManager->giant5, pos.x, pos.y);
 		break;
 	case UnitType::MINOTAUR:
 		ret = new Unit(UnitType::MINOTAUR, pos);
-		FxUnits(4, App->entityManager->Monster2, pos.x, pos.y);
 		break;
 	case UnitType::CLERIC:
 		ret = new Unit(UnitType::CLERIC, pos);
+		FxUnits(4, CreateMonk_sound, pos.x, pos.y);
 		switch (civ)
 		{
 		case VIKING:

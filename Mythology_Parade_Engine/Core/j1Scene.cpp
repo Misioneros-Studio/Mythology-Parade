@@ -492,15 +492,16 @@ bool j1Scene::CleanUp()
 	App->audio->CleanFxs(Lose_sound);
 	App->audio->CleanFxs(WinGreek_sound);
 	App->audio->CleanFxs(WinViking_sound);
-	App->audio->CleanFxs(App->gui->sfx_UI[(int)UI_Audio::SAVE]);
+	App->audio->CleanFxs(App->gui->sfx_UI[(int)UI_Audio::MAIN_MENU]);
+	App->audio->CleanFxs(App->gui->sfx_UI[(int)UI_Audio::HOVER]);
+	App->audio->CleanFxs(App->gui->sfx_UI[(int)UI_Audio::CLOSE]);
+	App->audio->CleanFxs(App->gui->sfx_UI[(int)UI_Audio::EXIT]);
+	App->audio->CleanFxs(App->gui->sfx_UI[(int)UI_Audio::SURRENDER]);
+	App->audio->CleanFxs(App->gui->sfx_UI[(int)UI_Audio::RESTART]);
+	App->audio->CleanFxs(App->gui->sfx_UI[(int)UI_Audio::OPTIONS]);
 	App->audio->CleanFxs(App->gui->sfx_UI[(int)UI_Audio::CONFIRMATION]);
 	App->audio->CleanFxs(App->gui->sfx_UI[(int)UI_Audio::LOAD]);
-	App->audio->CleanFxs(App->gui->sfx_UI[(int)UI_Audio::CLOSE]);
-	App->audio->CleanFxs(App->gui->sfx_UI[(int)UI_Audio::OPTIONS]);
-	App->audio->CleanFxs(App->gui->sfx_UI[(int)UI_Audio::RESTART]);
-	App->audio->CleanFxs(App->gui->sfx_UI[(int)UI_Audio::SURRENDER]);
-	App->audio->CleanFxs(App->gui->sfx_UI[(int)UI_Audio::EXIT]);
-	App->audio->CleanFxs(App->gui->sfx_UI[(int)UI_Audio::MAIN_MENU]);
+	App->audio->CleanFxs(App->gui->sfx_UI[(int)UI_Audio::SAVE]);
 
 	return true;
 }
