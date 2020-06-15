@@ -212,13 +212,13 @@ void j1TutorialScene::CreateTutorialMessage(int index, bool middle)
 {
 	SDL_Rect color = { 255,255,255,255 };
 	int screen_position = 1;
+	int x = 0;
 	if (index == 5 || index == 7 || index == 9 || index == 11 || index == 12 || index == 14) {
 		color.y = color.w = 100;
 		screen_position = 0;
 	}
 	int number_message = 3;
 	int y = 0;
-	int x = 0;
 	if (third_message_shown[screen_position] == false)
 		number_message = 2;
 	else
@@ -240,22 +240,24 @@ void j1TutorialScene::CreateTutorialMessage(int index, bool middle)
 		y = (int)((h-130) / 2);
 		screen_position = 0;
 	}
+	
 	TutorialMessage tutorial_message = tutorial_message_data->GetTutorialMessage(index);
 
 	window_tutorial_message[actual_message] = static_cast<WindowUI*>(App->gui->CreateUIElement(Type::WINDOW, nullptr,
-		{ ((int)w - 295) * screen_position + x ,y,290,(tutorial_message.lines * 18) + 15 }, { 1749,356,305,113 }));
+		{ ((int)w - 310) * screen_position + x ,y,305,(tutorial_message.lines * 18) + 15 }, { 1749,356,305,113 }));
 	int j = 0;
-
+	if (screen_position == 0)
+		x += 10;
 	for (int i = 1; i <= tutorial_message.lines; i++) {
 		int k = i + (actual_message * 9);
 		if (tutorial_message.has_title && i == 1) {
 			text_tutorial_message[k - 1] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, window_tutorial_message[actual_message],
-				{ ((int)w - 285) * screen_position + x ,y + (18 * (i - 1)) + 10,280,18 }, { 0,0,0,0 }, tutorial_message.title, Panel_Fade::no_one_fade, color));
+				{ ((int)w - 300) * screen_position + x ,y + (18 * (i - 1)) + 10,295,18 }, { 0,0,0,0 }, tutorial_message.title, Panel_Fade::no_one_fade, color));
 			j--;
 		}
 		else {
 			text_tutorial_message[k - 1] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, window_tutorial_message[actual_message],
-				{ ((int)w - 285) * screen_position + x ,y + (18 * (i - 1)) + 10,280,18 }, { 0,0,0,0 }, tutorial_message_data->GetLineTutorialMessage(i + j, tutorial_message),
+				{ ((int)w - 300) * screen_position + x ,y + (18 * (i - 1)) + 10,295,18 }, { 0,0,0,0 }, tutorial_message_data->GetLineTutorialMessage(i + j, tutorial_message),
 				Panel_Fade::no_one_fade, { 255,255,255,255 }));
 		}
 	}
