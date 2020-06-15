@@ -5,6 +5,11 @@
 #include "SDL/include/SDL_rect.h"
 #include "j1App.h"
 #include "j1Render.h"
+#include "HealthSystem.h"
+#include "FoWBitDefs.h"
+#include"MaykMath.h"
+#include"Animation.h"
+
 struct SDL_Texture;
 enum CivilizationType;
 
@@ -15,13 +20,10 @@ enum class EntityType
 	BUILDING
 };
 
-class Entity :public j1Module
+class Entity : public HealthSystem
 {
 public:
-	Entity(/*EntityTypes type*/) 
-	{
-
-	}
+	Entity();
 
 	// Destructor
 	virtual ~Entity() 
@@ -58,6 +60,12 @@ public:
 		return true;
 	}
 
+	// Called each loop iteration
+	virtual bool PostUpdate()
+	{
+		return true;
+	}
+
 	// Called before quitting
 	virtual bool CleanUp()
 	{
@@ -75,6 +83,12 @@ public:
 	{
 		return true;
 	}
+
+	virtual void Kill(iPoint direction) {
+
+	}	
+	
+	virtual AnimationType GetState();
 
 public:
 
@@ -102,8 +116,48 @@ public:
 		return collisionRect;
 	}
 
+	Rect getMovementRect()
+	{
+		return { collisionRect.x, collisionRect.y - 10, collisionRect.w, 10};
+	}
+
+	Rect getCollisionAsrect()
+	{
+		return { collisionRect.x, collisionRect.y + (collisionRect.h * 2) + 16, collisionRect.w, -collisionRect.h };
+	}
+
+	Rect getCollisionMathRect()
+	{
+		return { collisionRect.x, collisionRect.y + collisionRect.h, collisionRect.w, -collisionRect.h };
+	}
+
+	iPoint getMiddlePoint()
+	{
+		return { collisionRect.x + (collisionRect.w / 2), collisionRect.y + (collisionRect.h / 2) };
+	}
+
+	iPoint GetTilePosition();
+
+	bool canLevel;
+
+	bool shown_minimap;
+
+	bool shown;
+
+	bool isSelected();
+
+	void SetSelected(bool value);
+
+	
+	std::string name;
 protected:
 	SDL_RendererFlip flipState;
 	SDL_Rect collisionRect;
+
+
+	int fowRadius;
+	//Conditions
+	bool _isSelected;
+
 };
 #endif // !ENTITY_H

@@ -12,6 +12,7 @@
 #include "j1LogoScene.h"
 #include "j1TitleScene.h"
 #include "j1Scene.h"
+#include "j1TutorialScene.h"
 #include "j1Minimap.h"
 #include "j1Map.h"
 #include "j1Pathfinding.h"
@@ -19,8 +20,13 @@
 #include "j1Gui.h"
 #include "Console.h"
 #include "EntityManager.h"
+#include "FoWManager.h"
 #include "j1FadeToBlack.h"
+#include "j1ParticleManager.h"
 #include "j1App.h"
+#include "TooltipData.h"
+#include "IA.h"
+#include "AssetsManager.h"
 
 
 // Constructor
@@ -36,6 +42,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	logo_scene = new j1LogoScene();
 	title_scene = new j1TitleScene();
 	scene = new j1Scene();
+	tutorialscene = new j1TutorialScene();
 	minimap = new j1Minimap();
 	map = new j1Map();
 	pathfinding = new j1PathFinding();
@@ -43,15 +50,21 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	gui = new j1Gui();
 	console = new Console();
 	entityManager = new EntityManager();
+	fowManager = new FoWManager();
 	fade_to_black = new j1FadeToBlack();
+	particleManager = new j1ParticleManager();
+	ia = new IA();
+	assets_manager = new AssetsManager();
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
+	assets_manager->Init();
 	AddModule(input);
 	AddModule(win);
 	AddModule(tex);
-	AddModule(audio);
+
 	AddModule(map);
+	AddModule(fowManager);
 	AddModule(pathfinding);
 	AddModule(font);
 
@@ -60,16 +73,19 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(logo_scene);
 	AddModule(title_scene);
 	AddModule(scene);
-
+	AddModule(tutorialscene);
+	AddModule(particleManager);
 	AddModule(minimap);
 	AddModule(gui);
 	AddModule(console);
 
 	// entities
 	AddModule(entityManager);
-
+	AddModule(audio);
+	AddModule(ia);
 	// render last to swap buffer
 	AddModule(fade_to_black);
+
 	AddModule(render);
 
 
@@ -104,7 +120,17 @@ bool j1App::Awake()
 	pugi::xml_node		app_config;
 
 	bool ret = false;
-		
+
+	save_game.append("info.xml");
+	load_game.append("info.xml");
+
+	pugi::xml_document result;
+	if (result.load_file(load_game.c_str()))
+	{
+		existSaveFile = true;
+	}
+	
+	assets_manager->Awake(config_file);
 	config = LoadConfig(config_file);
 
 	if(config.empty() == false)
@@ -131,8 +157,10 @@ bool j1App::Awake()
 		}
 	}
 
-	PERF_PEEK(ptimer);
+	tooltipdata = new TooltipData();
 
+	PERF_PEEK(ptimer);
+	
 	return ret;
 }
 
@@ -182,8 +210,10 @@ bool j1App::Update()
 pugi::xml_node j1App::LoadConfig(pugi::xml_document& config_file) const
 {
 	pugi::xml_node ret;
-
-	pugi::xml_parse_result result = config_file.load_file("config.xml");
+	char* buffer;
+	int bytesFile = App->assets_manager->Load("xmls/config.xml", &buffer);
+	pugi::xml_parse_result result = config_file.load_buffer(buffer, bytesFile);
+	RELEASE_ARRAY(buffer);
 
 	if(result == NULL)
 		LOG("Could not load map xml file config.xml. pugi error: %s", result.description());
@@ -242,11 +272,6 @@ void j1App::FinishUpdate()
 bool j1App::PreUpdate()
 {
 	bool ret = true;
-
-	if (restart_scene == true) {
-		restart_scene = false;
-		RestartScene();
-	}
 
 	j1Module* pModule = NULL;
 
@@ -317,7 +342,8 @@ bool j1App::CleanUp()
 		if(it._Ptr->_Myval != nullptr)
 			ret = it._Ptr->_Myval->CleanUp();
 	}
-
+	delete tooltipdata;
+	logs.clear();
 	PERF_PEEK(ptimer);
 	return ret;
 }
@@ -367,11 +393,7 @@ void j1App::LoadGame(const char* file)
 // ---------------------------------------
 void j1App::SaveGame(const char* file) const
 {
-	// we should be checking if that file actually exist
-	// from the "GetSaveGames" list ... should we overwrite ?
-
 	want_to_save = true;
-	save_game.append(file);
 }
 
 // ---------------------------------------
@@ -393,7 +415,7 @@ bool j1App::LoadGameNow()
 	{
 		LOG("Loading new Game State from %s...", load_game.c_str());
 
-		root = data.child("game_state");
+		root = data.child("info");
 
 		ret = true;
 		j1Module* item = NULL;
@@ -401,7 +423,7 @@ bool j1App::LoadGameNow()
 
 		for (std::list<j1Module*>::iterator it = modules.begin(); it != modules.end() && ret == true; it++)
 		{
-			ret = it._Ptr->_Myval->Load(root.child(it._Ptr->_Myval->name.c_str()));
+			ret = it._Ptr->_Myval->Load(root);
 			item = it._Ptr->_Myval;
 		}
 
@@ -428,34 +450,24 @@ bool j1App::SavegameNow()
 	// xml object were we will store all data
 	pugi::xml_document data;
 	pugi::xml_node root;
-	
-	root = data.append_child("game_state");
 
-	j1Module* item = NULL;
+	root = data.append_child("info");
+
 
 	for (std::list<j1Module*>::iterator it = modules.begin(); it != modules.end() && ret == true; it++)
 	{
-		ret = it._Ptr->_Myval->Save(root.append_child(it._Ptr->_Myval->name.c_str()));
-		item = it._Ptr->_Myval;
+		ret = it._Ptr->_Myval->Save(root);
 	}
 
-	if(ret == true)
-	{
-		std::stringstream stream;
-		data.save(stream);
-
-		// we are done, so write data to disk
-		//fs->Save(save_game.GetString(), stream.str().c_str(), stream.str().length());
-		LOG("... finished saving", save_game.c_str());
-	}
-	else
-		LOG("Save process halted from an error in module %s", (item != NULL) ? item->name.c_str() : "unknown");
+	data.save_file("info.xml");
 
 	data.reset();
+
+
 	want_to_save = false;
 	return ret;
 }
-
+/*
 bool j1App::RestartScene() {
 	bool ret = true;
 
@@ -473,4 +485,4 @@ bool j1App::RestartScene() {
 		}
 	}
 	return ret;
-}
+}*/

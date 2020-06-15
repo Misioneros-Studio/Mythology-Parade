@@ -4,11 +4,21 @@
 #include "j1Scene.h"
 #include "j1Input.h"
 #include "j1Gui.h"
+#include "HUD.h"
 #include "EntityManager.h"
+#include "CombatUnit.h"
+
+#include "j1Audio.h"
+
+#include "SDL_mixer/include/SDL_mixer.h"
 
 Player::Player()
 {
-	Start();
+	research_assassin = research_chaotic_beast = research_chaotic_miracle = research_cleric = research_encampment = research_lawful_beast = research_lawful_miracle = research_lawful_victory =
+		research_temple = research_chaotic_victory = false;
+	shift = false;
+	alt = false;
+	sacrifices_before = prayers_before = faith_before = -1;
 }
 
 Player::~Player()
@@ -32,11 +42,27 @@ bool Player::Start()
 
 	dontSelect = false;
 	num_encampment = num_monastery = num_temple = 0;
-	time_production_victory = 10;
+	time_production_victory = 20;
 
-	player_type = CivilizationType::VIKING;
+	player_type = civilization;
 	displayDebug = false;
 	oneTime = true;
+
+
+	if (civilization == CivilizationType::GREEK)
+		name = "greek";
+	else
+		name = "viking";
+
+
+	buildingSelect = nullptr;
+
+	if (App->entityManager->initCivilizations && App->entityManager->loading == false)
+	{
+		App->entityManager->BuildCivilizations(civilization);
+		App->entityManager->initCivilizations = false;
+	}
+	App->entityManager->playerCreated = true;
 
 	return true;
 }
@@ -58,21 +84,30 @@ bool Player::PreUpdate()
 	sacrifice = std::to_string(CurrencySystem::sacrifices);
 	prayer = std::to_string(CurrencySystem::prayers);
 
-	if (oneTime)
-	{
-		InitVikings();
-		InitGreek();
-		oneTime = false;
-	}
+	//if (oneTime)
+	//{
+	//	InitVikings();
+	//	InitGreek();
+	//	oneTime = false;
+	//}
 
 	return true;
 }
 
 bool Player::Update(float dt)
 {
-	App->scene->ui_text_ingame[0]->SetString(faith);
-	App->scene->ui_text_ingame[1]->SetString(sacrifice);
-	App->scene->ui_text_ingame[2]->SetString(prayer);
+	if (faith_before!= CurrencySystem::faith) {
+		App->scene->hud->ui_text_ingame[0]->SetString(faith);
+		faith_before = CurrencySystem::faith;
+	}
+	if (sacrifices_before != CurrencySystem::sacrifices) {
+		App->scene->hud->ui_text_ingame[1]->SetString(sacrifice);
+		sacrifices_before = CurrencySystem::sacrifices;
+	}
+	if (prayers_before != CurrencySystem::prayers) {
+		App->scene->hud->ui_text_ingame[2]->SetString(prayer);
+		prayers_before = CurrencySystem::prayers;
+	}
 
 	//if (App->input->GetKey(SDL_SCANCODE_5) == KEY_DOWN && !App->entityManager->crPreview.active)
 	//{
@@ -84,6 +119,19 @@ bool Player::Update(float dt)
 	//	App->entityManager->CreateUnitEntity(UnitType::MONK, spawnPos);
 	//}
 
+	////Selection logics and drawing
+	//if (!App->scene->paused_game)
+	//{
+	//	SelectionDraw_Logic();
+	//	PlayerInputs();
+	//}
+
+	return true;
+}
+
+bool Player::PostUpdate()
+{
+
 	//Selection logics and drawing
 	if (!App->scene->paused_game)
 	{
@@ -91,13 +139,6 @@ bool Player::Update(float dt)
 		PlayerInputs();
 	}
 
-
-
-	return true;
-}
-
-bool Player::PostUpdate()
-{
 	return true;
 }
 
@@ -122,6 +163,12 @@ void Player::SelectionDraw_Logic()
 			dontSelect = false;
 		}
 		preClicked = App->render->ScreenToWorld(preClicked.x, preClicked.y);
+		if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_DOWN || App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT) {
+			shift = true;
+		}
+		else if (App->input->GetKey(SDL_SCANCODE_LALT) == KEY_DOWN || App->input->GetKey(SDL_SCANCODE_LALT) == KEY_REPEAT) {
+			alt = true;
+		}
 	}
 	if (!dontSelect)
 	{
@@ -134,17 +181,60 @@ void Player::SelectionDraw_Logic()
 			}
 			postClicked = App->render->ScreenToWorld(postClicked.x, postClicked.y);
 
-			App->render->DrawQuad({ preClicked.x, preClicked.y, postClicked.x - preClicked.x, postClicked.y - preClicked.y }, 255, 255, 255, 255, false);
+			if (shift == true && App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT)
+				App->render->DrawQuad({ preClicked.x, preClicked.y, postClicked.x - preClicked.x, postClicked.y - preClicked.y }, 100, 0, 255, 255, false);
+			else if(alt==true&& App->input->GetKey(SDL_SCANCODE_LALT) == KEY_REPEAT)
+				App->render->DrawQuad({ preClicked.x, preClicked.y, postClicked.x - preClicked.x, postClicked.y - preClicked.y }, 255, 0, 100, 255, false);
+			else
+				App->render->DrawQuad({ preClicked.x, preClicked.y, postClicked.x - preClicked.x, postClicked.y - preClicked.y }, 255, 255, 255, 255, false);
 		}
 
 		if (App->input->GetMouseButtonDown(1) == KEY_UP)
 		{
+			if (shift == true && App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT) {
+				buildingSelect = nullptr;
+				SeeEntitiesInside(true);
+
+			}
+			else if (alt == true && App->input->GetKey(SDL_SCANCODE_LALT) == KEY_REPEAT) {
+				buildingSelect = nullptr;
+				SeeEntitiesInside(false,true);
+
+			}
+			else {
+				for each (Unit * unit in listEntities)
+				{
+					unit->SetSelected(false);
+				}
+				if (buildingSelect != nullptr)
+					buildingSelect->SetSelected(false);
+				listEntities.clear();
+				buildingSelect = nullptr;
+				ClickLogic();
+				SeeEntitiesInside();
+				ActionToUnit();
+				ActionToBuilding();
+				App->scene->nextUnit_selected = false;
+			}
+
+			//Teorically donnt needed on UI_Improved
+			/*if(buildingSelect!=nullptr)
+				buildingSelect->SetSelected(false);
 			listEntities.clear();
 			buildingSelect = nullptr;
 			ClickLogic();
 			SeeEntitiesInside();
-			App->scene->HUDUpdateSelection(listEntities, (Building*)buildingSelect);
+			ActionToUnit();
+			ActionToBuilding();
+			App->scene->nextUnit_selected = false;
+			*/
+			App->scene->hud->HUDUpdateSelection(listEntities, (Building*)buildingSelect);
+
 		}
+	}
+	else {
+		shift = false;
+		alt = false;
 	}
 }
 
@@ -153,12 +243,84 @@ std::list<Entity*> Player::GetEntitiesSelected()
 	return listEntities;
 }
 
+void Player::SetEntitiesSelected( const std::list<Entity*> &entities_list)
+{
+	listEntities = entities_list;
+}
+
 Building* Player::GetSelectedBuild()
 {
 	return (Building*) buildingSelect;
 }
 
-void Player::SeeEntitiesInside()
+Building* Player::GetEnemySelectedBuild()
+{
+	return (Building*)enemyBuildingSelect;
+}
+
+void Player::ActionToUnit()
+{
+	if (listEntities.size() == 1 && App->scene->nextUnit_selected && listEntities.begin()._Ptr->_Myval != App->scene->hud->thing_selected)
+	{		
+		App->scene->hud->thing_selected->RecieveDamage(1);
+		App->scene->hud->thing_selected->Kill(App->map->WorldToMap(position.x, position.y));
+		Unit* unit = static_cast<Unit*>(listEntities.begin()._Ptr->_Myval);
+		unit->IncreaseHealthMonk();
+		App->scene->nextUnit_selected = false;
+	}
+	else if (App->scene->nextBuilding_selected) {
+		App->scene->nextUnit_selected = false;
+
+	}
+}
+
+void Player::ActionToBuilding()
+{
+	if(App->scene->nextUnit_selected && buildingSelect!=nullptr)
+	{
+		App->scene->hud->thing_selected->RecieveDamage(1);
+		App->scene->hud->thing_selected->Kill(App->map->WorldToMap(position.x, position.y));
+		Building* unit = static_cast<Building*>(buildingSelect);
+		unit->IncreaseHealthMonk();
+		App->scene->nextUnit_selected = false;
+	}
+	if (GetEnemySelectedBuild() != nullptr)
+	{
+		if (App->scene->nextBuilding_selected && GetEnemySelectedBuild()->name == "encampment" && civilization != GetEnemySelectedBuild()->civilization)
+		{
+			CivilizationType civ;
+			int info;
+			if (GetEnemySelectedBuild()->civilization == CivilizationType::GREEK)
+			{
+				civ = CivilizationType::VIKING; info = 3;
+			}
+			else
+			{
+				civ = CivilizationType::GREEK; info = 7;
+			}
+
+			iPoint pos = { (int)GetEnemySelectedBuild()->position.x, (int)GetEnemySelectedBuild()->position.y };
+			Building* building = static_cast<Building*>(App->entityManager->CreateBuildingEntity(pos, BuildingType::ENCAMPMENT, App->entityManager->buildingsData[info], civ));
+			building->SetTimeProducing(0);
+			App->entityManager->DeleteEntity(GetEnemySelectedBuild());
+			App->scene->nextBuilding_selected = false;
+			Miracle(Miracles::CallToArms);
+		}
+		else if (App->scene->building_meteor && GetEnemySelectedBuild()->name == "encampment")
+		{
+			App->scene->building_meteor = false;
+			iPoint pos = { (int)GetEnemySelectedBuild()->position.x , (int)GetEnemySelectedBuild()->position.y };
+			GetEnemySelectedBuild()->Kill(pos);
+			//App->entityManager->DeleteEntity(GetEnemySelectedBuild());
+			Disaster(Disasters::HolyMeteor);
+		}
+		enemyBuildingSelect = nullptr;
+	}
+
+
+}
+
+void Player::SeeEntitiesInside(bool shift, bool alt)
 {
 	//ALERT MAYK
 	std::list<Entity*>::iterator it = App->entityManager->entities[EntityType::UNIT].begin();
@@ -170,7 +332,28 @@ void Player::SeeEntitiesInside()
 			{
 				if (it._Ptr->_Myval->civilization == player_type)
 				{
-					listEntities.push_back(it._Ptr->_Myval);
+					if (shift == true) {
+						if (!it._Ptr->_Myval->isSelected()) {
+							it._Ptr->_Myval->SetSelected(true);
+							listEntities.push_back(it._Ptr->_Myval);
+						}
+					}
+					else if (alt == true) {
+						if (it._Ptr->_Myval->isSelected()) {
+							it._Ptr->_Myval->SetSelected(false);
+							bool finish = false;
+							for (std::list<Entity*>::iterator it2 = listEntities.begin(); it != listEntities.end() && finish == false; ++it2) {
+								if (it2._Ptr->_Myval->position == it._Ptr->_Myval->position) {
+									finish = true;
+									//listEntities.erase(it2);
+								}
+							}
+						}
+					}
+					else {
+						it._Ptr->_Myval->SetSelected(true);
+						listEntities.push_back(it._Ptr->_Myval);
+					}
 				}
 			}
 		}
@@ -196,28 +379,42 @@ void Player::PlayerInputs()
 	{
 		iPoint mouse = App->map->GetMousePositionOnMap();
 		iPoint spawnPos = App->map->TileCenterPoint(mouse);
-		App->entityManager->CreateUnitEntity(UnitType::ASSASSIN, spawnPos,civilization);
+		if(civilization==CivilizationType::GREEK)
+			App->entityManager->CreateUnitEntity(UnitType::CYCLOP, spawnPos,civilization);
+		else if(civilization == CivilizationType::VIKING)
+			App->entityManager->CreateUnitEntity(UnitType::JOTNAR, spawnPos, civilization);
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN && App->scene->godMode)
 	{
 		iPoint mouse = App->map->GetMousePositionOnMap();
 		iPoint spawnPos = App->map->TileCenterPoint(mouse);
-		App->entityManager->CreateUnitEntity(UnitType::MONK, spawnPos,civilization);
+		if (civilization == CivilizationType::GREEK)
+			App->entityManager->CreateUnitEntity(UnitType::ASSASSIN, spawnPos, CivilizationType::VIKING);
+		else if (civilization == CivilizationType::VIKING)
+			App->entityManager->CreateUnitEntity(UnitType::ASSASSIN, spawnPos, CivilizationType::GREEK);
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_F4) == KEY_DOWN && App->scene->godMode)
 	{
-		if (!listEntities.empty())
-		{
-			std::list<Entity*>::iterator it = listEntities.begin();
-			for (it; it != listEntities.end(); ++it)
-			{
-				App->entityManager->DeleteEntity(it._Ptr->_Myval);
-			}
-			listEntities.clear();
-			App->scene->HUDUpdateSelection(listEntities, nullptr);
-		}
+		iPoint mouse = App->map->GetMousePositionOnMap();
+		iPoint spawnPos = App->map->TileCenterPoint(mouse);
+		if (civilization == CivilizationType::GREEK)
+			App->entityManager->CreateUnitEntity(UnitType::ASSASSIN, spawnPos, CivilizationType::GREEK);
+		else if (civilization == CivilizationType::VIKING)
+			App->entityManager->CreateUnitEntity(UnitType::ASSASSIN, spawnPos, CivilizationType::VIKING);
+		//if (!listEntities.empty())
+		//{
+		//	std::list<Entity*>::iterator it = listEntities.begin();
+		//	for (it; it != listEntities.end(); ++it)
+		//	{
+		//		App->entityManager->DeleteEntity(it._Ptr->_Myval);
+		//	}
+		//	listEntities.clear();
+		//	App->scene->hud->HUDUpdateSelection(listEntities, nullptr);
+		//}
+
+
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN && App->scene->godMode)
@@ -247,6 +444,20 @@ void Player::PlayerInputs()
 			}
 		}
 	}
+
+	if (App->input->GetKey(SDL_SCANCODE_Y) == KEY_DOWN && App->scene->godMode)
+	{
+		if (!listEntities.empty())
+		{
+			std::list<Entity*>::iterator it = listEntities.begin();
+			for (it; it != listEntities.end(); ++it)
+			{
+				Unit* unit = static_cast<Unit*>(it._Ptr->_Myval);
+				unit->DivideHealth();
+			}
+			listEntities.clear();
+		}
+	}
 }
 
 void Player::ClickLogic()
@@ -260,7 +471,17 @@ void Player::ClickLogic()
 		{
 			if (click.y <= it._Ptr->_Myval->getCollisionRect().y && click.y >= it._Ptr->_Myval->getCollisionRect().y + it._Ptr->_Myval->getCollisionRect().h)
 			{
-				buildingSelect = it._Ptr->_Myval;
+				Building* building = static_cast<Building*>(it._Ptr->_Myval);
+				if (building->buildingStatus == BuildingStatus::FINISHED) {
+					if (it._Ptr->_Myval->civilization == civilization) {
+						buildingSelect = it._Ptr->_Myval;
+						it._Ptr->_Myval->SetSelected(true);
+						App->audio->PlayFx(3, App->entityManager->Select_sfx);
+					}
+					else {
+						enemyBuildingSelect = it._Ptr->_Myval;
+					}
+				}
 			}
 		}
 	}
@@ -273,8 +494,10 @@ void Player::ClickLogic()
 			{
 				if (click.y <= it._Ptr->_Myval->getCollisionRect().y && click.y >= it._Ptr->_Myval->getCollisionRect().y + it._Ptr->_Myval->getCollisionRect().h)
 				{
-					if (it._Ptr->_Myval->civilization == civilization) 
+					App->audio->PlayFx(3, App->entityManager->Select_sfx);
+					if (it._Ptr->_Myval->civilization == civilization)
 					{
+						it._Ptr->_Myval->SetSelected(true);
 						listEntities.push_back(it._Ptr->_Myval);
 						if (preClicked == postClicked)
 							return;
@@ -300,40 +523,17 @@ int Player::GetSacrifices()
 	return CurrencySystem::sacrifices;
 }
 
-
-void Player::InitVikings()
+void Player::SetFaith(int var)
 {
-	iPoint fortress = { 122,21 };
-	fortress = App->map->MapToWorld(fortress.x, fortress.y);
-	fortress.x -= App->map->GetTilesHalfSize().x;
-
-	App->entityManager->CreateBuildingEntity(fortress, BuildingType::FORTRESS, App->entityManager->buildingsData[0],CivilizationType::VIKING);
-
-	iPoint monkPos = { 119,26 };
-	iPoint assassinPos = { 121,28 };
-	monkPos = App->map->MapToWorld(monkPos.x, monkPos.y);
-	assassinPos = App->map->MapToWorld(assassinPos.x, assassinPos.y);
-
-
-	App->entityManager->CreateUnitEntity(UnitType::MONK, monkPos,civilization);
-	App->entityManager->CreateUnitEntity(UnitType::ASSASSIN, assassinPos,civilization);
-
+	CurrencySystem::faith = var;
 }
 
-void Player::InitGreek()
+void Player::SetPrayers(int var)
 {
-	iPoint fortress = { 102,41 };
-	fortress = App->map->MapToWorld(fortress.x, fortress.y);
-	fortress.x -= App->map->GetTilesHalfSize().x;
+	CurrencySystem::prayers = var;
+}
 
-	App->entityManager->CreateBuildingEntity(fortress, BuildingType::FORTRESS, App->entityManager->buildingsData[4],CivilizationType::GREEK);
-
-	iPoint monkPos = { 106,34 };
-	iPoint assassinPos = { 109,37 };
-	monkPos = App->map->MapToWorld(monkPos.x, monkPos.y);
-	assassinPos = App->map->MapToWorld(assassinPos.x, assassinPos.y);
-
-
-	App->entityManager->CreateUnitEntity(UnitType::MONK, monkPos,CivilizationType::GREEK);
-	App->entityManager->CreateUnitEntity(UnitType::ASSASSIN, assassinPos,CivilizationType::GREEK);
+void Player::SetSacrifices(int var)
+{
+	CurrencySystem::sacrifices = var;
 }

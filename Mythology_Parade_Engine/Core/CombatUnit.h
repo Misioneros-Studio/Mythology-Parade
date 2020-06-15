@@ -3,7 +3,6 @@
 
 #include "Unit.h"
 #include "LevelSystem.h"
-#include"Animation.h"
 
 class CombatUnit :	public Unit, public LevelSystem
 {
@@ -11,6 +10,7 @@ private:
 	int damage;
 	int range;
 	int speed;
+	bool finish_atack;
 
 public:
 	CombatUnit(UnitType, iPoint);
@@ -19,8 +19,13 @@ public:
 	bool Update(float);
 	void Action(Entity*) override;
 	void LevelUp();
+	void SetDamage(int d);
+
+	int realDamage;
+
 private:
 	void Init(int maxHealth, int damage, int range, int speed);
+
 
 public:
 	int GetDamageValue();
@@ -29,6 +34,18 @@ public:
 	void IncreaseHealth(int);
 	void IncreaseSpeed(int);
 	void IncreaseDamage(int);
+
+	void SetDefaultHealth();
+
+	void SetLevel(int);
+	void SetHealth(int);
+
+
+	void DetectNearbyEnemies();
+
+	std::list<Entity*> nearbyDetectedList;
+	Entity* enemyTarget;
+
 
 };
 

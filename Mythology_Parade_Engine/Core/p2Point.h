@@ -7,6 +7,7 @@
 
 #include "p2Defs.h"
 #include <math.h>
+#include"MaykMath.h"
 
 template<class TYPE>
 class p2Point
@@ -43,6 +44,12 @@ public:
 		return {(float)x, (float)y};
 	}
 
+	//Cast operator override
+	operator Point() const
+	{
+		return { (int)x, (int)y };
+	}
+
 	// Math ------------------------------------------------
 	p2Point operator -(const p2Point &v) const
 	{
@@ -66,6 +73,26 @@ public:
 
 		r.x = x + v.x;
 		r.y = y + v.y;
+
+		return(r);
+	}
+
+	const p2Point operator - (const TYPE& v) const
+	{
+		p2Point r;
+
+		r.x = x - v;
+		r.y = y - v;
+
+		return(r);
+	}
+
+	const p2Point operator + (const TYPE& v) const
+	{
+		p2Point r;
+
+		r.x = x + v;
+		r.y = y + v;
 
 		return(r);
 	}

@@ -9,11 +9,27 @@
 #include "j1Gui.h"
 #include "j1Minimap.h"
 #include "Console.h"
+#include "j1Scene.h"
 #include "j1Audio.h"
+#include "TooltipData.h"
+#include "EntityManager.h"
+#include "HUD.h"
 
 j1Gui::j1Gui() : j1Module()
 {
 	name.append("gui");
+	winlose_tex = nullptr;
+	atlas_file_name_num_0 = "";
+	atlas_file_name_num_1 = "";
+	atlas_file_name_num_2 = "";
+	UIs.clear();
+	atlas_num_0 = nullptr;
+	atlas_num_1 = nullptr;
+	atlas_num_2 = nullptr;
+	cursor_tex = nullptr;
+	lockClick = cursor_attack = cursor_move = cursor_heal = false;
+	cursor_size = { 0,0 };
+	LOG("%s", atlas_file_name_num_0.c_str());
 }
 
 // Destructor
@@ -28,6 +44,7 @@ bool j1Gui::Awake(pugi::xml_node& conf)
 
 	atlas_file_name_num_0 = conf.child("atlas_0").attribute("file").as_string("");
 	atlas_file_name_num_1 = conf.child("atlas_1").attribute("file").as_string("");
+	atlas_file_name_num_2 = conf.child("atlas_2").attribute("file").as_string("");
 	active = false;
 
 	return ret;
@@ -38,10 +55,14 @@ bool j1Gui::Start()
 {
 	atlas_num_0 = App->tex->Load(atlas_file_name_num_0.c_str());
 	atlas_num_1 = App->tex->Load(atlas_file_name_num_1.c_str());
-	for (int i = 0; i < 9; i++) {
+	atlas_num_2 = App->tex->Load(atlas_file_name_num_2.c_str());
+	for (int i = 0; i < 10; i++) {
 		sfx_UI[i] = 0;
 	}
 	cursor_tex = App->tex->Load("gui/cursors.png");
+
+	winlose_tex = App->tex->Load("gui/WinLoseBackground.png");
+
 	return true;
 }
 
@@ -70,13 +91,24 @@ bool j1Gui::PreUpdate()
 		std::list<UI*>::iterator it = UIs.begin();
 		std::advance(it, count);
 
-		if (it._Ptr->_Myval != UIs.end()._Ptr->_Myval)
+		if (it._Ptr->_Myval != UIs.end()._Ptr->_Myval && it._Ptr->_Myval->focus == true)
 			it._Ptr->_Myval->Move();
 	}
 	for(std::list<UI*>::iterator it = UIs.begin(); it != UIs.end(); it++)
 	{
 		it._Ptr->_Myval->PreUpdate();
 	}
+	return true;
+}
+
+// Called after all Updates
+bool j1Gui::Update(float dt)
+{
+	for (std::list<UI*>::iterator it = UIs.begin(); it != UIs.end(); it++)
+	{
+		it._Ptr->_Myval->Update(dt);
+	}
+
 	return true;
 }
 
@@ -106,17 +138,59 @@ bool j1Gui::PostUpdate()
 	if(App->minimap->active==true)
 		App->render->DrawQuad({ rect_position.x, rect_position.y, (int)(App->render->camera.w * App->minimap->scale),(int)(App->render->camera.h * App->minimap->scale) }, 255, 255, 255, 255, 
 			false, false);
+	if (App->minimap->show_damage_area == true) {
+		App->minimap->show_damage_area = false;
+		minimap_feedback_timer.Start();
+	}
+	if(minimap_feedback_timer.ReadSec()<=1)
+		App->render->DrawQuad({ App->minimap->damage_area.x - 5,App->minimap->damage_area.y - 5,10,10 }, 255, 255, 0, 255, false, false);
 
 
 	//Show cursor ------------------------------
 	int x, y;
 	App->input->GetMousePosition(x, y);
 	iPoint p = App->render->ScreenToWorld(x, y);
-	SDL_Rect sec = { 0, 0, 54, 45 };
+	SDL_Rect sec = { 0, 0, 22, 32 };
+	if (cursor_move == true && App->scene->active == true && App->scene->paused_game == false)
+		sec = { 162,0,36,36 };
+	if (cursor_attack == true && App->scene->active == true && App->scene->paused_game == false)
+		sec = { 216,0,35,33 };
+	if (cursor_heal == true && App->scene->active == true && App->scene->paused_game == false)
+		sec = { 324,0,27,32 };
 
+	cursor_size = { sec.w,sec.h };
 	p = App->render->ScreenToWorld(x, y);
 
 	App->render->Blit(cursor_tex, p.x, p.y, &sec);
+
+	//Win or Lose Window
+	if (App->entityManager->getPlayer() != nullptr && App->entityManager->active==true) {
+		if (App->entityManager->getPlayer()->player_win == true) {
+			if (App->scene->isInTutorial == true) {
+				DoWinOrLoseWindow(3, true);
+			}
+			else {
+				if (App->entityManager->getPlayer()->player_type == CivilizationType::VIKING) {
+					DoWinOrLoseWindow(1, true);
+				}
+				else {
+					DoWinOrLoseWindow(2, true);
+				}
+			}
+		}
+
+		else if (App->entityManager->getPlayer()->player_lose == true) {
+			App->entityManager->initCivilizations = true;
+			if (App->entityManager->getPlayer()->player_type == CivilizationType::VIKING) {
+				DoWinOrLoseWindow(1, false);
+			}
+			else {
+				DoWinOrLoseWindow(2, false);
+			}
+		}
+	}
+
+
 	return true;
 }
 
@@ -139,7 +213,12 @@ bool j1Gui::CleanUp()
 	{
 		App->tex->UnLoad(atlas_num_1);
 	}
+	if (atlas_num_2)
+	{
+		App->tex->UnLoad(atlas_num_2);
+	}
 	App->tex->UnLoad(cursor_tex);
+	App->tex->UnLoad(winlose_tex);
 	return true;
 }
 
@@ -150,12 +229,14 @@ const SDL_Texture* j1Gui::GetAtlas(int number_atlas) const
 		return atlas_num_0;
 	else if (number_atlas == 1)
 		return atlas_num_1;
+	else if (number_atlas == 2)
+		return atlas_num_2;
 }
 
 // class Gui ---------------------------------------------------
 
-UI* j1Gui::CreateUIElement(Type type, UI* p, SDL_Rect r, SDL_Rect sprite, std::string str, SDL_Rect sprite2, SDL_Rect sprite3, bool drageable, SDL_Rect drag_area, j1Module* s_listener, int audio,
-	bool console, float drag_position_scroll_bar, int number_atlas)
+UI* j1Gui::CreateUIElement(Type type, UI* p, SDL_Rect r, SDL_Rect sprite, std::string str, Panel_Fade p_fade, SDL_Rect sprite2, SDL_Rect sprite3, bool drageable, SDL_Rect drag_area, j1Module* s_listener, int audio,
+	bool console, float drag_position_scroll_bar, int number_atlas, int num_tooltip, bool tooltip_immediate)
 {
 	UI* ui = nullptr;
 	SDL_Color colour;
@@ -163,13 +244,13 @@ UI* j1Gui::CreateUIElement(Type type, UI* p, SDL_Rect r, SDL_Rect sprite, std::s
 	switch (type)
 	{
 	case Type::BUTTON:
-		ui = new ButtonUI(Type::BUTTON, p, r, sprite, sprite2, sprite3, true, true, drag_area, audio);
+		ui = new ButtonUI(Type::BUTTON, p, r, sprite, sprite2, sprite3, true, true, drag_area, audio, p_fade, num_tooltip, tooltip_immediate);
 		break;
 	case Type::IMAGE:
-		ui = new ImageUI(Type::IMAGE, p, r, sprite, drageable, drageable, drag_area, drag_position_scroll_bar);
+		ui = new ImageUI(Type::IMAGE, p, r, sprite, drageable, drageable, drag_area, drag_position_scroll_bar, p_fade, num_tooltip, tooltip_immediate);
 		break;
 	case Type::WINDOW:
-		ui = new WindowUI(Type::WINDOW, p, r, sprite, drageable, drageable, drag_area);
+		ui = new WindowUI(Type::WINDOW, p, r, sprite, drageable, drageable, drag_area, p_fade);
 		break;
 	case Type::TEXT:
 		colour = { (Uint8)sprite2.x,(Uint8)sprite2.y,(Uint8)sprite2.w,(Uint8)sprite2.h };
@@ -177,10 +258,10 @@ UI* j1Gui::CreateUIElement(Type type, UI* p, SDL_Rect r, SDL_Rect sprite, std::s
 			title = false;
 		else
 			title = true;
-		ui = new TextUI(Type::TEXT, p, r, str, drageable, drageable, drag_area, console, colour, title);
+		ui = new TextUI(Type::TEXT, p, r, str, drageable, drageable, drag_area, console, colour, title, p_fade, num_tooltip, tooltip_immediate);
 		break;
 	case Type::LISTTEXTS:
-		ui = new ListTextsUI(Type::LISTTEXTS, p, r, str, drageable, drageable, drag_area, console);
+		ui = new ListTextsUI(Type::LISTTEXTS, p, r, str, drageable, drageable, drag_area, console, p_fade);
 		break;
 	}
 
@@ -204,16 +285,16 @@ UI* j1Gui::CreateUIElement(Type type, UI* p, SDL_Rect r, SDL_Rect sprite, std::s
 	return ui;
 }
 
-UI* j1Gui::CreateUIElement(Type type, UI* p, SDL_Rect r, std::string str, int re, int g, int b, int a, bool drageable, SDL_Rect drag_area, j1Module* s_listener)
+UI* j1Gui::CreateUIElement(Type type, UI* p, SDL_Rect r, std::string str, int re, int g, int b, int a, bool drageable, SDL_Rect drag_area, j1Module* s_listener, Panel_Fade p_fade)
 {
 	UI* ui = nullptr;
 	switch (type)
 	{
 	case Type::IMAGE:
-		ui = new ImageUI(Type::IMAGE, p, r, re, g, b, a, drageable, drageable, drag_area);
+		ui = new ImageUI(Type::IMAGE, p, r, re, g, b, a, drageable, drageable, drag_area, p_fade);
 		break;
 	case Type::INPUT:
-		ui = new TextInputUI(Type::INPUT, p, r, re, g, b, a, "", drageable, true, drag_area);
+		ui = new TextInputUI(Type::INPUT, p, r, re, g, b, a, "", drageable, true, drag_area, p_fade);
 		break;
 	}
 
@@ -235,8 +316,6 @@ UI* j1Gui::CreateUIElement(Type type, UI* p, SDL_Rect r, std::string str, int re
 	UIs.push_back(ui);
 	return ui;
 }
-
-
 
 bool j1Gui::DeleteUIElement(UI* ui) 
 {
@@ -314,6 +393,31 @@ void j1Gui::ReturnConsole() {
 	}
 }
 
+void j1Gui::ActivateButtons() {
+	for (std::list<UI*>::iterator it = UIs.begin(); it != UIs.end(); it++)
+	{
+		if (it._Ptr->_Myval->type == Type::BUTTON) {
+			ButtonUI* button = (ButtonUI*)it._Ptr->_Myval;
+			button->front = true;
+		}
+	}
+}
+
+SDL_Texture* j1Gui::GetTexture()
+{
+	return atlas_num_0;
+}
+
+void j1Gui::DeactivateButtons() {
+	for (std::list<UI*>::iterator it = UIs.begin(); it != UIs.end(); it++)
+	{
+		if (it._Ptr->_Myval->type == Type::BUTTON) {
+			ButtonUI* button = (ButtonUI*)it._Ptr->_Myval;
+			button->front = false;
+		}
+	}
+}
+
 void j1Gui::WorkWithTextInput(std::string text) {
 	bool exit = false;
 	for (std::list<UI*>::iterator it = UIs.begin(); it != UIs.end() && exit == false; it++)
@@ -326,7 +430,7 @@ void j1Gui::WorkWithTextInput(std::string text) {
 	}
 }
 
-UI::UI(Type s_type, SDL_Rect r, UI* p, bool d, bool f, SDL_Rect d_area, bool consol)
+UI::UI(Type s_type, SDL_Rect r, UI* p, bool d, bool f, SDL_Rect d_area, bool consol, int num_tooltip, bool tooltip_immediate)
 {
 	name.append("UI");
 	type = s_type;
@@ -347,10 +451,29 @@ UI::UI(Type s_type, SDL_Rect r, UI* p, bool d, bool f, SDL_Rect d_area, bool con
 	console = consol;
 	priority = 1;
 	num_atlas = 0;
+	if (num_tooltip != -1) {
+		has_tooltip = true;
+		tooltip_num = num_tooltip;
+	}
+	else {
+		has_tooltip = false;
+		tooltip_num = -1;
+	}
+	for (int i = 0; i < 13; i++) {
+		tooltip_texts[i] = nullptr;
+	}
+	tooltip_window = nullptr;
+	has_timer_tooltip_started = false;
+	if (tooltip_immediate == true)
+		time_tooltip = 0;
+	else
+		time_tooltip = 1.2;
 }
 
 bool UI::PreUpdate() {
 	UI* ui = this;
+
+
 
 	screen_rect.x = local_rect.x;
 	screen_rect.y = local_rect.y;
@@ -396,6 +519,57 @@ bool UI::PreUpdate() {
 			mask_rect.h -= mask_rect.y + mask_rect.h - win_y;
 		}
 	}
+
+	if (has_tooltip == true) {
+		int x, y, x_motion, y_motion;
+		App->input->GetMouseMotion(x_motion, y_motion);
+		if (x_motion == 0 && y_motion == 0) {
+			App->input->GetMousePosition(x, y);
+			if (x >= screen_rect.x && x <= screen_rect.x + screen_rect.w && y >= screen_rect.y && y <= screen_rect.y + screen_rect.h) {
+				if (has_timer_tooltip_started == false) {
+					timer_tooltip.Start();
+					has_timer_tooltip_started = true;
+				}
+				else if (timer_tooltip.ReadSec() >= time_tooltip && tooltip_window == nullptr && has_timer_tooltip_started == true) {
+					ShowTooltip(x, y, win_x, win_y);
+				}
+			}
+		}
+
+		else if (tooltip_window != nullptr) {
+			App->input->GetMousePosition(x, y);
+			if (x < screen_rect.x || x > screen_rect.x + screen_rect.w || y < screen_rect.y || y > screen_rect.y + screen_rect.h) {
+				DestroyTooltip();
+				has_timer_tooltip_started = false;
+			}
+		}
+		else
+			has_timer_tooltip_started = false;
+	}
+	return true;
+}
+
+//This Update changes alpha if FADE is active/true
+bool UI::Update(float dt) {
+
+	if (fade_panel == Panel_Fade::panel_fade_in) {
+		float normalized = MIN(1.0f, (float)fade_panel_timer.ReadSec() / (float)fade_panel_time);
+		alpha = normalized * 255;
+		if (fade_panel_timer.ReadSec() >= fade_panel_time) {
+			alpha = 255;
+			fade_panel = Panel_Fade::no_one_fade;
+		}
+	}
+
+	else if (fade_panel == Panel_Fade::panel_fade_out) {
+		float normalized = MIN(1.0f, (float)fade_panel_timer.ReadSec() / (float)fade_panel_time);
+		alpha = 255 - (normalized * 255);
+		if (fade_panel_timer.ReadSec() >= fade_panel_time) {
+			alpha = 255;
+			fade_panel = Panel_Fade::no_one_fade;
+		}
+	}
+
 	return true;
 }
 
@@ -404,6 +578,36 @@ bool UI::PostUpdate() {
 		App->render->DrawQuad(screen_rect, 255, 0, 0, 255, false, false);
 	}
 	return true;
+}
+
+void UI::ShowTooltip(int mouse_x, int mouse_y, uint win_x, uint win_y)
+{
+	Tooltip tooltip = App->tooltipdata->GetTooltip(tooltip_num);
+	int x, y;
+	if (mouse_x + 322 + App->gui->cursor_size.x <= win_x) {
+		x = mouse_x + 5 + App->gui->cursor_size.x;
+	}
+	else {
+		x = mouse_x - 322;
+	}
+	if (mouse_y + (tooltip.lines*18) <= win_y) {
+		y = mouse_y;
+	}
+	else {
+		y = mouse_y - (tooltip.lines * 18);
+	}
+	tooltip_window = static_cast<WindowUI*>(App->gui->CreateUIElement(Type::WINDOW, nullptr, { x,y,317,(tooltip.lines * 18) }, { 1285,11,305,(tooltip.lines * 18)} ));
+	int j = 0;
+	for (int i = 1; i <= tooltip.lines; i++) {
+		if (tooltip.has_title&& i == 1) {
+			tooltip_texts[i - 1] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, tooltip_window, { x,y + (18 * (i - 1)),317,18 }, { 0,0,0,0 }, tooltip.title, Panel_Fade::no_one_fade, { 255,255,255,255 }));
+			j--;
+		}
+		else {
+			tooltip_texts[i - 1] = static_cast<TextUI*>(App->gui->CreateUIElement(Type::TEXT, tooltip_window, { x,y + (18 * (i - 1)),317,18 }, { 0,0,0,0 },
+				App->tooltipdata->GetLineTooltip(i + j, tooltip), Panel_Fade::no_one_fade, { 255,255,255,255 }));
+		}
+	}	
 }
 
 SDL_Rect UI::GetScreenRect()
@@ -477,6 +681,26 @@ bool UI::CheckMouse()
 	return false;
 }
 
+bool UI::CleanUp()
+{
+	DestroyTooltip();
+	return true;
+}
+
+void UI::DestroyTooltip()
+{
+	if (tooltip_window != nullptr) {
+		App->gui->DeleteUIElement(tooltip_window);
+		tooltip_window = nullptr;
+	}
+	for (int i = 12; i >= 0; i--) {
+		if (tooltip_texts[i] != nullptr) {
+			App->gui->DeleteUIElement(tooltip_texts[i]);
+			tooltip_texts[i] = nullptr;
+		}
+	}
+}
+
 bool UI::Move() {
 	int x, y;
 	App->input->GetMouseMotion(x, y);
@@ -538,7 +762,11 @@ SDL_Rect UI::Check_Printable_Rect(SDL_Rect sprite, iPoint& dif_sprite, SDL_Rect 
 	return sprite;
 }
 
-ImageUI::ImageUI(Type type, UI* p, SDL_Rect r, SDL_Rect sprite, bool d, bool f, SDL_Rect d_area, float drag_position_scroll_bar) :UI(type, r, p, d, f, d_area) {
+
+///////////// IMAGE //////////////
+
+ImageUI::ImageUI(Type type, UI * p, SDL_Rect r, SDL_Rect sprite, bool d, bool f, SDL_Rect d_area, float drag_position_scroll_bar, Panel_Fade p_fade, int num_tooltip, bool tooltip_immediate)
+	:UI(type, r, p, d, f, d_area, false, num_tooltip, tooltip_immediate) {
 	name.append("ImageUI");
 	sprite1 = sprite;
 	quad = r;
@@ -547,14 +775,26 @@ ImageUI::ImageUI(Type type, UI* p, SDL_Rect r, SDL_Rect sprite, bool d, bool f, 
 	drag_position_1 = { drag_area.w + drag_area.x - GetLocalRect().w,drag_area.h + drag_area.y - GetLocalRect().h };
 	square = false;
 	red = green = blue = alpha = 0;
+	unclicked = false;
+	fade_panel = p_fade;
 	if (drag_position_scroll_bar != -1) {
 		quad.x = drag_position_0.x + (drag_position_scroll_bar * (drag_position_1.x - drag_position_0.x));
 		SetScreenRect(quad);
 		UpdateLocalRect();
 	}
+	fade_panel = p_fade;
+
+	if (fade_panel == Panel_Fade::no_one_fade) {
+		alpha = 255;
+	}
+	if (fade_panel == Panel_Fade::panel_fade_in) {
+		alpha = 0;
+		fade_panel_timer.Start();
+		fade_panel_time = 1;
+	}
 }
 
-ImageUI::ImageUI(Type type, UI* p, SDL_Rect r, int re, int g, int b, int a, bool d, bool f, SDL_Rect d_area) :UI(type, r, p, d, f, d_area, true) {
+ImageUI::ImageUI(Type type, UI* p, SDL_Rect r, int re, int g, int b, int a, bool d, bool f, SDL_Rect d_area, Panel_Fade p_fade) :UI(type, r, p, d, f, d_area, true) {
 	name.append("ImageUI");
 	sprite1 = { 0,0,0,0 };
 	quad = r;
@@ -565,10 +805,20 @@ ImageUI::ImageUI(Type type, UI* p, SDL_Rect r, int re, int g, int b, int a, bool
 	red = re;
 	green = g;
 	blue = b;
-	alpha = a;
+	fade_panel = p_fade;
+
+	if (fade_panel == Panel_Fade::no_one_fade) {
+		alpha = a;
+	}
+	if (fade_panel == Panel_Fade::panel_fade_in) {
+		alpha = 0;
+		fade_panel_timer.Start();
+		fade_panel_time = 1;
+	}
 }
 
 bool ImageUI::PreUpdate() {
+	unclicked = false;
 	int x, y;
 	iPoint initial_position = GetScreenPos();
 	App->input->GetMousePosition(x, y);
@@ -580,6 +830,8 @@ bool ImageUI::PreUpdate() {
 	}
 	if (focus == true && App->input->GetMouseButtonDown(1) == KEY_UP) {
 		focus = false;
+		unclicked = true;
+
 	}
 	UI::PreUpdate();
 	if (initial_position != GetScreenPos()) {
@@ -592,12 +844,19 @@ bool ImageUI::PreUpdate() {
 	return true;
 }
 
+bool ImageUI::Update(float dt) {
+	UI::Update(dt);
+
+	return true;
+}
+
 bool ImageUI::PostUpdate() {
 	iPoint dif_sprite = { 0,0 };
 	if (square == false) {
 		SDL_Rect sprite = UI::Check_Printable_Rect(sprite1, dif_sprite);
 		quad.x = GetScreenPos().x + dif_sprite.x;
 		quad.y = GetScreenPos().y + dif_sprite.y;
+		SDL_SetTextureAlphaMod((SDL_Texture*)App->gui->GetAtlas(num_atlas), alpha);
 		if (this->active) App->render->BlitInsideQuad((SDL_Texture*)App->gui->GetAtlas(num_atlas), sprite, quad);
 	}
 	else if (this->active) {
@@ -616,10 +875,28 @@ fPoint ImageUI::GetDragPositionNormalized() {
 	return position_normalized;
 }
 
-WindowUI::WindowUI(Type type, UI* p, SDL_Rect r, SDL_Rect sprite, bool d, bool f, SDL_Rect d_area) :UI(type, r, p, d, f, d_area) {
+///////////// WINDOW //////////////
+
+WindowUI::WindowUI(Type type, UI* p, SDL_Rect r, SDL_Rect sprite, bool d, bool f, SDL_Rect d_area, Panel_Fade p_fade) :UI(type, r, p, d, f, d_area) {
 	name.append("WindowUI");
 	sprite1 = sprite;
 	quad = r;
+	fade_panel = p_fade;
+
+	if (fade_panel == Panel_Fade::no_one_fade) {
+		alpha = 255;
+	}
+	if (fade_panel == Panel_Fade::panel_fade_in) {
+		alpha = 0;
+		fade_panel_timer.Start();
+		fade_panel_time = 1;
+	}
+}
+
+bool WindowUI::Update(float dt) {
+	UI::Update(dt);
+
+	return true;
 }
 
 bool WindowUI::PostUpdate() {
@@ -627,20 +904,41 @@ bool WindowUI::PostUpdate() {
 	SDL_Rect sprite = UI::Check_Printable_Rect(sprite1, dif_sprite);
 	quad.x = GetScreenPos().x + dif_sprite.x;
 	quad.y = GetScreenPos().y + dif_sprite.y;
+	SDL_SetTextureAlphaMod((SDL_Texture*)App->gui->GetAtlas(num_atlas), alpha);
 	if (this->active)App->render->BlitInsideQuad((SDL_Texture*)App->gui->GetAtlas(num_atlas), sprite, quad);
 
 	UI::PostUpdate();
 	return true;
 }
 
+///////////// TEXT //////////////
 
-TextUI::TextUI(Type type, UI* p, SDL_Rect r, std::string str, bool d, bool f, SDL_Rect d_area, bool console, SDL_Color coulor, bool title) :UI(type, r, p, d, f, d_area, console) 
+TextUI::TextUI(Type type, UI* p, SDL_Rect r, std::string str, bool d, bool f, SDL_Rect d_area, bool console, SDL_Color coulor, bool title, Panel_Fade p_fade, int num_tooltip, bool tooltip_immediate)
+	:UI(type, r, p, d, f, d_area, console, num_tooltip, tooltip_immediate)
 {
 	name.append("TextUI");
 	stri = str.c_str();
 	quad = r;
 	color = coulor;
 	title_default = title;
+	fade_panel = p_fade;
+	text = nullptr;
+
+	if (fade_panel == Panel_Fade::no_one_fade) {
+		alpha = 255;
+	}
+	if (fade_panel == Panel_Fade::panel_fade_in) {
+		alpha = 0;
+		fade_panel_timer.Start();
+		fade_panel_time = 1;
+	}
+	SetString(stri);
+}
+
+bool TextUI::Update(float dt) {
+	UI::Update(dt);
+
+	return true;
 }
 
 bool TextUI::PostUpdate() {
@@ -648,38 +946,63 @@ bool TextUI::PostUpdate() {
 	iPoint dif_sprite = { 0,0 };
 
   
-	SDL_Texture* text;
-	if(title_default==false)
-		text = App->font->Print(stri.c_str(), color);
-	else
-		text = App->font->Print(stri.c_str(), color, App->font->default_title);
-
 	SDL_QueryTexture(text, NULL, NULL, &rect.w, &rect.h);
 
-
+	SDL_SetTextureAlphaMod(text, alpha);
 	SDL_Rect sprite = UI::Check_Printable_Rect(rect, dif_sprite);
 	if (this->active && this->GetConsole() == false)App->render->Blit(text, GetScreenToWorldPos().x + dif_sprite.x, GetScreenToWorldPos().y + dif_sprite.y, &sprite, 0.0F);
 	else if (this->active) App->render->Blit(text, quad.x + dif_sprite.x, quad.y + dif_sprite.y, &sprite, 0.0F);
 	UI::PostUpdate();
 
-	App->tex->UnLoad(text);
+	return true;
+}
 
+bool TextUI::CleanUp()
+{
+	UI::CleanUp();
+	App->tex->UnLoad(text);
 	return true;
 }
 
 void TextUI::SetString(std::string new_string) 
 {
+	App->tex->UnLoad(text);
 	stri = new_string;
+	if (title_default == false)
+		text = App->font->Print(stri.c_str(), color);
+	else
+		text = App->font->Print(stri.c_str(), color, App->font->default_title);
+	if (text == nullptr) {
+		LOG("TEXTURE NULLPTR");
+	}
 }
 
-ListTextsUI::ListTextsUI(Type type, UI* p, SDL_Rect r, std::string str, bool d, bool f, SDL_Rect d_area, bool console) :UI(type, r, p, d, f, d_area, console) {
+///////////// TEXT LIST //////////////
+
+ListTextsUI::ListTextsUI(Type type, UI* p, SDL_Rect r, std::string str, bool d, bool f, SDL_Rect d_area, bool console, Panel_Fade p_fade) :UI(type, r, p, d, f, d_area, console) {
 	name.append("ListTextsUI");
 	stri.push_back(str);
 	number_of_stri = stri.size();
 	quad = r;
+	PushBackTexture(str);
+
+	fade_panel = p_fade;
+
+	if (fade_panel == Panel_Fade::no_one_fade) {
+		alpha = 255;
+	}
+	if (fade_panel == Panel_Fade::panel_fade_in) {
+		alpha = 0;
+		fade_panel_timer.Start();
+		fade_panel_time = 1;
+	}
 }
 
+bool ListTextsUI::Update(float dt) {
+	UI::Update(dt);
 
+	return true;
+}
 
 bool ListTextsUI::PostUpdate() 
 {
@@ -692,20 +1015,22 @@ bool ListTextsUI::PostUpdate()
 		dif_sprite = { 0,0 };
 
 		std::list<std::string>::iterator it = stri.begin();
+		std::list<SDL_Texture*>::iterator it_texture = text.begin();
 		std::advance(it, i);
+		std::advance(it_texture, i);
 
 		if (it._Ptr->_Myval != stri.end()._Ptr->_Myval) 
 		{
-			SDL_Texture* text = App->font->Print(it->c_str(), { 255,255,255,255 });
 
-			SDL_QueryTexture(text, NULL, NULL, &rect.w, &rect.h);
+			SDL_QueryTexture(it_texture._Ptr->_Myval, NULL, NULL, &rect.w, &rect.h);
 
+			SDL_SetTextureAlphaMod((SDL_Texture*)App->gui->GetAtlas(num_atlas), alpha);
 
 			SDL_Rect sprite = UI::Check_Printable_Rect(rect, dif_sprite, { quad.x,quad.y + (quad.h * i),quad.w,quad.h });
-			if (this->active && this->GetConsole() == false)App->render->Blit(text, GetScreenToWorldPos().x + dif_sprite.x, GetScreenToWorldPos().y + dif_sprite.y, &sprite, 0.0F);
-			else if (this->active) App->render->Blit(text, quad.x + dif_sprite.x, quad.y + dif_sprite.y + (i * quad.h), &sprite, 0.0F);
+			if (this->active && this->GetConsole() == false) App->render->Blit(it_texture._Ptr->_Myval, quad.x + dif_sprite.x, quad.y + dif_sprite.y + (i * quad.h), &sprite, 0.0F);
+			else if (this->active) App->render->Blit(it_texture._Ptr->_Myval, quad.x + dif_sprite.x, quad.y + dif_sprite.y + (i * quad.h), &sprite, 0.0F);
 
-			App->tex->UnLoad(text);
+			//App->tex->UnLoad(text);
 		}
 	}
 	UI::PostUpdate();
@@ -713,10 +1038,21 @@ bool ListTextsUI::PostUpdate()
 	return true;
 }
 
+bool ListTextsUI::CleanUp()
+{
+	for (std::list<SDL_Texture*>::iterator it = text.begin(); it != text.end(); it++) {
+		App->tex->UnLoad(it._Ptr->_Myval);
+	}
+	text.clear();
+	stri.clear();
+	return false;
+}
+
 void ListTextsUI::SetListOfStrings(std::string string, int position) 
 {
 	if (position > number_of_stri) {
 		stri.push_back(string);
+		PushBackTexture(string);
 		number_of_stri++;
 		SDL_Rect screen_rect = GetScreenRect();
 		SDL_Rect parent_screen_rect = GetParentScreenRect();
@@ -727,17 +1063,42 @@ void ListTextsUI::SetListOfStrings(std::string string, int position)
 	}
 }
 
-ButtonUI::ButtonUI(Type type, UI* p, SDL_Rect r, SDL_Rect sprite, SDL_Rect spriten2, SDL_Rect spriten3, bool d, bool f, SDL_Rect d_area, int audio) :UI(type, r, p, d, f, d_area) {
+void ListTextsUI::PushBackTexture(std::string stri)
+{
+	text.push_back(App->font->Print(stri.c_str(), { 255,255,255,255 }));
+}
+
+///////////// BUTTON //////////////
+
+ButtonUI::ButtonUI(Type type, UI * p, SDL_Rect r, SDL_Rect sprite, SDL_Rect spriten2, SDL_Rect spriten3, bool d, bool f, SDL_Rect d_area, int audio, Panel_Fade p_fade, int num_tooltip, bool tooltip_immediate)
+	:UI(type, r, p, d, f, d_area, false, num_tooltip, tooltip_immediate) {
 	name.append("ButtonUI");
 	sprite1 = sprite;
 	sprite2 = spriten2;
 	sprite3 = spriten3;
 	over = false;
 	pushed = false;
+	hover = false;
 	quad = r;
 	isLocked = false;
 	front = true;
 	click_sfx = App->gui->sfx_UI[audio];
+	fade_panel = p_fade;
+
+	if (fade_panel == Panel_Fade::no_one_fade) {
+		alpha = 255;
+	}
+	if (fade_panel == Panel_Fade::panel_fade_in) {
+		alpha = 0;
+		fade_panel_timer.Start();
+		fade_panel_time = 1;
+	}
+}
+
+bool ButtonUI::Update(float dt) {
+	UI::Update(dt);
+
+	return true;
 }
 
 bool ButtonUI::PostUpdate() {
@@ -748,14 +1109,20 @@ bool ButtonUI::PostUpdate() {
 	}
 	else if (over == true) {
 		sprite = UI::Check_Printable_Rect(sprite1, dif_sprite);
+		if (hover == false) {
+			hover = true;
+			App->audio->PlayFx(1, App->gui->sfx_UI[(int)UI_Audio::HOVER]);
+		}
 	}
 	else {
 		sprite = UI::Check_Printable_Rect(sprite3, dif_sprite);
+		hover = false;
 	}
 	//App->render->Blit((SDL_Texture*)App->gui->GetAtlas(), GetScreenToWorldPos().x + dif_sprite.x, GetScreenToWorldPos().y + dif_sprite.y, &sprite, 0.f);
 
 	quad.x = GetScreenPos().x + dif_sprite.x;
 	quad.y = GetScreenPos().y + dif_sprite.y;
+	SDL_SetTextureAlphaMod((SDL_Texture*)App->gui->GetAtlas(num_atlas), alpha);
 	if (this->active)App->render->BlitInsideQuad((SDL_Texture*)App->gui->GetAtlas(num_atlas), sprite, quad);
 
 	UI::PostUpdate();
@@ -770,14 +1137,17 @@ bool ButtonUI::PreUpdate() {
 		over = true;
 	else over = false;
 	bool button = false;
-	if (App->input->GetMouseButtonDown(1) == KEY_DOWN || App->input->GetMouseButtonDown(1) == KEY_REPEAT) {
+	bool just_pushed = false;
+	if (App->input->GetMouseButtonDown(1) == KEY_DOWN && over == true) {
+		just_pushed = true;
+	}
+	if (App->input->GetMouseButtonDown(1) == KEY_REPEAT && pushed == true && over == true) {
 		pushing = true;
 	}
-	if (App->input->GetMouseButtonDown(1) == KEY_UP || App->input->GetKey(SDL_SCANCODE_RETURN))
+	if (App->input->GetMouseButtonDown(1) == KEY_UP && pushed == true && over == true)
 		button = true;
-	if (over == true && button == true)
-		pushed = true;
-	else pushed = false;
+	if (button == false)
+		pushed = false;
 	if (pushed && !App->gui->lockClick && !isLocked)
 	{
 		App->audio->PlayFx(1,click_sfx);
@@ -788,15 +1158,16 @@ bool ButtonUI::PreUpdate() {
 		}
 		App->gui->lockClick = true;
 	}
-	if (pushing == true && over == true)
+	if (just_pushed == true || pushing == true)
 		pushed = true;
 	UI::PreUpdate();
 
 	return true;
 }
 
+///////////// TEXT INPUT //////////////
 
-TextInputUI::TextInputUI(Type type, UI* p, SDL_Rect r, int re, int g, int b, int a, std::string str, bool d, bool f, SDL_Rect d_area) :UI(type, r, p, d, f, d_area, true) {
+TextInputUI::TextInputUI(Type type, UI* p, SDL_Rect r, int re, int g, int b, int a, std::string str, bool d, bool f, SDL_Rect d_area, Panel_Fade p_fade) :UI(type, r, p, d, f, d_area, true) {
 	name.append("TextInputUI");
 	sprite1 = { 0,0,0,0 };
 	quad = r;
@@ -808,6 +1179,24 @@ TextInputUI::TextInputUI(Type type, UI* p, SDL_Rect r, int re, int g, int b, int
 	green = g;
 	blue = b;
 	alpha = a;
+	fade_panel = p_fade;
+	text = nullptr;
+
+	if (fade_panel == Panel_Fade::no_one_fade) {
+		alpha = 255;
+	}
+	if (fade_panel == Panel_Fade::panel_fade_in) {
+		alpha = 0;
+		fade_panel_timer.Start();
+		fade_panel_time = 1;
+	}
+	UpdateLabel();
+}
+
+bool TextInputUI::Update(float dt) {
+	UI::Update(dt);
+
+	return true;
 }
 
 bool TextInputUI::PreUpdate() {
@@ -835,6 +1224,7 @@ bool TextInputUI::PreUpdate() {
 			{
 				label = label.erase(position - 1, 1);
 				position--;
+				UpdateLabel();
 			}
 		}
 		else if (App->input->special_keys == specialkeys::Left) {
@@ -850,6 +1240,7 @@ bool TextInputUI::PreUpdate() {
 			{
 				label = label.erase(position - 1);
 				position--;
+				UpdateLabel();
 			}
 		}
 		else if (App->input->special_keys == specialkeys::Home) {
@@ -866,17 +1257,16 @@ bool TextInputUI::PreUpdate() {
 
 bool TextInputUI::PostUpdate() {
 	iPoint dif_sprite = { 0,0 };
+	SDL_SetTextureAlphaMod((SDL_Texture*)App->gui->GetAtlas(num_atlas), alpha);
 	if (this->active) {
 		App->render->DrawQuad(quad, red, green, blue, alpha, true, false);
 	}
 
 	SDL_Rect rect = { 0,0,0,0 };
 	if (strcmp(label.c_str(), "")) {
-		SDL_Texture* text = App->font->Print(label.c_str(), {255,255,255,255});
 		SDL_QueryTexture(text, NULL, NULL, &rect.w, &rect.h);
 		SDL_Rect sprite = UI::Check_Printable_Rect(rect, dif_sprite);
 		if (this->active) App->render->Blit(text, quad.x + dif_sprite.x, quad.y + dif_sprite.y, &sprite, 0.0F);
-		App->tex->UnLoad(text);
 	}
 
 	if (focus == true) 
@@ -885,13 +1275,19 @@ bool TextInputUI::PostUpdate() {
 		label_from_position.erase(label_from_position.begin() + position, label_from_position.end());
 		int w, h;
 		App->font->CalcSize(label_from_position.c_str(), w, h);
-		App->render->DrawLine(quad.x + w, quad.y, quad.x + w, quad.y + quad.h, 0, 255, 255, 255, false);
+		App->render->DrawLine(quad.x + w, quad.y, quad.x + w, quad.y + quad.h, 0, 255, 255,alpha, false);
 	}
 	UI::PostUpdate();
 
 
 
 	return true;
+}
+
+bool TextInputUI::CleanUp()
+{
+	App->tex->UnLoad(text);
+	return false;
 }
 
 //BUG: when moving with left or right keys and typing
@@ -917,6 +1313,7 @@ void TextInputUI::ChangeLabel(std::string text)
 	label_part_1 += label_part_2;
 	label = label_part_1;
 	position++;
+	UpdateLabel();
 }
 
 void TextInputUI::SetLabel(std::string text) 
@@ -925,9 +1322,117 @@ void TextInputUI::SetLabel(std::string text)
 	{
 		label = text.c_str();
 		position += label.size() - 1;
+		UpdateLabel();
 	}
 }
 
 void TextInputUI::SetPositionToZero() {
 	position = 0;
+}
+
+void TextInputUI::UpdateLabel()
+{
+	App->tex->UnLoad(text);
+	text = App->font->Print(label.c_str(), { 255,255,255,255 });
+}
+
+void j1Gui::DoWinOrLoseWindow(int type, bool win) {
+	SDL_Rect sec_viking = { 0, 0,807, 345 };
+	SDL_Rect sec_greek = { 0, 345,807, 345 };
+
+	SDL_Rect sec_win = { 807, 0,807, 345 };
+	SDL_Rect sec_lose = { 807, 345,807, 345 };
+
+	SDL_Rect sec_tutorial = { 0, 690,807, 345 };
+	SDL_Rect sec_completed = { 807, 690,807, 345 };
+
+	if (App->scene->hud != nullptr) {
+		if (App->scene->hud->start_timer == false) {
+			App->scene->hud->timer_win_lose.Start();
+			animation_win_lose_timer.Start();
+		}
+
+		App->scene->hud->start_timer = true;
+	}
+
+	if (animation_win_lose_timer.ReadSec() <= 2) {
+		global_pos = DoTransitionWinLose(230, 100, winlose_tex, animation_win_lose_timer);
+	}
+
+	else if (animation_win_lose_timer.ReadSec() >= 2) {
+		global_pos.y = 100;
+	}
+
+	if (type == 1) {
+		if (win == true) {
+			App->render->Blit(winlose_tex, global_pos.x, global_pos.y, &sec_viking, NULL, 0.0F);
+			App->render->Blit(winlose_tex, global_pos.x, global_pos.y, &sec_win, NULL, 0.0F);
+			if (Mix_Playing(3) == 0)
+			{
+				App->audio->PlayFx(3, App->scene->WinViking_sound);
+			}
+		}
+		else {
+			App->render->Blit(winlose_tex, global_pos.x, global_pos.y, &sec_viking, NULL, 0.0F);
+			App->render->Blit(winlose_tex, global_pos.x, global_pos.y, &sec_lose, NULL, 0.0F);
+			if (Mix_Playing(3) == 0) {
+				App->audio->PlayFx(3, App->scene->Lose_sound);
+			}
+		}
+	}
+
+	if (type == 2) {
+		if (win == true) {
+			App->render->Blit(winlose_tex, global_pos.x, global_pos.y, &sec_greek, NULL, 0.0F);
+			App->render->Blit(winlose_tex, global_pos.x, global_pos.y, &sec_win, NULL, 0.0F);
+			if (Mix_Playing(3) == 0) {
+				App->audio->PlayFx(3, App->scene->WinGreek_sound);
+			}
+		}
+		else {
+			App->render->Blit(winlose_tex, global_pos.x, global_pos.y, &sec_greek, NULL, 0.0F);
+			App->render->Blit(winlose_tex, global_pos.x, global_pos.y, &sec_lose, NULL, 0.0F);
+			if (Mix_Playing(3) == 0) {
+				App->audio->PlayFx(3, App->scene->Lose_sound);
+			}
+		}
+	}
+
+	if (type == 3) {
+		App->render->Blit(winlose_tex, global_pos.x, global_pos.y, &sec_tutorial, NULL, 0.0F);
+		App->render->Blit(winlose_tex, global_pos.x, global_pos.y, &sec_completed, NULL, 0.0F);
+		if (Mix_Playing(3) == 0)
+		{
+			App->audio->PlayFx(3, App->scene->WinViking_sound);
+		}
+	}
+
+	if (App->scene->hud != nullptr) {
+		if (App->scene->hud->timer_win_lose.ReadSec() >= 5) {
+
+			App->scene->BackToTitleMenu();
+		}
+	}
+}
+
+fPoint j1Gui::DoTransitionWinLose(int pos_x, int pos_y, SDL_Texture* tex, j1Timer time) {
+	fPoint position_global;
+	position_global.x = pos_x;
+
+	if (first_time_timer_win == false) {
+		animation_win_lose_timer.Start();
+		first_time_timer_win = true;
+	}
+
+	float percentatge = time.ReadSec() * 0.5f;
+	position_global.y = LerpValue(percentatge, 200, 100);
+
+	SDL_SetTextureAlphaMod(tex, 255 * percentatge);
+
+	return position_global;
+}
+
+float j1Gui::LerpValue(float percent, float start, float end)
+{
+	return start + percent * (end - start);
 }

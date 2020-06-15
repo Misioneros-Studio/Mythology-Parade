@@ -23,16 +23,24 @@ public:
 	bool CleanUp();
 
 	void SelectionDraw_Logic();
-	void SeeEntitiesInside();
+	void SeeEntitiesInside(bool shift = false, bool alt = false);
 	void PlayerInputs();
 	void ClickLogic();
 	std::list<Entity*> GetEntitiesSelected();
+	void SetEntitiesSelected(const std::list<Entity*> &);
 	Building* GetSelectedBuild();
+	Building* GetEnemySelectedBuild();
+	void ActionToUnit();
+	void ActionToBuilding();
+
 	int GetFaith();
 	int GetPrayers();
 	int GetSacrifices();
-	void InitVikings();
-	void InitGreek();
+
+	void SetFaith(int var);
+	void SetPrayers(int var);
+	void SetSacrifices(int var);
+
 
 private:
 	std::string faith, sacrifice, prayer;
@@ -40,14 +48,21 @@ private:
 	int tick1 = 0, tick2 = 0;
 	iPoint preClicked;
 	iPoint postClicked;
-	std::list<Entity*> listEntities;
 	Entity* buildingSelect;
+	Entity* enemyBuildingSelect;
 
-	bool dontSelect;
 	bool oneTime;
 	iPoint click;
+	bool shift;
+	bool alt;
+	int faith_before;
+	int sacrifices_before;
+	int prayers_before;
+
 
 public:
+	std::list<Entity*> listEntities;
+	bool dontSelect;
 	bool player_win = false;
 	bool player_lose = false;
 	int num_monastery;
@@ -55,11 +70,19 @@ public:
 	int num_encampment;
 	int time_production_victory;
 	CivilizationType player_type;
-  
+	bool research_temple;
+	bool research_encampment;
+	bool research_cleric;
+	bool research_assassin;
+	bool research_lawful_beast;
+	bool research_chaotic_beast;
+	bool research_lawful_miracle;
+	bool research_chaotic_miracle;
+	bool research_lawful_victory;
+	bool research_chaotic_victory;
 
 };
 
 
 
 #endif // !__PLAYER_H__
-

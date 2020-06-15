@@ -8,6 +8,7 @@
 #include <math.h>
 #include"j1Scene.h"
 #include"QuadTree.h"
+#include "AssetsManager.h"
 
 j1Map::j1Map() : j1Module(), map_loaded(false)
 {
@@ -33,7 +34,6 @@ bool j1Map::Awake(pugi::xml_node& config)
 void j1Map::Draw()
 {
 	//j1PerfTimer timer;
-
 	//double startTime = timer.ReadMs();
 
 	if (map_loaded == false)
@@ -101,22 +101,24 @@ void j1Map::Draw()
 				int x = (a + b) / 2;
 				int y = (a - b) / 2;
 
-				if (x >= 0 && y >= 0 && x < data.width && y < data.height)
-				{
-					int tile_id = layer->Get(x, y);
-					if (tile_id > 0)
+				//if (App->fowManager->CheckTileVisibility({ x, y })) 
+				//{
+					if (x >= 0 && y >= 0 && x < data.width && y < data.height)
 					{
-						TileSet* tileset = GetTilesetFromTileId(tile_id);
+						int tile_id = layer->Get(x, y);
+						if (tile_id > 0)
+						{
+							TileSet* tileset = GetTilesetFromTileId(tile_id);
 
-						SDL_Rect r = tileset->GetTileRect(tile_id);
-						iPoint pos = MapToWorld(x, y);
+							SDL_Rect r = tileset->GetTileRect(tile_id);
+							iPoint pos = MapToWorld(x, y);
 
-						App->render->Blit(tileset->texture, pos.x, pos.y, &r);
+							App->render->Blit(tileset->texture, pos.x, pos.y, &r);
 
-						//blits++;
+							//blits++;
+						}
 					}
-				}
-
+				//}
 			}
 		}
 	}
@@ -239,6 +241,50 @@ fPoint j1Map::MapToWorld(float x, float y) const
 	return ret;
 }
 
+void j1Map::MapToWorld(int mapX, int mapY, int& worldX, int& worldY) const
+{
+	if (data.type == MAPTYPE_ORTHOGONAL)
+	{
+		worldX = mapX * data.tile_width;
+		worldY = mapY * data.tile_height;
+	}
+	else if (data.type == MAPTYPE_ISOMETRIC)
+	{
+		worldX = (mapX - mapY) * (data.tile_width * 0.5f);
+		worldY = (mapX + mapY) * (data.tile_height * 0.5f);
+	}
+	else
+	{
+		LOG("Unknown map type");
+		worldX = mapX; worldY = mapY;
+	}
+}
+void j1Map::WorldToMap(int worldX, int worldY, int& mapX, int& mapY) const
+{
+	if (data.type == MAPTYPE_ORTHOGONAL)
+	{
+		mapX = worldX / data.tile_width;
+		mapY = worldY / data.tile_height;
+	}
+	else if (data.type == MAPTYPE_ISOMETRIC)
+	{
+
+		float half_width = data.tile_width * 0.5f;
+		float half_height = data.tile_height * 0.5f;
+		mapX = int((worldX / half_width + worldY / half_height) / 2) - 1;
+		mapY = int((worldY / half_height - (worldX / half_width)) / 2);
+	}
+	else
+	{
+		LOG("Unknown map type");
+	}
+}
+
+iPoint j1Map::WorldToMap(fPoint input) const
+{
+	return WorldToMap(input.x, input.y);
+}
+
 iPoint j1Map::WorldToMap(int x, int y) const
 {
 	iPoint ret(0, 0);
@@ -297,7 +343,7 @@ bool j1Map::CleanUp()
 	data.downLayers.clear();
 
 	// Clean up the pugui tree
-	map_file.reset();
+
 
 	return true;
 }
@@ -306,11 +352,15 @@ bool j1Map::CleanUp()
 bool j1Map::Load(const char* file_name)
 {
 	bool ret = true;
+	pugi::xml_document map_file;
 	std::string tmp;
 	tmp.append(folder.c_str());
 	tmp.append(file_name);
 
-	pugi::xml_parse_result result = map_file.load_file(tmp.c_str());
+	char* buffer;
+	int bytesFile = App->assets_manager->Load(tmp.c_str(), &buffer);
+	pugi::xml_parse_result result = map_file.load_buffer(buffer, bytesFile);
+	RELEASE_ARRAY(buffer);
 
 	if (result == NULL)
 	{
@@ -321,7 +371,7 @@ bool j1Map::Load(const char* file_name)
 	// Load general info ----------------------------------------------
 	if (ret == true)
 	{
-		ret = LoadMap();
+		ret = LoadMap(map_file);
 	}
 
 	// Load all tilesets info ----------------------------------------------
@@ -390,12 +440,13 @@ bool j1Map::Load(const char* file_name)
 	}
 
 	map_loaded = ret;
+	map_file.reset();
 
 	return ret;
 }
 
 // Load map general properties
-bool j1Map::LoadMap()
+bool j1Map::LoadMap(pugi::xml_document&	map_file)
 {
 	bool ret = true;
 	pugi::xml_node map = map_file.child("map");

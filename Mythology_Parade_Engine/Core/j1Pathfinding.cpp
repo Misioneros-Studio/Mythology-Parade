@@ -4,11 +4,9 @@
 #include "j1PathFinding.h"
 
 
-j1PathFinding::j1PathFinding() : j1Module(), map(NULL), width(0), height(0), requestPath(false)
+j1PathFinding::j1PathFinding() : j1Module(), map(NULL), width(0), height(0), requestPath(false),maxPathLenght(0)
 {
 	name.append("pathfinding");
-
-
 }
 
 // Destructor
@@ -87,9 +85,24 @@ void j1PathFinding::RequestPath(const iPoint& origin, const iPoint& destination,
 	LOG("Path added to Path Request List");
 }
 
+void j1PathFinding::RequestPath(const iPoint& origin, const iPoint& destination, Entity* requestUnit)
+{
+	LOG("Requesting a path...");
+	if (/*!IsWalkable(origin) || */!IsWalkable(destination))
+	{
+		LOG("Invalid Path");
+		return;
+	}
+
+	pathRequestList.push(PathRequest(origin, destination, requestUnit));
+	LOG("Path added to Path Request List");
+}
+
 bool j1PathFinding::Start()
 {
 	//TODO 3: Add PathFinder to the vector.
+	pathfinderList.push_back(PathFinder());
+	pathfinderList.push_back(PathFinder());
 	pathfinderList.push_back(PathFinder());
 	pathfinderList.push_back(PathFinder());
 	return true;
@@ -101,7 +114,7 @@ bool j1PathFinding::Update(float dt)
 {
 	//This part distribute PathRequests to PathFinders
 	//Check if there are any path request
-	while (!pathRequestList.empty())
+	if (!pathRequestList.empty())
 	{
 		//Check if there are any pathFinder available to take that request
 		for (int i = 0; i < pathfinderList.size(); i++)
@@ -112,7 +125,12 @@ bool j1PathFinding::Update(float dt)
 				PathRequest request = pathRequestList.front();
 				pathRequestList.pop();
 
-				pathfinderList[i].PreparePath(request.origin, request.destination, request.requestEntity);
+				if (request.requestedUnit == nullptr) {
+					pathfinderList[i].PreparePath(request.origin, request.destination, request.requestEntity);
+				}
+				else {
+					pathfinderList[i].PreparePath(request.origin, request.destination, request.requestedUnit);
+				}
 				break;
 			}
 		}

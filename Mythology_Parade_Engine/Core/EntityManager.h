@@ -5,6 +5,7 @@
 
 #include "j1Module.h"
 #include <unordered_map>
+#include <map>
 #include "Entity.h"
 #include"j1Input.h"
 #include"j1Map.h"
@@ -19,6 +20,7 @@
 #include"j1Textures.h"
 #include "Player.h"
 #include"Animation.h"
+#include"MaykMath.h"
 
 
 
@@ -98,14 +100,14 @@ public:
 	bool CleanUp();
 
 	////Called when loading the game
-	//bool Load(pugi::xml_node&);
+	bool Load(pugi::xml_node&);
 
 	////Called when saving the game
-	//bool Save(pugi::xml_node&) const;
+	bool Save(pugi::xml_node&) const;
 
 	bool DeleteEntity(Entity*);
 
-	Entity* CreatePlayerEntity();
+	Entity* CreatePlayerEntity(std::string civilization_string = "");
 	Entity* CreateUnitEntity(UnitType, iPoint, CivilizationType);
 	Entity* CreateBuildingEntity(iPoint, BuildingType, BuildingInfo, CivilizationType);
 	void UpdateBuildPreview(int);
@@ -119,8 +121,12 @@ public:
 	void LoadBuildingsBlitRect();
 
 	Player* getPlayer() const;
+	void FxUnits(int channel, int fx, int posx, int posy);
+
 
 	static bool IsPointInsideQuad(SDL_Rect rect, int x, int y);
+	int volume;
+	iPoint MapPos();
 
 public:
 
@@ -131,8 +137,22 @@ public:
 	//The way to store the spritesheets
 	std::unordered_map<SpriteSheetType, SDL_Texture*> entitySpriteSheets;
 	std::vector<BuildingInfo> buildingsData;
-	void FxUnits(int channel, int fx, int posx, int posy);
-	int volume;
+
+	QuadTree quadTree;
+	AABBTree aabbTree;
+
+	//int volume;
+
+	//Textures
+	SDL_Texture* level_tex;
+	SDL_Rect level_rect;
+
+	SDL_Texture* circle_unit_tex;
+	SDL_Rect circle_unit_rect;
+
+	SDL_Texture* enemyTextureAssassin;
+	SDL_Texture* enemyTextureMonk;
+	SDL_Texture* enemyTextureCleric;
 
 private:
 	int buildingTestIndex = 0;
@@ -145,22 +165,30 @@ public:
 	SDL_Rect construction_bar_empty;
 	SDL_Rect construction_bar_front;
 	SDL_Rect life_bar_front;
+	SDL_Rect life_bar_front_enemy;
 	SDL_Rect research_bar_front;
+	SDL_Rect unit_life_bar_back;
+	SDL_Rect unit_life_bar_empty;
+	SDL_Rect unit_life_bar_front;
+	SDL_Rect unit_life_bar_front_enemy;
 
 	std::unordered_map<UnitType, std::unordered_map<AnimationType, std::unordered_map<Direction, Animation_char>>> animations;
+	std::multimap<int, Entity*> orderedSprites;
 
-	int Building_destruction;
-	int Building_placed;
-	int Decrease_Faith;
-	int Getting_resources;
-	int hit_1;
-	int Increase_faith;
-	int increase_prayers;
-	int increase_sacrifice;
-	int Walking_troops;
 	int CreateMonk_sound;
 	int CreateAssasin_sound;
-	int Research_sound;
+	int increase_sacrifice;
+	int DestroyBuilding;
+	int Select_sfx;
 
+
+	bool initCivilizations;
+
+	void BuildCivilizations(CivilizationType);
+	void InitVikings();
+	void InitGreek();
+	bool loading;
+
+	bool playerCreated;
 };
 #endif // !_ENTITYMANAGER_H

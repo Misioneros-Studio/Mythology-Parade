@@ -4,10 +4,16 @@
 #include "Console.h"
 #include "j1Gui.h"
 #include "j1Input.h"
+#include "Building.h"
+#include "EntityManager.h"
 #include "SDL/include/SDL_keyboard.h"
 #include "j1Window.h"
 
-Console::Console() {
+Console::Console() : background_alpha(255), background_red(0), background_green(0), background_blue(0),
+background_pos({ 0, 0, 0, 0 }), command(commands::none), console_background(nullptr), console_input(nullptr),
+console_log(nullptr), input_alpha(0), input_red(0), input_green(0), input_blue(0), input_pos({0, 0, 0, 0}),
+output_drag_area({ 0, 0, 0, 0 }), output_pos({0, 0, 0, 0})
+{
 	name.append("console");
 	console_active = false;
 }
@@ -40,7 +46,7 @@ bool Console::Awake(pugi::xml_node& node) {
 }
 
 bool Console::PreUpdate() {
-	if (App->input->GetKey(SDL_SCANCODE_GRAVE) == KEY_DOWN)
+	if (console_active==true)
 	{
 		console_active = !console_active;
 		if (console_active == true) {
@@ -74,8 +80,8 @@ void Console::ActivateConsole()
 {
 	console_background = (ImageUI*)App->gui->CreateUIElement(Type::IMAGE, nullptr, background_pos, "", background_red, background_green, background_blue, background_alpha);
 	console_background->SetPriority(2);
-	console_log = (ListTextsUI*)App->gui->CreateUIElement(Type::LISTTEXTS, console_background, output_pos, { 0,0,0,0 }, App->logs.begin()->c_str(), { 0,0,0,0 }, { 0,0,0,0 }, true,
-		output_drag_area, nullptr, 0, true);
+	console_log = (ListTextsUI*)App->gui->CreateUIElement(Type::LISTTEXTS, console_background, output_pos, { 0,0,0,0 }, App->logs.begin()->c_str(), Panel_Fade::no_one_fade, { 0,0,0,0 }, { 0,0,0,0 }, true,
+		output_drag_area, nullptr, Panel_Fade::no_one_fade, 0, true);
 	console_log->SetPriority(2);
 	console_input = (TextInputUI*)App->gui->CreateUIElement(Type::INPUT, nullptr, input_pos, "", input_red, input_green, input_blue, input_alpha);
 	console_input->SetPriority(2);
@@ -104,7 +110,9 @@ std::string Console::CheckCommand() {
 		command = commands::map;
 	else if (!strcmp(command_text.c_str(), "fullscreen") || !strcmp(command_text.c_str(), "FULLSCREEN"))
 		command = commands::fullscreen;
-	else {
+	else if (!strcmp(command_text.c_str(), "time 10") || !strcmp(command_text.c_str(), "time10"))
+		command = commands::time10;
+	else{
 		std::string three_letters_command = argument = console_input->GetLabel();
 		int num_of_letters = three_letters_command.size();
 		for (int i = 3; i < num_of_letters; i++) {
@@ -157,6 +165,20 @@ void Console::ExecuteCommand(std::string argument) {
 	case commands::map:
 		LOG("Map");
 		break;
+
+	case commands::time10:
+	{
+		if (App->entityManager->active == true) {
+			std::list<Entity*> list = App->entityManager->entities[EntityType::BUILDING];
+			for each (Building * building in list)
+			{
+				building->SetTimeProducing(10);
+			}
+		}
+		else
+			LOG("COULDN'T DO IT");
+		break;
+	}
 
 	case commands::none:
 		LOG("Command not found");

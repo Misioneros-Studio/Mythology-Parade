@@ -3,9 +3,10 @@
 
 #include "Entity.h"
 #include "SDL/include/SDL_rect.h"
-#include "HealthSystem.h"
 #include"EntityManager.h"
-#include "Animation.h"
+#include "j1Timer.h"
+
+struct SDL_Texture;
 
 enum class ReligiousType
 {
@@ -14,8 +15,9 @@ enum class ReligiousType
 	MISSIONARY
 };
 
-enum class UnitType 
+enum class UnitType
 {
+	NONE=-1,
 	PIKEMAN,
 	ASSASSIN,
 	EXPLORER,
@@ -23,29 +25,38 @@ enum class UnitType
 	FOOTMAN,
 	MONK,
 	CLERIC,
-	MISSIONARY
-};
+	MISSIONARY,
+	DRAUGAR,
+	JOTNAR,
+	CYCLOP,
+	MINOTAUR,
+	UNKNOWN
 
-class Unit : public Entity, public HealthSystem
+};
+class Unit : public Entity
 {
 private:
 
 	//Move Speed
 	int moveSpeed;
 
-	//Conditions
-	bool _isSelected;
-
 	//Description / Effect
 	std::string description;
 
-public: 
+
+public:
 	//Unit Type
 	UnitType unitType;
 	int time_production;
 	int time_research;
 	bool researched;
-	Unit* enemyTarget;
+	iPoint oldEnemyPosition;
+
+	bool toDelete = false;
+
+	bool insideMinotaur;
+	bool insideDraugar;
+	float sizeMultiplier;
 
 public:
 	Unit(UnitType, iPoint);
@@ -54,11 +65,11 @@ public:
 	void Init(int maxHealth);
 
 	bool Start() override;
+
 	bool Update(float dt);
 
 	void SetMoveSpeed(int);
 
-	bool isSelected();
 
 	virtual bool Draw(float dt);
 	virtual void Action(Entity*);
@@ -71,6 +82,11 @@ public:
 	void StateMachineActions(float dt);
 	void Kill(iPoint);
 
+	void Draw_Life_Bar(bool enemy = false);
+	AnimationType GetState();
+
+
+	std::vector<iPoint> entPath;
 protected:
 	//Animation
 	Direction currentDirection;
@@ -82,12 +98,13 @@ protected:
 
 	AnimationType state;
 
-	std::vector<iPoint> entPath;
 
 	float timeToDespawn;
 	//void SetTarget();
 	//void CheckState();
-	
+	j1Timer damage_timer;
+	bool show_bar_for_damage;
+	bool combat_unit;
 };
 
 #endif // !__UNIT_H__

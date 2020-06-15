@@ -8,7 +8,11 @@ enum which_fade {
 	unknown,
 	logo_to_title,
 	title_to_scene,
-	scene_to_title
+	scene_to_title,
+	scene_to_scene,
+	tutorial_to_tutorial,
+	title_to_tutorial,
+	tutorial_to_title
 };
 
 class j1FadeToBlack : public j1Module
@@ -33,7 +37,9 @@ public:
 	
 	which_fade actual_change = unknown;
 
-	bool FadeToBlack(which_fade fade, float time = 2.0f);
+	std::string actual_civilization;
+
+	bool FadeToBlack(which_fade fade, float time = 2.0f, std::string civilization = "");
 
 private:
 
@@ -42,10 +48,11 @@ private:
 	bool changing_to_scene = false;
 
 
-
 	Uint32 start_time = 0;
 	Uint32 total_time = 0;
 	SDL_Rect screen;
+
+	bool temp;
 };
 
 #endif //__MODULEFADETOBLACK_H__

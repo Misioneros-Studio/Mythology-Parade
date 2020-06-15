@@ -2,17 +2,22 @@
 #define __PATHFINDER_H__
 #include "p2Point.h"
 #include <vector>
-#include"Entity.h"
+#include "Entity.h"
 
 #pragma region Structs
+
+#define MOVE_DIAGONAL_COST 14
+#define MOVE_STRAIGHT_COST 10
 
 struct PathRequest 
 {
 	iPoint origin;
 	iPoint destination;
 	std::list <Entity*> requestEntity;
-
+	Entity* requestedUnit;
 	PathRequest(iPoint, iPoint, std::list <Entity*>);
+	PathRequest(iPoint, iPoint, Entity*);
+	
 };
 
 struct PathList;
@@ -28,11 +33,12 @@ struct PathNode
 	// Calculates this tile score
 	int Score() const;
 	// Calculate the F for a specific destination tile
-	int CalculateF(const iPoint& destination);
+	void CalculateFCost();
 
 	// -----------
-	int g;
-	int h;
+	int gCost;
+	int hCost;
+	int fCost;
 	iPoint pos;
 	const PathNode* parent; // needed to reconstruct the path in the end
 };
@@ -69,6 +75,7 @@ public:
 
 	// Main function to request a path from A to B
 	void PreparePath(const iPoint& origin, const iPoint& destination, std::list <Entity*> req);
+	void PreparePath(const iPoint& origin, const iPoint& destination, Entity* req);
 
 
 	// To request all tiles involved in the last generated path
@@ -77,6 +84,8 @@ public:
 	std::vector<iPoint> last_path;
 
 	bool Update();
+
+	int CalculateDistanceCost(const iPoint& a, const iPoint& b);
 
 	bool pathCompleted;
 	bool available;
@@ -90,8 +99,10 @@ private:
 	iPoint destination;
 
 	std::list<Entity*> requestUnitsList;
+	Entity* requestUnit;
 
 	int max_iterations;
+	int numPathsCreated;
 
 	// we store the created path here
 };

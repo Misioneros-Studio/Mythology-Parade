@@ -47,6 +47,7 @@ public:
 	uchar GetTileAt(const iPoint& pos) const;
 
 	void RequestPath(const iPoint& origin, const iPoint& destination, std::list<Entity*> requestUnit);
+	void RequestPath(const iPoint& origin, const iPoint& destination, Entity* requestedUnit);
 
 	bool Start() override;
 

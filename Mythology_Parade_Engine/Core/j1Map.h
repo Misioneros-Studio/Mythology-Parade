@@ -123,8 +123,12 @@ public:
 	bool Load(const char* path);
 
 	iPoint MapToWorld(int x, int y) const;
+	void MapToWorld(int mapX, int mapY, int& worldX, int& worldY) const;
 	fPoint MapToWorld(float x, float y) const;
+
 	iPoint WorldToMap(int x, int y) const;
+	void WorldToMap(int worldX, int worldY, int& mapX, int& mapY) const;
+	iPoint WorldToMap(fPoint input) const;
 
 	iPoint GetMousePositionOnMap();
 	iPoint TileCenterPoint(iPoint);
@@ -140,7 +144,7 @@ public:
 
 private:
 
-	bool LoadMap();
+	bool LoadMap(pugi::xml_document&);
 	bool LoadTilesetDetails(pugi::xml_node& tileset_node, TileSet* set);
 	bool LoadTilesetImage(pugi::xml_node& tileset_node, TileSet* set);
 	bool LoadLayer(pugi::xml_node& node, MapLayer* layer);
@@ -155,7 +159,7 @@ public:
 
 private:
 
-	pugi::xml_document	map_file;
+
 	std::string			folder;
 	bool				map_loaded;
 };

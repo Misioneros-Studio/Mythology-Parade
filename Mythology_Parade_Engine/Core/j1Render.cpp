@@ -2,6 +2,7 @@
 #include "p2Log.h"
 #include "j1App.h"
 #include "j1Window.h"
+#include "j1Textures.h"
 
 #include "j1Render.h"
 
@@ -35,6 +36,11 @@ bool j1Render::Awake(pugi::xml_node& config)
 	}
 
 	renderer = SDL_CreateRenderer(App->win->window, -1, flags);
+
+	SDL_Surface* surf = App->tex->GetSurface("assets/Icon.png");
+	SDL_SetWindowIcon(App->win->window, surf);
+	SDL_FreeSurface(surf);
+
 
 	if (renderer == NULL)
 	{
@@ -281,14 +287,14 @@ bool j1Render::DrawLine(int x1, int y1, int x2, int y2, Uint8 r, Uint8 g, Uint8 
 	return ret;
 }
 
-bool j1Render::DrawQuadTree(TreeType type, QuadNode* node)
+//TODO 2: Create a way to draw the trees for debugging
+bool j1Render::DrawQuadTree(TreeType type, QuadNode& node)
 {
-	//This method needs to be upgraded to a generic display type
-	SDL_Rect quad = { node->x , node->y , node->w,  node->h };
+	SDL_Rect quad = { node.x , node.y , node.w,  node.h };
 
 	switch (type)
 	{
-	case NORMAL:
+	case ORTHOGRAPHIC:
 		App->render->DrawLine(quad.x, quad.y, quad.x, quad.y + quad.h, 255, 255, 255);
 		App->render->DrawLine(quad.x, quad.y, quad.x + quad.w, quad.y, 255, 255, 255);
 
@@ -305,14 +311,35 @@ bool j1Render::DrawQuadTree(TreeType type, QuadNode* node)
 		App->render->DrawLine(quad.x - quad.w / 2, quad.y + quad.h / 2, quad.x, quad.y + quad.h, 255, 255, 255);
 		App->render->DrawLine(quad.x + quad.w / 2, quad.y + quad.h / 2, quad.x, quad.y + quad.h, 255, 255, 255);
 		break;
-
 	}
 
-	for (int i = 0; i < QUADNODE_CHILD_NUMBER; i++)
+	if (node.isDivided)
 	{
-		if (node->childs[i])
+		for (int i = 0; i < QUADNODE_CHILD_NUMBER; i++)
 		{
-			DrawQuadTree(type, node->childs[i]);
+			DrawQuadTree(type, node.childNodes[i]);
+		}
+	}
+	return true;
+}
+
+//TODO 2: Create a way to draw the trees for debugging
+bool j1Render::DrawAABBTree(AABBNode& node)
+{
+	Rect r = node.GetRect();
+	SDL_Rect quad = { r.x , r.y , r.w,  r.h };
+
+	if (quad.w != 0 && quad.h != 0)
+	{
+
+		DrawQuad(quad, node.color.w, node.color.x, node.color.y, node.color.z, false);
+
+		if (node.isDivided)
+		{
+			for (int i = 0; i < AABBNODE_CHILD_NUMBER; i++)
+			{
+				DrawAABBTree(node.childNodes[i]);
+			}
 		}
 	}
 	return true;
@@ -328,6 +355,7 @@ bool j1Render::DrawCircle(int x, int y, int radius, Uint8 r, Uint8 g, Uint8 b, U
 {
 	bool ret = true;
 	uint scale = App->win->GetScale();
+	float speed = 1.f;
 
 	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 	SDL_SetRenderDrawColor(renderer, r, g, b, a);
@@ -336,11 +364,13 @@ bool j1Render::DrawCircle(int x, int y, int radius, Uint8 r, Uint8 g, Uint8 b, U
 	SDL_Point points[360];
 
 	float factor = (float)M_PI / 180.0f;
+	x = (camera.x + x * scale);
+	y = (camera.y + y * scale);
 
 	for (uint i = 0; i < 360; ++i)
 	{
-		points[i].x = (int)(x + radius * cos(i * factor));
-		points[i].y = (int)(y + radius * sin(i * factor));
+		points[i].x = static_cast<int>(x + radius * cos(i * factor));
+		points[i].y = static_cast<int>(y + radius * sin(i * factor));
 	}
 
 	result = SDL_RenderDrawPoints(renderer, points, 360);

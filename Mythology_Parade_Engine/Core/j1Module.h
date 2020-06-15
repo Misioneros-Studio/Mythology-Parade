@@ -16,12 +16,14 @@ class j1Module
 public:
 
 	j1Module() : active(false)
-	{}
+	{
+
+	}
 
 	virtual ~j1Module()
 	{}
 
-	void Init()
+	virtual void Init()
 	{
 		active = true;
 	}
@@ -95,7 +97,6 @@ public:
 
 	std::string	name;
 	bool		active;
-	bool		destroy = false;
 
 };
 

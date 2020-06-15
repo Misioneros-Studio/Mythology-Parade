@@ -2,6 +2,7 @@
 #include "p2Log.h"
 #include "j1Render.h"
 #include "j1Input.h"
+#include "AssetsManager.h"
 
 Animation::Animation()
 {
@@ -15,8 +16,10 @@ std::unordered_map<AnimationType, std::unordered_map<Direction, Animation_char>>
 {
 	bool ret = true;
 	pugi::xml_document	character_file;
-	pugi::xml_parse_result result = character_file.load_file(path);
-
+	char* buffer;
+	int bytesFile = App->assets_manager->Load(path, &buffer);
+	pugi::xml_parse_result result = character_file.load_buffer(buffer, bytesFile);
+	RELEASE_ARRAY(buffer);
 	std::unordered_map<AnimationType, std::unordered_map<Direction, Animation_char>> animations;
 
 	int row = 0;
@@ -32,7 +35,8 @@ std::unordered_map<AnimationType, std::unordered_map<Direction, Animation_char>>
 	}
 
 	//Load info
-	if (ret == true) {
+	if (ret == true) 
+	{
 
 		pugi::xml_node	character_node = character_file.child("map");
 
@@ -147,4 +151,9 @@ Animation_char Animation::LoadAnimation(pugi::xml_node& obj_group, int row, int 
 	anim.loop = true;
 
 	return anim;
+}
+
+void CharacterTMXData::Clean() 
+{
+	App->tex->UnLoad(texture);
 }

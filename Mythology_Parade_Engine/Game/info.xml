@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<info>
+	<entities>
+		<unit type="monk" position_x="-268" position_y="4304" civilization="greek" health="1" />
+		<unit type="assassin" position_x="-300" position_y="4288" civilization="greek" health="100" level="0" />
+	</entities>
+	<buildings>
+		<build type="fortress" position_x="-288" position_y="4256" civilization="greek" health="500" status="finished" action="nothing" />
+	</buildings>
+	<players>
+		<greek>
+			<economy faith="524" prayers="0" sacrifices="0" />
+			<research>
+				<temple research="false" />
+				<encampment research="false" />
+				<cleric research="false" />
+				<assassin research="false" />
+				<lawful_beast research="false" />
+				<chaotic_beast research="false" />
+				<lawful_miracle research="false" />
+				<chaotic_miracle research="false" />
+				<lawful_victory research="false" />
+				<chaotic_victory research="false" />
+			</research>
+		</greek>
+	</players>
+	<volume music="50" fx="128" />
+	<IA>
+		<Game_Phase macroState="2" state="3" time="16.3969994" />
+	</IA>
+	<camera x="779" y="-3931" />
+</info>

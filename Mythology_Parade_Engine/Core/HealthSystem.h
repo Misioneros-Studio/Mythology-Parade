@@ -7,10 +7,16 @@ private:
 
 	int health;
 	int maxHealth;
+	int defaultHealth;
 
 	bool isDeath;
 
+protected:
+	bool damaged_now;
+
 public:
+
+	HealthSystem();
 
 	//Initilization
 	void Init();
@@ -23,7 +29,20 @@ public:
 
 	//Setters
 	void SetMaxHealth(int value);
+	int GetMaxHealth();
 	void IncreaseHealth(int value);
+
+	void SetDefaultHealth();
+
+	void IncreaseHealthMonk();
+
+	void SetHealth(int value);
+
+	void SetMaxUnitHealth();
+
+	void DivideHealth();
+	bool IsDeath();
+
 };
 
 #endif // !__HEALTHSYSTEM_H__

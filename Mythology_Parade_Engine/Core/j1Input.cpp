@@ -56,6 +56,10 @@ bool j1Input::PreUpdate()
 
 	const Uint8* keys = SDL_GetKeyboardState(NULL);
 
+	mouse_motion_x = mouse_motion_y = 0;
+
+	mouse_wheel = 0;
+
 	for (int i = 0; i < MAX_KEYS; ++i)
 	{
 		if (keys[i] == 1)
@@ -147,6 +151,10 @@ bool j1Input::PreUpdate()
 		case SDL_MOUSEBUTTONUP:
 			mouse_buttons[event.button.button - 1] = KEY_UP;
 			//LOG("Mouse button %d up", event.button.button-1);
+			break;
+
+		case SDL_MOUSEWHEEL:
+			mouse_wheel = event.wheel.y;
 			break;
 
 		case SDL_MOUSEMOTION:

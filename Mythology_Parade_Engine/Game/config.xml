@@ -21,6 +21,7 @@
   <gui>
     <atlas_0 file="gui/ui.png"/>
     <atlas_1 file="gui/Portaits.png"/>
+    <atlas_2 file="gui/Research Tree.png"/>
   </gui>
 
   <fonts>

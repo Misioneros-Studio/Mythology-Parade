@@ -6,6 +6,7 @@
 #include "j1Input.h"
 #include "j1Render.h"
 #include "j1LogoScene.h"
+#include "j1TutorialScene.h"
 #include"j1Audio.h"
 #include"j1FadeToBlack.h"
 
@@ -27,6 +28,9 @@ bool j1LogoScene::Start()
 	debug_tex = App->tex->Load("gui/Logo.png");
 	sfx_logo= App->audio->LoadFx("audio/titlescene/introscene2.wav");
 	App->audio->PlayFx(1,sfx_logo);
+
+	App->tutorialscene->active = false;
+	App->tutorialscene->CleanUp();
 	return true;
 }
 
@@ -54,11 +58,12 @@ bool j1LogoScene::PostUpdate()
 bool j1LogoScene::CleanUp()
 {
 	App->tex->UnLoad(debug_tex);
+	debug_tex = nullptr;
+	App->audio->CleanFxs(sfx_logo);
 	return true;
 }
 
 void j1LogoScene::ChangeToTitleScene()
 {
-	destroy = true;
 	App->fade_to_black->FadeToBlack(which_fade::logo_to_title, 2);
 }

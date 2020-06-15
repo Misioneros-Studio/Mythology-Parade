@@ -8,7 +8,7 @@
 #define DEFAULT_FONT_SIZE 12
 
 struct SDL_Texture;
-struct _TTF_Font;
+struct TTF_Font;
 
 class j1Fonts : public j1Module
 {
@@ -26,18 +26,23 @@ public:
 	bool CleanUp();
 
 	// Load Font
-	_TTF_Font* const Load(const char* path, int size = 12);
+	TTF_Font* const Load(const char* path, int size = 12);
 
 	// Create a surface from text
-	SDL_Texture* Print(const char* text, SDL_Color color = {0, 0, 0, 255}, _TTF_Font* font = NULL);
+	SDL_Texture* Print(const char* text, SDL_Color color = {0, 0, 0, 255}, TTF_Font* font = NULL);
 
-	bool CalcSize(const char* text, int& width, int& height, _TTF_Font* font = NULL) const;
+	bool CalcSize(const char* text, int& width, int& height, TTF_Font* font = NULL) const;
 
 public:
 
-	std::list<_TTF_Font*>	fonts;
-	_TTF_Font*			default;
-	_TTF_Font*			default_title;
+	std::list<TTF_Font*>	fonts;
+	TTF_Font*			default_font;
+	TTF_Font*			default_title;
+
+private:
+	SDL_Texture* texture;
+	SDL_Surface* surface;
+
 };
 
 

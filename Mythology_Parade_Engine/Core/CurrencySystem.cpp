@@ -2,17 +2,10 @@
 #include "j1App.h"
 #include "j1Scene.h"
 
-CurrencySystem::CurrencySystem()
+CurrencySystem::CurrencySystem() : faith(0), sacrifices(0), prayers(0), time_prayers(6), time_sacrifices(6)
 {
-	faith = 0;
-	sacrifices = 0;
-	prayers = 0;
-
-	time_prayers = time_sacrifices = 10;
-
-	basefaithRatio = 2;
+	basefaithRatio = 3;
 	faithRatio = basefaithRatio;
-
 }
 
 CurrencySystem::~CurrencySystem()
@@ -26,6 +19,17 @@ void CurrencySystem::IncreaseFaith()
 		if(faithRatio>0)
 		{
 			faith += faithRatio;
+		}
+	}
+}
+
+void CurrencySystem::IncreaseFaith(int number)
+{
+	if (!App->scene->paused_game)
+	{
+		if (number > 0)
+		{
+			faith += number;
 		}
 	}
 }
@@ -170,9 +174,10 @@ void CurrencySystem::Miracle(Miracles action)
 		}
 		break;
 	case Miracles::CallToArms:
-		if (prayers >= 60) {
-			prayers += 3;
-			sacrifices -= 3;
+		if (prayers >= 15) {
+			prayers += 0;
+			sacrifices -= 0;
+			faith -= 75;
 			//FUNCTION OF THE EFFECT
 		}
 		break;
@@ -212,9 +217,10 @@ void CurrencySystem::Disaster(Disasters action)
 		}
 		break;
 	case Disasters::HolyMeteor:
-		if (sacrifices >= 60) {
-			prayers -= 3;
-			sacrifices += 3;
+		if (sacrifices >= 15) {
+			prayers -= 0;
+			sacrifices += 0;
+			faith -= 75;
 			//FUNCTION OF THE EFFECT
 		}
 		break;

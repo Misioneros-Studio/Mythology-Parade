@@ -52,6 +52,7 @@ public:
 
 	//BASIC ECONOMY FUNCTONS
 	void IncreaseFaith();
+	void IncreaseFaith(int number);
 	void DecreaseFaith(int number);
 	void IncreaseSacrifice(ActionSacrifice action);
 	void IncreasePrayers(ActionPrayers action);
