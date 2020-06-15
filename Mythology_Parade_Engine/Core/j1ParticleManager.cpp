@@ -1,7 +1,8 @@
 #include "j1ParticleManager.h"
 #include "p2Log.h"
 #include "j1Textures.h"
-
+#include "j1Input.h"
+#include "j1Render.h"
 
 j1ParticleManager::j1ParticleManager()
 {
@@ -35,6 +36,7 @@ bool j1ParticleManager::Start()
 
 bool j1ParticleManager::Update(float dt)
 {
+
 	if (!particleList.empty()) 
 	{
 
@@ -206,7 +208,7 @@ void j1ParticleManager::CreateExplosionAnimation()
 	explosion_animation.PushBack(SDL_Rect{ 0, 516, 172, 172 }, 1, 0, 0);
 	explosion_animation.PushBack(SDL_Rect{ 172, 516, 172, 172 }, 1, 0, 0);
 	explosion_animation.PushBack(SDL_Rect{ 344, 516, 172, 172 }, 1, 0, 0);
-	explosion_animation.speed = 15.f;
+	explosion_animation.speed = 125.f;
 	explosion_animation.loop = false;
 }
 
