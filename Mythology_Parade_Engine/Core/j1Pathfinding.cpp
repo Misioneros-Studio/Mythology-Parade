@@ -103,6 +103,8 @@ bool j1PathFinding::Start()
 	//TODO 3: Add PathFinder to the vector.
 	pathfinderList.push_back(PathFinder());
 	pathfinderList.push_back(PathFinder());
+	pathfinderList.push_back(PathFinder());
+	pathfinderList.push_back(PathFinder());
 	return true;
 }
 

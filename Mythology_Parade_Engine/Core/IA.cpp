@@ -655,9 +655,9 @@ bool IA::Defense()
 		listEntities.push_back(assassin1);
 		listEntities.push_back(assassin2);
 		listEntities.push_back(assassin3);
-		atackUnits.push_back(assassin1);
-		atackUnits.push_back(assassin2);
-		atackUnits.push_back(assassin3);
+		//atackUnits.push_back(assassin1);
+		//atackUnits.push_back(assassin2);
+		//atackUnits.push_back(assassin3);
 		listEntities.push_back(static_cast<Entity*>(CreateUnit(UnitType::ASSASSIN, positionViking.at((int)EarlyMovements::ASSASSIN2))));
 
 	}
@@ -668,9 +668,9 @@ bool IA::Defense()
 		listEntities.push_back(assassin1);
 		listEntities.push_back(assassin2);
 		listEntities.push_back(assassin3);
-		atackUnits.push_back(assassin1);
-		atackUnits.push_back(assassin2);
-		atackUnits.push_back(assassin3);
+		//atackUnits.push_back(assassin1);
+		//atackUnits.push_back(assassin2);
+		//atackUnits.push_back(assassin3);
 		listEntities.push_back(static_cast<Entity*>(CreateUnit(UnitType::ASSASSIN, positionGreek.at((int)EarlyMovements::ASSASSIN2))));
 	}
 	return true;

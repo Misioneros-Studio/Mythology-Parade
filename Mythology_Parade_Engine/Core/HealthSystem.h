@@ -34,6 +34,8 @@ public:
 
 	void SetDefaultHealth();
 
+	void IncreaseHealthMonk();
+
 	void SetHealth(int value);
 
 	void SetMaxUnitHealth();

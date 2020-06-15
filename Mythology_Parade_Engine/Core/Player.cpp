@@ -214,6 +214,7 @@ void Player::SelectionDraw_Logic()
 				SeeEntitiesInside();
 				ActionToUnit();
 				ActionToBuilding();
+				App->scene->nextUnit_selected = false;
 			}
 
 			//Teorically donnt needed on UI_Improved
@@ -259,13 +260,17 @@ Building* Player::GetEnemySelectedBuild()
 
 void Player::ActionToUnit()
 {
-	if (listEntities.size() == 1 && App->scene->nextUnit_selected)
-	{
+	if (listEntities.size() == 1 && App->scene->nextUnit_selected && listEntities.begin()._Ptr->_Myval != App->scene->hud->thing_selected)
+	{		
 		App->scene->hud->thing_selected->RecieveDamage(1);
 		App->scene->hud->thing_selected->Kill(App->map->WorldToMap(position.x, position.y));
 		Unit* unit = static_cast<Unit*>(listEntities.begin()._Ptr->_Myval);
-		unit->SetMaxUnitHealth();
+		unit->IncreaseHealthMonk();
 		App->scene->nextUnit_selected = false;
+	}
+	else if (App->scene->nextBuilding_selected) {
+		App->scene->nextUnit_selected = false;
+
 	}
 }
 
@@ -273,9 +278,10 @@ void Player::ActionToBuilding()
 {
 	if(App->scene->nextUnit_selected && buildingSelect!=nullptr)
 	{
-		App->entityManager->DeleteEntity(App->scene->hud->thing_selected);
+		App->scene->hud->thing_selected->RecieveDamage(1);
+		App->scene->hud->thing_selected->Kill(App->map->WorldToMap(position.x, position.y));
 		Building* unit = static_cast<Building*>(buildingSelect);
-		unit->SetMaxUnitHealth();
+		unit->IncreaseHealthMonk();
 		App->scene->nextUnit_selected = false;
 	}
 	if (GetEnemySelectedBuild() != nullptr)

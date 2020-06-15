@@ -22,7 +22,7 @@ CombatUnit::CombatUnit(UnitType type, iPoint pos) : Unit(type, pos), range(0), d
 		time_research = 10;
 		researched = true;
 		//Change texture
-		LevelSystem::Init(3500, 6500, 9500);
+		LevelSystem::Init(350, 650, 950);
 		CombatUnit::Init(100, 15, 1, 80);
 		collisionRect = { 0, 0, 30, -55 };
 		sizeMultiplier = 2;

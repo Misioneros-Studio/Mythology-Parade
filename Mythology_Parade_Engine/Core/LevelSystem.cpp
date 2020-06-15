@@ -66,7 +66,7 @@ void LevelSystem::GainExperience(Action action, bool tutorial)
 	}
 	
 	if (tutorial == true)
-		value = 3500;
+		value = 350;
 	experience += value;
 	
 	if (experience >= exp_to_lvl_1) {

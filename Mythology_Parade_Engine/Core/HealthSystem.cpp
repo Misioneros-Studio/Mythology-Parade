@@ -56,6 +56,14 @@ void HealthSystem::SetDefaultHealth()
 	maxHealth = defaultHealth;
 	health += 20;
 }
+void HealthSystem::IncreaseHealthMonk()
+{
+	health += 100;
+	if (health > maxHealth)
+	{
+		health = maxHealth;
+	}
+}
 void HealthSystem::SetHealth(int value)
 {
 	health = value;
