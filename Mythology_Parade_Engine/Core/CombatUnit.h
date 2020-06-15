@@ -10,6 +10,7 @@ private:
 	int damage;
 	int range;
 	int speed;
+	bool finish_atack;
 
 public:
 	CombatUnit(UnitType, iPoint);

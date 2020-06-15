@@ -51,6 +51,7 @@ CombatUnit::CombatUnit(UnitType type, iPoint pos) : Unit(type, pos), range(0), d
 
 	realDamage = damage;
 
+	finish_atack = false;
 	combat_unit = true;
 	show_bar_for_damage = false;
 
@@ -168,86 +169,94 @@ bool CombatUnit::Update(float dt)
 			else {
 				if (currentAnim.current_sprite == currentAnim.num_sprites - 8)
 				{
-					App->entityManager->FxUnits(4, App->audio->hit_2, position.x, position.y);
+					if (finish_atack == false) {
+						finish_atack = true;
+						App->entityManager->FxUnits(4, App->audio->hit_2, position.x, position.y);
 
-					if (enemyTarget->type == EntityType::BUILDING)
-					{
-						if (RecieveDamage(static_cast<Building*>(enemyTarget)->GetDamage()))
+						if (enemyTarget->type == EntityType::BUILDING)
 						{
-							if (enemyTarget->civilization != App->entityManager->getPlayer()->civilization)
+							if (RecieveDamage(static_cast<Building*>(enemyTarget)->GetDamage()))
 							{
-								App->entityManager->getPlayer()->listEntities.remove(this);
-								App->scene->hud->HUDUpdateSelection(App->entityManager->getPlayer()->listEntities, nullptr);
-							}
-							Kill(App->map->WorldToMap(position.x, position.y));
-
-							CombatUnit* unit = nullptr;
-							for (std::list<Entity*>::iterator it = App->entityManager->entities[static_cast<EntityType>(1)].begin(); it != App->entityManager->entities[static_cast<EntityType>(1)].end(); ++it)
-							{
-								Unit* unit = static_cast<Unit*>((*it));
-								if (unit->unitType == UnitType::ASSASSIN)
+								if (enemyTarget->civilization != App->entityManager->getPlayer()->civilization)
 								{
-									CombatUnit* combat_unit = static_cast<CombatUnit*>(*it);
+									App->entityManager->getPlayer()->listEntities.remove(this);
+									App->scene->hud->HUDUpdateSelection(App->entityManager->getPlayer()->listEntities, nullptr);
+								}
+								Kill(App->map->WorldToMap(position.x, position.y));
 
-									if (combat_unit->enemyTarget == this) {
-	
-										combat_unit->enemyTarget = nullptr;
-										combat_unit->ChangeState({ -1,-1 }, AnimationType::IDLE);
+								CombatUnit* unit = nullptr;
+								for (std::list<Entity*>::iterator it = App->entityManager->entities[static_cast<EntityType>(1)].begin(); it != App->entityManager->entities[static_cast<EntityType>(1)].end(); ++it)
+								{
+									Unit* unit = static_cast<Unit*>((*it));
+									if (unit->unitType == UnitType::ASSASSIN)
+									{
+										CombatUnit* combat_unit = static_cast<CombatUnit*>(*it);
+
+										if (combat_unit->enemyTarget == this) {
+
+											combat_unit->enemyTarget = nullptr;
+											combat_unit->ChangeState({ -1,-1 }, AnimationType::IDLE);
+										}
 									}
 								}
 							}
 						}
-					}
-					if (enemyTarget->GetHealth() < 600 && enemyTarget->texture != nullptr) {
-						if (enemyTarget != nullptr && enemyTarget->GetState() != AnimationType::DIE && enemyTarget->RecieveDamage(this->GetDamageValue()))
-						{
-							this->GainExperience(Action::killEnemy, App->scene->isInTutorial);
-							if (enemyTarget->civilization == App->entityManager->getPlayer()->civilization)
+						if (enemyTarget->GetHealth() < 600 && enemyTarget->texture != nullptr) {
+							if (enemyTarget != nullptr && enemyTarget->GetState() != AnimationType::DIE && enemyTarget->RecieveDamage(this->GetDamageValue()))
 							{
-								App->entityManager->getPlayer()->listEntities.remove(enemyTarget);
-								App->scene->hud->HUDUpdateSelection(App->entityManager->getPlayer()->listEntities, nullptr);
-							}
-
-							if (enemyTarget->type == EntityType::BUILDING) {
-								switch (static_cast<Building*>(enemyTarget)->GetBuildingType())
+								this->GainExperience(Action::killEnemy, App->scene->isInTutorial);
+								if (enemyTarget->civilization == App->entityManager->getPlayer()->civilization)
 								{
-								case MONASTERY:
-									App->entityManager->getPlayer()->num_monastery--;
-									break;
-								case TEMPLE:
-									App->entityManager->getPlayer()->num_temple--;
-									break;
-								case ENCAMPMENT:
-									App->entityManager->getPlayer()->num_encampment--;
-									break;
-								default:
-									break;
+									App->entityManager->getPlayer()->listEntities.remove(enemyTarget);
+									App->scene->hud->HUDUpdateSelection(App->entityManager->getPlayer()->listEntities, nullptr);
 								}
-							}
-							enemyTarget->Kill(App->map->WorldToMap(position.x, position.y));
-							this->ChangeState(this->targetPosition, AnimationType::IDLE);
 
-							//for (std::list<Entity*>::iterator it = App->entityManager->entities[static_cast<EntityType>(1)].begin(); it != App->entityManager->entities[static_cast<EntityType>(1)].end(); ++it)
-							for (auto& it : App->entityManager->entities[static_cast<EntityType>(1)])
-							{
-								Unit* unit = static_cast<Unit*>(it);
-								if (unit->unitType == UnitType::ASSASSIN)
-								{
-									CombatUnit* combat_unit = static_cast<CombatUnit*>(it);
-									if (combat_unit != nullptr && combat_unit->enemyTarget == enemyTarget && combat_unit != this) {
-
-										combat_unit->nearbyDetectedList.remove(enemyTarget);
-										combat_unit->enemyTarget = nullptr;
-										combat_unit->ChangeState(combat_unit->targetPosition, AnimationType::IDLE);
+								if (enemyTarget->type == EntityType::BUILDING) {
+									switch (static_cast<Building*>(enemyTarget)->GetBuildingType())
+									{
+									case MONASTERY:
+										App->entityManager->getPlayer()->num_monastery--;
+										break;
+									case TEMPLE:
+										App->entityManager->getPlayer()->num_temple--;
+										break;
+									case ENCAMPMENT:
+										App->entityManager->getPlayer()->num_encampment--;
+										break;
+									default:
+										break;
 									}
 								}
+								enemyTarget->Kill(App->map->WorldToMap(position.x, position.y));
+								this->ChangeState(this->targetPosition, AnimationType::IDLE);
+
+								//for (std::list<Entity*>::iterator it = App->entityManager->entities[static_cast<EntityType>(1)].begin(); it != App->entityManager->entities[static_cast<EntityType>(1)].end(); ++it)
+								for (auto& it : App->entityManager->entities[static_cast<EntityType>(1)])
+								{
+									Unit* unit = static_cast<Unit*>(it);
+									if (unit->unitType == UnitType::ASSASSIN)
+									{
+										CombatUnit* combat_unit = static_cast<CombatUnit*>(it);
+										if (combat_unit != nullptr && combat_unit->enemyTarget == enemyTarget && combat_unit != this) {
+
+											combat_unit->nearbyDetectedList.remove(enemyTarget);
+											combat_unit->enemyTarget = nullptr;
+											combat_unit->ChangeState(combat_unit->targetPosition, AnimationType::IDLE);
+										}
+									}
+								}
+								this->nearbyDetectedList.remove(enemyTarget);
+								enemyTarget = nullptr;
 							}
-							this->nearbyDetectedList.remove(enemyTarget);
-							enemyTarget = nullptr;
 						}
 					}
 				}
+				else {
+					finish_atack = false;
+					LOG("------------------------------------------------FINISH FRAME");
+				}
 			}
+
 		}
 
 		if (isSelected()) {
@@ -378,7 +387,7 @@ void CombatUnit::DetectNearbyEnemies()
 
 
 	
-	LOG("Detected units: %i", nearbyDetectedList.size());
+	//LOG("Detected units: %i", nearbyDetectedList.size());
 	
 	//else
 	//{
