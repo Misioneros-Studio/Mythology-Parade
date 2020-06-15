@@ -122,7 +122,7 @@ void j1Textures::GetSize(const SDL_Texture* texture, uint& width, uint& height) 
 
 SDL_Surface * const j1Textures::GetSurface(const char * path) const
 {
-	SDL_Surface* surf = IMG_Load(path);
+	SDL_Surface* surf = IMG_Load_RW(App->assets_manager->Load(path), 1);
 
 	return surf != nullptr ? surf : nullptr;
 }
