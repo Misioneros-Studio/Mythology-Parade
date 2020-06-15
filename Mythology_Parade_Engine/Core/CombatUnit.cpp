@@ -143,7 +143,10 @@ bool CombatUnit::Update(float dt)
 		{
 			if (enemyTarget->IsDeath())
 			{
+				this->nearbyDetectedList.remove(enemyTarget);
 				enemyTarget = nullptr;
+				this->ChangeState(this->targetPosition, AnimationType::IDLE);
+
 			}
 		}
 
@@ -253,7 +256,6 @@ bool CombatUnit::Update(float dt)
 				}
 				else {
 					finish_atack = false;
-					LOG("------------------------------------------------FINISH FRAME");
 				}
 			}
 
