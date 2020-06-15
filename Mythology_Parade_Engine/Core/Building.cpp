@@ -29,7 +29,7 @@ percentage_constructing(0), time_producing(0), first_time_constructing(true), pe
 	case FORTRESS:
 		this->buildingType = BuildingType::FORTRESS;
 		time_construction =time_research = 0;
-		damage = 25;
+		damage = 15;
 		SetMaxHealth(500);
 		SetHealth(500);
 		influence = 20;
@@ -42,7 +42,7 @@ percentage_constructing(0), time_producing(0), first_time_constructing(true), pe
 		this->buildingType = BuildingType::MONASTERY;
 		time_research = 10;
 		time_construction = 5;
-		damage = 15;
+		damage = 5;
 		SetMaxHealth(250);
 		SetHealth(250);
 		influence = 10;
@@ -56,7 +56,7 @@ percentage_constructing(0), time_producing(0), first_time_constructing(true), pe
 		this->buildingType = BuildingType::TEMPLE;
 		time_research = 10;
 		time_construction = 5;
-		damage = 15;
+		damage = 5;
 		SetMaxHealth(200);
 		SetHealth(200);
 		influence = 10;
