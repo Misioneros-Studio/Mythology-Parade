@@ -21,6 +21,7 @@
 #include "j1Gui.h"
 #include "Console.h"
 #include "EntityManager.h"
+#include "j1ParticleManager.h"
 #include "IA.h"
 
 j1FadeToBlack::j1FadeToBlack()
@@ -90,6 +91,8 @@ bool j1FadeToBlack::PostUpdate()
 				App->fowManager->Disable();
 				App->minimap->Disable();
 				App->map->Disable();
+				App->particleManager->Disable();
+				App->particleManager->Enable();
 				App->title_scene->Enable();
 				App->map->Enable();
 
@@ -106,7 +109,8 @@ bool j1FadeToBlack::PostUpdate()
 				App->map->Disable();
 				//Enable IA
 				App->ia->Disable();
-
+				App->particleManager->Disable();
+				App->particleManager->Enable();
 				App->map->Enable();
 				App->entityManager->Enable();
 				App->pathfinding->Enable();
@@ -139,6 +143,8 @@ bool j1FadeToBlack::PostUpdate()
 				App->tutorialscene->Disable();
 				App->minimap->Disable();
 				App->map->Disable();
+				App->particleManager->Disable();
+				App->particleManager->Enable();
 				App->title_scene->Enable();
 				//Disable IA
 				App->ia->Disable();
@@ -151,9 +157,11 @@ bool j1FadeToBlack::PostUpdate()
 				App->tutorialscene->Disable();
 				App->minimap->Disable();
 				App->map->Disable();
+
 				//Disable IA
 				App->ia->Disable();
-
+				App->particleManager->Disable();
+				App->particleManager->Enable();
 				App->map->Enable();
 				App->entityManager->Enable();
 				App->pathfinding->Enable();

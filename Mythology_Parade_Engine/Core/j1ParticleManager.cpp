@@ -70,8 +70,9 @@ bool j1ParticleManager::CleanUp()
 		delete particle;
 	}
 	particleList.clear();
+	App->tex->UnLoad(texture);
 	texture = nullptr;
-
+	
 	return true;
 }
 
