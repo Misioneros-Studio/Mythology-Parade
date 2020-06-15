@@ -163,6 +163,7 @@ void Building::Kill(iPoint direction)
 	if (buildingType == BuildingType::FORTRESS) {
 
 		App->particleManager->CreateParticle({ (int)position.x + 10,(int)position.y - 100 }, { 0,0 }, 10, ParticleAnimation::Explosion);
+		App->entityManager->FxUnits(2, App->entityManager->DestroyBuilding, position.x, position.y);
 		if (App->scene->isInTutorial == true) {
 			App->tutorialscene->destroy_fortress = true;
 		}
@@ -177,6 +178,7 @@ void Building::Kill(iPoint direction)
 	}
 	else {
 		App->particleManager->CreateParticle({ (int)position.x - 22,(int)position.y - 100 }, { 0,0 }, 10, ParticleAnimation::Explosion);
+		App->entityManager->FxUnits(2, App->entityManager->DestroyBuilding, position.x, position.y);
 	}
 	//Convert();
 	//App->entityManager->DeleteEntity(this);

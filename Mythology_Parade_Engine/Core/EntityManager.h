@@ -175,7 +175,6 @@ public:
 	std::unordered_map<UnitType, std::unordered_map<AnimationType, std::unordered_map<Direction, Animation_char>>> animations;
 	std::multimap<int, Entity*> orderedSprites;
 
-	
 	int Monster2;
 	
 	int giant5;
@@ -185,6 +184,8 @@ public:
 	int CreateMonk_sound;
 	int CreateAssasin_sound;
 	int increase_sacrifice;
+
+	int DestroyBuilding;
 
 	bool initCivilizations;
 

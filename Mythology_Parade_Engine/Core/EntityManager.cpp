@@ -9,7 +9,7 @@
 #include "ResearchMenu.h"
 
 #include "p2Log.h"
-EntityManager::EntityManager() : CreateAssasin_sound(0), CreateMonk_sound(0), increase_sacrifice(0), Monster2(0), construction_bar_back({0, 0, 0, 0}),
+EntityManager::EntityManager() : CreateAssasin_sound(0), CreateMonk_sound(0), increase_sacrifice(0), Monster2(0),DestroyBuilding(0), construction_bar_back({0, 0, 0, 0}),
 construction_bar_empty({ 0, 0, 0, 0 }), construction_bar_front({ 0, 0, 0, 0 }), constructorSpriteRect({0, 0, 0, 0}), debugTex(nullptr),
 destructedSpriteRect({ 0, 0, 0, 0 }), giant5(0), life_bar_front({ 0, 0, 0, 0 }), life_bar_front_enemy({0, 0, 0, 0}),
  ogre5(0), research_bar_front({ 0, 0, 0, 0 }), shade12(0), unit_life_bar_back({ 0, 0, 0, 0 }), unit_life_bar_empty({ 0, 0, 0, 0 }),
@@ -102,6 +102,7 @@ bool EntityManager::Start()
 	
 	ogre5 = App->audio->LoadFx("audio/fx/ogre5.wav");
 	shade12 = App->audio->LoadFx("audio/fx/shade12.wav");
+	DestroyBuilding = App->audio->LoadFx("audio/fx/Building_destruction.wav");
 	
 	
 
@@ -435,7 +436,7 @@ bool EntityManager::CleanUp()
 	}
 
 	
-
+	App->audio->CleanFxs(DestroyBuilding);
 	App->audio->CleanFxs(ogre5);
 	
 	App->audio->CleanFxs(giant5);
