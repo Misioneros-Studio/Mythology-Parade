@@ -48,7 +48,9 @@ percentage_constructing(0), time_producing(0), first_time_constructing(true), pe
 		influence = 10;
 		maxCap = 5;
 		description = "I'm a monastery";
-		App->entityManager->getPlayer()->num_monastery++;
+		if (info.civilization == App->entityManager->getPlayer()->civilization) {
+			App->entityManager->getPlayer()->num_monastery++;
+		}
 		researched = false;
 		name = "monastery";
 		break;

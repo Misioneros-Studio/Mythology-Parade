@@ -207,6 +207,23 @@ bool CombatUnit::Update(float dt)
 								App->entityManager->getPlayer()->listEntities.remove(enemyTarget);
 								App->scene->hud->HUDUpdateSelection(App->entityManager->getPlayer()->listEntities, nullptr);
 							}
+
+							if (enemyTarget->type == EntityType::BUILDING) {
+								switch (static_cast<Building*>(enemyTarget)->GetBuildingType())
+								{
+								case MONASTERY:
+									App->entityManager->getPlayer()->num_monastery--;
+									break;
+								case TEMPLE:
+									App->entityManager->getPlayer()->num_temple--;
+									break;
+								case ENCAMPMENT:
+									App->entityManager->getPlayer()->num_encampment--;
+									break;
+								default:
+									break;
+								}
+							}
 							enemyTarget->Kill(App->map->WorldToMap(position.x, position.y));
 							this->ChangeState(this->targetPosition, AnimationType::IDLE);
 
