@@ -79,7 +79,7 @@ bool IA::Start()
 	bool ret = true;
 
 	timer_ia.Start();
-	time_ia = 760;
+	time_ia = 740;
 	timer.Start();
 
 	return ret;
@@ -474,11 +474,11 @@ void IA::LateGame()
 		late = LateGameBehaviour::ATACK2;
 		break;
 	case LateGameBehaviour::ATACK2:
-		if (timer.ReadSec() >= 30)
+		if (timer.ReadSec() >= 40)
 		{
 			CreateAtack();
 			timer.Start();
-			if (numWaves == 10)
+			if (numWaves == 7)
 			{
 				late = LateGameBehaviour::WIN;
 				timerWaves_win.Start();
@@ -678,9 +678,9 @@ bool IA::CreateAtack()
 
 	if (civilization == CivilizationType::VIKING)
 	{
-		assassin1 = CreateUnit(UnitType::ASSASSIN, positionViking.at((int)EarlyMovements::ASSASSIN1));
-		assassin2 = CreateUnit(UnitType::ASSASSIN, positionViking.at((int)EarlyMovements::ASSASSIN2));
-		assassin3 = CreateUnit(UnitType::ASSASSIN, positionViking.at((int)EarlyMovements::ASSASSIN2));
+		assassin1 = CreateUnit(UnitType::ASSASSIN, positionViking.at((int)EarlyMovements::ASSASSIN3));
+		assassin2 = CreateUnit(UnitType::ASSASSIN, positionViking.at((int)EarlyMovements::ASSASSIN3));
+		assassin3 = CreateUnit(UnitType::ASSASSIN, positionViking.at((int)EarlyMovements::ASSASSIN4));
 	}
 	else
 	{
