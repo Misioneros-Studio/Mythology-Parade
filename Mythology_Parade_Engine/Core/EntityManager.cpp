@@ -325,33 +325,57 @@ bool EntityManager::PostUpdate()
 	}
 
 	//TODO 7: Test collision detection in Debug and Release mode
-	for (std::list<Entity*>::iterator it = entities[EntityType::UNIT].begin(); it != entities[EntityType::UNIT].end(); it++)
+	for (std::list<Entity*>::iterator unitA = entities[EntityType::UNIT].begin(); unitA != entities[EntityType::UNIT].end(); unitA++)
 	{
 
 		//Get the nodes to check inside this unit position
 		std::vector<AABBNode*> nodesToCheck;
-		aabbTree.LoadLeafNodesInsideRect(&aabbTree.baseNode, nodesToCheck, (*it)->getMovementRect());
+		aabbTree.LoadLeafNodesInsideRect(&aabbTree.baseNode, nodesToCheck, (*unitA)->getMovementRect());
 
 		//Iterate all nodes
 		for (int i = 0; i < nodesToCheck.size(); i++)
 		{
 
 			//Iterate all data in that node
-			for (std::list<Entity*>::iterator it2 = nodesToCheck[i]->data.begin(); it2 != nodesToCheck[i]->data.end(); it2++)
+			for (std::list<Entity*>::iterator unitB = nodesToCheck[i]->data.begin(); unitB != nodesToCheck[i]->data.end(); unitB++)
 			{
 				//Check for collisions
-				if (it._Ptr->_Myval != it2._Ptr->_Myval && MaykMath::CheckRectCollision((*it)->getMovementRect(), (*it2)->getMovementRect()))
+				if (unitA._Ptr->_Myval != unitB._Ptr->_Myval && MaykMath::CheckRectCollision((*unitA)->getMovementRect(), (*unitB)->getMovementRect()))
 				{
 
-					fPoint direction = (*it)->position - (*it2)->position;
+					fPoint direction = (*unitA)->position - (*unitB)->position;
 
 					if (direction.IsZero())
 					{
 						direction = { 1, 1 };
 					}
 
+					fPoint normalDirection = fPoint::Normalize(direction);
+					iPoint tilePrediction = App->map->WorldToMap((*unitB)->position - normalDirection);
+
 					//LOG("Unit to unit collision");
-					(*it2)->position -= fPoint::Normalize(direction);
+					if (App->pathfinding->CheckBoundaries((*unitB)->GetTilePosition())) 
+					{
+						bool correct = false;
+						if (App->pathfinding->IsWalkable((*unitB)->GetTilePosition()) && App->pathfinding->IsWalkable(tilePrediction))
+						{
+							correct = true;
+						}
+						if (!App->pathfinding->IsWalkable((*unitB)->GetTilePosition()) && !App->pathfinding->IsWalkable(tilePrediction))
+						{
+							correct = true;
+						}
+						if (!App->pathfinding->IsWalkable((*unitB)->GetTilePosition()) && App->pathfinding->IsWalkable(tilePrediction))
+						{
+							correct = true;
+						}
+
+						if (correct) 
+						{
+							(*unitB)->position -= normalDirection;
+						}
+					}
+
 				}
 			}
 		}
@@ -359,7 +383,7 @@ bool EntityManager::PostUpdate()
 		nodesToCheck.clear();
 
 		//Find the lowest node in this point
-		quadTree.FindLowestNodeInPoint(&quadTree.baseNode, (*it)->position);
+		quadTree.FindLowestNodeInPoint(&quadTree.baseNode, (*unitA)->position);
 		if (quadTree.lowestNode)
 		{
 
@@ -375,12 +399,12 @@ bool EntityManager::PostUpdate()
 				Point C = { htPos.x, htPos.y };
 				Point D = { htPos.x + (htColl.w / 2), htPos.y - (htColl.h / 5) };
 
-				if (MaykMath::IsPointInsideOffAxisRectangle(B, A, C, D, (*it)->position))
+				if (MaykMath::IsPointInsideOffAxisRectangle(B, A, C, D, (*unitA)->position))
 				{
 					fPoint buildingCenter = (*it2)->position + fPoint((*it2)->getCollisionRect().w / 2, 0);
 
-					fPoint direction = buildingCenter - (*it)->position;
-					(*it)->position -= fPoint::Normalize(direction);
+					fPoint direction = buildingCenter - (*unitA)->position;
+					(*unitA)->position -= fPoint::Normalize(direction);
 				}
 			}
 

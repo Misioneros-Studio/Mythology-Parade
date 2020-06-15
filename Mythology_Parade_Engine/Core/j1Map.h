@@ -123,11 +123,12 @@ public:
 	bool Load(const char* path);
 
 	iPoint MapToWorld(int x, int y) const;
-	fPoint MapToWorld(float x, float y) const;
-	iPoint WorldToMap(int x, int y) const;
-
 	void MapToWorld(int mapX, int mapY, int& worldX, int& worldY) const;
+	fPoint MapToWorld(float x, float y) const;
+
+	iPoint WorldToMap(int x, int y) const;
 	void WorldToMap(int worldX, int worldY, int& mapX, int& mapY) const;
+	iPoint WorldToMap(fPoint input) const;
 
 	iPoint GetMousePositionOnMap();
 	iPoint TileCenterPoint(iPoint);

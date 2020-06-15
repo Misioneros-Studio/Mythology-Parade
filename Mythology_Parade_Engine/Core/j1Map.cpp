@@ -280,6 +280,11 @@ void j1Map::WorldToMap(int worldX, int worldY, int& mapX, int& mapY) const
 	}
 }
 
+iPoint j1Map::WorldToMap(fPoint input) const
+{
+	return WorldToMap(input.x, input.y);
+}
+
 iPoint j1Map::WorldToMap(int x, int y) const
 {
 	iPoint ret(0, 0);
