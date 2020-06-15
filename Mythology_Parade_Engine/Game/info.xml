@@ -1,33 +1,22 @@
 <?xml version="1.0"?>
 <info>
 	<entities>
-		<unit type="monk" position_x="-352" position_y="4400" civilization="greek" health="1" />
-		<unit type="assassin" position_x="-351.279999" position_y="4192" civilization="greek" health="100" level="0" />
-		<unit type="assassin" position_x="-332.640015" position_y="4208" civilization="greek" health="100" level="0" />
-		<unit type="assassin" position_x="-568.72229" position_y="4254.13086" civilization="greek" health="100" level="0" />
-		<unit type="assassin" position_x="-356.555511" position_y="4100.03467" civilization="greek" health="100" level="0" />
-		<unit type="assassin" position_x="-323.184998" position_y="4098.32422" civilization="greek" health="100" level="0" />
-		<unit type="assassin" position_x="-355.349304" position_y="4111.85693" civilization="greek" health="100" level="0" />
-		<unit type="assassin" position_x="-341.262726" position_y="4122.72559" civilization="greek" health="100" level="0" />
-		<unit type="assassin" position_x="-576" position_y="4240" civilization="greek" health="100" level="0" />
+		<unit type="monk" position_x="-268" position_y="4304" civilization="greek" health="1" />
+		<unit type="assassin" position_x="-300" position_y="4288" civilization="greek" health="100" level="0" />
 	</entities>
 	<buildings>
-		<build type="encampment" position_x="-576" position_y="4240" civilization="greek" health="350" status="finished" action="nothing" />
-		<build type="fortress" position_x="-288" position_y="4256" civilization="greek" health="245" status="finished" action="nothing" />
-		<build type="monastery" position_x="-384" position_y="4368" civilization="greek" health="250" status="finished" action="nothing" />
-		<build type="monastery" position_x="-320" position_y="4400" civilization="greek" health="250" status="finished" action="nothing" />
-		<build type="monastery" position_x="-480" position_y="4416" civilization="greek" health="250" status="finished" action="nothing" />
+		<build type="fortress" position_x="-288" position_y="4256" civilization="greek" health="500" status="finished" action="nothing" />
 	</buildings>
 	<players>
 		<greek>
-			<economy faith="237" prayers="0" sacrifices="13" />
+			<economy faith="524" prayers="0" sacrifices="0" />
 			<research>
 				<temple research="false" />
-				<encampment research="true" />
+				<encampment research="false" />
 				<cleric research="false" />
-				<assassin research="true" />
+				<assassin research="false" />
 				<lawful_beast research="false" />
-				<chaotic_beast research="true" />
+				<chaotic_beast research="false" />
 				<lawful_miracle research="false" />
 				<chaotic_miracle research="false" />
 				<lawful_victory research="false" />
@@ -37,7 +26,7 @@
 	</players>
 	<volume music="50" fx="128" />
 	<IA>
-		<Game_Phase macroState="2" state="3" />
+		<Game_Phase macroState="0" state="3" time="16.3969994" />
 	</IA>
-	<camera x="893" y="-3870" />
+	<camera x="779" y="-3931" />
 </info>
