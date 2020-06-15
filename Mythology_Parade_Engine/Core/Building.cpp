@@ -628,7 +628,7 @@ void Building::FinishProduction(const std::string &thing_produced, bool cancelle
 		{
 			App->entityManager->getPlayer()->sacrifices += 1;
 			if (Mix_Playing(1) == 0) {
-				App->audio->PlayFx(1, App->audio->increase_sacrifice);
+				App->audio->PlayFx(1, App->entityManager->increase_sacrifice);
 			}
 			
 		}
