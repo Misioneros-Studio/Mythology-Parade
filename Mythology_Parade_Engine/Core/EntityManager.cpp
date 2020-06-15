@@ -395,10 +395,10 @@ bool EntityManager::PostUpdate()
 				Point C = { htPos.x, htPos.y };
 				Point D = { htPos.x + (htColl.w / 2), htPos.y - (htColl.h / 5) };
 
-				App->render->DrawLine(B.x, B.y, A.x, A.y, 255, 0, 0);
-				App->render->DrawLine(A.x, A.y, C.x, C.y, 255, 0, 0);
-				App->render->DrawLine(C.x, C.y, D.x, D.y, 255, 0, 0);
-				App->render->DrawLine(D.x, D.y, B.x, B.y, 255, 0, 0);
+				//App->render->DrawLine(B.x, B.y, A.x, A.y, 255, 0, 0);
+				//App->render->DrawLine(A.x, A.y, C.x, C.y, 255, 0, 0);
+				//App->render->DrawLine(C.x, C.y, D.x, D.y, 255, 0, 0);
+				//App->render->DrawLine(D.x, D.y, B.x, B.y, 255, 0, 0);
 
 				if (MaykMath::IsPointInsideOffAxisRectangle(B, A, C, D, (*unitA)->position))
 				{
