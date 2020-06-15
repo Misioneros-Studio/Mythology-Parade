@@ -1,15 +1,15 @@
 <?xml version="1.0"?>
 <info>
 	<entities>
-		<unit type="monk" position_x="-228" position_y="4304" civilization="greek" health="1" />
-		<unit type="assassin" position_x="-260" position_y="4288" civilization="greek" health="100" level="0" />
+		<unit type="monk" position_x="-268" position_y="4304" civilization="greek" health="1" />
+		<unit type="assassin" position_x="-300" position_y="4288" civilization="greek" health="100" level="0" />
 	</entities>
 	<buildings>
 		<build type="fortress" position_x="-288" position_y="4256" civilization="greek" health="500" status="finished" action="nothing" />
 	</buildings>
 	<players>
 		<greek>
-			<economy faith="788" prayers="0" sacrifices="0" />
+			<economy faith="524" prayers="0" sacrifices="0" />
 			<research>
 				<temple research="false" />
 				<encampment research="false" />
@@ -26,7 +26,7 @@
 	</players>
 	<volume music="50" fx="128" />
 	<IA>
-		<Game_Phase macroState="2" state="3" />
+		<Game_Phase macroState="0" state="3" time="16.3969994" />
 	</IA>
-	<camera x="1147" y="-550" />
+	<camera x="779" y="-3931" />
 </info>
