@@ -484,7 +484,14 @@ bool j1Scene::CleanUp()
 		research_menu = nullptr;
 	}
 	
-
+	
+	App->audio->CleanFxs(Select_sfx);
+	App->audio->CleanFxs(ResearchFinished);
+	App->audio->CleanFxs(Research_sound);
+	App->audio->CleanFxs(OpenPauseMenu_sfx);
+	App->audio->CleanFxs(Lose_sound);
+	App->audio->CleanFxs(WinGreek_sound);
+	App->audio->CleanFxs(WinViking_sound);
 	App->audio->CleanFxs(App->gui->sfx_UI[(int)UI_Audio::SAVE]);
 	App->audio->CleanFxs(App->gui->sfx_UI[(int)UI_Audio::CONFIRMATION]);
 	App->audio->CleanFxs(App->gui->sfx_UI[(int)UI_Audio::LOAD]);
