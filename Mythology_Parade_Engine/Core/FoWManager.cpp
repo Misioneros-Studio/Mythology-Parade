@@ -105,12 +105,12 @@ bool FoWManager::PreUpdate()
 	//}
 
 	//debug input handling
-	if (App->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
-	{
-		ResetFoWMap();
-		MapNeedsUpdate();
-	}
-	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
+	//if (App->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
+	//{
+	//	ResetFoWMap();
+	//	MapNeedsUpdate();
+	//}
+	if (App->scene->godMode && App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
 	{
 		debugMode = !debugMode;
 		MapNeedsUpdate();
