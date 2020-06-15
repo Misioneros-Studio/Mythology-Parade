@@ -79,7 +79,7 @@ bool IA::Start()
 	bool ret = true;
 
 	timer_ia.Start();
-	time_ia = 740;
+	time_ia = 684;
 	timer.Start();
 
 	return ret;
