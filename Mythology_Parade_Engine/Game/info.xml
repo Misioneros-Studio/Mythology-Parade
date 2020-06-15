@@ -1,16 +1,15 @@
 <?xml version="1.0"?>
 <info>
 	<entities>
-		<unit type="monk" position_x="256" position_y="736" civilization="viking" health="1" />
-		<unit type="assassin" position_x="-256" position_y="736" civilization="viking" health="100" level="0" />
+		<unit type="monk" position_x="64" position_y="4192" civilization="greek" health="1" />
+		<unit type="assassin" position_x="-300" position_y="4288" civilization="greek" health="100" level="0" />
 	</entities>
 	<buildings>
-		<build type="monastery" position_x="-288" position_y="672" civilization="viking" health="250" status="finished" action="nothing" />
-		<build type="fortress" position_x="-96" position_y="704" civilization="viking" health="500" status="finished" action="nothing" />
+		<build type="fortress" position_x="-288" position_y="4256" civilization="greek" health="500" status="finished" action="nothing" />
 	</buildings>
 	<players>
-		<viking>
-			<economy faith="489" prayers="0" sacrifices="0" />
+		<greek>
+			<economy faith="506" prayers="0" sacrifices="0" />
 			<research>
 				<temple research="false" />
 				<encampment research="false" />
@@ -23,11 +22,11 @@
 				<lawful_victory research="false" />
 				<chaotic_victory research="false" />
 			</research>
-		</viking>
+		</greek>
 	</players>
 	<volume music="50" fx="128" />
 	<IA>
 		<Game_Phase macroState="0" state="1" />
 	</IA>
-	<camera x="580" y="-369" />
+	<camera x="779" y="-3931" />
 </info>

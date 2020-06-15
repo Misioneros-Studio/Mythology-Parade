@@ -79,15 +79,15 @@ public:
 
 	HUD* hud;
 	ResearchMenu* research_menu;
-	uint WinViking_sound;
-	uint WinGreek_sound;
-	uint Lose_sound;
+	int WinViking_sound;
+	int WinGreek_sound;
+	int Lose_sound;
 
 	//Ramos
-	uint OpenPauseMenu_sfx;
-	uint Research_sound;
-	uint ResearchFinished;
-	uint Select_sfx;
+	int OpenPauseMenu_sfx;
+	int Research_sound;
+	int ResearchFinished;
+	int Select_sfx;
 
 	//Arnau
 	bool update_selection;

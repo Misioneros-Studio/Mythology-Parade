@@ -852,33 +852,43 @@ void j1Scene::OnClick(UI* element, float argument)
 void j1Scene::FinishResearching(std::string thing_researched) {
 	if (thing_researched == "Temple") {
 		App->entityManager->getPlayer()->research_temple = true;
+		App->audio->PlayFx(4, ResearchFinished);
 	}
 	else if (thing_researched == "Encampment") {
 		App->entityManager->getPlayer()->research_encampment = true;
+		App->audio->PlayFx(4, ResearchFinished);
 	}
 	else if (thing_researched == "Cleric") {
 		App->entityManager->getPlayer()->research_cleric = true;
+		App->audio->PlayFx(4, ResearchFinished);
 	}
 	else if (thing_researched == "Assassin") {
 		App->entityManager->getPlayer()->research_assassin = true;
+		App->audio->PlayFx(4, ResearchFinished);
 	}
 	else if (thing_researched == "Lawful Beast") {
 		App->entityManager->getPlayer()->research_lawful_beast = true;
+		App->audio->PlayFx(4, ResearchFinished);
 	}
 	else if (thing_researched == "Chaotic Beast") {
 		App->entityManager->getPlayer()->research_chaotic_beast = true;
+		App->audio->PlayFx(4, ResearchFinished);
 	}
 	else if (thing_researched == "Lawful Miracle") {
 		App->entityManager->getPlayer()->research_lawful_miracle = true;
+		App->audio->PlayFx(4, ResearchFinished);
 	}
 	else if (thing_researched == "Chaotic Miracle") {
 		App->entityManager->getPlayer()->research_chaotic_miracle = true;
+		App->audio->PlayFx(4, ResearchFinished);
 	}
 	else if (thing_researched == "Lawful Victory") {
 		App->entityManager->getPlayer()->research_lawful_victory = true;
+		App->audio->PlayFx(4, ResearchFinished);
 	}
 	else if (thing_researched == "Chaotic Victory") {
 		App->entityManager->getPlayer()->research_chaotic_victory = true;
+		App->audio->PlayFx(4, ResearchFinished);
 	}
 
 }
