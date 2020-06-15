@@ -142,6 +142,7 @@ public:
 
 	bool shown_minimap;
 
+	bool shown;
 
 	bool isSelected();
 

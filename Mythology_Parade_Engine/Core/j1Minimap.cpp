@@ -125,6 +125,7 @@ bool j1Minimap::PostUpdate() {
 					int w = 4;
 					int h = 4;
 					if (ent->type == EntityType::UNIT) {
+						ent->shown = true;
 						green = 0;
 						w = h = 2;
 						if (ent->civilization == App->entityManager->getPlayer()->civilization) {
@@ -149,6 +150,8 @@ bool j1Minimap::PostUpdate() {
 					}
 					App->render->DrawQuad({ x,y,w,h }, red, green, blue, 255, true, false);
 				}
+				else
+					ent->shown = false;
 			}
 		}
 	}
