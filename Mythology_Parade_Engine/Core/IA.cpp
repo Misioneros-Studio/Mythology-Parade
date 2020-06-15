@@ -79,7 +79,7 @@ bool IA::Start()
 	bool ret = true;
 
 	timer_ia.Start();
-	time_ia = 2900;
+	time_ia = 760;
 	timer.Start();
 
 	return ret;
@@ -151,7 +151,6 @@ bool IA::Load(pugi::xml_node& s)
 {
 	listEntities.clear();
 	loading = true;
-	timer.Start();
 	pugi::xml_node node = s.child("IA").child("Game_Phase");
 	int macroState = node.attribute("macroState").as_int();
 	int state = node.attribute("state").as_int();
@@ -231,6 +230,9 @@ bool IA::Load(pugi::xml_node& s)
 	default:
 		break;
 	}
+
+	timer.StartAt(node.attribute("time").as_int());
+
 	loading = false;
 	return true;
 }
@@ -253,6 +255,8 @@ bool IA::Save(pugi::xml_node& s) const
 	{
 		gameph.append_attribute("state").set_value((int)late);
 	}
+
+	gameph.append_attribute("time").set_value(timer_ia.ReadSec());
 
 	return true;
 }
