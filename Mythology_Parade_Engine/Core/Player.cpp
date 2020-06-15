@@ -260,7 +260,7 @@ void Player::ActionToUnit()
 {
 	if (listEntities.size() == 1 && App->scene->nextUnit_selected)
 	{
-		App->entityManager->DeleteEntity(App->scene->hud->thing_selected);
+		App->scene->hud->thing_selected->Kill(App->map->WorldToMap(position.x, position.y));
 		Unit* unit = static_cast<Unit*>(listEntities.begin()._Ptr->_Myval);
 		unit->SetMaxUnitHealth();
 		App->scene->nextUnit_selected = false;

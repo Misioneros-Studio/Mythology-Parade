@@ -801,6 +801,7 @@ void j1Scene::OnClick(UI* element, float argument)
 		{
 			App->gui->cursor_heal = true;
 			nextUnit_selected = true;
+
 		}
 		else if (element->name == "Produce_Cleric")
 		{
