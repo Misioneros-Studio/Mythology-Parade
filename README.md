@@ -1,7 +1,7 @@
 
 Misioneros Studio is an on-going project working team due to "Project II" subject in CITM University: Videogames Design & Developments degree. Our current aim is to create a RTS videogame called **Mythology Parade** using SDL2 for our subject project.
 
-Click ![here](https://github.com/Misioneros-Studio/Mythology-Parade/releases/tag/1.0) to download our latest release!
+Click [here](https://github.com/Misioneros-Studio/Mythology-Parade/releases/tag/1.0) to download our latest release!
 <br>
 
 <img src="docs/Images/WhatsApp Image 2020-03-06 at 12.34.56.jpeg">
