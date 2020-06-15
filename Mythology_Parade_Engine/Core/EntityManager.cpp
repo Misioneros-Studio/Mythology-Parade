@@ -361,14 +361,14 @@ bool EntityManager::PostUpdate()
 						{
 							correct = true;
 						}
-						if (!App->pathfinding->IsWalkable((*unitB)->GetTilePosition()) && !App->pathfinding->IsWalkable(tilePrediction))
-						{
-							correct = true;
-						}
-						if (!App->pathfinding->IsWalkable((*unitB)->GetTilePosition()) && App->pathfinding->IsWalkable(tilePrediction))
-						{
-							correct = true;
-						}
+						//if (!App->pathfinding->IsWalkable((*unitB)->GetTilePosition()) && !App->pathfinding->IsWalkable(tilePrediction))
+						//{
+						//	correct = true;
+						//}
+						//if (!App->pathfinding->IsWalkable((*unitB)->GetTilePosition()) && App->pathfinding->IsWalkable(tilePrediction))
+						//{
+						//	correct = true;
+						//}
 
 						if (correct) 
 						{
