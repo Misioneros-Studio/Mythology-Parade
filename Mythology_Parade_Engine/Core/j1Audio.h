@@ -76,7 +76,6 @@ public:
 	int hit_1;
 	int Increase_faith;
 	int increase_prayers;
-	int increase_sacrifice;
 	int Walking_troops;
 	int Walking_troop2;
 	int hit_2;

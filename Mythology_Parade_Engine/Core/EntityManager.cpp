@@ -96,7 +96,7 @@ bool EntityManager::Start()
 
 	CreateAssasin_sound = App->audio->LoadFx("audio/fx/Appear_assasin.wav");
 	CreateMonk_sound = App->audio->LoadFx("audio/fx/Appear_monk.wav");
-	increase_sacrifice = App->audio->LoadFx("audio/fx/Sacrifices.wav");
+	increase_sacrifice = App->audio->LoadFx("audio/fx/VOLUME_Increase_sacrifice (1).wav");
 	DestroyBuilding = App->audio->LoadFx("audio/fx/Building_destruction.wav");
 	Select_sfx = App->audio->LoadFx("audio/ui/Menu Select 1.wav");
 	
