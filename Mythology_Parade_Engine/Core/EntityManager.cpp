@@ -7,6 +7,7 @@
 #include "j1FadeToBlack.h"
 #include "j1App.h"
 #include "ResearchMenu.h"
+#include "j1TutorialScene.h"
 
 #include "p2Log.h"
 EntityManager::EntityManager() : CreateAssasin_sound(0), CreateMonk_sound(0), increase_sacrifice(0), Monster2(0), construction_bar_back({0, 0, 0, 0}),
@@ -807,7 +808,7 @@ void EntityManager::InitVikings()
 
 		App->entityManager->CreateBuildingEntity(fortress, BuildingType::FORTRESS, App->entityManager->buildingsData[0], CivilizationType::VIKING);
 		App->entityManager->CreateUnitEntity(UnitType::MONK, monkPos, CivilizationType::VIKING);
-		App->entityManager->CreateUnitEntity(UnitType::ASSASSIN, assassinPos, CivilizationType::VIKING);
+		if (getPlayer()->civilization == CivilizationType::VIKING) App->entityManager->CreateUnitEntity(UnitType::ASSASSIN, assassinPos, CivilizationType::VIKING);
 	}
 }
 
@@ -839,7 +840,7 @@ void EntityManager::InitGreek()
 
 		App->entityManager->CreateBuildingEntity(fortress, BuildingType::FORTRESS, App->entityManager->buildingsData[4], CivilizationType::GREEK);
 		App->entityManager->CreateUnitEntity(UnitType::MONK, monkPos, CivilizationType::GREEK);
-		App->entityManager->CreateUnitEntity(UnitType::ASSASSIN, assassinPos, CivilizationType::GREEK);
+		if(getPlayer()->civilization == CivilizationType::GREEK) App->entityManager->CreateUnitEntity(UnitType::ASSASSIN, assassinPos, CivilizationType::GREEK);
 	}
 }
 
