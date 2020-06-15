@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<info>
+	<entities>
+		<unit type="monk" position_x="84" position_y="800" civilization="viking" health="1" />
+		<unit type="assassin" position_x="-160" position_y="752" civilization="viking" health="100" level="0" />
+	</entities>
+	<buildings>
+		<build type="fortress" position_x="-96" position_y="704" civilization="viking" health="500" status="finished" action="nothing" />
+	</buildings>
+	<players>
+		<viking>
+			<economy faith="509" prayers="0" sacrifices="0" />
+			<research>
+				<temple research="false" />
+				<encampment research="false" />
+				<cleric research="false" />
+				<assassin research="false" />
+				<lawful_beast research="false" />
+				<chaotic_beast research="false" />
+				<lawful_miracle research="false" />
+				<chaotic_miracle research="false" />
+				<lawful_victory research="false" />
+				<chaotic_victory research="false" />
+			</research>
+		</viking>
+	</players>
+	<volume music="50" fx="128" />
+	<IA>
+		<Game_Phase macroState="0" state="2" time="7.50199986" />
+	</IA>
+	<camera x="580" y="-419" />
+</info>
