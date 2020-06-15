@@ -306,6 +306,7 @@ void Player::ActionToBuilding()
 			App->entityManager->DeleteEntity(GetEnemySelectedBuild());
 			Disaster(Disasters::HolyMeteor);
 		}
+		enemyBuildingSelect = nullptr;
 	}
 	
 	

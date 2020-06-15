@@ -371,7 +371,7 @@ void IA::MidGame()
 		}
 		break;
 	case MidGameBehaviour::RESEARCH_ASSASSIN:
-		if (timer.ReadSec() >= 80 || loading)
+		if (timer.ReadSec() >= 5 || loading)
 		{
 			if (civilization == CivilizationType::VIKING)
 				CreateBuilding(BuildingType::ENCAMPMENT, positionViking.at((int)EarlyMovements::ENCAMPMENT));
@@ -493,7 +493,8 @@ bool IA::InitCiv()
 
 		timer.Start();
 		early = EarlyGameBehaviour::BASIC_BUILDINGS_CREATION;
-		gamePhase = GameBehaviour::EARLY;
+		mid = MidGameBehaviour::CREATE_ASSASSIN;
+		gamePhase = GameBehaviour::MID;
 	}
 
 	return true;
