@@ -101,6 +101,7 @@ private:
 	std::list<Entity*> listEntities;
 
 	j1Timer timer;
+	j1Timer timerWaves_win;
 
 	std::vector<iPoint> positionViking;
 	std::vector<iPoint> positionGreek;
