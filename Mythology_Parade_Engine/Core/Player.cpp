@@ -463,14 +463,16 @@ void Player::ClickLogic()
 		{
 			if (click.y <= it._Ptr->_Myval->getCollisionRect().y && click.y >= it._Ptr->_Myval->getCollisionRect().y + it._Ptr->_Myval->getCollisionRect().h)
 			{
-
-				if (it._Ptr->_Myval->civilization == civilization) {
-					buildingSelect = it._Ptr->_Myval;
-					it._Ptr->_Myval->SetSelected(true);
-					App->audio->PlayFx(3, App->scene->Select_sfx);
-				}
-				else {
-					enemyBuildingSelect = it._Ptr->_Myval;
+				Building* building = static_cast<Building*>(it._Ptr->_Myval);
+				if (building->buildingStatus == BuildingStatus::FINISHED) {
+					if (it._Ptr->_Myval->civilization == civilization) {
+						buildingSelect = it._Ptr->_Myval;
+						it._Ptr->_Myval->SetSelected(true);
+						App->audio->PlayFx(3, App->scene->Select_sfx);
+					}
+					else {
+						enemyBuildingSelect = it._Ptr->_Myval;
+					}
 				}
 			}
 		}
