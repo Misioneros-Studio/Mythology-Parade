@@ -646,8 +646,8 @@ void Building::StartResearching(const std::string &thing_producing) {
 
 	if (thing_producing == "Chaotic Miracle") time_producing = 10;
 	else if (thing_producing == "Lawful Miracle") time_producing = 10;
-	else if (thing_producing == "Chaotic Victory") time_producing = 20;
-	else if (thing_producing == "Lawful Victory") time_producing = 20;
+	else if (thing_producing == "Chaotic Victory") time_producing = 60;
+	else if (thing_producing == "Lawful Victory") time_producing = 60;
 	else if (thing_producing == "Assassin") time_producing = 5;
 	else if (thing_producing == "Cleric") time_producing = 5;
 	else if (thing_producing == "Encampment") time_producing = 5;
