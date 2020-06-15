@@ -2,6 +2,7 @@
 #include "j1App.h"
 #include "j1TutorialScene.h"
 #include "PugiXml/src/pugixml.hpp"
+#include "CombatUnit.h"
 
 IA::IA() : enemyFortress(nullptr)
 {
@@ -133,6 +134,7 @@ bool IA::Update(float dt)
 bool IA::PostUpdate()
 {
 	bool ret = true;
+	SetPathAgain();
 	return ret;
 }
 
@@ -643,17 +645,32 @@ bool IA::Find()
 
 bool IA::Defense()
 {
+	Entity* assassin1;
+	Entity* assassin2;
+	Entity* assassin3;
 	if (civilization == CivilizationType::VIKING) {
-		listEntities.push_back(static_cast<Entity*>(CreateUnit(UnitType::ASSASSIN, positionViking.at((int)EarlyMovements::ASSASSIN1))));
-		listEntities.push_back(static_cast<Entity*>(CreateUnit(UnitType::ASSASSIN, positionViking.at((int)EarlyMovements::ASSASSIN1))));
-		listEntities.push_back(static_cast<Entity*>(CreateUnit(UnitType::ASSASSIN, positionViking.at((int)EarlyMovements::ASSASSIN1))));
+		assassin1 = CreateUnit(UnitType::ASSASSIN, positionViking.at((int)EarlyMovements::ASSASSIN1));
+		assassin2 = CreateUnit(UnitType::ASSASSIN, positionViking.at((int)EarlyMovements::ASSASSIN1));
+		assassin3 = CreateUnit(UnitType::ASSASSIN, positionViking.at((int)EarlyMovements::ASSASSIN1));
+		listEntities.push_back(assassin1);
+		listEntities.push_back(assassin2);
+		listEntities.push_back(assassin3);
+		atackUnits.push_back(assassin1);
+		atackUnits.push_back(assassin2);
+		atackUnits.push_back(assassin3);
 		listEntities.push_back(static_cast<Entity*>(CreateUnit(UnitType::ASSASSIN, positionViking.at((int)EarlyMovements::ASSASSIN2))));
 
 	}
 	else {
-		listEntities.push_back(static_cast<Entity*>(CreateUnit(UnitType::ASSASSIN, positionGreek.at((int)EarlyMovements::ASSASSIN1))));
-		listEntities.push_back(static_cast<Entity*>(CreateUnit(UnitType::ASSASSIN, positionGreek.at((int)EarlyMovements::ASSASSIN1))));
-		listEntities.push_back(static_cast<Entity*>(CreateUnit(UnitType::ASSASSIN, positionGreek.at((int)EarlyMovements::ASSASSIN1))));
+		assassin1 = CreateUnit(UnitType::ASSASSIN, positionViking.at((int)EarlyMovements::ASSASSIN1));
+		assassin2 = CreateUnit(UnitType::ASSASSIN, positionViking.at((int)EarlyMovements::ASSASSIN1));
+		assassin3 = CreateUnit(UnitType::ASSASSIN, positionViking.at((int)EarlyMovements::ASSASSIN1));
+		listEntities.push_back(assassin1);
+		listEntities.push_back(assassin2);
+		listEntities.push_back(assassin3);
+		atackUnits.push_back(assassin1);
+		atackUnits.push_back(assassin2);
+		atackUnits.push_back(assassin3);
 		listEntities.push_back(static_cast<Entity*>(CreateUnit(UnitType::ASSASSIN, positionGreek.at((int)EarlyMovements::ASSASSIN2))));
 	}
 	return true;
@@ -688,9 +705,12 @@ bool IA::CreateAtack()
 		assassin2 = CreateUnit(UnitType::ASSASSIN, positionGreek.at((int)EarlyMovements::ASSASSIN2));
 		assassin3 = CreateUnit(UnitType::ASSASSIN, positionGreek.at((int)EarlyMovements::ASSASSIN2));
 	}
-	listEntities.push_back((Entity*)assassin1);
-	listEntities.push_back((Entity*)assassin2);
-	listEntities.push_back((Entity*)assassin3);
+	listEntities.push_back(assassin1);
+	listEntities.push_back(assassin2);
+	listEntities.push_back(assassin3);
+	atackUnits.push_back(assassin1);
+	atackUnits.push_back(assassin2);
+	atackUnits.push_back(assassin3);
 
 	MoveUnit(pos, "assassin", assassin1);
 	MoveUnit(pos, "assassin", assassin2);
@@ -860,3 +880,18 @@ void IA::CreateMonks()
 		App->entityManager->CreateUnitEntity(UnitType::MONK, {32,2672}, civilization);
 	}
 }
+
+void IA::SetPathAgain()
+{
+	iPoint fortress = { (int)enemyFortress->position.x, (int)enemyFortress->position.y };
+	std::list<Entity*>::iterator it = atackUnits.begin();
+	for (it; it != atackUnits.end(); ++it)
+	{
+		CombatUnit* unit = static_cast<CombatUnit*>(it._Ptr->_Myval);
+		if (unit->enemyTarget == nullptr && unit->entPath.size() == 0 && unit->GetState()==AnimationType::IDLE)
+		{
+			MoveUnit(fortress, "assassin", (Unit*)unit);
+		}
+	}
+}
+

@@ -78,6 +78,7 @@ public:
 	void Explore2();
 	void AssembleClerics();
 	void CreateMonks();
+	void SetPathAgain();
 
 public:
 	void EarlyGame();
@@ -99,6 +100,7 @@ private:
 	CivilizationType civilization;
 
 	std::list<Entity*> listEntities;
+	std::list<Entity*> atackUnits;
 
 	j1Timer timer;
 	j1Timer timerWaves_win;
