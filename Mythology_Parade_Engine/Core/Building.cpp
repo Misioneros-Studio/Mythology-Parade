@@ -404,7 +404,7 @@ bool Building::Update(float dt)
 	App->input->GetMousePosition(x, y);
 	iPoint point = App->render->ScreenToWorld(x, y);
 	if ((isSelected() || (point.x >= collisionRect.x && point.x <= collisionRect.x + collisionRect.w && point.y <= collisionRect.y && point.y >= collisionRect.y + collisionRect.h) ||
-		show_bar_for_damage == true) && buildingStatus == BuildingStatus::FINISHED) {
+		show_bar_for_damage == true) && buildingStatus == BuildingStatus::FINISHED && shown == true) {
 		bool enemy = false;
 		if (civilization != App->entityManager->getPlayer()->civilization)
 			enemy = true;
