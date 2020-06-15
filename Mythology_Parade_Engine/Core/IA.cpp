@@ -662,9 +662,9 @@ bool IA::Defense()
 
 	}
 	else {
-		assassin1 = CreateUnit(UnitType::ASSASSIN, positionViking.at((int)EarlyMovements::ASSASSIN1));
-		assassin2 = CreateUnit(UnitType::ASSASSIN, positionViking.at((int)EarlyMovements::ASSASSIN1));
-		assassin3 = CreateUnit(UnitType::ASSASSIN, positionViking.at((int)EarlyMovements::ASSASSIN1));
+		assassin1 = CreateUnit(UnitType::ASSASSIN, positionGreek.at((int)EarlyMovements::ASSASSIN1));
+		assassin2 = CreateUnit(UnitType::ASSASSIN, positionGreek.at((int)EarlyMovements::ASSASSIN1));
+		assassin3 = CreateUnit(UnitType::ASSASSIN, positionGreek.at((int)EarlyMovements::ASSASSIN1));
 		listEntities.push_back(assassin1);
 		listEntities.push_back(assassin2);
 		listEntities.push_back(assassin3);
