@@ -163,6 +163,7 @@ void Building::Kill(iPoint direction)
 	if (buildingType == BuildingType::FORTRESS) {
 
 		App->particleManager->CreateParticle({ (int)position.x + 10,(int)position.y - 100 }, { 0,0 }, 10, ParticleAnimation::Explosion);
+		App->entityManager->FxUnits(2, App->entityManager->DestroyBuilding, position.x, position.y);
 		if (App->scene->isInTutorial == true) {
 			App->tutorialscene->destroy_fortress = true;
 		}
@@ -177,6 +178,7 @@ void Building::Kill(iPoint direction)
 	}
 	else {
 		App->particleManager->CreateParticle({ (int)position.x - 22,(int)position.y - 100 }, { 0,0 }, 10, ParticleAnimation::Explosion);
+		App->entityManager->FxUnits(2, App->entityManager->DestroyBuilding, position.x, position.y);
 	}
 	//Convert();
 	//App->entityManager->DeleteEntity(this);
@@ -625,12 +627,17 @@ void Building::FinishProduction(const std::string &thing_produced, bool cancelle
 		else if (thing_produced == "Sacrifices")
 		{
 			App->entityManager->getPlayer()->sacrifices += 1;
-			App->audio->PlayFx(1, App->audio->increase_sacrifice);
+			if (Mix_Playing(1) == 0) {
+				App->audio->PlayFx(1, App->audio->increase_sacrifice);
+			}
+			
 		}
 		else if (thing_produced == "Prayers")
 		{
 			App->entityManager->getPlayer()->prayers += 1;
-			App->audio->PlayFx(1, App->audio->increase_prayers);
+			if (Mix_Playing(1) == 0) {
+				App->audio->PlayFx(1, App->audio->increase_prayers);
+			}
 		}
 		else
 		{

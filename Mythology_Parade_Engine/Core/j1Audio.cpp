@@ -261,10 +261,18 @@ bool j1Audio::CleanFxs(int fx_to_delete)
 		return false;
 	Mix_HaltChannel(-1);
 
+	
 	std::list<Mix_Chunk*>::iterator it = fx.begin();
 	std::advance(it, fx_to_delete - 1);
-	Mix_FreeChunk(it._Ptr->_Myval);
-	it._Ptr->_Myval = nullptr;
+	
+	if (it._Ptr->_Myval != nullptr) {
+
+
+		Mix_FreeChunk(it._Ptr->_Myval);
+	
+		it._Ptr->_Myval = nullptr;
+	}
+	
 	nullptrs++;
 
 	return ret;

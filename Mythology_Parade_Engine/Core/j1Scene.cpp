@@ -105,7 +105,7 @@ bool j1Scene::Start()
 	OpenPauseMenu_sfx = App->audio->LoadFx("audio/fx/OpenPause.wav");
 	Research_sound = App->audio->LoadFx("audio/fx/Research_Sound.wav");
 	ResearchFinished = App->audio->LoadFx("audio/fx/ResearchFinished.wav");
-	Select_sfx = App->audio->LoadFx("audio/ui/Menu Select 1.wav");
+	
 
 
 	paused_game = false;
@@ -484,16 +484,24 @@ bool j1Scene::CleanUp()
 		research_menu = nullptr;
 	}
 	
+	
 
-	App->audio->CleanFxs(App->gui->sfx_UI[(int)UI_Audio::SAVE]);
+	App->audio->CleanFxs(ResearchFinished);
+	App->audio->CleanFxs(Research_sound);
+	App->audio->CleanFxs(OpenPauseMenu_sfx);
+	App->audio->CleanFxs(Lose_sound);
+	App->audio->CleanFxs(WinGreek_sound);
+	App->audio->CleanFxs(WinViking_sound);
+	App->audio->CleanFxs(App->gui->sfx_UI[(int)UI_Audio::MAIN_MENU]);
+	App->audio->CleanFxs(App->gui->sfx_UI[(int)UI_Audio::HOVER]);
+	App->audio->CleanFxs(App->gui->sfx_UI[(int)UI_Audio::CLOSE]);
+	App->audio->CleanFxs(App->gui->sfx_UI[(int)UI_Audio::EXIT]);
+	App->audio->CleanFxs(App->gui->sfx_UI[(int)UI_Audio::SURRENDER]);
+	App->audio->CleanFxs(App->gui->sfx_UI[(int)UI_Audio::RESTART]);
+	App->audio->CleanFxs(App->gui->sfx_UI[(int)UI_Audio::OPTIONS]);
 	App->audio->CleanFxs(App->gui->sfx_UI[(int)UI_Audio::CONFIRMATION]);
 	App->audio->CleanFxs(App->gui->sfx_UI[(int)UI_Audio::LOAD]);
-	App->audio->CleanFxs(App->gui->sfx_UI[(int)UI_Audio::CLOSE]);
-	App->audio->CleanFxs(App->gui->sfx_UI[(int)UI_Audio::OPTIONS]);
-	App->audio->CleanFxs(App->gui->sfx_UI[(int)UI_Audio::RESTART]);
-	App->audio->CleanFxs(App->gui->sfx_UI[(int)UI_Audio::SURRENDER]);
-	App->audio->CleanFxs(App->gui->sfx_UI[(int)UI_Audio::EXIT]);
-	App->audio->CleanFxs(App->gui->sfx_UI[(int)UI_Audio::MAIN_MENU]);
+	App->audio->CleanFxs(App->gui->sfx_UI[(int)UI_Audio::SAVE]);
 
 	return true;
 }
@@ -844,33 +852,43 @@ void j1Scene::OnClick(UI* element, float argument)
 void j1Scene::FinishResearching(std::string thing_researched) {
 	if (thing_researched == "Temple") {
 		App->entityManager->getPlayer()->research_temple = true;
+		App->audio->PlayFx(4, ResearchFinished);
 	}
 	else if (thing_researched == "Encampment") {
 		App->entityManager->getPlayer()->research_encampment = true;
+		App->audio->PlayFx(4, ResearchFinished);
 	}
 	else if (thing_researched == "Cleric") {
 		App->entityManager->getPlayer()->research_cleric = true;
+		App->audio->PlayFx(4, ResearchFinished);
 	}
 	else if (thing_researched == "Assassin") {
 		App->entityManager->getPlayer()->research_assassin = true;
+		App->audio->PlayFx(4, ResearchFinished);
 	}
 	else if (thing_researched == "Lawful Beast") {
 		App->entityManager->getPlayer()->research_lawful_beast = true;
+		App->audio->PlayFx(4, ResearchFinished);
 	}
 	else if (thing_researched == "Chaotic Beast") {
 		App->entityManager->getPlayer()->research_chaotic_beast = true;
+		App->audio->PlayFx(4, ResearchFinished);
 	}
 	else if (thing_researched == "Lawful Miracle") {
 		App->entityManager->getPlayer()->research_lawful_miracle = true;
+		App->audio->PlayFx(4, ResearchFinished);
 	}
 	else if (thing_researched == "Chaotic Miracle") {
 		App->entityManager->getPlayer()->research_chaotic_miracle = true;
+		App->audio->PlayFx(4, ResearchFinished);
 	}
 	else if (thing_researched == "Lawful Victory") {
 		App->entityManager->getPlayer()->research_lawful_victory = true;
+		App->audio->PlayFx(4, ResearchFinished);
 	}
 	else if (thing_researched == "Chaotic Victory") {
 		App->entityManager->getPlayer()->research_chaotic_victory = true;
+		App->audio->PlayFx(4, ResearchFinished);
 	}
 
 }

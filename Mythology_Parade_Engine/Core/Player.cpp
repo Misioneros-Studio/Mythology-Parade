@@ -308,8 +308,8 @@ void Player::ActionToBuilding()
 		}
 		enemyBuildingSelect = nullptr;
 	}
-	
-	
+
+
 }
 
 void Player::SeeEntitiesInside(bool shift, bool alt)
@@ -468,7 +468,7 @@ void Player::ClickLogic()
 					if (it._Ptr->_Myval->civilization == civilization) {
 						buildingSelect = it._Ptr->_Myval;
 						it._Ptr->_Myval->SetSelected(true);
-						App->audio->PlayFx(3, App->scene->Select_sfx);
+						App->audio->PlayFx(3, App->entityManager->Select_sfx);
 					}
 					else {
 						enemyBuildingSelect = it._Ptr->_Myval;
@@ -486,7 +486,7 @@ void Player::ClickLogic()
 			{
 				if (click.y <= it._Ptr->_Myval->getCollisionRect().y && click.y >= it._Ptr->_Myval->getCollisionRect().y + it._Ptr->_Myval->getCollisionRect().h)
 				{
-					App->audio->PlayFx(3, App->scene->Select_sfx);
+					App->audio->PlayFx(3, App->entityManager->Select_sfx);
 					if (it._Ptr->_Myval->civilization == civilization)
 					{
 						it._Ptr->_Myval->SetSelected(true);
