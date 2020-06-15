@@ -111,6 +111,7 @@
     <ClInclude Include="TutorialMessages.h" />
     <ClInclude Include="IA.h" />
     <ClInclude Include="AssetsManager.h" />
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="TODOS.txt" />
@@ -122,5 +123,11 @@
     <Filter Include="Trees\Math">
       <UniqueIdentifier>{f54e8cb9-d77a-4f56-903c-207668c50797}</UniqueIdentifier>
     </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Mythology_Parade.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="C:\Users\jpg10\Desktop\Icon.ico" />
   </ItemGroup>
 </Project>

@@ -172,12 +172,19 @@
     <ClInclude Include="PugiXml\src\pugixml.hpp" />
     <ClInclude Include="j1TitleScene.h" />
     <ClInclude Include="ResearchMenu.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="TooltipData.h" />
     <ClInclude Include="TutorialMessages.h" />
     <ClInclude Include="Unit.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="TODOS.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Mythology_Parade.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="C:\Users\jpg10\Desktop\Icon.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
