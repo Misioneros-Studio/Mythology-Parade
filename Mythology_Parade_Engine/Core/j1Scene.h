@@ -87,8 +87,7 @@ public:
 	int OpenPauseMenu_sfx;
 	int Research_sound;
 	int ResearchFinished;
-	int Select_sfx;
-
+	
 	//Arnau
 	bool update_selection;
 	bool dont_update_types_of_troops;

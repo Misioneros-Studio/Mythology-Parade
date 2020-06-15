@@ -179,6 +179,8 @@ public:
 	int CreateAssasin_sound;
 	int increase_sacrifice;
 	int DestroyBuilding;
+	int Select_sfx;
+
 
 	bool initCivilizations;
 

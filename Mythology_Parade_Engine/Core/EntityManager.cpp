@@ -97,6 +97,7 @@ bool EntityManager::Start()
 	CreateMonk_sound = App->audio->LoadFx("audio/fx/Appear_monk.wav");
 	increase_sacrifice = App->audio->LoadFx("audio/fx/Sacrifices.wav");
 	DestroyBuilding = App->audio->LoadFx("audio/fx/Building_destruction.wav");
+	Select_sfx = App->audio->LoadFx("audio/ui/Menu Select 1.wav");
 	
 	
 
@@ -428,7 +429,7 @@ bool EntityManager::CleanUp()
 		// Do stuff
 		it.second.Clean();
 	}
-	
+	App->audio->CleanFxs(Select_sfx);
 	App->audio->CleanFxs(DestroyBuilding);
 	App->audio->CleanFxs(increase_sacrifice);
 	App->audio->CleanFxs(CreateMonk_sound);
