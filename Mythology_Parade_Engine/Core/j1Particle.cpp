@@ -24,7 +24,8 @@ j1Particle::j1Particle(std::vector<float>& position, std::vector<float>& speed, 
 	animation(animation),
 
 	fade(fade),
-	active(false)
+	active(false),
+	dt_particle(0)
 
 {}
 
@@ -44,13 +45,14 @@ j1Particle::j1Particle(float life, SDL_Texture* texture, ClassicAnimation animat
 	animation(animation),
 
 	fade(fade),
-	active(false)
+	active(false),
+	dt_particle(0)
 {}
 
 
 
 j1Particle::j1Particle(float positionX, float positionY, float speedX, float speedY, float accelerationX, float accelerationY,
-	float angle, float angularSpeed, float life, SDL_Texture* texture, ClassicAnimation animation, bool fade) :
+	float angle, float angularSpeed, float life, SDL_Texture* texture, ClassicAnimation animation, float blit_speed, bool fade) :
 
 	position{ positionX, positionY },
 	speed{ speedX, speedY },
@@ -65,7 +67,10 @@ j1Particle::j1Particle(float positionX, float positionY, float speedX, float spe
 	animation(animation),
 
 	fade(fade),
-	active(true)
+	active(true),
+	b_speed(blit_speed),
+	dt_particle(0)
+
 {}
 
 
@@ -145,21 +150,22 @@ void j1Particle::Update(float dt)
 	{
 		Move(dt);
 		CheckLife(dt);
+		dt_particle = dt;
 	}
 }
 
 
-void j1Particle::PostUpdate(float dt)
+void j1Particle::PostUpdate()
 {
 	if (active)
-		Draw(dt);
+		Draw(dt_particle);
 }
 
 
 void j1Particle::Draw(float dt)
 {
 	bool last = false;
-	App->render->Blit(texture, position[0], position[1], &animation.GetCurrentFrameBox(dt,last));
+	App->render->Blit(texture, position[0], position[1], &animation.GetCurrentFrameBox(dt,last),b_speed);
 	if (last)
 		Desactivate();
 }

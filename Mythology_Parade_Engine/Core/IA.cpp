@@ -70,10 +70,19 @@ IA::IA() : enemyFortress(nullptr)
 
 void IA::Init()
 {
-	timer_ia.Start();
-	time_ia = 2900;
 	active = false;
 	LOG("A");
+}
+
+bool IA::Start()
+{
+	bool ret = true;
+
+	timer_ia.Start();
+	time_ia = 2900;
+	timer.Start();
+
+	return ret;
 }
 
 bool IA::PreUpdate()

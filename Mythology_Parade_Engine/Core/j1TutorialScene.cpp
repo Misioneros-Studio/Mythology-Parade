@@ -20,7 +20,7 @@ j1TutorialScene::j1TutorialScene() : j1Module()
 {
 	name.append("tutorialscene");
 	tutorial_message_data = nullptr;
-	quest_done = fortress_selected = monk_created = unit_created = convert_or_kill = level_up = false;
+	quest_done = fortress_selected = monk_created = unit_created = convert_or_kill = level_up = destroy_fortress = false;
 	camera_first_position = { 0,0 };
 	actual_message = 0;
 	for (int i = 0; i < 36; i++) {
@@ -70,19 +70,27 @@ bool j1TutorialScene::Update(float dt)
 {
 	
 	if ((message_number == 1 && tutorial_message_timer.ReadSec() >= 6) || (message_number !=1 && message_number < 3 && tutorial_message_timer.ReadSec() >= 3)) {
-		if (message_number == 1)
+		if (message_number == 1) {
 			DeleteTutorialMessage();
+			iPoint arrow_pos;
+			arrow_pos = App->map->MapToWorld(63, 63);
+			App->particleManager->CreateParticle({ arrow_pos.x,arrow_pos.y }, { 0,0 }, 3, ParticleAnimation::Tutorial_Arrow_Down);
+		}
 		if (message_number == 0) {
 			CreateTutorialMessage(message_number, true);
-			iPoint arrow_pos;
-			arrow_pos = App->map->MapToWorld(71, 71);
-			App->particleManager->CreateParticle({ arrow_pos.x,arrow_pos.y }, { 0,0 }, 10, ParticleAnimation::Tutorial_Arrow);
 		}
-		else
+		else {
 			CreateTutorialMessage(message_number);
+		}
 		message_number++;
 		if (message_number == 3) {
+			//FOG OF WAR
 			camera_first_position = { App->render->camera.x,App->render->camera.y };
+
+			App->particleManager->CreateParticle({ 611,158 }, { 0,0 }, 5, ParticleAnimation::Tutorial_Arrow_Up,0.0f);
+			App->particleManager->CreateParticle({ 611,335 }, { 0,0 }, 5, ParticleAnimation::Tutorial_Arrow_Down, 0.0f);
+			App->particleManager->CreateParticle({ 503,266 }, { 0,0 }, 5, ParticleAnimation::Tutorial_Arrow_Right, 0.0f);
+			App->particleManager->CreateParticle({ 680,266 }, { 0,0 }, 5, ParticleAnimation::Tutorial_Arrow_Left, 0.0f);
 		}
 		tutorial_message_timer.Start();
 	}
@@ -93,6 +101,9 @@ bool j1TutorialScene::Update(float dt)
 		if ((quest_done == false && tutorial_message_timer.ReadSec() >= 40)|| (quest_done == true && tutorial_message_timer.ReadSec() >= 20)) {
 			DeleteTutorialMessage();
 			CreateTutorialMessage(message_number);
+			iPoint arrow_pos;
+			arrow_pos = App->map->MapToWorld(63, 63);
+			App->particleManager->CreateParticle({ arrow_pos.x,arrow_pos.y }, { 0,0 }, 5, ParticleAnimation::Tutorial_Arrow_Down);
 			message_number++;
 			CreateTutorialMessage(message_number);
 			message_number++;
@@ -102,6 +113,9 @@ bool j1TutorialScene::Update(float dt)
 	else if (message_number == 5) {
 		if (fortress_selected == true){
 			CreateTutorialMessage(message_number);
+			iPoint arrow_pos;
+			arrow_pos = App->map->MapToWorld(63, 63);
+			App->particleManager->CreateParticle({ 380,485 }, { 0,0 }, 5, ParticleAnimation::Tutorial_Arrow_Down, 0.0f);
 			message_number++;
 		}
 	}
@@ -139,13 +153,34 @@ bool j1TutorialScene::Update(float dt)
 	}
 	else if (message_number == 13) {
 		if (level_up == true) {
-			App->entityManager->getPlayer()->player_win = true;
+			DeleteTutorialMessage();
+			CreateTutorialMessage(message_number);
+			message_number++;
+			tutorial_message_timer.Start();
 		}
 	}
+	else if (message_number == 14) {
+		if (tutorial_message_timer.ReadSec() >= 5) {
+			CreateTutorialMessage(message_number);
+			message_number++;
+			CreateTutorialMessage(message_number);
+			iPoint arrow_pos;
+			arrow_pos = App->map->MapToWorld(82, 82);
+			App->particleManager->CreateParticle({ arrow_pos.x,arrow_pos.y }, { 0,0 }, 5, ParticleAnimation::Tutorial_Arrow_Down);
+			message_number++;
+		}
+	}
+	else if (message_number == 16) {
+		App->particleManager->CreateParticle({ 611,80 }, { 0,0 }, 5, ParticleAnimation::Tutorial_Arrow_Up, 0.0f);
+		if(destroy_fortress==true)
+			App->entityManager->getPlayer()->player_win = true;
+	}
+
 	monk_created = false;
 	unit_created = false;
 	convert_or_kill = false;
 	level_up = false;
+	destroy_fortress = false;
 	return true;
 }
 
@@ -177,7 +212,7 @@ void j1TutorialScene::CreateTutorialMessage(int index, bool middle)
 {
 	SDL_Rect color = { 255,255,255,255 };
 	int screen_position = 1;
-	if (index == 5 || index == 7 || index == 9 || index == 11 || index == 12) {
+	if (index == 5 || index == 7 || index == 9 || index == 11 || index == 12 || index == 14) {
 		color.y = color.w = 100;
 		screen_position = 0;
 	}

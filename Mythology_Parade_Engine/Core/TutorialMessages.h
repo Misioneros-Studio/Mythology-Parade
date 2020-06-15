@@ -5,7 +5,7 @@
 #include "PugiXml\src\pugixml.hpp"
 #include"p2Point.h"
 
-#define TOTAL_TUTORIAL_MESSAGES 13
+#define TOTAL_TUTORIAL_MESSAGES 16
 
 enum class TutorialMessagesAvailable {
 	presentationdialog,
@@ -20,7 +20,10 @@ enum class TutorialMessagesAvailable {
 	createanewbuildingandanewunit,
 	moveunits,
 	attackorconvertanenemyunit,
-	levelupaunit
+	levelupaunit,
+	tooltips,
+	winquest,
+	winconditions
 };
 
 struct TutorialMessage {
@@ -35,6 +38,8 @@ struct TutorialMessage {
 	std::string line6;
 	std::string line7;
 	std::string line8;
+	std::string line9;
+	std::string line10;
 };
 
 class TutorialMessageData

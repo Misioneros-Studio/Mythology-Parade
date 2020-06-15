@@ -26,6 +26,8 @@ void TutorialMessageData::GetTutorialMessageData()
 		tutorial_messages[i].line6 = "";
 		tutorial_messages[i].line7 = "";
 		tutorial_messages[i].line8 = "";
+		tutorial_messages[i].line9 = "";
+		tutorial_messages[i].line10 = "";
 		tutorial_messages[i].lines = 0;
 		tutorial_messages[i].has_title = false;
 	}
@@ -81,6 +83,12 @@ void TutorialMessageData::GetTutorialMessageData()
 				tutorial_messages[i].line8 = it->child("line8").child_value();
 				if (tutorial_messages[i].line8 != "")
 					tutorial_messages[i].lines++;
+				tutorial_messages[i].line9 = it->child("line9").child_value();
+				if (tutorial_messages[i].line9 != "")
+					tutorial_messages[i].lines++;
+				tutorial_messages[i].line10 = it->child("line10").child_value();
+				if (tutorial_messages[i].line10 != "")
+					tutorial_messages[i].lines++;
 				i++;
 			}
 		}
@@ -121,6 +129,12 @@ std::string TutorialMessageData::GetLineTutorialMessage(int i, TutorialMessage t
 		break;
 	case 8:
 		return tutorial_message.line8;
+		break;
+	case 9:
+		return tutorial_message.line9;
+		break;
+	case 10:
+		return tutorial_message.line10;
 		break;
 	}
 	return tutorial_message.title;
