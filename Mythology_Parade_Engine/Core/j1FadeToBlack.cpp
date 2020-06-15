@@ -114,7 +114,6 @@ bool j1FadeToBlack::PostUpdate()
 				App->minimap->Enable();
 				App->fowManager->Enable();
 				//Enable IA
-				App->ia->Disable();
 				App->ia->Enable();
 
 				break;
