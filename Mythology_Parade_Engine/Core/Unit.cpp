@@ -221,8 +221,8 @@ bool Unit::Update(float dt)
 	}
 	if (show_bar_for_damage == true && damage_timer.ReadSec() > 2)
 		show_bar_for_damage = false;
-	if (isSelected() || (point.x >= collisionRect.x && point.x <= collisionRect.x + collisionRect.w && point.y <= collisionRect.y && point.y >= collisionRect.y + collisionRect.h) ||
-		show_bar_for_damage == true) {
+	if ((isSelected() || (point.x >= collisionRect.x && point.x <= collisionRect.x + collisionRect.w && point.y <= collisionRect.y && point.y >= collisionRect.y + collisionRect.h) ||
+		show_bar_for_damage == true) && shown==true) {
 		if (civilization != App->entityManager->getPlayer()->civilization)
 			Draw_Life_Bar(true);
 		else

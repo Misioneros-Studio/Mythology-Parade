@@ -115,7 +115,15 @@ bool j1Minimap::PostUpdate() {
 			if (ent->type == EntityType::UNIT || ent->type == EntityType::BUILDING) {
 				fPoint pos_map = ent->position;
 				fPoint fow_pos = App->map->WorldToMap((int)ent->position.x, (int)ent->position.y);
-				if (App->fowManager->CheckTileVisibility({ (int)fow_pos.x,(int)fow_pos.y }) || ent->shown_minimap == true) {
+				bool appears_in_map = false;
+				if (App->fowManager->CheckTileVisibility({ (int)fow_pos.x,(int)fow_pos.y })) {
+					appears_in_map = true;
+					ent->shown = true;
+				}
+				else {
+					ent->shown = false;
+				}
+				if (appears_in_map==true || ent->shown_minimap == true) {
 					iPoint pos_minimap = WorldToMinimap((int)pos_map.x, (int)pos_map.y);
 					int x = pos_minimap.x;
 					int y = pos_minimap.y;
@@ -125,7 +133,6 @@ bool j1Minimap::PostUpdate() {
 					int w = 4;
 					int h = 4;
 					if (ent->type == EntityType::UNIT) {
-						ent->shown = true;
 						green = 0;
 						w = h = 2;
 						if (ent->civilization == App->entityManager->getPlayer()->civilization) {
@@ -150,8 +157,6 @@ bool j1Minimap::PostUpdate() {
 					}
 					App->render->DrawQuad({ x,y,w,h }, red, green, blue, 255, true, false);
 				}
-				else
-					ent->shown = false;
 			}
 		}
 	}
